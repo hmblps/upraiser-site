@@ -16,6 +16,13 @@ dist-ssr
 !.env.example
 .vercel
 
+# Local drafts / exports (not deployed)
+pdf-pages/
+Integrations Logos/
+
+# Hero source backup (optional local re-encode)
+public/hero/_original/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

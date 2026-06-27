@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, type ReactNode } from "react";
 import Lenis from "lenis";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { usePreferNativeScroll } from "../hooks/usePreferNativeScroll";
 import { ScrollProvider } from "../context/ScrollContext";
 
 const HEADER_OFFSET = 80;
@@ -11,6 +12,8 @@ function getSectionTop(el: HTMLElement, offset = HEADER_OFFSET) {
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
+  const nativeScroll = usePreferNativeScroll();
+  const useLenis = !reduced && !nativeScroll;
   const lenisRef = useRef<Lenis | null>(null);
   const listenersRef = useRef(new Set<(scrollY: number) => void>());
 
@@ -31,14 +34,14 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       const el = document.getElementById(targetId);
       if (!el) return;
 
-      if (lenisRef.current && !reduced) {
+      if (lenisRef.current && useLenis) {
         lenisRef.current.scrollTo(el, { offset, duration: 1.05 });
         return;
       }
 
       window.scrollTo({ top: getSectionTop(el, -offset), behavior: reduced ? "auto" : "smooth" });
     },
-    [reduced],
+    [reduced, useLenis],
   );
 
   const jumpToSection = useCallback((targetId: string) => {
@@ -56,7 +59,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (reduced) {
+    if (!useLenis) {
       const onScroll = () => notifyScroll(window.scrollY);
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
@@ -90,7 +93,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, [reduced, notifyScroll]);
+  }, [useLenis, notifyScroll]);
 
   return (
     <ScrollProvider scrollTo={scrollTo} jumpToSection={jumpToSection} registerScrollListener={registerScrollListener}>

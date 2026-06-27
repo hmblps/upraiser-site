@@ -46,6 +46,14 @@ Vite отдаёт всё из **`public/`** как корень сайта (`pub
 
 Перед `npm run build` скрипт `scripts/verify-assets.sh` проверяет обязательные файлы.
 
+### Откат perf-оптимизаций
+
+```bash
+git reset --hard pre-perf-opt   # или: bash scripts/rollback-perf.sh
+```
+
+Точка сохранения: git tag **`pre-perf-opt`** (до CSS/video/fonts/Lenis mobile).
+
 ---
 
 ## Структура страницы

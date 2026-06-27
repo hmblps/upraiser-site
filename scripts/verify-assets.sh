@@ -6,6 +6,10 @@ cd "$ROOT"
 
 REQUIRED=(
   "public/hero/light-mountains-loop.mp4"
+  "public/hero/light-mountains-loop.webm"
+  "public/fonts/inter-latin-600.woff2"
+  "public/fonts/inter-latin-700.woff2"
+  "public/fonts/inter-latin-800.woff2"
   "public/upraiser-logo.png"
   "public/favicon.png"
   "public/partners/lenovo-logo.png"

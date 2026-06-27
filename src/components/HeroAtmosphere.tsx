@@ -4,7 +4,8 @@ import { useHeroCursorLight } from "../hooks/useHeroCursorLight";
 import { useHeroMobileLite } from "../hooks/useHeroMobileLite";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
-const MOUNTAINS_SRC = "/hero/light-mountains-loop.mp4";
+const MOUNTAINS_MP4 = "/hero/light-mountains-loop.mp4";
+const MOUNTAINS_WEBM = "/hero/light-mountains-loop.webm";
 
 type HeroMountainsLoopProps = {
   pauseOffscreen?: boolean;
@@ -53,13 +54,15 @@ function HeroMountainsLoop({ pauseOffscreen = false, preload = "auto" }: HeroMou
     <video
       ref={videoRef}
       className="hero-mountains-video is-active"
-      src={MOUNTAINS_SRC}
       muted
       loop
       playsInline
       preload={preload}
       tabIndex={-1}
-    />
+    >
+      <source src={MOUNTAINS_MP4} type="video/mp4" />
+      <source src={MOUNTAINS_WEBM} type="video/webm" />
+    </video>
   );
 }
 
