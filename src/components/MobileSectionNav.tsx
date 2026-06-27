@@ -1,0 +1,56 @@
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { navLinks } from "../data/content";
+import { scrollSectionIds } from "../data/scrollSections";
+import { useActiveSection } from "../hooks/useActiveSection";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+
+export function MobileSectionNav() {
+  const reduced = useReducedMotion();
+  const activeIndex = useActiveSection();
+  const activeId = scrollSectionIds[activeIndex] ?? scrollSectionIds[0];
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 420);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.nav
+          aria-label="Page sections"
+          initial={reduced ? false : { opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-x-0 top-[4.75rem] z-[90] border-b border-border bg-bg/95 backdrop-blur-md md:hidden"
+        >
+          <div className="flex gap-2 overflow-x-auto px-4 py-2.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {navLinks.map((link) => {
+              const sectionId = link.href.replace("#", "");
+              const isActive = activeId === sectionId;
+
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition ${
+                    isActive
+                      ? "bg-orange text-on-accent shadow-[0_4px_16px_rgba(253,216,53,0.2)]"
+                      : "border border-border text-muted-light"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+          </div>
+        </motion.nav>
+      )}
+    </AnimatePresence>
+  );
+}
