@@ -1,4 +1,5 @@
 import { integrationPartners } from "../data/partners";
+import { accentSectionLabel } from "../lib/accent";
 
 export function PartnersCarousel() {
   const items = [...integrationPartners, ...integrationPartners];
@@ -6,9 +7,7 @@ export function PartnersCarousel() {
   return (
     <section className="border-t border-border bg-bg-elevated py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <p className="text-left text-xs font-semibold uppercase tracking-widest text-muted">
-          Trusted integrations & partners
-        </p>
+        <p className={`text-left ${accentSectionLabel("red")}`}>Trusted integrations & partners</p>
       </div>
 
       <div className="partners-strip relative mt-8 overflow-hidden py-1">

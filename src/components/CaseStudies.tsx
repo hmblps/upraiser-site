@@ -5,7 +5,8 @@ import { accentLink } from "../lib/accent";
 import { useCountUp } from "../hooks/useCountUp";
 import { SectionHeader, SectionHeaderRow } from "./SectionHeader";
 import { Reveal } from "./motion/Reveal";
-import { useHorizontalScrollProgress } from "../hooks/useHorizontalScrollProgress";
+import { useInfiniteCaseCarousel, CASE_CAROUSEL_COPIES } from "../hooks/useInfiniteCaseCarousel";
+import { useHorizontalPointerScroll } from "../hooks/useHorizontalPointerScroll";
 import { CaseSparkline, getTrendLabel } from "./CaseSparkline";
 
 function CaseResultStat({ value, label }: { value: string; label: string }) {
@@ -39,9 +40,23 @@ function CaseResultStat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function CaseCard({ item }: { item: (typeof caseStudies)[0] }) {
+function CaseCard({
+  item,
+  caseIndex,
+  copy,
+}: {
+  item: (typeof caseStudies)[0];
+  caseIndex: number;
+  copy: number;
+}) {
   return (
-    <article className="card-lift flex w-[min(88vw,420px)] shrink-0 snap-start flex-col self-stretch overflow-hidden rounded-3xl border border-border bg-bg-card">
+    <article
+      data-case-card
+      data-case-index={caseIndex}
+      data-case-copy={copy}
+      aria-hidden={copy > 0 || undefined}
+      className="card-lift flex w-[min(88vw,420px)] shrink-0 flex-col self-stretch overflow-hidden rounded-3xl border border-border bg-bg-card"
+    >
       <div className="rounded-t-3xl border-b border-border bg-[var(--theme-case-panel)] p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
@@ -68,7 +83,7 @@ function CaseCard({ item }: { item: (typeof caseStudies)[0] }) {
         </div>
 
         <div className="mt-5 rounded-xl border border-border/80 bg-bg p-3">
-          <CaseSparkline trend={item.trend} label={getTrendLabel(item)} id={item.id} />
+          <CaseSparkline trend={item.trend} label={getTrendLabel(item)} id={item.id} heroMetric={item.heroMetric} />
         </div>
       </div>
 
@@ -117,21 +132,14 @@ function CaseCard({ item }: { item: (typeof caseStudies)[0] }) {
 
 export function CaseStudies() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const activeIndex = useHorizontalScrollProgress(scrollRef, caseStudies.length);
+  const { activeIndex, scrollByCard, scrollToIndex } = useInfiniteCaseCarousel(scrollRef, {
+    itemCount: caseStudies.length,
+  });
+  useHorizontalPointerScroll(scrollRef);
 
-  const scroll = (direction: "left" | "right") => {
-    scrollRef.current?.scrollBy({
-      left: direction === "left" ? -440 : 440,
-      behavior: "smooth",
-    });
-  };
-
-  const scrollToIndex = (index: number) => {
-    const element = scrollRef.current;
-    if (!element) return;
-    const card = element.children[index] as HTMLElement | undefined;
-    card?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-  };
+  const loopItems = Array.from({ length: CASE_CAROUSEL_COPIES }, (_, copy) =>
+    caseStudies.map((item, index) => ({ item, copy, index })),
+  ).flat();
 
   return (
     <section id="cases" className="section-band">
@@ -146,7 +154,7 @@ export function CaseStudies() {
           <div className="flex shrink-0 items-center gap-3">
             <button
               type="button"
-              onClick={() => scroll("left")}
+              onClick={() => scrollByCard("left")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
               aria-label="Scroll cases left"
             >
@@ -154,7 +162,7 @@ export function CaseStudies() {
             </button>
             <button
               type="button"
-              onClick={() => scroll("right")}
+              onClick={() => scrollByCard("right")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
               aria-label="Scroll cases right"
             >
@@ -170,17 +178,18 @@ export function CaseStudies() {
           <div className="carousel-fade relative">
             <div
               ref={scrollRef}
-              className="flex cursor-grab snap-x snap-mandatory items-stretch gap-5 overflow-x-auto pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              data-lenis-prevent-touch
+              className="cases-carousel cases-carousel-loop flex cursor-grab items-stretch gap-5 overflow-x-auto pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
-              {caseStudies.map((item) => (
-                <CaseCard key={item.id} item={item} />
+              {loopItems.map(({ item, copy, index }) => (
+                <CaseCard key={`${item.id}-${copy}`} item={item} caseIndex={index} copy={copy} />
               ))}
             </div>
           </div>
 
           <div className="mt-4 flex items-center justify-between gap-4">
             <p className="scroll-hint text-xs text-muted">
-              Drag or scroll to explore <span aria-hidden>→</span>
+              Swipe or drag sideways · scroll wheel moves the page <span aria-hidden>↕</span>
             </p>
             <div className="flex items-center gap-2">
               {caseStudies.map((item, index) => (

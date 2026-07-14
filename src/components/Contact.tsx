@@ -13,6 +13,10 @@ type FormState = {
   vertical: string;
 };
 
+type FormErrors = Partial<FormState> & {
+  privacyAccepted?: string;
+};
+
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
 const initialForm: FormState = {
@@ -29,16 +33,18 @@ const linkedIn = footerLinks.social.find((link) => link.label === "LinkedIn");
 
 export function Contact() {
   const [form, setForm] = useState<FormState>(initialForm);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [status, setStatus] = useState<SubmitStatus>("idle");
-  const [errors, setErrors] = useState<Partial<FormState>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = () => {
-    const next: Partial<FormState> = {};
+    const next: FormErrors = {};
     if (!form.name.trim()) next.name = "Required";
     if (!form.email.trim()) next.email = "Required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Invalid email";
     if (!form.message.trim()) next.message = "Required";
+    if (!privacyAccepted) next.privacyAccepted = "Required";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -73,6 +79,7 @@ export function Contact() {
           company: form.company || "—",
           vertical: form.vertical,
           message: form.message,
+          privacy_policy_accepted: "Yes",
         }),
       });
 
@@ -81,6 +88,7 @@ export function Contact() {
       if (response.ok && data.success) {
         setStatus("success");
         setForm(initialForm);
+        setPrivacyAccepted(false);
         return;
       }
 
@@ -161,6 +169,7 @@ export function Contact() {
                     onClick={() => {
                       setStatus("idle");
                       setForm(initialForm);
+                      setPrivacyAccepted(false);
                       setSubmitError(null);
                     }}
                   >
@@ -255,6 +264,33 @@ export function Contact() {
                       disabled={status === "loading"}
                     />
                     {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
+                  </div>
+
+                  <div>
+                    <label className="flex cursor-pointer items-start gap-3 text-sm text-muted-light">
+                      <input
+                        type="checkbox"
+                        checked={privacyAccepted}
+                        onChange={(e) => {
+                          setPrivacyAccepted(e.target.checked);
+                          if (e.target.checked && errors.privacyAccepted) {
+                            setErrors((prev) => ({ ...prev, privacyAccepted: undefined }));
+                          }
+                        }}
+                        disabled={status === "loading"}
+                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-orange"
+                      />
+                      <span>
+                        I have read and agree to the{" "}
+                        <a href="/privacy" className="font-medium text-orange hover:text-orange-light">
+                          Privacy Policy
+                        </a>
+                        .
+                      </span>
+                    </label>
+                    {errors.privacyAccepted && (
+                      <p className="mt-1 text-xs text-red-400">{errors.privacyAccepted}</p>
+                    )}
                   </div>
 
                   <Magnetic className="w-full">

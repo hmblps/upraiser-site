@@ -3,15 +3,25 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 type Theme = "light" | "dark";
 
 const STORAGE_KEY = "upraiser-theme";
+const THEME_COLORS: Record<Theme, string> = {
+  dark: "#0a0a0a",
+  light: "#fffbf7",
+};
 
 const ThemeContext = createContext<{
   theme: Theme;
   toggleTheme: () => void;
 } | null>(null);
 
+function syncThemeColor(theme: Theme) {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", THEME_COLORS[theme]);
+}
+
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
   document.documentElement.style.colorScheme = theme;
+  syncThemeColor(theme);
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

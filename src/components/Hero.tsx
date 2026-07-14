@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { EASE_OUT } from "../lib/motion";
 import { useCountUp } from "../hooks/useCountUp";
 import { useApplePreview } from "../hooks/useApplePreview";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import { Stagger, StaggerItem } from "./motion/Stagger";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { HeroHighlights } from "./apple-preview/HeroHighlights";
 import { highlights, primaryCta } from "../data/content";
 import { HeroAtmosphere } from "./HeroAtmosphere";
 
 const headlineLines = ["We see how stunning", "Your rise to the top", "can be."];
+
+function entranceClass(reduced: boolean, name: string) {
+  return reduced ? "" : `hero-entrance ${name}`;
+}
 
 function StatCard({ value, label }: { value: string; label: string }) {
   const ref = useRef<HTMLElement>(null);
@@ -57,45 +58,27 @@ export function Hero() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid items-end gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <motion.p
-              initial={reduced ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: EASE_OUT }}
-              className="section-label section-label-red mb-4"
-            >
+            <p className={`section-label section-label-red mb-4 ${entranceClass(reduced, "hero-entrance-label")}`}>
               UPRAISER · Charting the Ascent
-            </motion.p>
+            </p>
 
             <h1 className="hero-title max-w-3xl text-4xl font-extrabold leading-[1.08] sm:text-5xl lg:text-6xl">
               {headlineLines.map((line, index) => (
-                <motion.span
+                <span
                   key={line}
-                  initial={reduced ? false : { opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.12 + index * 0.1, ease: EASE_OUT }}
-                  className="block"
+                  className={`block ${entranceClass(reduced, `hero-entrance-line-${index + 1}`)}`}
                 >
                   {line}
-                </motion.span>
+                </span>
               ))}
             </h1>
 
-            <motion.p
-              initial={reduced ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.45, ease: EASE_OUT }}
-              className="section-description mt-6 max-w-xl text-lg"
-            >
+            <p className={`section-description mt-6 max-w-xl text-lg ${entranceClass(reduced, "hero-entrance-body")}`}>
               Revolutionary technical solutions and smart marketing strategy — built to acquire, retain, and monetize
               high-value users across iGaming, Fintech, and premium media.
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={reduced ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.58, ease: EASE_OUT }}
-              className="mt-8 flex flex-wrap gap-4"
-            >
+            <div className={`mt-8 flex flex-wrap gap-4 ${entranceClass(reduced, "hero-entrance-cta")}`}>
               <Magnetic>
                 <a
                   href={primaryCta.href}
@@ -108,26 +91,26 @@ export function Hero() {
               <Magnetic strength={0.22}>
                 <a
                   href="#cases"
-                  className="btn-caps inline-block rounded-full border border-border px-7 py-3 text-sm font-semibold transition hover:border-fg/30 hover:bg-bg-card"
+                  className="btn-caps btn-secondary inline-block rounded-full px-7 py-3 text-sm font-semibold transition hover:border-orange/35"
                 >
                   View Case Studies
                 </a>
               </Magnetic>
-            </motion.div>
+            </div>
 
             {isActive("highlights") ? <HeroHighlights /> : null}
           </div>
 
-          <Stagger
-            className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
-            stagger={0.08}
-          >
+          <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden">
             {highlights.map((item) => (
-              <StaggerItem key={item.label} className="w-[min(68vw,11.5rem)] shrink-0 snap-start md:w-auto">
+              <div
+                key={item.label}
+                className={`hero-entrance-stat w-[min(68vw,11.5rem)] shrink-0 snap-start md:w-auto ${reduced ? "" : "hero-entrance"}`}
+              >
                 <StatCard value={item.value} label={item.label} />
-              </StaggerItem>
+              </div>
             ))}
-          </Stagger>
+          </div>
         </div>
       </div>
     </section>

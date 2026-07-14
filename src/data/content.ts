@@ -218,6 +218,16 @@ export const footerLinks = {
   social: [
     { label: "LinkedIn", href: "https://www.linkedin.com/company/upraiser/" },
   ],
+  legal: [
+    {
+      label: "Privacy Policy",
+      href: "/privacy",
+    },
+    {
+      label: "Terms & Conditions",
+      href: "/terms",
+    },
+  ],
 };
 
 export const highlights = [

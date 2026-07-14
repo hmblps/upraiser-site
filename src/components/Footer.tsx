@@ -1,4 +1,5 @@
 import { footerLinks } from "../data/content";
+import { accentSectionLabel } from "../lib/accent";
 
 export function Footer() {
   return (
@@ -21,11 +22,11 @@ export function Footer() {
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             <div>
-              <h4 className="footer-heading">Explore</h4>
+              <h4 className={accentSectionLabel("gold")}>Explore</h4>
               <ul className="mt-4 space-y-2">
                 {footerLinks.explore.map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="text-sm text-muted-light hover:text-fg">
+                    <a href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
                       {link.label}
                     </a>
                   </li>
@@ -33,11 +34,11 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="footer-heading">Company</h4>
+              <h4 className={accentSectionLabel("gold")}>Company</h4>
               <ul className="mt-4 space-y-2">
                 {footerLinks.company.map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="text-sm text-muted-light hover:text-fg">
+                    <a href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
                       {link.label}
                     </a>
                   </li>
@@ -45,15 +46,21 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="footer-heading">Connect</h4>
+              <h4 className={accentSectionLabel("gold")}>Connect</h4>
               <ul className="mt-4 space-y-2">
                 <li>
-                  <a href="mailto:info@upraiser.co.uk" className="text-sm text-muted-light hover:text-fg">
+                  <a
+                    href="mailto:info@upraiser.co.uk"
+                    className="text-sm text-muted-light transition-colors hover:text-fg"
+                  >
                     info@upraiser.co.uk
                   </a>
                 </li>
                 <li>
-                  <a href="https://upraiser.co.uk" className="text-sm text-muted-light hover:text-fg">
+                  <a
+                    href="https://upraiser.co.uk"
+                    className="text-sm text-muted-light transition-colors hover:text-fg"
+                  >
                     upraiser.co.uk
                   </a>
                 </li>
@@ -63,7 +70,7 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm text-muted-light hover:text-fg"
+                      className="inline-flex items-center gap-2 text-sm text-muted-light transition-colors hover:text-fg"
                     >
                       {link.label}
                       <span className="text-[10px] text-muted" aria-hidden>
@@ -78,14 +85,15 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
-          <p className="text-xs text-muted">© {new Date().getFullYear()} UPRAISER Agency LLP. All rights reserved.</p>
-          <div className="flex gap-6 text-xs text-muted">
-            <a href="#" className="link-caps hover:text-fg">
-              Privacy Policy
-            </a>
-            <a href="#" className="link-caps hover:text-fg">
-              Terms & Conditions
-            </a>
+          <p className="text-xs text-muted-light">
+            © {new Date().getFullYear()} UPRAISER Agency LLP. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            {footerLinks.legal.map((link) => (
+              <a key={link.label} href={link.href} className="link-caps text-muted-light transition-colors hover:text-fg">
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
       </div>

@@ -8,6 +8,8 @@ export interface CaseStudy {
   challenges: string[];
   approach: string[];
   results: { value: string; label: string }[];
+  /** Primary metric highlighted on the case card */
+  heroMetric: { value: string; label: string };
   /** Normalized trend points for sparkline visualization */
   trend: number[];
   outcome: string;
@@ -39,6 +41,7 @@ export const caseStudies: CaseStudy[] = [
       { value: "$250K+", label: "Revenue attributed" },
       { value: "7+", label: "Extra bets per active user" },
     ],
+    heroMetric: { value: "$250K+", label: "Revenue attributed" },
     trend: [20, 26, 32, 38, 44, 50, 56, 62, 68, 74, 80, 86],
     outcome: "Scaled acquisition while keeping fraud at zero and compliance intact across regulated markets.",
   },
@@ -67,6 +70,7 @@ export const caseStudies: CaseStudy[] = [
       { value: "32%", label: "Install-to-connect rate" },
       { value: "4 mo", label: "Sustained growth window" },
     ],
+    heroMetric: { value: "14,308", label: "Installs driven" },
     trend: [8, 9, 11, 13, 16, 21, 28, 38, 52, 66, 78, 90],
     outcome: "Proved CTV can drive both reach and meaningful downstream activation — not just top-of-funnel volume.",
   },
@@ -95,6 +99,7 @@ export const caseStudies: CaseStudy[] = [
       { value: "120+", label: "Markets reached" },
       { value: "1–2 days", label: "Typical launch time" },
     ],
+    heroMetric: { value: "800+", label: "First-time deposits" },
     trend: [14, 15, 16, 17, 18, 20, 52, 60, 68, 76, 86, 94],
     outcome: "Delivered high-value traders through OEM channels where standard programmatic alone underperforms.",
   },
@@ -122,6 +127,7 @@ export const caseStudies: CaseStudy[] = [
       { value: "650", label: "Purchase events tracked" },
       { value: "On-target", label: "CPA vs. goal" },
     ],
+    heroMetric: { value: "3,000", label: "New purchases / month" },
     trend: [24, 32, 38, 42, 41, 43, 46, 54, 63, 72, 82, 91],
     outcome: "Consistent subscription volume at scale while protecting unit economics in a premium vertical.",
   },

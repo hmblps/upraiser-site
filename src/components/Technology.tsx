@@ -1,5 +1,7 @@
 import { sections, technologyFeatures } from "../data/content";
+import { accentTitle } from "../lib/accent";
 import { SectionHeader } from "./SectionHeader";
+import { ProximitySurface } from "./motion/ProximitySurface";
 import { Stagger, StaggerItem } from "./motion/Stagger";
 
 export function Technology() {
@@ -16,10 +18,12 @@ export function Technology() {
           <Stagger className="space-y-4" stagger={0.08}>
             {technologyFeatures.map((item) => (
               <StaggerItem key={item.title}>
-                <div className="card-lift rounded-2xl border border-border bg-bg-card p-5 hover:border-orange/30">
-                  <h3 className="card-title text-base font-semibold text-orange">{item.title}</h3>
+                <ProximitySurface className="rounded-2xl border border-border bg-bg-card p-5 hover:border-orange/30">
+                  <h3 className={`card-title text-base font-semibold ${accentTitle("gold")}`}>
+                    {item.title}
+                  </h3>
                   <p className="copy mt-2">{item.description}</p>
-                </div>
+                </ProximitySurface>
               </StaggerItem>
             ))}
           </Stagger>
