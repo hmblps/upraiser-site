@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
+import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useScrollMorph } from "../hooks/useScrollMorph";
 import { useMode } from "./SectionHeader";
 import { LineChart, type LineChartDatum } from "./LineChart";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
 
 const PERIODS = ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12"];
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -183,11 +181,16 @@ type FoldChartProps = {
  */
 export function FoldChart({ progress }: FoldChartProps) {
   const { mode } = useMode();
+  const { theme } = useTheme();
   const reduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
-  const [morph, setMorph] = useState(0);
 
   const isGrowth = mode === "growth";
+  const morph = useScrollMorph(progress, enabled, {
+    start: 0.02,
+    span: theme === "dark" ? 0.88 : 0.78,
+    lerp: theme === "dark" ? 0.075 : 0.09,
+  });
   const targets = useMemo(() => (isGrowth ? growthTargets() : fraudTargets()), [isGrowth]);
   const ghosts = isGrowth ? GROWTH_GHOSTS : FRAUD_GHOSTS;
   const colors = isGrowth
@@ -204,21 +207,6 @@ export function FoldChart({ progress }: FoldChartProps) {
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
-
-  useEffect(() => {
-    if (!enabled) return;
-    let raf = 0;
-    const unsub = progress.on("change", (value) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        setMorph(clamp((value - 0.02) / 0.78, 0, 1));
-      });
-    });
-    return () => {
-      unsub();
-      cancelAnimationFrame(raf);
-    };
-  }, [enabled, progress]);
 
   const data = useMemo(
     () => morphSeries(targets, morph, isGrowth ? "growth" : "fraud"),
@@ -240,8 +228,14 @@ export function FoldChart({ progress }: FoldChartProps) {
 
   if (!enabled) return null;
 
+  const chartSummary = isGrowth
+    ? "Growth trend chart showing revenue index and unique users rising over twelve weeks as you scroll."
+    : "Fraud rate chart showing primary fraud rate and residual risk declining over twelve weeks as you scroll.";
+
   return (
-    <motion.div className={`fold-chart fold-chart--${mode}`} style={{ opacity }} aria-hidden>
+    <>
+      <p className="sr-only">{chartSummary}</p>
+      <motion.div className={`fold-chart fold-chart--${mode}`} style={{ opacity }} aria-hidden>
       <div className="fold-chart-ghosts">
         {ghosts.map((g) => (
           <GhostBubble key={g.id} metric={g} morph={morph} />
@@ -263,5 +257,6 @@ export function FoldChart({ progress }: FoldChartProps) {
         valueFormatter={isGrowth ? (n) => `${Math.round(n)}` : (n) => `${Number(n).toFixed(1)}%`}
       />
     </motion.div>
+    </>
   );
 }

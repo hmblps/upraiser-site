@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { memo, useId, useMemo, useState } from "react";
 import {
   Area,
   CartesianGrid,
@@ -33,6 +33,8 @@ type LineChartProps = {
   showFill?: boolean;
   /** Recharts enter animation — off when scroll-driving values */
   animate?: boolean;
+  /** Curve interpolation for line/area paths */
+  curveType?: "monotone" | "natural" | "basis" | "linear";
   /** Fixed Y domain keeps scroll morph from jumping the scale */
   yDomain?: [number | "auto" | "dataMin" | "dataMax", number | "auto" | "dataMin" | "dataMax"];
   valueFormatter?: (value: number) => string;
@@ -79,7 +81,7 @@ function ChartTooltip({
  * Tremor-style composed line chart (Recharts).
  * Ambient-friendly: soft grid, dual series, hover tooltip.
  */
-export function LineChart({
+export const LineChart = memo(function LineChart({
   data,
   index,
   categories,
@@ -91,6 +93,7 @@ export function LineChart({
   showTooltip = true,
   showFill = true,
   animate = true,
+  curveType = "monotone",
   yDomain,
   valueFormatter = (n) => `${n}`,
   onValueChange,
@@ -174,7 +177,7 @@ export function LineChart({
             ? series.map((s) => (
                 <Area
                   key={`area-${s.key}`}
-                  type="monotone"
+                  type={curveType}
                   dataKey={s.key}
                   stroke="none"
                   fill={`url(#${s.fillId})`}
@@ -189,7 +192,7 @@ export function LineChart({
           {series.map((s, i) => (
             <Line
               key={`line-${s.key}`}
-              type="monotone"
+              type={curveType}
               dataKey={s.key}
               name={s.key}
               stroke={s.color}
@@ -212,4 +215,4 @@ export function LineChart({
       </ResponsiveContainer>
     </div>
   );
-}
+});

@@ -40,7 +40,7 @@ export function MobileSectionNav() {
                 <ScrollLink
                   key={link.href}
                   href={link.href}
-                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition ${
+                  className={`text-micro shrink-0 rounded-full px-3.5 py-1.5 tracking-wide transition ${
                     isActive
                       ? "bg-orange text-on-accent shadow-[0_4px_16px_rgba(253,216,53,0.2)]"
                       : "border border-border text-muted-light"

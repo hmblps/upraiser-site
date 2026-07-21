@@ -37,7 +37,7 @@ function StatCard({ value, label, counted }: { value: string; label: string; cou
 
   return (
     <HoverTilt className="tilt-surface hero-stat-card h-full rounded-2xl" maxTilt={8} spotlight={false}>
-      <article className="h-full p-6 lg:p-8">
+      <article className="card-pad h-full">
         <div className="stat-value">{display}</div>
         <p className="stat-label mt-2 text-muted-light">{label}</p>
       </article>

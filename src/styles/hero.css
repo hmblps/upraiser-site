@@ -1,0 +1,406 @@
+.hero-cursor-light-active {
+  --hero-light-x: 56%;
+  --hero-light-y: 66%;
+}
+
+.hero-atmosphere-light.hero-cursor-light-active {
+  --hero-light-x: 70%;
+  --hero-light-y: 34%;
+}
+
+.hero-atmosphere-layer-stack {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-dark-mountains-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-mountains-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-light-mountains-base {
+  position: absolute;
+  inset: 0;
+  opacity: 0.34;
+}
+
+.hero-light-mountains-base .hero-mountains-video.is-active {
+  filter: contrast(1.04) saturate(0.96) brightness(0.94);
+}
+
+.hero-atmosphere-spotlight.hero-atmosphere-light .hero-light-mountains-base {
+  opacity: 1;
+}
+
+.hero-atmosphere-spotlight.hero-atmosphere-light .hero-light-mountains-base .hero-mountains-video.is-active {
+  filter: contrast(1.08) saturate(1.14) brightness(1.12);
+}
+
+.hero-dark-mountains-base {
+  position: absolute;
+  inset: 0;
+  opacity: 0.42;
+}
+
+.hero-dark-mountains-base .hero-mountains-video.is-active {
+  filter: contrast(1.1) saturate(0.78) brightness(0.68);
+}
+
+.hero-atmosphere-spotlight.hero-atmosphere-dark .hero-dark-mountains-base {
+  opacity: 1;
+}
+
+.hero-atmosphere-spotlight.hero-atmosphere-dark .hero-dark-mountains-base .hero-mountains-video.is-active {
+  filter: contrast(1.04) saturate(0.88) brightness(1.06);
+}
+
+/* Single decode: bright video + dim wash punched out at cursor */
+.hero-video-dim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-video-dim--light {
+  background: rgb(255 251 247 / 68%);
+  -webkit-mask-image: radial-gradient(
+    ellipse min(40vw, 460px) min(30vw, 340px) at var(--hero-light-x) var(--hero-light-y),
+    transparent 0%,
+    rgb(0 0 0 / 0.32) 40%,
+    rgb(0 0 0 / 0.78) 64%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse min(40vw, 460px) min(30vw, 340px) at var(--hero-light-x) var(--hero-light-y),
+    transparent 0%,
+    rgb(0 0 0 / 0.32) 40%,
+    rgb(0 0 0 / 0.78) 64%,
+    #000 100%
+  );
+}
+
+.hero-video-dim--dark {
+  background: rgb(6 8 14 / 58%);
+  -webkit-mask-image: radial-gradient(
+    ellipse min(40vw, 480px) min(32vw, 360px) at var(--hero-light-x) var(--hero-light-y),
+    transparent 0%,
+    rgb(0 0 0 / 0.04) 24%,
+    rgb(0 0 0 / 0.42) 52%,
+    rgb(0 0 0 / 0.72) 68%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse min(40vw, 480px) min(32vw, 360px) at var(--hero-light-x) var(--hero-light-y),
+    transparent 0%,
+    rgb(0 0 0 / 0.04) 24%,
+    rgb(0 0 0 / 0.42) 52%,
+    rgb(0 0 0 / 0.72) 68%,
+    #000 100%
+  );
+}
+
+/* Dark hero: keep upper-right snow dim (stat cards zone) */
+.hero-video-dim--dark-corner-lock {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: rgb(6 8 14 / 52%);
+  -webkit-mask-image: radial-gradient(
+    ellipse min(50vw, 540px) min(38vh, 400px) at 100% 0%,
+    #000 0%,
+    rgb(0 0 0 / 0.72) 48%,
+    transparent 76%
+  );
+  mask-image: radial-gradient(
+    ellipse min(50vw, 540px) min(38vh, 400px) at 100% 0%,
+    #000 0%,
+    rgb(0 0 0 / 0.72) 48%,
+    transparent 76%
+  );
+}
+
+/* Mobile / coarse pointer: один video, статичный grade, без mask + cursor rAF */
+@media (max-width: 767px), (pointer: coarse) {
+  .hero-atmosphere-mobile-lite .hero-dark-mountains-base {
+    opacity: 0.38;
+  }
+
+  .hero-atmosphere-mobile-lite .hero-dark-mountains-base .hero-mountains-video.is-active {
+    filter: contrast(1.08) saturate(0.86) brightness(0.8);
+  }
+
+  .hero-atmosphere-mobile-lite .hero-light-mountains-base {
+    opacity: 0.32;
+  }
+
+  .hero-atmosphere-mobile-lite .hero-light-mountains-base .hero-mountains-video.is-active {
+    filter: contrast(1.04) saturate(1.05) brightness(0.96);
+  }
+}
+
+.hero-dark-mountains-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--theme-bg) 35%, transparent) 12%,
+      transparent 40%
+    ),
+    linear-gradient(
+      to top,
+      var(--theme-bg) 0%,
+      color-mix(in srgb, var(--theme-bg) 88%, transparent) 18%,
+      color-mix(in srgb, var(--theme-bg) 40%, transparent) 38%,
+      transparent 58%
+    ),
+    linear-gradient(
+      108deg,
+      color-mix(in srgb, var(--theme-bg) 90%, transparent) 0%,
+      color-mix(in srgb, var(--theme-bg) 45%, transparent) 28%,
+      transparent 52%
+    );
+}
+
+.hero-bottom-fade-bridge {
+  z-index: 3;
+  height: 8rem;
+  background: linear-gradient(
+    to top,
+    var(--theme-bg) 0%,
+    color-mix(in srgb, var(--theme-bg) 92%, transparent) 42%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] .hero-bottom-fade-bridge {
+  height: 9rem;
+  background: linear-gradient(
+    to top,
+    var(--theme-bg) 0%,
+    color-mix(in srgb, var(--theme-bg) 94%, transparent) 46%,
+    transparent 100%
+  );
+}
+
+.hero-copy-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 1.25rem;
+}
+
+[data-theme="light"] .hero-copy-wash {
+  background: radial-gradient(
+    115% 85% at 18% 42%,
+    rgb(255 251 247 / 72%) 0%,
+    rgb(255 251 247 / 28%) 42%,
+    transparent 72%
+  );
+}
+
+[data-theme="dark"] .hero-copy-wash {
+  background: linear-gradient(
+    to right,
+    rgb(8 8 10 / 62%) 0%,
+    rgb(8 8 10 / 28%) 26%,
+    rgb(8 8 10 / 8%) 40%,
+    transparent 50%
+  );
+}
+
+.hero-lede {
+  text-wrap: pretty;
+}
+
+.hero-content {
+  padding-top: calc(var(--site-header-height) + var(--hero-content-gap));
+}
+
+[data-theme="dark"] #hero,
+[data-theme="light"] #hero {
+  border-bottom-color: color-mix(in srgb, var(--theme-border) 28%, transparent);
+}
+
+#audience.section-band {
+  position: relative;
+  isolation: isolate;
+}
+
+#audience.section-band::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -4rem;
+  z-index: 0;
+  height: 6rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--theme-bg) 55%, transparent) 0%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] #audience.section-band::before {
+  top: -5rem;
+  height: 7rem;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--theme-bg) 65%, transparent) 0%,
+    transparent 100%
+  );
+}
+
+#audience.section-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-mountains-media {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+}
+
+.hero-mountains-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 72%;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1.5s ease-in-out;
+  will-change: opacity;
+}
+
+.hero-mountains-video.is-active {
+  opacity: 1;
+  filter: contrast(1.04) saturate(1.02);
+}
+
+.hero-mountains-warmwash {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(
+      ellipse 70% 55% at 70% 55%,
+      color-mix(in srgb, var(--theme-accent-light) 14%, transparent) 0%,
+      transparent 65%
+    ),
+    color-mix(in srgb, var(--theme-bg) 28%, transparent);
+  mix-blend-mode: soft-light;
+}
+
+.hero-mountains-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--theme-bg) 0%,
+      color-mix(in srgb, var(--theme-bg) 82%, transparent) 22%,
+      transparent 52%
+    ),
+    linear-gradient(
+      to top,
+      var(--theme-bg) 0%,
+      color-mix(in srgb, var(--theme-bg) 78%, transparent) 16%,
+      color-mix(in srgb, var(--theme-bg) 35%, transparent) 36%,
+      transparent 52%
+    ),
+    linear-gradient(
+      105deg,
+      color-mix(in srgb, var(--theme-bg) 88%, transparent) 0%,
+      color-mix(in srgb, var(--theme-bg) 40%, transparent) 30%,
+      transparent 48%
+    );
+}
+
+.apple-preview-panel {
+  pointer-events: auto;
+  position: fixed;
+  right: 1rem;
+  bottom: 5.5rem;
+  z-index: 40;
+  width: min(19rem, calc(100vw - 2rem));
+  padding: 0.75rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 0.875rem;
+  background: color-mix(in srgb, var(--theme-bg-elevated) 92%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.18);
+}
+
+.apple-preview-panel-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--theme-muted);
+}
+
+.apple-preview-panel-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.apple-preview-panel-options button {
+  border: 1px solid var(--theme-border);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--theme-fg);
+  cursor: pointer;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  padding: 0.45rem 0.55rem;
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.apple-preview-panel-options button:hover {
+  border-color: color-mix(in srgb, var(--theme-accent) 35%, transparent);
+  background: color-mix(in srgb, var(--theme-accent) 6%, transparent);
+}
+
+.apple-preview-panel-options button.is-active {
+  border-color: color-mix(in srgb, var(--theme-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--theme-accent) 12%, transparent);
+}
+
+.apple-preview-panel-all {
+  margin-top: 0.25rem;
+  color: var(--theme-muted) !important;
+  font-size: 0.68rem !important;
+}
+
+.sparkline-area {
+  opacity: 0;
+  transition: opacity 0.65s ease 0.4s;
+}
+
+.sparkline-area.is-drawn {
+  opacity: 1;
+}

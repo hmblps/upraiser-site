@@ -2,13 +2,13 @@
 export const scrollSectionIds = [
   "hero",
   "audience",
-  "value",
-  "promise",
   "difference",
+  "process",
+  "value",
   "channels",
   "cases",
+  "promise",
   "about",
-  "process",
   "contact",
 ] as const;
 

@@ -118,7 +118,7 @@ function MainContent() {
       <main className="site-main">
         <div
           id="hero"
-          className="relative z-[35] flex min-h-0 flex-col overflow-hidden scroll-mt-24 md:min-h-[calc(100dvh-4.75rem)]"
+          className="relative z-[35] flex min-h-0 flex-col overflow-hidden md:min-h-[calc(100dvh-4.75rem)]"
         >
           <Hero />
         </div>

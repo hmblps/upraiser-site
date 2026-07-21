@@ -1,11 +1,8 @@
 import { useLayoutEffect, useRef, useState, type RefObject } from "react";
-import { useMotionValue, useSpring, type MotionValue } from "framer-motion";
-import { useScroll } from "../context/ScrollContext";
+import { type MotionValue } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
+import { clamp } from "../lib/clamp";
+import { useScrollScene, type RunwaySceneConfig } from "./useScrollScene";
 
 type Point = { x: number; y: number };
 
@@ -75,39 +72,11 @@ export function useSectionMeasure({ stageRef, inlineRef, heroMeasureRef, remeasu
   return { points, pointsRef, endScaleRef };
 }
 
-/** Scroll progress 0→1 through a sticky accent section. Uses getBoundingClientRect (Lenis-safe). */
-export function useSectionScrollProgress(sectionRef: RefObject<HTMLElement | null>, resetKey = ""): MotionValue<number> {
-  const { registerScrollListener } = useScroll();
-  const progress = useMotionValue(0);
-
-  useLayoutEffect(() => {
-    const update = () => {
-      const node = sectionRef.current;
-      if (!node) return;
-
-      const scrollRange = node.offsetHeight - window.innerHeight;
-      if (scrollRange <= 0) {
-        progress.set(0);
-        return;
-      }
-
-      // Negative top = how far the section has scrolled past the viewport top
-      const scrolled = -node.getBoundingClientRect().top;
-      progress.set(clamp(scrolled / scrollRange, 0, 1));
-    };
-
-    update();
-    const unsubscribe = registerScrollListener(update);
-    const observer = new ResizeObserver(update);
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    window.addEventListener("resize", update);
-
-    return () => {
-      unsubscribe();
-      observer.disconnect();
-      window.removeEventListener("resize", update);
-    };
-  }, [progress, registerScrollListener, resetKey, sectionRef]);
-
-  return useSpring(progress, { stiffness: 220, damping: 36, restDelta: 0.002, mass: 0.65 });
+/** Sticky runway progress for accent folds — locked to scroll wheel */
+export function useSectionScrollProgress(
+  sectionRef: RefObject<HTMLElement | null>,
+  resetKey = "",
+): MotionValue<number> {
+  const config: RunwaySceneConfig = { mode: "runway", resetKey, spring: false };
+  return useScrollScene(sectionRef, config);
 }

@@ -151,7 +151,7 @@ export function ValueProps() {
   return (
     <section
       id="value"
-      className={`section-band section-band--dense scroll-mt-24${mode === "infrastructure" ? " section-band--ambience" : ""}`}
+      className={`section-band section-band--dense${mode === "infrastructure" ? " section-band--ambience" : ""}`}
     >
       {mode === "infrastructure" ? <SectionAmbience tone="cool" /> : null}
       <div className="relative z-[1] mx-auto max-w-7xl px-6 lg:px-8">

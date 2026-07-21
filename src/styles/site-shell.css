@@ -1,0 +1,103 @@
+/* ── Site atmosphere ── */
+
+.site-grain {
+  opacity: var(--theme-grain-opacity);
+  mix-blend-mode: overlay;
+  z-index: 30;
+}
+
+/* Partnership strip paints above the grain veil */
+.lenovo-trust-strip {
+  background-color: var(--theme-bg-card);
+}
+
+.site-grain svg {
+  display: block;
+}
+
+main > section.section-band:nth-of-type(odd) {
+  background-color: var(--theme-bg);
+}
+
+main > section.section-band:nth-of-type(even) {
+  background-color: var(--theme-bg-elevated);
+}
+
+main > section.section-band {
+  padding-block: 3rem;
+}
+
+@media (min-width: 768px) {
+  main > section.section-band {
+    padding-block: 5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main > section.section-band {
+    padding-block: 7rem;
+  }
+
+  main > section#contact.section-band {
+    padding-block: 8rem;
+  }
+}
+
+/* Intentional density — breaks mechanical odd/even sameness */
+main > section.section-band--quiet {
+  padding-block: 4rem;
+}
+
+main > section.section-band--dense {
+  padding-block: 3.25rem;
+}
+
+main > section.section-band--statement {
+  padding-block: 5rem;
+  background-color: var(--theme-bg);
+}
+
+main > section.section-band--strip {
+  padding-block: 2.75rem;
+}
+
+@media (min-width: 768px) {
+  main > section.section-band--quiet {
+    padding-block: 5.5rem;
+  }
+
+  main > section.section-band--dense {
+    padding-block: 4.25rem;
+  }
+
+  main > section.section-band--statement {
+    padding-block: 6.5rem;
+  }
+
+  main > section.section-band--strip {
+    padding-block: 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main > section.section-band--quiet {
+    padding-block: 7.5rem;
+  }
+
+  main > section.section-band--dense {
+    padding-block: 5.5rem;
+  }
+
+  main > section.section-band--statement {
+    padding-block: 9rem;
+  }
+
+  main > section.section-band--strip {
+    padding-block: 4.5rem;
+  }
+}
+
+main > section.section-band + section.section-band {
+  border-top: 1px solid var(--theme-border);
+}
+

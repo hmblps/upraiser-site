@@ -1,0 +1,24 @@
+/* Runway scrollytelling — accent folds only (cards use anchor, no extra height) */
+
+@media (min-width: 768px) {
+  .scroll-scene--fold {
+    min-height: 135vh;
+  }
+
+  .scroll-scene--fold .scroll-scene-stage {
+    position: sticky;
+    top: var(--scroll-sticky-top);
+    padding-bottom: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-scene--fold {
+    min-height: auto;
+  }
+
+  .scroll-scene--fold .scroll-scene-stage {
+    position: static;
+    padding-bottom: 0;
+  }
+}

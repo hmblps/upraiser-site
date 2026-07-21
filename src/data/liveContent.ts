@@ -1,7 +1,7 @@
 export type SiteMode = "growth" | "infrastructure";
 
 export const navLinks = [
-  { label: "Solutions", href: "#channels" },
+  { label: "Solutions", href: "#value" },
   { label: "Case Studies", href: "#cases" },
   { label: "About", href: "#about" },
   { label: "Careers", href: "mailto:info@upraiser.co.uk" },
@@ -32,7 +32,7 @@ export const audienceByMode = {
   growth: {
     label: "Who We Serve",
     title: "Brands Measuring Success by What Happens After the Install",
-    line1: "Your success is a deposit, a subscription, or a funded account  - not a line on a CPI report.",
+    line1: "Your success is a deposit, a subscription, or a funded account — not a line on a CPI report.",
     line2Prefix: "Built to",
     inlineWord: "SCALE",
     scrollHeroWord: "SCALE",
@@ -41,7 +41,7 @@ export const audienceByMode = {
   infrastructure: {
     label: "Who We Serve",
     title: "Teams Who Demand That the Numbers Match the Invoice",
-    line1: "When the MMP and the media bill tell different stories, the fix is in the pipe  - not in another dashboard.",
+    line1: "When the MMP and the media bill tell different stories, the fix is in the pipe — not in another dashboard.",
     line2Prefix: "Run on",
     inlineWord: "PROOF",
     scrollHeroWord: "PROOF",
@@ -63,7 +63,7 @@ export const valueByMode = {
       kicker: "Event-weighted buying",
       title: "Buy the event Your board already tracks",
       description:
-        "Deposits, subscriptions, first-time funders  - campaigns follow the metrics on Your deck, not CPI charts that fall apart in the MMP.",
+        "Deposits, subscriptions, first-time funders — campaigns follow the metrics on Your deck, not CPI charts that fall apart in the MMP.",
     },
     metrics: [
       { value: "97.3%", label: "Fraud blocked pre-bid", progress: 0.973 },
@@ -76,13 +76,13 @@ export const valueByMode = {
       },
       {
         title: "CPA that holds at scale",
-        description: "Unit economics stay flat when Your budget doubles  - cohort LTV drives the bid.",
+        description: "Unit economics stay flat when Your budget doubles — cohort LTV drives the bid.",
       },
     ],
     brand: {
       badge: "Official partner",
       title: "Lenovo OEM",
-      description: "ROM and Google PAI  - factory-floor distribution far off the open exchange.",
+      description: "ROM and Google PAI — factory-floor distribution far off the open exchange.",
     },
   },
   infrastructure: {
@@ -90,7 +90,7 @@ export const valueByMode = {
       kicker: "Log-native buying",
       title: "Every line item has a device event",
       description:
-        "Server logs reconcile to Adjust and AppsFlyer in real time. Month-end is a formality for You  - not a three-day attribution war room.",
+        "Server logs reconcile to Adjust and AppsFlyer in real time. Month-end is a formality for You — not a three-day attribution war room.",
     },
     metrics: [
       { value: "0%", label: "Post-flight log drift", progress: 0.02 },
@@ -103,13 +103,13 @@ export const valueByMode = {
       },
       {
         title: "Numbers that match",
-        description: "Your MMP and media bill tell the same story  - raw logs, not estimates.",
+        description: "Your MMP and media bill tell the same story — raw logs, not estimates.",
       },
     ],
     brand: {
       badge: "Official partner",
       title: "Lenovo OEM",
-      description: "SDK-audited ROM and PAI pipes  - factory floor to Your first postback.",
+      description: "SDK-audited ROM and PAI pipes — factory floor to Your first postback.",
     },
   },
 } satisfies Record<SiteMode, unknown>;
@@ -129,7 +129,7 @@ export const promiseByMode = {
     titleLead: "We bring You ",
     accentWord: "CLARITY",
     description:
-      "Every line item is traceable to a device event. No black-box reporting, no post-campaign surprises  - just logs Your team can pull and verify whenever You need.",
+      "Every line item is traceable to a device event. No black-box reporting, no post-campaign surprises — just logs Your team can pull and verify whenever You need.",
   },
 } satisfies Record<SiteMode, unknown>;
 
@@ -141,11 +141,11 @@ export const differenceByMode = {
     },
     {
       title: "48 Hours Brief to Bid",
-      text: "Creative, tracking, and MMP events are wired before the first impression  - We are live inside two days so You don't lose momentum.",
+      text: "Creative, tracking, and MMP events are wired before the first impression — We are live inside two days so You don't lose momentum.",
     },
     {
       title: "Cohort Value Drives Bids",
-      text: "Optimization follows Your LTV and payback  - not yesterday's CPI  - so Your unit economics stay firm when Your spend doubles.",
+      text: "Optimization follows Your LTV and payback — not yesterday's CPI — so Your unit economics stay firm when Your spend doubles.",
     },
   ],
   infrastructure: [
@@ -155,7 +155,7 @@ export const differenceByMode = {
     },
     {
       title: "MMP Logs Match Server Side",
-      text: "Adjust, AppsFlyer, and Kochava are reconciled before the flight closes  - You won't need a post-campaign dispute call.",
+      text: "Adjust, AppsFlyer, and Kochava are reconciled before the flight closes — You won't need a post-campaign dispute call.",
     },
     {
       title: "OEM Deploys Fully Audited",
@@ -367,7 +367,7 @@ export const technologyByMode = {
     },
     {
       title: "MMP Integration",
-      description: "AppsFlyer, Adjust, Kochava, Protect360  - Your stack, fully connected.",
+      description: "AppsFlyer, Adjust, Kochava, Protect360 — Your stack, fully connected.",
     },
   ],
   infrastructure: [
@@ -381,7 +381,7 @@ export const technologyByMode = {
     },
     {
       title: "MMP Integration",
-      description: "AppsFlyer, Adjust, Kochava, Protect360  - Your stack, fully connected.",
+      description: "AppsFlyer, Adjust, Kochava, Protect360 — Your stack, fully connected.",
     },
   ],
 } satisfies Record<SiteMode, readonly { title: string; description: string }[]>;
@@ -390,13 +390,13 @@ export const bridgeByMode = {
   growth: {
     eyebrow: "Alternate view",
     lead: "See the infrastructure story",
-    preview: "Log parity, pre-bid filtration, and audit-ready OEM  - how Ad Ops closes the month without a war room.",
+    preview: "Log parity, pre-bid filtration, and audit-ready OEM — how Ad Ops closes the month without a war room.",
     cta: "Switch to Infrastructure",
   },
   infrastructure: {
     eyebrow: "Alternate view",
     lead: "See the growth story",
-    preview: "Event-weighted buying, OEM scale, and verified outcomes  - how brands ramp without breaking unit economics.",
+    preview: "Event-weighted buying, OEM scale, and verified outcomes — how brands ramp without breaking unit economics.",
     cta: "Switch to Growth",
   },
 } satisfies Record<

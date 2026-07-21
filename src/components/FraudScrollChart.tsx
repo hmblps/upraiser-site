@@ -27,9 +27,7 @@ const fraudGhostLayout = [
   { left: "58%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
 ] as const;
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
+import { clamp } from "../lib/clamp";
 
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = (angleDeg * Math.PI) / 180;
@@ -154,7 +152,12 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
   if (!enabled) return null;
 
   return (
-    <motion.div className="fraud-radial-chart" style={reduced ? { opacity: 0.75 } : { opacity: chartOpacity }} aria-hidden>
+    <>
+      <p className="sr-only">
+        Fraud traffic breakdown: fake installs 47%, device farms 35%, AI layer 10%, bots 8%. Values animate as you
+        scroll.
+      </p>
+      <motion.div className="fraud-radial-chart" style={reduced ? { opacity: 0.75 } : { opacity: chartOpacity }} aria-hidden>
       <div className="fraud-radial-chart__ghosts fold-chart-ghosts">
         {segments.map((segment, index) => {
           const layout = fraudGhostLayout[index]!;
@@ -203,5 +206,6 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
         </div>
       </div>
     </motion.div>
+    </>
   );
 }

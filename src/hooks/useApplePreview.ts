@@ -2,15 +2,22 @@ import { useEffect, useState } from "react";
 import {
   APPLE_PREVIEW_FEATURES,
   type ApplePreviewFeature,
+  isApplePreviewPanelVisible,
   parseApplePreviewFeatures,
 } from "../config/applePreview";
 
 export function useApplePreview() {
-  const [features, setFeatures] = useState<ApplePreviewFeature[] | null>(() =>
-    typeof window === "undefined" ? null : parseApplePreviewFeatures(window.location.search),
-  );
+  const [features, setFeatures] = useState<ApplePreviewFeature[] | null>(() => {
+    if (typeof window === "undefined" || !isApplePreviewPanelVisible()) return null;
+    return parseApplePreviewFeatures(window.location.search);
+  });
 
   useEffect(() => {
+    if (!isApplePreviewPanelVisible()) {
+      setFeatures(null);
+      return;
+    }
+
     const sync = () => setFeatures(parseApplePreviewFeatures(window.location.search));
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);

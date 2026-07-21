@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { audienceByMode } from "../data/liveContent";
-import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
 
@@ -13,7 +13,7 @@ function AudienceStatic() {
   const content = audienceByMode[mode];
 
   return (
-    <section id="audience" className="section-band section-band--quiet scroll-mt-24">
+    <section id="audience" className="section-band section-band--quiet">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader label={content.label} title={content.title} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-5">
@@ -63,6 +63,6 @@ function AudienceAnimated() {
 }
 
 export function Audience() {
-  const reduced = useReducedMotion();
-  return reduced ? <AudienceStatic /> : <AudienceAnimated />;
+  const runway = useScrollRunwayEnabled();
+  return runway ? <AudienceAnimated /> : <AudienceStatic />;
 }

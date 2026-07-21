@@ -1,0 +1,190 @@
+.section-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-section-label);
+}
+
+.section-label-red {
+  color: var(--brand-section-label);
+}
+
+.card-surface-gold {
+  background-color: color-mix(in srgb, var(--theme-accent) 5%, var(--theme-bg-card));
+}
+
+.card-surface-red {
+  background-color: color-mix(in srgb, var(--theme-accent-secondary) 5%, var(--theme-bg-card));
+}
+
+.growth-word-inline {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-magenta);
+}
+
+.accent-word {
+  font-weight: 800;
+}
+
+.accent-word-gold {
+  color: var(--color-orange);
+}
+
+.accent-word-red {
+  color: var(--color-magenta);
+}
+
+.accent-scroll-section--lite {
+  min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .accent-scroll-section--lite.scroll-scene--fold {
+    min-height: 135vh;
+  }
+}
+
+.accent-scroll-sticky {
+  position: sticky;
+  top: var(--scroll-sticky-top);
+  display: flex;
+  min-height: calc(100vh - var(--scroll-sticky-top));
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 1rem 1.5rem;
+  overflow: visible;
+  /* containing block for full-bleed fold chart */
+  isolation: isolate;
+}
+
+.accent-scroll-stage {
+  min-height: min(26vh, 14rem);
+  overflow: visible;
+}
+
+.accent-scroll-float,
+.accent-scroll-float-placeholder {
+  translate: -50% -50%;
+}
+
+.accent-scroll-float-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: min(14vh, 6.5rem);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.accent-scroll-hero-word {
+  font-size: clamp(3.5rem, 14vw, 7.5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.accent-scroll-hero-word-gold {
+  color: var(--color-orange);
+  text-shadow:
+    0 0 36px color-mix(in srgb, var(--theme-accent) 32%, transparent),
+    0 0 72px color-mix(in srgb, var(--theme-accent) 14%, transparent);
+}
+
+.accent-scroll-hero-word-red {
+  color: var(--color-magenta);
+  text-shadow:
+    0 0 36px color-mix(in srgb, var(--theme-accent-secondary) 28%, transparent),
+    0 0 72px color-mix(in srgb, var(--theme-accent) 12%, transparent);
+}
+
+.accent-scroll-copy--lite {
+  position: relative;
+  z-index: 1;
+  max-width: 48rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: min(9vh, 4rem);
+}
+
+.accent-scroll-inline-line {
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .accent-scroll-inline-line {
+    white-space: nowrap;
+  }
+
+  .accent-scroll-section--split-fraud .accent-scroll-copy--lite {
+    max-width: min(34rem, 44%);
+    margin-left: 0;
+    margin-right: auto;
+    padding-top: min(5vh, 2.5rem);
+  }
+}
+
+/* Laptop band — chart vs copy balance on 13–15" displays */
+@media (min-width: 1280px) and (max-width: 1440px) {
+  .accent-scroll-section--split-fraud .accent-scroll-copy--lite {
+    max-width: min(30rem, 40%);
+    padding-top: min(4vh, 2rem);
+  }
+
+  .accent-scroll-section--split-fraud .accent-scroll-sticky {
+    padding-block: 0.75rem 1.25rem;
+  }
+
+  .accent-scroll-section--split-fraud .accent-scroll-stage {
+    min-height: min(44vh, 24rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .accent-scroll-section--lite {
+    min-height: 100vh;
+  }
+
+  .accent-scroll-stage {
+    min-height: 22vh;
+  }
+
+  .accent-scroll-copy--lite {
+    padding-top: min(8vh, 3.5rem);
+  }
+}
+
+/* Tighter band padding on fold sections */
+main > section#audience.section-band--quiet,
+main > section#promise.section-band--quiet {
+  padding-block: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  main > section#audience.section-band--quiet,
+  main > section#promise.section-band--quiet {
+    padding-block: 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main > section#audience.section-band--quiet,
+  main > section#promise.section-band--quiet {
+    padding-block: 4.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accent-scroll-section--lite {
+    min-height: auto;
+  }
+
+  .accent-scroll-sticky {
+    position: static;
+    min-height: auto;
+  }
+}

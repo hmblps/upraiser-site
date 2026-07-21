@@ -4,6 +4,7 @@ import { footerLinks, lenovoPartnership, sectionsByMode } from "../data/liveCont
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
+import { ContactFormField } from "./ContactFormField";
 
 type FormState = {
   name: string;
@@ -119,13 +120,13 @@ export function Contact() {
               <div className="mt-10 space-y-4 text-sm">
                 <div>
                   <div className="text-muted stat-label">Email</div>
-                  <a href="mailto:info@upraiser.co.uk" className="font-medium text-fg hover:text-orange">
+                  <a href="mailto:info@upraiser.co.uk" className="font-semibold text-fg hover:text-orange">
                     info@upraiser.co.uk
                   </a>
                 </div>
                 <div>
                   <div className="text-muted stat-label">Address</div>
-                  <span className="font-medium">
+                  <span className="font-semibold">
                     128 City Road, London EC1V 2NX, United Kingdom
                   </span>
                 </div>
@@ -136,7 +137,7 @@ export function Contact() {
                       href={linkedIn.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium text-fg hover:text-orange"
+                      className="font-semibold text-fg hover:text-orange"
                     >
                       linkedin.com/company/upraiser
                     </a>
@@ -164,7 +165,7 @@ export function Contact() {
                   </p>
                   <button
                     type="button"
-                    className="mt-8 text-sm font-medium text-orange hover:underline"
+                    className="mt-8 text-sm font-semibold text-orange hover:underline"
                     onClick={() => {
                       setStatus("idle");
                       setForm(initialForm);
@@ -176,7 +177,7 @@ export function Contact() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                <form onSubmit={handleSubmit} className="space-y-5" noValidate aria-busy={status === "loading"}>
                   {status === "error" && submitError && (
                     <div
                       className="rounded-xl border border-magenta/30 bg-magenta/5 px-4 py-3 text-sm text-magenta-light"
@@ -186,72 +187,34 @@ export function Contact() {
                     </div>
                   )}
 
-                  <div>
-                    <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
-                      Full name
-                    </label>
+                  <ContactFormField label="Full name" id="name" error={errors.name} disabled={status === "loading"}>
                     <input
-                      id="name"
                       type="text"
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      disabled={status === "loading"}
-                      aria-invalid={errors.name ? true : undefined}
-                      aria-describedby={errors.name ? "name-error" : undefined}
                     />
-                    {errors.name && (
-                      <p id="name-error" className="mt-1 text-xs text-red-400" role="alert">
-                        {errors.name}
-                      </p>
-                    )}
-                  </div>
+                  </ContactFormField>
 
-                  <div>
-                    <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
-                      Work email
-                    </label>
+                  <ContactFormField label="Work email" id="email" error={errors.email} disabled={status === "loading"}>
                     <input
-                      id="email"
                       type="email"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      disabled={status === "loading"}
-                      aria-invalid={errors.email ? true : undefined}
-                      aria-describedby={errors.email ? "email-error" : undefined}
                     />
-                    {errors.email && (
-                      <p id="email-error" className="mt-1 text-xs text-red-400" role="alert">
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
+                  </ContactFormField>
 
-                  <div>
-                    <label htmlFor="company" className="mb-1.5 block text-sm font-medium">
-                      Company
-                    </label>
+                  <ContactFormField label="Company" id="company" disabled={status === "loading"}>
                     <input
-                      id="company"
                       type="text"
                       value={form.company}
                       onChange={(e) => setForm({ ...form, company: e.target.value })}
-                      className="w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      disabled={status === "loading"}
                     />
-                  </div>
+                  </ContactFormField>
 
-                  <div>
-                    <label htmlFor="vertical" className="mb-1.5 block text-sm font-medium">
-                      I am a...
-                    </label>
+                  <ContactFormField label="I am a..." id="vertical" disabled={status === "loading"}>
                     <select
-                      id="vertical"
                       value={form.vertical}
                       onChange={(e) => setForm({ ...form, vertical: e.target.value })}
-                      className="w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      disabled={status === "loading"}
                     >
                       <option value="brand">Brand</option>
                       <option value="advertising-partner">Advertising Partner</option>
@@ -259,28 +222,15 @@ export function Contact() {
                       <option value="direct-publisher">Direct publisher</option>
                       <option value="other">Other</option>
                     </select>
-                  </div>
+                  </ContactFormField>
 
-                  <div>
-                    <label htmlFor="message" className="mb-1.5 block text-sm font-medium">
-                      Message
-                    </label>
+                  <ContactFormField label="Message" id="message" error={errors.message} disabled={status === "loading"}>
                     <textarea
-                      id="message"
                       rows={4}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full resize-none rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      disabled={status === "loading"}
-                      aria-invalid={errors.message ? true : undefined}
-                      aria-describedby={errors.message ? "message-error" : undefined}
                     />
-                    {errors.message && (
-                      <p id="message-error" className="mt-1 text-xs text-red-400" role="alert">
-                        {errors.message}
-                      </p>
-                    )}
-                  </div>
+                  </ContactFormField>
 
                   <div>
                     <label className="flex cursor-pointer items-start gap-3 text-sm text-muted-light">
@@ -298,7 +248,7 @@ export function Contact() {
                       />
                       <span>
                         I have read and agree to the{" "}
-                        <a href="/privacy" className="font-medium text-orange hover:text-orange-light">
+                        <a href="/privacy" className="font-semibold text-orange hover:text-orange-light">
                           Privacy Policy
                         </a>
                         .

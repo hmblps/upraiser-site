@@ -17,7 +17,7 @@ function SoftDetail({
 }) {
   return (
     <div className="space-y-2">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted opacity-50">{title}</p>
+      <p className="text-micro text-muted opacity-50">{title}</p>
       {children}
     </div>
   );
@@ -64,10 +64,10 @@ function CaseCard({
       aria-hidden={copy > 0 || undefined}
       className="card-lift case-card flex w-[min(88vw,420px)] shrink-0 flex-col overflow-hidden rounded-3xl border border-border/60 bg-bg-card"
     >
-      <div className="case-card-scroll flex min-h-0 flex-1 flex-col p-8 md:p-10">
+      <div className="case-card-scroll card-pad flex min-h-0 flex-1 flex-col">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange opacity-80">
+            <span className="text-micro text-orange opacity-80">
               {item.category}
             </span>
             <h3 className="mt-3 text-xl font-bold tracking-tight text-fg md:text-2xl">{item.client}</h3>
@@ -79,7 +79,7 @@ function CaseCard({
           <p className="case-hero-metric-value text-6xl font-bold tracking-tighter text-orange md:text-7xl">
             {heroDisplay}
           </p>
-          <p className="mt-2 text-sm font-medium tracking-wide text-muted opacity-60">{item.heroMetric.label}</p>
+          <p className="mt-2 text-sm font-semibold tracking-wide text-muted opacity-60">{item.heroMetric.label}</p>
         </div>
 
         <p className="mt-8 text-sm leading-relaxed text-muted opacity-60 md:text-[0.9375rem]">{data.overview}</p>
@@ -116,6 +116,9 @@ export function CaseStudies() {
           <div className="carousel-fade relative">
             <div
               ref={scrollRef}
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Case studies"
               data-lenis-prevent-touch
               className="cases-carousel cases-carousel-picker flex cursor-grab items-start gap-5 overflow-x-auto pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >

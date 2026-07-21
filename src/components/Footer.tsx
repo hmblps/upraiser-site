@@ -80,7 +80,7 @@ export function Footer() {
                       className="inline-flex items-center gap-2 text-sm text-muted-light transition-colors hover:text-fg"
                     >
                       {link.label}
-                      <span className="text-[10px] text-muted" aria-hidden>
+                      <span className="text-micro text-muted" aria-hidden>
                         ↗
                       </span>
                     </a>

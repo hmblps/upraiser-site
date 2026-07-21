@@ -16,9 +16,7 @@ type FoldAreaMassProps = {
   progress: MotionValue<number>;
 };
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
+import { clamp } from "../lib/clamp";
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;

@@ -14,9 +14,7 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
+import { clamp } from "../lib/clamp";
 
 export function inlineWordWidth(word: string) {
   return `${Math.max(word.length + 1, 7)}ch`;
@@ -92,7 +90,7 @@ export function AccentScrollFold({
     <section
       ref={sectionRef}
       id={id}
-      className={`accent-scroll-section accent-scroll-section--lite section-band section-band--quiet scroll-mt-24 ${className}`.trim()}
+      className={`accent-scroll-section accent-scroll-section--lite scroll-scene scroll-scene--fold section-band section-band--quiet ${className}`.trim()}
     >
       <div className="accent-scroll-sticky mx-auto max-w-7xl px-6 lg:px-8">
         {ambient === "chart" ? (

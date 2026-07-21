@@ -24,8 +24,8 @@ export function accentIconWrap(tone: AccentTone): string {
 
 export function accentBadge(tone: AccentTone): string {
   return tone === "gold"
-    ? "rounded-full bg-orange/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-orange"
-    : "rounded-full bg-magenta/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-magenta";
+    ? "rounded-full bg-orange/10 px-2.5 py-1 text-micro tracking-wider text-orange"
+    : "rounded-full bg-magenta/10 px-2.5 py-1 text-micro tracking-wider text-magenta";
 }
 
 export function accentCategoryBadge(tone: AccentTone): string {

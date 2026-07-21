@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { promiseByMode } from "../data/liveContent";
-import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { AccentWord } from "./AccentWord";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
@@ -10,7 +10,7 @@ function PromiseStatic() {
   const content = promiseByMode[mode];
 
   return (
-    <section id="promise" className="section-band section-band--quiet scroll-mt-24">
+    <section id="promise" className="section-band section-band--quiet">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader label={content.label} animated={false} />
         <h2 className="section-title max-w-3xl">
@@ -61,6 +61,6 @@ function PromiseAnimated() {
 }
 
 export function PromiseSection() {
-  const reduced = useReducedMotion();
-  return reduced ? <PromiseStatic /> : <PromiseAnimated />;
+  const runway = useScrollRunwayEnabled();
+  return runway ? <PromiseAnimated /> : <PromiseStatic />;
 }

@@ -36,5 +36,6 @@ export const defaultTransition = SPRING_SOFT;
 
 export const viewportOnce = {
   once: true,
-  margin: "-80px" as const,
+  margin: "0px 0px -10% 0px" as const,
+  amount: 0.2 as const,
 };

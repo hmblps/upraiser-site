@@ -10,6 +10,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes("node_modules/framer-motion")) return "framer-motion";
           if (id.includes("node_modules/lenis")) return "lenis";
+          if (id.includes("node_modules/recharts")) return "recharts";
         },
       },
     },

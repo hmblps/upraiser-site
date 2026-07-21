@@ -1,51 +1,40 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import { processByMode, sectionsByMode } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import { useScroll } from "../context/ScrollContext";
+import { useScrollScene } from "../hooks/useScrollScene";
+import { clamp } from "../lib/clamp";
 import { SectionAmbience } from "./SectionAmbience";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { SPRING_SOFT } from "../lib/motion";
 import { ScrollLink } from "./ScrollLink";
 
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-
-function useProcessProgress(sectionRef: React.RefObject<HTMLElement | null>, stepCount: number, reduced: boolean) {
-  const { registerScrollListener } = useScroll();
-  const raw = useMotionValue(0);
-  const progress = useSpring(raw, { stiffness: 180, damping: 32, mass: 0.7 });
-  const [activeIndex, setActiveIndex] = useState(0);
+function useProcessActiveIndex(
+  sectionRef: React.RefObject<HTMLElement | null>,
+  stepCount: number,
+  reduced: boolean,
+  resetKey: string,
+) {
+  const progress = useScrollScene(sectionRef, {
+    mode: "viewportBand",
+    spring: false,
+    resetKey,
+  });
+  const [activeIndex, setActiveIndex] = useState(reduced ? stepCount - 1 : 0);
 
   useEffect(() => {
     if (reduced) {
-      raw.set(1);
       setActiveIndex(stepCount - 1);
       return;
     }
-
-    const update = () => {
-      const node = sectionRef.current;
-      if (!node) return;
-      const bounds = node.getBoundingClientRect();
-      const viewport = window.innerHeight;
-      const start = viewport * 0.72;
-      const end = viewport * 0.28;
-      const t = clamp((start - bounds.top) / (start - end + bounds.height * 0.35), 0, 1);
-      raw.set(t);
+    const unsub = progress.on("change", (t) => {
       setActiveIndex(clamp(Math.floor(t * stepCount), 0, stepCount - 1));
-    };
+    });
+    return unsub;
+  }, [progress, reduced, stepCount]);
 
-    update();
-    const unsubscribe = registerScrollListener(update);
-    window.addEventListener("resize", update);
-    return () => {
-      unsubscribe();
-      window.removeEventListener("resize", update);
-    };
-  }, [raw, reduced, registerScrollListener, sectionRef, stepCount]);
-
-  return { progress, activeIndex };
+  return activeIndex;
 }
 
 function ProcessStep({
@@ -95,19 +84,19 @@ export function Process() {
   const steps = processByMode[mode];
   const sectionRef = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const { activeIndex } = useProcessProgress(sectionRef, steps.length, reduced);
+  const activeIndex = useProcessActiveIndex(sectionRef, steps.length, reduced, mode);
 
   return (
     <section
       ref={sectionRef}
       id="process"
-      className="section-band section-band--ambience section-band--dense relative scroll-mt-24 overflow-hidden"
+      className="section-band section-band--ambience section-band--dense relative overflow-hidden"
     >
       <SectionAmbience tone="soft" />
       <div className="relative z-[1] mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader animated={false} label={sectionsByMode.process.label} title={section.title} />
 
-        <div className="process-rail">
+        <div className="process-rail section-stack">
           {steps.map((item, index) => (
             <ProcessStep
               key={item.step}

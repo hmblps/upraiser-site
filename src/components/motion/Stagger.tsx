@@ -11,7 +11,7 @@ type StaggerProps = HTMLMotionProps<"div"> & {
 export function Stagger({ children, stagger = 0.1, className, resetKey = "", ...props }: StaggerProps) {
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0, margin: "0px 0px -8% 0px", once: true });
+  const inView = useInView(ref, { amount: 0.15, margin: "0px 0px -10% 0px", once: true });
   // Fallback: hash jumps / lazy mount can miss the first intersection
   const [forced, setForced] = useState(false);
 

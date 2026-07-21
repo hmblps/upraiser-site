@@ -22,7 +22,7 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
     <div className={`slide-tabs relative flex gap-2 ${className}`.trim()}>
       {items.map((item) => {
         const active = item.id === activeId;
-        const classes = `slide-tab relative shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition ${
+        const classes = `slide-tab relative shrink-0 rounded-full px-3.5 py-1.5 text-micro tracking-wide transition ${
           active ? "text-on-accent" : "border border-border text-muted-light hover:border-fg/20 hover:text-fg"
         }`;
 

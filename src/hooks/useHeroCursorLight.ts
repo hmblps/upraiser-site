@@ -6,23 +6,28 @@ type Options = {
   lerp?: number;
   minY?: number;
   maxY?: number;
+  minX?: number;
+  maxX?: number;
 };
 
 export function useHeroCursorLight(
   containerRef: RefObject<HTMLElement | null>,
   enabled: boolean,
-  { defaultX = 74, defaultY = 36, lerp = 0.1, minY, maxY }: Options = {},
+  { defaultX = 74, defaultY = 36, lerp = 0.1, minY, maxY, minX, maxX }: Options = {},
 ) {
   useEffect(() => {
     const container = containerRef.current;
     if (!enabled || !container) return;
 
-    const clampY = (value: number) => {
-      let y = value;
-      if (minY !== undefined) y = Math.max(minY, y);
-      if (maxY !== undefined) y = Math.min(maxY, y);
-      return y;
+    const clamp = (value: number, min?: number, max?: number) => {
+      let next = value;
+      if (min !== undefined) next = Math.max(min, next);
+      if (max !== undefined) next = Math.min(max, next);
+      return next;
     };
+
+    const clampX = (value: number) => clamp(value, minX, maxX);
+    const clampY = (value: number) => clamp(value, minY, maxY);
 
     const finePointer = window.matchMedia("(pointer: fine)").matches;
     if (!finePointer) {
@@ -49,7 +54,7 @@ export function useHeroCursorLight(
         return;
       }
 
-      targetX = relX;
+      targetX = clampX(relX);
       targetY = clampY(relY);
     };
 
@@ -73,5 +78,5 @@ export function useHeroCursorLight(
       container.style.removeProperty("--hero-light-x");
       container.style.removeProperty("--hero-light-y");
     };
-  }, [containerRef, enabled, defaultX, defaultY, lerp, minY, maxY]);
+  }, [containerRef, enabled, defaultX, defaultY, lerp, minY, maxY, minX, maxX]);
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useHeroCursorLight } from "../hooks/useHeroCursorLight";
 import { useHeroMobileLite } from "../hooks/useHeroMobileLite";
@@ -8,16 +8,31 @@ const MOUNTAINS_MP4 = "/hero/light-mountains-loop.mp4";
 
 type HeroMountainsLoopProps = {
   pauseOffscreen?: boolean;
-  preload?: "auto" | "metadata" | "none";
+  /** Desktop: load immediately with preload auto. Mobile: defer + metadata. */
+  eager?: boolean;
 };
 
-function HeroMountainsLoop({ pauseOffscreen = false, preload = "auto" }: HeroMountainsLoopProps) {
+function HeroMountainsLoop({ pauseOffscreen = false, eager = false }: HeroMountainsLoopProps) {
   const reduced = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [sourceReady, setSourceReady] = useState(eager);
+
+  useEffect(() => {
+    if (eager) return;
+
+    const activate = () => setSourceReady(true);
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(activate, { timeout: 900 });
+      return () => window.cancelIdleCallback(id);
+    }
+
+    const id = window.setTimeout(activate, 350);
+    return () => window.clearTimeout(id);
+  }, [eager]);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !sourceReady) return;
 
     if (reduced) {
       video.pause();
@@ -28,11 +43,11 @@ function HeroMountainsLoop({ pauseOffscreen = false, preload = "auto" }: HeroMou
     if (pauseOffscreen) return;
 
     video.play().catch(() => {});
-  }, [reduced, pauseOffscreen]);
+  }, [reduced, pauseOffscreen, sourceReady]);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || reduced || !pauseOffscreen) return;
+    if (!video || reduced || !pauseOffscreen || !sourceReady) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -47,7 +62,9 @@ function HeroMountainsLoop({ pauseOffscreen = false, preload = "auto" }: HeroMou
 
     observer.observe(video);
     return () => observer.disconnect();
-  }, [reduced, pauseOffscreen]);
+  }, [reduced, pauseOffscreen, sourceReady]);
+
+  const preload = eager ? "auto" : "metadata";
 
   return (
     <video
@@ -56,10 +73,10 @@ function HeroMountainsLoop({ pauseOffscreen = false, preload = "auto" }: HeroMou
       muted
       loop
       playsInline
-      preload={preload}
+      preload={sourceReady ? preload : "none"}
       tabIndex={-1}
     >
-      <source src={MOUNTAINS_MP4} type="video/mp4" />
+      {sourceReady ? <source src={MOUNTAINS_MP4} type="video/mp4" /> : null}
     </video>
   );
 }
@@ -73,15 +90,17 @@ export function HeroAtmosphere() {
   const useSpotlight = !mobileLite && !reduced;
 
   useHeroCursorLight(containerRef, useSpotlight, {
-    defaultX: isLight ? 72 : 76,
-    defaultY: isLight ? 36 : 38,
-    minY: isLight ? undefined : 20,
-    lerp: 0.085,
+    defaultX: isLight ? 70 : 56,
+    defaultY: isLight ? 34 : 66,
+    minY: isLight ? undefined : 38,
+    maxY: isLight ? undefined : 88,
+    maxX: isLight ? undefined : 78,
+    lerp: 0.052,
   });
 
   const videoProps = {
     pauseOffscreen: mobileLite,
-    preload: mobileLite ? ("metadata" as const) : ("auto" as const),
+    eager: !mobileLite && !reduced,
   };
 
   const baseClass = isLight ? "hero-light-mountains-base" : "hero-dark-mountains-base";
@@ -94,7 +113,8 @@ export function HeroAtmosphere() {
       className={`pointer-events-none absolute inset-0 hero-cursor-light-active${mobileLite ? " hero-atmosphere-mobile-lite" : ""}${useSpotlight ? " hero-atmosphere-spotlight" : ""}${isLight ? " hero-atmosphere-light" : " hero-atmosphere-dark"}`}
       aria-hidden
     >
-      <div className={layerClass}>
+      <div className="hero-copy-wash" />
+      <div className={`${layerClass} hero-atmosphere-layer-stack`}>
         <div className={baseClass}>
           <HeroMountainsLoop {...videoProps} />
           {useSpotlight ? (
@@ -116,7 +136,6 @@ export function HeroAtmosphere() {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 hero-bottom-fade-bridge" />
-      <div className="hero-copy-wash" />
     </div>
   );
 }

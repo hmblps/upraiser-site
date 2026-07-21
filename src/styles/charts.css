@@ -1,0 +1,321 @@
+/* Full-bleed SCALE fold chart — edge to edge inside the sticky empty block */
+.fold-chart {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .fold-chart {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 12%;
+    bottom: 10%;
+    z-index: 0;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .accent-scroll-stage {
+    min-height: min(48vh, 26rem);
+  }
+
+  .accent-scroll-copy--lite,
+  .accent-scroll-sticky > .section-header {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.fold-chart-ghosts {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.fold-chart-ghost-slot {
+  position: absolute;
+  translate: -50% -50%;
+}
+
+.fold-chart-ghost {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  will-change: transform, opacity;
+}
+
+.fold-chart-ghost-value {
+  font-size: clamp(1.65rem, 3.6vw, 2.65rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--theme-fg) 62%, transparent);
+  line-height: 1;
+}
+
+.fold-chart-ghost-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--theme-muted) 75%, transparent);
+}
+
+[data-theme="dark"] .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--theme-accent) 52%, var(--theme-fg) 26%);
+}
+
+[data-theme="dark"] .fold-chart-ghost-label {
+  color: color-mix(in srgb, var(--theme-accent-light) 34%, var(--theme-muted) 38%);
+}
+
+[data-theme="light"] .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--theme-accent-ink) 38%, var(--theme-fg) 38%);
+}
+
+.fold-chart-plot {
+  position: absolute;
+  inset: 0;
+  contain: layout paint;
+}
+
+.fold-chart-plot .mode-line-chart {
+  transform: translateZ(0);
+}
+
+.mode-line-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.mode-line-tooltip {
+  min-width: 9.5rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 80%, transparent);
+  background: color-mix(in srgb, var(--theme-bg-card) 92%, transparent);
+  box-shadow: 0 10px 28px color-mix(in srgb, #000 12%, transparent);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.mode-line-tooltip-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--theme-muted);
+}
+
+.mode-line-tooltip ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.mode-line-tooltip li {
+  display: grid;
+  grid-template-columns: 0.5rem 1fr auto;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--theme-fg);
+}
+
+.mode-line-tooltip-swatch {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+}
+
+.mode-line-tooltip-name {
+  color: var(--theme-muted-light);
+}
+
+.mode-line-tooltip-value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold-chart {
+    display: none;
+  }
+
+  .fraud-radial-chart {
+    display: none;
+  }
+}
+
+/* PROOF — full-bleed ambient radial (dark mirror of SCALE line chart) */
+.fraud-radial-chart {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .fraud-radial-chart {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    width: 100vw;
+    transform: translateX(-50%);
+    overflow: visible;
+    pointer-events: none;
+  }
+}
+
+.fraud-radial-chart__ghosts {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+}
+
+.fraud-radial-chart__plot {
+  container-type: size;
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  left: 33%;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-right: clamp(5.5rem, 20vw, 12rem);
+  padding-bottom: clamp(1rem, 3vh, 2.5rem);
+  overflow: hidden;
+}
+
+.fraud-radial-chart__frame {
+  position: relative;
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+  flex-shrink: 0;
+  aspect-ratio: 1;
+}
+
+.fraud-radial-chart__svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: translateX(-3.5%) scale(1.26);
+  transform-origin: 28% 52%;
+}
+
+.fraud-radial-chart__track {
+  color: color-mix(in srgb, var(--theme-border) 55%, transparent);
+  opacity: 0.14;
+}
+
+.fraud-radial-chart__arc {
+  color: inherit;
+  filter: drop-shadow(0 0 14px color-mix(in srgb, currentColor 22%, transparent));
+  opacity: 0.92;
+}
+
+.fraud-radial-chart__ghosts .fraud-ghost-toned .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--fraud-ghost-tone) 70%, var(--theme-fg) 14%);
+}
+
+.fraud-radial-chart__ghosts .fraud-ghost-toned .fold-chart-ghost-label {
+  color: color-mix(in srgb, var(--fraud-ghost-tone) 46%, var(--theme-muted) 34%);
+}
+
+.fraud-radial-chart__date-ring-svg {
+  fill: color-mix(in srgb, var(--theme-bg-card) 58%, transparent);
+  stroke: color-mix(in srgb, var(--theme-border) 82%, transparent);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--theme-accent-secondary) 12%, transparent));
+}
+
+.fraud-radial-chart__date-day-svg {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  fill: color-mix(in srgb, var(--theme-fg) 88%, transparent);
+}
+
+.fraud-radial-chart__date-year-svg {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: color-mix(in srgb, var(--theme-muted) 90%, transparent);
+}
+
+@media (min-width: 1280px) and (max-width: 1440px) {
+  .fraud-radial-chart__plot {
+    left: 31%;
+    padding-right: clamp(4rem, 14vw, 9rem);
+  }
+
+  .fraud-radial-chart__svg {
+    transform: translateX(-2.5%) scale(1.18);
+    transform-origin: 26% 52%;
+  }
+
+  .fold-chart {
+    top: 14%;
+    bottom: 8%;
+  }
+}
+
+/* RESULTS ambient AreaChart — accumulated mass (sequel to SCALE line) */
+.fold-area {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .fold-area {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 12%;
+    bottom: 10%;
+    z-index: 0;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+}
+
+.fold-area-motion {
+  position: absolute;
+  inset: 0;
+}
+
+.fold-area-ghosts {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 100%);
+}
+
+.fold-area-plot {
+  position: absolute;
+  inset: 0;
+  /* Soft top fade so copy stays clear — still enough chart body to read as a plot */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold-area {
+    display: none;
+  }
+}

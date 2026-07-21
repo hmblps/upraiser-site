@@ -58,7 +58,7 @@ export function About() {
     <section
       ref={anchorRef}
       id="about"
-      className="section-band section-band--ambience relative scroll-mt-24 overflow-hidden"
+      className="section-band section-band--ambience relative overflow-hidden"
     >
       <SectionAmbience tone={mode === "growth" ? "warm" : "cool"} />
       <div className="relative z-[1] mx-auto max-w-7xl px-6 pb-24 lg:px-8 lg:pb-28">
@@ -66,7 +66,7 @@ export function About() {
           <SectionHeader animated={false} label={sectionsByMode.about.label} title={section.title} description={section.description} />
 
           <ProximityCard className="rounded-2xl">
-            <div id="technology" className="spec-panel scroll-mt-24 rounded-2xl border border-border bg-bg-card/90 p-5 lg:pt-5">
+            <div id="technology" className="spec-panel scroll-mt-section rounded-2xl border border-border bg-bg-card/90 p-5 lg:pt-5">
               <p className="section-label">{sectionsByMode.technology.label}</p>
               <dl className="spec-list">
                 {technology.map((item) => (

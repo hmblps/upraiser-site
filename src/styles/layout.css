@@ -1,0 +1,236 @@
+.site-main {
+  position: relative;
+}
+
+#hero {
+  isolation: isolate;
+}
+
+.theme-bridge-strip {
+  backdrop-filter: blur(12px);
+}
+
+.theme-bridge-strip--to-light {
+  background: color-mix(in srgb, var(--theme-bg-card) 92%, #fff4e8 8%);
+  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 45%, transparent);
+}
+
+.theme-bridge-strip--to-dark {
+  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
+}
+
+.theme-bridge-cta:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--theme-accent) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.case-card {
+  height: min(82vh, 38rem);
+  max-height: min(82vh, 38rem);
+}
+
+.case-card-scroll {
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+  touch-action: pan-y pinch-zoom;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--theme-accent) 35%, transparent) transparent;
+}
+
+.case-card-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.case-card-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--theme-accent) 35%, transparent);
+  border-radius: 999px;
+}
+
+.cases-carousel-picker {
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: max(1.5rem, 50% - min(86vw, 392px) / 2);
+}
+
+.cases-carousel-picker [data-case-card] {
+  scroll-snap-align: center;
+}
+
+.channel-panel {
+  border: 1px solid var(--theme-border);
+  border-radius: 1rem;
+  background: var(--theme-bg-card);
+  padding: 1.5rem;
+}
+
+.channel-panel.live-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.channel-panel.live-panel::after {
+  content: "";
+  position: absolute;
+  right: 1.5rem;
+  bottom: 0;
+  left: 1.5rem;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--theme-accent), color-mix(in srgb, var(--theme-accent-secondary) 70%, transparent), transparent);
+  opacity: 0.55;
+  transform: translateX(-40%);
+  animation: live-panel-scan 6.5s ease-in-out infinite;
+}
+
+@keyframes live-panel-scan {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateX(-35%);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(35%);
+  }
+}
+
+@keyframes value-pulse-core {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes value-pulse-ring {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes value-bar-dance {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes value-icon-clock-minute {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes value-icon-clock-hour {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes value-icon-check-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes value-icon-scan {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(-5px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(5px);
+  }
+}
+
+@keyframes value-icon-nudge {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  50% {
+    transform: translate(1.5px, 1.5px);
+  }
+}
+
+@keyframes value-icon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes value-icon-node-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes value-ring-dot-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes live-ring-breathe {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes live-mark-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--theme-accent) 0%, transparent);
+    border-color: color-mix(in srgb, var(--theme-accent) 35%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 18px color-mix(in srgb, var(--theme-accent) 28%, transparent);
+    border-color: color-mix(in srgb, var(--theme-accent) 55%, transparent);
+  }
+}
+
+@keyframes live-stat-soft {
+  0%,
+  100% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes live-num-soft {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
