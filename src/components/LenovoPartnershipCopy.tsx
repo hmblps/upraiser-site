@@ -1,4 +1,4 @@
-import { lenovoPartnership } from "../data/content";
+import { lenovoPartnership } from "../data/liveContent";
 
 type LenovoPartnershipCopyProps = {
   className?: string;

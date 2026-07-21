@@ -37,3 +37,4 @@ assets/brand/.og-hero-frame.jpg
 *.njsproj
 *.sln
 *.sw?
+.env*

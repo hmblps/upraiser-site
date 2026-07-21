@@ -5,6 +5,7 @@ import { usePreferNativeScroll } from "../hooks/usePreferNativeScroll";
 import { ScrollProvider } from "../context/ScrollContext";
 
 const HEADER_OFFSET = 80;
+const SCROLLING_CLASS_TIMEOUT_MS = 120;
 
 function getSectionTop(el: HTMLElement, offset = HEADER_OFFSET) {
   return el.getBoundingClientRect().top + window.scrollY - offset;
@@ -16,8 +17,18 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const useLenis = !reduced && !nativeScroll;
   const lenisRef = useRef<Lenis | null>(null);
   const listenersRef = useRef(new Set<(scrollY: number) => void>());
+  const clearScrollClassTimeoutRef = useRef<number | null>(null);
+  const rafRef = useRef(0);
 
   const notifyScroll = useCallback((scrollY: number) => {
+    document.documentElement.classList.add("is-scrolling");
+    if (clearScrollClassTimeoutRef.current !== null) {
+      window.clearTimeout(clearScrollClassTimeoutRef.current);
+    }
+    clearScrollClassTimeoutRef.current = window.setTimeout(() => {
+      document.documentElement.classList.remove("is-scrolling");
+      clearScrollClassTimeoutRef.current = null;
+    }, SCROLLING_CLASS_TIMEOUT_MS);
     listenersRef.current.forEach((listener) => listener(scrollY));
   }, []);
 
@@ -63,14 +74,21 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       const onScroll = () => notifyScroll(window.scrollY);
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onScroll);
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        document.documentElement.classList.remove("is-scrolling");
+        if (clearScrollClassTimeoutRef.current !== null) {
+          window.clearTimeout(clearScrollClassTimeoutRef.current);
+        }
+      };
     }
 
     const lenis = new Lenis({
-      duration: 1.05,
-      lerp: 0.085,
+      duration: 0.72,
+      lerp: 0.14,
       smoothWheel: true,
-      touchMultiplier: 1.2,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.1,
       allowNestedScroll: true,
     });
 
@@ -80,20 +98,36 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       notifyScroll(instance.scroll);
     });
 
-    let frame = 0;
+    let running = true;
 
     const raf = (time: number) => {
-      lenis.raf(time);
-      frame = requestAnimationFrame(raf);
+      if (!running) return;
+      if (!document.hidden) {
+        lenis.raf(time);
+      }
+      rafRef.current = requestAnimationFrame(raf);
     };
 
-    frame = requestAnimationFrame(raf);
+    rafRef.current = requestAnimationFrame(raf);
     notifyScroll(window.scrollY);
 
+    const onVisibility = () => {
+      if (!document.hidden) {
+        notifyScroll(window.scrollY);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
-      cancelAnimationFrame(frame);
+      running = false;
+      cancelAnimationFrame(rafRef.current);
+      document.removeEventListener("visibilitychange", onVisibility);
       lenis.destroy();
       lenisRef.current = null;
+      document.documentElement.classList.remove("is-scrolling");
+      if (clearScrollClassTimeoutRef.current !== null) {
+        window.clearTimeout(clearScrollClassTimeoutRef.current);
+      }
     };
   }, [useLenis, notifyScroll]);
 

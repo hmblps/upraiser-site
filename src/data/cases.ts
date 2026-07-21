@@ -1,134 +1,106 @@
+export interface CaseFocus {
+  overview: string;
+  outcome: string;
+}
+
 export interface CaseStudy {
   id: string;
   client: string;
   category: string;
   headline: string;
-  overview: string;
   channels: string[];
-  challenges: string[];
-  approach: string[];
-  results: { value: string; label: string }[];
   /** Primary metric highlighted on the case card */
   heroMetric: { value: string; label: string };
   /** Normalized trend points for sparkline visualization */
   trend: number[];
-  outcome: string;
+  growthFocus: CaseFocus;
+  optimizationFocus: CaseFocus;
 }
 
 export const caseStudies: CaseStudy[] = [
   {
-    id: "fanatics",
+    id: "igaming",
     client: "Fanatics",
     category: "iGaming",
-    headline: "Compliant sportsbook growth at scale",
-    overview:
-      "We scaled paid acquisition for a real-money sportsbook and casino app across iOS and Android — with strict 18+ compliance and state-level regulatory requirements.",
-    channels: ["Programmatic", "High-intent display", "Behavioral targeting"],
-    challenges: [
-      "Differentiated positioning in a promo-saturated market",
-      "Geo and age compliance across regulated US states",
-      "Driving quality bettors, not vanity install volume",
-    ],
-    approach: [
-      "Curated whitelist of verified, age-gated inventory",
-      "Continuous creative and messaging tests on high-intent placements",
-      "Daily bid and budget tuning against deposit and LTV signals",
-      "Segmentation by sports vs. casino user intent",
-    ],
-    results: [
-      { value: "8,000", label: "Verified installs" },
-      { value: "500", label: "First-time deposits" },
-      { value: "$250K+", label: "Revenue attributed" },
-      { value: "7+", label: "Extra bets per active user" },
-    ],
-    heroMetric: { value: "$250K+", label: "Revenue attributed" },
-    trend: [20, 26, 32, 38, 44, 50, 56, 62, 68, 74, 80, 86],
-    outcome: "Scaled acquisition while keeping fraud at zero and compliance intact across regulated markets.",
+    headline: "Sportsbook growth in regulated markets",
+    channels: ["Programmatic", "High-intent display", "Behavioral"],
+    heroMetric: { value: "$250K+", label: "Attributed Revenue" },
+    trend: [20, 30, 45, 60, 75, 85, 90, 95, 98, 99, 100, 100],
+    growthFocus: {
+      overview: "Fanatics needed to capture the sports-betting market without hitting a compliance wall. We built a growth engine that treated inventory safety with the same rigor as Your LTV.",
+      outcome: "We helped You scale into regulated territory while keeping legal and finance happy. Pure, reportable growth for You."
+    },
+    optimizationFocus: {
+      overview: "A single bad placement in this sector is a legal nightmare. We implemented hard filters to kill fraud and wasted impressions before the spend ever hit the exchange.",
+      outcome: "We fortified Your UA stack against waste. No compliance flags, just high-value bettors who play and stay."
+    }
   },
   {
-    id: "snoop",
-    client: "Snoop",
-    category: "Fintech",
-    headline: "CTV-driven installs with deep activation",
-    overview:
-      "For a UK budget-planning app, we built a connected-TV strategy focused on installs and the critical post-install step: linking a bank account.",
-    channels: ["CTV / Roku", "Performance UA", "Full-funnel optimization"],
-    challenges: [
-      "Breaking through noise in UK personal finance",
-      "Moving users from install to account connection",
-      "Maintaining efficient CPA on a premium funnel event",
-    ],
-    approach: [
-      "Roku TV campaigns timed to peak viewing windows",
-      "Creative and placement tests aligned with UK audience behavior",
-      "Weekly performance reviews and targeting refinements over four months",
-      "Post-install messaging strategy to lift account-link rates",
-    ],
-    results: [
-      { value: "14,308", label: "Installs" },
-      { value: "4,580", label: "Accounts connected" },
-      { value: "32%", label: "Install-to-connect rate" },
-      { value: "4 mo", label: "Sustained growth window" },
-    ],
-    heroMetric: { value: "14,308", label: "Installs driven" },
-    trend: [8, 9, 11, 13, 16, 21, 28, 38, 52, 66, 78, 90],
-    outcome: "Proved CTV can drive both reach and meaningful downstream activation — not just top-of-funnel volume.",
+    id: "ecommerce",
+    client: "D2C Brand",
+    category: "E-commerce",
+    headline: "Global storefront expansion",
+    channels: ["Social", "Influencer", "Display"],
+    heroMetric: { value: "140%", label: "Order Growth" },
+    trend: [10, 15, 25, 40, 55, 70, 85, 90, 92, 95, 97, 100],
+    growthFocus: {
+      overview: "A premium brand needed to scale orders in new GEOs without killing their margins. We shifted the focus from 'installs' to 'conversion-ready' users.",
+      outcome: "We doubled Your reach while Your CPA actually dropped as we hit scale. Results that speak for themselves."
+    },
+    optimizationFocus: {
+      overview: "You were bleeding 20% of Your budget to bots masquerading as shoppers. We re-engineered the funnel to prioritize verified checkout intent.",
+      outcome: "We slashed Your wasted ad-spend by 30%, shifting that capital straight into high-value acquisition. Your ROAS now reflects reality."
+    }
   },
   {
-    id: "vantage",
-    client: "Vantage",
-    category: "Fintech",
-    headline: "OEM-powered trading app acquisition",
-    overview:
-      "We leveraged Lenovo OEM inventory to grow first-time deposits for an Android trading app in competitive fintech markets.",
-    channels: ["OEM pre-install", "Lenovo Ad Exchange", "Event-based CPA"],
-    challenges: [
-      "Standing out in a crowded trading app category",
-      "Scaling FTDs without inflating acquisition costs",
-      "Sustaining engagement after the install",
-    ],
-    approach: [
-      "Distribution via Lenovo exchange and premium direct supply",
-      "Campaigns optimized around deposit and FTD events, not CPI alone",
-      "Rapid geo and device-model targeting — live in 1–2 days",
-      "Post-install activation workflows tied to revenue events",
-    ],
-    results: [
-      { value: "800+", label: "First-time deposits" },
-      { value: "$150+", label: "Average user value" },
-      { value: "120+", label: "Markets reached" },
-      { value: "1–2 days", label: "Typical launch time" },
-    ],
-    heroMetric: { value: "800+", label: "First-time deposits" },
-    trend: [14, 15, 16, 17, 18, 20, 52, 60, 68, 76, 86, 94],
-    outcome: "Delivered high-value traders through OEM channels where standard programmatic alone underperforms.",
+    id: "streaming",
+    client: "Global OTT",
+    category: "Streaming",
+    headline: "From viewer to subscriber",
+    channels: ["CTV", "Performance UA", "Full-funnel"],
+    heroMetric: { value: "32%", label: "Conversion Lift" },
+    trend: [5, 10, 20, 35, 50, 65, 75, 85, 90, 95, 98, 100],
+    growthFocus: {
+      overview: "You needed to turn casual CTV viewers into paying subscribers. We mapped the path from screen-time to signup, finding the 'Aha!' moment in Your app.",
+      outcome: "We delivered a surge in paid subs that shows up in Your product revenue, not just a weekly vanity report."
+    },
+    optimizationFocus: {
+      overview: "Churn was eating Your trial growth. We audited the signup flow to identify exactly where You were losing potential long-term subscribers.",
+      outcome: "We tightened the funnel, keeping more of Your audience engaged and turning more trials into lifetime members."
+    }
   },
   {
-    id: "wsj",
-    client: "Wall Street Journal",
-    category: "Media",
-    headline: "High-intent subscribers at target CPA",
-    overview:
-      "We ran performance campaigns for a leading US financial news app — prioritizing paid subscriptions over raw install volume.",
-    channels: ["Native & editorial", "Finance-intent inventory", "CPA optimization"],
-    challenges: [
-      "High competition and rising CPAs in financial media",
-      "Converting installs into paying subscribers",
-      "Finding inventory that matches brand and compliance standards",
-    ],
-    approach: [
-      "Placements on business, finance, and news environments with proven purchase intent",
-      "Strict inventory filtering against CPA and quality thresholds",
-      "Continuous media-mix testing and budget reallocation from live data",
-    ],
-    results: [
-      { value: "3,000", label: "New purchases / month" },
-      { value: "16,515", label: "Installs in period" },
-      { value: "650", label: "Purchase events tracked" },
-      { value: "On-target", label: "CPA vs. goal" },
-    ],
-    heroMetric: { value: "3,000", label: "New purchases / month" },
-    trend: [24, 32, 38, 42, 41, 43, 46, 54, 63, 72, 82, 91],
-    outcome: "Consistent subscription volume at scale while protecting unit economics in a premium vertical.",
+    id: "lifestyle",
+    client: "Community App",
+    category: "Lifestyle",
+    headline: "Viral loop mechanics",
+    channels: ["Organic-style UA", "Referral"],
+    heroMetric: { value: "4.2x", label: "Viral K-Factor" },
+    trend: [15, 20, 30, 45, 60, 75, 85, 90, 95, 97, 99, 100],
+    growthFocus: {
+      overview: "You wanted to grow Your community through advocacy, not just paid ads. We integrated viral mechanics that made Your users Your best growth partners.",
+      outcome: "We turned Your community into a self-perpetuating engine. Growth that pays for itself."
+    },
+    optimizationFocus: {
+      overview: "Paid creative was burning out too fast. We analyzed Your data to find which creative hooks were actually driving retention versus just cheap clicks.",
+      outcome: "We stabilized Your creative output, ensuring every ad dollar You spend drives Your business forward, not just a temporary spike."
+    }
   },
+  {
+    id: "news",
+    client: "Premium Publisher",
+    category: "News",
+    headline: "Subscription intent at scale",
+    channels: ["Native", "Editorial", "Intent-based"],
+    heroMetric: { value: "3,000", label: "Paid Subs /mo" },
+    trend: [20, 25, 35, 45, 55, 65, 75, 80, 85, 90, 95, 100],
+    growthFocus: {
+      overview: "You needed paying subscribers in a market where CPAs only move one way: up. We identified the high-intent inventory where Your readers actually live.",
+      outcome: "Steady, predictable subscription volume. Your unit economics are finally protected."
+    },
+    optimizationFocus: {
+      overview: "Your bounce rates were spiking on 'news' sites that were really just ad-farms. We applied hard inventory quality filters.",
+      outcome: "We cleaned Your inventory and weeded out the bots. Your subscription volume increased because Your ads finally reached humans."
+    }
+  }
 ];

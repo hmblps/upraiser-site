@@ -15,7 +15,11 @@ export function Reveal({ children, delay = 0, className, ...props }: RevealProps
       whileInView="visible"
       viewport={viewportOnce}
       variants={fadeUp}
-      transition={{ ...defaultTransition, delay }}
+      transition={
+        reduced
+          ? { duration: 0 }
+          : { ...defaultTransition, delay }
+      }
       className={className}
       {...props}
     >

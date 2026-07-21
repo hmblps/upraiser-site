@@ -4,6 +4,7 @@ import { Hero } from "./components/Hero";
 import { SmoothScroll } from "./components/SmoothScroll";
 import { SectionNav } from "./components/SectionNav";
 import { SiteGrain } from "./components/SiteGrain";
+import { ScrollLink } from "./components/ScrollLink";
 import { useApplePreview } from "./hooks/useApplePreview";
 
 const ApplePreviewPanel = lazy(() =>
@@ -24,13 +25,10 @@ const PromiseSection = lazy(() =>
   import("./components/PromiseSection").then((m) => ({ default: m.PromiseSection })),
 );
 const Difference = lazy(() => import("./components/Difference").then((m) => ({ default: m.Difference })));
-const Objectives = lazy(() => import("./components/Objectives").then((m) => ({ default: m.Objectives })));
 const TrafficChannels = lazy(() =>
   import("./components/TrafficChannels").then((m) => ({ default: m.TrafficChannels })),
 );
-const Testimonials = lazy(() => import("./components/Testimonials").then((m) => ({ default: m.Testimonials })));
 const CaseStudies = lazy(() => import("./components/CaseStudies").then((m) => ({ default: m.CaseStudies })));
-const Technology = lazy(() => import("./components/Technology").then((m) => ({ default: m.Technology })));
 const About = lazy(() => import("./components/About").then((m) => ({ default: m.About })));
 const Process = lazy(() => import("./components/Process").then((m) => ({ default: m.Process })));
 const Contact = lazy(() => import("./components/Contact").then((m) => ({ default: m.Contact })));
@@ -74,17 +72,17 @@ function LazySection({ children, minHeight = "28vh" }: { children: ReactNode; mi
 
 function usePreloadBelowFold() {
   useEffect(() => {
-    const preload = () => {
+    const preloadNear = () => {
       void import("./components/LenovoTrustStrip");
       void import("./components/Audience");
       void import("./components/ValueProps");
       void import("./components/PromiseSection");
+    };
+
+    const preloadRest = () => {
       void import("./components/Difference");
-      void import("./components/Objectives");
       void import("./components/TrafficChannels");
-      void import("./components/Testimonials");
       void import("./components/CaseStudies");
-      void import("./components/Technology");
       void import("./components/About");
       void import("./components/Process");
       void import("./components/Contact");
@@ -94,12 +92,20 @@ function usePreloadBelowFold() {
     };
 
     if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(preload, { timeout: 2500 });
-      return () => window.cancelIdleCallback(id);
+      const nearId = window.requestIdleCallback(preloadNear, { timeout: 1200 });
+      const restId = window.requestIdleCallback(preloadRest, { timeout: 3500 });
+      return () => {
+        window.cancelIdleCallback(nearId);
+        window.cancelIdleCallback(restId);
+      };
     }
 
-    const id = window.setTimeout(preload, 1200);
-    return () => window.clearTimeout(id);
+    const nearTimer = window.setTimeout(preloadNear, 600);
+    const restTimer = window.setTimeout(preloadRest, 2000);
+    return () => {
+      window.clearTimeout(nearTimer);
+      window.clearTimeout(restTimer);
+    };
   }, []);
 }
 
@@ -109,45 +115,39 @@ function MainContent() {
 
   return (
     <>
-      <main>
-        <div id="hero" className="relative flex min-h-0 flex-col overflow-hidden border-b border-border scroll-mt-24 md:min-h-[calc(100dvh-4.75rem)]">
+      <main className="site-main">
+        <div
+          id="hero"
+          className="relative z-[35] flex min-h-0 flex-col overflow-hidden scroll-mt-24 md:min-h-[calc(100dvh-4.75rem)]"
+        >
           <Hero />
-          <Suspense fallback={null}>
-            <LenovoTrustStrip />
-          </Suspense>
         </div>
-        <LazySection minHeight="120vh">
+        <Suspense fallback={null}>
+          <LenovoTrustStrip />
+        </Suspense>
+        <LazySection minHeight="70vh">
           <Audience />
-        </LazySection>
-        <LazySection>
-          <ValueProps />
-        </LazySection>
-        <LazySection minHeight="120vh">
-          <PromiseSection />
         </LazySection>
         <LazySection>
           <Difference />
         </LazySection>
         <LazySection>
-          <Objectives />
-        </LazySection>
-        <LazySection minHeight="52vh">
-          <TrafficChannels />
+          <Process />
         </LazySection>
         <LazySection>
-          <Testimonials />
+          <ValueProps />
+        </LazySection>
+        <LazySection minHeight="44vh">
+          <TrafficChannels />
         </LazySection>
         <LazySection minHeight="48vh">
           <CaseStudies />
         </LazySection>
-        <LazySection>
-          <Technology />
+        <LazySection minHeight="70vh">
+          <PromiseSection />
         </LazySection>
         <LazySection>
           <About />
-        </LazySection>
-        <LazySection>
-          <Process />
         </LazySection>
         <LazySection minHeight="56vh">
           <Contact />
@@ -175,9 +175,9 @@ function MainContent() {
 export default function App() {
   return (
     <SmoothScroll>
-      <a href="#audience" className="skip-link">
+      <ScrollLink href="#hero" className="skip-link">
         Skip to content
-      </a>
+      </ScrollLink>
       <SiteGrain />
       <DeferredCustomCursor />
       <Header />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { scrollSectionIds } from "../data/scrollSections";
+import { useScroll } from "../context/ScrollContext";
 
 const HEADER_OFFSET = 80;
 
@@ -18,21 +19,21 @@ function resolveActiveIndex(): number {
   return active;
 }
 
+/** Active section index — listens through Lenis-aware scroll bus when available. */
 export function useActiveSection() {
+  const { registerScrollListener } = useScroll();
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const update = () => setActiveIndex(resolveActiveIndex());
-
     update();
-    window.addEventListener("scroll", update, { passive: true });
+    const unsubscribe = registerScrollListener(update);
     window.addEventListener("resize", update);
-
     return () => {
-      window.removeEventListener("scroll", update);
+      unsubscribe();
       window.removeEventListener("resize", update);
     };
-  }, []);
+  }, [registerScrollListener]);
 
   return activeIndex;
 }

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Reveal } from "./motion/Reveal";
-import { footerLinks, lenovoPartnership, sections } from "../data/content";
+import { footerLinks, lenovoPartnership, sectionsByMode } from "../data/liveContent";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
@@ -71,12 +71,12 @@ export function Contact() {
         },
         body: JSON.stringify({
           access_key: accessKey,
-          subject: `UPRAISER Contact — ${form.company || form.name}`,
+          subject: `UPRAISER Contact - ${form.company || form.name}`,
           from_name: "UPRAISER Website",
           name: form.name,
           email: form.email,
           replyto: form.email,
-          company: form.company || "—",
+          company: form.company || "-",
           vertical: form.vertical,
           message: form.message,
           privacy_policy_accepted: "Yes",
@@ -107,14 +107,13 @@ export function Contact() {
           <div className="overflow-hidden rounded-3xl border border-border bg-bg-card">
           <div className="grid lg:grid-cols-2">
             <div className="relative bg-bg-elevated p-10 lg:p-14">
-              <p className="section-label section-label-red">{sections.contact.label}</p>
+              <p className="section-label">{sectionsByMode.contact.label}</p>
               <h2 className="section-title">
-                {sections.contact.titleLead}
-                <AccentWord tone="red">{sections.contact.accentWord}</AccentWord>?
+                {sectionsByMode.contact.titleLead}
+                <AccentWord tone="red">{sectionsByMode.contact.accentWord}</AccentWord>?
               </h2>
               <p className="section-description">
-                Whether You're scaling installs, driving deposits, or launching in new geos — let's build a strategy
-                aligned with Your LTV goals.
+                Scaling installs, deposits, or new geos? Let's talk.
               </p>
 
               <div className="mt-10 space-y-4 text-sm">
@@ -153,7 +152,7 @@ export function Contact() {
 
             <div className="p-10 lg:p-14">
               {status === "success" ? (
-                <div className="flex h-full flex-col items-center justify-center text-center">
+                <div className="flex h-full flex-col items-center justify-center text-center" role="status" aria-live="polite">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-orange/10 text-orange">
                     <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -161,7 +160,7 @@ export function Contact() {
                   </div>
                   <h3 className="mt-6 text-2xl font-bold">Message received</h3>
                   <p className="mt-3 max-w-sm text-muted-light">
-                    Thanks for reaching out. Our team will get back to You within 1–2 business days.
+                    Thanks for reaching out. Our team will get back to You within 1-2 business days.
                   </p>
                   <button
                     type="button"
@@ -179,7 +178,10 @@ export function Contact() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                   {status === "error" && submitError && (
-                    <div className="rounded-xl border border-magenta/30 bg-magenta/5 px-4 py-3 text-sm text-magenta-light">
+                    <div
+                      className="rounded-xl border border-magenta/30 bg-magenta/5 px-4 py-3 text-sm text-magenta-light"
+                      role="alert"
+                    >
                       {submitError}
                     </div>
                   )}
@@ -194,10 +196,15 @@ export function Contact() {
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       className="w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      placeholder="Jane Smith"
                       disabled={status === "loading"}
+                      aria-invalid={errors.name ? true : undefined}
+                      aria-describedby={errors.name ? "name-error" : undefined}
                     />
-                    {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
+                    {errors.name && (
+                      <p id="name-error" className="mt-1 text-xs text-red-400" role="alert">
+                        {errors.name}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -210,10 +217,15 @@ export function Contact() {
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       className="w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      placeholder="jane@company.com"
                       disabled={status === "loading"}
+                      aria-invalid={errors.email ? true : undefined}
+                      aria-describedby={errors.email ? "email-error" : undefined}
                     />
-                    {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
+                    {errors.email && (
+                      <p id="email-error" className="mt-1 text-xs text-red-400" role="alert">
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -226,7 +238,6 @@ export function Contact() {
                       value={form.company}
                       onChange={(e) => setForm({ ...form, company: e.target.value })}
                       className="w-full rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      placeholder="Your company"
                       disabled={status === "loading"}
                     />
                   </div>
@@ -260,10 +271,15 @@ export function Contact() {
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       className="w-full resize-none rounded-xl border border-border bg-bg-elevated px-4 py-3 text-sm text-fg outline-none transition focus:border-orange"
-                      placeholder="Tell us about Your goals, KPIs, and target markets..."
                       disabled={status === "loading"}
+                      aria-invalid={errors.message ? true : undefined}
+                      aria-describedby={errors.message ? "message-error" : undefined}
                     />
-                    {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
+                    {errors.message && (
+                      <p id="message-error" className="mt-1 text-xs text-red-400" role="alert">
+                        {errors.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>

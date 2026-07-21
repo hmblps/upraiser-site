@@ -1,5 +1,6 @@
-import { footerLinks } from "../data/content";
+import { footerLinks } from "../data/liveContent";
 import { accentSectionLabel } from "../lib/accent";
+import { ScrollLink } from "./ScrollLink";
 
 export function Footer() {
   return (
@@ -7,10 +8,10 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 pt-12 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div>
-            <a href="#" className="flex items-center gap-3">
+            <ScrollLink href="#hero" className="flex items-center gap-3">
               <img src="/upraiser-logo.png" alt="UPRAISER" className="h-9 w-9 object-contain" />
               <span className="text-lg font-bold">UPRAISER</span>
-            </a>
+            </ScrollLink>
             <p className="mt-4 text-sm text-muted-light">
               UPRAISER Agency LLP
               <br />
@@ -22,31 +23,37 @@ export function Footer() {
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             <div>
-              <h4 className={accentSectionLabel("gold")}>Explore</h4>
+              <h4 className={accentSectionLabel()}>Explore</h4>
               <ul className="mt-4 space-y-2">
                 {footerLinks.explore.map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
+                    <ScrollLink href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
                       {link.label}
-                    </a>
+                    </ScrollLink>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className={accentSectionLabel("gold")}>Company</h4>
+              <h4 className={accentSectionLabel()}>Company</h4>
               <ul className="mt-4 space-y-2">
                 {footerLinks.company.map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
-                      {link.label}
-                    </a>
+                    {link.href.startsWith("#") ? (
+                      <ScrollLink href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
+                        {link.label}
+                      </ScrollLink>
+                    ) : (
+                      <a href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className={accentSectionLabel("gold")}>Connect</h4>
+              <h4 className={accentSectionLabel()}>Connect</h4>
               <ul className="mt-4 space-y-2">
                 <li>
                   <a

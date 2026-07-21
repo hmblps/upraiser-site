@@ -7,7 +7,7 @@
 | **Production** | https://upraiser-site.vercel.app |
 | **Целевой домен** | https://upraiser.co.uk (пока не на Vercel) |
 | **Stack** | React 19 · TypeScript · Vite 8 · Tailwind v4 · Framer Motion · Lenis |
-| **Copy** | `src/data/content.ts` · кейсы: `src/data/cases.ts` |
+| **Copy** | `src/data/liveContent.ts` · кейсы: `src/data/cases.ts` |
 | **Deploy** | `npm run deploy` |
 
 > **Полный handoff для других ИИ** — концепт, история решений, все детали реализации:  

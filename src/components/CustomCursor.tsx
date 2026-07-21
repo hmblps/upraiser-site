@@ -19,6 +19,7 @@ export function CustomCursor() {
   const [hovering, setHovering] = useState(false);
   const [clicking, setClicking] = useState(false);
   const [mode, setMode] = useState<CursorMode>("default");
+  const [overChrome, setOverChrome] = useState(false);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const target = useRef({ x: 0, y: 0 });
@@ -35,15 +36,18 @@ export function CustomCursor() {
     const onMove = (event: MouseEvent) => {
       target.current = { x: event.clientX, y: event.clientY };
       const element = document.elementFromPoint(event.clientX, event.clientY);
+      const overChrome = !!element?.closest("header");
+      setOverChrome(overChrome);
       const nextMode = resolveCursorMode(element);
       setMode(nextMode);
-      setHovering(nextMode !== "default" || !!element?.closest(INTERACTIVE_SELECTOR));
+      setHovering(!overChrome && (nextMode !== "default" || !!element?.closest(INTERACTIVE_SELECTOR)));
     };
 
     const onDown = () => setClicking(true);
     const onUp = () => setClicking(false);
     const onLeave = () => {
       setHovering(false);
+      setOverChrome(false);
       setMode("default");
     };
 
@@ -85,7 +89,7 @@ export function CustomCursor() {
   const modeClass = hovering ? `is-mode-${mode}` : "";
 
   return (
-    <div aria-hidden className="custom-cursor-root">
+    <div aria-hidden className={`custom-cursor-root${overChrome ? " is-over-chrome" : ""}`}>
       <div
         ref={ringRef}
         className={`custom-cursor-ring ${hovering ? "is-hover" : ""} ${clicking ? "is-click" : ""} ${modeClass}`.trim()}

@@ -34,11 +34,12 @@ for file in "${REQUIRED[@]}"; do
 done
 
 if ((${#missing[@]} > 0)); then
-  echo "Missing required static assets in public/:"
+  echo "Missing required static assets:"
   printf '  - %s\n' "${missing[@]}"
   echo
   echo "All deploy media: source in assets/ (project root), synced to public/ before build."
   echo "Hero loop: assets/hero/light-mountains-loop.mp4"
+  echo "OG image: npm run generate:og  (requires hero video in assets/)"
   echo "Restore: bash scripts/restore-hero-from-prod.sh"
   exit 1
 fi

@@ -26,4 +26,5 @@ if [[ -f .env ]]; then
   fi
 fi
 
-vercel deploy --prod --yes
+vercel build --prod --yes
+vercel deploy --prebuilt --prod --yes --no-wait

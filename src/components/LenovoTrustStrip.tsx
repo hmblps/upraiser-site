@@ -1,51 +1,69 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { lenovoPartnership } from "../data/content";
+import { lenovoPartnership } from "../data/liveContent";
+import { useScroll } from "../context/ScrollContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { EASE_OUT } from "../lib/motion";
 import { LenovoPartnershipCopy } from "./LenovoPartnershipCopy";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 
-const SCROLL_REVEAL_PX = 88;
+/** Reveal after scrolling past the hero top — slides open below the hero. */
+const SCROLL_REVEAL_RATIO = 0.28;
+const SCROLL_REVEAL_MIN_PX = 220;
+
+function revealThreshold() {
+  return Math.max(SCROLL_REVEAL_MIN_PX, Math.round(window.innerHeight * SCROLL_REVEAL_RATIO));
+}
 
 export function LenovoTrustStrip() {
   const reduced = useReducedMotion();
+  const { registerScrollListener } = useScroll();
   const [revealed, setRevealed] = useState(reduced);
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced) {
+      setRevealed(true);
+      return;
+    }
 
-    const onScroll = () => {
-      setRevealed(window.scrollY > SCROLL_REVEAL_PX);
+    const update = (scrollY: number) => {
+      setRevealed(scrollY > revealThreshold());
     };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [reduced]);
+    const unsubscribe = registerScrollListener(update);
+    const onResize = () => update(window.scrollY);
+    window.addEventListener("resize", onResize);
+    return () => {
+      unsubscribe();
+      window.removeEventListener("resize", onResize);
+    };
+  }, [reduced, registerScrollListener]);
 
   return (
-    <motion.section
-      aria-label="Lenovo partnership"
-      aria-hidden={!revealed}
+    /* z-40 + isolate: sit above SiteGrain (z-30, mix-blend overlay) so logo/copy stay crisp */
+    <motion.div
+      className={`lenovo-trust-strip relative z-40 isolate overflow-hidden bg-bg-card ${revealed ? "border-b border-border" : "border-b-0"}`}
       initial={false}
-      animate={{
-        y: revealed ? "0%" : "100%",
-        opacity: revealed ? 1 : 0,
-      }}
+      animate={{ height: revealed ? "auto" : 0 }}
       transition={{ duration: reduced ? 0 : 0.52, ease: EASE_OUT }}
-      className={`absolute inset-x-0 bottom-0 z-20 border-t border-border bg-bg-card/95 backdrop-blur-md ${revealed ? "pointer-events-auto" : "pointer-events-none"}`}
     >
-      <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+      <motion.section
+        aria-label="Lenovo partnership"
+        aria-hidden={!revealed}
+        initial={false}
+        animate={{ y: revealed ? 0 : 24, opacity: revealed ? 1 : 0 }}
+        transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.85 }}
+        className={`mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8 ${revealed ? "pointer-events-auto" : "pointer-events-none"}`}
+      >
         <div className="flex items-center gap-4">
-          <LenovoPartnershipLogo className="h-9 w-auto shrink-0 rounded-sm sm:h-10" />
+          <LenovoPartnershipLogo className="h-9 w-auto shrink-0 sm:h-10" />
           <div>
             <p className="stat-label text-orange">{lenovoPartnership.badge}</p>
             <p className="mt-0.5 text-sm font-semibold text-fg">{lenovoPartnership.title}</p>
           </div>
         </div>
         <LenovoPartnershipCopy className="w-full max-w-xl space-y-3 sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl" />
-      </div>
-    </motion.section>
+      </motion.section>
+    </motion.div>
   );
 }

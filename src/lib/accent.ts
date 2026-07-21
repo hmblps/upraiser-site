@@ -63,6 +63,6 @@ export function accentPanelLabel(tone: AccentTone): string {
     : "text-xs font-semibold uppercase tracking-wider text-magenta";
 }
 
-export function accentSectionLabel(tone: AccentTone): string {
-  return tone === "gold" ? "section-label" : "section-label section-label-red";
+export function accentSectionLabel(_tone?: AccentTone): string {
+  return "section-label";
 }

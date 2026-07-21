@@ -1,15 +1,12 @@
-/** Ordered blocks for section arrow navigation */
+/** Ordered blocks for section keyboard / mobile nav — must match App.tsx */
 export const scrollSectionIds = [
   "hero",
   "audience",
   "value",
   "promise",
   "difference",
-  "objectives",
   "channels",
-  "testimonials",
   "cases",
-  "technology",
   "about",
   "process",
   "contact",

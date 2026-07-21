@@ -1,4 +1,4 @@
-import { lenovoPartnership } from "../data/content";
+import { lenovoPartnership } from "../data/liveContent";
 
 type LenovoPartnershipLogoProps = {
   className?: string;
@@ -9,9 +9,12 @@ export function LenovoPartnershipLogo({ className }: LenovoPartnershipLogoProps)
     <img
       src={lenovoPartnership.logo}
       alt={lenovoPartnership.logoAlt}
-      className={className}
+      className={`block ${className ?? ""}`.trim()}
+      width={140}
+      height={40}
       loading="lazy"
       decoding="async"
+      draggable={false}
     />
   );
 }

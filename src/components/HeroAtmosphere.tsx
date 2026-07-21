@@ -70,12 +70,13 @@ export function HeroAtmosphere() {
   const reduced = useReducedMotion();
   const mobileLite = useHeroMobileLite();
   const containerRef = useRef<HTMLDivElement>(null);
-  const useLitLayer = !mobileLite && !reduced;
+  const useSpotlight = !mobileLite && !reduced;
 
-  useHeroCursorLight(containerRef, useLitLayer, {
-    defaultX: isLight ? 70 : 74,
-    defaultY: isLight ? 34 : 36,
-    minY: isLight ? undefined : 22,
+  useHeroCursorLight(containerRef, useSpotlight, {
+    defaultX: isLight ? 72 : 76,
+    defaultY: isLight ? 36 : 38,
+    minY: isLight ? undefined : 20,
+    lerp: 0.085,
   });
 
   const videoProps = {
@@ -83,39 +84,39 @@ export function HeroAtmosphere() {
     preload: mobileLite ? ("metadata" as const) : ("auto" as const),
   };
 
+  const baseClass = isLight ? "hero-light-mountains-base" : "hero-dark-mountains-base";
+  const layerClass = isLight ? "hero-mountains-layer" : "hero-dark-mountains-layer";
+  const dimClass = isLight ? "hero-video-dim hero-video-dim--light" : "hero-video-dim hero-video-dim--dark";
+
   return (
     <div
       ref={containerRef}
-      className={`pointer-events-none absolute inset-0 hero-cursor-light-active${mobileLite ? " hero-atmosphere-mobile-lite" : ""}${isLight ? " hero-atmosphere-light" : " hero-atmosphere-dark"}`}
+      className={`pointer-events-none absolute inset-0 hero-cursor-light-active${mobileLite ? " hero-atmosphere-mobile-lite" : ""}${useSpotlight ? " hero-atmosphere-spotlight" : ""}${isLight ? " hero-atmosphere-light" : " hero-atmosphere-dark"}`}
       aria-hidden
     >
-      {isLight ? (
-        <div className="hero-mountains-layer">
-          <div className="hero-light-mountains-base">
-            <HeroMountainsLoop {...videoProps} />
-          </div>
-          {useLitLayer ? (
-            <div className="hero-light-mountains-lit hero-mountains-lit">
-              <HeroMountainsLoop />
-            </div>
+      <div className={layerClass}>
+        <div className={baseClass}>
+          <HeroMountainsLoop {...videoProps} />
+          {useSpotlight ? (
+            <>
+              <div className={dimClass} aria-hidden />
+              {!isLight ? <div className="hero-video-dim hero-video-dim--dark-corner-lock" aria-hidden /> : null}
+            </>
           ) : null}
-          <div className="hero-mountains-warmwash" />
-          <div className="hero-mountains-scrim" />
         </div>
-      ) : (
-        <div className="hero-dark-mountains-layer">
-          <div className="hero-dark-mountains-base">
-            <HeroMountainsLoop {...videoProps} />
-          </div>
-          {useLitLayer ? (
-            <div className="hero-dark-mountains-lit hero-mountains-lit">
-              <HeroMountainsLoop />
-            </div>
-          ) : null}
+
+        {isLight ? (
+          <>
+            <div className="hero-mountains-warmwash" />
+            <div className="hero-mountains-scrim" />
+          </>
+        ) : (
           <div className="hero-dark-mountains-scrim" />
-        </div>
-      )}
+        )}
+      </div>
+
       <div className="absolute inset-x-0 bottom-0 hero-bottom-fade-bridge" />
+      <div className="hero-copy-wash" />
     </div>
   );
 }
