@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { aboutPage, primaryCta } from "../data/liveContent";
+import { AboutFaq } from "./AboutFaq";
 import { EditorialItem, EditorialStack } from "./Editorial";
+import { PageCtaRow } from "./PageIntro";
 import { SectionAmbience } from "./SectionAmbience";
-import { Magnetic } from "./motion-preview/Magnetic";
 import { Reveal } from "./motion/Reveal";
-import { ScrollLink } from "./ScrollLink";
 import { SectionHeader } from "./SectionHeader";
 
 const FACTS = [
@@ -14,7 +14,10 @@ const FACTS = [
   { label: "Address", value: "128 City Road, London EC1V 2NX, UK" },
 ] as const;
 
-/** Institutional about — mode-agnostic page copy from aboutPage. */
+/**
+ * About owns: who we are · how we work with You · legal facts · FAQ.
+ * Not here: OEM (Solutions), case outcomes (Cases/Home), measurement story (/measurement).
+ */
 export function About() {
   return (
     <section id="about" className="section-band section-band--ambience relative overflow-hidden">
@@ -27,6 +30,13 @@ export function About() {
           description={aboutPage.description}
         />
 
+        <Reveal delay={0.06} className="mt-8">
+          <p className="about-positioning text-2xl font-bold tracking-tight text-fg sm:text-3xl md:text-4xl">
+            {aboutPage.positioningLead}{" "}
+            <span className="text-orange">{aboutPage.positioningAccent}</span>
+          </p>
+        </Reveal>
+
         <Reveal delay={0.08} className="section-stack">
           <EditorialStack>
             {aboutPage.storySegments.map((segment) => (
@@ -38,7 +48,7 @@ export function About() {
           </EditorialStack>
         </Reveal>
 
-        <Reveal delay={0.12} className="mt-12 max-w-2xl">
+        <Reveal delay={0.1} className="mt-12 max-w-2xl">
           <p className="section-label">{aboutPage.teamLabel}</p>
           <p className="copy mt-3">{aboutPage.teamLead}</p>
           <EditorialStack className="mt-8">
@@ -51,26 +61,31 @@ export function About() {
           </EditorialStack>
         </Reveal>
 
-        <Reveal delay={0.16}>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Magnetic>
-              <ScrollLink
-                href={primaryCta.href}
-                data-cursor="cta"
-                className="btn-caps inline-block rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-orange-light"
-              >
-                {aboutPage.ctaLabel}
-              </ScrollLink>
-            </Magnetic>
-            <Magnetic strength={0.22}>
-              <Link
-                to="/technology"
-                className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5 text-sm font-semibold hover:border-orange/35"
-              >
-                Technology
-              </Link>
-            </Magnetic>
-          </div>
+        <Reveal delay={0.12} className="mt-16">
+          <AboutFaq />
+        </Reveal>
+
+        <Reveal delay={0.14} className="mt-12">
+          <p className="text-sm text-muted">
+            <Link to="/solutions?pillar=oem" className="font-semibold text-fg underline-offset-4 hover:underline">
+              Solutions
+            </Link>
+            {" · "}
+            <Link to="/measurement" className="font-semibold text-fg underline-offset-4 hover:underline">
+              Measurement
+            </Link>
+            {" · "}
+            <Link to="/cases" className="font-semibold text-fg underline-offset-4 hover:underline">
+              Cases
+            </Link>
+          </p>
+          <PageCtaRow
+            className="mt-8"
+            primaryLabel={aboutPage.ctaLabel}
+            primaryHref={primaryCta.href}
+            secondaryLabel="Cases"
+            secondaryHref="/cases"
+          />
         </Reveal>
       </div>
     </section>

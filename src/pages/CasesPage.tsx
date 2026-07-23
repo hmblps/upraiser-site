@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import { Outlet } from "react-router-dom";
 import { LazySection } from "../layouts/SiteLayout";
 
 const CaseStudies = lazy(() =>
@@ -11,6 +12,7 @@ export function CasesPage() {
       <LazySection minHeight="56vh">
         <CaseStudies />
       </LazySection>
+      <Outlet />
     </main>
   );
 }

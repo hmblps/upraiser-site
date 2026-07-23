@@ -99,11 +99,20 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     });
 
     let running = true;
+    let modalStopped = false;
 
     const raf = (time: number) => {
       if (!running) return;
       if (!document.hidden) {
-        lenis.raf(time);
+        const modalOpen = document.documentElement.classList.contains("case-modal-open");
+        if (modalOpen && !modalStopped) {
+          lenis.stop();
+          modalStopped = true;
+        } else if (!modalOpen && modalStopped) {
+          lenis.start();
+          modalStopped = false;
+        }
+        if (!modalOpen) lenis.raf(time);
       }
       rafRef.current = requestAnimationFrame(raf);
     };

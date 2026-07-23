@@ -13,7 +13,7 @@
 | **Hero scroll-scrub brief** | **[CONTEXT.md](./CONTEXT.md)** (план, ещё не в коде) |
 
 **Последний production deploy:** 23 Jul 2026 · mode transitions, hero polish, case logos.  
-**Git backup:** branch `backup/2026-07-23` · zip `~/Downloads/Upraiser-site-backup-2026-07-23.zip`
+**Git backup:** branch `backup/2026-07-23-evening` (`3b46222`) · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
 
 ---
 

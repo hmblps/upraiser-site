@@ -91,13 +91,12 @@ body {
   }
 }
 
-/* Pause heavy decorative motion while scrolling — keep value icons alive */
+/* Pause heavy decorative motion while scrolling — keep value icons + chart ghosts alive */
 html.is-scrolling .section-ambience-orb,
 html.is-scrolling .live-stat,
 html.is-scrolling .live-num,
 html.is-scrolling .live-panel::after,
-html.is-scrolling .sparkline-live-dot,
-html.is-scrolling .fold-chart-ghost--float {
+html.is-scrolling .sparkline-live-dot {
   animation-play-state: paused !important;
 }
 
@@ -177,10 +176,6 @@ header nav .nav-link:focus-visible::after {
 
 .partners-marquee {
   animation: partners-marquee 45s linear infinite;
-}
-
-.partners-strip:hover .partners-marquee {
-  animation-play-state: paused;
 }
 
 @keyframes clients-marquee-left {
@@ -297,7 +292,19 @@ header nav .nav-link:focus-visible::after {
   max-height: 2rem;
   max-width: 6.75rem;
   object-fit: contain;
-  opacity: 0.92;
+  opacity: 0.55;
+  filter: grayscale(1);
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease,
+    transform 0.3s ease;
+}
+
+.client-chip:hover .client-chip__logo,
+.client-chip:focus-within .client-chip__logo {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.04);
 }
 
 .client-chip--wordmark {
@@ -310,9 +317,18 @@ header nav .nav-link:focus-visible::after {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--theme-fg);
-  opacity: 0.78;
+  color: var(--theme-muted);
+  opacity: 0.72;
   white-space: nowrap;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.client-chip:hover .client-chip__name,
+.client-chip:focus-within .client-chip__name {
+  color: var(--theme-fg);
+  opacity: 1;
 }
 
 .clients-board__note {
@@ -388,6 +404,7 @@ main [id] {
   width: fit-content;
   padding-inline: 0.875rem;
   overflow: visible;
+  cursor: default;
 }
 
 .partner-logo {
@@ -400,6 +417,21 @@ main [id] {
   opacity: 0.5;
   filter: brightness(0) invert(1);
   transition:
+    opacity 0.3s ease,
+    filter 0.3s ease,
+    transform 0.3s ease;
+}
+
+.partner-logo-wordmark {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--theme-fg) 55%, transparent);
+  opacity: 0.72;
+  transition:
+    color 0.3s ease,
     opacity 0.3s ease,
     transform 0.3s ease;
 }
@@ -417,17 +449,39 @@ main [id] {
 }
 
 [data-theme="light"] .partner-logo {
-  opacity: 0.32;
+  opacity: 0.34;
   filter: brightness(0);
 }
 
-.partners-strip:hover .partner-logo {
-  opacity: 0.78;
-  transform: scale(1.03);
+[data-theme="light"] .partner-logo-wordmark {
+  color: color-mix(in srgb, var(--theme-fg) 42%, transparent);
+  opacity: 0.85;
 }
 
-[data-theme="light"] .partners-strip:hover .partner-logo {
-  opacity: 0.58;
+/* Pause the reel when any mark is hovered; color only that mark. */
+.partners-strip:has(.partner-logo-slot:hover) .partners-marquee,
+.partners-strip:has(.partner-logo-slot:focus-within) .partners-marquee {
+  animation-play-state: paused;
+}
+
+.partner-logo-slot:hover .partner-logo,
+.partner-logo-slot:focus-within .partner-logo {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.06);
+}
+
+.partner-logo-slot:hover .partner-logo-wordmark,
+.partner-logo-slot:focus-within .partner-logo-wordmark {
+  color: var(--theme-fg);
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+[data-theme="light"] .partner-logo-slot:hover .partner-logo,
+[data-theme="light"] .partner-logo-slot:focus-within .partner-logo {
+  opacity: 1;
+  filter: none;
 }
 
 .carousel-fade {
@@ -478,8 +532,13 @@ main [id] {
   -webkit-overflow-scrolling: touch;
 }
 
-.cases-carousel-loop {
+.cases-carousel-loop,
+.cases-carousel-loop.cases-carousel-picker {
   scroll-snap-type: none;
+}
+
+.cases-carousel-loop [data-case-card] {
+  scroll-snap-align: none;
 }
 
 .cases-carousel.is-drag-scrolling {

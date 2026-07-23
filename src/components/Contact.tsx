@@ -1,11 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { Reveal } from "./motion/Reveal";
-import { contactPage, contactVerticalOptions, footerLinks, lenovoPartnership } from "../data/liveContent";
-import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
+import { contactPage, contactVerticalOptions, footerLinks } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
 import { BorderBeam } from "./BorderBeam";
 import { ContactFormField } from "./ContactFormField";
+import { ContactIntentChips } from "./ContactIntentChips";
 import { CONTACT_INTENT_EVENT, consumeContactIntent } from "../lib/contactIntent";
 
 type FormState = {
@@ -172,10 +173,15 @@ export function Contact() {
                   ) : null}
                 </div>
 
-                <div className="border-t border-border pt-4">
-                  <div className="text-muted stat-label">{lenovoPartnership.badge}</div>
-                  <LenovoPartnershipLogo className="mt-2 h-8 w-auto sm:h-9" />
-                </div>
+                <p className="border-t border-border pt-4 text-sm text-muted">
+                  OEM / Lenovo →{" "}
+                  <Link
+                    to="/solutions?pillar=oem#help-with"
+                    className="font-semibold text-fg underline-offset-4 hover:underline"
+                  >
+                    Solutions · OEM
+                  </Link>
+                </p>
               </div>
             </div>
 
@@ -239,6 +245,15 @@ export function Contact() {
                     />
                   </ContactFormField>
 
+                  <ContactIntentChips
+                    value={form.vertical}
+                    disabled={status === "loading"}
+                    onChange={(vertical) => {
+                      setForm({ ...form, vertical });
+                      setErrors((prev) => ({ ...prev, vertical: undefined }));
+                    }}
+                  />
+
                   <ContactFormField label="I am a..." id="vertical" disabled={status === "loading"}>
                     <select
                       value={form.vertical}
@@ -276,9 +291,9 @@ export function Contact() {
                       />
                       <span>
                         I have read and agree to the{" "}
-                        <a href="/privacy" className="font-semibold text-orange hover:text-orange-light">
+                        <Link to="/privacy" className="font-semibold text-orange hover:text-orange-light">
                           Privacy Policy
-                        </a>
+                        </Link>
                         .
                       </span>
                     </label>

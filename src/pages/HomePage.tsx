@@ -59,7 +59,7 @@ function usePreloadHome() {
 
 /**
  * Home pitch — teasers + channel switcher (full inventory on /solutions).
- * Case stories on /cases; Lenovo procurement on /partners.
+ * Case stories on /cases; Lenovo OEM depth on /solutions?pillar=oem.
  */
 export function HomePage() {
   usePreloadHome();

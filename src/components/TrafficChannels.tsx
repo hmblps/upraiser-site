@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { sectionsByMode, trafficChannelsByMode } from "../data/liveContent";
+import { sectionsByMode, solutionsHub, trafficChannelsByMode } from "../data/liveContent";
 import { SectionHeader, SectionHeaderRow, useMode } from "./SectionHeader";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { Reveal } from "./motion/Reveal";
@@ -11,28 +11,35 @@ import { SlideTabs } from "./SlideTabs";
 type TrafficChannelsProps = {
   /** `home` = switcher + short teaser; tab click opens /solutions with that channel. */
   variant?: "home" | "full";
+  /** When set (Solutions pillars), only these channel ids appear as tabs. */
+  channelIds?: string[];
 };
 
-export function TrafficChannels({ variant = "full" }: TrafficChannelsProps) {
+export function TrafficChannels({ variant = "full", channelIds }: TrafficChannelsProps) {
   const { mode } = useMode();
   const reduced = useReducedMotion();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const trafficChannels = trafficChannelsByMode[mode];
+  const allChannels = trafficChannelsByMode[mode];
+  const trafficChannels =
+    channelIds && channelIds.length > 0
+      ? allChannels.filter((c) => channelIds.includes(c.id))
+      : allChannels;
   const section = sectionsByMode.channels[mode];
   const isHome = variant === "home";
+  const channels = trafficChannels.length > 0 ? trafficChannels : allChannels;
 
   const channelFromUrl = searchParams.get("channel");
   const initialId =
-    !isHome && channelFromUrl && trafficChannels.some((c) => c.id === channelFromUrl)
+    !isHome && channelFromUrl && channels.some((c) => c.id === channelFromUrl)
       ? channelFromUrl
-      : trafficChannels[0].id;
+      : channels[0]!.id;
 
   const [activeId, setActiveId] = useState(initialId);
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const active = trafficChannels.find((c) => c.id === activeId) ?? trafficChannels[0];
-  const activeIndex = trafficChannels.findIndex((channel) => channel.id === activeId);
+  const active = channels.find((c) => c.id === activeId) ?? channels[0]!;
+  const activeIndex = channels.findIndex((channel) => channel.id === activeId);
 
   const scrollTabs = (direction: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: direction === "left" ? -200 : 200, behavior: "smooth" });
@@ -40,7 +47,12 @@ export function TrafficChannels({ variant = "full" }: TrafficChannelsProps) {
 
   const openOnSolutions = useCallback(
     (id: string) => {
-      navigate({ pathname: "/solutions", search: `?channel=${id}`, hash: "#channels" });
+      const pillar = solutionsHub.categories.find((c) =>
+        (c.channelIds as readonly string[]).includes(id),
+      );
+      const search = new URLSearchParams({ channel: id });
+      if (pillar) search.set("pillar", pillar.id);
+      navigate({ pathname: "/solutions", search: `?${search.toString()}`, hash: "#channels" });
     },
     [navigate],
   );
@@ -64,24 +76,24 @@ export function TrafficChannels({ variant = "full" }: TrafficChannelsProps) {
   const stepChannel = useCallback(
     (direction: -1 | 1) => {
       const nextIndex = activeIndex + direction;
-      if (nextIndex < 0 || nextIndex >= trafficChannels.length) return;
-      selectChannel(trafficChannels[nextIndex].id);
+      if (nextIndex < 0 || nextIndex >= channels.length) return;
+      selectChannel(channels[nextIndex]!.id);
     },
-    [activeIndex, selectChannel, trafficChannels],
+    [activeIndex, selectChannel, channels],
   );
 
   useEffect(() => {
     if (isHome) {
-      setActiveId(trafficChannels[0].id);
+      setActiveId(channels[0]!.id);
       return;
     }
     const fromUrl = searchParams.get("channel");
-    if (fromUrl && trafficChannels.some((c) => c.id === fromUrl)) {
+    if (fromUrl && channels.some((c) => c.id === fromUrl)) {
       setActiveId(fromUrl);
       return;
     }
-    setActiveId(trafficChannels[0].id);
-  }, [mode, isHome, searchParams, trafficChannels]);
+    setActiveId(channels[0]!.id);
+  }, [mode, isHome, searchParams, channels]);
 
   useEffect(() => {
     const tab = scrollRef.current?.querySelector<HTMLElement>(`[data-tab-id="${activeId}"]`);
@@ -161,7 +173,7 @@ export function TrafficChannels({ variant = "full" }: TrafficChannelsProps) {
               layoutId={`channel-tab-${variant}-${mode}`}
               activeId={activeId}
               onChange={selectChannel}
-              items={trafficChannels.map((channel) => ({ id: channel.id, label: channel.title }))}
+              items={channels.map((channel) => ({ id: channel.id, label: channel.title }))}
             />
           </div>
         </Reveal>

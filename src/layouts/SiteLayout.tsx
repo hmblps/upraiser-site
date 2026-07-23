@@ -6,6 +6,7 @@ import { SiteGrain } from "../components/SiteGrain";
 import { ScrollLink } from "../components/ScrollLink";
 import { ScrollToTop } from "../components/ScrollToTop";
 import { useApplePreview } from "../hooks/useApplePreview";
+import { CaseModalProvider } from "../context/CaseModalContext";
 
 const ApplePreviewPanel = lazy(() =>
   import("../components/apple-preview/ApplePreviewPanel").then((m) => ({ default: m.ApplePreviewPanel })),
@@ -56,26 +57,28 @@ export function SiteLayout() {
 
   return (
     <SmoothScroll>
-      <ScrollToTop />
-      <ScrollLink href="/" className="skip-link">
-        Skip to content
-      </ScrollLink>
-      <SiteGrain />
-      <DeferredCustomCursor />
-      <Header />
-      <Outlet />
-      {/* Prod root: partners strip always sits above Footer */}
-      <LazySection minHeight="12vh">
-        <PartnersCarousel />
-      </LazySection>
-      <LazySection minHeight="20vh">
-        <Footer />
-      </LazySection>
-      {applePreview && appleFeatures ? (
-        <Suspense fallback={null}>
-          <ApplePreviewPanel active={appleFeatures} />
-        </Suspense>
-      ) : null}
+      <CaseModalProvider>
+        <ScrollToTop />
+        <ScrollLink href="/" className="skip-link">
+          Skip to content
+        </ScrollLink>
+        <SiteGrain />
+        <DeferredCustomCursor />
+        <Header />
+        <Outlet />
+        {/* Same as production: integrations strip above Footer on every page */}
+        <LazySection minHeight="12vh">
+          <PartnersCarousel />
+        </LazySection>
+        <LazySection minHeight="20vh">
+          <Footer />
+        </LazySection>
+        {applePreview && appleFeatures ? (
+          <Suspense fallback={null}>
+            <ApplePreviewPanel active={appleFeatures} />
+          </Suspense>
+        ) : null}
+      </CaseModalProvider>
     </SmoothScroll>
   );
 }

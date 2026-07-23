@@ -8,9 +8,9 @@ import { BorderBeam } from "./BorderBeam";
 import { LenovoPartnershipCopy } from "./LenovoPartnershipCopy";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 
-/** Reveal after scrolling past the hero top — slides open below the hero. */
-const SCROLL_REVEAL_RATIO = 0.28;
-const SCROLL_REVEAL_MIN_PX = 220;
+/** Reveal early in the hero scroll — before Audience enters the viewport. */
+const SCROLL_REVEAL_RATIO = 0.08;
+const SCROLL_REVEAL_MIN_PX = 64;
 
 function revealThreshold() {
   return Math.max(SCROLL_REVEAL_MIN_PX, Math.round(window.innerHeight * SCROLL_REVEAL_RATIO));

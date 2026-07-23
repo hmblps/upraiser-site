@@ -7,8 +7,8 @@
 > **Local path:** `Upraiser New Website Cursor Project`  
 > **Production:** https://upraiser-site.vercel.app  
 > **Target domain:** https://upraiser.co.uk (not on Vercel SPA yet)  
-> **Git backup branch:** `backup/2026-07-23` (`817c1f4`)  
-> **Zip backup:** `~/Downloads/Upraiser-site-backup-2026-07-23.zip`
+> **Git backup branch:** `backup/2026-07-23-evening` (`3b46222`)
+> **Zip backup:** `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
 
 ---
 
@@ -133,12 +133,12 @@ PartnersCarousel · Footer (persistent)
 
 **Home (`/`):**
 ```
-#hero → Lenovo → #audience → #solutions-teaser → #difference → #cases
-→ #process-teaser → #promise → #pilot → #mode-bridge (ThemeBridge)
-→ Partners (bottom) → Footer
+#hero → ClientsMarquee → #cases (teaser) → #promise (measurement) → #pilot → #mode-bridge
 ```
 
-**Section keyboard nav:** `hero → audience → solutions-teaser → difference → cases → process-teaser → promise → pilot`
+**Section keyboard nav:** `hero → cases → promise → pilot`
+
+Depth (channels, process, value, solutions hub) lives on `/solutions`. Technology is product-story on `/technology`.
 
 ---
 
@@ -370,8 +370,10 @@ npm run deploy   # prebuilt local build → upraiser-site-v2 → aliases upraise
 
 | Kind | Location |
 |------|----------|
-| Git branch | `backup/2026-07-23` |
-| Zip | `~/Downloads/Upraiser-site-backup-2026-07-23.zip` (~162 MB, no `node_modules`) |
+| Git branch (morning) | `backup/2026-07-23` (`817c1f4`) |
+| Zip (morning) | `~/Downloads/Upraiser-site-backup-2026-07-23.zip` (~162 MB, no `node_modules`) |
+| Git branch (evening) | `backup/2026-07-23-evening` (`3b46222`) — case modal, clients marquee, pre-Saatchi restructure |
+| Zip (evening) | `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip` (no `node_modules` / `.hermes` / `.cursor`) |
 
 ---
 

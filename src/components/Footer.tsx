@@ -95,9 +95,13 @@ export function Footer() {
           </p>
           <div className="flex gap-6">
             {footerLinks.legal.map((link) => (
-              <a key={link.label} href={link.href} className="link-caps text-muted-light transition-colors hover:text-fg">
+              <ScrollLink
+                key={link.label}
+                href={link.href}
+                className="link-caps text-muted-light transition-colors hover:text-fg"
+              >
                 {link.label}
-              </a>
+              </ScrollLink>
             ))}
           </div>
         </div>

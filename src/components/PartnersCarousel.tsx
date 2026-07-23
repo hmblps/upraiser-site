@@ -10,9 +10,6 @@ export function PartnersCarousel() {
     <section className="border-t border-border bg-bg-elevated py-12" aria-label="Trusted integrations and partners">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <p className={`text-left ${accentSectionLabel("gold")}`}>Integrations & platforms</p>
-        <p className="mt-2 max-w-xl text-sm text-muted">
-          MMPs, supply partners, and media platforms we wire into the stack — separate from client brands.
-        </p>
       </div>
 
       <div className="partners-strip relative mt-8 overflow-hidden py-1">

@@ -30,7 +30,7 @@ export const integrationPartners: IntegrationPartner[] = [
   { name: "Singular", slug: "singular", logo: withLogo("singular"), scale: 1 },
 ];
 
-/** Attribution / MMP logos shown on /technology */
+/** Attribution / MMP logos shown on /measurement */
 export const mmpPartnerSlugs = ["appsflyer", "kochava", "singular"] as const;
 
 /** Supply-side logos emphasized on /partners */

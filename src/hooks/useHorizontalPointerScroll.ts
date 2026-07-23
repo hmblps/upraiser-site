@@ -18,21 +18,19 @@ export function useHorizontalPointerScroll(ref: RefObject<HTMLElement | null>) {
       const absX = Math.abs(event.deltaX);
       const absY = Math.abs(event.deltaY);
 
-      // Vertical wheel / trackpad → page scroll (Lenis). Never hijack deltaY.
       if (absY >= absX || absX === 0) return;
 
       const delta = event.deltaX;
+      const infinite = el.classList.contains("cases-carousel-loop");
       const forward = delta > 0;
       const atStart = el.scrollLeft <= 1;
       const atEnd = el.scrollLeft >= maxScroll - 1;
 
-      // At horizontal edges — let Lenis handle any remaining vertical component.
-      if ((forward && atEnd) || (!forward && atStart)) return;
+      if (!infinite && ((forward && atEnd) || (!forward && atStart))) return;
 
       event.preventDefault();
       event.stopPropagation();
 
-      // Mandatory snap rejects small scrollLeft nudges; disable briefly for wheel/trackpad.
       el.style.scrollSnapType = "none";
       el.scrollLeft += delta;
 
@@ -53,6 +51,8 @@ export function useHorizontalPointerScroll(ref: RefObject<HTMLElement | null>) {
     let moved = false;
     let startX = 0;
     let startScrollLeft = 0;
+    let activePointerId: number | null = null;
+    const DRAG_THRESHOLD = 18;
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0 || event.pointerType !== "mouse") return;
@@ -60,34 +60,45 @@ export function useHorizontalPointerScroll(ref: RefObject<HTMLElement | null>) {
       moved = false;
       startX = event.clientX;
       startScrollLeft = el.scrollLeft;
-      el.setPointerCapture(event.pointerId);
+      activePointerId = event.pointerId;
+      // Capture only after real drag — otherwise card clicks never fire.
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      if (!dragging) return;
+      if (!dragging || activePointerId !== event.pointerId) return;
       const dx = event.clientX - startX;
-      if (Math.abs(dx) > 4) {
+      if (!moved && Math.abs(dx) > DRAG_THRESHOLD) {
         moved = true;
         el.classList.add("is-drag-scrolling");
+        try {
+          el.setPointerCapture(event.pointerId);
+        } catch {
+          /* ignore */
+        }
       }
       if (moved) el.scrollLeft = startScrollLeft - dx;
     };
 
     const endDrag = (event: PointerEvent) => {
-      if (!dragging) return;
+      if (!dragging || (activePointerId !== null && activePointerId !== event.pointerId)) return;
       dragging = false;
+      activePointerId = null;
       el.classList.remove("is-drag-scrolling");
       if (el.hasPointerCapture(event.pointerId)) {
         el.releasePointerCapture(event.pointerId);
       }
+      // Keep `moved` through the click event, then clear on next tick.
+      if (moved) {
+        window.setTimeout(() => {
+          moved = false;
+        }, 0);
+      }
     };
 
     const onClickCapture = (event: MouseEvent) => {
-      if (moved) {
-        event.preventDefault();
-        event.stopPropagation();
-        moved = false;
-      }
+      if (!moved) return;
+      event.preventDefault();
+      event.stopPropagation();
     };
 
     el.addEventListener("pointerdown", onPointerDown);
