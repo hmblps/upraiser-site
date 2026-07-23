@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { navLinks, primaryCta } from "../data/liveContent";
 import { useScroll } from "../context/ScrollContext";
 import { useTheme } from "../context/ThemeContext";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { ScrollLink } from "./ScrollLink";
+import { LocaleSwitcher } from "./LocaleSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
+
+function navIsActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export function Header() {
   const { registerScrollListener } = useScroll();
   const { theme } = useTheme();
+  const { pathname } = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -33,32 +41,30 @@ export function Header() {
       className={`fixed inset-x-0 top-0 z-[100] isolate border-b transition-[background-color,box-shadow,border-color] duration-300 ${headerSurface}`}
     >
       <div className="header-bar mx-auto flex h-[var(--site-header-height)] max-w-7xl items-center justify-between px-6 lg:px-8">
-        <ScrollLink href="#hero" className="header-brand flex items-center gap-3 rounded-md transition-opacity hover:opacity-90">
+        <ScrollLink href="/" className="header-brand flex items-center gap-3 rounded-md transition-opacity hover:opacity-90">
           <img src="/upraiser-logo.png" alt="UPRAISER" className="h-9 w-9 object-contain" />
           <span className="text-lg font-bold tracking-tight">UPRAISER</span>
         </ScrollLink>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) =>
-            link.href.startsWith("#") ? (
-              <ScrollLink
-                key={`${link.label}-${link.href}`}
-                href={link.href}
-                contactIntent={link.contactIntent}
-                className="nav-link text-muted-light transition-colors hover:text-fg"
-                data-cursor="link"
-              >
-                {link.label}
-              </ScrollLink>
-            ) : (
-              <a key={link.href} href={link.href} className="nav-link text-muted-light transition-colors hover:text-fg" data-cursor="link">
-                {link.label}
-              </a>
-            ),
-          )}
+          {navLinks.map((link) => (
+            <ScrollLink
+              key={link.href}
+              href={link.href}
+              contactIntent={link.contactIntent}
+              aria-current={navIsActive(pathname, link.href) ? "page" : undefined}
+              className={`nav-link transition-colors hover:text-fg ${
+                navIsActive(pathname, link.href) ? "text-fg" : "text-muted-light"
+              }`}
+              data-cursor="link"
+            >
+              {link.label}
+            </ScrollLink>
+          ))}
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          <LocaleSwitcher />
           <ThemeToggle />
           <Magnetic strength={0.35}>
             <ScrollLink
@@ -71,7 +77,8 @@ export function Header() {
           </Magnetic>
         </div>
 
-        <div className="flex items-center gap-3 md:hidden">
+        <div className="flex items-center gap-2 md:hidden">
+          <LocaleSwitcher />
           <ThemeToggle />
           <button
             type="button"
@@ -95,28 +102,17 @@ export function Header() {
       {menuOpen && (
         <div id="mobile-nav" className="border-t border-border bg-bg-elevated px-6 py-4 md:hidden">
           <nav className="flex flex-col gap-4">
-            {navLinks.map((link) =>
-              link.href.startsWith("#") ? (
-                <ScrollLink
-                  key={`${link.label}-${link.href}`}
-                  href={link.href}
-                  contactIntent={link.contactIntent}
-                  className="nav-link text-muted-light"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </ScrollLink>
-              ) : (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="nav-link text-muted-light"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ),
-            )}
+            {navLinks.map((link) => (
+              <ScrollLink
+                key={link.href}
+                href={link.href}
+                contactIntent={link.contactIntent}
+                className="nav-link text-muted-light"
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </ScrollLink>
+            ))}
             <ScrollLink
               href={primaryCta.href}
               className="btn-caps rounded-full bg-orange px-5 py-2.5 text-center text-sm font-semibold text-on-accent"

@@ -63,42 +63,22 @@ git config --global user.name "hmblps"
 
 ---
 
-## Структура страницы (App.tsx)
+## Структура (React Router)
 
 ```
-SiteGrain · CustomCursor (deferred) · Header (fixed)
-main:
-  #hero              Hero + HeroAtmosphere
-  (strip)            LenovoTrustStrip
-  #audience          AccentScrollFold + ambient chart
-  #difference        Why Us — header + 3 cards (anchor spawn desktop)
-  #process           4-step rail (scroll band)
-  #value             ValueProps bento + animated glyphs
-  #channels          Traffic channels (tabs)
-  #cases             Case studies carousel / mobile accordion
-  #promise           AccentScrollFold + ambient area chart
-  #about             About + technology panel + ThemeBridge
-  #contact           Web3Forms + Lenovo strip
-PartnersCarousel     Logo marquee
-Footer
-MobileSectionNav · SectionNav (↑↓)
+/              Pitch + killer folds + ThemeBridge (dual-mode home)
+/solutions     Value · Channels · Process
+/technology    Stack + MMP (mode-agnostic)
+/partners      Supply track (mode-agnostic)
+/cases         Архив · /cases/:slug деталь
+/about         London · ICO · tech preview → /technology
+/contact       Request Pilot
 ```
 
-**Nav order** (`scrollSections.ts`):  
-`hero → audience → difference → process → value → channels → cases → promise → about → contact`
+Header: Solutions · Technology · Partners · Cases · About · theme · **Request Pilot**  
+Partners strip — внизу перед Footer. **Блог не ведём.**
 
-Секции ниже hero — **lazy-loaded** (`React.lazy` + idle preload).
-
----
-
-## Product direction (23 Jul 2026)
-
-Длинный single-page scroll обсуждался как тяжёлый для конверсии. **Согласовано направление** (ещё не реализовано):
-
-- **Главная** = короткий pitch (Hero → proof → CTA)
-- **Внутренние страницы** = depth (cases, channels, process, about)
-
-Сжатие главной обнажит контентные дыры (сегмент, оффер, trust) — закрывать мостами, не возвращая runway-аттракционы. Подробности: `AI_HANDOFF.md` §15.
+**Nav order (home keyboard):** `hero → audience → solutions-teaser → difference → cases → process-teaser → promise → pilot`
 
 ---
 

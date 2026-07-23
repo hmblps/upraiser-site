@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 
 /** Off-screen clone set for seamless manual loop (not shown as extra cards on screen). */
-export const CASE_CAROUSEL_COPIES = 2;
+export const CASE_CAROUSEL_COPIES = 3;
 
 type Options = {
   itemCount: number;

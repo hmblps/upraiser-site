@@ -22,6 +22,7 @@ function PromiseClean() {
           <p className="section-lead">
             {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />.
           </p>
+          <p className="section-description max-w-2xl">{content.description}</p>
         </div>
       </ModeContentTransition>
     </section>
@@ -60,6 +61,9 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
               .
             </motion.span>
           </p>
+          <motion.p className="section-description relative z-[2] mt-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
+            {content.description}
+          </motion.p>
         </>
       )}
     </AccentScrollFold>

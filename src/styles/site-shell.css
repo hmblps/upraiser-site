@@ -13,6 +13,7 @@
 
 .lenovo-trust-strip--revealed {
   border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
+  border-bottom: 1px solid var(--theme-border);
 }
 
 .lenovo-trust-strip--hidden {

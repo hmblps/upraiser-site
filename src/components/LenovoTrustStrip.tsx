@@ -43,7 +43,7 @@ export function LenovoTrustStrip() {
   return (
     /* z-40 + isolate: sit above SiteGrain (z-30, mix-blend overlay) so logo/copy stay crisp */
     <motion.div
-      className={`lenovo-trust-strip relative z-40 isolate overflow-hidden bg-bg-card ${revealed ? "lenovo-trust-strip--revealed border-b border-border" : "lenovo-trust-strip--hidden"}`}
+      className={`lenovo-trust-strip relative z-40 isolate overflow-hidden bg-bg-card ${revealed ? "lenovo-trust-strip--revealed" : "lenovo-trust-strip--hidden"}`}
       initial={false}
       animate={{ height: revealed ? "auto" : 0, opacity: revealed ? 1 : 0 }}
       transition={{ duration: reduced ? 0 : 0.52, ease: EASE_OUT }}
@@ -56,7 +56,7 @@ export function LenovoTrustStrip() {
             initial={false}
             animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.85 }}
-            className="relative z-[1] mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8"
+            className="relative z-[1] rail-strip__inner flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
           >
             <div className="flex items-center gap-4">
               <LenovoPartnershipLogo className="h-9 w-auto shrink-0 sm:h-10" />
@@ -65,7 +65,10 @@ export function LenovoTrustStrip() {
                 <p className="mt-0.5 text-sm font-semibold text-fg">{lenovoPartnership.title}</p>
               </div>
             </div>
-            <LenovoPartnershipCopy className="w-full max-w-xl space-y-3 sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl" />
+            <LenovoPartnershipCopy
+              variant="strip"
+              className="w-full max-w-xl sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl"
+            />
           </motion.section>
         </div>
       ) : null}

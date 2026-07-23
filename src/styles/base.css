@@ -96,7 +96,8 @@ html.is-scrolling .section-ambience-orb,
 html.is-scrolling .live-stat,
 html.is-scrolling .live-num,
 html.is-scrolling .live-panel::after,
-html.is-scrolling .sparkline-live-dot {
+html.is-scrolling .sparkline-live-dot,
+html.is-scrolling .fold-chart-ghost--float {
   animation-play-state: paused !important;
 }
 
@@ -180,6 +181,165 @@ header nav .nav-link:focus-visible::after {
 
 .partners-strip:hover .partners-marquee {
   animation-play-state: paused;
+}
+
+@keyframes clients-marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes clients-marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Clients board — used on /partners under Brands we work with */
+.clients-board {
+  display: grid;
+  gap: 1rem;
+}
+
+.clients-board__stage {
+  position: relative;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.15rem 0;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 80%, transparent);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--theme-bg-card) 92%, var(--theme-accent) 8%) 0%,
+      color-mix(in srgb, var(--theme-bg-card) 96%, transparent) 48%,
+      var(--theme-bg-card) 100%
+    );
+  overflow: hidden;
+}
+
+.clients-board__fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.clients-board__fade--left {
+  left: 0;
+  background: linear-gradient(to right, var(--theme-bg-card), transparent);
+}
+
+.clients-board__fade--right {
+  right: 0;
+  background: linear-gradient(to left, var(--theme-bg-card), transparent);
+}
+
+.clients-board__row {
+  overflow: hidden;
+}
+
+.clients-board__track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 0.65rem;
+  padding-inline: 1.25rem;
+  will-change: transform;
+}
+
+.clients-board__track--left {
+  animation: clients-marquee-left var(--marquee-duration, 48s) linear infinite;
+}
+
+.clients-board__track--right {
+  animation: clients-marquee-right var(--marquee-duration, 54s) linear infinite;
+}
+
+.clients-board__stage:hover .clients-board__track {
+  animation-play-state: paused;
+}
+
+.clients-board__track.is-static {
+  animation: none;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  will-change: auto;
+}
+
+.client-chip {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 8.25rem;
+  height: 3.15rem;
+  padding-inline: 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 88%, transparent);
+  background: color-mix(in srgb, var(--theme-bg) 72%, var(--theme-bg-card));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
+}
+
+.client-chip__logo {
+  display: block;
+  width: auto;
+  height: calc(1.55rem * var(--logo-scale, 1));
+  max-height: 2rem;
+  max-width: 6.75rem;
+  object-fit: contain;
+  opacity: 0.92;
+}
+
+.client-chip--wordmark {
+  min-width: auto;
+  padding-inline: 1.1rem;
+}
+
+.client-chip__name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--theme-fg);
+  opacity: 0.78;
+  white-space: nowrap;
+}
+
+.clients-board__note {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--theme-muted);
+  opacity: 0.72;
+}
+
+@media (min-width: 768px) {
+  .clients-board__fade {
+    width: 3.5rem;
+  }
+
+  .client-chip {
+    min-width: 9rem;
+    height: 3.35rem;
+  }
+
+  .client-chip__logo {
+    height: calc(1.7rem * var(--logo-scale, 1));
+    max-width: 7.25rem;
+  }
+
+  .client-chip__name {
+    font-size: 0.8125rem;
+  }
 }
 
 .card-lift {
@@ -274,32 +434,42 @@ main [id] {
   position: relative;
 }
 
-/* Soft edge hint only — does not mask/dim case card text */
+/* Soft edge hint only — keep side cards readable */
 .carousel-fade::before,
 .carousel-fade::after {
   content: "";
   position: absolute;
   top: 0.85rem;
   bottom: calc(1rem + 0.85rem);
-  width: 1.25rem;
+  width: 0.65rem;
   z-index: 2;
   pointer-events: none;
+  opacity: 0.55;
 }
 
 .carousel-fade::before {
   left: 0;
-  background: linear-gradient(to right, var(--theme-bg), transparent);
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--theme-bg) 70%, transparent),
+    transparent
+  );
 }
 
 .carousel-fade::after {
   right: 0;
-  background: linear-gradient(to left, var(--theme-bg), transparent);
+  background: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--theme-bg) 70%, transparent),
+    transparent
+  );
 }
 
 @media (min-width: 768px) {
   .carousel-fade::before,
   .carousel-fade::after {
-    width: 1.75rem;
+    width: 0.85rem;
+    opacity: 0.4;
   }
 }
 
@@ -363,13 +533,20 @@ main [id] {
   .live-panel::after,
   .sparkline-live-dot,
   .partners-marquee,
+  .clients-board__track,
   .marquee-track,
   .border-beam::before,
   .scroll-hint,
   .hero-mountains-video,
   .hero-entrance,
-  .hero-entrance-stat {
+  .hero-entrance-stat,
+  .fold-chart-ghost--float {
     animation: none !important;
+  }
+
+  .fold-chart-ghost--float {
+    opacity: 0.5;
+    transform: none;
   }
 
   .value-bento-tile--feature:hover .value-bento-icon,

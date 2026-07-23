@@ -8,7 +8,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 pt-12 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div>
-            <ScrollLink href="#hero" className="flex items-center gap-3">
+            <ScrollLink href="/" className="flex items-center gap-3">
               <img src="/upraiser-logo.png" alt="UPRAISER" className="h-9 w-9 object-contain" />
               <span className="text-lg font-bold">UPRAISER</span>
             </ScrollLink>
@@ -39,19 +39,13 @@ export function Footer() {
               <ul className="mt-4 space-y-2">
                 {footerLinks.company.map((link) => (
                   <li key={`${link.label}-${link.href}`}>
-                    {link.href.startsWith("#") ? (
-                      <ScrollLink
-                        href={link.href}
-                        contactIntent={link.contactIntent}
-                        className="text-sm text-muted-light transition-colors hover:text-fg"
-                      >
-                        {link.label}
-                      </ScrollLink>
-                    ) : (
-                      <a href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
-                        {link.label}
-                      </a>
-                    )}
+                    <ScrollLink
+                      href={link.href}
+                      contactIntent={link.contactIntent}
+                      className="text-sm text-muted-light transition-colors hover:text-fg"
+                    >
+                      {link.label}
+                    </ScrollLink>
                   </li>
                 ))}
               </ul>

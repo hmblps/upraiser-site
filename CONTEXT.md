@@ -214,7 +214,7 @@ Use Framer Motion `motion.*` with `style={{ y, opacity }}`. Spring type `"spring
 Label:  UPRAISER · Charting the Ascent
 H1:     We see how stunning / Your rise / to the top / can be.
 Lede:   Pre-bid fraud filtration, OEM distribution, and verified outcomes.
-Footer: Founded 17 July 2017 · London
+Footer: Founded 17 July 2017 · Based in London
 CTAs:   Contact | View Case Studies
 Stats:  4 cards (mode-dependent metrics) — right column on desktop
 ```

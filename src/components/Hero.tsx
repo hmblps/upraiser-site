@@ -153,7 +153,7 @@ export function Hero() {
               </Magnetic>
               <Magnetic strength={0.22}>
                 <ScrollLink
-                  href="#cases"
+                  href="/cases"
                   className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5 text-sm font-semibold hover:border-orange/35"
                 >
                   View Case Studies

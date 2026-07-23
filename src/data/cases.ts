@@ -33,6 +33,10 @@ export interface CaseStudy {
 
 export const CASE_TREND_CAPTION = "12-week volume index";
 
+export function getCaseById(id: string): CaseStudy | undefined {
+  return caseStudies.find((item) => item.id === id);
+}
+
 export const caseStudies: CaseStudy[] = [
   {
     id: "fanatics",

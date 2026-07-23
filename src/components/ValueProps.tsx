@@ -3,6 +3,7 @@ import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { SectionAmbience } from "./SectionAmbience";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { ValueBentoIcon } from "./ValueBentoIcon";
+import { HoverTilt } from "./HoverTilt";
 
 function ValueTile({
   children,
@@ -16,9 +17,14 @@ function ValueTile({
   spotlight?: boolean;
 }) {
   return (
-    <div className={`value-bento-tile h-full ${className}`.trim()} data-max-tilt={maxTilt} data-spotlight={spotlight}>
+    <HoverTilt
+      className={`value-bento-tile h-full ${className}`.trim()}
+      maxTilt={maxTilt}
+      spotlight={spotlight}
+      lift={false}
+    >
       {children}
-    </div>
+    </HoverTilt>
   );
 }
 
@@ -87,6 +93,7 @@ export function ValueProps() {
               <ValueTile
                 key={item.title}
                 className={`value-bento-tile--feature value-bento-tile--feature-${index === 0 ? "a" : "b"}`}
+                maxTilt={7}
               >
                 <ValueCard icon={<ValueBentoIcon slot={slot} mode={mode} />}>
                   <h3 className="card-title">{item.title}</h3>
@@ -96,7 +103,7 @@ export function ValueProps() {
             );
           })}
 
-          <ValueTile className="value-bento-tile--brand" spotlight>
+          <ValueTile className="value-bento-tile--brand" maxTilt={6} spotlight>
             <ValueCard icon={<ValueBentoIcon slot="brand" mode={mode} />}>
               <p className="stat-label text-orange">{content.brand.badge}</p>
               <h3 className="card-title mt-1.5">{content.brand.title}</h3>

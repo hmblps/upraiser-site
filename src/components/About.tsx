@@ -1,87 +1,78 @@
-import { useEffect, useRef } from "react";
-import { sectionsByMode, technologyByMode } from "../data/liveContent";
-import { useReducedMotion } from "../hooks/useReducedMotion";
+import { Link } from "react-router-dom";
+import { aboutPage, primaryCta } from "../data/liveContent";
+import { EditorialItem, EditorialStack } from "./Editorial";
 import { SectionAmbience } from "./SectionAmbience";
-import { ModeContentTransition } from "./motion/ModeContentTransition";
-import { SectionHeader, useMode } from "./SectionHeader";
-import { ThemeBridge } from "./ThemeBridge";
+import { Magnetic } from "./motion-preview/Magnetic";
+import { Reveal } from "./motion/Reveal";
+import { ScrollLink } from "./ScrollLink";
+import { SectionHeader } from "./SectionHeader";
 
-function useProximity(ref: React.RefObject<HTMLDivElement | null>, enabled: boolean) {
-  useEffect(() => {
-    const node = ref.current;
-    if (!enabled || !node || !window.matchMedia("(pointer: fine)").matches) return;
+const FACTS = [
+  { label: "Entity", value: "UPRAISER Agency LLP · London" },
+  { label: "Founded", value: "17 July 2017" },
+  { label: "ICO", value: "ZC000436" },
+  { label: "Address", value: "128 City Road, London EC1V 2NX, UK" },
+] as const;
 
-    const onMove = (event: MouseEvent) => {
-      const bounds = node.getBoundingClientRect();
-      const x = ((event.clientX - bounds.left) / bounds.width) * 100;
-      const y = ((event.clientY - bounds.top) / bounds.height) * 100;
-      node.style.setProperty("--proximity-x", `${x.toFixed(1)}%`);
-      node.style.setProperty("--proximity-y", `${y.toFixed(1)}%`);
-      node.dataset.proximity = "active";
-    };
-
-    const onLeave = () => {
-      node.style.setProperty("--proximity-x", "50%");
-      node.style.setProperty("--proximity-y", "40%");
-      delete node.dataset.proximity;
-    };
-
-    node.addEventListener("mousemove", onMove, { passive: true });
-    node.addEventListener("mouseleave", onLeave);
-    return () => {
-      node.removeEventListener("mousemove", onMove);
-      node.removeEventListener("mouseleave", onLeave);
-      node.style.removeProperty("--proximity-x");
-      node.style.removeProperty("--proximity-y");
-      delete node.dataset.proximity;
-    };
-  }, [enabled, ref]);
-}
-
-function ProximityCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useProximity(ref, !useReducedMotion());
-
-  return (
-    <div ref={ref} className={`proximity-surface card-lift ${className}`.trim()}>
-      <div className="relative z-[1]">{children}</div>
-    </div>
-  );
-}
-
+/** Institutional about — mode-agnostic page copy from aboutPage. */
 export function About() {
-  const { mode } = useMode();
-  const section = sectionsByMode.about[mode];
-  const technology = technologyByMode[mode];
-  const anchorRef = useRef<HTMLElement>(null);
-
   return (
-    <section
-      ref={anchorRef}
-      id="about"
-      className="section-band section-band--ambience relative overflow-hidden"
-    >
-      <SectionAmbience tone={mode === "growth" ? "warm" : "cool"} />
-      <ModeContentTransition mode={mode} className="relative z-[1] mx-auto max-w-7xl px-6 pb-24 lg:px-8 lg:pb-28">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start lg:gap-12">
-          <SectionHeader animated={false} label={sectionsByMode.about.label} title={section.title} description={section.description} />
+    <section id="about" className="section-band section-band--ambience relative overflow-hidden">
+      <SectionAmbience tone="warm" />
+      <div className="relative z-[1] mx-auto max-w-7xl px-6 pb-16 lg:px-8 lg:pb-20">
+        <SectionHeader
+          animated={false}
+          label={aboutPage.label}
+          title={aboutPage.title}
+          description={aboutPage.description}
+        />
 
-          <ProximityCard className="rounded-2xl">
-            <div id="technology" className="spec-panel scroll-mt-section rounded-2xl border border-border bg-bg-card/90 p-5 lg:pt-5">
-              <p className="section-label">{sectionsByMode.technology.label}</p>
-              <dl className="spec-list">
-                {technology.map((item) => (
-                  <div key={item.title} className="spec-row">
-                    <dt>{item.title}</dt>
-                    <dd className="copy">{item.description}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </ProximityCard>
-        </div>
-      </ModeContentTransition>
-      <ThemeBridge anchorRef={anchorRef} />
+        <Reveal delay={0.08} className="section-stack">
+          <EditorialStack>
+            {aboutPage.storySegments.map((segment) => (
+              <EditorialItem key={segment.title} as="article">
+                <h3 className="text-base font-bold tracking-tight text-fg">{segment.title}</h3>
+                <p className="copy mt-3 text-sm text-muted">{segment.body}</p>
+              </EditorialItem>
+            ))}
+          </EditorialStack>
+        </Reveal>
+
+        <Reveal delay={0.12} className="mt-12 max-w-2xl">
+          <p className="section-label">{aboutPage.teamLabel}</p>
+          <p className="copy mt-3">{aboutPage.teamLead}</p>
+          <EditorialStack className="mt-8">
+            {FACTS.map((fact) => (
+              <EditorialItem key={fact.label} variant="split">
+                <p className="text-sm font-semibold text-fg">{fact.label}</p>
+                <p className="copy text-sm text-muted">{fact.value}</p>
+              </EditorialItem>
+            ))}
+          </EditorialStack>
+        </Reveal>
+
+        <Reveal delay={0.16}>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Magnetic>
+              <ScrollLink
+                href={primaryCta.href}
+                data-cursor="cta"
+                className="btn-caps inline-block rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-orange-light"
+              >
+                {aboutPage.ctaLabel}
+              </ScrollLink>
+            </Magnetic>
+            <Magnetic strength={0.22}>
+              <Link
+                to="/technology"
+                className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5 text-sm font-semibold hover:border-orange/35"
+              >
+                Technology
+              </Link>
+            </Magnetic>
+          </div>
+        </Reveal>
+      </div>
     </section>
   );
 }

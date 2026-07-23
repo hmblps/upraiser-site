@@ -29,3 +29,22 @@ export const integrationPartners: IntegrationPartner[] = [
   { name: "Kochava", slug: "kochava", logo: withLogo("kochava"), scale: 1 },
   { name: "Singular", slug: "singular", logo: withLogo("singular"), scale: 1 },
 ];
+
+/** Attribution / MMP logos shown on /technology */
+export const mmpPartnerSlugs = ["appsflyer", "kochava", "singular"] as const;
+
+/** Supply-side logos emphasized on /partners */
+export const supplyPartnerSlugs = [
+  "unity",
+  "applovin",
+  "ironsource",
+  "taboola",
+  "outbrain",
+  "lenovo",
+] as const;
+
+export function partnersBySlugs(slugs: readonly string[]) {
+  return slugs
+    .map((slug) => integrationPartners.find((p) => p.slug === slug))
+    .filter((p): p is IntegrationPartner => Boolean(p));
+}

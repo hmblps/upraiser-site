@@ -1,9 +1,10 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Reveal } from "./motion/Reveal";
-import { contactVerticalOptions, footerLinks, lenovoPartnership, sectionsByMode } from "../data/liveContent";
+import { contactPage, contactVerticalOptions, footerLinks, lenovoPartnership } from "../data/liveContent";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
+import { BorderBeam } from "./BorderBeam";
 import { ContactFormField } from "./ContactFormField";
 import { CONTACT_INTENT_EVENT, consumeContactIntent } from "../lib/contactIntent";
 
@@ -128,30 +129,34 @@ export function Contact() {
     <section id="contact" className="section-band">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <Reveal>
-          <div className="overflow-hidden rounded-3xl border border-border bg-bg-card">
-          <div className="grid lg:grid-cols-2">
+          <div className="strip-beam-wrap relative overflow-hidden rounded-3xl border border-border bg-bg-card">
+            <BorderBeam
+              className="z-20"
+              duration={10}
+              size={320}
+              colorFrom="var(--theme-accent-light)"
+              colorTo="var(--color-magenta)"
+            />
+            <div className="relative z-[1] grid lg:grid-cols-2">
             <div className="relative bg-bg-elevated p-10 lg:p-14">
-              <p className="section-label">{sectionsByMode.contact.label}</p>
+              <p className="section-label">{contactPage.label}</p>
               <h2 className="section-title">
-                {sectionsByMode.contact.titleLead}
-                <AccentWord tone="red">{sectionsByMode.contact.accentWord}</AccentWord>?
+                {contactPage.titleLead}
+                <AccentWord tone="red">{contactPage.accentWord}</AccentWord>?
               </h2>
-              <p className="section-description">
-                Scaling installs, deposits, or new geos? Let's talk.
-              </p>
+              <p className="section-description">{contactPage.description}</p>
+              <p className="mt-3 text-sm text-muted">{contactPage.subline}</p>
 
               <div className="mt-10 space-y-4 text-sm">
                 <div>
                   <div className="text-muted stat-label">Email</div>
-                  <a href="mailto:info@upraiser.co.uk" className="font-semibold text-fg hover:text-orange">
-                    info@upraiser.co.uk
+                  <a href={`mailto:${contactPage.email}`} className="font-semibold text-fg hover:text-orange">
+                    {contactPage.email}
                   </a>
                 </div>
                 <div>
                   <div className="text-muted stat-label">Address</div>
-                  <span className="font-semibold">
-                    128 City Road, London EC1V 2NX, United Kingdom
-                  </span>
+                  <span className="font-semibold">{contactPage.office}</span>
                 </div>
                 <div>
                   <div className="text-muted stat-label">LinkedIn</div>
@@ -289,13 +294,13 @@ export function Contact() {
                       data-cursor="cta"
                       className="btn-caps w-full rounded-full bg-orange py-3.5 text-sm font-semibold text-on-accent transition hover:bg-orange-light disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      {status === "loading" ? "Sending…" : "Send Message"}
+                      {status === "loading" ? "Sending…" : contactPage.ctaLabel}
                     </button>
                   </Magnetic>
                 </form>
               )}
             </div>
-          </div>
+            </div>
           </div>
         </Reveal>
       </div>

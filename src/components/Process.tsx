@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValueEvent, type MotionValue } from "framer-motion";
 import { processByMode, sectionsByMode } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScrollScene } from "../hooks/useScrollScene";
@@ -11,7 +11,7 @@ import { Magnetic } from "./motion-preview/Magnetic";
 import { SPRING_SOFT } from "../lib/motion";
 import { ScrollLink } from "./ScrollLink";
 
-function useProcessActiveIndex(
+function useProcessScroll(
   sectionRef: React.RefObject<HTMLElement | null>,
   stepCount: number,
   reduced: boolean,
@@ -19,8 +19,11 @@ function useProcessActiveIndex(
 ) {
   const progress = useScrollScene(sectionRef, {
     mode: "viewportBand",
-    spring: false,
+    spring: true,
     resetKey,
+    bandStart: 0.78,
+    bandEnd: 0.22,
+    heightBias: 0.55,
   });
   const [activeIndex, setActiveIndex] = useState(reduced ? stepCount - 1 : 0);
 
@@ -35,7 +38,7 @@ function useProcessActiveIndex(
     return unsub;
   }, [progress, reduced, stepCount]);
 
-  return activeIndex;
+  return { activeIndex, progress };
 }
 
 function ProcessStep({
@@ -62,10 +65,11 @@ function ProcessStep({
       initial={false}
       animate={
         reduced
-          ? { opacity: 1, y: 0 }
+          ? { opacity: 1, y: 0, scale: 1 }
           : {
-              opacity: active ? 1 : 0.58,
-              y: active ? 0 : 6,
+              opacity: active ? 1 : 0.38,
+              y: active ? 0 : 12,
+              scale: current ? 1 : active ? 0.985 : 0.97,
             }
       }
       transition={SPRING_SOFT}
@@ -79,13 +83,59 @@ function ProcessStep({
   );
 }
 
+function ProcessProgressTrack({
+  progress,
+  stepCount,
+  activeIndex,
+  reduced,
+}: {
+  progress: MotionValue<number>;
+  stepCount: number;
+  activeIndex: number;
+  reduced: boolean;
+}) {
+  const [fill, setFill] = useState(reduced ? 1 : 0);
+
+  useMotionValueEvent(progress, "change", (t) => {
+    setFill(t);
+  });
+
+  useEffect(() => {
+    if (reduced) setFill(1);
+  }, [reduced]);
+
+  return (
+    <div className="process-progress" aria-hidden>
+      <div className="process-progress__track">
+        <motion.div
+          className="process-progress__fill"
+          initial={false}
+          animate={{ scaleX: reduced ? 1 : fill }}
+          transition={SPRING_SOFT}
+          style={{ transformOrigin: "left center" }}
+        />
+      </div>
+      <div className="process-progress__dots">
+        {Array.from({ length: stepCount }, (_, index) => (
+          <span
+            key={index}
+            className={`process-progress__dot${index <= activeIndex ? " is-active" : ""}${
+              index === activeIndex ? " is-current" : ""
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function Process() {
   const { mode } = useMode();
   const section = sectionsByMode.process[mode];
   const steps = processByMode[mode];
   const sectionRef = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const activeIndex = useProcessActiveIndex(sectionRef, steps.length, reduced, mode);
+  const { activeIndex, progress } = useProcessScroll(sectionRef, steps.length, reduced, mode);
 
   return (
     <section
@@ -97,10 +147,17 @@ export function Process() {
       <ModeContentTransition mode={mode} className="relative z-[1] mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader animated={false} label={sectionsByMode.process.label} title={section.title} />
 
+        <ProcessProgressTrack
+          progress={progress}
+          stepCount={steps.length}
+          activeIndex={activeIndex}
+          reduced={reduced}
+        />
+
         <div className="process-rail section-stack">
           {steps.map((item, index) => (
             <ProcessStep
-              key={item.step}
+              key={`${mode}-${item.step}`}
               {...item}
               index={index}
               activeIndex={activeIndex}
@@ -112,7 +169,7 @@ export function Process() {
         <div className="mt-8">
           <Magnetic>
             <ScrollLink
-              href="#contact"
+              href="/contact"
               data-cursor="cta"
               className="btn-caps inline-block rounded-full bg-orange px-7 py-3 text-sm font-semibold text-on-accent transition hover:bg-orange-light hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--theme-accent-light)_25%,transparent)]"
             >

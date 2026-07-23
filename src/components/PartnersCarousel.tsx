@@ -1,13 +1,18 @@
+import type { CSSProperties } from "react";
 import { integrationPartners } from "../data/partners";
 import { accentSectionLabel } from "../lib/accent";
 
+/** Full partners marquee — lives above Footer (as on production). */
 export function PartnersCarousel() {
   const items = [...integrationPartners, ...integrationPartners];
 
   return (
-    <section className="border-t border-border bg-bg-elevated py-12">
+    <section className="border-t border-border bg-bg-elevated py-12" aria-label="Trusted integrations and partners">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <p className={`text-left ${accentSectionLabel("red")}`}>Trusted integrations & partners</p>
+        <p className={`text-left ${accentSectionLabel("gold")}`}>Integrations & platforms</p>
+        <p className="mt-2 max-w-xl text-sm text-muted">
+          MMPs, supply partners, and media platforms we wire into the stack — separate from client brands.
+        </p>
       </div>
 
       <div className="partners-strip relative mt-8 overflow-hidden py-1">
@@ -19,7 +24,7 @@ export function PartnersCarousel() {
             <div
               key={`${partner.slug}-${index}`}
               className="partner-logo-slot"
-              style={{ "--logo-scale": partner.scale ?? 1 } as React.CSSProperties}
+              style={{ "--logo-scale": partner.scale ?? 1 } as CSSProperties}
               aria-hidden={index >= integrationPartners.length}
             >
               <img src={partner.logo} alt={partner.name} className="partner-logo" loading="lazy" decoding="async" />

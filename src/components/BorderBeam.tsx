@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { cn } from "../lib/cn";
 
 type BorderBeamProps = {
   className?: string;
@@ -10,7 +11,7 @@ type BorderBeamProps = {
 };
 
 export function BorderBeam({
-  className = "",
+  className,
   size = 220,
   duration = 8,
   colorFrom = "var(--theme-accent)",
@@ -22,7 +23,7 @@ export function BorderBeam({
   return (
     <span
       aria-hidden
-      className={`border-beam pointer-events-none absolute inset-0 z-0 rounded-[inherit] ${className}`.trim()}
+      className={cn("border-beam pointer-events-none absolute inset-0 z-10 rounded-[inherit]", className)}
       style={
         {
           "--beam-size": `${size}px`,

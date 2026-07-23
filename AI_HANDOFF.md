@@ -97,42 +97,48 @@ Mode-aware section bodies wrap with **`ModeContentTransition`** (`AnimatePresenc
 
 ---
 
-## 4. Page structure (App.tsx order — source of truth)
+## 4b. Site map (Z2A-adapted, no blog) — Jul 23 2026
+
+Reference competitor: https://www.z2adigital.com/ (structure only). Production roots: https://upraiser-site.vercel.app/
+
+| Route | Role | Dual-mode narrative? |
+|-------|------|----------------------|
+| `/` | Pitch + killer folds + teasers + ThemeBridge | **Yes** — Growth / Infrastructure story |
+| `/solutions` | Value · Channels · Process | Soft (theme still swaps copy where wired) |
+| `/technology` | Stack, scoring, MMP logos | **No** — shared copy |
+| `/partners` | Supply / monetization track | **No** — shared copy |
+| `/cases` | Archive | Soft |
+| `/cases/:slug` | Case detail | Soft (growth vs infra focus blocks) |
+| `/about` | London · 2017 · ICO · tech preview | Soft |
+| `/contact` | Request Pilot form | No |
+| Blog | — | **Skipped** |
+
+**Flows (from Z2A, adapted):**
+- Advertiser: `/` → `/solutions` → `/contact`
+- Depth tech: `/` → `/technology` → `/contact`
+- Supply partner: `/` → `/partners` → `/contact` (intent `advertising-partner`)
+- Proof: `/` → `/cases` → `/cases/:slug` → `/contact`
+
+**Nav:** Solutions · Technology · Partners · Cases · About · theme · Request Pilot  
+**Not copying from Z2A:** blog, careers microsite, resources mega-menu, personal contact pages.
+
+SPA with **React Router** (`BrowserRouter` in `main.tsx`). Layout: `src/layouts/SiteLayout.tsx`.
 
 ```
-SiteGrain
-DeferredCustomCursor
-Header (fixed) — includes ThemeToggle
-main.site-main:
-  #hero              Hero + HeroAtmosphere
-  LenovoTrustStrip   (below hero wrapper)
-  #audience          Audience — AccentScrollFold ambient chart/fraud
-  #difference        Difference — Why Us header + 3 cards
-  #process           Process — scroll step rail
-  #value             ValueProps (bento + Lucide animated glyphs)
-  #channels          TrafficChannels
-  #cases             CaseStudies carousel / mobile accordion
-  #promise           PromiseSection — AccentScrollFold ambient bars
-  #about             About (+ technology list) + ThemeBridge strip
-  #contact           Contact — Web3Forms
-PartnersCarousel
-Footer
-MobileSectionNav
-SectionNav (desktop ↑↓)
-optional ApplePreviewPanel (?preview=…)
+SiteGrain · DeferredCustomCursor · Header (persistent)
+Outlet:
+  /  /solutions  /technology  /partners  /cases  /cases/:slug  /about  /contact
+PartnersCarousel · Footer (persistent)
 ```
 
-**Nav IDs** (`src/data/scrollSections.ts`):
+**Home (`/`):**
+```
+#hero → Lenovo → #audience → #solutions-teaser → #difference → #cases
+→ #process-teaser → #promise → #pilot → #mode-bridge (ThemeBridge)
+→ Partners (bottom) → Footer
+```
 
-`hero → audience → difference → process → value → channels → cases → promise → about → contact`
-
-**Removed (do not resurrect unless asked):**
-
-- `Objectives.tsx`, `Testimonials.tsx`, `Technology.tsx` (standalone)
-- `GrowthScrollBlock.tsx`, `PromiseScrollBlock.tsx` → `AccentScrollFold`
-- `BackgroundGlow.tsx`, `FraudRadialChart.tsx`
-- `src/data/content.ts` → `liveContent.ts`
-- `FoldBarList.tsx` → `FoldAreaMass.tsx`
+**Section keyboard nav:** `hero → audience → solutions-teaser → difference → cases → process-teaser → promise → pilot`
 
 ---
 
@@ -383,16 +389,23 @@ npm run deploy   # prebuilt local build → upraiser-site-v2 → aliases upraise
 
 ---
 
-## 15. Product direction — IA split (agreed, not built)
+## 15. Product direction — IA split (IN PROGRESS / shipped v1)
 
-Owner direction (23 Jul 2026): long single-page scroll feels heavy for conversion. **Homepage = pitch; internal pages = depth.**
+**Shipped 23 Jul 2026 (v1):** React Router pages + shortened home.
 
-**Likely keep on `/`:** Hero → Difference (or Value) → Cases teaser → Contact/CTA.  
-**Likely move off:** TrafficChannels, full Process, full Value bento, About/tech, full Cases, dual-mode depth.
+| Route | Content |
+|-------|---------|
+| `/` | Hero → Lenovo → **Audience fold** → Difference → Cases teaser → **Promise fold** → Pilot CTA |
+| `/solutions` | Value, Channels, Process |
+| `/cases` | Full case archive |
+| `/about` | About + technology + ThemeBridge |
+| `/contact` | Contact form |
 
-Compressing the page will **expose content gaps** (segment recognition, clear offer, trust strip higher, objection handling) — fill those with short copy/bridges, not by restoring runway “spectacle.”
+**Killer feature rule:** AccentScrollFold + ambient charts (Audience / Promise) live on **home**, not buried on `/solutions`.
 
-Do **not** start the router split unless the owner asks. Prefer a written URL map first.
+**Still later:** `/cases/:slug`, Google/Meta partner certification badges (not Snapchat), hero scroll-scrub (`CONTEXT.md`).
+
+Compressing the page may expose content gaps (segment strip, clearer offer) — fill with short bridges, not by restoring full runway on home.
 
 ---
 
