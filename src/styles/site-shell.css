@@ -11,6 +11,15 @@
   background-color: var(--theme-bg-card);
 }
 
+.lenovo-trust-strip--revealed {
+  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
+}
+
+.lenovo-trust-strip--hidden {
+  pointer-events: none;
+  visibility: hidden;
+}
+
 .site-grain svg {
   display: block;
 }

@@ -2,10 +2,10 @@
 
 > **Purpose:** give another AI (or engineer) complete context to continue work without rediscovering the codebase.  
 > Share this file **with the repo**. Shorter human README: `README.md`.  
-> **Updated:** 16 July 2026  
+> **Updated:** 21 July 2026  
 > **Local path:** `Upraiser New Website Cursor Project`  
 > **Production:** https://upraiser-site.vercel.app  
-> **Target domain:** https://upraiser.co.uk (not fully on Vercel SPA yet)
+> **Target domain:** https://upraiser.co.uk (not on Vercel SPA yet)
 
 ---
 
@@ -16,8 +16,8 @@
 3. Preserve **dual theme = dual narrative** (`light` → growth, `dark` → infrastructure).
 4. Do **not** commit or deploy unless the human explicitly asks.
 5. Prefer Framer Motion **springs** (`type: "spring"`) for micro-interactions; respect `prefers-reduced-motion`.
-6. Brand slogans the owner wants to keep: **«Charting the Ascent»** and Hero H1 **«We see how stunning / Your rise to the top / can be.»** — do not “AdTech-sanitize” these without asking.
-7. Positioning: UPRAISER is an **agency / traffic operator** that analyzes, filters, optimizes — **not** a SaaS antifraud product (do not clone Stripe Radar as “our product”).
+6. Brand slogans to keep: **«Charting the Ascent»** and Hero H1 **«We see how stunning / Your rise to the top / can be.»**
+7. Positioning: UPRAISER is an **agency / traffic operator** — **not** a SaaS antifraud product.
 
 ---
 
@@ -28,13 +28,11 @@
 | | |
 |---|---|
 | Verticals | iGaming, Fintech, premium media |
-| Differentiator | Verified outcomes (deposits, subscriptions, funders) — not vanity impressions; pre-bid fraud filtration; **official Lenovo OEM partner** |
+| Differentiator | Verified outcomes; pre-bid fraud filtration; **official Lenovo OEM partner** |
 | Legal | 128 City Road, London EC1V 2NX · info@upraiser.co.uk · ICO **ZC000436** |
 | LinkedIn | https://www.linkedin.com/company/upraiser/ |
 
-**This repo is:** a single-page marketing landing (SPA), English UI, B2B lead gen (Web3Forms contact).
-
-**This repo is not:** CMS, blog, client dashboard, multi-route app, careers portal (Careers = mailto).
+**This repo is:** single-page marketing SPA, English UI, B2B lead gen (Web3Forms).
 
 ---
 
@@ -44,23 +42,20 @@
 |-------|--------|
 | UI | React **19** + TypeScript |
 | Build | Vite **8** |
-| Styles | Tailwind CSS **v4** (`@tailwindcss/vite`) + large `src/index.css` (~2.5k lines) |
+| Styles | Tailwind CSS **v4** + modular `src/styles/*.css` (imported from `index.css`) |
 | Motion | Framer Motion **12** |
 | Smooth scroll | Lenis (desktop); **native scroll on mobile/touch** |
-| Charts | Recharts (ambient LineChart / BarChart behind scroll folds) |
-| Icons | Mostly custom SVG; `lucide-react` only for theme toggle (Sun/Moon) |
+| Charts | Recharts — ambient fold charts (`ModeChart`, `FoldAreaMass`, `FraudScrollChart`) |
 | Lint | oxlint |
-| Hosting | Vercel project `upraiser-site` under team `alex-3152s-projects` |
+| Hosting | Vercel **`upraiser-site-v2`** → alias `upraiser-site.vercel.app` |
 | Contact | Web3Forms via `VITE_WEB3FORMS_ACCESS_KEY` |
 
-**Installed but essentially unused in `src/`:** `@react-three/fiber`, `@react-three/drei`, `three` — do not build new features on them unless asked; candidates for removal.
-
-**Node scripts (package.json):**
+**Removed deps from active use:** `@react-three/fiber`, `@react-three/drei`, `three` (if still in package.json — candidates for cleanup).
 
 ```bash
 npm run dev          # vite → http://localhost:5173
 npm run build        # sync-assets → verify-assets → tsc -b → vite build
-npm run deploy       # scripts/deploy-vercel.sh → vercel deploy --prod
+npm run deploy       # scripts/deploy-vercel.sh → upraiser-site-v2
 npm run lint         # oxlint
 npm run preview      # vite preview
 npm run generate:og  # OG image helper
@@ -70,47 +65,41 @@ npm run generate:og  # OG image helper
 
 ## 3. Dual theme = dual SiteMode (CRITICAL)
 
-Theme toggle drives **two narrative modes**, not just colors.
-
 | `data-theme` | `SiteMode` | Meaning |
 |--------------|------------|---------|
-| `light` | `growth` | Scale, revenue, markets, ascent metaphor |
+| `light` | `growth` | Scale, revenue, markets, ascent |
 | `dark` | `infrastructure` | Logs, fraud, bid scoring, audit, proof |
 
 **Wiring:**
 
 - `ThemeProvider` — `src/context/ThemeContext.tsx`
-- Storage key: `upraiser-theme` (`localStorage`)
-- Anti-flash: inline script in `index.html` sets `data-theme` before paint
-- `useMode()` in `src/components/SectionHeader.tsx` maps theme → mode
-- Almost all section copy lives in `*ByMode` objects in `src/data/liveContent.ts`
+- Storage: `upraiser-theme`
+- Anti-flash: inline script in `index.html`
+- `useMode()` in `SectionHeader.tsx`
+- Copy: `*ByMode` in `src/data/liveContent.ts`
 
-**Hero stats are mode-specific** (`heroHighlightsByMode`):
-
-- **growth:** Markets, Apps in Network, Avg. Launch Time, Revenue Attributed  
-- **infrastructure:** Fraud Blocked Pre-Bid, Post-Flight Log Drift, p99 Bid Scoring, Device Signals  
-
-When adding UI that shows metrics/copy, always branch on `useMode()` / `*ByMode`.
+**Hero stats:** `heroHighlightsByMode` — different metrics per mode.
 
 ---
 
-## 4. Current page structure (App.tsx order)
+## 4. Page structure (App.tsx order — source of truth)
 
 ```
 SiteGrain
-DeferredCustomCursor (idle)
+DeferredCustomCursor
 Header (fixed)
 main.site-main:
-  #hero          Hero + LenovoTrustStrip (same wrapper)
-  #audience      Audience — AccentScrollFold ambient="chart" (SCALE / PROOF)
-  #value         ValueProps — bento pillars
-  #promise       PromiseSection — AccentScrollFold ambient="bars" (RESULTS / CLARITY)
-  #difference    Difference — HEADER ONLY (body intentionally stripped)
-  #channels      TrafficChannels — tabs / channel detail
-  #cases         CaseStudies — infinite carousel + sparklines
-  #about         About — includes technology stack panel (Technology.tsx deleted)
-  #process       Process — steps + theme bridge CTA
-  #contact       Contact — Web3Forms + Lenovo strip
+  #hero              Hero + HeroAtmosphere
+  LenovoTrustStrip   (below hero wrapper)
+  #audience          Audience — AccentScrollFold ambient chart/fraud
+  #difference        Difference — Why Us header + 3 cards
+  #process           Process — scroll step rail
+  #value             ValueProps
+  #channels          TrafficChannels
+  #cases             CaseStudies carousel
+  #promise           PromiseSection — AccentScrollFold ambient bars
+  #about             About (+ technology list)
+  #contact           Contact — Web3Forms
 PartnersCarousel
 Footer
 MobileSectionNav
@@ -118,326 +107,297 @@ SectionNav (desktop ↑↓)
 optional ApplePreviewPanel (?preview=…)
 ```
 
-**Removed / no longer on page (do not resurrect unless asked):**
+**Nav IDs** (`src/data/scrollSections.ts`):
 
-- `Objectives.tsx`, `Testimonials.tsx`, `Technology.tsx` (as standalone)
-- `GrowthScrollBlock.tsx`, `PromiseScrollBlock.tsx` → replaced by shared `AccentScrollFold`
-- `src/data/content.ts` → replaced by `src/data/liveContent.ts`
+`hero → audience → difference → process → value → channels → cases → promise → about → contact`
 
-**Scroll section IDs** (keyboard + mobile nav) — `src/data/scrollSections.ts`:
+**Removed (do not resurrect unless asked):**
 
-`hero → audience → value → promise → difference → channels → cases → about → process → contact`
+- `Objectives.tsx`, `Testimonials.tsx`, `Technology.tsx` (standalone)
+- `GrowthScrollBlock.tsx`, `PromiseScrollBlock.tsx` → `AccentScrollFold`
+- `BackgroundGlow.tsx`, `FraudRadialChart.tsx`
+- `src/data/content.ts` → `liveContent.ts`
+- `FoldBarList.tsx` → `FoldAreaMass.tsx`
 
 ---
 
-## 5. Repository layout
+## 5. Scroll Scene System (Jul 2026)
+
+Unified scroll progress: `src/hooks/useScrollScene.ts` + `src/lib/scrollScene.ts`.
+
+| Mode | Used by | Behavior |
+|------|---------|----------|
+| `runway` | Audience, Promise (`useSectionScrollProgress`) | `sectionHeight - viewport` progress; sticky 135vh desktop |
+| `anchor` | Difference cards | progress from cards grid ref vs viewport lines |
+| `viewportBand` | Process | section rect vs 72%/28% viewport bands |
+| in-view | Value, Channels, Cases, Contact | `Reveal` / `Stagger` |
+
+**Gate:** `useScrollRunwayEnabled()` — desktop ≥768px + not reduced motion.
+
+**Rules:**
+
+- Scroll-driven transforms: **`spring: false`** (locked to wheel; no floaty lag)
+- Fold runway CSS: `src/styles/scroll-scene.css`, `accent-scroll.css`
+- Charts morph: `useScrollMorph` in `ModeChart.tsx`
+
+---
+
+## 6. Repository layout
 
 ```
 /
 ├── AI_HANDOFF.md          ← this file
-├── README.md              ← short human docs (partially stale vs App.tsx)
-├── index.html             ← meta, OG, theme anti-flash, root
-├── package.json
-├── vite.config.ts
+├── README.md              ← human summary
+├── index.html
+├── vite.config.ts         ← manual chunks: framer-motion, lenis, recharts
 ├── vercel.json
-├── .env / .env.example    ← VITE_WEB3FORMS_ACCESS_KEY
-├── assets/                ← source of truth for brand/hero; synced → public/
-├── public/                ← served static (fonts, hero video, partners, legal)
+├── assets/                → sync → public/
 ├── scripts/
 │   ├── sync-assets.sh
 │   ├── verify-assets.sh
-│   ├── deploy-vercel.sh
-│   ├── generate-og-image.mjs
-│   ├── optimize-hero-video.mjs
+│   ├── deploy-vercel.sh   ← targets upraiser-site-v2
 │   └── rollback-*.sh
 └── src/
-    ├── main.tsx           ← ThemeProvider + App
-    ├── App.tsx            ← section composition, lazy loading
-    ├── index.css          ← tokens, sections, hero, folds, charts, bento…
+    ├── App.tsx
+    ├── index.css          ← @theme tokens + @import styles/*
+    ├── styles/            ← split CSS modules (Jul 2026)
     ├── context/
     │   ├── ThemeContext.tsx
-    │   └── ScrollContext.tsx   ← Lenis instance for ScrollLink
+    │   └── ScrollContext.tsx
     ├── data/
-    │   ├── liveContent.ts      ← PRIMARY copy / mode content
+    │   ├── liveContent.ts
     │   ├── cases.ts
     │   ├── partners.ts
     │   └── scrollSections.ts
     ├── lib/
-    │   ├── accent.ts           ← gold/red label helpers
-    │   └── motion.ts           ← SPRING, SPRING_SOFT, fade helpers
-    ├── hooks/                  ← see §7
-    ├── config/applePreview.ts
-    └── components/             ← see §6
+    │   ├── accent.ts
+    │   ├── motion.ts
+    │   ├── clamp.ts
+    │   └── scrollScene.ts
+    ├── hooks/
+    │   ├── useScrollScene.ts
+    │   ├── useScrollMorph.ts
+    │   ├── useSectionScrollProgress.ts  (+ useSectionMeasure)
+    │   ├── useHeroCursorLight.ts
+    │   └── …
+    └── components/
 ```
-
-**Asset pipeline:** edit under `assets/` → `npm run build` runs `sync-assets.sh` → copies into `public/`. Do not only edit `public/` if the file is meant to be sourced from `assets/`.
 
 ---
 
-## 6. Components (what each does)
+## 7. Components (key files)
 
-### Shell / chrome
+### Shell
 
-| File | Role |
-|------|------|
-| `Header.tsx` | Fixed nav, logo, links, theme toggle, CTA |
-| `Footer.tsx` | Explore / Company / Legal |
-| `ThemeToggle.tsx` | Light/dark; drives SiteMode |
-| `SmoothScroll.tsx` | Lenis provider; native on touch |
-| `ScrollLink.tsx` | Anchor links via Lenis or native |
-| `SectionNav.tsx` | Desktop section keyboard nav |
-| `MobileSectionNav.tsx` | Mobile section jumper |
-| `SiteGrain.tsx` | Full-page film grain overlay |
-| `CustomCursor.tsx` | Fine-pointer custom cursor (`data-cursor` modes) |
+`Header`, `Footer`, `SmoothScroll`, `ScrollLink`, `SectionNav`, `MobileSectionNav`, `SiteGrain`, `CustomCursor`, `ThemeToggle`
 
 ### Hero
 
 | File | Role |
 |------|------|
-| `Hero.tsx` | Slogan, H1, lede, CTAs, **mode-aware stat cards** |
-| `HeroAtmosphere.tsx` | Mountains video + cursor light mask (light/dark variants) |
-| `LenovoTrustStrip.tsx` | Official partner strip under hero |
-| `LenovoPartnershipLogo.tsx` / `Copy.tsx` | Shared Lenovo partnership bits |
+| `Hero.tsx` | Slogan, H1, lede, CTAs, mode-aware stat cards |
+| `HeroAtmosphere.tsx` | Mountains video + cursor spotlight (mask punch-through) |
+| `LenovoTrustStrip.tsx` | Partner strip under hero |
 
-### Dual-mode scroll folds (scrollytelling)
+**Hero spotlight (dark):** soft dim layer + corner-lock upper-right (stat cards zone). Cursor lerp ~0.05. Copy-wash left-only gradient.
 
-| File | Role |
-|------|------|
-| `AccentScrollFold.tsx` | Sticky hero word shrinks into inline word; `ambient`: `chart` \| `bars` \| `none` |
-| `Audience.tsx` | `#audience` — growth SCALE / infra PROOF; ambient **chart** |
-| `PromiseSection.tsx` | `#promise` — RESULTS / CLARITY; ambient **bars** |
-| `ModeChart.tsx` (`FoldChart`) | Full-bleed scroll-synced **LineChart** + ghost bubble metrics |
-| `FoldBarList.tsx` | Full-bleed scroll-synced **BarChart** + bubbles |
-| `LineChart.tsx` / `BarChart.tsx` | Tremor-like Recharts wrappers |
-| `AccentWord.tsx` | Accent word styling helper |
-
-Ambient viz rules (owner intent):
-
-- Quiet **background**, not dashboard widgets  
-- Desktop ≥768px; respect reduced motion  
-- SCALE = journey (line); RESULTS = outcomes (bars)  
-- Do not put gadgets in a right rail  
-
-### Mid-page sections
+### Scroll folds
 
 | File | Role |
 |------|------|
-| `ValueProps.tsx` | `#value` bento — mode copy from `valueByMode` |
-| `Difference.tsx` | `#difference` **header only** (Why Us). Copy in `sectionsByMode.difference` / `differenceByMode` may exist unused |
-| `TrafficChannels.tsx` | `#channels` tabbed channels; mode titles |
-| `SlideTabs.tsx` | Animated tab indicator |
-| `CaseStudies.tsx` | `#cases` carousel |
-| `CaseSparkline.tsx` | Hero metric + sparkline per case |
-| `About.tsx` | `#about` + embedded technology list |
-| `Process.tsx` | `#process` steps + “switch view” bridge |
-| `Contact.tsx` | `#contact` form → Web3Forms |
-| `PartnersCarousel.tsx` | Infinite logo marquee |
-| `SectionHeader.tsx` | Shared label/title/description + **`useMode`** |
-| `SectionAmbience.tsx` | Soft gradient orbs behind some bands |
-| `HoverTilt.tsx` | 3D tilt on hover |
-| `BorderBeam.tsx` | Optional border beam accent |
-| `ProximitySurface.tsx` | Proximity glow wrapper |
+| `AccentScrollFold.tsx` | Sticky hero word → inline word morph |
+| `Audience.tsx` | `#audience` — growth: `FoldChart`; infra: `FraudScrollChart` |
+| `PromiseSection.tsx` | `#promise` — `FoldAreaMass` area chart |
+| `ModeChart.tsx` | Scroll-synced LineChart + ghost metrics |
+| `FoldAreaMass.tsx` | Scroll-synced stacked area (RESULTS/CLARITY) |
+| `FraudScrollChart.tsx` | Infrastructure fraud radial scroll chart |
+| `LineChart.tsx` | Recharts wrapper |
 
-### Motion helpers
+**Charts:** desktop ≥768px only; hidden on mobile/reduced motion.
+
+### Why Us
 
 | File | Role |
 |------|------|
-| `motion/Reveal.tsx` | In-view reveal |
-| `motion/Stagger.tsx` | Stagger children (fixed stuck opacity:0 issue historically) |
-| `motion-preview/Magnetic.tsx` | Magnetic button pull |
+| `Difference.tsx` | Header + 3 cards from `differenceByMode` |
+| Desktop | `useScrollScene` anchor spawn on cards grid |
+| Mobile | `Stagger` in-view |
 
-### Dev / preview
+### Other sections
 
-| File | Role |
-|------|------|
-| `apple-preview/*` | Internal feature toggles via query/config — not for production UX |
+`ValueProps`, `TrafficChannels`, `SlideTabs`, `CaseStudies`, `About`, `Process`, `Contact`, `ContactFormField`, `PartnersCarousel`, `SectionHeader`, `SectionAmbience`, `BorderBeam`
+
+### Motion
+
+`motion/Reveal.tsx`, `motion/Stagger.tsx`, `motion-preview/Magnetic.tsx`
 
 ---
 
-## 7. Hooks
+## 8. Hooks (current)
 
 | Hook | Purpose |
 |------|---------|
-| `useMode` (SectionHeader) | theme → growth \| infrastructure |
-| `useTheme` | theme + toggle |
-| `useReducedMotion` | a11y gate for motion/video |
-| `useInViewOnce` | one-shot in-view |
-| `useCountUp` | animate numeric stat strings |
-| `useSectionScrollProgress` | 0–1 progress for fold sections |
-| `useActiveSection` | which `#id` is active |
-| `usePreferNativeScroll` | disable Lenis on touch |
-| `useHeroCursorLight` | CSS vars for mountain spotlight |
+| `useMode` | theme → growth \| infrastructure |
+| `useScrollScene` | unified runway / anchor / viewportBand progress |
+| `useScrollMorph` | rAF-lerped chart morph from scroll progress |
+| `useSectionScrollProgress` | runway wrapper for accent folds |
+| `useSectionMeasure` | hero word fold geometry |
+| `useScrollRunwayEnabled` | desktop runway gate |
+| `useHeroCursorLight` | CSS vars `--hero-light-x/y` |
 | `useHeroMobileLite` | lighter hero on mobile |
-| `useInfiniteCaseCarousel` | cases loop / drag |
-| `useHorizontalPointerScroll` | horizontal drag scroll |
-| `useProximityGlow` | card proximity lighting |
-| `useMagneticElement` | magnetic pull math |
-| `useApplePreview` | preview panel flags |
-| `useSectionKeyboardNav` | ↑↓ between sections |
+| `useReducedMotion` | a11y gate |
+| `useActiveSection` | nav highlight |
+| `usePreferNativeScroll` | disable Lenis on touch |
+| `useInViewOnce` | one-shot IO |
+| `useCountUp` | stat animation |
+
+**Removed / unused:** `useProximityGlow`, `useMagneticElement`, `useHorizontalScrollProgress` (if deleted)
 
 ---
 
-## 8. Data layer (`liveContent.ts`)
+## 9. Data layer
 
-**Single source of mode-aware marketing copy.** Key exports:
+**Primary:** `src/data/liveContent.ts`
 
-- `heroHighlightsByMode`
-- `audienceByMode`, `promiseByMode`, `valueByMode`
-- `channelsByMode` / channel definitions
-- `differenceByMode` (may be unused while Difference is header-only)
-- `processByMode`, `technologyByMode`, `aboutHighlightsByMode`
-- `bridgeByMode` (Process “switch theme” teaser)
-- `sectionsByMode` (titles/descriptions per section)
-- `lenovoPartnership`, `navLinks`, `primaryCta`, `footerLinks`
+- `heroHighlightsByMode`, `audienceByMode`, `promiseByMode`, `valueByMode`
+- `differenceByMode` — **used** in Difference cards
+- `processByMode`, `channelsByMode`, `sectionsByMode`, `bridgeByMode`
+- `navLinks`, `footerLinks`, `lenovoPartnership`
 
-**Cases:** `src/data/cases.ts` — Challenge → Approach → Outcome + `heroMetric` + `trend[]`.
+**Cases:** `src/data/cases.ts`  
+**Partners:** `src/data/partners.ts`
 
-**Partners:** `src/data/partners.ts` — marquee logos under `public/partners/`.
-
-**Copy rules:**
-
-- Brand name **UPRAISER** in ALL CAPS in labels/nav  
-- Client-facing **You / Your / Yours** with capital **Y**  
-- Prefer hard metrics over “revolutionary / smart / stunning” in **body** ledes — but Hero slogan is protected brand poetry  
-- Avoid pitching as if they sell a named antifraud SaaS; they **operate / analyze / optimize** buys  
+**Copy rules:** UPRAISER ALL CAPS · You/Your capital Y · hard metrics in body · not antifraud SaaS pitch
 
 ---
 
-## 9. Design tokens & visual system
+## 10. Design tokens
 
-Defined in `src/index.css` on `[data-theme="dark"]` / `[data-theme="light"]`:
+Theme tokens in `src/index.css` (`@theme` + `[data-theme=…]`).
 
-| Token | Dark | Light |
-|-------|------|-------|
-| `--theme-bg` | `#0a0a0a` | `#fffbf7` |
-| `--theme-fg` | `#ffffff` | `#141010` |
-| `--theme-accent` (gold) | `#ffcc00` | `#9a6b00` (AA-safe) |
-| `--theme-accent-secondary` | `#e63558` | same magenta |
-| Cards / borders | warm near-black | cream / soft border |
+Shared layout tokens in `src/styles/base.css`:
 
-**Metaphor:** mountains + ascent (hero video). Owner likes this; CD feedback suggested “cyber topographic” overlay — **not implemented**; discuss before changing.
+- `--site-header-height`, `--scroll-sticky-top`, `--scroll-margin-section`
+- `--section-stack-gap`, `--card-pad`, `.section-stack`
 
-**Motion defaults:** `src/lib/motion.ts` — `SPRING`, `SPRING_SOFT`.
-
-**Frontend design constraints (owner rules):**
-
-- Landing first viewport = one composition; brand strong  
-- Prefer springs; intentional motion, not noise  
-- Avoid generic AI aesthetics (purple gradients, cream+terracotta clichés) — this brand is gold + magenta on dark/cream  
-- Cards: don’t invent card grids in hero; mid-page cards exist where interaction needs them  
-
-**Inspiration note (July 2026):** Stripe Radar dark UI (signals, icons, density) is a **visual** reference for infrastructure tone — **not** a product to clone. Translate to “signals we read / optimize,” not “buy our Radar.”
+Motion: `src/lib/motion.ts` — `SPRING`, `SPRING_SOFT`, `viewportOnce`
 
 ---
 
-## 10. Performance & loading
+## 11. Performance & loading
 
-- Below-fold sections: `React.lazy` + `Suspense` + idle `import()` preload in `App.tsx`
-- `CustomCursor` deferred via `requestIdleCallback`
-- Framer Motion / Lenis / Recharts load with their chunks (AccentScrollFold pulls Recharts — large chunk)
-- Hero entrance historically CSS-first to keep main bundle lean; Hero now also uses Framer for stats/copy
+- Lazy sections + idle preload in `App.tsx`
+- Manual chunks: `framer-motion`, `lenis`, `recharts`
+- Hero video ~7 MB — no re-encode (owner decision)
+- Hero entrance CSS-first; fold pulls Recharts chunk on desktop
 
 ---
 
-## 11. Contact form & env
+## 12. Contact form
 
 ```env
 VITE_WEB3FORMS_ACCESS_KEY=...
 ```
 
-- Client posts to Web3Forms API from `Contact.tsx`
-- `deploy-vercel.sh` tries to sync key to Vercel envs from local `.env`
-- Destination inbox should be verified in Web3Forms dashboard (info@upraiser.co.uk)
+`Contact.tsx` + `ContactFormField.tsx` (BorderBeam on focus — subtle).  
+`deploy-vercel.sh` syncs key to Vercel env from local `.env`.
 
 ---
 
-## 12. Deploy / Vercel (important gotchas)
+## 13. Deploy / Vercel (critical)
 
-**Project:** `upraiser-site` · org/team: `alex-3152s-projects`  
-**CLI user:** `alex-3152` · Vercel email: `alex@upraiser.co.uk`  
-**Git author often:** `homeboyleps@gmail.com`
+| | |
+|---|---|
+| **Production URL** | https://upraiser-site.vercel.app |
+| **Vercel project** | **`upraiser-site-v2`** (not `upraiser-site`) |
+| **Team** | `alex-3152s-projects` |
+| **Vercel account** | `alex-3152` · `alex@upraiser.co.uk` |
+| **GitHub** | `hmblps/upraiser-site` · branch `main` |
+| **Git author (required)** | `alex@upraiser.co.uk` — verified on GitHub |
 
-**BLOCKER:** Vercel may set deployments to `BLOCKED` / `TEAM_ACCESS_REQUIRED` when git commit author email is not on the team. Status shows `UNKNOWN` / `seatBlock`.
+### Blocked deploy causes (seen Jul 2026)
 
-**Workaround that worked:** deploy from a **temp copy of the project without `.git`** so CLI doesn’t attach blocked git author — then production becomes Ready.
+1. **Git author `homeboyleps@gmail.com`** — not on GitHub account / Vercel can't match → **Blocked**
+2. **CLI + gmail author** — "not a member of the team" on Hobby plan
+3. **Git not connected** to `upraiser-site-v2` — push doesn't auto-deploy
+
+### Working deploy path (Jul 21 2026)
 
 ```bash
-# Normal (may block if git author not on team):
-npm run deploy
-
-# Workaround sketch:
-rsync -a --exclude .git --exclude node_modules ./ /tmp/upraiser-deploy/
-cp -R .vercel /tmp/upraiser-deploy/
-cd /tmp/upraiser-deploy && vercel deploy --prod --yes
+git config --global user.email "alex@upraiser.co.uk"
+npm run deploy   # prebuilt local build → upraiser-site-v2 → aliases upraiser-site.vercel.app
 ```
 
-**Longer-term fix:** invite `homeboyleps@gmail.com` to the Vercel team **or** commit with author `alex@upraiser.co.uk`.
+Or: push to `main` with correct author **after** connecting Git in Vercel dashboard to **upraiser-site-v2**.
 
-**Do not** change git config unless the human asks.
+### Do not
 
-Production aliases typically include `https://upraiser-site.vercel.app`. Deployment Protection / SSO may 302 unauthenticated browsers to Vercel login depending on team settings.
-
----
-
-## 13. Known WIP / intentional gaps (July 2026)
-
-1. **`#difference` (Why Us)** — header only; previous card/viz treatments were rejected (“kolkhoz”). `differenceByMode` content may still exist unused.  
-2. **README.md** still mentions old sections (`#objectives`, `#testimonials`, `#technology`, `content.ts`) — trust **App.tsx** + this handoff.  
-3. **Uncommitted local work** often exists on `main` (ambient charts, mode hero stats, dual-mode copy, deleted sections). Last tagged narrative commit may lag working tree.  
-4. **Case studies** dense; review suggested giant primary metric + muted secondary — not fully restyled.  
-5. **Traffic channels** on mobile: many tabs — accordion/carousel polish suggested, not required done.  
-6. **three.js** deps unused.  
-7. **Hero lede** owner prefers infrastructure sentence about performance / OEM / verified outcomes — not the “Hardware-level OEM access and predictive LTV scoring…” AdTech rewrite (that was reverted).
+- Deploy to project `upraiser-site` expecting `upraiser-site.vercel.app` to update
+- Use `homeboyleps@gmail.com` as git author (email taken on another GitHub account)
 
 ---
 
-## 14. Recent product decisions (conversation memory)
+## 14. Known gaps / polish backlog
 
-- Ambient scroll charts in Audience (line) and Promise (bars) — keep quiet, full-bleed, scroll-synced.  
-- Why Us stripped to header after failed viz experiments.  
-- Hero slogans restored: Charting the Ascent + “We see how stunning…”.  
-- Hero stat cards must differ by light/dark mode (implemented via `heroHighlightsByMode`).  
-- Do not frame UPRAISER as owning a Stripe-Radar-like product; operators who analyze/optimize.  
-- Deploy succeeded via no-git copy when team seat blocked git author.
-
----
-
-## 15. Agent / collaboration rules (owner)
-
-- Commit **only** when explicitly asked; same for push/PR.  
-- Prefer editing existing files; don’t invent markdown docs unless asked (this handoff was requested).  
-- Match existing visual language; don’t rebuild the site in a new aesthetic without approval.  
-- Russian is fine for chat with the owner; **UI copy stays English**.  
-- Skills in `.claude/skills` / `.cursor/skills` / `.agents/skills` exist for design/motion — use when relevant.
+1. **Git → Vercel auto-deploy** — connect repo to `upraiser-site-v2` in dashboard  
+2. **og:image URL** — still points to vercel.app; update when `upraiser.co.uk` live  
+3. **Contact BorderBeam** — subtle / sometimes invisible (not critical)  
+4. **Traffic channels mobile** — horizontal scroll tabs; accordion optional  
+5. **Partner logos** — partial set in `public/partners/`  
+6. **Case studies** — dense cards; metric hierarchy polish suggested  
+7. **three.js deps** — unused, removable  
 
 ---
 
-## 16. Quick “where do I change X?”
+## 15. Recent decisions (Jul 2026)
 
-| Want to change… | Go to… |
-|-----------------|--------|
-| Hero slogan / H1 / lede | `Hero.tsx` |
-| Hero stat numbers by theme | `liveContent.ts` → `heroHighlightsByMode` |
-| Section titles / mode stories | `liveContent.ts` → `sectionsByMode`, `*ByMode` |
-| Case study metrics | `cases.ts` |
-| Partner logos | `partners.ts` + `public/partners/` (+ `assets/` if synced) |
-| Theme colors | `index.css` `[data-theme=…]` |
+- Scroll Scene System — unified scroll progress across fold / cards / process  
+- Why Us cards — anchor spawn desktop, Stagger mobile, compact section (no 128vh runway)  
+- Hero dark spotlight — softer, less contrast, mountains brighten at cursor  
+- CSS split into `src/styles/` modules  
+- Difference section wired with `differenceByMode` cards  
+- Deploy target corrected to **upraiser-site-v2**  
+- Production live Jul 21 2026 with scroll charts + new Why Us  
+
+---
+
+## 16. Agent rules (owner)
+
+- Commit / push / deploy **only when explicitly asked**  
+- UI copy **English**; chat with owner can be Russian  
+- Don't add third scroll-moment or hero orbs without approval  
+- Use refero-design / motion skills when doing UI polish  
+- Trust **App.tsx** + this file over stale comments  
+
+---
+
+## 17. Quick “where do I change X?”
+
+| Change… | File |
+|---------|------|
+| Hero copy / stats | `Hero.tsx`, `liveContent.ts` → `heroHighlightsByMode` |
+| Section copy | `liveContent.ts` → `*ByMode`, `sectionsByMode` |
+| Why Us cards | `liveContent.ts` → `differenceByMode`, `Difference.tsx` |
+| Scroll fold ambient | `Audience.tsx` / `PromiseSection.tsx` → `ambient=` |
+| Scroll timing | `useScrollScene.ts`, `scrollScene.ts`, `scroll-scene.css` |
+| Hero spotlight | `hero.css`, `HeroAtmosphere.tsx`, `useHeroCursorLight.ts` |
+| Theme colors | `index.css`, `styles/base.css` |
 | Section order | `App.tsx` + `scrollSections.ts` |
-| Scroll fold ambient type | `Audience.tsx` / `PromiseSection.tsx` → `ambient=` |
-| Contact form key | `.env` + Vercel env |
-| Nav links | `liveContent.ts` → `navLinks` |
+| Deploy | `scripts/deploy-vercel.sh`, Vercel dashboard |
+| Contact key | `.env` + Vercel env |
 
 ---
 
-## 17. Sanity checklist before shipping a change
+## 18. Sanity checklist
 
-- [ ] `npm run build` passes (`tsc -b` + vite)  
-- [ ] Toggle light/dark — copy and hero stats both make sense  
-- [ ] Mobile: hero, channels, cases, contact usable  
-- [ ] Reduced motion: no broken stuck `opacity: 0` (watch Stagger/Reveal)  
-- [ ] Deploy: if Vercel BLOCKED on git author, use no-git workaround or fix team seats  
-- [ ] Don’t overwrite Charting the Ascent / rise-to-the-top without asking  
+- [ ] `npm run build` passes  
+- [ ] Light/dark — copy, stats, charts appropriate per mode  
+- [ ] Desktop: Audience/Promise fold + chart morph  
+- [ ] Desktop: Why Us cards spawn on scroll into grid  
+- [ ] Mobile: static/Stagger fallbacks, no broken opacity  
+- [ ] `git log -1` shows `alex@upraiser.co.uk` before deploy  
+- [ ] Deploy to **upraiser-site-v2**; verify `upraiser-site.vercel.app` last-modified  
 
 ---
 
-*End of handoff. Prefer updating this file when architecture or page map changes.*
+*End of handoff. Update this file when architecture, deploy, or page map changes.*

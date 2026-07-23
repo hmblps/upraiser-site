@@ -92,8 +92,8 @@
 @media (min-width: 768px) {
   .value-bento {
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: minmax(9rem, auto) minmax(9rem, auto) minmax(9.5rem, auto);
-    gap: 1rem;
+    grid-template-rows: minmax(7.25rem, auto) minmax(7.25rem, auto) minmax(7.5rem, auto);
+    gap: 0.875rem;
   }
 
   .value-bento-tile--hero {
@@ -101,9 +101,8 @@
     min-height: 0;
   }
 
-  .value-bento-hero-inner {
-    grid-template-columns: 1.1fr 0.9fr;
-    align-items: end;
+  .value-bento-card--hero {
+    min-height: 100%;
   }
 
   .value-bento-tile--metric-a {

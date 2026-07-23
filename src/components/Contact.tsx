@@ -1,10 +1,11 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Reveal } from "./motion/Reveal";
-import { footerLinks, lenovoPartnership, sectionsByMode } from "../data/liveContent";
+import { contactVerticalOptions, footerLinks, lenovoPartnership, sectionsByMode } from "../data/liveContent";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
 import { ContactFormField } from "./ContactFormField";
+import { CONTACT_INTENT_EVENT, consumeContactIntent } from "../lib/contactIntent";
 
 type FormState = {
   name: string;
@@ -39,6 +40,25 @@ export function Contact() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const applyIntent = (vertical: string) => {
+      const allowed = contactVerticalOptions.some((option) => option.value === vertical);
+      if (!allowed) return;
+      setForm((current) => ({ ...current, vertical }));
+      window.requestAnimationFrame(() => document.getElementById("vertical")?.focus());
+    };
+
+    const stored = consumeContactIntent();
+    if (stored) applyIntent(stored);
+
+    const onIntent = (event: Event) => {
+      applyIntent((event as CustomEvent<string>).detail);
+    };
+
+    window.addEventListener(CONTACT_INTENT_EVENT, onIntent);
+    return () => window.removeEventListener(CONTACT_INTENT_EVENT, onIntent);
+  }, []);
+
   const validate = () => {
     const next: FormErrors = {};
     if (!form.name.trim()) next.name = "Required";
@@ -72,7 +92,10 @@ export function Contact() {
         },
         body: JSON.stringify({
           access_key: accessKey,
-          subject: `UPRAISER Contact - ${form.company || form.name}`,
+          subject:
+            form.vertical === "careers"
+              ? "UPRAISER Careers inquiry"
+              : `UPRAISER Contact - ${form.company || form.name}`,
           from_name: "UPRAISER Website",
           name: form.name,
           email: form.email,
@@ -97,7 +120,7 @@ export function Contact() {
       setSubmitError(data.message ?? "Unable to send message. Please try again.");
     } catch {
       setStatus("error");
-      setSubmitError("Network error. Please check Your connection and try again.");
+      setSubmitError("Network error. Please check your connection and try again.");
     }
   };
 
@@ -161,7 +184,7 @@ export function Contact() {
                   </div>
                   <h3 className="mt-6 text-2xl font-bold">Message received</h3>
                   <p className="mt-3 max-w-sm text-muted-light">
-                    Thanks for reaching out. Our team will get back to You within 1-2 business days.
+                    Thanks for reaching out. Our team will get back to you within 1–2 business days.
                   </p>
                   <button
                     type="button"
@@ -216,11 +239,11 @@ export function Contact() {
                       value={form.vertical}
                       onChange={(e) => setForm({ ...form, vertical: e.target.value })}
                     >
-                      <option value="brand">Brand</option>
-                      <option value="advertising-partner">Advertising Partner</option>
-                      <option value="app-web-owner">App / Web Owner</option>
-                      <option value="direct-publisher">Direct publisher</option>
-                      <option value="other">Other</option>
+                      {contactVerticalOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </select>
                   </ContactFormField>
 

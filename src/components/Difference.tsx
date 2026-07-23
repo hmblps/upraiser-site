@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { differenceByMode, sectionsByMode } from "../data/liveContent";
-import { stagedRevealRange } from "../lib/scrollScene";
 import { SPRING_SOFT } from "../lib/motion";
 import { useScrollRunwayEnabled, useScrollScene } from "../hooks/useScrollScene";
+import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { SectionAmbience } from "./SectionAmbience";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { Stagger, StaggerItem } from "./motion/Stagger";
@@ -18,6 +18,13 @@ const cardSpawn = {
   visible: { opacity: 1, y: 0, scale: 1 },
 };
 
+/** Stagger tuned so card 3 finishes ~mid-scroll, not at the section tail. */
+const CARD_REVEAL: ReadonlyArray<[number, number]> = [
+  [0.04, 0.22],
+  [0.14, 0.34],
+  [0.26, 0.5],
+];
+
 function DifferenceCardBody({ card }: { card: DifferenceCard }) {
   return (
     <>
@@ -30,15 +37,13 @@ function DifferenceCardBody({ card }: { card: DifferenceCard }) {
 function ScrollSpawnCard({
   card,
   index,
-  total,
   progress,
 }: {
   card: DifferenceCard;
   index: number;
-  total: number;
   progress: MotionValue<number>;
 }) {
-  const [start, end] = stagedRevealRange(index, total, 0.08, 0.12);
+  const [start, end] = CARD_REVEAL[index] ?? CARD_REVEAL[CARD_REVEAL.length - 1]!;
   const opacity = useTransform(progress, [start, end], [0, 1]);
   const y = useTransform(progress, [start, end], [40, 0]);
   const scale = useTransform(progress, [start, end], [0.94, 1]);
@@ -63,8 +68,8 @@ function DifferenceScroll() {
   const progress = useScrollScene(sectionRef, {
     mode: "anchor",
     anchorRef: cardsRef,
-    startLine: 0.9,
-    endLine: 0.2,
+    startLine: 0.88,
+    endLine: 0.36,
     spring: false,
     resetKey: mode,
   });
@@ -72,7 +77,7 @@ function DifferenceScroll() {
   return (
     <section ref={sectionRef} id="difference" className="section-band section-band--quiet">
       <SectionAmbience tone={mode === "growth" ? "warm" : "cool"} />
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+      <ModeContentTransition mode={mode} className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader
           label={sectionsByMode.difference.label}
           title={section.title}
@@ -81,16 +86,10 @@ function DifferenceScroll() {
 
         <div ref={cardsRef} className="section-stack grid gap-6 md:grid-cols-3">
           {cards.map((card, index) => (
-            <ScrollSpawnCard
-              key={card.title}
-              card={card}
-              index={index}
-              total={cards.length}
-              progress={progress}
-            />
+            <ScrollSpawnCard key={card.title} card={card} index={index} progress={progress} />
           ))}
         </div>
-      </div>
+      </ModeContentTransition>
     </section>
   );
 }
@@ -103,7 +102,7 @@ function DifferenceStatic() {
   return (
     <section id="difference" className="section-band section-band--quiet">
       <SectionAmbience tone={mode === "growth" ? "warm" : "cool"} />
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+      <ModeContentTransition mode={mode} className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader
           label={sectionsByMode.difference.label}
           title={section.title}
@@ -119,7 +118,7 @@ function DifferenceStatic() {
             </StaggerItem>
           ))}
         </Stagger>
-      </div>
+      </ModeContentTransition>
     </section>
   );
 }

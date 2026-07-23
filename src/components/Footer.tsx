@@ -38,9 +38,13 @@ export function Footer() {
               <h4 className={accentSectionLabel()}>Company</h4>
               <ul className="mt-4 space-y-2">
                 {footerLinks.company.map((link) => (
-                  <li key={link.href}>
+                  <li key={`${link.label}-${link.href}`}>
                     {link.href.startsWith("#") ? (
-                      <ScrollLink href={link.href} className="text-sm text-muted-light transition-colors hover:text-fg">
+                      <ScrollLink
+                        href={link.href}
+                        contactIntent={link.contactIntent}
+                        className="text-sm text-muted-light transition-colors hover:text-fg"
+                      >
                         {link.label}
                       </ScrollLink>
                     ) : (

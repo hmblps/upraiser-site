@@ -9,14 +9,14 @@ import {
   YAxis,
 } from "recharts";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
+import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useScrollMorph } from "../hooks/useScrollMorph";
 import { useMode } from "./SectionHeader";
 
 type FoldAreaMassProps = {
   progress: MotionValue<number>;
 };
-
-import { clamp } from "../lib/clamp";
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -27,7 +27,6 @@ const PERIODS = ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W
 
 /** Stack layers — Secondary sits under Primary so the silhouette = accumulated mass */
 function growthTargets() {
-  // Elbows: quiet → ramp → compound (kept — user liked this bend)
   const base = [9, 10, 12, 19, 23, 27, 38, 44, 49, 58, 66, 74];
   const lift = [7, 8, 10, 15, 18, 21, 29, 34, 37, 46, 52, 62];
   return PERIODS.map((period, i) => ({
@@ -183,8 +182,6 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: number }) 
       drift={metric.drift}
       duration={metric.duration}
       delay={metric.delay}
-      rise={150 + metric.originY * 0.3}
-      peakOpacity={0.48}
     >
       <span className="fold-chart-ghost-value">{metric.format(morph)}</span>
       <span className="fold-chart-ghost-label">{metric.label}</span>
@@ -198,12 +195,17 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: number }) 
  */
 export function FoldAreaMass({ progress }: FoldAreaMassProps) {
   const { mode } = useMode();
+  const { theme } = useTheme();
   const reduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
-  const [morph, setMorph] = useState(0);
   const reactId = useId().replace(/:/g, "");
 
   const isGrowth = mode === "growth";
+  const morph = useScrollMorph(progress, enabled, {
+    start: 0.02,
+    span: theme === "dark" ? 0.88 : 0.78,
+    lerp: theme === "dark" ? 0.075 : 0.09,
+  });
   const ghosts = isGrowth ? GROWTH_RESULT_GHOSTS : CLARITY_RESULT_GHOSTS;
   const targets = useMemo(() => (isGrowth ? growthTargets() : clarityTargets()), [isGrowth]);
   const primary = "var(--theme-accent)";
@@ -221,21 +223,6 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
 
-  useEffect(() => {
-    if (!enabled) return;
-    let raf = 0;
-    const unsub = progress.on("change", (value) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        setMorph(clamp((value - 0.05) / 0.7, 0, 1));
-      });
-    });
-    return () => {
-      unsub();
-      cancelAnimationFrame(raf);
-    };
-  }, [enabled, progress]);
-
   const data = useMemo(() => {
     const morphed = morphSeries(targets, morph);
     return morphed.map((row) => ({
@@ -245,8 +232,7 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
     }));
   }, [targets, morph, names.Base, names.Lift]);
 
-  const opacity = useTransform(progress, [0, 0.08, 0.45, 0.8, 1], [0, 0.75, 1, 1, 1]);
-  const ghostOpacity = useTransform(progress, [0, 0.12, 0.5, 1], [0, 0.55, 1, 1]);
+  const opacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
 
   const gradBase = `fold-area-base-${reactId}`;
   const gradLift = `fold-area-lift-${reactId}`;
@@ -254,64 +240,61 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
   if (!enabled) return null;
 
   return (
-    <div className={`fold-area fold-area--${mode}`} aria-hidden>
-      <motion.div className="fold-area-ghosts fold-chart-ghosts" style={{ opacity: ghostOpacity }}>
+    <motion.div className={`fold-area fold-area--${mode}`} style={reduced ? { opacity: 0.75 } : { opacity }} aria-hidden>
+      <div className="fold-area-ghosts fold-chart-ghosts">
         {ghosts.map((g) => (
           <GhostBubble key={g.id} metric={g} morph={morph} />
         ))}
-      </motion.div>
+      </div>
 
-      <motion.div className="fold-area-motion" style={reduced ? { opacity: 0.75 } : { opacity }}>
-        <div className="fold-area-plot">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={data} margin={{ top: 28, right: 24, left: 12, bottom: 12 }}>
-              <defs>
-                <linearGradient id={gradBase} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={colors[1]} stopOpacity={0.78} />
-                  <stop offset="100%" stopColor={colors[1]} stopOpacity={0.22} />
-                </linearGradient>
-                <linearGradient id={gradLift} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={colors[0]} stopOpacity={0.88} />
-                  <stop offset="55%" stopColor={colors[0]} stopOpacity={0.45} />
-                  <stop offset="100%" stopColor={colors[0]} stopOpacity={0.14} />
-                </linearGradient>
-              </defs>
+      <div className="fold-area-plot">
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={data} margin={{ top: 28, right: 24, left: 8, bottom: 8 }}>
+            <defs>
+              <linearGradient id={gradBase} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={colors[1]} stopOpacity={0.78} />
+                <stop offset="100%" stopColor={colors[1]} stopOpacity={0.22} />
+              </linearGradient>
+              <linearGradient id={gradLift} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={colors[0]} stopOpacity={0.88} />
+                <stop offset="55%" stopColor={colors[0]} stopOpacity={0.45} />
+                <stop offset="100%" stopColor={colors[0]} stopOpacity={0.14} />
+              </linearGradient>
+            </defs>
 
-              <CartesianGrid
-                stroke="var(--theme-border)"
-                strokeOpacity={0.35}
-                vertical={false}
-                strokeDasharray="3 8"
-              />
+            <XAxis dataKey="period" hide />
+            <YAxis hide domain={[0, 150]} />
 
-              <XAxis dataKey="period" hide />
-              <YAxis hide domain={[0, 150]} />
+            <Area
+              type="monotone"
+              stackId="mass"
+              dataKey={names.Base}
+              stroke="none"
+              fill={`url(#${gradBase})`}
+              isAnimationActive={false}
+            />
+            <Area
+              type="monotone"
+              stackId="mass"
+              dataKey={names.Lift}
+              stroke={colors[0]}
+              strokeWidth={2.5}
+              strokeOpacity={0.95}
+              fill={`url(#${gradLift})`}
+              dot={{ r: 3.25, fill: colors[0], strokeWidth: 0 }}
+              activeDot={false}
+              isAnimationActive={false}
+            />
 
-              {/* Stacked mass — one mountain of outcomes, not twin flow lines */}
-              <Area
-                type="monotone"
-                stackId="mass"
-                dataKey={names.Base}
-                stroke="none"
-                fill={`url(#${gradBase})`}
-                isAnimationActive={false}
-              />
-              <Area
-                type="monotone"
-                stackId="mass"
-                dataKey={names.Lift}
-                stroke={colors[0]}
-                strokeWidth={2.5}
-                strokeOpacity={0.95}
-                fill={`url(#${gradLift})`}
-                dot={{ r: 3.25, fill: colors[0], strokeWidth: 0 }}
-                activeDot={false}
-                isAnimationActive={false}
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-      </motion.div>
-    </div>
+            <CartesianGrid
+              stroke="var(--theme-border)"
+              strokeOpacity={0.55}
+              vertical={false}
+              strokeDasharray="3 6"
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+    </motion.div>
   );
 }

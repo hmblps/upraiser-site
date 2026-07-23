@@ -16,10 +16,6 @@
     pointer-events: none;
   }
 
-  .accent-scroll-stage {
-    min-height: min(48vh, 26rem);
-  }
-
   .accent-scroll-copy--lite,
   .accent-scroll-sticky > .section-header {
     position: relative;
@@ -292,18 +288,11 @@
   }
 }
 
-.fold-area-motion {
-  position: absolute;
-  inset: 0;
-}
-
 .fold-area-ghosts {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 100%);
 }
 
 .fold-area-plot {
@@ -316,6 +305,125 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fold-area {
+    display: none;
+  }
+}
+
+/* CLARITY — ledger rows snap to order (infrastructure promise) */
+.clarity-ledger {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .clarity-ledger {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 22%;
+    bottom: 0;
+    z-index: 0;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+  }
+}
+
+.clarity-ledger__wash {
+  position: absolute;
+  inset: 12% 4% 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 72% 58% at 74% 86%, color-mix(in srgb, var(--theme-accent) 16%, transparent), transparent 72%),
+    radial-gradient(ellipse 42% 38% at 14% 78%, color-mix(in srgb, var(--theme-accent-secondary) 8%, transparent), transparent 68%);
+}
+
+.clarity-ledger__panel {
+  position: absolute;
+  inset: 16% 7% 1% 5%;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 72%, transparent);
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--theme-bg-card) 52%, transparent) 0%,
+    color-mix(in srgb, var(--theme-bg-card) 28%, transparent) 100%
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-fg) 5%, transparent);
+}
+
+[data-theme="dark"] .clarity-ledger__panel {
+  border-color: color-mix(in srgb, var(--theme-accent) 14%, var(--theme-border));
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--theme-bg-card) 78%, #0a0a0a 22%) 0%,
+    color-mix(in srgb, var(--theme-bg-card) 42%, #0a0a0a 58%) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--theme-accent) 10%, transparent),
+    0 28px 90px color-mix(in srgb, black 42%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--theme-accent) 6%, transparent);
+}
+
+[data-theme="dark"] .clarity-ledger__wash {
+  background:
+    radial-gradient(ellipse 78% 62% at 76% 88%, color-mix(in srgb, var(--theme-accent) 22%, transparent), transparent 74%),
+    radial-gradient(ellipse 48% 42% at 12% 80%, color-mix(in srgb, var(--theme-accent-secondary) 12%, transparent), transparent 70%);
+}
+
+[data-theme="light"] .clarity-ledger__panel {
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--theme-bg-card) 72%, transparent) 0%,
+    color-mix(in srgb, var(--theme-bg-card) 38%, transparent) 100%
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 65%, transparent);
+}
+
+[data-theme="dark"] .accent-scroll-section--clarity .accent-scroll-sticky::before {
+  content: "";
+  position: absolute;
+  inset: 38% -12vw -8%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 68% 52% at 68% 88%,
+    color-mix(in srgb, var(--theme-accent) 7%, transparent),
+    transparent 72%
+  );
+}
+
+.clarity-ledger__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.clarity-ledger__ghosts {
+  position: absolute;
+  inset: 0;
+}
+
+.clarity-ledger__ghost .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--clarity-ghost-tone, var(--theme-accent)) 72%, var(--theme-fg) 10%);
+}
+
+.clarity-ledger__ghost .fold-chart-ghost-label {
+  color: color-mix(in srgb, var(--clarity-ghost-tone, var(--theme-muted)) 42%, var(--theme-muted) 38%);
+}
+
+[data-theme="dark"] .clarity-ledger__ghost .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--clarity-ghost-tone, var(--theme-accent)) 78%, var(--theme-fg) 8%);
+}
+
+[data-theme="dark"] .clarity-ledger__columns line {
+  stroke: color-mix(in srgb, var(--theme-accent) 18%, var(--theme-border));
+  stroke-opacity: 0.28;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clarity-ledger {
     display: none;
   }
 }

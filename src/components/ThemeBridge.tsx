@@ -68,6 +68,8 @@ export function ThemeBridge({ anchorRef }: { anchorRef: RefObject<HTMLElement | 
     };
   }, [anchorRef, reduced, registerScrollListener]);
 
+  // Bottom strip: switch mode + return to hero so the new story starts from the top.
+  // Header ThemeToggle stays in place — see section ModeContentTransition wrappers.
   const switchView = () => {
     toggleTheme();
     window.setTimeout(() => scrollTo("hero"), 120);
@@ -86,7 +88,7 @@ export function ThemeBridge({ anchorRef }: { anchorRef: RefObject<HTMLElement | 
       className={`theme-bridge-strip absolute inset-x-0 bottom-0 z-20 border-t border-border bg-bg-card/95 backdrop-blur-md ${dark ? "theme-bridge-strip--to-light" : "theme-bridge-strip--to-dark"} ${revealed ? "pointer-events-auto" : "pointer-events-none"}`}
     >
       <div className="strip-beam-wrap relative">
-        <BorderBeam duration={10} colorFrom="var(--theme-accent)" colorTo="var(--color-magenta)" />
+        <BorderBeam duration={10} colorFrom="var(--theme-accent-light)" colorTo="var(--color-magenta)" />
         <div className="relative z-[1] mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <div className="flex items-center gap-4">
             <div

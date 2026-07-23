@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { audienceByMode } from "../data/liveContent";
 import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
+import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
 
@@ -14,7 +15,7 @@ function AudienceStatic() {
 
   return (
     <section id="audience" className="section-band section-band--quiet">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <ModeContentTransition mode={mode} className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader label={content.label} title={content.title} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-5">
           <p className="section-lead">{content.line1}</p>
@@ -22,7 +23,7 @@ function AudienceStatic() {
             {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />
           </p>
         </div>
-      </div>
+      </ModeContentTransition>
     </section>
   );
 }
@@ -36,8 +37,9 @@ function AudienceAnimated() {
     <AccentScrollFold
       id="audience"
       remountKey={key}
+      runway="anchor"
       ambient={mode === "infrastructure" ? "fraud" : "chart"}
-      className={mode === "infrastructure" ? "accent-scroll-section--split-fraud" : ""}
+      className={`accent-scroll-section--fold-pair${mode === "infrastructure" ? " accent-scroll-section--split-copy" : ""}`.trim()}
       scrollHeroWord={content.scrollHeroWord}
       label={<SectionHeader label={content.label} title={content.title} animated={false} />}
     >
@@ -64,5 +66,11 @@ function AudienceAnimated() {
 
 export function Audience() {
   const runway = useScrollRunwayEnabled();
-  return runway ? <AudienceAnimated /> : <AudienceStatic />;
+  const { mode } = useMode();
+  if (!runway) return <AudienceStatic />;
+  return (
+    <ModeContentTransition mode={mode}>
+      <AudienceAnimated />
+    </ModeContentTransition>
+  );
 }

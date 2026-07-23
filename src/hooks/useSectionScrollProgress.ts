@@ -34,7 +34,7 @@ export function useSectionMeasure({ stageRef, inlineRef, heroMeasureRef, remeasu
 
       const heroBox = heroMeasureRef.current?.getBoundingClientRect();
       const nextPoints = {
-        start: { x: stageBox.width * 0.5, y: stageBox.height * 0.34 },
+        start: { x: stageBox.width * 0.5, y: stageBox.height * 0.28 },
         end: {
           x: inlineBox.left - stageBox.left + inlineBox.width * 0.5,
           y: inlineBox.top - stageBox.top + inlineBox.height * 0.5,

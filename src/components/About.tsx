@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { sectionsByMode, technologyByMode } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SectionAmbience } from "./SectionAmbience";
+import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { ThemeBridge } from "./ThemeBridge";
 
@@ -61,7 +62,7 @@ export function About() {
       className="section-band section-band--ambience relative overflow-hidden"
     >
       <SectionAmbience tone={mode === "growth" ? "warm" : "cool"} />
-      <div className="relative z-[1] mx-auto max-w-7xl px-6 pb-24 lg:px-8 lg:pb-28">
+      <ModeContentTransition mode={mode} className="relative z-[1] mx-auto max-w-7xl px-6 pb-24 lg:px-8 lg:pb-28">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start lg:gap-12">
           <SectionHeader animated={false} label={sectionsByMode.about.label} title={section.title} description={section.description} />
 
@@ -79,7 +80,7 @@ export function About() {
             </div>
           </ProximityCard>
         </div>
-      </div>
+      </ModeContentTransition>
       <ThemeBridge anchorRef={anchorRef} />
     </section>
   );

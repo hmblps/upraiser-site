@@ -66,3 +66,8 @@ export function accentPanelLabel(tone: AccentTone): string {
 export function accentSectionLabel(_tone?: AccentTone): string {
   return "section-label";
 }
+
+/** Fold hero words (SCALE, RESULTS, PROOF, CLARITY) — always logo red accent. */
+export function accentScrollHeroWordClass(_mode: "growth" | "infrastructure"): string {
+  return "accent-scroll-hero-word-red";
+}

@@ -1,59 +1,65 @@
 import { motion } from "framer-motion";
-import { promiseByMode } from "../data/liveContent";
+import { promiseByMode, type SiteMode } from "../data/liveContent";
 import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
-import { AccentWord } from "./AccentWord";
+import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
 
-function PromiseStatic() {
+function GrowthWordInline({ word }: { word: string }) {
+  return <span className="growth-word-inline">{word}</span>;
+}
+
+function PromiseClean() {
   const { mode } = useMode();
   const content = promiseByMode[mode];
 
   return (
     <section id="promise" className="section-band section-band--quiet">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <SectionHeader label={content.label} animated={false} />
-        <h2 className="section-title max-w-3xl">
-          {content.titleLead}
-          <AccentWord tone="red">{content.accentWord}</AccentWord>.
-        </h2>
-        <p className="section-description">{content.description}</p>
-      </div>
+      <ModeContentTransition mode={mode} className="mx-auto max-w-7xl px-6 lg:px-8">
+        <SectionHeader label={content.label} title={content.title} animated={false} />
+        <div className="section-stack flex max-w-3xl flex-col gap-5">
+          <p className="section-lead">{content.line1}</p>
+          <p className="section-lead">
+            {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />.
+          </p>
+        </div>
+      </ModeContentTransition>
     </section>
   );
 }
 
-function PromiseAnimated() {
-  const { mode } = useMode();
+function PromiseFold({ mode }: { mode: SiteMode }) {
   const content = promiseByMode[mode];
-  const key = `${mode}-${content.accentWord}-${content.titleLead}`;
+  const key = `${mode}-${content.inlineWord}-${content.line2Prefix}`;
 
   return (
     <AccentScrollFold
       id="promise"
       remountKey={key}
+      runway="anchor"
       ambient="bars"
+      className="accent-scroll-section--fold-pair"
       scrollHeroWord={content.scrollHeroWord}
-      label={<SectionHeader label={content.label} animated={false} />}
+      label={<SectionHeader label={content.label} title={content.title} animated={false} />}
     >
       {({ inlineRef, lineOpacity, lineX, bodyOpacity, bodyX, inlineOpacity }) => (
         <>
-          <h2 className="section-title max-w-3xl accent-scroll-inline-line">
-            <motion.span style={{ opacity: lineOpacity, x: lineX }} className="inline">
-              {content.titleLead}
+          <motion.p className="section-lead relative z-[2]" style={{ opacity: lineOpacity, x: lineX }}>
+            {content.line1}
+          </motion.p>
+          <p className="section-lead accent-scroll-inline-line relative z-[2]">
+            <motion.span style={{ opacity: bodyOpacity, x: bodyX }} className="inline">
+              {content.line2Prefix}{" "}
             </motion.span>
-            <span ref={inlineRef} className="relative inline-block align-baseline" style={{ minWidth: inlineWordWidth(content.accentWord) }}>
+            <span ref={inlineRef} className="relative inline-block align-baseline" style={{ minWidth: inlineWordWidth(content.inlineWord) }}>
               <motion.span style={{ opacity: inlineOpacity }} className="inline">
-                <AccentWord tone="red">{content.accentWord}</AccentWord>
+                <GrowthWordInline word={content.inlineWord} />
               </motion.span>
             </span>
-            <motion.span style={{ opacity: lineOpacity, x: lineX }} className="inline">
+            <motion.span style={{ opacity: bodyOpacity, x: bodyX }} className="inline">
               .
             </motion.span>
-          </h2>
-          <motion.p style={{ opacity: bodyOpacity, x: bodyX }} className="section-description">
-            {content.description}
-          </motion.p>
+          </p>
         </>
       )}
     </AccentScrollFold>
@@ -61,6 +67,12 @@ function PromiseAnimated() {
 }
 
 export function PromiseSection() {
+  const { mode } = useMode();
   const runway = useScrollRunwayEnabled();
-  return runway ? <PromiseAnimated /> : <PromiseStatic />;
+  if (!runway) return <PromiseClean />;
+  return (
+    <ModeContentTransition mode={mode}>
+      <PromiseFold mode={mode} />
+    </ModeContentTransition>
+  );
 }

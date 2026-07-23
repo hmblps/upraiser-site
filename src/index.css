@@ -55,35 +55,38 @@
 
 [data-theme="light"] {
   color-scheme: light;
-  /* Warm neutrals — echo logo yellow triangle, not cold zinc */
-  --theme-bg: #fffbf7;
-  --theme-bg-elevated: #ffffff;
-  --theme-bg-card: #fef9f3;
-  --theme-border: #f0e4d8;
-  --theme-fg: #141010;
-  --theme-muted: #7d665c;
-  --theme-muted-light: #6b5852;
   /*
-   * Brand gold #FFCC00 fails AA on cream. Use a warm gold (not bronze) for text/UI,
-   * keep bright logo-adjacent gold on --theme-accent-light for highlights/hover.
-   * #8f6500 ≈ 5:1 on #fffbf7 / #fef9f3.
+   * Sampled from upraiser-logo.png + legacy upraiser.co.uk behavior.
+   * Logo gold #f8c800 · logo red #f80038
+   * Gold = labels, metrics, accents page-wide · red = CTA/links
    */
-  --theme-accent: #8f6500;
-  --theme-accent-light: #e6b800;
-  --theme-accent-dim: #8f650024;
-  --theme-accent-secondary: #e63558;
-  --theme-accent-secondary-light: #ff4d6d;
-  --theme-on-accent: #fffbf7;
-  --theme-hero-glow: #e6b80024;
+  --logo-gold: #f8c800;
+  --logo-red: #f80038;
+  --theme-bg: #ffffff;
+  --theme-bg-elevated: #ffffff;
+  --theme-bg-card: #f8fafc;
+  --theme-border: #d4deea;
+  --theme-fg: #0a0a0a;
+  --theme-muted: #5c6570;
+  --theme-muted-light: #6b7585;
+  --theme-accent: var(--logo-gold);
+  --theme-accent-light: #ffe14d;
+  --theme-accent-dim: #f8c80024;
+  --theme-accent-secondary: var(--logo-red);
+  --theme-accent-secondary-light: #ff4060;
+  --theme-on-accent: #ffffff;
+  --theme-hero-glow: #f8c80022;
   --theme-input-bg: #ffffff;
-  --theme-case-panel: #fef9f3;
-  --theme-grain-opacity: 0.028;
-  --theme-card-hover-mid: #c9a000;
+  --theme-case-panel: #f8fafc;
+  --theme-grain-opacity: 0.018;
+  --theme-card-hover-mid: var(--logo-gold);
   --theme-card-hover-gold: color-mix(in srgb, var(--theme-card-hover-mid) 38%, var(--theme-bg-card));
   --theme-card-hover-border: color-mix(in srgb, var(--theme-card-hover-mid) 24%, var(--theme-border));
   --theme-card-hover-shadow: color-mix(in srgb, var(--theme-card-hover-mid) 9%, transparent);
-  --brand-section-label: var(--theme-accent);
-  --theme-accent-ink: #8f6500;
+  --brand-section-label: var(--logo-gold);
+  --theme-accent-ink: var(--logo-gold);
+  --fraud-segment-farms: var(--logo-gold);
+  --fraud-segment-ai: var(--logo-red);
 }
 
 @import "./styles/base.css";

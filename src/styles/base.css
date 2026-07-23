@@ -18,6 +18,7 @@ html {
   --text-kicker: 0.75rem;
   --card-pad: 1.5rem;
   --card-pad-md: 2rem;
+  --hero-stat-min-h: 5.75rem;
 }
 
 @media (min-width: 768px) {
@@ -143,12 +144,25 @@ html.is-scrolling .sparkline-live-dot {
   outline-offset: 3px;
 }
 
+/* Legacy upraiser.co.uk: red sign-up → peach-gold hover wash */
+[data-theme="light"] .btn-caps.bg-orange,
+[data-theme="light"] .bg-orange.text-on-accent {
+  background-color: var(--theme-accent-secondary);
+  color: var(--theme-on-accent);
+}
+
+[data-theme="light"] .btn-caps.bg-orange:hover:not(:disabled),
+[data-theme="light"] .bg-orange.text-on-accent:hover {
+  background-color: var(--theme-accent-light);
+  color: var(--theme-fg);
+}
+
 .contact-field:focus-visible {
   outline: none;
 }
 
 header nav .nav-link:focus-visible::after {
-  transform: translateX(-50%) scaleX(1);
+  transform: scaleX(1);
 }
 
 @keyframes partners-marquee {
@@ -265,8 +279,8 @@ main [id] {
 .carousel-fade::after {
   content: "";
   position: absolute;
-  top: 0;
-  bottom: 1rem;
+  top: 0.85rem;
+  bottom: calc(1rem + 0.85rem);
   width: 1.25rem;
   z-index: 2;
   pointer-events: none;
@@ -330,7 +344,6 @@ main [id] {
   }
 
   .section-ambience-orb,
-  .value-bento-pulse-core,
   .value-bento-pulse-ring,
   .value-bento-pulse-bars i,
   .value-bento-icon-bars i,
@@ -341,6 +354,9 @@ main [id] {
   .value-bento-icon-node,
   .value-bento-ring-dot,
   .live-ring .value-bento-ring-fill,
+  .value-bento-glyph,
+  .value-bento-glyph-animated,
+  .value-bento-glyph-animated svg :is(path, circle, line, polyline, rect),
   .live-mark,
   .live-stat,
   .live-num,

@@ -1,4 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useRef, type RefObject } from "react";
+import { useCarouselActiveIndex } from "../hooks/useCarouselActiveIndex";
 import { useCountUp } from "../hooks/useCountUp";
 import { useApplePreview } from "../hooks/useApplePreview";
 import { useInViewOnce } from "../hooks/useInViewOnce";
@@ -6,7 +8,7 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SPRING_SOFT } from "../lib/motion";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { HeroHighlights } from "./apple-preview/HeroHighlights";
-import { heroHighlightsByMode, primaryCta } from "../data/liveContent";
+import { heroFounded, heroHighlightsByMode, heroLede, primaryCta } from "../data/liveContent";
 import { HeroAtmosphere } from "./HeroAtmosphere";
 import { HoverTilt } from "./HoverTilt";
 import { ScrollLink } from "./ScrollLink";
@@ -32,6 +34,40 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: HERO_SPRING },
 };
 
+function HeroStatsDots({
+  containerRef,
+  count,
+  activeIndex,
+}: {
+  containerRef: RefObject<HTMLDivElement | null>;
+  count: number;
+  activeIndex: number;
+}) {
+  const scrollTo = (index: number) => {
+    const container = containerRef.current;
+    if (!container) return;
+    const cell = container.querySelectorAll(".hero-stats__cell")[index] as HTMLElement | undefined;
+    if (!cell) return;
+    container.scrollTo({ left: cell.offsetLeft - container.offsetLeft, behavior: "smooth" });
+  };
+
+  return (
+    <div className="hero-stats-dots" role="tablist" aria-label="Hero metrics">
+      {Array.from({ length: count }, (_, index) => (
+        <button
+          key={index}
+          type="button"
+          role="tab"
+          aria-selected={index === activeIndex}
+          aria-label={`Metric ${index + 1}`}
+          className={`hero-stats-dot${index === activeIndex ? " is-active" : ""}`}
+          onClick={() => scrollTo(index)}
+        />
+      ))}
+    </div>
+  );
+}
+
 function StatCard({ value, label, counted }: { value: string; label: string; counted: boolean }) {
   const display = useCountUp(value, counted);
 
@@ -39,7 +75,7 @@ function StatCard({ value, label, counted }: { value: string; label: string; cou
     <HoverTilt className="tilt-surface hero-stat-card h-full rounded-2xl" maxTilt={8} spotlight={false}>
       <article className="card-pad h-full">
         <div className="stat-value">{display}</div>
-        <p className="stat-label mt-2 text-muted-light">{label}</p>
+        <p className="stat-label text-muted-light">{label}</p>
       </article>
     </HoverTilt>
   );
@@ -49,15 +85,25 @@ export function Hero() {
   const reduced = useReducedMotion();
   const { mode } = useMode();
   const { isActive } = useApplePreview();
-  const { ref: statsRef, active: statsActive } = useInViewOnce({ threshold: 0.25 });
+  const { ref: inViewRef, active: statsActive } = useInViewOnce({ threshold: 0.25 });
+  const statsScrollRef = useRef<HTMLDivElement>(null);
   const highlights = heroHighlightsByMode[mode];
+  const activeStatIndex = useCarouselActiveIndex(statsScrollRef, highlights.length);
+
+  const setStatsRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      statsScrollRef.current = node;
+      inViewRef.current = node;
+    },
+    [inViewRef],
+  );
 
   return (
     <section className="hero-stage relative flex flex-1 flex-col overflow-hidden pb-10 lg:pb-14">
       <HeroAtmosphere />
 
       <div className="hero-content relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
-        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
+        <div className="hero-layout grid items-end gap-11 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
           <motion.div
             className="hero-copy"
             initial={reduced ? false : "hidden"}
@@ -68,7 +114,7 @@ export function Hero() {
               UPRAISER · Charting the Ascent
             </motion.p>
 
-            <h1 className="hero-title max-w-[11.5ch] text-[2.75rem] font-extrabold leading-none tracking-tighter sm:max-w-[12ch] sm:text-5xl lg:max-w-[11ch] lg:text-[4.25rem]">
+            <h1 className="hero-title max-w-[12ch] text-[2.5rem] font-extrabold leading-none tracking-tighter sm:max-w-[12.5ch] sm:text-4xl lg:max-w-[12ch] lg:text-[3.75rem]">
               <motion.span variants={reduced ? undefined : itemVariants} className="block">
                 {headlineLines[0].text}
               </motion.span>
@@ -83,10 +129,16 @@ export function Hero() {
 
             <motion.p
               variants={reduced ? undefined : itemVariants}
-              className="hero-lede mt-7 max-w-lg text-[0.9375rem] leading-[1.6] text-muted-light sm:text-base"
+              className="hero-lede mt-8 max-w-lg text-[0.9375rem] leading-[1.65] text-muted-light sm:text-base"
             >
-              Performance infrastructure for mobile growth - pre-bid fraud filtration, OEM distribution, and verified
-              outcome buying across iGaming, Fintech, and premium media.
+              {heroLede}
+            </motion.p>
+
+            <motion.p
+              variants={reduced ? undefined : itemVariants}
+              className="hero-founded mt-3 text-[0.8125rem] font-medium tracking-wide text-muted-light sm:text-sm"
+            >
+              {heroFounded}
             </motion.p>
 
             <motion.div variants={reduced ? undefined : itemVariants} className="mt-9 flex flex-wrap gap-3.5">
@@ -112,25 +164,35 @@ export function Hero() {
             {isActive("highlights") ? <HeroHighlights /> : null}
           </motion.div>
 
-          <div
-            ref={statsRef}
-            className="hero-stats -mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-2 md:gap-3.5 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
-          >
-            <AnimatePresence mode="popLayout">
-              {highlights.map((item, index) => (
+          <div className="hero-stats-wrap">
+            <div
+              ref={setStatsRef}
+              className="hero-stats -mx-6 overflow-x-auto px-6 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
+            >
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
-                  key={`${mode}-${item.label}`}
-                  layout
-                  initial={reduced ? false : { opacity: 0, y: 14, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={reduced ? undefined : { opacity: 0, y: -10, scale: 0.98 }}
-                  transition={{ ...SPRING_SOFT, delay: reduced ? 0 : index * 0.04 }}
-                  className="w-[min(68vw,11.5rem)] shrink-0 snap-start md:w-auto"
+                  key={mode}
+                  className="hero-stats__track flex snap-x snap-mandatory gap-3 md:grid md:grid-cols-2 md:gap-3.5"
+                  initial={reduced ? false : { opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduced ? undefined : { opacity: 0, y: -8 }}
+                  transition={HERO_SPRING}
                 >
-                  <StatCard value={item.value} label={item.label} counted={statsActive} />
+                  {highlights.map((item, index) => (
+                    <motion.div
+                      key={item.label}
+                      initial={reduced ? false : { opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ ...SPRING_SOFT, delay: reduced ? 0 : index * 0.05 }}
+                      className="hero-stats__cell w-[min(68vw,11.5rem)] shrink-0 snap-start md:w-auto"
+                    >
+                      <StatCard value={item.value} label={item.label} counted={statsActive} />
+                    </motion.div>
+                  ))}
                 </motion.div>
-              ))}
-            </AnimatePresence>
+              </AnimatePresence>
+            </div>
+            <HeroStatsDots containerRef={statsScrollRef} count={highlights.length} activeIndex={activeStatIndex} />
           </div>
         </div>
       </div>

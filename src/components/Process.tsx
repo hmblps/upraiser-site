@@ -4,6 +4,7 @@ import { processByMode, sectionsByMode } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScrollScene } from "../hooks/useScrollScene";
 import { clamp } from "../lib/clamp";
+import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { SectionAmbience } from "./SectionAmbience";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { Magnetic } from "./motion-preview/Magnetic";
@@ -63,8 +64,8 @@ function ProcessStep({
         reduced
           ? { opacity: 1, y: 0 }
           : {
-              opacity: active ? 1 : 0.42,
-              y: active ? 0 : 10,
+              opacity: active ? 1 : 0.58,
+              y: active ? 0 : 6,
             }
       }
       transition={SPRING_SOFT}
@@ -93,7 +94,7 @@ export function Process() {
       className="section-band section-band--ambience section-band--dense relative overflow-hidden"
     >
       <SectionAmbience tone="soft" />
-      <div className="relative z-[1] mx-auto max-w-7xl px-6 lg:px-8">
+      <ModeContentTransition mode={mode} className="relative z-[1] mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader animated={false} label={sectionsByMode.process.label} title={section.title} />
 
         <div className="process-rail section-stack">
@@ -113,13 +114,13 @@ export function Process() {
             <ScrollLink
               href="#contact"
               data-cursor="cta"
-              className="btn-caps inline-block rounded-full bg-orange px-7 py-3 text-sm font-semibold text-on-accent transition hover:bg-orange-light hover:shadow-[0_8px_24px_rgba(253,216,53,0.25)]"
+              className="btn-caps inline-block rounded-full bg-orange px-7 py-3 text-sm font-semibold text-on-accent transition hover:bg-orange-light hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--theme-accent-light)_25%,transparent)]"
             >
               {section.cta}
             </ScrollLink>
           </Magnetic>
         </div>
-      </div>
+      </ModeContentTransition>
     </section>
   );
 }

@@ -5,6 +5,10 @@
     min-height: 135vh;
   }
 
+  .scroll-scene--fold-compact {
+    min-height: 104vh;
+  }
+
   .scroll-scene--fold .scroll-scene-stage {
     position: sticky;
     top: var(--scroll-sticky-top);
@@ -13,7 +17,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-scene--fold {
+  .scroll-scene--fold,
+  .scroll-scene--fold-compact {
     min-height: auto;
   }
 

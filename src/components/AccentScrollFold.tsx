@@ -1,6 +1,9 @@
 import { lazy, Suspense, useRef, type ReactNode, type RefObject } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
+import { clamp } from "../lib/clamp";
+import { accentScrollHeroWordClass } from "../lib/accent";
 import { useSectionMeasure, useSectionScrollProgress } from "../hooks/useSectionScrollProgress";
+import { useScrollScene } from "../hooks/useScrollScene";
 import { useMode } from "./SectionHeader";
 import { InfrastructureGrid } from "./InfrastructureGrid";
 
@@ -9,12 +12,13 @@ const FoldAreaMass = lazy(() => import("./FoldAreaMass").then((m) => ({ default:
 const FraudScrollChart = lazy(() =>
   import("./FraudScrollChart").then((m) => ({ default: m.FraudScrollChart })),
 );
+const ClarityLedger = lazy(() =>
+  import("./ClarityLedger").then((m) => ({ default: m.ClarityLedger })),
+);
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
-
-import { clamp } from "../lib/clamp";
 
 export function inlineWordWidth(word: string) {
   return `${Math.max(word.length + 1, 7)}ch`;
@@ -26,7 +30,7 @@ type AccentScrollFoldProps = {
   label: ReactNode;
   scrollHeroWord: string;
   /** Ambient visual in the empty fold air */
-  ambient?: "chart" | "bars" | "fraud" | "none";
+  ambient?: "chart" | "bars" | "fraud" | "clarity" | "none";
   children: (ctx: {
     progress: MotionValue<number>;
     inlineRef: RefObject<HTMLSpanElement | null>;
@@ -36,6 +40,10 @@ type AccentScrollFoldProps = {
     bodyX: MotionValue<number>;
     inlineOpacity: MotionValue<number>;
   }) => ReactNode;
+  /** Full-bleed layer behind sticky fold content (z-0). */
+  backdrop?: (ctx: { progress: MotionValue<number> }) => ReactNode;
+  /** `anchor` = natural section height, progress tied to copy block (no sticky runway) */
+  runway?: "default" | "compact" | "anchor";
   className?: string;
 };
 
@@ -48,6 +56,8 @@ export function AccentScrollFold({
   label,
   scrollHeroWord,
   ambient = "none",
+  backdrop,
+  runway = "default",
   children,
   className = "",
 }: AccentScrollFoldProps) {
@@ -57,7 +67,17 @@ export function AccentScrollFold({
   const heroMeasureRef = useRef<HTMLSpanElement>(null);
 
   const { mode } = useMode();
-  const progress = useSectionScrollProgress(sectionRef, remountKey);
+  const heroWordClass = accentScrollHeroWordClass(mode);
+  const runwayProgress = useSectionScrollProgress(sectionRef, remountKey);
+  const anchorProgress = useScrollScene(sectionRef, {
+    mode: "anchor",
+    anchorRef: stageRef,
+    startLine: 0.9,
+    endLine: 0.22,
+    spring: false,
+    resetKey: remountKey,
+  });
+  const progress = runway === "anchor" ? anchorProgress : runwayProgress;
   const { points, endScaleRef } = useSectionMeasure({
     stageRef,
     inlineRef,
@@ -65,12 +85,12 @@ export function AccentScrollFold({
     remeasureKey: remountKey,
   });
 
-  const heroOpacity = useTransform(progress, [0, 0.1, 0.62, 0.74], [1, 1, 1, 0]);
+  const heroOpacity = useTransform(progress, [0, 0.1, 0.52, 0.64], [1, 1, 1, 0]);
   const inlineOpacity = useTransform(progress, [0, 0.66, 0.8], [0, 0, 1]);
-  const lineOpacity = useTransform(progress, [0.48, 0.62], [0, 1]);
-  const lineX = useTransform(progress, [0.48, 0.62], [-14, 0]);
-  const bodyOpacity = useTransform(progress, [0.58, 0.72], [0, 1]);
-  const bodyX = useTransform(progress, [0.58, 0.72], [-14, 0]);
+  const lineOpacity = useTransform(progress, [0.36, 0.52], [0, 1]);
+  const lineX = useTransform(progress, [0.36, 0.52], [-14, 0]);
+  const bodyOpacity = useTransform(progress, [0.64, 0.76], [0, 1]);
+  const bodyX = useTransform(progress, [0.64, 0.76], [-14, 0]);
   const scale = useTransform(progress, (value) => {
     const t = clamp((value - 0.06) / 0.62, 0, 1);
     return lerp(1, endScaleRef.current, t);
@@ -86,13 +106,22 @@ export function AccentScrollFold({
     return lerp(points.start.y, points.end.y, t) - points.start.y;
   });
 
+  const runwayClass =
+    runway === "anchor"
+      ? "accent-scroll-section--anchor"
+      : runway === "compact"
+        ? "scroll-scene--fold-compact"
+        : "scroll-scene--fold";
+  const sceneClass = runway === "anchor" ? "" : "scroll-scene";
+
   return (
     <section
       ref={sectionRef}
       id={id}
-      className={`accent-scroll-section accent-scroll-section--lite scroll-scene scroll-scene--fold section-band section-band--quiet ${className}`.trim()}
+      className={`accent-scroll-section accent-scroll-section--lite ${sceneClass} ${runwayClass} section-band section-band--quiet ${className}${ambient === "clarity" ? " accent-scroll-section--clarity" : ""}`.trim()}
     >
-      <div className="accent-scroll-sticky mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="accent-scroll-sticky relative mx-auto max-w-7xl px-6 lg:px-8">
+        {backdrop?.({ progress })}
         {ambient === "chart" ? (
           mode === "infrastructure" ? (
             <InfrastructureGrid progress={progress} />
@@ -112,11 +141,16 @@ export function AccentScrollFold({
             <FraudScrollChart progress={progress} />
           </Suspense>
         ) : null}
+        {ambient === "clarity" ? (
+          <Suspense fallback={null}>
+            <ClarityLedger progress={progress} />
+          </Suspense>
+        ) : null}
 
         {label}
         <div ref={stageRef} className="accent-scroll-stage relative mt-4 md:mt-5">
           <div className="accent-scroll-float-placeholder pointer-events-none absolute inset-x-0 top-0" aria-hidden>
-            <span ref={heroMeasureRef} className="accent-scroll-hero-word accent-scroll-hero-word-red opacity-0">
+            <span ref={heroMeasureRef} className={`accent-scroll-hero-word ${heroWordClass} opacity-0`}>
               {scrollHeroWord}
             </span>
           </div>
@@ -127,11 +161,11 @@ export function AccentScrollFold({
               className="accent-scroll-float pointer-events-none absolute z-10 origin-center"
               style={{ left: points.start.x, top: points.start.y, x, y, scale, opacity: heroOpacity }}
             >
-              <span className="accent-scroll-hero-word accent-scroll-hero-word-red">{scrollHeroWord}</span>
+              <span className={`accent-scroll-hero-word ${heroWordClass}`}>{scrollHeroWord}</span>
             </motion.div>
           ) : (
             <div className="accent-scroll-float-placeholder pointer-events-none absolute inset-x-0 top-0" aria-hidden>
-              <span className="accent-scroll-hero-word accent-scroll-hero-word-red opacity-0">{scrollHeroWord}</span>
+              <span className={`accent-scroll-hero-word ${heroWordClass} opacity-0`}>{scrollHeroWord}</span>
             </div>
           )}
 

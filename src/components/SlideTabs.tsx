@@ -46,7 +46,13 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
         }
 
         return (
-          <button key={item.id} type="button" onClick={() => onChange(item.id)} className={classes}>
+          <button
+            key={item.id}
+            type="button"
+            data-tab-id={item.id}
+            onClick={() => onChange(item.id)}
+            className={classes}
+          >
             {highlight}
             <span className="relative z-10">{item.label}</span>
           </button>

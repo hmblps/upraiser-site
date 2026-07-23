@@ -1,9 +1,11 @@
 import { type AnchorHTMLAttributes, type MouseEvent, type ReactNode } from "react";
 import { useScroll } from "../context/ScrollContext";
+import { publishContactIntent } from "../lib/contactIntent";
 
 type ScrollLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   href: string;
   children: ReactNode;
+  contactIntent?: string;
 };
 
 function isHashLink(href: string) {
@@ -11,7 +13,7 @@ function isHashLink(href: string) {
 }
 
 /** In-page anchors go through Lenis-aware scrollTo (header offset). External / mailto stay native. */
-export function ScrollLink({ href, children, onClick, ...props }: ScrollLinkProps) {
+export function ScrollLink({ href, children, onClick, contactIntent, ...props }: ScrollLinkProps) {
   const { scrollTo } = useScroll();
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -21,6 +23,7 @@ export function ScrollLink({ href, children, onClick, ...props }: ScrollLinkProp
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
     event.preventDefault();
+    if (contactIntent) publishContactIntent(contactIntent);
     scrollTo(href.slice(1));
   };
 

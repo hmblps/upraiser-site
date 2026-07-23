@@ -33,7 +33,7 @@ export function Header() {
       className={`fixed inset-x-0 top-0 z-[100] isolate border-b transition-[background-color,box-shadow,border-color] duration-300 ${headerSurface}`}
     >
       <div className="header-bar mx-auto flex h-[var(--site-header-height)] max-w-7xl items-center justify-between px-6 lg:px-8">
-        <ScrollLink href="#hero" className="flex items-center gap-3">
+        <ScrollLink href="#hero" className="header-brand flex items-center gap-3 rounded-md transition-opacity hover:opacity-90">
           <img src="/upraiser-logo.png" alt="UPRAISER" className="h-9 w-9 object-contain" />
           <span className="text-lg font-bold tracking-tight">UPRAISER</span>
         </ScrollLink>
@@ -42,14 +42,16 @@ export function Header() {
           {navLinks.map((link) =>
             link.href.startsWith("#") ? (
               <ScrollLink
-                key={link.href}
+                key={`${link.label}-${link.href}`}
                 href={link.href}
+                contactIntent={link.contactIntent}
                 className="nav-link text-muted-light transition-colors hover:text-fg"
+                data-cursor="link"
               >
                 {link.label}
               </ScrollLink>
             ) : (
-              <a key={link.href} href={link.href} className="nav-link text-muted-light transition-colors hover:text-fg">
+              <a key={link.href} href={link.href} className="nav-link text-muted-light transition-colors hover:text-fg" data-cursor="link">
                 {link.label}
               </a>
             ),
@@ -96,8 +98,9 @@ export function Header() {
             {navLinks.map((link) =>
               link.href.startsWith("#") ? (
                 <ScrollLink
-                  key={link.href}
+                  key={`${link.label}-${link.href}`}
                   href={link.href}
+                  contactIntent={link.contactIntent}
                   className="nav-link text-muted-light"
                   onClick={() => setMenuOpen(false)}
                 >

@@ -4,6 +4,7 @@ import { lenovoPartnership } from "../data/liveContent";
 import { useScroll } from "../context/ScrollContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { EASE_OUT } from "../lib/motion";
+import { BorderBeam } from "./BorderBeam";
 import { LenovoPartnershipCopy } from "./LenovoPartnershipCopy";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 
@@ -42,28 +43,32 @@ export function LenovoTrustStrip() {
   return (
     /* z-40 + isolate: sit above SiteGrain (z-30, mix-blend overlay) so logo/copy stay crisp */
     <motion.div
-      className={`lenovo-trust-strip relative z-40 isolate overflow-hidden bg-bg-card ${revealed ? "border-b border-border" : "border-b-0"}`}
+      className={`lenovo-trust-strip relative z-40 isolate overflow-hidden bg-bg-card ${revealed ? "lenovo-trust-strip--revealed border-b border-border" : "lenovo-trust-strip--hidden"}`}
       initial={false}
-      animate={{ height: revealed ? "auto" : 0 }}
+      animate={{ height: revealed ? "auto" : 0, opacity: revealed ? 1 : 0 }}
       transition={{ duration: reduced ? 0 : 0.52, ease: EASE_OUT }}
     >
-      <motion.section
-        aria-label="Lenovo partnership"
-        aria-hidden={!revealed}
-        initial={false}
-        animate={{ y: revealed ? 0 : 24, opacity: revealed ? 1 : 0 }}
-        transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.85 }}
-        className={`mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8 ${revealed ? "pointer-events-auto" : "pointer-events-none"}`}
-      >
-        <div className="flex items-center gap-4">
-          <LenovoPartnershipLogo className="h-9 w-auto shrink-0 sm:h-10" />
-          <div>
-            <p className="stat-label text-orange">{lenovoPartnership.badge}</p>
-            <p className="mt-0.5 text-sm font-semibold text-fg">{lenovoPartnership.title}</p>
-          </div>
+      {revealed ? (
+        <div className="strip-beam-wrap relative overflow-hidden">
+          <BorderBeam duration={10} colorFrom="var(--theme-accent-light)" colorTo="var(--color-magenta)" />
+          <motion.section
+            aria-label="Lenovo partnership"
+            initial={false}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.85 }}
+            className="relative z-[1] mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8"
+          >
+            <div className="flex items-center gap-4">
+              <LenovoPartnershipLogo className="h-9 w-auto shrink-0 sm:h-10" />
+              <div>
+                <p className="stat-label text-orange">{lenovoPartnership.badge}</p>
+                <p className="mt-0.5 text-sm font-semibold text-fg">{lenovoPartnership.title}</p>
+              </div>
+            </div>
+            <LenovoPartnershipCopy className="w-full max-w-xl space-y-3 sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl" />
+          </motion.section>
         </div>
-        <LenovoPartnershipCopy className="w-full max-w-xl space-y-3 sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl" />
-      </motion.section>
+      ) : null}
     </motion.div>
   );
 }

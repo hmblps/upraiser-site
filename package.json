@@ -12,6 +12,7 @@
     "deploy": "bash scripts/deploy-vercel.sh"
   },
   "dependencies": {
+    "@astryxdesign/core": "^0.1.7",
     "framer-motion": "^12.41.0",
     "lenis": "^1.3.24",
     "lucide-react": "^0.544.0",

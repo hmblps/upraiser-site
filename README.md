@@ -5,13 +5,13 @@
 | | |
 |---|---|
 | **Production** | https://upraiser-site.vercel.app |
-| **Целевой домен** | https://upraiser.co.uk (пока не на Vercel) |
-| **Stack** | React 19 · TypeScript · Vite 8 · Tailwind v4 · Framer Motion · Lenis |
+| **Целевой домен** | https://upraiser.co.uk (DNS ещё не на Vercel) |
+| **Stack** | React 19 · TypeScript · Vite 8 · Tailwind v4 · Framer Motion · Lenis · Recharts |
 | **Copy** | `src/data/liveContent.ts` · кейсы: `src/data/cases.ts` |
-| **Deploy** | `npm run deploy` |
+| **Deploy** | `npm run deploy` → Vercel project **`upraiser-site-v2`** |
+| **Handoff для ИИ** | **[AI_HANDOFF.md](./AI_HANDOFF.md)** |
 
-> **Полный handoff для других ИИ** — концепт, история решений, все детали реализации:  
-> **[AI_HANDOFF.md](./AI_HANDOFF.md)** ← шарить этот файл вместе с репозиторием.
+**Последний production deploy:** 21 Jul 2026 · scroll scene system, ambient charts, Why Us cards, hero spotlight polish.
 
 ---
 
@@ -22,10 +22,17 @@ npm install
 cp .env.example .env          # VITE_WEB3FORMS_ACCESS_KEY
 npm run dev                   # http://localhost:5173
 npm run build                 # sync-assets + verify-assets + tsc + vite
-npm run deploy                # Vercel → upraiser-site
+npm run deploy                # local build → Vercel production
 ```
 
-**Env:** `VITE_WEB3FORMS_ACCESS_KEY` — contact form ([web3forms.com](https://web3forms.com)). `scripts/deploy-vercel.sh` синхронизирует ключ в Vercel.
+**Env:** `VITE_WEB3FORMS_ACCESS_KEY` — contact form ([web3forms.com](https://web3forms.com)). `scripts/deploy-vercel.sh` синхронизирует ключ в Vercel env.
+
+**Git author (важно для Vercel):** commit email должен совпадать с **verified email на GitHub** (`hmblps`):
+
+```bash
+git config --global user.email "alex@upraiser.co.uk"
+git config --global user.name "hmblps"
+```
 
 **Правило:** commit и deploy — **только по явной просьбе** владельца проекта.
 
@@ -35,41 +42,60 @@ npm run deploy                # Vercel → upraiser-site
 
 **Позиционирование:** не «generic agency», а **traffic infrastructure** — DMP, fraud layer, OEM access, event-verified buying.
 
-**Референсы по структуре (не копипаст):**
-- [Z2A Digital](https://www.z2adigital.com/) — promise, 4 Ts, technology, case studies
-- [Hike](https://gohike.com.br/) — value props, objectives, traffic channels, process
-- Медиакит UPRAISER — бренд, low-poly mountains, луч ascent, gold + magenta
+**Два scroll-момента (не добавлять третий):**
 
-**Два scroll-момента (больше не добавлять):** `#audience` → **GROWTH** · `#promise` → **OUTCOMES**
+| Секция | Light (growth) | Dark (infrastructure) | Ambient |
+|--------|----------------|----------------------|---------|
+| `#audience` | SCALE | PROOF | Line chart / fraud radial |
+| `#promise` | RESULTS | CLARITY | Area mass chart |
 
-**Hero:** cursor-lit mountains video (без orbs). Курсор «подсвечивает» горы через CSS mask.
+**Hero:** cursor-lit mountains video (single decode + CSS mask). Мягкий spotlight в dark theme, без orbs.
+
+**Dual theme = dual narrative:** `light` → growth · `dark` → infrastructure (`useMode()`).
 
 ---
 
-## Структура страницы
+## Структура страницы (App.tsx)
 
 ```
 SiteGrain · CustomCursor (deferred) · Header (fixed)
 main:
-  #hero              Hero (CSS entrance) + HeroAtmosphere + LenovoTrustStrip
-  #audience          GROWTH scroll block
+  #hero              Hero + HeroAtmosphere
+  (strip)            LenovoTrustStrip
+  #audience          AccentScrollFold + ambient chart
+  #difference        Why Us — header + 3 cards (anchor spawn desktop)
+  #process           4-step rail (scroll band)
   #value             ValueProps (3 pillars)
-  #promise           OUTCOMES scroll block
-  #difference        4 Ts bento grid
-  #objectives        4 objectives
-  #channels          Traffic channels (tabs + detail)
-  #testimonials      Client quotes carousel (mobile)
-  #cases             Case studies infinite carousel
-  #technology        Proximity glow cards
-  #about             About + stats
-  #process           4-step process
-  #contact           Form (Web3Forms) + Lenovo strip
-PartnersCarousel     Infinite logo marquee
-Footer               Explore / Company / Legal
-MobileSectionNav · SectionNav (↑↓ keyboard)
+  #channels          Traffic channels (tabs)
+  #cases             Case studies carousel
+  #promise           AccentScrollFold + ambient area chart
+  #about             About + technology panel
+  #contact           Web3Forms + Lenovo strip
+PartnersCarousel     Logo marquee
+Footer
+MobileSectionNav · SectionNav (↑↓)
 ```
 
-Секции ниже hero — **lazy-loaded** (`React.lazy` + `Suspense` + idle preload).
+**Nav order** (`scrollSections.ts`):  
+`hero → audience → difference → process → value → channels → cases → promise → about → contact`
+
+Секции ниже hero — **lazy-loaded** (`React.lazy` + idle preload).
+
+---
+
+## Scroll Scene System
+
+Единая модель scrollytelling — `src/hooks/useScrollScene.ts` + `src/lib/scrollScene.ts`.
+
+| Режим | Секции | Поведение |
+|-------|--------|-----------|
+| `runway` | Audience, Promise | sticky fold, 135vh desktop, progress 0→1 |
+| `anchor` | Difference (Why Us) | карточки spawn от grid ref, без лишней высоты |
+| `viewportBand` | Process | шаги по полосе viewport |
+| in-view | Value, Channels, Cases, Contact | `Reveal` / `Stagger` |
+
+**Desktop ≥768px:** fold + charts + anchor spawn.  
+**Mobile / reduced motion:** static copy или Stagger in-view.
 
 ---
 
@@ -79,18 +105,36 @@ MobileSectionNav · SectionNav (↑↓ keyboard)
 |---------|--------|
 | UPRAISER | ALL CAPS в labels, nav, logo |
 | You / Your / Yours | Capitalized **Y** в клиентском тексте |
-| Section labels | gold (`section-label`) или red (`section-label-red`) |
-| Card titles | gold (`text-orange`) по умолчанию |
-| Contact accent | **UPRAISED** (red/magenta в title) |
+| Section labels | gold (growth) / magenta (infrastructure) |
 | Тон | Infrastructure, hard metrics, verified outcomes |
 
-**Тема:** light/dark · `localStorage` key `upraiser-theme` · anti-flash script в `index.html`
+**Тема:** `localStorage` key `upraiser-theme` · anti-flash в `index.html`
 
-**Favicon:** `/favicon.png` (192×192) · **Logo:** `/upraiser-logo.png`
+**Favicon:** `/favicon.png` · **Logo:** `/upraiser-logo.png`
 
-**OG/Twitter:** hand-crafted `og-image.png` (1024×537) · пока `og:image` → `upraiser-site.vercel.app/og-image.png`
+**OG/Twitter:** `og-image.png` — URL пока `upraiser-site.vercel.app/og-image.png` (обновить при переносе на `upraiser.co.uk`)
 
-**Акценты:** `src/lib/accent.ts` — gold = orange · red = magenta
+**Акценты:** `src/lib/accent.ts`
+
+---
+
+## Стили (CSS modules)
+
+`src/index.css` импортирует модули из `src/styles/`:
+
+| Файл | Содержание |
+|------|------------|
+| `base.css` | tokens, scroll-margin, card utilities |
+| `accent-scroll.css` | sticky fold layout |
+| `scroll-scene.css` | runway sticky (fold only) |
+| `hero.css` | mountains video, cursor spotlight |
+| `charts.css` | fold charts, ghost bubbles |
+| `components.css` | contact form, theme bridge, UI |
+| `layout.css` | cases carousel, channels |
+| `typography.css` | section titles, copy rhythm |
+| `site-shell.css` | section bands, spacing |
+| `surfaces.css` | cards, panels |
+| `ambience-responsive.css` | breakpoints 1280–1440 |
 
 ---
 
@@ -98,85 +142,91 @@ MobileSectionNav · SectionNav (↑↓ keyboard)
 
 | Область | Поведение |
 |---------|-----------|
-| Scroll desktop | Lenis (`lerp: 0.085`, `allowNestedScroll: true`) |
+| Scroll desktop | Lenis (`lerp: 0.14`) |
 | Scroll mobile/touch | Native (`usePreferNativeScroll`) |
-| `#cases` carousel | Manual only · seamless loop · 2 DOM copies (clone hidden) · drag + horizontal wheel |
-| Partners strip | CSS marquee, infinite |
-| Custom cursor | Fine pointer only · modes: default/link/cta/card |
-| Reduced motion | Отключает Lenis effects, video lit, marquee, entrances |
+| Fold charts | Desktop only; Recharts scroll-morph via `useScrollMorph` |
+| `#cases` carousel | Manual · seamless loop · drag + horizontal wheel |
+| Custom cursor | Fine pointer · modes: default/link/cta/card |
+| Reduced motion | Static folds, no Lenis effects, no cursor light |
 
 ---
 
-## Performance (v1)
+## Performance
 
-- Hero entrance — **CSS**, не framer-motion (main bundle ~69 KB gzip)
-- `framer-motion` — отдельный chunk (~47 KB gzip), грузится с lazy-секциями
-- `lenis` — отдельный chunk (~5 KB gzip)
+- Hero entrance — **CSS** (main bundle ~72 KB gzip)
+- `framer-motion`, `lenis`, `recharts` — manual chunks в `vite.config.ts`
 - `CustomCursor` — deferred via `requestIdleCallback`
-
-**Не делали (без visual QA):** hero video re-encode (~7 MB 1080p остаётся как есть)
+- Hero video ~7 MB 1080p — **без re-encode** (owner rejected quality loss)
 
 ---
 
-## SEO
+## Deploy (Vercel)
 
-- `public/robots.txt`
-- `public/sitemap.xml` — `/`, `/privacy`, `/terms`
+| | |
+|---|---|
+| **Vercel project** | `upraiser-site-v2` (alias → `upraiser-site.vercel.app`) |
+| **Team** | `alex-3152s-projects` |
+| **CLI** | `alex-3152` · email `alex@upraiser.co.uk` |
+| **Repo** | `github.com/hmblps/upraiser-site` · branch `main` |
+
+```bash
+npm run deploy    # prebuilt local build → production
+vercel alias ls   # проверить alias
+```
+
+**Типичные блокеры:**
+
+- Git commit author ≠ verified GitHub email → **Blocked**
+- CLI deploy с `homeboyleps@gmail.com` → team access error
+- Git push не триггерит deploy, если Git не подключён к **upraiser-site-v2** в dashboard
+
+**Fix:** `git config --global user.email "alex@upraiser.co.uk"` + push **или** `npm run deploy` (CLI prebuilt).
+
+---
+
+## SEO & legal
+
+- `public/robots.txt`, `public/sitemap.xml`
 - JSON-LD `Organization` в `index.html`
-- Legal canonical: `upraiser.co.uk/privacy` · `upraiser.co.uk/terms`
-- ICO в privacy: **ZC000436**
+- Legal: `upraiser.co.uk/privacy` · `upraiser.co.uk/terms` · ICO **ZC000436**
 
 ---
 
-## Статические файлы
+## Assets
 
-**Master:** `assets/` → sync → `public/` перед build (`scripts/sync-assets.sh`)
+**Master:** `assets/` → `scripts/sync-assets.sh` → `public/` перед build.
 
 | `assets/` | Deploy |
 |-----------|--------|
-| `hero/light-mountains-loop.mp4` | ~7 MB 1080p hero |
+| `hero/light-mountains-loop.mp4` | ~7 MB hero video |
 | `brand/og-image.png` | OG card |
 | `brand/favicon.png` | Favicon |
 | `brand/upraiser-logo.png` | Logo |
 
 ```bash
-bash scripts/restore-hero-from-prod.sh   # hero с prod
-bash scripts/sync-assets.sh
-bash scripts/verify-assets.sh          # в npm run build
-```
-
----
-
-## Откат
-
-```bash
-bash scripts/rollback-perf.sh          # → pre-perf-opt
-bash scripts/rollback-polish.sh        # → pre-polish-opt
-bash scripts/rollback-interaction.sh   # → pre-interaction-opt
+bash scripts/restore-hero-from-prod.sh
+npm run generate:og
 ```
 
 ---
 
 ## Не делать (без явного запроса)
 
-- Orbs, sweep glows, gold radial в hero→audience bridge
+- Orbs / sweep glows в hero bridge
 - Третий scroll-moment
 - Hero video re-encode без visual QA
-- Красный UPRAISER в header/footer wordmark
-- Защита hero copy от cursor-lit (убивает «прожектор»)
-- Автоскролл карусели кейсов (только manual)
-- Commit без явной просьбы
+- Commit / deploy без просьбы
+- Автоскролл карусели кейсов
 
 ---
 
 ## Остаётся на стороне клиента
 
-- Финальные **логотипы** partners (сейчас ~5 SVG из 18 в `public/partners/`)
-- **Переделанные кейсы** (дизайн карточек, client logos)
-- **Живой copy** вместо AI-текста (testimonials, descriptions)
-- Перенос **upraiser.co.uk** на Vercel + обновление `og:image` URL
+- Финальные **логотипы** partners (~5 SVG из 18)
+- **Живой copy** вместо AI-текста
+- Перенос **upraiser.co.uk** на Vercel + fix `og:image` URL
 - Smoke test contact form → `info@upraiser.co.uk`
-- Careers: сейчас `mailto:` — опционально секция `#careers`
+- Подключить Git → **upraiser-site-v2** для auto-deploy на push
 
 ---
 
