@@ -1,7 +1,11 @@
 # UPRAISER — Context Package for External AI
 
-> Copy this entire file into an external AI chat to implement **scroll-driven hero video + text parallax**.
+> **Status (23 Jul 2026):** planning brief only — **scroll-scrub hero is NOT implemented** in production.  
+> Current live hero = looping `/hero/light-mountains-loop.mp4` + theme overlay crossfade.  
+> Full site handoff: **[AI_HANDOFF.md](./AI_HANDOFF.md)** · human summary: **[README.md](./README.md)**  
 > Live site: https://upraiser-site.vercel.app/
+
+> Copy this entire file into an external AI chat to implement **scroll-driven hero video + text parallax**.
 
 ---
 

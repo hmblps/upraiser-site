@@ -9,7 +9,11 @@ Canonical deploy media lives here in the **project root**. Before build, `script
 | `assets/brand/favicon.png` | `/favicon.png` |
 | `assets/brand/og-image.png` | `/og-image.png` |
 
+Case brand marks live under `public/cases/logos/` (edited in place; not under `assets/`).
+
 **Do not delete** `assets/hero/light-mountains-loop.mp4` — hero background video (~7 MB, 1080p).
+
+Future ascent scrub clip (planned, see `CONTEXT.md`): `assets/hero/ascent/` → `public/hero/ascent/`.
 
 Regenerate OG image after hero or brand changes:
 
