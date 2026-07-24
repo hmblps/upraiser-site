@@ -175,16 +175,17 @@
   min-height: var(--hero-stat-min-h);
   border-width: 1px;
   border-style: solid;
-  border-color: color-mix(in srgb, var(--theme-border) 65%, transparent);
-  background: color-mix(in srgb, var(--theme-bg) 42%, transparent);
-  backdrop-filter: blur(14px) saturate(1.08);
-  -webkit-backdrop-filter: blur(14px) saturate(1.08);
-  box-shadow: 0 10px 30px color-mix(in srgb, var(--theme-fg) 5%, transparent);
+  border-color: color-mix(in srgb, var(--theme-border) 45%, transparent);
+  /* No frosted glass slab — keep mountain continuous behind type/cards */
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
 .hero-stat-card.tilt-surface:hover {
-  border-color: color-mix(in srgb, var(--theme-accent) 22%, var(--theme-border));
-  background: color-mix(in srgb, var(--theme-bg) 54%, transparent);
+  border-color: color-mix(in srgb, var(--theme-accent) 28%, var(--theme-border));
+  background: color-mix(in srgb, var(--theme-bg) 18%, transparent);
 }
 
 .hero-stat-card .card-pad {
@@ -223,7 +224,7 @@
 }
 
 [data-theme="light"] .hero-stat-card.tilt-surface:hover {
-  background: color-mix(in srgb, var(--logo-gold) 22%, rgb(255 255 255 / 94%));
+  background: color-mix(in srgb, var(--logo-gold) 10%, transparent);
   border-color: color-mix(in srgb, var(--logo-gold) 35%, var(--theme-border));
 }
 
@@ -232,15 +233,13 @@
 }
 
 [data-theme="dark"] .hero-stat-card.tilt-surface {
-  border-color: rgb(255 204 0 / 12%);
-  background: rgb(8 8 10 / 52%);
-  box-shadow:
-    0 10px 30px rgb(0 0 0 / 35%),
-    inset 0 1px 0 rgb(255 255 255 / 6%);
+  border-color: rgb(255 204 0 / 14%);
+  background: transparent;
+  box-shadow: none;
 }
 
 [data-theme="dark"] .hero-stat-card.tilt-surface:hover {
-  background: rgb(8 8 10 / 68%);
+  background: rgb(8 8 10 / 22%);
   border-color: rgb(255 204 0 / 22%);
 }
 

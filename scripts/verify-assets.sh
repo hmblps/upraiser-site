@@ -5,11 +5,13 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 REQUIRED=(
-  "assets/hero/light-mountains-loop.mp4"
+  "assets/hero/everest.glb"
   "assets/brand/upraiser-logo.png"
   "assets/brand/favicon.png"
   "assets/brand/og-image.png"
-  "public/hero/light-mountains-loop.mp4"
+  "public/hero/everest.glb"
+  "public/draco/gltf/draco_decoder.wasm"
+  "public/draco/gltf/draco_wasm_wrapper.js"
   "public/fonts/inter-latin-600.woff2"
   "public/fonts/inter-latin-700.woff2"
   "public/fonts/inter-latin-800.woff2"
@@ -37,10 +39,8 @@ if ((${#missing[@]} > 0)); then
   echo "Missing required static assets:"
   printf '  - %s\n' "${missing[@]}"
   echo
-  echo "All deploy media: source in assets/ (project root), synced to public/ before build."
-  echo "Hero loop: assets/hero/light-mountains-loop.mp4"
-  echo "OG image: npm run generate:og  (requires hero video in assets/)"
-  echo "Restore: bash scripts/restore-hero-from-prod.sh"
+  echo "Deploy media: source in assets/, synced to public/ before build."
+  echo "Hero 3D: assets/hero/everest.glb → public/hero/everest.glb"
   exit 1
 fi
 

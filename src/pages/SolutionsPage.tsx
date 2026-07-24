@@ -1,9 +1,17 @@
 import { lazy, useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { solutionsHub, solutionsPage, primaryCta } from "../data/liveContent";
+import { PERFORMANCE_CONTENT } from "../data/performanceData";
 import { LazySection } from "../layouts/SiteLayout";
+import { CaseMetricMatrix } from "../components/CaseMetricMatrix";
+import { DepthCloseCta } from "../components/DepthCloseCta";
 import { PageIntro } from "../components/PageIntro";
+import { PhilosophyBand } from "../components/PhilosophyBand";
+import { SolutionPathStory } from "../components/SolutionPathStory";
 import { SolutionsHub } from "../components/SolutionsHub";
+import { TechSpotlightBand } from "../components/TechSpotlightBand";
+import { TrustMarquee } from "../components/TrustMarquee";
+import { Reveal } from "../components/motion/Reveal";
 
 const TrafficChannels = lazy(() =>
   import("../components/TrafficChannels").then((m) => ({ default: m.TrafficChannels })),
@@ -21,8 +29,9 @@ function pillarFromParams(pillar: string | null, channel: string | null) {
 }
 
 /**
- * Solutions — pillar grid → filtered channel inventory.
- * Process / Difference / Audience stay on Home; measurement on /measurement.
+ * Solutions — Saatchi services IA in UPRAISER style.
+ * Hero → trust → philosophy → path spine → tech → proof → CTA.
+ * No Home / Cases / Contact edits.
  */
 export function SolutionsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -33,10 +42,7 @@ export function SolutionsPage() {
   const activePillar =
     solutionsHub.categories.find((c) => c.id === activePillarId) ?? solutionsHub.categories[0]!;
 
-  const channelIds = useMemo(
-    () => [...activePillar.channelIds] as string[],
-    [activePillar],
-  );
+  const channelIds = useMemo(() => [...activePillar.channelIds] as string[], [activePillar]);
 
   useEffect(() => {
     setActivePillarId(pillarFromParams(searchParams.get("pillar"), searchParams.get("channel")));
@@ -67,29 +73,66 @@ export function SolutionsPage() {
         { replace: true },
       );
       requestAnimationFrame(() => {
-        document.getElementById("channels")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById("path-story")?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     },
     [setSearchParams],
   );
 
+  const footer = PERFORMANCE_CONTENT.footerCta;
+
   return (
-    <main className="site-main pt-[var(--site-header-height)]">
+    <main className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
       <PageIntro
         label={solutionsPage.label}
         title={solutionsPage.title}
         description={solutionsPage.description}
         ctaLabel={solutionsPage.ctaLabel}
         ctaHref={primaryCta.href}
-        secondaryLabel="Measurement"
+        secondaryLabel="Clarity"
         secondaryHref="/measurement"
+        dense={false}
       />
+
+      <TrustMarquee />
+      <PhilosophyBand />
 
       <SolutionsHub activeId={activePillar.id} onSelect={selectPillar} />
 
-      <LazySection minHeight="44vh">
-        <TrafficChannels variant="full" channelIds={channelIds} />
+      <LazySection minHeight="36vh">
+        <section className="section-band section-band--ambience border-t border-border/40">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <SolutionPathStory pillar={activePillar} />
+          </div>
+        </section>
       </LazySection>
+
+      <LazySection minHeight="36vh">
+        <section className="section-band border-t border-border/40">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <Reveal>
+              <p className="section-label">Channels in this path</p>
+              <p className="copy mt-2 max-w-xl text-sm text-muted">
+                Inventory for {activePillar.title}. Open a channel for the full write-up.
+              </p>
+            </Reveal>
+            <div className="mt-6">
+              <TrafficChannels variant="full" channelIds={channelIds} />
+            </div>
+          </div>
+        </section>
+      </LazySection>
+
+      <TechSpotlightBand />
+      <CaseMetricMatrix />
+
+      <DepthCloseCta
+        title={footer.title}
+        description={footer.subtitle}
+        ctaLabel={footer.buttonText}
+        ctaHref={footer.buttonHref}
+        contactIntent={activePillar.contactIntent}
+      />
     </main>
   );
 }

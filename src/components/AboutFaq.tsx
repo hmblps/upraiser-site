@@ -4,16 +4,26 @@ import { aboutPage } from "../data/liveContent";
 import { SPRING_SOFT } from "../lib/motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
-/** About FAQ — spring accordion, one panel at a time. */
-export function AboutFaq() {
+type FaqItem = { question: string; answer: string };
+
+type AboutFaqProps = {
+  heading?: string;
+  items?: FaqItem[];
+};
+
+/** FAQ accordion — spring open, one panel at a time. */
+export function AboutFaq({
+  heading = aboutPage.faqHeading,
+  items = [...aboutPage.faq],
+}: AboutFaqProps) {
   const reduced = useReducedMotion();
-  const [openId, setOpenId] = useState<string | null>(aboutPage.faq[0]?.question ?? null);
+  const [openId, setOpenId] = useState<string | null>(items[0]?.question ?? null);
 
   return (
     <div className="about-faq">
-      <p className="section-label">{aboutPage.faqHeading}</p>
+      <p className="section-label">{heading}</p>
       <ul className="mt-5 divide-y divide-border/50 border-y border-border/50">
-        {aboutPage.faq.map((item) => {
+        {items.map((item) => {
           const isOpen = openId === item.question;
           return (
             <li key={item.question}>

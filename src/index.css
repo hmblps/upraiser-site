@@ -15,6 +15,18 @@
   --color-muted-light: var(--theme-muted-light);
   --color-on-accent: var(--theme-on-accent);
   --font-sans: "Inter", system-ui, sans-serif;
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px))
+      rotate(calc(var(--angle) * -1deg));
+  }
+  100% {
+    transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px))
+      rotate(calc((var(--angle) * -1deg) - 360deg));
+  }
 }
 
 :root,
@@ -97,6 +109,7 @@
 @import "./styles/hero.css";
 @import "./styles/surfaces.css";
 @import "./styles/components.css";
+@import "./styles/depth-pages.css";
 @import "./styles/charts.css";
 @import "./styles/scroll-scene.css";
 @import "./styles/layout.css";

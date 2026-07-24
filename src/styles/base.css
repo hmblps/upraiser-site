@@ -51,6 +51,12 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
+/* Hero fly-through: page scroll frozen until summit */
+html.scroll-locked,
+html.scroll-locked body {
+  overflow: hidden !important;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);

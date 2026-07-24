@@ -19,6 +19,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const listenersRef = useRef(new Set<(scrollY: number) => void>());
   const clearScrollClassTimeoutRef = useRef<number | null>(null);
   const rafRef = useRef(0);
+  const heroLockedRef = useRef(false);
+  const modalStoppedRef = useRef(false);
 
   const notifyScroll = useCallback((scrollY: number) => {
     document.documentElement.classList.add("is-scrolling");
@@ -39,6 +41,33 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       listenersRef.current.delete(listener);
     };
   }, []);
+
+  const applyScrollLock = useCallback(() => {
+    const locked = heroLockedRef.current || document.documentElement.classList.contains("case-modal-open");
+    const lenis = lenisRef.current;
+
+    if (locked) {
+      document.documentElement.classList.add("scroll-locked");
+      if (lenis && !modalStoppedRef.current) {
+        lenis.stop();
+        modalStoppedRef.current = true;
+      }
+    } else {
+      document.documentElement.classList.remove("scroll-locked");
+      if (lenis && modalStoppedRef.current) {
+        lenis.start();
+        modalStoppedRef.current = false;
+      }
+    }
+  }, []);
+
+  const setScrollLocked = useCallback(
+    (locked: boolean) => {
+      heroLockedRef.current = locked;
+      applyScrollLock();
+    },
+    [applyScrollLock],
+  );
 
   const scrollTo = useCallback(
     (targetId: string, offset = -HEADER_OFFSET) => {
@@ -76,7 +105,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       window.addEventListener("scroll", onScroll, { passive: true });
       return () => {
         window.removeEventListener("scroll", onScroll);
-        document.documentElement.classList.remove("is-scrolling");
+        document.documentElement.classList.remove("is-scrolling", "scroll-locked");
         if (clearScrollClassTimeoutRef.current !== null) {
           window.clearTimeout(clearScrollClassTimeoutRef.current);
         }
@@ -84,11 +113,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 0.72,
-      lerp: 0.14,
+      duration: 1.05,
+      lerp: 0.085,
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.1,
+      wheelMultiplier: 0.82,
+      touchMultiplier: 1,
       allowNestedScroll: true,
     });
 
@@ -99,20 +128,22 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     });
 
     let running = true;
-    let modalStopped = false;
 
     const raf = (time: number) => {
       if (!running) return;
       if (!document.hidden) {
         const modalOpen = document.documentElement.classList.contains("case-modal-open");
-        if (modalOpen && !modalStopped) {
+        const shouldStop = modalOpen || heroLockedRef.current;
+        if (shouldStop && !modalStoppedRef.current) {
           lenis.stop();
-          modalStopped = true;
-        } else if (!modalOpen && modalStopped) {
+          modalStoppedRef.current = true;
+          document.documentElement.classList.add("scroll-locked");
+        } else if (!shouldStop && modalStoppedRef.current) {
           lenis.start();
-          modalStopped = false;
+          modalStoppedRef.current = false;
+          document.documentElement.classList.remove("scroll-locked");
         }
-        if (!modalOpen) lenis.raf(time);
+        if (!shouldStop) lenis.raf(time);
       }
       rafRef.current = requestAnimationFrame(raf);
     };
@@ -133,7 +164,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       document.removeEventListener("visibilitychange", onVisibility);
       lenis.destroy();
       lenisRef.current = null;
-      document.documentElement.classList.remove("is-scrolling");
+      document.documentElement.classList.remove("is-scrolling", "scroll-locked");
       if (clearScrollClassTimeoutRef.current !== null) {
         window.clearTimeout(clearScrollClassTimeoutRef.current);
       }
@@ -141,7 +172,12 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   }, [useLenis, notifyScroll]);
 
   return (
-    <ScrollProvider scrollTo={scrollTo} jumpToSection={jumpToSection} registerScrollListener={registerScrollListener}>
+    <ScrollProvider
+      scrollTo={scrollTo}
+      jumpToSection={jumpToSection}
+      registerScrollListener={registerScrollListener}
+      setScrollLocked={setScrollLocked}
+    >
       {children}
     </ScrollProvider>
   );

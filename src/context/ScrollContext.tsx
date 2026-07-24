@@ -9,6 +9,8 @@ type ScrollContextValue = {
   jumpToSection: (targetId: string) => void;
   /** Lenis-aware scroll position (falls back to window when Lenis is off) */
   registerScrollListener: (listener: ScrollListener) => () => void;
+  /** Freeze page scroll (Lenis stop / overflow) — e.g. hero fly-through */
+  setScrollLocked: (locked: boolean) => void;
 };
 
 const ScrollContext = createContext<ScrollContextValue | null>(null);
@@ -18,14 +20,16 @@ export function ScrollProvider({
   scrollTo,
   jumpToSection,
   registerScrollListener,
+  setScrollLocked,
 }: {
   children: ReactNode;
   scrollTo: (targetId: string, offset?: number) => void;
   jumpToSection: (targetId: string) => void;
   registerScrollListener: (listener: ScrollListener) => () => void;
+  setScrollLocked: (locked: boolean) => void;
 }) {
   return (
-    <ScrollContext.Provider value={{ scrollTo, jumpToSection, registerScrollListener }}>
+    <ScrollContext.Provider value={{ scrollTo, jumpToSection, registerScrollListener, setScrollLocked }}>
       {children}
     </ScrollContext.Provider>
   );

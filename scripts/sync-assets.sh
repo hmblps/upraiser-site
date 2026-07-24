@@ -10,16 +10,22 @@ copy() {
   local dest="$2"
   if [[ ! -f "$src" ]]; then
     echo "Missing source asset: $src"
-    echo "Restore hero: bash scripts/restore-hero-from-prod.sh"
     exit 1
   fi
   mkdir -p "$(dirname "$dest")"
   cp "$src" "$dest"
 }
 
-copy "assets/hero/light-mountains-loop.mp4" "public/hero/light-mountains-loop.mp4"
+# Live Hero 3D model
+copy "assets/hero/everest.glb" "public/hero/everest.glb"
+
+# Brand / legal / maps
 copy "assets/brand/upraiser-logo.png" "public/upraiser-logo.png"
 copy "assets/brand/favicon.png" "public/favicon.png"
 copy "assets/brand/og-image.png" "public/og-image.png"
+copy "assets/maps/world-dots-dark.svg" "public/maps/world-dots-dark.svg"
+copy "assets/maps/world-dots-light.svg" "public/maps/world-dots-light.svg"
+
+# Optional: OG tooling still reads assets/hero/light-mountains-loop.mp4 (not required in public/)
 
 echo "Synced assets/ → public/."

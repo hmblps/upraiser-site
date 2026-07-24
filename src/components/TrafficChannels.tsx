@@ -134,17 +134,38 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
   return (
     <section id="channels" ref={sectionRef} className="section-band section-band--strip">
       <ModeContentTransition mode={mode} className="mx-auto max-w-7xl px-6 lg:px-8">
-        <SectionHeaderRow>
-          <SectionHeader
-            label={sectionsByMode.channels.label}
-            title={section.title}
-            description={
-              isHome
-                ? "Switch sources here. Open a type on Solutions for the full inventory write-up — no separate depth pages."
-                : undefined
-            }
-          />
-          <div className="flex shrink-0 gap-2">
+        {isHome || !channelIds ? (
+          <SectionHeaderRow>
+            <SectionHeader
+              label={sectionsByMode.channels.label}
+              title={section.title}
+              description={
+                isHome
+                  ? "Switch sources here. Open a type on Solutions for the full inventory write-up — no separate depth pages."
+                  : undefined
+              }
+            />
+            <div className="flex shrink-0 gap-2">
+              <button
+                type="button"
+                onClick={() => scrollTabs("left")}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                aria-label="Scroll channels left"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollTabs("right")}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                aria-label="Scroll channels right"
+              >
+                →
+              </button>
+            </div>
+          </SectionHeaderRow>
+        ) : (
+          <div className="mb-4 flex justify-end gap-2">
             <button
               type="button"
               onClick={() => scrollTabs("left")}
@@ -162,7 +183,7 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
               →
             </button>
           </div>
-        </SectionHeaderRow>
+        )}
 
         <Reveal delay={0.1}>
           <div

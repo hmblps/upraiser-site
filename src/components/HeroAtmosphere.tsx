@@ -1,169 +1,79 @@
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
-import { useHeroCursorLight } from "../hooks/useHeroCursorLight";
-import { useHeroMobileLite } from "../hooks/useHeroMobileLite";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 
-const MOUNTAINS_MP4 = "/hero/light-mountains-loop.mp4";
-const ATMOSPHERE_CROSSFADE = { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const };
+const HeroTerrainCanvas = lazy(() =>
+  import("./HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas })),
+);
 
-type HeroMountainsLoopProps = {
-  pauseOffscreen?: boolean;
-  /** Desktop: load immediately with preload auto. Mobile: defer + metadata. */
-  eager?: boolean;
-};
-
-function HeroMountainsLoop({ pauseOffscreen = false, eager = false }: HeroMountainsLoopProps) {
-  const reduced = useReducedMotion();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [sourceReady, setSourceReady] = useState(eager);
-
-  useEffect(() => {
-    if (eager) return;
-
-    const activate = () => setSourceReady(true);
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(activate, { timeout: 900 });
-      return () => window.cancelIdleCallback(id);
-    }
-
-    const id = window.setTimeout(activate, 350);
-    return () => window.clearTimeout(id);
-  }, [eager]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !sourceReady) return;
-
-    if (reduced) {
-      video.pause();
-      video.currentTime = 0;
-      return;
-    }
-
-    if (pauseOffscreen) return;
-
-    video.play().catch(() => {});
-  }, [reduced, pauseOffscreen, sourceReady]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reduced || !pauseOffscreen || !sourceReady) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-          return;
-        }
-        video.pause();
-      },
-      { threshold: 0.12 },
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, [reduced, pauseOffscreen, sourceReady]);
-
-  const preload = eager ? "auto" : "metadata";
-
-  return (
-    <video
-      ref={videoRef}
-      className="hero-mountains-video is-active"
-      muted
-      loop
-      playsInline
-      preload={sourceReady ? preload : "none"}
-      tabIndex={-1}
-    >
-      {sourceReady ? <source src={MOUNTAINS_MP4} type="video/mp4" /> : null}
-    </video>
+function useDesktopHero() {
+  const [ok, setOk] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(DESKTOP_HERO_QUERY).matches : false,
   );
+
+  useEffect(() => {
+    const mq = window.matchMedia(DESKTOP_HERO_QUERY);
+    const sync = () => setOk(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  return ok;
 }
 
-function AtmosphereOverlays({ isLight, useSpotlight }: { isLight: boolean; useSpotlight: boolean }) {
-  const dimClass = isLight ? "hero-video-dim hero-video-dim--light" : "hero-video-dim hero-video-dim--dark";
-
-  return (
-    <>
-      {useSpotlight ? (
-        <>
-          <div className={dimClass} aria-hidden />
-          {!isLight ? <div className="hero-video-dim hero-video-dim--dark-corner-lock" aria-hidden /> : null}
-        </>
-      ) : null}
-      {isLight ? (
-        <>
-          <div className="hero-mountains-warmwash" />
-          <div className="hero-mountains-scrim" />
-        </>
-      ) : (
-        <div className="hero-dark-mountains-scrim" />
-      )}
-    </>
-  );
-}
-
+/**
+ * CSS sky paints immediately; WebGL mounts after idle so text/layout win first paint.
+ * Model is Draco ~1MB (was 33MB) — no visual downgrade (same triangle count).
+ */
 export function HeroAtmosphere() {
   const { theme } = useTheme();
   const isLight = theme === "light";
   const reduced = useReducedMotion();
-  const mobileLite = useHeroMobileLite();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const useSpotlight = !mobileLite && !reduced;
+  const desktop = useDesktopHero();
+  const use3d = desktop && !reduced;
+  const [canvasReady, setCanvasReady] = useState(false);
 
-  useHeroCursorLight(containerRef, useSpotlight, {
-    defaultX: isLight ? 70 : 56,
-    defaultY: isLight ? 34 : 66,
-    minY: isLight ? undefined : 38,
-    maxY: isLight ? undefined : 88,
-    maxX: isLight ? undefined : 78,
-    lerp: 0.052,
-  });
+  useEffect(() => {
+    if (!use3d) {
+      setCanvasReady(false);
+      return;
+    }
 
-  const videoProps = {
-    pauseOffscreen: mobileLite,
-    eager: !mobileLite && !reduced,
-  };
+    let cancelled = false;
+    const boot = () => {
+      if (cancelled) return;
+      setCanvasReady(true);
+    };
 
-  const baseClass = isLight ? "hero-light-mountains-base" : "hero-dark-mountains-base";
-  const layerClass = isLight ? "hero-mountains-layer" : "hero-dark-mountains-layer";
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(boot, { timeout: 900 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(id);
+      };
+    }
+
+    const t = window.setTimeout(boot, 120);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(t);
+    };
+  }, [use3d]);
 
   return (
     <div
-      ref={containerRef}
-      className={`pointer-events-none absolute inset-0 hero-cursor-light-active${mobileLite ? " hero-atmosphere-mobile-lite" : ""}${useSpotlight ? " hero-atmosphere-spotlight" : ""}${isLight ? " hero-atmosphere-light" : " hero-atmosphere-dark"}`}
+      className={`pointer-events-none absolute inset-0 hero-atmosphere${isLight ? " hero-atmosphere--light" : " hero-atmosphere--dark"}${desktop ? "" : " hero-atmosphere--mobile"}`}
       aria-hidden
     >
-      <div className="hero-copy-wash" />
-
-      <div className={`${layerClass} hero-atmosphere-layer-stack`}>
-        {/* Single decode — grade classes swap with theme; overlays crossfade */}
-        <div className={`${baseClass} hero-atmosphere-video-shell`}>
-          <HeroMountainsLoop {...videoProps} />
-        </div>
-
-        {reduced ? (
-          <AtmosphereOverlays isLight={isLight} useSpotlight={useSpotlight} />
-        ) : (
-          <AnimatePresence mode="sync" initial={false}>
-            <motion.div
-              key={theme}
-              className="hero-atmosphere-overlays absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={ATMOSPHERE_CROSSFADE}
-            >
-              <AtmosphereOverlays isLight={isLight} useSpotlight={useSpotlight} />
-            </motion.div>
-          </AnimatePresence>
-        )}
+      <div className="hero-atmosphere__sky hero-terrain-shell">
+        {use3d && canvasReady ? (
+          <Suspense fallback={null}>
+            <HeroTerrainCanvas className="hero-terrain-root" />
+          </Suspense>
+        ) : null}
       </div>
-
-      <div className="absolute inset-x-0 bottom-0 hero-bottom-fade-bridge" />
     </div>
   );
 }

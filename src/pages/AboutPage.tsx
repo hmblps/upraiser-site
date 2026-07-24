@@ -6,7 +6,7 @@ const About = lazy(() => import("../components/About").then((m) => ({ default: m
 export function AboutPage() {
   return (
     <main className="site-main pt-[var(--site-header-height)]">
-      <LazySection minHeight="56vh">
+      <LazySection minHeight="70vh">
         <About />
       </LazySection>
     </main>

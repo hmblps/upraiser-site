@@ -1,29 +1,30 @@
 import type { CSSProperties } from "react";
 import { measurementPage, primaryCta } from "../data/liveContent";
+import { PERFORMANCE_CONTENT } from "../data/performanceData";
 import { mmpPartnerSlugs, partnersBySlugs } from "../data/partners";
 import { LazySection } from "../layouts/SiteLayout";
-import { EditorialItem, EditorialStack } from "../components/Editorial";
-import { PageCtaRow, PageIntro } from "../components/PageIntro";
+import { CaseMetricMatrix } from "../components/CaseMetricMatrix";
+import { ClarityReconcile } from "../components/ClarityReconcile";
+import { DepthCloseCta } from "../components/DepthCloseCta";
+import { PageIntro } from "../components/PageIntro";
+import { TrustMarquee } from "../components/TrustMarquee";
 import { Reveal } from "../components/motion/Reveal";
-import { Stagger, StaggerItem } from "../components/motion/Stagger";
-import { SPRING_SOFT } from "../lib/motion";
-
-const cardSpawn = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0 },
-};
 
 /**
- * Measurement — Saatchi/OneView product story.
- * No specs, no FAQ dump, no latency theatre. Mechanism in plain language.
+ * Measurement — Saatchi proprietary-tech IA (OneView → Clarity).
+ * Hero → trust → receipt reconcile → wire → MMP → proof → CTA.
+ * UPRAISER receipt language; no fake dashboard cards.
  */
 export function MeasurementPage() {
+  const tech = PERFORMANCE_CONTENT.techSpotlight;
+  const footer = PERFORMANCE_CONTENT.footerCta;
+
   return (
-    <main className="site-main pt-[var(--site-header-height)]">
+    <main className="site-main depth-page depth-page--measurement pt-[var(--site-header-height)]">
       <PageIntro
         label={measurementPage.label}
-        title={measurementPage.title}
-        description={measurementPage.heroLead}
+        title={tech.productName}
+        description={`${tech.title}. ${tech.description}`}
         ctaLabel={measurementPage.ctaLabel}
         ctaHref={primaryCta.href}
         secondaryLabel="View Solutions"
@@ -31,40 +32,45 @@ export function MeasurementPage() {
         dense={false}
       />
 
-      <LazySection minHeight="40vh">
-        <section id="measurement" className="section-band section-band--ambience border-t border-border/40">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <Reveal>
-              <p className="section-label">{measurementPage.principlesHeading}</p>
-              <EditorialStack className="mt-8">
-                {measurementPage.principles.map((item, index) => (
-                  <EditorialItem
-                    key={item.title}
-                    variant="step"
-                    step={String(index + 1).padStart(2, "0")}
-                  >
-                    <p className="text-base font-semibold tracking-tight text-fg sm:text-lg">{item.title}</p>
-                    <p className="copy mt-2 max-w-2xl text-sm text-muted">{item.description}</p>
-                  </EditorialItem>
-                ))}
-              </EditorialStack>
-            </Reveal>
+      <TrustMarquee label="Runs beside Your MMP stack" />
 
-            <Reveal delay={0.08} className="mt-16">
-              <p className="section-label">{measurementPage.capabilitiesHeading}</p>
-              <Stagger stagger={0.05} className="tech-feature-grid mt-8">
-                {measurementPage.capabilities.map((item) => (
-                  <StaggerItem key={item.title} variants={cardSpawn} transition={SPRING_SOFT}>
-                    <article className="tech-feature-card">
-                      <h3 className="text-lg font-bold tracking-tight text-fg">{item.title}</h3>
-                      <p className="copy mt-3 text-sm text-muted">{item.description}</p>
-                    </article>
-                  </StaggerItem>
+      <LazySection minHeight="44vh">
+        <section id="measurement" className="section-band border-t border-border/40">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <ClarityReconcile />
+
+            <Reveal delay={0.06} className="mt-16">
+              <p className="section-label">{measurementPage.modulesHeading}</p>
+              <ul className="depth-feature-list mt-10">
+                {measurementPage.modules.map((item, index) => (
+                  <li key={item.title} className="depth-feature-row">
+                    <span className="depth-feature-row__index" aria-hidden>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="depth-feature-row__body">
+                      <h3 className="depth-feature-row__title">{item.title}</h3>
+                      <p className="depth-feature-row__text">{item.description}</p>
+                    </div>
+                  </li>
                 ))}
-              </Stagger>
+              </ul>
             </Reveal>
 
             <Reveal delay={0.1} className="mt-16">
+              <p className="section-label">{measurementPage.stepsHeading}</p>
+              <ol className="clarity-wire mt-10">
+                {measurementPage.steps.map((item, index) => (
+                  <li key={item.step} className="clarity-wire__step">
+                    {index > 0 ? <span className="clarity-wire__connector" aria-hidden /> : null}
+                    <span className="clarity-wire__num">{item.step}</span>
+                    <h3 className="clarity-wire__title">{item.title}</h3>
+                    <p className="clarity-wire__text">{item.description}</p>
+                  </li>
+                ))}
+              </ol>
+            </Reveal>
+
+            <Reveal delay={0.12} className="mt-16 border-t border-border/50 pt-12">
               <p className="section-label">{measurementPage.mmpHeading}</p>
               <p className="copy mt-3 max-w-xl text-sm text-muted">{measurementPage.mmpLead}</p>
               <div className="mt-8 flex flex-wrap items-center gap-8">
@@ -85,18 +91,18 @@ export function MeasurementPage() {
                 ))}
               </div>
             </Reveal>
-
-            <Reveal delay={0.12} className="mt-12">
-              <PageCtaRow
-                primaryLabel={measurementPage.ctaLabel}
-                primaryHref={primaryCta.href}
-                secondaryLabel="View Solutions"
-                secondaryHref="/solutions"
-              />
-            </Reveal>
           </div>
         </section>
       </LazySection>
+
+      <CaseMetricMatrix title="When bid-time and bill-time already agree" />
+
+      <DepthCloseCta
+        title={measurementPage.closeTitle}
+        description={measurementPage.closeDescription}
+        ctaLabel={footer.buttonText}
+        ctaHref={footer.buttonHref}
+      />
     </main>
   );
 }

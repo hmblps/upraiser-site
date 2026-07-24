@@ -16,10 +16,9 @@ export const contactVerticalOptions = [
 ] as const;
 
 export const navLinks: NavLink[] = [
-  { label: "Solutions", href: "/solutions" },
-  { label: "Measurement", href: "/measurement" },
+  { label: "Expertise", href: "/expertise" },
   { label: "Cases", href: "/cases" },
-  { label: "About", href: "/about" },
+  { label: "Company", href: "/company" },
 ];
 
 export const primaryCta = {
@@ -183,7 +182,6 @@ export const promiseByMode = {
   }
 >;
 
-
 export const differenceByMode = {
   growth: [
     {
@@ -317,8 +315,8 @@ export const trafficChannelsByMode = {
     {
       id: "retargeting",
       title: "Retargeting",
-      tagline: "Bring high-intent users back",
-      teaser: "MMP event pools — reactivate users who showed intent, bid against LTV not vanity opens.",
+      tagline: "MMP feed, not pixels",
+      teaser: "Audience pools from MMP events — reactivation bids on real behavior, device-level proof.",
       description:
         "Retargeting should bring back users who already showed intent — trial starts, cart views, deposit abandoners — not everyone who glanced at an ad. We build cross-channel reactivation from MMP event pools, not brittle pixels. Bids weight LTV and likelihood to convert. Every win-back flight traces to a device-level event Your team can pull when the month closes.",
       bestFor: "Trial users, cart abandoners, reactivation",
@@ -455,7 +453,7 @@ export const trafficChannelsByMode = {
       points: [
         "MMP event pools instead of brittle pixels",
         "Behavior-based reactivation bids",
-        "Device-level proof on every win-back",
+        "Device-level proof for every win-back",
         "LTV cohorts with exportable trails",
         "Lifecycle spend that closes clean at month-end",
       ],
@@ -541,13 +539,12 @@ export const bridgeByMode = {
 
 export const footerLinks = {
   explore: [
-    { label: "Solutions", href: "/solutions" },
-    { label: "Measurement", href: "/measurement" },
+    { label: "Expertise", href: "/expertise" },
     { label: "Cases", href: "/cases" },
     { label: "Contact", href: "/contact" },
   ],
   company: [
-    { label: "About", href: "/about" },
+    { label: "Company", href: "/company" },
     { label: "Careers inquiry", href: "/contact", contactIntent: "careers" },
     { label: "Contact", href: "/contact" },
   ] satisfies NavLink[],
@@ -558,59 +555,76 @@ export const footerLinks = {
   ],
 };
 
-/**
- * Measurement — Saatchi/OneView-style product story.
- * No spec soup. Qualitative mechanism only; MMP logos as quiet proof.
- */
 export const measurementPage = {
   label: "Measurement",
-  title: "Every bid has a receipt",
+  productName: "Clarity",
+  title: "Clarity",
+  titleAccent: "Every bid has a receipt",
+  chapter: {
+    scrollHeroWord: "RECEIPT",
+    line1: "Measurement is not a slide at the end of the month.",
+    line2Prefix: "It is the",
+    inlineWord: "receipt",
+    description:
+      "Scoring, logs, and Your MMP on one path — so Ad Ops and finance close without a war room.",
+  },
   heroLead:
-    "We wire scoring, logs, and Your MMP so Ad Ops and finance close the month on the same file — not two competing stories.",
-  ctaLabel: "Request a measurement review",
-  principlesHeading: "What this means in practice",
-  principles: [
+    "Scoring, logs, and Your MMP on one path — so Ad Ops and finance close without a war room.",
+  ctaLabel: "Request a Clarity review",
+  heroStats: [
+    { value: "0%", label: "Post-flight drift" },
+    { value: "<2s", label: "Log to MMP" },
+    { value: "48h", label: "Brief to live" },
+  ],
+  panel: {
+    eyebrow: "Clarity",
+    title: "Bid-time and bill-time agree",
+    body: "Server events, delivery logs, and media bills share one path. Month-end is a file pull — not a reconciliation call.",
+    rows: [
+      { event: "Install", bid: "Device postback", bill: "MMP install", tone: "ok" },
+      { event: "FTD", bid: "Event fire", bill: "Finance event", tone: "ok" },
+      { event: "Fraud", bid: "Pre-bid block", bill: "Never billed", tone: "warn" },
+      { event: "Media bill", bid: "Delivery log", bill: "Invoice line", tone: "ok" },
+      { event: "Drift", bid: "0.0%", bill: "0.0%", tone: "ok" },
+    ],
+  },
+  modulesHeading: "What You get on every flight",
+  modules: [
     {
-      title: "Stop fraud before the bid",
-      description:
-        "Bad supply never clears the cap. Device and cohort checks run at auction time — not in a post-campaign report nobody wants to defend.",
+      title: "Pre-bid guard",
+      description: "Fraud and cohort checks before the impression clears. Bad supply never hits the cap.",
     },
     {
-      title: "One timeline for spend and events",
-      description:
-        "Server events, delivery logs, and media bills share a path. When finance asks what the spend bought, the answer is already in the file.",
+      title: "Live caps",
+      description: "GEO and KPI caps follow outcomes in flight — overspend dies before overnight batch.",
     },
     {
-      title: "Your MMP stays the system of record",
-      description:
-        "We connect into AppsFlyer, Adjust, Singular, or Kochava. We do not wrap Your attribution in another dashboard You have to reconcile later.",
+      title: "Month-end file",
+      description: "Raw logs on demand. Finance and Ad Ops pull the same receipt.",
     },
   ],
-  capabilitiesHeading: "Built into every buy",
-  capabilities: [
+  stepsHeading: "How we wire Clarity",
+  steps: [
     {
-      title: "Pre-bid filtration",
-      description:
-        "Bots, emulators, and hijacked installs drop before the impression is bought — so volume never outruns quality.",
+      step: "01",
+      title: "Map the stack",
+      description: "MMP endpoints, log pipes, pre-bid rules — written down before anything goes live.",
     },
     {
-      title: "Event-weighted caps",
-      description:
-        "GEO and KPI caps follow live outcomes. Overspend is caught in flight, not discovered overnight.",
+      step: "02",
+      title: "Connect and verify",
+      description: "Raw logs into Your MMP. If bid-time and bill-time disagree, we fix the pipe first.",
     },
     {
-      title: "Log-backed reconciliation",
-      description:
-        "Bid-time decisions and bill-time numbers agree. Month-end is a file pull, not a war room between UA and finance.",
-    },
-    {
-      title: "OEM with trails",
-      description:
-        "Lenovo ROM and Google PAI ship with SDK trails from factory floor to postback — inventory You can defend in review.",
+      step: "03",
+      title: "Deploy and monitor",
+      description: "Lanes go live with drift checks. The invoice already matches the log.",
     },
   ],
   mmpHeading: "Works with Your MMP",
-  mmpLead: "Raw events into Your stack. We connect — we do not replace.",
+  mmpLead: "Raw events into Your stack. Clarity connects — it does not replace.",
+  closeTitle: "See Clarity on Your stack",
+  closeDescription: "Bring Your MMP events and GEO caps — we show where bid-time and bill-time diverge.",
 } as const;
 
 export const lenovoPartnership = {
@@ -618,7 +632,6 @@ export const lenovoPartnership = {
   logo: "/partners/lenovo-logo.png",
   logoAlt: "Lenovo",
   title: "Lenovo PC HK LTD",
-  /** Short proof line for home trust strip — inventory depth lives on /solutions?pillar=oem. */
   stripLine: "Factory ROM and Google PAI — direct lanes, not resold exchange supply.",
   descriptionIntro:
     "Official Lenovo agency partner for brands and networks who need procurement-grade OEM access alongside performance buying.",
@@ -629,40 +642,55 @@ export const lenovoPartnership = {
 export const aboutPage = {
   label: "About",
   title: "Born from FraudOps. Built for Scale.",
+  chapter: {
+    scrollHeroWord: "LOGS",
+    line1: "We started by explaining attribution drift to finance.",
+    line2Prefix: "Then we built the agency that",
+    inlineWord: "ends that call",
+    description:
+      "London-based. Buying and reconciling mobile growth so Ad Ops and finance read the same file.",
+  },
   positioningLead: "Built from logs.",
   positioningAccent: "Built for trust.",
   description:
     "London-based performance agency. We buy and reconcile mobile growth so Ad Ops and finance read the same file.",
   storySegments: [
     {
+      mark: "2017",
       title: "Founded 17 July 2017",
-      body:
-        "Started by Ad Ops engineers who spent years explaining attribution drift to finance teams. We built UPRAISER to end that conversation — registered in the US, based in London.",
+      body: "Ad Ops engineers tired of post-flight fights. UPRAISER exists to make bid-time and bill-time agree — US-registered, London-based.",
     },
     {
+      mark: "P&L",
       title: "Built for the P&L",
-      body:
-        "Every campaign ties to a revenue event finance already tracks — not install vanity, not post-flight attribution debates.",
+      body: "Campaigns tie to revenue events finance already tracks — not install vanity, not attribution theatre.",
     },
     {
+      mark: "Now",
       title: "Small team, direct access",
-      body:
-        "No account managers between You and the person optimizing Your campaigns. OEM lanes live under Solutions; how we verify spend lives under Measurement.",
+      body: "You talk to the buyer optimizing the flight. Paths sit under Solutions. Proof sits under Measurement.",
     },
   ],
+  facts: [
+    { label: "Founded", value: "2017" },
+    { label: "Base", value: "London" },
+    { label: "ICO", value: "ZC000436" },
+    { label: "Entity", value: "LLP" },
+  ] as const,
   teamLabel: "Legal entity",
-  teamLead: "UPRAISER Agency LLP — registered details below.",
+  teamLead: "UPRAISER Agency LLP — 128 City Road, London EC1V 2NX, United Kingdom.",
+  testimonialsHeading: "What teams tell us",
   faqHeading: "FAQ",
   faq: [
     {
-      question: "Why does Our MMP show different numbers than the media bill?",
+      question: "Why does Our MMP disagree with the media bill?",
       answer:
         "Usually the supply path is not wired to device events before the bid. We fix that at auction time — so bid-time and bill-time agree before month-end.",
     },
     {
       question: "Do you replace Our MMP?",
       answer:
-        "No. We connect into Your existing stack — AppsFlyer, Adjust, Singular, Kochava — and keep raw events in Your system of record.",
+        "No. We connect into AppsFlyer, Adjust, Singular, or Kochava and keep raw events in Your system of record.",
     },
     {
       question: "How fast can a pilot go live?",
@@ -672,10 +700,17 @@ export const aboutPage = {
     {
       question: "Where does Lenovo / OEM live?",
       answer:
-        "Under Solutions · OEM — factory ROM and Google PAI with SDK trails. Home shows the partnership strip; Measurement covers how those trails reconcile.",
+        "Under Solutions · OEM — factory ROM and Google PAI with SDK trails. Measurement covers how those trails reconcile into Your MMP.",
+    },
+    {
+      question: "What does the log actually prove?",
+      answer:
+        "Device-level install signals, pre-bid fraud checks, and delivery reconciliation — enough for finance and compliance without a supplementary deck.",
     },
   ],
   ctaLabel: "Request Pilot",
+  closeTitle: "Meet the team on a pilot",
+  closeDescription: "Vertical, GEO, KPI event — we reply with a scoped path, not a capability deck.",
 } as const;
 
 export const casesPage = {
@@ -708,44 +743,104 @@ export const casesPage = {
 export const solutionsPage = {
   label: "Solutions",
   title: "We can help you with",
+  chapter: {
+    scrollHeroWord: "PATHS",
+    line1: "Four buying paths. One reconciliation file.",
+    line2Prefix: "Pick a lane — we open the",
+    inlineWord: "story",
+    description:
+      "Performance, OEM, creators, premium. Every path runs on Clarity so finance reads the same receipt as Ad Ops.",
+  },
   description:
-    "Pick a lane. Channels open below — OEM, performance, creators, and premium reach under one event schema. How we verify spend lives on Measurement.",
+    "Four buying paths. Every path runs on Clarity so finance reads the same receipt as Ad Ops.",
   ctaLabel: "Request Pilot",
+  closeTitle: "Brief the path You need",
+  closeDescription: "Tell us the vertical, GEO, and KPI event — we route to the right buying lane.",
 } as const;
 
-/** Hub categories on /solutions — TOC into TrafficChannels (no depth URLs). */
 export const solutionsHub = {
-  label: "Lanes",
-  description: "Four buying paths. Select one to open its channels.",
+  label: "Buying paths",
+  description: "Select a path. Story, deliverables, and channels open below.",
   categories: [
     {
       id: "performance",
-      title: "Performance buying",
+      title: "Performance UA",
+      problem: "Spend scales, but CPA and finance stop agreeing.",
       summary: "CPI, CPA, and FTD models across in-app, programmatic, and reactivation.",
       primaryChannel: "performance",
       channelIds: ["performance", "programmatic", "retargeting"] as const,
+      contactIntent: "brand",
+      deliverables: [
+        "Caps wired to FTD, registration, or subscription — not vanity CPI",
+        "Pre-bid filtration on every impression",
+        "MMP reconciliation before flight close",
+      ],
+      whyItWorks: [
+        "Unit economics hold when spend doubles",
+        "Finance reads one file — no dispute calls",
+      ],
+      casePreview: "/cases/fanatics",
+      caseLabel: "Fanatics-style performance path",
     },
     {
       id: "oem",
       title: "OEM & Lenovo",
-      summary: "Factory ROM and Google PAI — direct lanes with SDK trails, not resold exchange.",
+      problem: "OEM inventory looks premium until procurement asks for trails.",
+      summary: "Factory ROM and Google PAI with SDK trails — direct lanes, not resold exchange.",
       primaryChannel: "oem",
       channelIds: ["oem"] as const,
+      contactIntent: "brand",
+      deliverables: [
+        "Direct Lenovo ROM and Google PAI with device-level trails",
+        "Factory-floor to postback proof for compliance",
+        "Pre-bid fraud screen on every OEM impression",
+      ],
+      whyItWorks: [
+        "Inventory authenticity procurement will accept",
+        "One auditable log for UA, Ad Ops, and finance",
+      ],
+      casePreview: "/cases/block-blast-pai",
+      caseLabel: "OEM / PAI case",
     },
     {
       id: "creators",
       title: "Creators & social",
-      summary: "Influencer and paid social with MMP-tracked events — not brand-lift slides.",
-      /** Prefer influencer when present; social always exists in both modes. */
+      problem: "Creator spend lives outside the same reconciliation as paid media.",
+      summary: "Paid social and creator placements with MMP-tracked outcomes — not brand-lift slides.",
       primaryChannel: "social",
       channelIds: ["influencer", "social"] as const,
+      contactIntent: "advertising-partner",
+      deliverables: [
+        "Meta, TikTok, and Google mapped to funnel events",
+        "Creator placements tracked to installs and deposits",
+        "Same-day MMP conversion wiring",
+      ],
+      whyItWorks: [
+        "Spend justified by events — not estimated reach",
+        "Creator spend in the same reconciliation file as paid media",
+      ],
+      casePreview: "/cases/azar",
+      caseLabel: "Creator / social case",
     },
     {
       id: "premium",
       title: "Premium & CTV",
+      problem: "Premium and CTV look good in decks and weak in month-end files.",
       summary: "Native editorial and connected TV — household reach scored pre-bid.",
       primaryChannel: "native",
       channelIds: ["native", "ctv"] as const,
+      contactIntent: "brand",
+      deliverables: [
+        "Curated finance and tech publisher whitelist",
+        "Pre-flight brand and compliance checks",
+        "CTV with pre-bid household and device scoring",
+      ],
+      whyItWorks: [
+        "Placements legal and brand teams can accept",
+        "CTV activation matched to delivery logs",
+      ],
+      casePreview: "/cases/autodoc",
+      caseLabel: "Premium / CTV case",
     },
   ],
 } as const;
@@ -756,13 +851,71 @@ export const contactPage = {
   titleLead: "Ready to be ",
   accentWord: "Upraised",
   description:
-    "Share Your vertical, GEO, and KPI event. We reply with a scoped path — not a deck of awareness line items.",
+    "Tell us Your vertical, GEO, and the KPI event that matters. We reply with a scoped path — not a deck of awareness line items.",
   subline:
-    "We respond within 1–2 business days. Stack review or partnership — pick an intent below and we route accordingly.",
+    "1–2 business days. Brand brief, OEM / supply, or careers — pick an intent and we route it.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
   email: "info@upraiser.co.uk",
   ctaLabel: "Start the conversation",
 } as const;
+
+export const caseStudyMeta = {
+  structureLabel: "How to read a case",
+  structureSteps: [
+    {
+      title: "Results",
+      description:
+        "Three hero numbers before the story — the only figures finance will ask for twice.",
+    },
+    {
+      title: "Metadata",
+      description:
+        "Brand, vertical, GEO, KPI event, payment model, and channels — structured for procurement.",
+    },
+    {
+      title: "Story",
+      description:
+        "Challenge, approach, result — short blocks tied to a device-level event You can verify.",
+    },
+  ],
+} as const;
+
+export const testimonials = [
+  {
+    quote:
+      "We stopped explaining attribution drift to finance and started sharing one file.",
+    name: "UA Director",
+    role: "Fintech app · UK",
+    company: "Mid-size consumer finance",
+    href: "/cases/snoop",
+  },
+  {
+    quote:
+      "The Lenovo lane gave us factory-side proof, not resold exchange supply with a OEM sticker.",
+    name: "Growth Lead",
+    role: "Android trading app · Global",
+    company: "High-frequency finance",
+    href: "/cases/vantage",
+  },
+  {
+    quote:
+      "We went from weekly reconciliation calls to a monthly file pull. That is the outcome we really bought.",
+    name: "Ad Ops Lead",
+    role: "Media buyer · EU",
+    company: "Programmatic accounts",
+    href: "/cases/autodoc",
+  },
+  {
+    quote:
+      "Pre-bid filtration meant every dollar we raised spend against actually cleared a device check.",
+    name: "Performance Lead",
+    role: "Marketplace · GCC",
+    company: "E-commerce expansion",
+    href: "/cases/fiverr",
+  },
+] as const;
+
+
 
 export const sectionsByMode = {
   value: {

@@ -1,12 +1,13 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Reveal } from "./motion/Reveal";
-import { contactPage, contactVerticalOptions, footerLinks } from "../data/liveContent";
+import { contactPage, contactVerticalOptions, lenovoPartnership, primaryCta } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
 import { BorderBeam } from "./BorderBeam";
 import { ContactFormField } from "./ContactFormField";
 import { ContactIntentChips } from "./ContactIntentChips";
+import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 import { CONTACT_INTENT_EVENT, consumeContactIntent } from "../lib/contactIntent";
 
 type FormState = {
@@ -32,8 +33,6 @@ const initialForm: FormState = {
 };
 
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
-
-const linkedIn = footerLinks.social.find((link) => link.label === "LinkedIn");
 
 export function Contact() {
   const [form, setForm] = useState<FormState>(initialForm);
@@ -126,6 +125,13 @@ export function Contact() {
     }
   };
 
+  const ctaRow = [
+    { label: "Request Pilot", href: primaryCta.href },
+    { label: "See Cases", href: "/cases" },
+    { label: "Expertise", href: "/expertise" },
+    { label: "Company", href: "/company" },
+  ];
+
   return (
     <section id="contact" className="section-band">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -141,12 +147,24 @@ export function Contact() {
             <div className="relative z-[1] grid lg:grid-cols-2">
             <div className="relative bg-bg-elevated p-10 lg:p-14">
               <p className="section-label">{contactPage.label}</p>
-              <h2 className="section-title">
+              <h1 className="section-title">
                 {contactPage.titleLead}
                 <AccentWord tone="red">{contactPage.accentWord}</AccentWord>?
-              </h2>
+              </h1>
               <p className="section-description">{contactPage.description}</p>
               <p className="mt-3 text-sm text-muted">{contactPage.subline}</p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {ctaRow.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-orange hover:text-orange"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
 
               <div className="mt-10 space-y-4 text-sm">
                 <div>
@@ -161,27 +179,29 @@ export function Contact() {
                 </div>
                 <div>
                   <div className="text-muted stat-label">LinkedIn</div>
-                  {linkedIn ? (
-                    <a
-                      href={linkedIn.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-fg hover:text-orange"
-                    >
-                      linkedin.com/company/upraiser
-                    </a>
-                  ) : null}
+                  <a
+                    href="https://www.linkedin.com/company/upraiser/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-fg hover:text-orange"
+                  >
+                    linkedin.com/company/upraiser
+                  </a>
                 </div>
 
-                <p className="border-t border-border pt-4 text-sm text-muted">
-                  OEM / Lenovo →{" "}
-                  <Link
-                    to="/solutions?pillar=oem#help-with"
-                    className="font-semibold text-fg underline-offset-4 hover:underline"
-                  >
-                    Solutions · OEM
-                  </Link>
-                </p>
+                <div className="border-t border-border pt-4">
+                  <div className="text-muted stat-label">{lenovoPartnership.badge}</div>
+                  <LenovoPartnershipLogo className="mt-2 h-8 w-auto sm:h-9" />
+                  <p className="mt-3 text-sm text-muted">
+                    OEM / Lenovo →{" "}
+                    <Link
+                      to="/expertise?pillar=oem#help-with"
+                      className="font-semibold text-fg underline-offset-4 hover:underline"
+                    >
+                      Solutions · OEM
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -274,33 +294,6 @@ export function Contact() {
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                     />
                   </ContactFormField>
-
-                  <div>
-                    <label className="flex cursor-pointer items-start gap-3 text-sm text-muted-light">
-                      <input
-                        type="checkbox"
-                        checked={privacyAccepted}
-                        onChange={(e) => {
-                          setPrivacyAccepted(e.target.checked);
-                          if (e.target.checked && errors.privacyAccepted) {
-                            setErrors((prev) => ({ ...prev, privacyAccepted: undefined }));
-                          }
-                        }}
-                        disabled={status === "loading"}
-                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-orange"
-                      />
-                      <span>
-                        I have read and agree to the{" "}
-                        <Link to="/privacy" className="font-semibold text-orange hover:text-orange-light">
-                          Privacy Policy
-                        </Link>
-                        .
-                      </span>
-                    </label>
-                    {errors.privacyAccepted && (
-                      <p className="mt-1 text-xs text-red-400">{errors.privacyAccepted}</p>
-                    )}
-                  </div>
 
                   <Magnetic className="w-full">
                     <button

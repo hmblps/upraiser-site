@@ -1,251 +1,74 @@
-.hero-cursor-light-active {
-  --hero-light-x: 56%;
-  --hero-light-y: 66%;
+/* Hero atmosphere — CSS sky under transparent R3F canvas */
+.hero-atmosphere {
+  position: absolute;
+  inset: 0;
 }
 
-.hero-atmosphere-light.hero-cursor-light-active {
-  --hero-light-x: 70%;
-  --hero-light-y: 34%;
-}
-
-.hero-atmosphere-layer-stack {
+.hero-atmosphere__sky {
   position: absolute;
   inset: 0;
   z-index: 1;
+  background: var(--theme-bg);
 }
 
-.hero-atmosphere-video-shell {
-  transition:
-    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.hero-atmosphere-overlays {
-  z-index: 1;
-  pointer-events: none;
-}
-
-.hero-dark-mountains-layer {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-.hero-mountains-layer {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-.hero-light-mountains-base {
-  position: absolute;
-  inset: 0;
-  opacity: 0.52;
-}
-
-.hero-light-mountains-base .hero-mountains-video.is-active {
-  filter: contrast(1.04) saturate(0.96) brightness(0.94);
-}
-
-.hero-atmosphere-spotlight.hero-atmosphere-light .hero-light-mountains-base {
-  opacity: 1;
-}
-
-.hero-atmosphere-spotlight.hero-atmosphere-light .hero-light-mountains-base .hero-mountains-video.is-active {
-  filter: contrast(1.16) saturate(1.12) brightness(1.06);
-}
-
-.hero-atmosphere-spotlight.hero-atmosphere-light .hero-mountains-warmwash {
-  -webkit-mask-image: radial-gradient(
-    ellipse min(44vw, 500px) min(34vw, 380px) at var(--hero-light-x) var(--hero-light-y),
-    transparent 0%,
-    rgb(0 0 0 / 0.38) 38%,
-    #000 72%
-  );
-  mask-image: radial-gradient(
-    ellipse min(44vw, 500px) min(34vw, 380px) at var(--hero-light-x) var(--hero-light-y),
-    transparent 0%,
-    rgb(0 0 0 / 0.38) 38%,
-    #000 72%
-  );
-}
-
-.hero-dark-mountains-base {
-  position: absolute;
-  inset: 0;
-  opacity: 0.42;
-}
-
-.hero-dark-mountains-base .hero-mountains-video.is-active {
-  filter: contrast(1.1) saturate(0.78) brightness(0.68);
-}
-
-.hero-atmosphere-spotlight.hero-atmosphere-dark .hero-dark-mountains-base {
-  opacity: 1;
-}
-
-.hero-atmosphere-spotlight.hero-atmosphere-dark .hero-dark-mountains-base .hero-mountains-video.is-active {
-  filter: contrast(1.04) saturate(0.88) brightness(1.06);
-}
-
-/* Single decode: bright video + dim wash punched out at cursor */
-.hero-video-dim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.hero-video-dim--light {
-  background: rgb(255 255 255 / 42%);
-  -webkit-mask-image: radial-gradient(
-    ellipse min(42vw, 480px) min(32vw, 360px) at var(--hero-light-x) var(--hero-light-y),
-    transparent 0%,
-    rgb(0 0 0 / 0.14) 34%,
-    rgb(0 0 0 / 0.72) 58%,
-    #000 100%
-  );
-  mask-image: radial-gradient(
-    ellipse min(42vw, 480px) min(32vw, 360px) at var(--hero-light-x) var(--hero-light-y),
-    transparent 0%,
-    rgb(0 0 0 / 0.14) 34%,
-    rgb(0 0 0 / 0.72) 58%,
-    #000 100%
-  );
-}
-
-.hero-video-dim--dark {
-  background: rgb(6 8 14 / 58%);
-  -webkit-mask-image: radial-gradient(
-    ellipse min(40vw, 480px) min(32vw, 360px) at var(--hero-light-x) var(--hero-light-y),
-    transparent 0%,
-    rgb(0 0 0 / 0.04) 24%,
-    rgb(0 0 0 / 0.42) 52%,
-    rgb(0 0 0 / 0.72) 68%,
-    #000 100%
-  );
-  mask-image: radial-gradient(
-    ellipse min(40vw, 480px) min(32vw, 360px) at var(--hero-light-x) var(--hero-light-y),
-    transparent 0%,
-    rgb(0 0 0 / 0.04) 24%,
-    rgb(0 0 0 / 0.42) 52%,
-    rgb(0 0 0 / 0.72) 68%,
-    #000 100%
-  );
-}
-
-/* Dark hero: keep upper-right snow dim (stat cards zone) */
-.hero-video-dim--dark-corner-lock {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: rgb(6 8 14 / 52%);
-  -webkit-mask-image: radial-gradient(
-    ellipse min(50vw, 540px) min(38vh, 400px) at 100% 0%,
-    #000 0%,
-    rgb(0 0 0 / 0.72) 48%,
-    transparent 76%
-  );
-  mask-image: radial-gradient(
-    ellipse min(50vw, 540px) min(38vh, 400px) at 100% 0%,
-    #000 0%,
-    rgb(0 0 0 / 0.72) 48%,
-    transparent 76%
-  );
-}
-
-/* Mobile / coarse pointer: один video, статичный grade, без mask + cursor rAF */
-@media (max-width: 767px), (pointer: coarse) {
-  .hero-atmosphere-mobile-lite .hero-dark-mountains-base {
-    opacity: 0.38;
-  }
-
-  .hero-atmosphere-mobile-lite .hero-dark-mountains-base .hero-mountains-video.is-active {
-    filter: contrast(1.08) saturate(0.86) brightness(0.8);
-  }
-
-  .hero-atmosphere-mobile-lite .hero-light-mountains-base {
-    opacity: 0.46;
-  }
-
-  .hero-atmosphere-mobile-lite .hero-light-mountains-base .hero-mountains-video.is-active {
-    filter: contrast(1.04) saturate(1.05) brightness(0.96);
-  }
-}
-
-.hero-dark-mountains-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+.hero-atmosphere--light .hero-atmosphere__sky {
   background:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      color-mix(in srgb, var(--theme-bg) 35%, transparent) 12%,
-      transparent 40%
-    ),
-    linear-gradient(
-      to top,
-      var(--theme-bg) 0%,
-      color-mix(in srgb, var(--theme-bg) 88%, transparent) 18%,
-      color-mix(in srgb, var(--theme-bg) 40%, transparent) 38%,
-      transparent 58%
-    ),
-    linear-gradient(
-      108deg,
-      color-mix(in srgb, var(--theme-bg) 90%, transparent) 0%,
-      color-mix(in srgb, var(--theme-bg) 45%, transparent) 28%,
-      transparent 52%
-    );
+    radial-gradient(ellipse 90% 55% at 50% 16%, color-mix(in srgb, #f8c800 14%, #fff8ec) 0%, transparent 58%),
+    linear-gradient(180deg, #f3eee6 0%, #efe8dc 42%, #ffffff 100%);
 }
 
-.hero-bottom-fade-bridge {
-  z-index: 3;
-  height: 8rem;
-  background: linear-gradient(
-    to top,
-    var(--theme-bg) 0%,
-    color-mix(in srgb, var(--theme-bg) 92%, transparent) 42%,
-    transparent 100%
-  );
+.hero-atmosphere--dark .hero-atmosphere__sky {
+  background:
+    radial-gradient(ellipse 80% 48% at 50% 12%, #16120e 0%, transparent 55%),
+    radial-gradient(ellipse 70% 40% at 68% 26%, color-mix(in srgb, #ffcc00 8%, transparent) 0%, transparent 50%),
+    linear-gradient(180deg, #050504 0%, #0a0a0a 48%, #0c0b0a 100%);
 }
 
-[data-theme="dark"] .hero-bottom-fade-bridge {
-  height: 9rem;
-  background: linear-gradient(
-    to top,
-    var(--theme-bg) 0%,
-    color-mix(in srgb, var(--theme-bg) 94%, transparent) 46%,
-    transparent 100%
-  );
+.hero-atmosphere--mobile .hero-atmosphere__sky {
+  /* Flat brand sky when WebGL is off */
+  opacity: 1;
 }
 
-.hero-copy-wash {
+.hero-terrain-shell,
+.hero-terrain-root {
   position: absolute;
   inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  border-radius: 1.25rem;
+  width: 100%;
+  height: 100%;
 }
 
-[data-theme="light"] .hero-copy-wash {
-  background: radial-gradient(
-    115% 85% at 18% 42%,
-    rgb(255 255 255 / 52%) 0%,
-    rgb(255 255 255 / 18%) 42%,
-    transparent 72%
-  );
+.hero-terrain-canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
-[data-theme="dark"] .hero-copy-wash {
-  background: linear-gradient(
-    to right,
-    rgb(8 8 10 / 62%) 0%,
-    rgb(8 8 10 / 28%) 26%,
-    rgb(8 8 10 / 8%) 40%,
-    transparent 50%
-  );
+/* Lenis fly-through runway: sticky viewport, tall scroll track */
+.hero-stage--fly {
+  position: relative;
+  height: 100%;
+  min-height: 100dvh;
+}
+
+.hero-fly-sticky {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+}
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .hero-stage--fly {
+    /* ~4–5s sticky runway — time to read the drone ascent */
+    height: 480vh;
+    min-height: 480vh;
+  }
+
+  .hero-fly-sticky {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+  }
 }
 
 .hero-lede {
@@ -368,70 +191,6 @@
 #audience.section-band > * {
   position: relative;
   z-index: 1;
-}
-
-.hero-mountains-media {
-  position: absolute;
-  inset: 0;
-  opacity: 0.3;
-}
-
-.hero-mountains-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 58%;
-  opacity: 0;
-  transform: scale(1);
-  transition: opacity 1.5s ease-in-out;
-  will-change: opacity;
-}
-
-.hero-mountains-video.is-active {
-  opacity: 1;
-  filter: contrast(1.04) saturate(1.02);
-}
-
-.hero-mountains-warmwash {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    radial-gradient(
-      ellipse 70% 55% at 70% 55%,
-      color-mix(in srgb, var(--theme-accent-light) 14%, transparent) 0%,
-      transparent 65%
-    ),
-    color-mix(in srgb, var(--theme-bg) 28%, transparent);
-  mix-blend-mode: soft-light;
-}
-
-.hero-mountains-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background:
-    linear-gradient(
-      to bottom,
-      var(--theme-bg) 0%,
-      color-mix(in srgb, var(--theme-bg) 82%, transparent) 22%,
-      transparent 52%
-    ),
-    linear-gradient(
-      to top,
-      var(--theme-bg) 0%,
-      color-mix(in srgb, var(--theme-bg) 78%, transparent) 16%,
-      color-mix(in srgb, var(--theme-bg) 35%, transparent) 36%,
-      transparent 52%
-    ),
-    linear-gradient(
-      105deg,
-      color-mix(in srgb, var(--theme-bg) 88%, transparent) 0%,
-      color-mix(in srgb, var(--theme-bg) 40%, transparent) 30%,
-      transparent 48%
-    );
 }
 
 .apple-preview-panel {
