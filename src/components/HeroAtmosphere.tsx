@@ -27,7 +27,7 @@ function useDesktopHero() {
 /**
  * CSS sky paints immediately; WebGL mounts after idle.
  * Dark: NightStars inside HeroTerrainCanvas (same depth pass as ridges).
- * Light: BrandHazeSky + ScrollBeams inside the canvas (cream haze, no FX CSS layer).
+ * Light: BrandHazeSky + ScrollBeams inside the canvas (cool white haze).
  */
 export function HeroAtmosphere() {
   const { theme } = useTheme();

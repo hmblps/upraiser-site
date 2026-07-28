@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
+import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { DRACO_PATH, MODEL_URL } from "../../lib/heroModel";
+import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "../../lib/heroModel";
 import { Scene } from "./Scene";
 import { HERO_ASCENT_DEFAULTS, type ScrollState } from "./shared";
 
@@ -13,7 +14,7 @@ type HeroTerrainCanvasProps = {
   className?: string;
 };
 
-/** Brand-warm Everest wireframe — drone ascent + sun arc on Lenis sticky runway. */
+/** Brand-warm Everest — dark wire / light photo maps + drone ascent. */
 export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   const { theme } = useTheme();
   const reduced = useReducedMotion();
@@ -44,6 +45,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   useEffect(() => {
     if (reduced) return;
     void useGLTF.preload(MODEL_URL, DRACO_PATH);
+    void useGLTF.preload(MODEL_URL_LIGHT, DRACO_PATH);
   }, [reduced]);
 
   useEffect(() => {
@@ -73,19 +75,22 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
       <Canvas
         key={theme}
         className="hero-terrain-canvas"
-        dpr={1}
+        dpr={isLight ? [1, 1.75] : 1}
         frameloop={inView ? "always" : "never"}
         gl={{
-          antialias: false,
+          antialias: isLight,
           alpha: false,
           powerPreference: "high-performance",
           stencil: false,
           depth: true,
         }}
         camera={{ position: [cx, cy, cz], fov: path.startFov, near: 0.5, far: 900 }}
-        style={{ width: "100%", height: "100%", display: "block", background: isLight ? "#f2ebe0" : "#050504" }}
+        style={{ width: "100%", height: "100%", display: "block", background: isLight ? "#ffffff" : "#050504" }}
         onCreated={({ gl }) => {
-          if (isLight) gl.setClearColor(0xf2ebe0, 1);
+          gl.toneMapping = ACESFilmicToneMapping;
+          gl.toneMappingExposure = isLight ? 1.0 : 1;
+          gl.outputColorSpace = SRGBColorSpace;
+          if (isLight) gl.setClearColor(0xffffff, 1);
           else gl.setClearColor(0x050504, 1);
         }}
       >

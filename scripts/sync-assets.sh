@@ -16,8 +16,9 @@ copy() {
   cp "$src" "$dest"
 }
 
-# Live Hero 3D model
+# Live Hero 3D model (dark wire + light photo). Bird is a procedural halo silhouette — no GLB.
 copy "assets/hero/everest.glb" "public/hero/everest.glb"
+copy "assets/hero/everest-light.glb" "public/hero/everest-light.glb"
 
 # Brand / legal / maps
 copy "assets/brand/upraiser-logo.png" "public/upraiser-logo.png"

@@ -6,10 +6,12 @@ cd "$ROOT"
 
 REQUIRED=(
   "assets/hero/everest.glb"
+  "assets/hero/everest-light.glb"
   "assets/brand/upraiser-logo.png"
   "assets/brand/favicon.png"
   "assets/brand/og-image.png"
   "public/hero/everest.glb"
+  "public/hero/everest-light.glb"
   "public/draco/gltf/draco_decoder.wasm"
   "public/draco/gltf/draco_wasm_wrapper.js"
   "public/fonts/inter-latin-600.woff2"
@@ -41,6 +43,7 @@ if ((${#missing[@]} > 0)); then
   echo
   echo "Deploy media: source in assets/, synced to public/ before build."
   echo "Hero 3D: assets/hero/everest.glb → public/hero/everest.glb"
+  echo "Hero 3D light: assets/hero/everest-light.glb → public/hero/everest-light.glb"
   exit 1
 fi
 

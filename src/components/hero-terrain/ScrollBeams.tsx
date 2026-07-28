@@ -74,7 +74,7 @@ export function ScrollBeams() {
     <group>
       <SpotLight
         ref={aRef}
-        color="#f0c56a"
+        color="#b8d0ff"
         intensity={3.6}
         distance={260}
         angle={0.32}
@@ -82,22 +82,22 @@ export function ScrollBeams() {
         decay={1.35}
         castShadow={false}
         volumetric
-        opacity={0.42}
+        opacity={0.38}
         attenuation={90}
         anglePower={2.4}
         position={[-40, 40, 160]}
       />
       <SpotLight
         ref={bRef}
-        color="#ffe9c2"
-        intensity={2.4}
+        color="#ffe6c8"
+        intensity={2.2}
         distance={230}
         angle={0.28}
         penumbra={0.65}
         decay={1.4}
         castShadow={false}
         volumetric
-        opacity={0.28}
+        opacity={0.26}
         attenuation={75}
         anglePower={2.8}
         position={[40, 36, 155]}

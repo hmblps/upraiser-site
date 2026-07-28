@@ -72,7 +72,6 @@ export function LenovoTrustStrip() {
             </div>
           </motion.div>
           <LenovoPartnershipCopy
-            variant="strip"
             className="w-full max-w-xl sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl"
           />
         </div>

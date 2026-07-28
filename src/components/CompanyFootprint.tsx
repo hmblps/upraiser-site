@@ -23,7 +23,7 @@ type CompanyFootprintProps = {
 
 /**
  * Footprint — Aceternity WorldMap as the widget; copy stays thin.
- * Arc color follows theme (ink-gold on cream, bright gold on dark).
+ * Arc color follows theme (ink-gold on white, bright gold on dark).
  */
 export function CompanyFootprint({ embedded = false }: CompanyFootprintProps) {
   const { footprint } = COMPANY_CONTENT;

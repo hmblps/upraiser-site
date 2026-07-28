@@ -12,10 +12,12 @@
 }
 
 .hero-atmosphere--light .hero-atmosphere__sky {
-  /* Matches --theme-bg cream + BrandHazeSky wash */
+  /* Cool white paper + soft prismatic sun wash (reads on white) */
   background:
-    radial-gradient(ellipse 85% 50% at 30% 16%, rgba(242, 200, 110, 0.2), transparent 58%),
-    linear-gradient(180deg, #fffaf4 0%, #f6edd8 55%, #efe0c4 100%);
+    radial-gradient(ellipse 70% 42% at 58% 28%, rgba(168, 200, 255, 0.22), transparent 55%),
+    radial-gradient(ellipse 55% 36% at 62% 32%, rgba(255, 196, 140, 0.14), transparent 50%),
+    radial-gradient(ellipse 40% 28% at 64% 30%, rgba(196, 160, 255, 0.1), transparent 48%),
+    linear-gradient(180deg, #ffffff 0%, #f4f6f9 58%, #e8ecf2 100%);
 }
 
 .hero-atmosphere--dark .hero-atmosphere__sky {
@@ -165,7 +167,7 @@
   will-change: transform, opacity;
 }
 
-/* Light: gold-on-cream washes out over the wire — use red ink like the ghost stats */
+/* Light: gold-on-white washes out over the wire — use red ink like the ghost stats */
 [data-theme="light"] .hero-fly-label {
   color: var(--theme-accent-secondary);
 }

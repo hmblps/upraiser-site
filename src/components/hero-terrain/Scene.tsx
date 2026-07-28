@@ -1,6 +1,7 @@
 import { Suspense, useEffect, type MutableRefObject } from "react";
 import { Everest } from "../Everest";
 import { Atmosphere, HorizonGlow, SunRig } from "./Atmosphere";
+import { AscentBird } from "./AscentBird";
 import { AscentHalo } from "./AscentHalo";
 import { BrandHazeSky } from "./BrandHazeSky";
 import { HeroCamera } from "./HeroCamera";
@@ -43,6 +44,7 @@ export function Scene({
         <Everest theme={theme} castShadow={false} receiveShadow={false} />
         <SceneReady onReady={onModelReady} />
       </Suspense>
+      {isLight ? <AscentBird /> : null}
     </>
   );
 }

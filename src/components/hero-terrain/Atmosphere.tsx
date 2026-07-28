@@ -26,16 +26,21 @@ export function Atmosphere({ theme }: { theme: ThemeMode }) {
   return (
     <>
       <fog attach="fog" args={[fog.color, fog.nearStart, fog.farStart]} />
-      <ambientLight intensity={isLight ? 0.78 : 0.26} />
+      {/* Light: keep fill low so photo maps + key/rim can sculpt volume (was washing to clay). */}
+      <ambientLight intensity={isLight ? 0.22 : 0.26} />
       <hemisphereLight
         args={[
-          isLight ? "#fffaf0" : "#241d11",
-          isLight ? "#e8dcc8" : "#0a0805",
-          isLight ? 0.72 : 0.3,
+          isLight ? "#f4f7fb" : "#241d11",
+          isLight ? "#c8d0dc" : "#0a0805",
+          isLight ? 0.26 : 0.3,
         ]}
       />
       {isLight ? (
-        <directionalLight color="#fff6e8" intensity={0.55} position={[-28, 48, 56]} />
+        <>
+          {/* Camera-side fill — cooler alpine daylight, keep photo contrast */}
+          <directionalLight color="#f2f6ff" intensity={1.05} position={[-36, 52, 78]} />
+          <directionalLight color="#dce8ff" intensity={0.35} position={[48, 28, 42]} />
+        </>
       ) : null}
     </>
   );
@@ -47,32 +52,33 @@ export function HorizonGlow({ theme }: { theme: ThemeMode }) {
   const glowRef = useRef<PointLight>(null);
   const progressSmooth = useRef(0);
   const isLight = theme === "light";
-  const accent = isLight ? "#f8c800" : "#a8842e";
+  const accent = isLight ? "#c8dcff" : "#a8842e";
 
   useFrame((_, delta) => {
     progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
     const elev = isLight ? easeOutCubic(progressSmooth.current) : 0.5;
     if (rimRef.current) {
-      rimRef.current.intensity = MathUtils.lerp(isLight ? 0.38 : 0.08, isLight ? 0.55 : 0.14, elev);
+      rimRef.current.intensity = MathUtils.lerp(isLight ? 0.55 : 0.08, isLight ? 0.85 : 0.14, elev);
     }
     if (glowRef.current) {
-      glowRef.current.intensity = MathUtils.lerp(0.55, 0.85, elev);
+      glowRef.current.intensity = MathUtils.lerp(0.35, 0.55, elev);
     }
   });
 
   return (
     <group>
-      <directionalLight ref={rimRef} color={accent} intensity={0.35} position={[8, 22, -90]} />
+      {/* Soft backlight — enough rim, not a wash on photo albedo */}
+      <directionalLight ref={rimRef} color={accent} intensity={isLight ? 0.6 : 0.35} position={[8, 36, -90]} />
       {isLight ? (
-        <pointLight ref={glowRef} color={accent} intensity={0.45} distance={140} decay={2} position={[0, 14, -48]} />
+        <pointLight ref={glowRef} color="#ffe2b8" intensity={0.4} distance={140} decay={2} position={[0, 22, -48]} />
       ) : null}
     </group>
   );
 }
 
 const SUNRISE = {
-  keyDawn: new Color("#ffc878"),
-  keyNoon: new Color("#ffe8c2"),
+  keyDawn: new Color("#ffe0b8"),
+  keyNoon: new Color("#eef4ff"),
 } as const;
 
 export function SunRig({ theme }: { theme: ThemeMode }) {
@@ -100,7 +106,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
 
     if (keyLightRef.current) {
       keyLightRef.current.position.set(x, y, z);
-      keyLightRef.current.intensity = MathUtils.lerp(1.65, 2.05, rise);
+      keyLightRef.current.intensity = MathUtils.lerp(1.35, 1.75, rise);
       keyLightRef.current.color.lerpColors(SUNRISE.keyDawn, SUNRISE.keyNoon, rise);
     }
     if (targetRef.current) {
@@ -121,7 +127,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
   return (
     <group>
       <object3D ref={targetRef} position={[0, 14, 0]} />
-      <directionalLight ref={keyLightRef} color="#ffc878" intensity={1.65} position={[42, 28, -52]} />
+      <directionalLight ref={keyLightRef} color="#eef4ff" intensity={1.4} position={[42, 28, -52]} />
     </group>
   );
 }

@@ -18,10 +18,10 @@ export function BrandHazeSky() {
         depthWrite: false,
         fog: false,
         uniforms: {
-          uZenith: { value: new Color("#fffaf4") },
-          uMid: { value: new Color("#f6edd8") },
-          uHorizon: { value: new Color("#efe0c4") },
-          uGlow: { value: new Color("#f2c86e") },
+          uZenith: { value: new Color("#ffffff") },
+          uMid: { value: new Color("#f0f3f7") },
+          uHorizon: { value: new Color("#e4e9f0") },
+          uGlow: { value: new Color("#c8dcff") },
           uSunDir: { value: new Vector3(0.55, 0.48, -0.4).normalize() },
         },
         vertexShader: /* glsl */ `
@@ -46,8 +46,14 @@ export function BrandHazeSky() {
             col = mix(col, uZenith, smoothstep(0.22, 0.92, h));
             float sun = pow(max(dot(dir, uSunDir), 0.0), 5.5);
             float halo = pow(max(dot(dir, uSunDir), 0.0), 1.45);
-            col += uGlow * (sun * 0.48 + halo * 0.14);
-            col = mix(col, uZenith, 0.06);
+            // Cool core + faint warm/violet fringe so the aureole reads on white.
+            vec3 warm = vec3(1.0, 0.82, 0.62);
+            vec3 cool = uGlow;
+            vec3 violet = vec3(0.78, 0.72, 1.0);
+            vec3 prism = mix(cool, warm, sun);
+            prism = mix(prism, violet, halo * 0.35);
+            col += prism * (sun * 0.32 + halo * 0.12);
+            col = mix(col, uZenith, 0.05);
             gl_FragColor = vec4(col, 1.0);
           }
         `,

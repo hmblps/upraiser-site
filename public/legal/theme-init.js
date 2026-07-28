@@ -4,5 +4,5 @@
   document.documentElement.dataset.theme = theme;
   document.documentElement.style.colorScheme = theme;
   var meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", theme === "light" ? "#fffbf7" : "#0a0a0a");
+  if (meta) meta.setAttribute("content", theme === "light" ? "#ffffff" : "#0a0a0a");
 })();

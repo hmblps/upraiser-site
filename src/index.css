@@ -4,7 +4,7 @@
  * UPRAISER design tokens
  * ──────────────────────
  * Dual theme = dual narrative, one token grammar.
- * Light: warm cream paper (matches 3D hero haze #f2ebe0) — no cold slate.
+ * Light: clean white paper (high type contrast) — cooler alpine light + prismatic halo.
  * Dark: warm near-black charcoal.
  * Accents: logo gold (labels/metrics) · logo red (CTAs / secondary).
  */
@@ -88,14 +88,14 @@
   --logo-gold: #f8c800;
   --logo-red: #f80038;
 
-  /* Cream paper — same family as hero BrandHazeSky / fog */
-  --theme-bg: #f2ebe0;
-  --theme-bg-elevated: #f7f1e6;
-  --theme-bg-card: #faf6ef;
-  --theme-border: #e0d4c4;
-  --theme-fg: #1a1612;
-  --theme-muted: #6b6358;
-  --theme-muted-light: #857a6c;
+  /* White paper — cool grey elevates; hero sun is cooler / prismatic */
+  --theme-bg: #ffffff;
+  --theme-bg-elevated: #f3f4f6;
+  --theme-bg-card: #ffffff;
+  --theme-border: #e5e7eb;
+  --theme-fg: #121212;
+  --theme-muted: #52525b;
+  --theme-muted-light: #71717a;
 
   --theme-accent: var(--logo-gold);
   --theme-accent-light: #ffe14d;
@@ -103,10 +103,10 @@
   --theme-accent-secondary: var(--logo-red);
   --theme-accent-secondary-light: #ff4060;
   --theme-on-accent: #ffffff;
-  --theme-hero-glow: #f8c80022;
-  --theme-input-bg: #faf6ef;
-  --theme-case-panel: #faf6ef;
-  --theme-grain-opacity: 0.022;
+  --theme-hero-glow: #a8c8ff22;
+  --theme-input-bg: #f8f9fb;
+  --theme-case-panel: #f8f9fb;
+  --theme-grain-opacity: 0.016;
 
   --theme-card-hover-mid: var(--logo-gold);
   --theme-card-hover-gold: color-mix(in srgb, var(--theme-card-hover-mid) 38%, var(--theme-bg-card));

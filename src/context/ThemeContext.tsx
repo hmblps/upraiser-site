@@ -7,7 +7,7 @@ const SEEN_KEY = "upraiser-modes-seen";
 
 const THEME_COLORS: Record<Theme, string> = {
   dark: "#050504",
-  light: "#f2ebe0",
+  light: "#ffffff",
 };
 
 type SeenModes = { light: boolean; dark: boolean };

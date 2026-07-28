@@ -10,11 +10,11 @@ export const IDLE_BREATHE = (Math.PI * 2) / 7;
 
 /**
  * Fog arc: hazy establish → opens mid-flight → summit finale mist.
- * Light stays warm cream only (cool greys read as a dirty horizon seam).
+ * Light uses clean white so type contrast holds against the horizon.
  */
 export const FOG = {
   light: {
-    color: "#f2ebe0",
+    color: "#f4f6f9",
     nearStart: 130,
     farStart: 420,
     nearEnd: 160,

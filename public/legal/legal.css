@@ -13,12 +13,12 @@
 
 [data-theme="light"] {
   color-scheme: light;
-  --bg: #fffbf7;
-  --bg-elevated: #ffffff;
-  --border: #f0e4d8;
-  --fg: #141010;
-  --muted: #8a7268;
-  --muted-light: #6b5852;
+  --bg: #ffffff;
+  --bg-elevated: #f4f5f7;
+  --border: #e6e8ec;
+  --fg: #121212;
+  --muted: #5a5a5a;
+  --muted-light: #737373;
   --accent: #e8a500;
   --accent-secondary: #e63558;
 }

@@ -759,7 +759,7 @@ body.custom-cursor-active label {
   margin-top: -3.5px;
   margin-left: -3.5px;
   border-radius: 9999px;
-  /* Cream paper: pale gold vanishes — use ink + gold ring */
+  /* White paper: pale gold vanishes — use ink + gold ring */
   background: var(--theme-fg);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-bg) 55%, transparent);
 }

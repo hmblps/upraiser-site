@@ -38,7 +38,7 @@ export function WorldMap({
   const mapSrc =
     theme === "dark" ? "/maps/world-dots-dark.svg" : "/maps/world-dots-light.svg";
   const pointColor = pulseColor ?? lineColor;
-  const fadeEdge = theme === "light" ? "#f2ebe0" : "#050504";
+  const fadeEdge = theme === "light" ? "#ffffff" : "#050504";
 
   const projectPoint = (lat: number, lng: number) => {
     const x = (lng + 180) * (800 / 360);

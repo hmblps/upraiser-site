@@ -16,14 +16,14 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
-const src = path.join(root, "assets/hero/everest.src.glb");
+const src = path.join(root, "assets/hero/everest.mt-everest.src.glb");
 const outPublic = path.join(root, "public/hero/everest.glb");
 const outAssets = path.join(root, "assets/hero/everest.glb");
 
 async function main() {
   if (!fs.existsSync(src)) {
     console.error("Missing source:", src);
-    console.error("Place the full Sketchfab export at assets/hero/everest.src.glb first.");
+    console.error("Place the Sketchfab Mt. Everest download at assets/hero/everest.mt-everest.src.glb first.");
     process.exit(1);
   }
 
