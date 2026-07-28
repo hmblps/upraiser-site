@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
-import { MODEL_URL, MODEL_URL_LIGHT } from "../lib/heroModel";
+import { MODEL_URL, MODEL_URL_LIGHT, VOYAGER_URL } from "../lib/heroModel";
 
 const HeroTerrainCanvas = lazy(() =>
   import("./HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas })),
@@ -60,6 +60,7 @@ export function HeroAtmosphere() {
 
     const darkPrefetch = prefetchHeroGlb(MODEL_URL);
     const lightPrefetch = prefetchHeroGlb(MODEL_URL_LIGHT);
+    const voyagerPrefetch = !isLight ? prefetchHeroGlb(`${VOYAGER_URL}?v=tex6`) : null;
 
     if (typeof window.requestIdleCallback === "function") {
       const id = window.requestIdleCallback(boot, { timeout: 900 });
@@ -68,6 +69,7 @@ export function HeroAtmosphere() {
         window.cancelIdleCallback(id);
         darkPrefetch.remove();
         lightPrefetch.remove();
+        voyagerPrefetch?.remove();
       };
     }
 
@@ -77,8 +79,9 @@ export function HeroAtmosphere() {
       window.clearTimeout(t);
       darkPrefetch.remove();
       lightPrefetch.remove();
+      voyagerPrefetch?.remove();
     };
-  }, [use3d]);
+  }, [use3d, isLight]);
 
   return (
     <div

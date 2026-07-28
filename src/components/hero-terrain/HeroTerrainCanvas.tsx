@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "../../lib/heroModel";
+import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, VOYAGER_URL } from "../../lib/heroModel";
 import { Scene } from "./Scene";
 import { HERO_ASCENT_DEFAULTS, type ScrollState, type ThemeMode } from "./shared";
 
@@ -67,6 +67,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
     if (reduced) return;
     void useGLTF.preload(MODEL_URL, DRACO_PATH);
     void useGLTF.preload(MODEL_URL_LIGHT, DRACO_PATH);
+    void useGLTF.preload(`${VOYAGER_URL}?v=tex6`);
   }, [reduced]);
 
   useEffect(() => {

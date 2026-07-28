@@ -4,6 +4,7 @@ import { Atmosphere, HorizonGlow, SunRig } from "./Atmosphere";
 import { AscentBird } from "./AscentBird";
 import { AscentHalo } from "./AscentHalo";
 import { BrandHazeSky } from "./BrandHazeSky";
+import { FloatingVoyager } from "./FloatingVoyager";
 import { HeroCamera } from "./HeroCamera";
 import { NightStars } from "./NightStars";
 import { ScrollBeams } from "./ScrollBeams";
@@ -42,10 +43,14 @@ export function Scene({
       {isLight ? <BrandHazeSky /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={false} receiveShadow={false} />
-        {/* Remount per theme so onReady fires even when the GLB is already cached */}
         <SceneReady key={theme} onReady={onModelReady} />
       </Suspense>
       {isLight ? <AscentBird /> : null}
+      {!isLight ? (
+        <Suspense fallback={null}>
+          <FloatingVoyager />
+        </Suspense>
+      ) : null}
     </>
   );
 }
