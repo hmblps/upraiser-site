@@ -230,6 +230,33 @@
   justify-content: flex-start;
 }
 
+/* Fly hero — brand block hugs the left edge of the viewport square, not the centered page rail */
+.hero-content--fly-rail.page-container {
+  max-width: none;
+  margin-inline: 0;
+  width: 100%;
+  padding-left: var(--hero-rail-left);
+  padding-right: var(--page-gutter);
+}
+
+.hero-content--fly-rail .hero-layout {
+  width: 100%;
+}
+
+.hero-content--fly-rail .hero-copy {
+  justify-self: start;
+  align-self: start;
+  width: max-content;
+  max-width: min(36rem, calc(52vw - var(--hero-rail-left)));
+  padding-top: clamp(0.35rem, 1vh, 0.85rem);
+  text-align: left;
+}
+
+.hero-content--fly-rail .hero-title--hero {
+  margin: 0;
+  text-align: left;
+}
+
 .hero-layout {
   align-items: start;
   width: 100%;
@@ -240,6 +267,7 @@
   /* Drop below the nav so it reads as part of the sky, not the header */
   max-width: min(34rem, 46vw);
   padding-top: clamp(1.75rem, 5.5vh, 3.75rem);
+  text-align: left;
 }
 
 .hero-title--hero {

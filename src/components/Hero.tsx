@@ -111,7 +111,7 @@ function HeroPinnedScene() {
       <div className="hero-fly-sticky relative flex flex-col overflow-hidden">
         <HeroAtmosphere />
 
-        <div className="hero-content page-container relative z-10 w-full flex-1">
+        <div className="hero-content hero-content--fly-rail page-container relative z-10 w-full flex-1">
           <div className="hero-layout grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10 xl:gap-14">
             <motion.div
               className="hero-copy"

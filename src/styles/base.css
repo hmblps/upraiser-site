@@ -17,6 +17,8 @@ html {
   --scroll-sticky-top: calc(var(--site-header-height) + 1.25rem);
   --scroll-margin-section: calc(var(--site-header-height) + 1.5rem);
   --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  /** Hero + header — left inset inside the hero square (right rail stays on --page-gutter) */
+  --hero-rail-left: clamp(1.75rem, 5vw, 3rem);
   --content-max: 80rem; /* aligns with prior max-w-7xl rail */
   --content-max-narrow: 40rem;
   --content-max-copy: 36rem;
