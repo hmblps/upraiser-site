@@ -54,7 +54,6 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
   const progressRef = useRef(0);
   const [revealedCount, setRevealedCount] = useState(0);
   const stageRef = useRef<HTMLElement | null>(null);
-  const rafRef = useRef(0);
   const lastRevealedRef = useRef(-1);
 
   useEffect(() => {
@@ -74,8 +73,14 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
       progressRef.current = next;
       stage.dataset.heroFly = next.toFixed(3);
 
-      // Soft handoff: last 10% eases the pin out gently (small drift, light fade).
-      const exit = clamp((next - 0.9) / 0.1, 0, 1);
+      // Lenovo dock: settle flush on the sticky bottom before soft exit.
+      const lenovoIn = smoothstep(next, 0.7, 0.86);
+      stage.style.setProperty("--hero-lenovo-opacity", lenovoIn.toFixed(4));
+      stage.style.setProperty("--hero-lenovo-y", ((1 - lenovoIn) * 108).toFixed(2));
+      stage.dataset.lenovoDock = lenovoIn > 0.55 ? "1" : "0";
+
+      // Soft handoff: only the last ~5% — after Lenovo is fully docked.
+      const exit = clamp((next - 0.95) / 0.05, 0, 1);
       const exitEase = exit * exit * (3 - 2 * exit); // smoothstep
       stage.style.setProperty("--hero-exit", exitEase.toFixed(4));
 
@@ -98,16 +103,13 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    const unsubscribe = registerScrollListener((scrollY) => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => publish(scrollY));
-    });
+    // Publish in the same turn as Lenis scroll notify — no deferred rAF lag vs R3F.
+    const unsubscribe = registerScrollListener(publish);
 
     publish(window.scrollY);
 
     return () => {
       unsubscribe();
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [registerScrollListener]);
 

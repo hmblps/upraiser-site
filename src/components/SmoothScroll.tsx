@@ -142,10 +142,10 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 0.92,
-      lerp: 0.14,
+      // Single pacing knob — dual duration+lerp made wheel vs trackpad feel torn.
+      lerp: 0.12,
       smoothWheel: true,
-      wheelMultiplier: 0.9,
+      wheelMultiplier: 1,
       touchMultiplier: 1,
       allowNestedScroll: true,
     });

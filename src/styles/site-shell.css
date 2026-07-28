@@ -6,16 +6,6 @@
   z-index: 30;
 }
 
-/* Partnership strip — pops over sticky hero (above SiteGrain) */
-.lenovo-trust-strip {
-  background-color: color-mix(in srgb, var(--theme-bg-card) 95%, transparent);
-}
-
-.lenovo-trust-strip--revealed {
-  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
-  box-shadow: 0 -12px 40px color-mix(in srgb, var(--theme-fg) 6%, transparent);
-}
-
 .site-grain svg {
   display: block;
 }

@@ -198,9 +198,9 @@
 .hero-stat-ghost__label {
   min-height: 2.4em;
   margin-top: 0.4rem;
-  font-size: 0.625rem;
+  font-size: var(--text-micro);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   line-height: 1.35;
   color: color-mix(in srgb, var(--theme-muted) 88%, var(--theme-fg) 12%);
@@ -375,26 +375,20 @@ header nav .nav-link:focus-visible::after {
 .section-description {
   margin-top: 1rem;
   max-width: 36rem;
-  font-size: 0.9375rem;
-  line-height: 1.55;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   color: var(--theme-muted-light);
 }
 
 .section-lead {
   max-width: 42rem;
-  font-size: 1.25rem;
+  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.5rem);
   font-weight: 600;
-  line-height: 1.35;
-}
-
-@media (min-width: 640px) {
-  .section-lead {
-    font-size: 1.5rem;
-  }
+  line-height: var(--leading-snug);
 }
 
 .copy {
-  font-size: 0.875rem;
+  font-size: var(--text-body);
   line-height: 1.625;
   color: var(--theme-muted-light);
 }

@@ -42,7 +42,8 @@ export function Scene({
       {isLight ? <BrandHazeSky /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={false} receiveShadow={false} />
-        <SceneReady onReady={onModelReady} />
+        {/* Remount per theme so onReady fires even when the GLB is already cached */}
+        <SceneReady key={theme} onReady={onModelReady} />
       </Suspense>
       {isLight ? <AscentBird /> : null}
     </>

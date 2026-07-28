@@ -52,11 +52,39 @@
 }
 
 .fold-chart-ghost-label {
-  font-size: 0.625rem;
+  font-size: var(--text-micro);
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: color-mix(in srgb, var(--theme-muted) 75%, transparent);
+}
+
+@keyframes fold-ghost-float {
+  0%,
+  100% {
+    opacity: calc(var(--ghost-peak, 0.58) * 0.55);
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: var(--ghost-peak, 0.58);
+    transform: translate3d(var(--ghost-drift, 0px), calc(var(--ghost-travel, 160px) * -0.12), 0);
+  }
+}
+
+.fold-chart-ghost--float {
+  animation: fold-ghost-float var(--ghost-duration, 7s) ease-in-out var(--ghost-delay, 0s) infinite;
+}
+
+/* Tablet: left-lane ghosts sit under full-width fold copy — keep the right half only */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .fold-chart-ghosts {
+    clip-path: inset(0 0 0 50%);
+    opacity: 0.78;
+  }
+
+  .accent-scroll-section--split-copy .fold-chart-ghosts {
+    clip-path: inset(0 0 0 44%);
+  }
 }
 
 [data-theme="dark"] .fold-chart-ghost-value {

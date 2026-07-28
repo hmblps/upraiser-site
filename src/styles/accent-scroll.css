@@ -38,17 +38,17 @@
 }
 
 .accent-scroll-section--lite {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 @media (min-width: 768px) {
   .accent-scroll-section--lite.scroll-scene--fold {
     /* Compact runway — fold completes in the first ~¼ of sticky travel */
-    min-height: 125vh;
+    min-height: 125dvh;
   }
 
   .accent-scroll-section--lite.scroll-scene--fold-compact {
-    min-height: 108vh;
+    min-height: 108dvh;
   }
 }
 
@@ -61,7 +61,7 @@
   top: auto;
   justify-content: flex-start;
   padding-block: 0;
-  min-height: calc(100vh - var(--scroll-sticky-top));
+  min-height: calc(100dvh - var(--scroll-sticky-top));
 }
 
 .accent-scroll-section--anchor:not(.accent-scroll-section--fold-pair) .accent-scroll-copy--lite {
@@ -214,24 +214,10 @@
   }
 }
 
-/* Band padding on fold sections — match production rhythm */
+/* Band padding on fold sections — share site rhythm tokens */
 main > section#audience.section-band--quiet,
 main > section#promise.section-band--quiet {
-  padding-block: 2.5rem;
-}
-
-@media (min-width: 768px) {
-  main > section#audience.section-band--quiet,
-  main > section#promise.section-band--quiet {
-    padding-block: 3.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  main > section#audience.section-band--quiet,
-  main > section#promise.section-band--quiet {
-    padding-block: 4.5rem;
-  }
+  padding-block: var(--section-y-dense);
 }
 
 @media (prefers-reduced-motion: reduce) {

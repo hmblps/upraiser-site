@@ -53,9 +53,7 @@ function usePreloadHome() {
 }
 
 /**
- * Home pitch — teasers + channel switcher (full inventory on /solutions).
- * Case stories on /cases; Lenovo OEM depth on /solutions?pillar=oem.
- * LenovoTrustStrip lives inside Hero (HeroFlyProvider) — do not remount here.
+ * Home pitch — hero fly (Lenovo docks flush at sticky bottom) → killer folds.
  */
 export function HomePage() {
   usePreloadHome();

@@ -1,18 +1,34 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "../../lib/heroModel";
 import { Scene } from "./Scene";
-import { HERO_ASCENT_DEFAULTS, type ScrollState } from "./shared";
+import { HERO_ASCENT_DEFAULTS, type ScrollState, type ThemeMode } from "./shared";
 
 export { HERO_ASCENT_DEFAULTS } from "./shared";
 
 type HeroTerrainCanvasProps = {
   className?: string;
 };
+
+/** Keep one WebGL context across themes — swap clear / exposure without remount. */
+function ThemeGlSync({ theme }: { theme: ThemeMode }) {
+  const { gl } = useThree();
+  const isLight = theme === "light";
+
+  useEffect(() => {
+    gl.toneMapping = ACESFilmicToneMapping;
+    gl.toneMappingExposure = isLight ? 1.0 : 1;
+    gl.outputColorSpace = SRGBColorSpace;
+    gl.setClearColor(isLight ? 0xffffff : 0x050504, 1);
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, isLight ? 1.75 : 1));
+  }, [gl, isLight]);
+
+  return null;
+}
 
 /** Brand-warm Everest — dark wire / light photo maps + drone ascent. */
 export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
@@ -24,6 +40,11 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
   const handleModelReady = useCallback(() => setModelReady(true), []);
+
+  // Veil until the *target* theme terrain reports ready (SceneReady remounts per theme).
+  useEffect(() => {
+    setModelReady(false);
+  }, [theme]);
 
   useEffect(() => {
     if (reduced) return;
@@ -72,13 +93,13 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
       className={`${className ?? ""} hero-terrain-fade${modelReady ? " is-ready" : ""}`}
       aria-hidden
     >
+      {/* One Canvas for both themes — remounting was the dirty/late mountain flash. */}
       <Canvas
-        key={theme}
         className="hero-terrain-canvas"
         dpr={isLight ? [1, 1.75] : 1}
         frameloop={inView ? "always" : "never"}
         gl={{
-          antialias: isLight,
+          antialias: true,
           alpha: false,
           powerPreference: "high-performance",
           stencil: false,
@@ -94,6 +115,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
           else gl.setClearColor(0x050504, 1);
         }}
       >
+        <ThemeGlSync theme={theme} />
         <Scene theme={theme} scrollRef={scrollRef} path={path} onModelReady={handleModelReady} />
       </Canvas>
     </div>

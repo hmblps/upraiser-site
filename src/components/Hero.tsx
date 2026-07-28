@@ -108,7 +108,7 @@ function HeroPinnedScene() {
 
   return (
     <section className="hero-stage hero-stage--terrain hero-stage--fly relative">
-      <div className="hero-fly-sticky relative flex flex-col overflow-hidden pb-10 lg:pb-14">
+      <div className="hero-fly-sticky relative flex flex-col overflow-hidden">
         <HeroAtmosphere />
 
         <div className="hero-content page-container relative z-10 w-full flex-1">
@@ -181,6 +181,7 @@ function HeroPinnedScene() {
           </div>
         </div>
 
+        {/* Flush to sticky bottom — same frame as the mountain, not a post-hero gap */}
         <LenovoTrustStrip />
       </div>
     </section>

@@ -114,9 +114,9 @@
     height: 100dvh;
     min-height: 100dvh;
     max-height: 100dvh;
-    /* Soft unpin: small lift + light fade so Audience isn't shoved into frame */
-    transform: translateY(calc(var(--hero-exit, 0) * -3.2vh));
-    opacity: calc(1 - var(--hero-exit, 0) * 0.22);
+    /* Soft unpin after Lenovo is docked — tiny lift only */
+    transform: translateY(calc(var(--hero-exit, 0) * -1.2vh));
+    opacity: calc(1 - var(--hero-exit, 0) * 0.12);
     will-change: transform, opacity;
   }
 }
@@ -131,20 +131,65 @@
 @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
   .hero-landing-pad {
     display: block;
-    /* Short buffer only — fold itself starts on viewport entry (anchor) */
+    /* Short buffer — Audience fold starts on viewport entry */
     height: clamp(12vh, 16vh, 20vh);
     background: var(--theme-bg);
   }
 }
 
-/* 3D scene fades in once the GLB has resolved — no pop-in on first load */
+/* Lenovo — flush dock on sticky hero bottom (vars from HeroFlyContext) */
+.hero-stage--fly {
+  --hero-lenovo-opacity: 0;
+  --hero-lenovo-y: 108;
+}
+
+.lenovo-hero-dock {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 22;
+  width: 100%;
+  opacity: var(--hero-lenovo-opacity, 0);
+  transform: translate3d(0, calc(var(--hero-lenovo-y, 108) * 1%), 0);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.lenovo-hero-dock .lenovo-trust-strip {
+  width: 100%;
+  background-color: color-mix(in srgb, var(--theme-bg-card) 95%, transparent);
+}
+
+.lenovo-trust-strip--revealed {
+  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
+  box-shadow: 0 -12px 40px color-mix(in srgb, var(--theme-fg) 6%, transparent);
+}
+
+/* Interactive once mostly revealed */
+.hero-stage--fly[data-lenovo-dock="1"] .lenovo-hero-dock {
+  pointer-events: auto;
+}
+
+@media (max-width: 899px), (prefers-reduced-motion: reduce) {
+  .hero-stage--fly {
+    --hero-lenovo-opacity: 1;
+    --hero-lenovo-y: 0;
+  }
+
+  .lenovo-hero-dock {
+    pointer-events: auto;
+  }
+}
+
+/* 3D scene veils until GLB ready — fast out on theme swap, softer in */
 .hero-terrain-fade {
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transition: opacity 0.35s ease;
 }
 
 .hero-terrain-fade.is-ready {
   opacity: 1;
+  transition: opacity 0.85s ease;
 }
 
 /* Headline glued to the sticky viewport — micro-float with the flight (vars from HeroFlyContext). */
@@ -177,9 +222,9 @@
 }
 
 .hero-content {
-  /* Headline tucked under nav in the left sky pocket; stats anchor lower-right */
+  /* Headline under nav; bottom pad clears Lenovo dock + air under stats */
   padding-top: calc(var(--site-header-height) + var(--hero-content-gap));
-  padding-bottom: clamp(5rem, 11vh, 7.5rem);
+  padding-bottom: clamp(11rem, 22vh, 14.5rem);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -226,6 +271,8 @@
 .hero-stats-wrap {
   align-self: end;
   margin-top: auto;
+  /* Lift the 2×2 off the Lenovo dock */
+  margin-bottom: clamp(3rem, 7vh, 5.5rem);
   width: 100%;
 }
 

@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
-import { MODEL_URL } from "../lib/heroModel";
+import { MODEL_URL, MODEL_URL_LIGHT } from "../lib/heroModel";
 
 const HeroTerrainCanvas = lazy(() =>
   import("./HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas })),
@@ -24,10 +24,19 @@ function useDesktopHero() {
   return ok;
 }
 
+function prefetchHeroGlb(href: string) {
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.href = href;
+  link.as = "fetch";
+  link.crossOrigin = "anonymous";
+  document.head.appendChild(link);
+  return link;
+}
+
 /**
  * CSS sky paints immediately; WebGL mounts after idle.
- * Dark: NightStars inside HeroTerrainCanvas (same depth pass as ridges).
- * Light: BrandHazeSky + ScrollBeams inside the canvas (cool white haze).
+ * Prefetch both Everest GLBs so theme toggle does not wait on a cold light download.
  */
 export function HeroAtmosphere() {
   const { theme } = useTheme();
@@ -49,20 +58,16 @@ export function HeroAtmosphere() {
       setCanvasReady(true);
     };
 
-    // Prefetch GLB while waiting for idle — overlaps with three.js download.
-    const prefetch = document.createElement("link");
-    prefetch.rel = "prefetch";
-    prefetch.href = MODEL_URL;
-    prefetch.as = "fetch";
-    prefetch.crossOrigin = "anonymous";
-    document.head.appendChild(prefetch);
+    const darkPrefetch = prefetchHeroGlb(MODEL_URL);
+    const lightPrefetch = prefetchHeroGlb(MODEL_URL_LIGHT);
 
     if (typeof window.requestIdleCallback === "function") {
       const id = window.requestIdleCallback(boot, { timeout: 900 });
       return () => {
         cancelled = true;
         window.cancelIdleCallback(id);
-        prefetch.remove();
+        darkPrefetch.remove();
+        lightPrefetch.remove();
       };
     }
 
@@ -70,7 +75,8 @@ export function HeroAtmosphere() {
     return () => {
       cancelled = true;
       window.clearTimeout(t);
-      prefetch.remove();
+      darkPrefetch.remove();
+      lightPrefetch.remove();
     };
   }, [use3d]);
 

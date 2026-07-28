@@ -1,10 +1,19 @@
 import { useEffect, type RefObject } from "react";
 import { useReducedMotion } from "./useReducedMotion";
 
-/** Mouse drag + optional wheel → horizontal scroll for overflow-x carousels (desktop). */
+type HorizontalScrollOptions = {
+  wheel?: boolean;
+  /**
+   * When true, vertical wheel/trackpad pans the carousel.
+   * Default `"viewport-locked"` — only when `html.viewport-route` (e.g. /cases).
+   */
+  mapVertical?: boolean | "viewport-locked";
+};
+
+/** Mouse drag + wheel → horizontal scroll for overflow-x carousels (desktop). */
 export function useHorizontalPointerScroll(
   ref: RefObject<HTMLElement | null>,
-  { wheel = true }: { wheel?: boolean } = {},
+  { wheel = true, mapVertical = "viewport-locked" }: HorizontalScrollOptions = {},
 ) {
   const reduced = useReducedMotion();
 
@@ -14,6 +23,12 @@ export function useHorizontalPointerScroll(
 
     let snapRestoreTimer: ReturnType<typeof setTimeout> | undefined;
 
+    const shouldMapVertical = () => {
+      if (mapVertical === true) return true;
+      if (mapVertical === false) return false;
+      return document.documentElement.classList.contains("viewport-route");
+    };
+
     const onWheel = (event: WheelEvent) => {
       if (!wheel) return;
 
@@ -22,11 +37,17 @@ export function useHorizontalPointerScroll(
 
       const absX = Math.abs(event.deltaX);
       const absY = Math.abs(event.deltaY);
+      if (absX < 0.5 && absY < 0.5) return;
 
-      // Vertical wheel / trackpad → page scroll (Lenis). Never hijack deltaY.
-      if (absY >= absX || absX === 0) return;
-
-      const delta = event.deltaX;
+      let delta = 0;
+      if (absX > absY) {
+        delta = event.deltaX;
+      } else if (shouldMapVertical()) {
+        // Locked viewport pages have nowhere for vertical scroll to go — drive the deck.
+        delta = event.deltaY;
+      } else {
+        return;
+      }
 
       event.preventDefault();
       event.stopPropagation();
@@ -112,5 +133,5 @@ export function useHorizontalPointerScroll(
       el.removeEventListener("click", onClickCapture, true);
       el.classList.remove("is-drag-scrolling");
     };
-  }, [ref, reduced, wheel]);
+  }, [ref, reduced, wheel, mapVertical]);
 }
