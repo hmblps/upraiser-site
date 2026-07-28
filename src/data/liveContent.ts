@@ -7,7 +7,11 @@ export type NavLink = {
 };
 
 export const contactVerticalOptions = [
-  { value: "brand", label: "Brand" },
+  { value: "app-growth", label: "App Growth / media" },
+  { value: "oem", label: "OEM / Lenovo" },
+  { value: "clarity", label: "Clarity / measurement" },
+  { value: "studio", label: "Studio / creatives" },
+  { value: "brand", label: "Brand partnership" },
   { value: "advertising-partner", label: "Advertising Partner" },
   { value: "app-web-owner", label: "App / Web Owner" },
   { value: "direct-publisher", label: "Direct publisher" },
@@ -17,8 +21,10 @@ export const contactVerticalOptions = [
 
 export const navLinks: NavLink[] = [
   { label: "Expertise", href: "/expertise" },
+  { label: "Clarity", href: "/clarity" },
+  { label: "Studio", href: "/studio" },
   { label: "Cases", href: "/cases" },
-  { label: "Company", href: "/company" },
+  { label: "About", href: "/company" },
 ];
 
 export const primaryCta = {
@@ -29,7 +35,7 @@ export const primaryCta = {
 export const heroFounded = "Founded 17 July 2017 · Based in London";
 
 export const heroLede =
-  "We make sure every bid has a receipt — before the invoice arrives.";
+  "Every bid earns a receipt — before the invoice climbs the board deck.";
 
 export const heroHighlightsByMode = {
   growth: [
@@ -213,11 +219,53 @@ export const differenceByMode = {
   ],
 } satisfies Record<SiteMode, unknown>;
 
+/** Two-column market contrast — Standard Way vs Upraiser pipe. */
+export const differenceCompare = {
+  restLabel: "The Rest",
+  oursLabel: "Upraiser",
+  rest: [
+    {
+      title: "Black-box arbitrage",
+      text: "Resold supply. No steer. No trail when finance asks.",
+    },
+    {
+      title: "Attribution leakage",
+      text: "Late fraud screens. Soft postbacks. Conversions vanish before the receipt.",
+    },
+    {
+      title: "Account burn",
+      text: "Accounts die mid-ascent. Flights stall while the pipe is rebuilt.",
+    },
+    {
+      title: "Vanity KPIs",
+      text: "Paid for clicks and soft leads — LTV and payback never enter the bid.",
+    },
+  ],
+  ours: [
+    {
+      title: "Direct source access",
+      text: "Contracts on the publisher path. Fewer hops from bid to device event.",
+    },
+    {
+      title: "Pre-bid verification",
+      text: "Bots scored before auction close. Clean S2S into Your MMP — not after invoice.",
+    },
+    {
+      title: "Buying pipe that holds",
+      text: "Account and supply continuity so volume ramps without the mid-flight cliff.",
+    },
+    {
+      title: "Payback-tuned caps",
+      text: "Bids follow ROAS / payback You already track — not CPI vanity.",
+    },
+  ],
+} as const;
+
 export const trafficChannelsByMode = {
   growth: [
     {
       id: "oem",
-      title: "OEM & Pre-installs",
+      title: "OEM",
       tagline: "On device before day one",
       teaser:
         "Lenovo ROM and Google PAI — factory-side presence before the open-exchange auction even opens.",
@@ -250,11 +298,11 @@ export const trafficChannelsByMode = {
     },
     {
       id: "performance",
-      title: "Performance UA",
+      title: "App Growth",
       tagline: "Pay for what converts",
       teaser: "CPI, CPA, CPL tied to deposits and subs — not install charts that break after the flight.",
       description:
-        "Performance UA is end-to-end mobile acquisition across display, video, and in-app — priced on outcomes finance already tracks. We run CPI, CPA, and CPL models where the bid follows revenue signals: first deposit, funded account, paid subscription. Real-time fraud filtering sits on every buy. iGaming, fintech, gaming, and subscription apps are the core — verticals where a cheap install that never converts is worse than no install at all.",
+        "App Growth is end-to-end mobile acquisition across display, video, and in-app — priced on outcomes finance already tracks. We run CPI, CPA, and CPL models where the bid follows revenue signals: first deposit, funded account, paid subscription. Real-time fraud filtering sits on every buy. iGaming, fintech, gaming, and subscription apps are the core — verticals where a cheap install that never converts is worse than no install at all.",
       bestFor: "iGaming, fintech, games, subscription apps",
       points: [
         "Event-priced buying: FTD, registration, subscription — not vanity CPI",
@@ -348,7 +396,7 @@ export const trafficChannelsByMode = {
   infrastructure: [
     {
       id: "oem",
-      title: "OEM & Pre-installs",
+      title: "OEM",
       tagline: "Auditable factory supply",
       teaser: "Lenovo ROM and PAI with SDK trails — one log for compliance, UA, and finance.",
       description:
@@ -380,11 +428,11 @@ export const trafficChannelsByMode = {
     },
     {
       id: "performance",
-      title: "Performance UA",
+      title: "App Growth",
       tagline: "Event-verified mobile buying",
       teaser: "FTD/CPA models with pre-auction filtration — every paid action reconciles to a device log.",
       description:
-        "Performance UA for Ad Ops means FTD and CPA models where every paid action reconciles to a device log before the flight closes. In-app, display, and video supply is filtered pre-auction. Caps and bids wire to MMP events — not CPI vanity. When finance asks why the bill matches the MMP, the answer is already in the raw export.",
+        "App Growth for Ad Ops means FTD and CPA models where every paid action reconciles to a device log before the flight closes. In-app, display, and video supply is filtered pre-auction. Caps and bids wire to MMP events — not CPI vanity. When finance asks why the bill matches the MMP, the answer is already in the raw export.",
       bestFor: "FTD/CPA models, games, finance-grade reporting",
       points: [
         "Pre-auction filtration on every performance buy",
@@ -494,7 +542,8 @@ export const processByMode = {
     {
       step: "03",
       title: "Go Live and Ramp",
-      description: "48 hours to first bid. Real-time optimization. CPAs held inside the target You set — verified in the MMP, not estimated.",
+      description:
+        "48 hours to first bid. Real-time optimization. CPAs held inside the target You set — verified in the MMP, not estimated.",
     },
   ],
   infrastructure: [
@@ -540,11 +589,14 @@ export const bridgeByMode = {
 export const footerLinks = {
   explore: [
     { label: "Expertise", href: "/expertise" },
+    { label: "Clarity", href: "/clarity" },
+    { label: "Studio", href: "/studio" },
     { label: "Cases", href: "/cases" },
     { label: "Contact", href: "/contact" },
   ],
   company: [
-    { label: "Company", href: "/company" },
+    { label: "About", href: "/company" },
+    { label: "Clients", href: "/clients" },
     { label: "Careers inquiry", href: "/contact", contactIntent: "careers" },
     { label: "Contact", href: "/contact" },
   ] satisfies NavLink[],
@@ -749,7 +801,7 @@ export const solutionsPage = {
     line2Prefix: "Pick a lane — we open the",
     inlineWord: "story",
     description:
-      "Performance, OEM, creators, premium. Every path runs on Clarity so finance reads the same receipt as Ad Ops.",
+      "App Growth, OEM, Creators, premium. Every path runs on Clarity so finance reads the same receipt as Ad Ops.",
   },
   description:
     "Four buying paths. Every path runs on Clarity so finance reads the same receipt as Ad Ops.",
@@ -764,7 +816,7 @@ export const solutionsHub = {
   categories: [
     {
       id: "performance",
-      title: "Performance UA",
+      title: "App Growth",
       problem: "Spend scales, but CPA and finance stop agreeing.",
       summary: "CPI, CPA, and FTD models across in-app, programmatic, and reactivation.",
       primaryChannel: "performance",
@@ -784,7 +836,7 @@ export const solutionsHub = {
     },
     {
       id: "oem",
-      title: "OEM & Lenovo",
+      title: "OEM",
       problem: "OEM inventory looks premium until procurement asks for trails.",
       summary: "Factory ROM and Google PAI with SDK trails — direct lanes, not resold exchange.",
       primaryChannel: "oem",
@@ -804,7 +856,7 @@ export const solutionsHub = {
     },
     {
       id: "creators",
-      title: "Creators & social",
+      title: "Creators",
       problem: "Creator spend lives outside the same reconciliation as paid media.",
       summary: "Paid social and creator placements with MMP-tracked outcomes — not brand-lift slides.",
       primaryChannel: "social",
@@ -908,7 +960,7 @@ export const testimonials = [
   {
     quote:
       "Pre-bid filtration meant every dollar we raised spend against actually cleared a device check.",
-    name: "Performance Lead",
+    name: "Growth Lead",
     role: "Marketplace · GCC",
     company: "E-commerce expansion",
     href: "/cases/fiverr",
@@ -944,14 +996,12 @@ export const sectionsByMode = {
   difference: {
     label: "Why Us",
     growth: {
-      title: "Scale without breaking unit economics",
-      description:
-        "When spend ramps, most teams trade CPA for volume. Three disciplines our clients use to avoid that trade-off — and keep finance happy.",
+      title: "Direct pipe. Not resale.",
+      description: "Finance needs a buying route that climbs with spend — direct supply, pre-bid checks, caps on revenue events.",
     },
     infrastructure: {
-      title: "Every line item has a receipt",
-      description:
-        "Ad Ops should not need a war room at month-end. Three standards on every campaign we deploy — so the numbers agree before the invoice arrives.",
+      title: "Precision vs the rest",
+      description: "Black-box arbitrage burns accounts. Infrastructure means every bid clears with a trail Ad Ops and finance pull the same day.",
     },
   },
   technology: {

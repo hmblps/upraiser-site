@@ -6,12 +6,19 @@
       (function () {
         var t = localStorage.getItem("upraiser-theme");
         if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+        // Tall sticky hero — kill browser scroll restore before React/Lenis boot.
+        if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+        if (!location.hash) {
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }
       })();
     </script>
     <link rel="icon" href="/favicon.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content="#050504" />
     <meta
       name="description"
       content="UPRAISER — London-based mobile performance since 2017. Pre-bid fraud filtration, Lenovo OEM distribution, and verified outcomes for iGaming and fintech."

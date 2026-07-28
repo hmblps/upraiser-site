@@ -15,7 +15,7 @@ export function TrustMarquee({
 
   return (
     <section className={cn("section-band section-band--strip border-y border-border/40", className)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner">
         <p className="section-label">{label}</p>
         <div className="trust-marquee mt-6">
           <div className="trust-marquee__track">

@@ -8,6 +8,19 @@ import { Reveal } from "./motion/Reveal";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SlideTabs } from "./SlideTabs";
 
+const PANEL_SPRING = { type: "spring" as const, stiffness: 340, damping: 30, mass: 0.7 };
+
+const panelVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.055 } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.16 } },
+};
+
+const panelItem = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: PANEL_SPRING },
+};
+
 type TrafficChannelsProps = {
   /** `home` = switcher + short teaser; tab click opens /solutions with that channel. */
   variant?: "home" | "full";
@@ -52,7 +65,7 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
       );
       const search = new URLSearchParams({ channel: id });
       if (pillar) search.set("pillar", pillar.id);
-      navigate({ pathname: "/solutions", search: `?${search.toString()}`, hash: "#channels" });
+      navigate({ pathname: "/expertise", search: `?${search.toString()}`, hash: "#help-with" });
     },
     [navigate],
   );
@@ -133,7 +146,7 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
 
   return (
     <section id="channels" ref={sectionRef} className="section-band section-band--strip">
-      <ModeContentTransition mode={mode} className="mx-auto max-w-7xl px-6 lg:px-8">
+      <ModeContentTransition mode={mode} className="section-inner">
         {isHome || !channelIds ? (
           <SectionHeaderRow>
             <SectionHeader
@@ -204,31 +217,43 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${mode}-${active.id}-${variant}`}
-                initial={reduced ? false : { opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={reduced ? undefined : { opacity: 0, x: 12 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                initial={reduced ? false : "hidden"}
+                animate="visible"
+                exit={reduced ? undefined : "exit"}
+                variants={panelVariants}
                 className="transition-panel relative"
               >
                 <div>
-                  <p className="stat-label text-orange">{active.tagline}</p>
-                  <h3 className="card-title mt-2">{active.title}</h3>
-                  <p className="copy mt-3 max-w-2xl">{body}</p>
+                  <motion.p variants={reduced ? undefined : panelItem} className="stat-label text-orange">
+                    {active.tagline}
+                  </motion.p>
+                  <motion.h3 variants={reduced ? undefined : panelItem} className="card-title mt-2">
+                    {active.title}
+                  </motion.h3>
+                  <motion.p variants={reduced ? undefined : panelItem} className="copy mt-3 max-w-2xl">
+                    {body}
+                  </motion.p>
                   {points.length > 0 ? (
-                    <ul className="channel-inventory-points mt-5 space-y-2.5">
+                    <motion.ul
+                      variants={reduced ? undefined : panelItem}
+                      className="channel-inventory-points mt-5 space-y-2.5"
+                    >
                       {points.map((point) => (
                         <li key={point} className="channel-inventory-points__item copy text-sm text-muted">
                           {point}
                         </li>
                       ))}
-                    </ul>
+                    </motion.ul>
                   ) : null}
-                  <div className="mt-6 border-t border-border pt-4">
+                  <motion.div
+                    variants={reduced ? undefined : panelItem}
+                    className="mt-6 border-t border-border pt-4"
+                  >
                     <p className="stat-label text-muted">Best for</p>
                     <p className="copy mt-1">{active.bestFor}</p>
-                  </div>
+                  </motion.div>
                   {isHome ? (
-                    <p className="mt-5">
+                    <motion.p variants={reduced ? undefined : panelItem} className="mt-5">
                       <button
                         type="button"
                         data-cursor="link"
@@ -240,7 +265,7 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
                           →
                         </span>
                       </button>
-                    </p>
+                    </motion.p>
                   ) : null}
                 </div>
               </motion.div>

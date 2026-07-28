@@ -5,7 +5,7 @@ import { useScroll } from "../context/ScrollContext";
 /** Reset window scroll on route change; honor `/path#section` deep links. */
 export function ScrollToTop() {
   const { pathname, hash } = useLocation();
-  const { scrollTo } = useScroll();
+  const { scrollTo, resetScroll } = useScroll();
 
   useEffect(() => {
     if (hash) {
@@ -27,8 +27,10 @@ export function ScrollToTop() {
       return () => window.cancelAnimationFrame(frame);
     }
 
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [pathname, hash, scrollTo]);
+    resetScroll();
+    const timers = [40, 120, 320].map((ms) => window.setTimeout(resetScroll, ms));
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [pathname, hash, scrollTo, resetScroll]);
 
   return null;
 }

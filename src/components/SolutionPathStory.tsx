@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { solutionsHub } from "../data/liveContent";
 import { ScrollLink } from "./ScrollLink";
@@ -45,13 +44,6 @@ export function SolutionPathStory({ pillar }: SolutionPathStoryProps) {
                   →
                 </span>
               </ScrollLink>
-              <Link
-                to={pillar.casePreview}
-                data-cursor="link"
-                className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold"
-              >
-                {pillar.caseLabel}
-              </Link>
             </div>
           </div>
 

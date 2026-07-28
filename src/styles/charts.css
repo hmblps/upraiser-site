@@ -42,32 +42,6 @@
   will-change: transform, opacity;
 }
 
-.fold-chart-ghost--float {
-  animation: fold-ghost-float var(--ghost-duration, 7s) linear var(--ghost-delay, 0s) infinite;
-}
-
-@keyframes fold-ghost-float {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 24px, 0);
-  }
-
-  22% {
-    opacity: var(--ghost-peak, 0.58);
-    transform: translate3d(calc(var(--ghost-drift, 0px) * 0.28), calc(var(--ghost-travel, 160px) * -0.28), 0);
-  }
-
-  72% {
-    opacity: calc(var(--ghost-peak, 0.58) * 0.88);
-    transform: translate3d(calc(var(--ghost-drift, 0px) * 0.64), calc(var(--ghost-travel, 160px) * -0.64), 0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate3d(var(--ghost-drift, 0px), calc(var(--ghost-travel, 160px) * -1), 0);
-  }
-}
-
 .fold-chart-ghost-value {
   font-size: clamp(1.65rem, 3.6vw, 2.65rem);
   font-weight: 700;
@@ -317,9 +291,8 @@
 .fold-area-ghosts {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
-  overflow: visible;
 }
 
 .fold-area-plot {

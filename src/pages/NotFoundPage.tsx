@@ -5,7 +5,7 @@ import { Magnetic } from "../components/motion-preview/Magnetic";
 export function NotFoundPage() {
   return (
     <main className="site-main flex min-h-[70dvh] items-center pt-[var(--site-header-height)]">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+      <div className="section-inner py-20">
         <p className="section-label">404</p>
         <h1 className="mt-3 max-w-[14ch] text-4xl font-extrabold tracking-tighter text-fg sm:text-5xl">
           This page is not on the map

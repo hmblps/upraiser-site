@@ -1,13 +1,9 @@
-import { Suspense, lazy, useEffect } from "react";
+import { lazy, useEffect } from "react";
 import { Hero } from "../components/Hero";
 import { LazySection } from "../layouts/SiteLayout";
 import { SectionNav } from "../components/SectionNav";
 import { HomePilotCta } from "../components/HomePilotCta";
-import { HomeModeBridge } from "../components/HomeModeBridge";
 
-const LenovoTrustStrip = lazy(() =>
-  import("../components/LenovoTrustStrip").then((m) => ({ default: m.LenovoTrustStrip })),
-);
 const Audience = lazy(() => import("../components/Audience").then((m) => ({ default: m.Audience })));
 const Difference = lazy(() => import("../components/Difference").then((m) => ({ default: m.Difference })));
 const Process = lazy(() => import("../components/Process").then((m) => ({ default: m.Process })));
@@ -24,7 +20,6 @@ const PromiseSection = lazy(() =>
 function usePreloadHome() {
   useEffect(() => {
     const runNear = () => {
-      void import("../components/LenovoTrustStrip");
       void import("../components/Audience");
       void import("../components/Difference");
     };
@@ -60,6 +55,7 @@ function usePreloadHome() {
 /**
  * Home pitch — teasers + channel switcher (full inventory on /solutions).
  * Case stories on /cases; Lenovo OEM depth on /solutions?pillar=oem.
+ * LenovoTrustStrip lives inside Hero (HeroFlyProvider) — do not remount here.
  */
 export function HomePage() {
   usePreloadHome();
@@ -73,9 +69,6 @@ export function HomePage() {
         >
           <Hero />
         </div>
-        <Suspense fallback={null}>
-          <LenovoTrustStrip />
-        </Suspense>
         <LazySection minHeight="70vh">
           <Audience />
         </LazySection>
@@ -97,7 +90,6 @@ export function HomePage() {
         <LazySection minHeight="28vh">
           <HomePilotCta />
         </LazySection>
-        <HomeModeBridge />
       </main>
       <SectionNav />
     </>

@@ -26,7 +26,7 @@ export function DepthCloseCta({
 }: DepthCloseCtaProps) {
   return (
     <section className={cn("section-band section-band--dense", className)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner">
         <Reveal>
           <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
             <div className="max-w-xl">

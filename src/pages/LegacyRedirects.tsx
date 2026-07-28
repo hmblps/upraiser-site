@@ -15,5 +15,5 @@ export function RedirectSolutionsToExpertise() {
 }
 
 export function RedirectMeasurementToExpertise() {
-  return <Navigate to="/expertise?pillar=clarity#clarity" replace />;
+  return <Navigate to="/clarity" replace />;
 }

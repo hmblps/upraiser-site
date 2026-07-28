@@ -3,22 +3,53 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Instant jumps — Lenis owns smooth scroll. Global `smooth` fought refresh resets. */
+  scroll-behavior: auto;
+  overflow-anchor: none;
 }
 
 :root,
 [data-theme="dark"],
 [data-theme="light"] {
+  /* ── Layout ── */
   --site-header-height: 3.5rem;
-  --hero-content-gap: clamp(1rem, 2.5vh, 1.75rem);
+  --hero-content-gap: clamp(0.35rem, 1.2vh, 0.85rem);
   --scroll-sticky-top: calc(var(--site-header-height) + 1.25rem);
   --scroll-margin-section: calc(var(--site-header-height) + 1.5rem);
+  --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --content-max: 80rem; /* aligns with prior max-w-7xl rail */
+  --content-max-narrow: 40rem;
+  --content-max-copy: 36rem;
+  --section-y: clamp(3rem, 6vw, 5rem);
+  --section-y-dense: clamp(2.5rem, 4.5vw, 3.5rem);
+  --section-y-statement: clamp(4.5rem, 8vw, 7rem);
   --section-stack-gap: 2.5rem;
+
+  /* ── Type scale (Inter roles) ── */
   --text-micro: 0.6875rem;
   --text-kicker: 0.75rem;
+  --text-caption: 0.8125rem;
+  --text-body: 0.9375rem;
+  --text-body-lg: 1.0625rem;
+  --text-title: clamp(1.75rem, 3.2vw, 2.35rem);
+  --text-display: clamp(2.15rem, 5.4vw, 4.1rem);
+  --leading-tight: 1.1;
+  --leading-snug: 1.2;
+  --leading-body: 1.55;
+  --tracking-display: -0.055em;
+  --tracking-title: -0.025em;
+  --tracking-caps: 0.1em;
+  --tracking-kicker: 0.12em;
+
+  /* ── Surfaces ── */
   --card-pad: 1.5rem;
   --card-pad-md: 2rem;
-  --hero-stat-min-h: 5.75rem;
+  --hero-stat-min-h: 5.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-pill: 9999px;
 }
 
 @media (min-width: 768px) {
@@ -26,6 +57,7 @@ html {
   [data-theme="dark"],
   [data-theme="light"] {
     --section-stack-gap: 3rem;
+    --section-y: clamp(4rem, 7vw, 5.5rem);
   }
 }
 
@@ -35,6 +67,9 @@ html {
   [data-theme="light"] {
     --site-header-height: 3.75rem;
     --section-stack-gap: 3.5rem;
+    --section-y: clamp(5rem, 8vw, 7rem);
+    --section-y-dense: clamp(3.25rem, 5vw, 5.5rem);
+    --section-y-statement: clamp(6rem, 10vw, 9rem);
   }
 }
 
@@ -60,10 +95,22 @@ html.scroll-locked body {
 body {
   margin: 0;
   font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   background: var(--theme-bg);
   color: var(--theme-fg);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01" on, "cv11" on;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Unified horizontal page rail — prefer over ad-hoc px-* gutters where possible */
+.page-container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
 }
 
 /* Animated border "beam" used in theme bridge strip */
@@ -507,6 +554,16 @@ main [id] {
   opacity: 0.55;
 }
 
+/* Viewport /cases: soft side fades so scroll peek doesn't hard-clip */
+.viewport-page .carousel-fade::before,
+.viewport-page .carousel-fade::after {
+  display: block;
+  top: 0;
+  bottom: 0;
+  width: 1.75rem;
+  opacity: 1;
+}
+
 .carousel-fade::before {
   left: 0;
   background: linear-gradient(
@@ -525,11 +582,35 @@ main [id] {
   );
 }
 
+.viewport-page .carousel-fade::before {
+  background: linear-gradient(
+    to right,
+    var(--theme-bg) 0%,
+    color-mix(in srgb, var(--theme-bg) 75%, transparent) 45%,
+    transparent 100%
+  );
+}
+
+.viewport-page .carousel-fade::after {
+  background: linear-gradient(
+    to left,
+    var(--theme-bg) 0%,
+    color-mix(in srgb, var(--theme-bg) 75%, transparent) 45%,
+    transparent 100%
+  );
+}
+
 @media (min-width: 768px) {
   .carousel-fade::before,
   .carousel-fade::after {
     width: 0.85rem;
     opacity: 0.4;
+  }
+
+  .viewport-page .carousel-fade::before,
+  .viewport-page .carousel-fade::after {
+    width: 2.25rem;
+    opacity: 1;
   }
 }
 

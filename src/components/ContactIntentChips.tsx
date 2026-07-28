@@ -10,10 +10,20 @@ type ContactIntentChipsProps = {
   disabled?: boolean;
 };
 
+/** Primary intents in the chip row — full list stays in the select. */
+const CHIP_VALUES = new Set([
+  "app-growth",
+  "oem",
+  "clarity",
+  "studio",
+  "brand",
+  "careers",
+]);
+
 /** Let’s-Talk intent chips — syncs with the vertical select. */
 export function ContactIntentChips({ value, onChange, disabled }: ContactIntentChipsProps) {
   const reduced = useReducedMotion();
-  const options = contactVerticalOptions.filter((option) => option.value !== "other");
+  const options = contactVerticalOptions.filter((option) => CHIP_VALUES.has(option.value));
 
   return (
     <div>

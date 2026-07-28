@@ -1,6 +1,5 @@
 import { useEffect, useState, type RefObject } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { bridgeByMode } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScroll } from "../context/ScrollContext";
@@ -41,7 +40,6 @@ export function ThemeBridge({ anchorRef }: { anchorRef: RefObject<HTMLElement | 
   const { mode } = useMode();
   const { theme, toggleTheme } = useTheme();
   const { scrollTo, registerScrollListener } = useScroll();
-  const navigate = useNavigate();
   const content = bridgeByMode[mode];
   const reduced = useReducedMotion();
   const [revealed, setRevealed] = useState(reduced);
@@ -72,8 +70,7 @@ export function ThemeBridge({ anchorRef }: { anchorRef: RefObject<HTMLElement | 
 
   const switchView = () => {
     toggleTheme();
-    navigate("/");
-    window.setTimeout(() => scrollTo("hero"), 160);
+    window.setTimeout(() => scrollTo("hero"), 120);
   };
 
   const dark = theme === "dark";
@@ -88,42 +85,34 @@ export function ThemeBridge({ anchorRef }: { anchorRef: RefObject<HTMLElement | 
       transition={{ duration: reduced ? 0 : 0.52, ease: EASE_OUT }}
       className={`theme-bridge-strip absolute inset-x-0 bottom-0 z-20 border-t border-border bg-bg-card/95 backdrop-blur-md ${dark ? "theme-bridge-strip--to-light" : "theme-bridge-strip--to-dark"} ${revealed ? "pointer-events-auto" : "pointer-events-none"}`}
     >
-      <div className="strip-beam-wrap relative overflow-hidden">
-        <BorderBeam
-          className="z-20"
-          duration={10}
-          colorFrom="var(--theme-accent-light)"
-          colorTo="var(--color-magenta)"
-        />
-        <div className="relative z-[1] rail-strip__inner flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-          <div className="flex min-w-0 flex-1 items-start gap-3.5 sm:gap-4">
+      <div className="strip-beam-wrap relative">
+        <BorderBeam duration={10} colorFrom="var(--theme-accent-light)" colorTo="var(--color-magenta)" />
+        <div className="relative z-[1] mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <div className="flex items-center gap-4">
             <div
-              className="theme-bridge-mode-icon mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-orange/35 bg-orange/10 text-orange sm:h-11 sm:w-11"
+              className="theme-bridge-mode-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-orange/35 bg-orange/10 text-orange"
               aria-hidden
             >
               {dark ? <SunIcon /> : <MoonIcon />}
             </div>
-            <div className="min-w-0 max-w-2xl">
+            <div>
               <p className="stat-label text-orange">{content.eyebrow}</p>
-              <p className="mt-0.5 text-sm font-semibold leading-snug text-fg sm:text-[0.9375rem]">
-                {content.lead}
-              </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-light">{content.preview}</p>
+              <p className="mt-0.5 text-sm font-semibold text-fg">{content.lead}</p>
             </div>
           </div>
 
-          <motion.button
-            type="button"
-            onClick={switchView}
-            whileHover={reduced ? undefined : { scale: 1.03 }}
-            whileTap={reduced ? undefined : { scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 420, damping: 28 }}
-            className="theme-bridge-cta inline-flex w-full shrink-0 items-center justify-center gap-2 self-stretch rounded-full border border-orange/35 bg-orange/10 px-5 py-2.5 text-sm font-semibold text-fg transition hover:border-orange/60 hover:bg-orange/15 hover:text-orange sm:w-auto sm:self-center"
-          >
-            {dark ? <SunIcon /> : <MoonIcon />}
-            {content.cta}
-            <span aria-hidden>→</span>
-          </motion.button>
+          <div className="w-full max-w-xl space-y-3 sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl">
+            <p className="copy text-sm text-muted-light">{content.preview}</p>
+            <button
+              type="button"
+              onClick={switchView}
+              className="theme-bridge-cta inline-flex w-full items-center justify-center gap-2 rounded-full border border-orange/35 bg-orange/10 px-5 py-2.5 text-sm font-semibold text-fg transition hover:border-orange/60 hover:bg-orange/15 hover:text-orange sm:w-auto"
+            >
+              {dark ? <SunIcon /> : <MoonIcon />}
+              {content.cta}
+              <span aria-hidden>→</span>
+            </button>
+          </div>
         </div>
       </div>
     </motion.section>

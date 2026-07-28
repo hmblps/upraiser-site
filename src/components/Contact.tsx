@@ -1,7 +1,6 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { Reveal } from "./motion/Reveal";
-import { contactPage, contactVerticalOptions, lenovoPartnership, primaryCta } from "../data/liveContent";
+import { contactPage, contactVerticalOptions, primaryCta } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
 import { BorderBeam } from "./BorderBeam";
@@ -29,7 +28,7 @@ const initialForm: FormState = {
   email: "",
   company: "",
   message: "",
-  vertical: "brand",
+  vertical: "app-growth",
 };
 
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
@@ -133,93 +132,66 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="section-band">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <Reveal>
-          <div className="strip-beam-wrap relative overflow-hidden rounded-3xl border border-border bg-bg-card">
+    <div className="depth-page depth-page--contact viewport-page">
+      <div className="viewport-page__shell section-inner flex min-h-0 flex-col">
+        <div className="viewport-page__panel relative min-h-0 flex-1 overflow-hidden pt-3 pb-2">
+          <div className="strip-beam-wrap relative h-full min-h-0 overflow-hidden rounded-[var(--radius-xl)] border border-border bg-bg-card">
             <BorderBeam
               className="z-20"
               duration={10}
-              size={320}
+              size={280}
               colorFrom="var(--theme-accent-light)"
               colorTo="var(--color-magenta)"
             />
-            <div className="relative z-[1] grid lg:grid-cols-2">
-            <div className="relative bg-bg-elevated p-10 lg:p-14">
+            <div className="relative z-[1] grid h-full min-h-0 overflow-hidden lg:grid-cols-2">
+            <div className="relative flex min-h-0 flex-col overflow-hidden bg-bg-elevated p-5 sm:p-6 lg:p-8">
               <p className="section-label">{contactPage.label}</p>
-              <h1 className="section-title">
+              <h1 className="section-title mt-1.5 text-[1.45rem] sm:text-2xl lg:text-[1.85rem]">
                 {contactPage.titleLead}
                 <AccentWord tone="red">{contactPage.accentWord}</AccentWord>?
               </h1>
-              <p className="section-description">{contactPage.description}</p>
-              <p className="mt-3 text-sm text-muted">{contactPage.subline}</p>
+              <p className="section-description mt-2 line-clamp-2 text-sm">{contactPage.description}</p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-4 flex flex-wrap gap-2">
                 {ctaRow.map((item) => (
                   <Link
                     key={item.label}
                     to={item.href}
-                    className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-orange hover:text-orange"
+                    className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-fg hover:border-orange hover:text-orange"
                   >
                     {item.label}
                   </Link>
                 ))}
               </div>
 
-              <div className="mt-10 space-y-4 text-sm">
+              <div className="mt-auto space-y-2 pt-4 text-sm">
                 <div>
                   <div className="text-muted stat-label">Email</div>
                   <a href={`mailto:${contactPage.email}`} className="font-semibold text-fg hover:text-orange">
                     {contactPage.email}
                   </a>
                 </div>
-                <div>
-                  <div className="text-muted stat-label">Address</div>
-                  <span className="font-semibold">{contactPage.office}</span>
-                </div>
-                <div>
-                  <div className="text-muted stat-label">LinkedIn</div>
-                  <a
-                    href="https://www.linkedin.com/company/upraiser/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-fg hover:text-orange"
-                  >
-                    linkedin.com/company/upraiser
-                  </a>
-                </div>
-
-                <div className="border-t border-border pt-4">
-                  <div className="text-muted stat-label">{lenovoPartnership.badge}</div>
-                  <LenovoPartnershipLogo className="mt-2 h-8 w-auto sm:h-9" />
-                  <p className="mt-3 text-sm text-muted">
-                    OEM / Lenovo →{" "}
-                    <Link
-                      to="/expertise?pillar=oem#help-with"
-                      className="font-semibold text-fg underline-offset-4 hover:underline"
-                    >
-                      Solutions · OEM
-                    </Link>
-                  </p>
+                <div className="border-t border-border pt-3">
+                  <LenovoPartnershipLogo className="h-7 w-auto sm:h-8" />
                 </div>
               </div>
             </div>
 
-            <div className="p-10 lg:p-14">
+            <div className="min-h-0 overflow-hidden p-5 sm:p-6 lg:p-8">
               {status === "success" ? (
-                <div className="flex h-full flex-col items-center justify-center text-center" role="status" aria-live="polite">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-orange/10 text-orange">
-                    <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex h-full min-h-0 flex-col items-center justify-center text-center" role="status" aria-live="polite">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange/10 text-orange">
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="mt-6 text-2xl font-bold">Message received</h3>
-                  <p className="mt-3 max-w-sm text-muted-light">
+                  <h3 className="mt-4 text-lg font-bold">Message received</h3>
+                  <p className="mt-2 max-w-sm text-xs text-muted-light">
                     Thanks for reaching out. Our team will get back to you within 1–2 business days.
                   </p>
                   <button
                     type="button"
-                    className="mt-8 text-sm font-semibold text-orange hover:underline"
+                    className="mt-5 text-sm font-semibold text-orange hover:underline"
                     onClick={() => {
                       setStatus("idle");
                       setForm(initialForm);
@@ -231,10 +203,10 @@ export function Contact() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5" noValidate aria-busy={status === "loading"}>
+                <form onSubmit={handleSubmit} className="flex h-full min-h-0 flex-col space-y-2.5 overflow-hidden" noValidate aria-busy={status === "loading"}>
                   {status === "error" && submitError && (
                     <div
-                      className="rounded-xl border border-magenta/30 bg-magenta/5 px-4 py-3 text-sm text-magenta-light"
+                      className="shrink-0 rounded-xl border border-magenta/30 bg-magenta/5 px-3 py-2 text-xs text-magenta-light"
                       role="alert"
                     >
                       {submitError}
@@ -289,18 +261,37 @@ export function Contact() {
 
                   <ContactFormField label="Message" id="message" error={errors.message} disabled={status === "loading"}>
                     <textarea
-                      rows={4}
+                      rows={2}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                     />
                   </ContactFormField>
 
-                  <Magnetic className="w-full">
+                  <label className="flex shrink-0 items-start gap-2 text-xs text-muted">
+                    <input
+                      type="checkbox"
+                      className="mt-0.5"
+                      checked={privacyAccepted}
+                      onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                      disabled={status === "loading"}
+                    />
+                    <span>
+                      I agree to the{" "}
+                      <Link to="/privacy" className="underline hover:text-fg">
+                        Privacy Policy
+                      </Link>
+                      {errors.privacyAccepted ? (
+                        <span className="ml-1 text-magenta-light">· Required</span>
+                      ) : null}
+                    </span>
+                  </label>
+
+                  <Magnetic className="mt-auto w-full shrink-0">
                     <button
                       type="submit"
                       disabled={status === "loading"}
                       data-cursor="cta"
-                      className="btn-caps w-full rounded-full bg-orange py-3.5 text-sm font-semibold text-on-accent transition hover:bg-orange-light disabled:cursor-not-allowed disabled:opacity-60"
+                      className="btn-caps w-full rounded-full bg-orange py-2.5 text-sm font-semibold text-on-accent transition hover:bg-orange-light disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {status === "loading" ? "Sending…" : contactPage.ctaLabel}
                     </button>
@@ -310,8 +301,8 @@ export function Contact() {
             </div>
             </div>
           </div>
-        </Reveal>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

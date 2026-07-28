@@ -8,12 +8,16 @@ import {
   type ReactNode,
   type MutableRefObject,
 } from "react";
-import { MathUtils } from "three";
+import { clamp, smoothstep } from "../lib/clamp";
 import { useScroll } from "./ScrollContext";
 
+/** Must stay in sync with Hero card reveal thresholds. */
+export const HERO_CARD_REVEAL_AT = [0.18, 0.38, 0.58, 0.78] as const;
+
 type HeroFlyContextValue = {
-  /** 0 at pin start → 1 when sticky runway ends */
-  progress: number;
+  /** Discrete reveal count for React (cards) — avoids per-frame Hero re-renders. */
+  revealedCount: number;
+  /** Continuous 0→1 for WebGL / imperative consumers. */
   progressRef: MutableRefObject<number>;
 };
 
@@ -30,18 +34,28 @@ function resolveFlyStage(cached: HTMLElement | null) {
 function flyProgressForScroll(stage: HTMLElement, scrollY: number) {
   const top = stage.getBoundingClientRect().top + scrollY;
   const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
-  return MathUtils.clamp((scrollY - top) / runway, 0, 1);
+  return clamp((scrollY - top) / runway, 0, 1);
+}
+
+function countRevealed(progress: number) {
+  let n = 0;
+  for (const at of HERO_CARD_REVEAL_AT) {
+    if (progress >= at) n += 1;
+  }
+  return n;
 }
 
 /**
  * Shared Lenis progress for the pinned Hero fly runway (camera + cards + sun).
+ * React only re-renders when a card threshold crosses — canvas reads progressRef.
  */
 export function HeroFlyProvider({ children }: { children: ReactNode }) {
   const { registerScrollListener } = useScroll();
   const progressRef = useRef(0);
-  const [progress, setProgress] = useState(0);
+  const [revealedCount, setRevealedCount] = useState(0);
   const stageRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef(0);
+  const lastRevealedRef = useRef(-1);
 
   useEffect(() => {
     const publish = (scrollY: number) => {
@@ -49,13 +63,39 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
       stageRef.current = stage;
       if (!stage) {
         progressRef.current = 0;
-        setProgress(0);
+        if (lastRevealedRef.current !== 0) {
+          lastRevealedRef.current = 0;
+          setRevealedCount(0);
+        }
         return;
       }
 
       const next = flyProgressForScroll(stage, scrollY);
       progressRef.current = next;
-      setProgress((prev) => (Math.abs(prev - next) > 0.001 ? next : prev));
+      stage.dataset.heroFly = next.toFixed(3);
+
+      // Soft handoff: last 10% eases the pin out gently (small drift, light fade).
+      const exit = clamp((next - 0.9) / 0.1, 0, 1);
+      const exitEase = exit * exit * (3 - 2 * exit); // smoothstep
+      stage.style.setProperty("--hero-exit", exitEase.toFixed(4));
+
+      // Headline glued to the sticky frame: floats with the flight, doesn't fly away.
+      // Soft sine drift (~±1.1vh) tracks the climb; opacity only softens on runway exit.
+      const floatY = Math.sin(next * Math.PI) * 1.1;
+      stage.style.setProperty("--hero-title-y", floatY.toFixed(2));
+      stage.style.setProperty("--hero-title-scale", (1 - next * 0.012).toFixed(4));
+      stage.style.setProperty("--hero-title-opacity", (1 - exitEase * 0.35).toFixed(4));
+
+      // Label arrives with the first ghost figure — establish stays quiet.
+      const labelIn = smoothstep(next, 0.14, 0.28);
+      stage.style.setProperty("--hero-label-opacity", labelIn.toFixed(4));
+      stage.style.setProperty("--hero-label-y", ((1 - labelIn) * 28).toFixed(2));
+
+      const revealed = countRevealed(next);
+      if (revealed !== lastRevealedRef.current) {
+        lastRevealedRef.current = revealed;
+        setRevealedCount(revealed);
+      }
     };
 
     const unsubscribe = registerScrollListener((scrollY) => {
@@ -71,7 +111,7 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
     };
   }, [registerScrollListener]);
 
-  const value = useMemo(() => ({ progress, progressRef }), [progress]);
+  const value = useMemo(() => ({ revealedCount, progressRef }), [revealedCount]);
 
   return <HeroFlyContext.Provider value={value}>{children}</HeroFlyContext.Provider>;
 }

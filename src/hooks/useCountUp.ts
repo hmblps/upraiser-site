@@ -44,13 +44,8 @@ export function useCountUp(raw: string, active: boolean, duration = 1400) {
   useEffect(() => {
     const parsed = parseStatValue(raw);
 
-    if (!parsed.animate || reduced) {
+    if (!active || !parsed.animate || reduced) {
       setDisplay(raw);
-      return;
-    }
-
-    if (!active) {
-      setDisplay(`${parsed.prefix}${formatValue(0, parsed.decimals)}${parsed.suffix}`);
       return;
     }
 

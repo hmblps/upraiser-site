@@ -1,6 +1,7 @@
 import { COMPANY_CONTENT } from "../data/innerPagesData";
+import { useTheme } from "../context/ThemeContext";
 import { WorldMap, type WorldMapDot } from "./ui/WorldMap";
-import { Reveal } from "./motion/Reveal";
+import { cn } from "../lib/cn";
 
 const LND = { lat: 51.5074, lng: -0.1278, label: "London HQ" };
 
@@ -15,43 +16,77 @@ const TRAFFIC_ARCS: WorldMapDot[] = [
   { start: LND, end: { lat: 1.3521, lng: 103.8198, label: "OEM" } },
 ];
 
+type CompanyFootprintProps = {
+  /** Fits Company viewport tab — map + stats, no page runway */
+  embedded?: boolean;
+};
+
 /**
  * Footprint — Aceternity WorldMap as the widget; copy stays thin.
- * One HQ line + stats + market chips. No duplicate essay beside the map.
+ * Arc color follows theme (ink-gold on cream, bright gold on dark).
  */
-export function CompanyFootprint() {
+export function CompanyFootprint({ embedded = false }: CompanyFootprintProps) {
   const { footprint } = COMPANY_CONTENT;
+  const { theme } = useTheme();
+  const lineColor = theme === "light" ? "#b8860b" : "#ffcc00";
+  const pulseColor = theme === "light" ? "#f80038" : "#ffe066";
 
-  return (
-    <section className="section-band border-y border-border/40 company-footprint">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="company-footprint__intro">
-          <Reveal>
+  const body = (
+    <div
+      className={cn(
+        "company-footprint",
+        embedded && "company-footprint--embedded h-full min-h-0 overflow-hidden",
+        theme === "light" && "company-footprint--light",
+      )}
+    >
+      <div className={cn(!embedded && "section-inner")}>
+        {!embedded ? (
+          <div className="company-footprint__intro">
             <p className="section-label">{footprint.label}</p>
             <h2 className="section-title mt-3 max-w-xl">{footprint.title}</h2>
             <p className="copy mt-3 max-w-xl text-sm text-muted">{footprint.lead}</p>
-          </Reveal>
+            <p className="company-footprint__hq-line mt-4">
+              <span className="company-footprint__hq-code">{footprint.hq.code}</span>
+              <span className="company-footprint__hq-sep" aria-hidden>
+                ·
+              </span>
+              <span>
+                <strong className="text-fg">{footprint.hq.name}</strong>
+                <span className="text-muted"> — {footprint.hq.detail}</span>
+              </span>
+            </p>
+          </div>
+        ) : (
+          <div className="mb-3 shrink-0">
+            <p className="stat-label text-orange">{footprint.label}</p>
+            <p className="company-footprint__hq-line mt-1.5 text-xs sm:text-sm">
+              <span className="company-footprint__hq-code">{footprint.hq.code}</span>
+              <span className="company-footprint__hq-sep" aria-hidden>
+                ·
+              </span>
+              <span>
+                <strong className="text-fg">{footprint.hq.name}</strong>
+                <span className="text-muted"> — {footprint.hq.role}</span>
+              </span>
+            </p>
+          </div>
+        )}
 
-          <Reveal delay={0.06} className="company-footprint__hq-line">
-            <span className="company-footprint__hq-code">{footprint.hq.code}</span>
-            <span className="company-footprint__hq-sep" aria-hidden>
-              ·
-            </span>
-            <span>
-              <strong className="text-fg">{footprint.hq.name}</strong>
-              <span className="text-muted"> — {footprint.hq.detail}</span>
-            </span>
-          </Reveal>
+        <div
+          className={cn(
+            "company-footprint__map",
+            embedded ? "min-h-0 flex-1 overflow-hidden" : "mt-8",
+          )}
+        >
+          <WorldMap
+            dots={TRAFFIC_ARCS}
+            lineColor={lineColor}
+            pulseColor={pulseColor}
+            className={embedded ? "aspect-[2.4/1] max-h-[min(280px,32vh)]" : undefined}
+          />
         </div>
 
-        <Reveal delay={0.08} className="company-footprint__map mt-8">
-          <WorldMap dots={TRAFFIC_ARCS} lineColor="#ffcc00" />
-          <p className="company-footprint__map-caption">
-            Arcs from London HQ to markets in the case file — not a franchise map
-          </p>
-        </Reveal>
-
-        <dl className="company-footprint__stats mt-8">
+        <dl className={cn("company-footprint__stats", embedded ? "mt-3 shrink-0" : "mt-8")}>
           {footprint.stats.map((stat) => (
             <div key={stat.label} className="company-footprint__stat">
               <dt className="company-footprint__stat-value">{stat.value}</dt>
@@ -60,16 +95,24 @@ export function CompanyFootprint() {
           ))}
         </dl>
 
-        <ul className="company-footprint__chips mt-8" aria-label="Traffic markets">
-          {footprint.trafficPoints.map((point) => (
-            <li key={point.code} className="company-footprint__chip">
-              <span className="company-footprint__chip-code">{point.code}</span>
-              <span className="company-footprint__chip-name">{point.name}</span>
-              <span className="company-footprint__chip-detail">{point.detail}</span>
-            </li>
-          ))}
-        </ul>
+        {!embedded ? (
+          <ul className="company-footprint__chips mt-8" aria-label="Traffic markets">
+            {footprint.trafficPoints.map((point) => (
+              <li key={point.code} className="company-footprint__chip">
+                <span className="company-footprint__chip-code">{point.code}</span>
+                <span className="company-footprint__chip-name">{point.name}</span>
+                <span className="company-footprint__chip-detail">{point.detail}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
-    </section>
+    </div>
   );
+
+  if (embedded) {
+    return <div className="flex h-full min-h-0 flex-col overflow-hidden">{body}</div>;
+  }
+
+  return <section className="section-band border-y border-border/40">{body}</section>;
 }

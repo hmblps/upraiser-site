@@ -1,7 +1,7 @@
 .section-label {
-  font-size: 0.875rem;
+  font-size: var(--text-kicker);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-kicker);
   text-transform: uppercase;
   color: var(--brand-section-label);
 }
@@ -43,11 +43,12 @@
 
 @media (min-width: 768px) {
   .accent-scroll-section--lite.scroll-scene--fold {
-    min-height: 135vh;
+    /* Compact runway — fold completes in the first ~¼ of sticky travel */
+    min-height: 125vh;
   }
 
   .accent-scroll-section--lite.scroll-scene--fold-compact {
-    min-height: 104vh;
+    min-height: 108vh;
   }
 }
 

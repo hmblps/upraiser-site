@@ -17,6 +17,8 @@ export type WorldMapDot = {
 type WorldMapProps = {
   dots?: WorldMapDot[];
   lineColor?: string;
+  /** Pulse / destination dots — defaults to lineColor */
+  pulseColor?: string;
   className?: string;
 };
 
@@ -28,12 +30,15 @@ type WorldMapProps = {
 export function WorldMap({
   dots = [],
   lineColor = "#ffcc00",
+  pulseColor,
   className,
 }: WorldMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { theme } = useTheme();
   const mapSrc =
     theme === "dark" ? "/maps/world-dots-dark.svg" : "/maps/world-dots-light.svg";
+  const pointColor = pulseColor ?? lineColor;
+  const fadeEdge = theme === "light" ? "#f2ebe0" : "#050504";
 
   const projectPoint = (lat: number, lng: number) => {
     const x = (lng + 180) * (800 / 360);
@@ -48,10 +53,13 @@ export function WorldMap({
   };
 
   return (
-    <div className={cn("relative aspect-[2/1] w-full font-sans", className)}>
+    <div className={cn("company-world-map relative aspect-[2/1] w-full font-sans", className)}>
       <img
         src={mapSrc}
-        className="pointer-events-none h-full w-full select-none [mask-image:linear-gradient(to_bottom,transparent,white_10%,white_90%,transparent)]"
+        className={cn(
+          "pointer-events-none h-full w-full select-none [mask-image:linear-gradient(to_bottom,transparent,white_10%,white_90%,transparent)]",
+          theme === "light" && "company-world-map__dots--light",
+        )}
         alt=""
         height={495}
         width={1056}
@@ -66,10 +74,10 @@ export function WorldMap({
       >
         <defs>
           <linearGradient id="upraiser-path-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="white" stopOpacity="0" />
+            <stop offset="0%" stopColor={fadeEdge} stopOpacity="0" />
             <stop offset="5%" stopColor={lineColor} stopOpacity="1" />
-            <stop offset="95%" stopColor={lineColor} stopOpacity="1" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
+            <stop offset="95%" stopColor={pointColor} stopOpacity="1" />
+            <stop offset="100%" stopColor={fadeEdge} stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -82,7 +90,7 @@ export function WorldMap({
                 d={createCurvedPath(startPoint, endPoint)}
                 fill="none"
                 stroke="url(#upraiser-path-gradient)"
-                strokeWidth="1"
+                strokeWidth={theme === "light" ? 1.35 : 1.1}
                 initial={{ pathLength: 0 }}
                 whileInView={{ pathLength: 1 }}
                 viewport={{ once: true }}
@@ -98,17 +106,17 @@ export function WorldMap({
               <circle
                 cx={projectPoint(dot.start.lat, dot.start.lng).x}
                 cy={projectPoint(dot.start.lat, dot.start.lng).y}
-                r="2"
+                r="2.4"
                 fill={lineColor}
               />
               <circle
                 cx={projectPoint(dot.start.lat, dot.start.lng).x}
                 cy={projectPoint(dot.start.lat, dot.start.lng).y}
-                r="2"
+                r="2.4"
                 fill={lineColor}
                 opacity="0.5"
               >
-                <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite" />
+                <animate attributeName="r" from="2.4" to="9" dur="1.5s" begin="0s" repeatCount="indefinite" />
                 <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite" />
               </circle>
             </g>
@@ -116,17 +124,17 @@ export function WorldMap({
               <circle
                 cx={projectPoint(dot.end.lat, dot.end.lng).x}
                 cy={projectPoint(dot.end.lat, dot.end.lng).y}
-                r="2"
-                fill={lineColor}
+                r="2.2"
+                fill={pointColor}
               />
               <circle
                 cx={projectPoint(dot.end.lat, dot.end.lng).x}
                 cy={projectPoint(dot.end.lat, dot.end.lng).y}
-                r="2"
-                fill={lineColor}
+                r="2.2"
+                fill={pointColor}
                 opacity="0.5"
               >
-                <animate attributeName="r" from="2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite" />
+                <animate attributeName="r" from="2.2" to="8" dur="1.5s" begin="0s" repeatCount="indefinite" />
                 <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" begin="0s" repeatCount="indefinite" />
               </circle>
             </g>

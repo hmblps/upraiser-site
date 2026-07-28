@@ -29,7 +29,7 @@ export function SolutionsHub({ activeId, onSelect }: SolutionsHubProps) {
 
   return (
     <section id="help-with" className="section-band section-band--dense border-b border-border/40">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner">
         <p className="section-label">{solutionsHub.label}</p>
         <p className="copy mt-3 max-w-2xl text-sm text-muted">{solutionsHub.description}</p>
 

@@ -39,7 +39,7 @@ export function PageIntro({
         className,
       )}
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner">
         <SectionHeader animated={false} label={label} title={title} description={description} />
         {(ctaLabel && ctaHref) || (secondaryLabel && secondaryHref) ? (
           <PageCtaRow

@@ -1,13 +1,15 @@
-/** Ordered blocks for section keyboard nav on the home pitch page */
+/** Ordered blocks for section keyboard / mobile nav — must match App.tsx */
 export const scrollSectionIds = [
   "hero",
   "audience",
   "difference",
   "process",
+  "value",
   "channels",
   "cases",
   "promise",
-  "pilot",
+  "about",
+  "contact",
 ] as const;
 
 export type ScrollSectionId = (typeof scrollSectionIds)[number];

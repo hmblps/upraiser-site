@@ -11,9 +11,6 @@ type CaseBrandHeaderProps = {
 export function CaseBrandHeader({ item, compact = false }: CaseBrandHeaderProps) {
   const { brand } = item;
   const meta = [item.vertical, item.paymentModel, item.geos].join(" · ");
-  const previewLimit = 2;
-  const visibleChannels = compact ? item.channels.slice(0, previewLimit) : item.channels;
-  const hiddenCount = compact ? Math.max(0, item.channels.length - previewLimit) : 0;
 
   return (
     <div
@@ -58,16 +55,11 @@ export function CaseBrandHeader({ item, compact = false }: CaseBrandHeaderProps)
       </div>
 
       <div className="case-brand-header__channels">
-        {visibleChannels.map((channel) => (
+        {item.channels.map((channel) => (
           <span key={channel} className="case-brand-channel">
             {channel}
           </span>
         ))}
-        {hiddenCount > 0 ? (
-          <span className="case-brand-channel case-brand-channel--more" aria-label={`${hiddenCount} more channels`}>
-            +{hiddenCount}
-          </span>
-        ) : null}
       </div>
     </div>
   );

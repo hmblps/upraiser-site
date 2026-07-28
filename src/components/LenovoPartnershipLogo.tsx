@@ -12,8 +12,9 @@ export function LenovoPartnershipLogo({ className }: LenovoPartnershipLogoProps)
       className={`block ${className ?? ""}`.trim()}
       width={140}
       height={40}
-      loading="lazy"
+      loading="eager"
       decoding="async"
+      fetchPriority="low"
       draggable={false}
     />
   );

@@ -6,37 +6,18 @@
   isolation: isolate;
 }
 
-.theme-bridge-strip {
-  backdrop-filter: blur(12px);
-}
-
-.theme-bridge-strip .strip-beam-wrap {
-  overflow: hidden;
-}
-
-.theme-bridge-strip .border-beam {
-  z-index: 20;
-}
-
-.theme-bridge-strip--to-light {
-  background: color-mix(in srgb, var(--theme-bg-card) 92%, #fff4e8 8%);
-  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 45%, transparent);
-}
-
-.theme-bridge-strip--to-dark {
-  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
-}
-
-.theme-bridge-cta:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--theme-accent) 55%, transparent);
-  outline-offset: 2px;
-}
-
 .cases-carousel-picker {
   scroll-snap-type: x proximity;
   scroll-padding-inline: max(1.5rem, 50% - min(86vw, 392px) / 2);
   /* Room for hover lift/shadow — overflow-x clips vertical overflow */
   padding-block: 0.85rem;
+}
+
+/* Viewport /cases: stretch equal-height cards; keep tiny side inset for fade */
+.viewport-page .cases-carousel-picker {
+  padding-block: 0;
+  padding-inline: 0.5rem;
+  align-items: stretch;
 }
 
 .cases-carousel-picker [data-case-card] {

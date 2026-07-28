@@ -2,11 +2,11 @@
 
 @media (min-width: 768px) {
   .scroll-scene--fold {
-    min-height: 135vh;
+    min-height: 125vh;
   }
 
   .scroll-scene--fold-compact {
-    min-height: 104vh;
+    min-height: 108vh;
   }
 
   .scroll-scene--fold .scroll-scene-stage {

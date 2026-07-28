@@ -1,14 +1,20 @@
 import {
   createContext,
+  lazy,
+  Suspense,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCaseById, type CaseStudy } from "../data/cases";
-import { CaseDetailModal } from "../components/CaseDetailModal";
+
+const CaseDetailModal = lazy(() =>
+  import("../components/CaseDetailModal").then((m) => ({ default: m.CaseDetailModal })),
+);
 
 type CaseModalContextValue = {
   openCase: (id: string) => void;
@@ -24,9 +30,14 @@ function isCasesRoute(pathname: string) {
 
 export function CaseModalProvider({ children }: { children: ReactNode }) {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [panelItem, setPanelItem] = useState<CaseStudy | null>(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const item: CaseStudy | null = activeId ? (getCaseById(activeId) ?? null) : null;
+
+  useEffect(() => {
+    if (item) setPanelItem(item);
+  }, [item]);
 
   const openCase = useCallback(
     (id: string) => {
@@ -55,7 +66,16 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
   return (
     <CaseModalContext.Provider value={value}>
       {children}
-      <CaseDetailModal item={item} open={Boolean(item)} onClose={closeCase} />
+      {panelItem ? (
+        <Suspense fallback={null}>
+          <CaseDetailModal
+            item={panelItem}
+            open={Boolean(item)}
+            onClose={closeCase}
+            onExitComplete={() => setPanelItem(null)}
+          />
+        </Suspense>
+      ) : null}
     </CaseModalContext.Provider>
   );
 }

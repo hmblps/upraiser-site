@@ -90,7 +90,7 @@ export function SolutionsPage() {
         ctaLabel={solutionsPage.ctaLabel}
         ctaHref={primaryCta.href}
         secondaryLabel="Clarity"
-        secondaryHref="/measurement"
+        secondaryHref="/clarity"
         dense={false}
       />
 
@@ -101,7 +101,7 @@ export function SolutionsPage() {
 
       <LazySection minHeight="36vh">
         <section className="section-band section-band--ambience border-t border-border/40">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="section-inner">
             <SolutionPathStory pillar={activePillar} />
           </div>
         </section>
@@ -109,7 +109,7 @@ export function SolutionsPage() {
 
       <LazySection minHeight="36vh">
         <section className="section-band border-t border-border/40">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="section-inner">
             <Reveal>
               <p className="section-label">Channels in this path</p>
               <p className="copy mt-2 max-w-xl text-sm text-muted">

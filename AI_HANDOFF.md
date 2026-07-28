@@ -2,8 +2,8 @@
 
 > **Purpose:** give another AI (or engineer) complete context to continue work without rediscovering the codebase.  
 > Share this file **with the repo**. Shorter human README: `README.md`.  
-> Specialized external-AI brief (hero scroll-scrub task): `CONTEXT.md`.  
-> **Updated:** 23 July 2026  
+> Hero 3D / fly architecture: `CONTEXT.md`.  
+> **Updated:** 25 July 2026  
 > **Local path:** `Upraiser New Website Cursor Project`  
 > **Production:** https://upraiser-site.vercel.app  
 > **Target domain:** https://upraiser.co.uk (not on Vercel SPA yet)  
@@ -50,6 +50,7 @@
 | Motion | Framer Motion **12** |
 | Smooth scroll | Lenis (desktop); **native scroll on mobile/touch** |
 | Charts | Recharts — ambient fold charts (`ModeChart`, `FoldAreaMass`, `FraudScrollChart`) |
+| 3D hero | `@react-three/fiber` + `@react-three/drei` + `three` (desktop only) |
 | Lint | oxlint |
 | Hosting | Vercel **`upraiser-site-v2`** → alias `upraiser-site.vercel.app` |
 | Contact | Web3Forms via `VITE_WEB3FORMS_ACCESS_KEY` |
@@ -62,10 +63,11 @@ npm run build        # sync-assets → verify-assets → tsc -b → vite build
 npm run deploy       # scripts/deploy-vercel.sh → upraiser-site-v2
 npm run lint         # oxlint
 npm run preview      # vite preview
-npm run generate:og  # OG image (needs assets/hero video + ffmpeg)
+npm run generate:og  # OG image (optional mountains frame + ffmpeg)
+npm run optimize:everest  # GLB optimize pipeline
 ```
 
-**Build note:** if `assets/brand/og-image.png` is missing, run `npm run generate:og` before `build` / `deploy`.
+**Build note:** if `assets/brand/og-image.png` or `assets/hero/everest.glb` is missing, restore / regenerate before `build` / `deploy`.
 
 ---
 
@@ -93,11 +95,13 @@ npm run generate:og  # OG image (needs assets/hero video + ffmpeg)
 | **Header** `ThemeToggle` | Toggle theme **in place** — stay on current scroll position |
 | **About** `ThemeBridge` (bottom strip) | Toggle theme + **`scrollTo("hero")`** after ~120ms |
 
-Mode-aware section bodies wrap with **`ModeContentTransition`** (`AnimatePresence mode="wait"`, spring fade/slide). Applied to: ValueProps, Difference, Process, TrafficChannels, Audience, Promise, CaseStudies, About. Hero stats use their own `AnimatePresence mode="wait"` group. Hero atmosphere overlays crossfade ~400ms (single video decode).
+Mode-aware section bodies wrap with **`ModeContentTransition`** (`AnimatePresence mode="wait"`, spring fade/slide). Applied to: ValueProps, Difference, Process, TrafficChannels, Audience, Promise, CaseStudies, About. Hero stats use their own `AnimatePresence mode="wait"` group when present.
+
+**Header surface:** frosted glass — semi-transparent `bg-bg` + backdrop blur (stronger when scrolled).
 
 ---
 
-## 4b. Site map (Z2A-adapted, no blog) — Jul 23 2026
+## 4b. Site map — Jul 25 2026
 
 Reference competitor: https://www.z2adigital.com/ (structure only). Production roots: https://upraiser-site.vercel.app/
 
@@ -133,12 +137,12 @@ PartnersCarousel · Footer (persistent)
 
 **Home (`/`):**
 ```
-#hero → ClientsMarquee → #cases (teaser) → #promise (measurement) → #pilot → #mode-bridge
+#hero (3D fly runway) → landing pad → #audience → Difference → Process → Channels → Cases teaser → #promise → Pilot CTA → ModeBridge
 ```
 
-**Section keyboard nav:** `hero → cases → promise → pilot`
+**Section keyboard nav:** `hero → audience → … → promise → pilot`
 
-Depth (channels, process, value, solutions hub) lives on `/solutions`. Technology is product-story on `/technology`.
+Depth (full value inventory) lives on `/solutions`. Technology is product-story on `/technology`.
 
 ---
 
@@ -148,8 +152,9 @@ Unified scroll progress: `src/hooks/useScrollScene.ts` + `src/lib/scrollScene.ts
 
 | Mode | Used by | Behavior |
 |------|---------|----------|
-| `runway` | Audience, Promise (`useSectionScrollProgress`) | `sectionHeight - viewport` progress; sticky 135vh desktop |
-| `anchor` | Difference cards | progress from cards grid ref vs viewport lines |
+| `runway` / HeroFly | Hero sticky ascent | Lenis runway; `progressRef` drives camera / beams / copy |
+| `runway` | Promise (`useSectionScrollProgress`) | sticky 135vh desktop |
+| `anchor` | Audience, Difference cards | progress from viewport / cards grid |
 | `viewportBand` | Process | section rect vs 72%/28% viewport bands |
 | in-view | Value, Channels, Cases, Contact | `Reveal` / `Stagger` |
 
@@ -169,25 +174,27 @@ Unified scroll progress: `src/hooks/useScrollScene.ts` + `src/lib/scrollScene.ts
 ```
 /
 ├── AI_HANDOFF.md          ← this file
-├── CONTEXT.md             ← external-AI brief: hero scroll-scrub (not implemented yet)
+├── CONTEXT.md             ← hero 3D / fly architecture (shipped)
 ├── README.md              ← human summary
 ├── index.html
-├── vite.config.ts         ← manual chunks: framer-motion, lenis, recharts
+├── vite.config.ts         ← manual chunks: framer-motion, lenis, recharts, three
 ├── vercel.json
-├── assets/                → sync → public/
+├── assets/                → sync → public/ (everest.glb, brand, maps)
 ├── scripts/
 │   ├── sync-assets.sh
 │   ├── verify-assets.sh
 │   ├── deploy-vercel.sh   ← targets upraiser-site-v2
 │   ├── generate-og-image.mjs
+│   ├── optimize-everest-glb.mjs
 │   └── rollback-*.sh
 └── src/
     ├── App.tsx
     ├── index.css          ← @theme tokens + @import styles/*
-    ├── styles/            ← split CSS modules
+    ├── styles/            ← split CSS modules (incl. hero.css)
     ├── context/
     │   ├── ThemeContext.tsx
-    │   └── ScrollContext.tsx
+    │   ├── ScrollContext.tsx
+    │   └── HeroFlyContext.tsx
     ├── data/
     │   ├── liveContent.ts
     │   ├── cases.ts
@@ -200,6 +207,7 @@ Unified scroll progress: `src/hooks/useScrollScene.ts` + `src/lib/scrollScene.ts
     │   ├── scrollScene.ts
     │   ├── cn.ts
     │   ├── contactIntent.ts
+    │   ├── heroDesktop.ts
     │   └── valueIconSync.ts
     ├── hooks/
     │   ├── useScrollScene.ts
@@ -207,8 +215,9 @@ Unified scroll progress: `src/hooks/useScrollScene.ts` + `src/lib/scrollScene.ts
     │   ├── useInView.ts
     │   └── …
     └── components/
+        ├── Hero.tsx / HeroAtmosphere.tsx / HeroTerrainCanvas.tsx / Everest.tsx
         ├── motion/ModeContentTransition.tsx
-        ├── lucide-animated/   ← animated glyphs for ValueProps
+        ├── lucide-animated/
         └── …
 ```
 
@@ -220,21 +229,24 @@ Unified scroll progress: `src/hooks/useScrollScene.ts` + `src/lib/scrollScene.ts
 
 `Header`, `Footer`, `SmoothScroll`, `ScrollLink`, `SectionNav`, `MobileSectionNav`, `SiteGrain`, `CustomCursor`, `ThemeToggle`, `ThemeBridge`
 
-### Hero
+### Hero (3D Everest — Jul 25)
 
 | File | Role |
 |------|------|
-| `Hero.tsx` | Slogan, H1, lede, founded line, CTAs, mode-aware stats |
-| `HeroAtmosphere.tsx` | Mountains loop video + theme overlay crossfade + cursor spotlight |
+| `Hero.tsx` | Sticky stage, 5-line H1, ghost stats reveal, `HeroFlyProvider` |
+| `HeroAtmosphere.tsx` | CSS sky; idle-lazy mount of `HeroTerrainCanvas` (desktop only) |
+| `HeroTerrainCanvas.tsx` | R3F canvas: camera path, fog, sun, `BrandHazeSky` / `NightStars` / `ScrollBeams` |
+| `Everest.tsx` | Draco GLB wire + opaque ghost fill |
+| `HeroFlyContext.tsx` | Lenis sticky runway → `progressRef` |
 | `LenovoTrustStrip.tsx` | Partner strip under hero |
 
-**Hero stats (Jul 23):**
+**Light theme:** cream haze shader (not drei `<Sky>`) + viewport-corner scroll spotlights (drei `SpotLight`, volumetric).  
+**Dark theme:** opaque night clear + camera-centered star dome.  
+**Mobile / reduced motion:** CSS sky only — no WebGL.
 
-- Desktop: 2×2 grid; **no pagination dots**
-- Mobile: horizontal snap carousel + **dots** (`.hero-stats-dots`) — dots = card pagination, **not** theme switch
-- Mode change: `AnimatePresence mode="wait"` — old set exits fully, then new set enters (stagger)
+**Art locks:** no Rayleigh sky; no ground disc horizon; fog matches clear color; light wire yellow-gold for contrast. Details in `CONTEXT.md`.
 
-**Hero spotlight (dark):** soft dim + corner-lock upper-right (stat cards zone). Cursor lerp ~0.05. Copy-wash left-only gradient. Video: `object-fit: cover`, `object-position: center 58%`, **never `scale < 1`**.
+**Hero stats:** desktop grid / mobile snap + dots when stats UI is shown; reveal tied to fly progress.
 
 ### Scroll folds
 
@@ -322,11 +334,11 @@ Motion: `src/lib/motion.ts` — `SPRING`, `SPRING_SOFT`, `viewportOnce`
 
 ## 11. Performance & loading
 
-- Lazy sections + idle preload in `App.tsx`
-- Manual chunks: `framer-motion`, `lenis`, `recharts`
-- Hero video ~7 MB — no re-encode (owner decision)
-- Hero entrance CSS-first; fold pulls Recharts chunk on desktop
-- Atmosphere: **one** video element; theme change crossfades overlays only
+- Lazy home sections + idle preload in `HomePage.tsx` / layout
+- Manual chunks: `framer-motion`, `lenis`, `recharts`, `three`
+- Hero 3D desktop-only; Draco GLB; canvas idle-mount
+- Fold pulls Recharts chunk on desktop
+- Do not ship looping hero MP4 as primary background (legacy asset optional for OG)
 
 ---
 
@@ -359,7 +371,7 @@ VITE_WEB3FORMS_ACCESS_KEY=...
 npm run deploy   # prebuilt local build → upraiser-site-v2 → aliases upraiser-site.vercel.app
 ```
 
-**Last production deploy (this handoff):** 23 Jul 2026 — mode transitions, hero polish, case logos, pre–IA-split snapshot.
+**Last production deploy (this handoff):** 25 Jul 2026 — 3D Everest hero (haze / stars / scroll beams), glass header, wire contrast.
 
 ### Do not
 
@@ -381,33 +393,28 @@ npm run deploy   # prebuilt local build → upraiser-site-v2 → aliases upraise
 
 1. **Git → Vercel auto-deploy** — connect repo to `upraiser-site-v2` in dashboard  
 2. **og:image URL** — still points to vercel.app; update when `upraiser.co.uk` live  
-3. **IA split (planned, not started)** — shorter homepage (pitch) + depth routes (`/cases`, `/channels`, `/how-we-work`, `/about`, `/contact`); see §15  
-4. **Hero scroll-scrub ascent video** — designed in `CONTEXT.md`; **not implemented**; needs final MP4  
-5. **Partner logos** — partial set in `public/partners/`  
-6. **Case overlap** with Thing Or Two (Fiverr, Azar, Banco Azteca) — content/legal review  
-7. **Duplicate React key** `#contact` in nav (known, low priority)  
-8. **`@astryxdesign/core`** — unused dependency  
-9. **Infrastructure hero stat labels** — long strings may wrap despite clamp  
+3. **Partner logos** — partial set in `public/partners/`  
+4. **Case overlap** with Thing Or Two (Fiverr, Azar, Banco Azteca) — content/legal review  
+5. **Duplicate React key** `#contact` in nav (known, low priority)  
+6. **`@astryxdesign/core`** — unused dependency  
+7. **ScrollBeams** — intensity / volumetric opacity may still need art direction pass  
+8. **Live copy** pass vs AI draft text  
 
 ---
 
-## 15. Product direction — IA split (IN PROGRESS / shipped v1)
+## 15. Product direction — IA split (shipped v1+)
 
-**Shipped 23 Jul 2026 (v1):** React Router pages + shortened home.
+**Shipped:** React Router pages + home pitch with 3D hero runway.
 
 | Route | Content |
 |-------|---------|
-| `/` | Hero → Lenovo → **Audience fold** → Difference → Cases teaser → **Promise fold** → Pilot CTA |
+| `/` | Hero (3D) → Audience → Difference → Process → Channels → Cases teaser → Promise → Pilot → ModeBridge |
 | `/solutions` | Value, Channels, Process |
-| `/cases` | Full case archive |
+| `/cases` | Full case archive (+ `:slug`) |
 | `/about` | About + technology + ThemeBridge |
 | `/contact` | Contact form |
 
 **Killer feature rule:** AccentScrollFold + ambient charts (Audience / Promise) live on **home**, not buried on `/solutions`.
-
-**Still later:** `/cases/:slug`, Google/Meta partner certification badges (not Snapchat), hero scroll-scrub (`CONTEXT.md`).
-
-Compressing the page may expose content gaps (segment strip, clearer offer) — fill with short bridges, not by restoring full runway on home.
 
 ---
 
@@ -417,18 +424,22 @@ Compressing the page may expose content gaps (segment strip, clearer offer) — 
 
 - Scroll Scene System — unified progress across fold / cards / process  
 - Why Us cards — anchor spawn desktop, Stagger mobile  
-- Hero dark spotlight polish; CSS split into `src/styles/`  
 - Deploy target corrected to **upraiser-site-v2**
 
 ### Jul 23
 
 - `ModeContentTransition` site-wide for mid-scroll theme changes  
-- Hero stats `mode="wait"`; mobile dots only; atmosphere overlay crossfade  
 - ThemeBridge → scroll to hero; Header toggle stays in place  
 - Case brand logos + accordion/carousel polish  
-- Copy refresh (lede, founded line, section titles)  
-- Backup branch + zip before planned IA work  
-- Agreed: explore shorter homepage + depth pages (not implemented)
+- IA split v1 (React Router + shortened home)
+
+### Jul 25
+
+- Replaced video hero with **R3F Everest** fly (`HeroTerrainCanvas` + `HeroFly`)  
+- Light: `BrandHazeSky` + `ScrollBeams`; dark: `NightStars`  
+- Rejected drei physical `<Sky>` (dirty cool tones / horizon seam)  
+- Glass header; yellower light wire for cream contrast  
+- Docs: README / AI_HANDOFF / CONTEXT / assets/README updated to match
 
 ---
 
@@ -447,32 +458,34 @@ Compressing the page may expose content gaps (segment strip, clearer offer) — 
 
 | Change… | File |
 |---------|------|
-| Hero copy / stats | `Hero.tsx`, `liveContent.ts` → `heroHighlightsByMode`, `heroLede`, `heroFounded` |
+| Hero copy / stats | `Hero.tsx`, `liveContent.ts` → `heroHighlightsByMode` |
+| Hero 3D / camera / beams / sky | `HeroTerrainCanvas.tsx`, `Everest.tsx`, `CONTEXT.md` |
+| Hero runway progress | `HeroFlyContext.tsx` |
 | Mode crossfade wrapper | `motion/ModeContentTransition.tsx` |
 | Section copy | `liveContent.ts` → `*ByMode`, `sectionsByMode` |
 | Why Us cards | `liveContent.ts` → `differenceByMode`, `Difference.tsx` |
 | Scroll fold ambient | `Audience.tsx` / `PromiseSection.tsx` → `ambient=` |
 | Scroll timing | `useScrollScene.ts`, `scrollScene.ts`, `scroll-scene.css` |
-| Hero spotlight / video | `hero.css`, `HeroAtmosphere.tsx`, `useHeroCursorLight.ts` |
-| Theme stay vs scroll-home | `ThemeToggle.tsx` vs `ThemeBridge.tsx` |
+| Header glass | `Header.tsx` `headerSurface` |
+| Theme stay vs scroll-home | `ThemeToggle.tsx` vs `ThemeBridge.tsx` / `HomeModeBridge` |
 | Theme colors | `index.css`, `styles/base.css` |
-| Section order | `App.tsx` + `scrollSections.ts` |
+| Section order | `HomePage.tsx` + `scrollSections.ts` |
 | Deploy | `scripts/deploy-vercel.sh`, Vercel dashboard |
 | Contact key | `.env` + Vercel env |
-| Hero scroll-scrub plan | `CONTEXT.md` (not shipped) |
+| Assets sync | `assets/README.md`, `scripts/sync-assets.sh` |
 
 ---
 
 ## 19. Sanity checklist
 
-- [ ] `npm run build` passes (OG image present or regenerated)  
-- [ ] Light/dark — copy, stats, charts appropriate per mode  
+- [ ] `npm run build` passes (`og-image.png` + `everest.glb` present)  
+- [ ] Light/dark — copy, charts, hero FX appropriate per mode  
+- [ ] Desktop light: cream haze + visible scroll beams on fly  
+- [ ] Desktop dark: star dome behind ridges (no horizon slab)  
 - [ ] Header theme toggle: stay in place + section content wait-transition  
-- [ ] ThemeBridge: switches + scrolls to hero  
+- [ ] ThemeBridge / ModeBridge: switches + scrolls to hero  
 - [ ] Desktop: Audience/Promise fold + chart morph  
-- [ ] Desktop: Why Us cards spawn on scroll into grid  
-- [ ] Mobile: hero stats carousel + dots; no desktop dots  
-- [ ] Mobile: static/Stagger fallbacks, no broken opacity  
+- [ ] Mobile: no WebGL hero; CSS sky; static/Stagger fallbacks  
 - [ ] `git log -1` author OK before Vercel Git deploy  
 - [ ] Deploy to **upraiser-site-v2**; verify `upraiser-site.vercel.app`  
 

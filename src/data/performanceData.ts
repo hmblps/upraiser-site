@@ -77,7 +77,7 @@ export const PERFORMANCE_TO_HOME: Record<PerformanceBlock, string> = {
   trustMarquee: "LenovoTrustStrip (+ optional Cases logo marquee)",
   philosophy: "Audience + Difference + Promise (fold charts live here only)",
   services: "TrafficChannels variant=home → /solutions",
-  techSpotlight: "Clarity teaser → /measurement",
+  techSpotlight: "Clarity teaser → /clarity",
   caseStudies: "CasesTeaser → /cases",
   footerCta: "HomePilotCta + Footer",
 };
@@ -158,7 +158,7 @@ export const PERFORMANCE_CONTENT = {
     },
     {
       id: "paid-search-social",
-      title: "Paid Social & Creators",
+      title: "Creators",
       category: "Media Buying",
       description: "Meta, TikTok, and creator placements wired to MMP events.",
       iconName: "Search",
@@ -166,7 +166,7 @@ export const PERFORMANCE_CONTENT = {
     },
     {
       id: "oem-inventory",
-      title: "OEM & Lenovo",
+      title: "OEM",
       category: "Media Buying",
       description: "Factory ROM and Google PAI — official Lenovo agency lanes with SDK trails.",
       iconName: "Layers",
@@ -175,11 +175,11 @@ export const PERFORMANCE_CONTENT = {
     },
     {
       id: "attribution-tech",
-      title: "Clarity Measurement",
+      title: "Clarity",
       category: "Data & Tech",
       description: "S2S postbacks, MMP wiring, and bid-time / bill-time reconciliation.",
       iconName: "BarChart3",
-      href: "/measurement",
+      href: "/clarity",
     },
     {
       id: "premium-ctv",
@@ -203,7 +203,7 @@ export const PERFORMANCE_CONTENT = {
       "Month-end file finance and Ad Ops can pull the same day",
     ],
     ctaText: "Open Clarity",
-    ctaHref: "/measurement",
+    ctaHref: "/clarity",
   },
 
   caseStudies: [

@@ -1,253 +1,144 @@
-# UPRAISER — Context Package for External AI
+# UPRAISER — Hero Context (3D Everest fly)
 
-> **Status (23 Jul 2026):** planning brief only — **scroll-scrub hero is NOT implemented** in production.  
-> Current live hero = looping `/hero/light-mountains-loop.mp4` + theme overlay crossfade.  
+> **Status (25 Jul 2026):** **SHIPPED** — desktop hero is a sticky Lenis runway + React Three Fiber Everest fly-through.  
+> Legacy plan (scroll-scrub MP4) is **superseded**; do not reintroduce looping mountains video into the live canvas path without an explicit ask.  
 > Full site handoff: **[AI_HANDOFF.md](./AI_HANDOFF.md)** · human summary: **[README.md](./README.md)**  
-> Live site: https://upraiser-site.vercel.app/
-
-> Copy this entire file into an external AI chat to implement **scroll-driven hero video + text parallax**.
+> Live: https://upraiser-site.vercel.app/
 
 ---
 
-## 1. Stack (answer: Vite + React, NOT Next.js)
+## 1. Stack
 
 | Layer | Choice |
 |-------|--------|
-| Framework | **Vite 8 + React 19 + TypeScript** |
-| Styling | **Tailwind CSS v4** + custom CSS in `src/styles/*.css` |
-| Scroll smoothing | **Lenis** (`lenis` package) — NOT GSAP, NOT Locomotive |
-| Scroll-driven animation | **Framer Motion** (`useMotionValue`, `useSpring`, `useTransform`) |
-| Custom scroll scenes | **`useScrollScene` hook** + `runwayProgress()` — already used in Audience/Promise sections |
-| Charts | Recharts (unrelated to hero) |
+| Framework | Vite 8 + React 19 + TypeScript |
+| 3D | `@react-three/fiber` + `@react-three/drei` + `three` |
+| Scroll | Lenis (desktop) + `HeroFlyContext` progress (not drei `useScroll`) |
+| Styles | Tailwind v4 + `src/styles/hero.css` |
+| Motion (UI) | Framer Motion springs |
 
-**No GSAP ScrollTrigger.** Integrate with existing Lenis + `registerScrollListener`.
-
-### package.json (dependencies only)
-
-```json
-{
-  "dependencies": {
-    "framer-motion": "^12.41.0",
-    "lenis": "^1.3.24",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "recharts": "^3.9.2"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.3.1",
-    "tailwindcss": "^4.3.1",
-    "typescript": "~6.0.2",
-    "vite": "^8.1.0"
-  }
-}
-```
+**No GSAP.** Hero camera / beams / fog read `progressRef` from `HeroFlyProvider`.
 
 ---
 
-## 2. Task — UX Scenario
+## 2. What shipped
 
-### Goal
-Replace (or extend) the current **looping hero background video** with a **scroll-scrubbed ascent video** + **parallax on hero text**.
+### Desktop (≥768px, motion ok)
 
-### Desired behavior (desktop ≥768px, motion ok)
+1. `#hero` is a **sticky runway** driven by `HeroFlyProvider` (Lenis-aware).
+2. Inner stage stays viewport-locked while progress 0→1.
+3. **Camera** flies Path C (“Low approach”) in `HeroTerrainCanvas` (`HERO_ASCENT_DEFAULTS`).
+4. **Headline** micro-floats with climb; soft exit toward landing pad before Audience.
+5. After runway: short `.hero-landing-pad`, then `#audience` (anchor fold).
 
-1. `#hero` becomes a **scroll runway** (~**220vh** total height).
-2. Inner hero content is **`position: sticky`** (top = site header offset).
-3. While user scrolls through the runway (0→100% progress):
-   - **Video** scrubs from `currentTime = 0` to `duration` (NOT autoplay loop).
-   - **Hero copy** (label, H1, lede, founded, CTAs) moves at different Y speeds (parallax) and slightly fades.
-   - **Stat cards** (right column) parallax slower or opposite direction.
-4. After runway completes, page scroll continues normally to `#audience` (Lenovo strip + sections).
-5. **Mobile / `prefers-reduced-motion`**: fallback to current behavior — static poster frame OR looping video, no runway.
+### Theme FX (same canvas)
 
-### Creative direction (video content — being generated separately)
+| Theme | Implementation |
+|-------|----------------|
+| **Light** | Opaque clear `#f2ebe0` · `BrandHazeSky` cream→gold shader dome (not drei `<Sky>`) · `ScrollBeams` — two drei `SpotLight`s from viewport corners, aim sweeps with progress |
+| **Dark** | Opaque clear `#050504` · `NightStars` — camera-centered point dome behind ridges |
 
-- **POV / aerial ascent** to mountain summit — NOT diving into canyons.
-- Final frames: **on peak**, panoramic horizon, mountain ridges.
-- Aspect **16:9**, 1080p, ~8–12 seconds, no watermark.
-- Placeholder path (future): `/hero/ascent/hero-ascent.mp4`
-- **Current prod asset** (loop fallback): `/hero/light-mountains-loop.mp4`
+### Mobile / reduced motion
 
-### Video asset specs (current loop)
-
-| Property | Value |
-|----------|-------|
-| Path (public URL) | `/hero/light-mountains-loop.mp4` |
-| Source on disk | `assets/hero/light-mountains-loop.mp4` → synced to `public/` on build |
-| Resolution | **1920×1080** |
-| FPS | **25** |
-| Duration | **~13.04 s** |
-| Format | H.264 MP4, muted, `playsInline` |
-
-For scroll-scrub, a **shorter 8–10s non-loop** ascent clip is preferred.
-
-### Video CSS (current — do not break edge fill)
-
-```css
-.hero-mountains-video {
-  object-fit: cover;
-  object-position: center 58%;
-  transform: scale(1); /* NEVER scale below 1 — causes edge gaps */
-}
-```
+CSS sky only (`HeroAtmosphere`). No WebGL mount.
 
 ---
 
-## 3. DOM structure (current)
+## 3. DOM / component map
 
 ```tsx
-// App.tsx
-<main>
-  <div id="hero" className="md:min-h-[calc(100dvh-4.75rem)]">
-    <Hero />
-  </div>
-  <LenovoTrustStrip />
-  <Audience />  {/* scroll scenes already below */}
-  ...
-</main>
+// HomePage.tsx
+<div id="hero">
+  <Hero />                    {/* HeroFlyProvider wraps stage */}
+</div>
+<div className="hero-landing-pad" />
+<Audience runway="anchor" />
 ```
 
 ```tsx
 // Hero.tsx
-<section className="hero-stage">
-  <HeroAtmosphere />   {/* background video + scrims + cursor spotlight */}
-  <div className="hero-content">
-    <div className="hero-copy">...</div>   {/* left: text */}
-    <div className="hero-stats">...</div>   {/* right: 4 stat cards */}
-  </div>
-</section>
+<HeroFlyProvider>
+  <HeroAtmosphere />          {/* CSS sky + idle-lazy HeroTerrainCanvas */}
+  <div className="hero-stage">…headline + ghost stats…</div>
+  <LenovoTrustStrip />
+</HeroFlyProvider>
 ```
-
----
-
-## 4. Scroll infrastructure — MUST reuse
-
-### Lenis init (`SmoothScroll.tsx`)
-
-- Lenis wraps entire app via `<ScrollProvider>`.
-- Scroll position exposed via `registerScrollListener((scrollY) => ...)`.
-- **All scroll-driven hooks MUST use `registerScrollListener`**, not raw `window.scroll` alone (Lenis virtual scroll).
-
-### `useScrollScene` — pattern for hero runway
-
-Already exists. Example usage:
 
 ```tsx
-const runwayRef = useRef<HTMLElement>(null);
-const progress = useScrollScene(runwayRef, { mode: "runway", spring: true });
-// progress: MotionValue<number> 0→1 while section scrolls through viewport
+// HeroTerrainCanvas Scene (light)
+Atmosphere (fog) → HorizonGlow → SunRig → ScrollBeams → HeroCamera → BrandHazeSky → Everest
+// dark: NightStars instead of BrandHazeSky / ScrollBeams
 ```
-
-```ts
-// lib/scrollScene.ts
-export function runwayProgress(sectionTop, sectionHeight, viewportHeight, enterOffset = 0) {
-  const scrollRange = sectionHeight - viewportHeight;
-  if (scrollRange <= 0) return 0;
-  return clamp((-sectionTop - enterOffset) / scrollRange, 0, 1);
-}
-```
-
-### Gate for desktop-only runway
-
-```tsx
-const runwayEnabled = useScrollRunwayEnabled(); // false on mobile or reduced-motion
-```
-
----
-
-## 5. Key files to modify / create
 
 | File | Role |
 |------|------|
-| `src/components/Hero.tsx` | Add runway ref, parallax on copy via `useTransform(progress, ...)` |
-| `src/components/HeroAtmosphere.tsx` | Video scrub OR swap `HeroMountainsLoop` → `HeroScrollVideo` |
-| `src/hooks/useScrollScene.ts` | Reuse as-is |
-| `src/components/SmoothScroll.tsx` | Reuse as-is — sync video scrub to Lenis listener |
-| `src/styles/hero.css` | `.hero-runway`, `.hero-runway-sticky` |
-| `src/App.tsx` | Optionally move `#hero` height to runway wrapper |
-
-### Suggested new component
-
-`src/components/HeroScrollVideo.tsx`:
-
-```tsx
-// Pseudocode — implement against real project
-useMotionValueEvent(progress, "change", (p) => {
-  if (!videoRef.current || !videoRef.current.duration) return;
-  videoRef.current.currentTime = p * videoRef.current.duration;
-});
-```
-
-Preload: `video.preload = "auto"`, pause loop, `muted playsInline`.
+| `src/context/HeroFlyContext.tsx` | Sticky runway progress → `progressRef` |
+| `src/components/HeroAtmosphere.tsx` | CSS sky; lazy-mount canvas on desktop |
+| `src/components/HeroTerrainCanvas.tsx` | Camera, fog, sun, haze/stars, scroll beams |
+| `src/components/Everest.tsx` | GLB wire + ghost fill materials |
+| `src/styles/hero.css` | Atmosphere, sticky copy, terrain fade |
 
 ---
 
-## 6. Parallax speeds (starting point)
+## 4. Assets
 
-```tsx
-const labelY = useTransform(progress, [0, 1], [0, -40]);
-const titleY = useTransform(progress, [0, 1], [0, -120]);
-const ledeY  = useTransform(progress, [0, 1], [0, -180]);
-const titleOpacity = useTransform(progress, [0, 0.75, 1], [1, 1, 0.35]);
-const bgScale = useTransform(progress, [0, 1], [1, 1.06]); // subtle, keep >= 1
-```
+| Path | Role |
+|------|------|
+| `assets/hero/everest.glb` → `/hero/everest.glb` | Live terrain (required for build) |
+| `public/draco/gltf/*` | Draco decoders (in place) |
+| `assets/hero/light-mountains-loop.mp4` | **Optional** — OG tooling / legacy; **not** synced to public by default |
 
-Use Framer Motion `motion.*` with `style={{ y, opacity }}`. Spring type `"spring"` for micro-interactions.
-
----
-
-## 7. Constraints — do NOT
-
-- ❌ Add GSAP / ScrollTrigger (not in project)
-- ❌ Use `window.scroll` without `registerScrollListener` when Lenis active
-- ❌ `transform: scale()` below 1 on full-bleed video (causes edge gaps)
-- ❌ Break mobile — keep `useScrollRunwayEnabled()` gate
-- ❌ Break `prefers-reduced-motion` — static fallback
-- ❌ Remove existing scrims/spotlight in `HeroAtmosphere` without replacement
-- ❌ YouTube embed — self-hosted MP4 only
-
----
-
-## 8. Hero copy (for layout reference)
-
-```
-Label:  UPRAISER · Charting the Ascent
-H1:     We see how stunning / Your rise / to the top / can be.
-Lede:   Pre-bid fraud filtration, OEM distribution, and verified outcomes.
-Footer: Founded 17 July 2017 · Based in London
-CTAs:   Contact | View Case Studies
-Stats:  4 cards (mode-dependent metrics) — right column on desktop
+```bash
+npm run optimize:everest
+bash scripts/sync-assets.sh
 ```
 
 ---
 
-## 9. Deliverables expected from AI
+## 5. Art direction locks (do not regress)
 
-1. `HeroScrollVideo.tsx` (or extend `HeroAtmosphere.tsx`)
-2. Updated `Hero.tsx` with runway + parallax
-3. CSS additions in `hero.css`
-4. Fallback path for mobile/reduced-motion
-5. TypeScript, no new deps unless justified
-6. Brief note on where to drop final MP4 (`assets/hero/ascent/`)
-
----
-
-## 10. Reference — AccentScrollFold (existing scroll pattern)
-
-Other sections use sticky runway via `AccentScrollFold` + `useScrollScene`. Hero should follow the same architecture for consistency.
+1. **Light sky:** cream / beige / soft gold only. Never re-enable physical Rayleigh `Sky` (dirty blue-grey + horizon seam).
+2. **No ground disc** under the mountain — rim + fog = hard horizon line.
+3. **Fog color** must match clear / haze base (`#f2ebe0` light, `#050504` dark).
+4. **Wire (light):** yellow-gold (`#efb400`) for contrast on cream.
+5. **ScrollBeams:** must be **readable** on scroll (viewport-corner sources + visible volumetric). Dial intensity with owner — do not hide them again by default.
+6. **Stars:** camera-position-following dome; opaque night clear so additive/points composite cleanly.
 
 ---
 
-## 11. Prompt for AI (paste as task)
+## 6. Camera path (Path C — Low approach)
 
-```
-Implement scroll-scrubbed hero video for UPRAISER (Vite/React/Lenis/Framer Motion).
+Defaults in `HERO_ASCENT_DEFAULTS` (`HeroTerrainCanvas.tsx`):
 
-Use existing useScrollScene({ mode: "runway" }) and registerScrollListener from ScrollContext.
-Hero runway ~220vh, sticky inner viewport, video currentTime = progress * duration.
-Parallax hero text layers at different Y speeds. Desktop only (useScrollRunwayEnabled).
-Mobile/reduced-motion: keep looping /hero/light-mountains-loop.mp4.
+- Start low / left-offset, look toward peak right of center
+- Climb + FOV tighten (46 → 34)
+- Soft bank through mid arc + idle drone drift
 
-Return full code for new/modified files. Match existing TypeScript + Tailwind conventions.
-Do not add GSAP.
-```
+Tune positions carefully — small Y/Z changes break headline/sky balance.
+
+---
+
+## 7. What NOT to do
+
+- ❌ Bring back looping MP4 as the primary hero background without an ask
+- ❌ drei `<Sky>` / cool grey fog on light theme
+- ❌ Ground `circleGeometry` horizon fill
+- ❌ drei `useScroll` for hero progress (Lenis + `HeroFly` own the runway)
+- ❌ GSAP ScrollTrigger
+
+---
+
+## 8. Tuning knobs (quick)
+
+| Want… | Where |
+|-------|--------|
+| Beam visibility | `ScrollBeams` opacity / intensity / angle in `HeroTerrainCanvas.tsx` |
+| Sky warmth | `BrandHazeSky` uniforms `uZenith` / `uMid` / `uHorizon` / `uGlow` |
+| Wire yellow | `Everest.tsx` light accent + emissive |
+| Fog depth | `FOG.light` / `FOG.dark` |
+| Camera path | `HERO_ASCENT_DEFAULTS` |
+| Header glass | `Header.tsx` `headerSurface` classes |
+
+---
+
+*Update this file when hero architecture changes. Prefer this over stale video-scrub notes.*

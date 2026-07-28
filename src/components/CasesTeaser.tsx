@@ -24,7 +24,7 @@ export function CasesTeaser() {
 
   return (
     <section id="cases" className="section-band section-band--dense">
-      <ModeContentTransition mode={mode} className="mx-auto max-w-7xl px-6 lg:px-8">
+      <ModeContentTransition mode={mode} className="section-inner">
         <SectionHeader
           animated={false}
           label={casesPage.label}

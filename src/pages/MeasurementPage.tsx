@@ -36,7 +36,7 @@ export function MeasurementPage() {
 
       <LazySection minHeight="44vh">
         <section id="measurement" className="section-band border-t border-border/40">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="section-inner">
             <ClarityReconcile />
 
             <Reveal delay={0.06} className="mt-16">

@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
+import { MODEL_URL } from "../lib/heroModel";
 
 const HeroTerrainCanvas = lazy(() =>
   import("./HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas })),
@@ -24,8 +25,9 @@ function useDesktopHero() {
 }
 
 /**
- * CSS sky paints immediately; WebGL mounts after idle so text/layout win first paint.
- * Model is Draco ~1MB (was 33MB) — no visual downgrade (same triangle count).
+ * CSS sky paints immediately; WebGL mounts after idle.
+ * Dark: NightStars inside HeroTerrainCanvas (same depth pass as ridges).
+ * Light: BrandHazeSky + ScrollBeams inside the canvas (cream haze, no FX CSS layer).
  */
 export function HeroAtmosphere() {
   const { theme } = useTheme();
@@ -47,11 +49,20 @@ export function HeroAtmosphere() {
       setCanvasReady(true);
     };
 
+    // Prefetch GLB while waiting for idle — overlaps with three.js download.
+    const prefetch = document.createElement("link");
+    prefetch.rel = "prefetch";
+    prefetch.href = MODEL_URL;
+    prefetch.as = "fetch";
+    prefetch.crossOrigin = "anonymous";
+    document.head.appendChild(prefetch);
+
     if (typeof window.requestIdleCallback === "function") {
       const id = window.requestIdleCallback(boot, { timeout: 900 });
       return () => {
         cancelled = true;
         window.cancelIdleCallback(id);
+        prefetch.remove();
       };
     }
 
@@ -59,6 +70,7 @@ export function HeroAtmosphere() {
     return () => {
       cancelled = true;
       window.clearTimeout(t);
+      prefetch.remove();
     };
   }, [use3d]);
 

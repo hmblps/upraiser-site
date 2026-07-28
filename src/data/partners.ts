@@ -30,10 +30,10 @@ export const integrationPartners: IntegrationPartner[] = [
   { name: "Singular", slug: "singular", logo: withLogo("singular"), scale: 1 },
 ];
 
-/** Attribution / MMP logos shown on /measurement */
+/** Attribution / MMP logos shown on Clarity */
 export const mmpPartnerSlugs = ["appsflyer", "kochava", "singular"] as const;
 
-/** Supply-side logos emphasized on /partners */
+/** Supply-side logos emphasized on OEM / supply contexts */
 export const supplyPartnerSlugs = [
   "unity",
   "applovin",
@@ -43,8 +43,54 @@ export const supplyPartnerSlugs = [
   "lenovo",
 ] as const;
 
+export const socialPartnerSlugs = ["meta", "tiktok", "x", "snapchat", "discord", "reddit"] as const;
+
+export const oemPartnerSlugs = ["lenovo", "google", "apple", "appsflyer"] as const;
+
+export const studioPartnerSlugs = ["meta", "tiktok", "snapchat", "discord", "unity", "applovin"] as const;
+
+export type PartnerLogoSetId =
+  | "default"
+  | "clarity"
+  | "oem"
+  | "growth"
+  | "social"
+  | "programmatic"
+  | "studio"
+  | "supply";
+
+const LOGO_SETS: Record<PartnerLogoSetId, readonly string[]> = {
+  default: integrationPartners.map((p) => p.slug),
+  clarity: mmpPartnerSlugs,
+  oem: oemPartnerSlugs,
+  growth: ["meta", "tiktok", "google", "applovin", "unity", "appsflyer", "lenovo"],
+  social: socialPartnerSlugs,
+  programmatic: ["taboola", "outbrain", "applovin", "unity", "ironsource", "google"],
+  studio: studioPartnerSlugs,
+  supply: supplyPartnerSlugs,
+};
+
 export function partnersBySlugs(slugs: readonly string[]) {
   return slugs
     .map((slug) => integrationPartners.find((p) => p.slug === slug))
     .filter((p): p is IntegrationPartner => Boolean(p));
+}
+
+export function partnersForSet(set: PartnerLogoSetId) {
+  return partnersBySlugs(LOGO_SETS[set]);
+}
+
+/** Pick logo set from pathname + optional expertise pillar. */
+export function partnerSetForRoute(pathname: string, pillar: string | null = null): PartnerLogoSetId {
+  if (pathname.startsWith("/clarity") || pathname.startsWith("/measurement")) return "clarity";
+  if (pathname.startsWith("/studio")) return "studio";
+  if (pathname.startsWith("/expertise")) {
+    if (pillar === "oem") return "oem";
+    if (pillar === "social" || pillar === "creators") return "social";
+    if (pillar === "programmatic" || pillar === "ctv") return "programmatic";
+    if (pillar === "clarity") return "clarity";
+    return "growth";
+  }
+  if (pathname.startsWith("/company") || pathname.startsWith("/clients")) return "default";
+  return "default";
 }

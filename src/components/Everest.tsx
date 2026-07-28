@@ -4,15 +4,20 @@ Adapted for UPRAISER Hero — brand gold wire + warm ghost fill.
 GLB is Draco-compressed + texture-stripped (geometry fidelity kept).
 */
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Center, useGLTF } from "@react-three/drei";
-import type { ThreeElements } from "@react-three/fiber";
+import { useFrame, type ThreeElements } from "@react-three/fiber";
 import { Box3, Color, MeshStandardMaterial, Vector3, type Mesh, type Object3D } from "three";
+import { DRACO_PATH, MODEL_URL } from "../lib/heroModel";
+import { IDLE_BREATHE } from "./hero-terrain/shared";
 
-export const MODEL_URL = "/hero/everest.glb";
-/** Local Draco wasm — matches KHR_draco_mesh_compression on the GLB. */
-export const DRACO_PATH = "/draco/gltf/";
-const TERRAIN_SPAN = 240;
+export { DRACO_PATH, MODEL_URL } from "../lib/heroModel";
+const TERRAIN_SPAN = 420;
+/**
+ * Planet-curvature radius (world units). Terrain edges bend down like the Earth's
+ * horizon, so the map never shows a hard end — edge drop ≈ (span/2)² / (2R) ≈ 48u.
+ */
+const PLANET_RADIUS = 460;
 
 type EverestGLTF = {
   nodes: {
@@ -50,8 +55,8 @@ function stripMaps(mat: MeshStandardMaterial) {
 
 export function Everest({
   theme = "light",
-  castShadow = true,
-  receiveShadow = true,
+  castShadow = false,
+  receiveShadow = false,
   ...props
 }: EverestProps) {
   const { nodes, materials, scene } = useGLTF(MODEL_URL, DRACO_PATH) as unknown as EverestGLTF;
@@ -64,44 +69,96 @@ export function Everest({
     return TERRAIN_SPAN / maxDim;
   }, [scene]);
 
+  const geos = useMemo(
+    () => [nodes.Object_4, nodes.Object_5, nodes.Object_6, nodes.Object_7],
+    [nodes],
+  );
+
+  // One-time CPU bend: drop each vertex by d²/(2R) from the terrain centre —
+  // globe curvature, edges sink below the horizon instead of ending in a cliff.
+  useMemo(() => {
+    const box = new Box3();
+    for (const node of geos) {
+      node.geometry.computeBoundingBox();
+      if (node.geometry.boundingBox) box.union(node.geometry.boundingBox);
+    }
+    const cx = (box.min.x + box.max.x) / 2;
+    const cz = (box.min.z + box.max.z) / 2;
+    const rLocal = PLANET_RADIUS / Math.max(scale, 1e-6);
+
+    for (const node of geos) {
+      const geo = node.geometry;
+      if (geo.userData.planetCurved) continue;
+      geo.userData.planetCurved = true;
+
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i += 1) {
+        const dx = pos.getX(i) - cx;
+        const dz = pos.getZ(i) - cz;
+        pos.setY(i, pos.getY(i) - (dx * dx + dz * dz) / (2 * rLocal));
+      }
+      pos.needsUpdate = true;
+      geo.computeBoundingBox();
+      geo.computeBoundingSphere();
+    }
+  }, [geos, scale]);
+
   const wire = useMemo(() => {
-    const accent = isLight ? "#f8c800" : "#ffcc00";
+    // Dark: brighter amber wire so ridges hold against the starfield (still muted vs #ffcc00).
+    // Light: yellow-gold + enough metalness to catch StudioRimLight env speculars.
+    const accent = isLight ? "#efb400" : "#d4a84a";
     return new MeshStandardMaterial({
       color: new Color(accent),
-      emissive: new Color(accent),
-      emissiveIntensity: isLight ? 0.12 : 0.2,
+      emissive: new Color(isLight ? "#d9a000" : "#8a6424"),
+      emissiveIntensity: isLight ? 0.42 : 0.34,
       wireframe: true,
       transparent: true,
-      opacity: isLight ? 0.9 : 0.92,
-      metalness: 0.1,
-      roughness: 0.4,
+      opacity: isLight ? 1 : 0.88,
+      metalness: isLight ? 0.4 : 0.05,
+      roughness: isLight ? 0.26 : 0.68,
       depthWrite: false,
+      depthTest: true,
+      envMapIntensity: isLight ? 0.72 : 0,
     });
   }, [isLight]);
 
   const ghost = useMemo(() => {
     const mat = materials.Default.clone();
     stripMaps(mat);
-    mat.color = new Color(isLight ? "#eae4da" : "#12100e");
-    mat.emissive = new Color("#000000");
-    mat.emissiveIntensity = 0;
-    mat.metalness = 0.04;
-    mat.roughness = 0.94;
+    mat.color = new Color(isLight ? "#efe8dc" : "#050504");
+    mat.emissive = new Color(isLight ? "#e4d9c6" : "#000000");
+    mat.emissiveIntensity = isLight ? 0.14 : 0;
+    mat.metalness = 0.02;
+    mat.roughness = isLight ? 0.96 : 0.98;
+    mat.envMapIntensity = isLight ? 0.08 : 0;
     mat.wireframe = false;
-    mat.transparent = true;
-    mat.opacity = isLight ? 0.7 : 0.55;
+    mat.transparent = false;
+    mat.opacity = 1;
     mat.depthWrite = true;
+    mat.depthTest = true;
     mat.needsUpdate = true;
     return mat;
   }, [materials.Default, isLight]);
 
-  const geos = useMemo(
-    () => [nodes.Object_4, nodes.Object_5, nodes.Object_6, nodes.Object_7],
-    [nodes],
+  useEffect(
+    () => () => {
+      wire.dispose();
+      ghost.dispose();
+    },
+    [wire, ghost],
   );
 
+  // Soft idle breathe — mountain scale never pulses.
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const breathe = Math.sin(t * IDLE_BREATHE);
+    wire.emissiveIntensity = (isLight ? 0.42 : 0.34) + breathe * (isLight ? 0.04 : 0.03);
+    wire.opacity = (isLight ? 1 : 0.88) + breathe * (isLight ? 0 : 0.01);
+  });
+
   return (
-    <group {...props} dispose={null} scale={scale} rotation={[0, 0.22, 0]}>
+    // y compensates <Center> re-centring the bent mesh (edge drop lifts the middle)
+    <group {...props} dispose={null} scale={scale} rotation={[0, -0.06, 0]} position={[-6, -34, -22]}>
       <Center>
         {geos.map((node, i) => (
           <mesh
@@ -125,5 +182,3 @@ export function Everest({
     </group>
   );
 }
-
-useGLTF.preload(MODEL_URL, DRACO_PATH);

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { cn } from "../lib/cn";
 
 type Item = {
   id: string;
@@ -19,22 +20,26 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
   const reduced = useReducedMotion();
 
   return (
-    <div className={`slide-tabs relative flex gap-2 ${className}`.trim()}>
+    <div className={cn("slide-tabs relative flex gap-2", className)}>
       {items.map((item) => {
         const active = item.id === activeId;
-        const classes = `slide-tab relative shrink-0 rounded-full px-3.5 py-1.5 text-micro tracking-wide transition ${
-          active ? "text-on-accent" : "border border-border text-muted-light hover:border-fg/20 hover:text-fg"
-        }`;
+        const classes = cn(
+          "slide-tab relative shrink-0 rounded-full px-3.5 py-1.5 text-micro tracking-wide transition",
+          active
+            ? "slide-tab--active text-on-accent"
+            : "border border-border text-muted-light hover:border-fg/20 hover:text-fg",
+        );
 
-        const highlight = active && !reduced ? (
-          <motion.span
-            layoutId={layoutId}
-            className="absolute inset-0 rounded-full bg-orange"
-            transition={{ type: "spring", stiffness: 420, damping: 32 }}
-          />
-        ) : active ? (
-          <span className="absolute inset-0 rounded-full bg-orange" aria-hidden />
-        ) : null;
+        const highlight =
+          active && !reduced ? (
+            <motion.span
+              layoutId={layoutId}
+              className="slide-tab__pill absolute inset-0 rounded-full bg-orange"
+              transition={{ type: "spring", stiffness: 420, damping: 32 }}
+            />
+          ) : active ? (
+            <span className="slide-tab__pill absolute inset-0 rounded-full bg-orange" aria-hidden />
+          ) : null;
 
         if (item.href) {
           return (

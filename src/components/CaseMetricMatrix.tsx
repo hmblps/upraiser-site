@@ -23,7 +23,7 @@ export function CaseMetricMatrix({
 
   return (
     <section className={cn("section-band border-t border-border/40", className)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner">
         <Reveal>
           <p className="section-label">{label}</p>
           <h2 className="section-title mt-3 max-w-2xl">{title}</h2>

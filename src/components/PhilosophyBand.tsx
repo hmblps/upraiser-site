@@ -19,7 +19,7 @@ export function PhilosophyBand({ className }: PhilosophyBandProps) {
 
   return (
     <section className={cn("section-band border-t border-border/40", className)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner">
         <Reveal>
           <p className="section-label">{philosophy.tagline}</p>
           <h2 className="section-title mt-3 max-w-3xl">{philosophy.title}</h2>

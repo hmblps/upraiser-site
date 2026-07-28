@@ -140,16 +140,16 @@ export const caseStudies: CaseStudy[] = [
     geos: "PH · BR",
     kpiEvent: "OrderPlaced",
     headline: "Install-to-order funnel across SEA and LATAM",
-    channels: ["Performance UA", "In-App", "OEM"],
+    channels: ["App Growth", "In-App", "OEM"],
     brand: {
       icon: "/cases/logos/shopee.png",
       accent: "#EE4D2D",
       surface: "#2a0f0a",
     },
     metrics: [
-      { value: "7.2%", label: "Install → order (PH)" },
-      { value: "15.7K", label: "Installs (PH)" },
-      { value: "10.7%", label: "Install → order (BR)" },
+      { value: "7.2%", label: "Order rate · PH" },
+      { value: "15.7K", label: "Installs · PH" },
+      { value: "10.7%", label: "Order rate · BR" },
     ],
     trend: [35, 38, 40, 42, 44, 45, 46, 52, 60, 68, 75, 82],
     growthFocus: {
@@ -301,7 +301,7 @@ export const caseStudies: CaseStudy[] = [
     geos: "EU · 5 markets",
     kpiEvent: "af_purchase",
     headline: "Purchase events at CPI scale across the EU",
-    channels: ["Performance UA", "CPI", "Programmatic"],
+    channels: ["App Growth", "CPI", "Programmatic"],
     brand: {
       icon: "/cases/logos/autodoc.png",
       accent: "#F97316",

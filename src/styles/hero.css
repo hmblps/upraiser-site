@@ -12,16 +12,15 @@
 }
 
 .hero-atmosphere--light .hero-atmosphere__sky {
+  /* Matches --theme-bg cream + BrandHazeSky wash */
   background:
-    radial-gradient(ellipse 90% 55% at 50% 16%, color-mix(in srgb, #f8c800 14%, #fff8ec) 0%, transparent 58%),
-    linear-gradient(180deg, #f3eee6 0%, #efe8dc 42%, #ffffff 100%);
+    radial-gradient(ellipse 85% 50% at 30% 16%, rgba(242, 200, 110, 0.2), transparent 58%),
+    linear-gradient(180deg, #fffaf4 0%, #f6edd8 55%, #efe0c4 100%);
 }
 
 .hero-atmosphere--dark .hero-atmosphere__sky {
-  background:
-    radial-gradient(ellipse 80% 48% at 50% 12%, #16120e 0%, transparent 55%),
-    radial-gradient(ellipse 70% 40% at 68% 26%, color-mix(in srgb, #ffcc00 8%, transparent) 0%, transparent 50%),
-    linear-gradient(180deg, #050504 0%, #0a0a0a 48%, #0c0b0a 100%);
+  /* Flat night — matches --theme-bg / WebGL clear */
+  background: var(--theme-bg);
 }
 
 .hero-atmosphere--mobile .hero-atmosphere__sky {
@@ -37,6 +36,49 @@
   height: 100%;
 }
 
+/* Sky FX sit behind the terrain canvas; opaque ridges occlude stars. */
+.hero-sky-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Stars behind the terrain canvas — opaque ridges occlude them (no ridge blobs). */
+.hero-sky-fx--stars {
+  z-index: 0;
+}
+
+.hero-sky-fx--rays {
+  z-index: 0;
+}
+
+.hero-sky-fx__layer {
+  position: absolute !important;
+  inset: 0;
+}
+
+.hero-terrain-root {
+  z-index: 1;
+}
+
+/* Feather only in light — dark CSS sky already matches fog (#050504), so a mask
+   band reads as a semi-transparent sky seam. */
+.hero-atmosphere--light .hero-terrain-root {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 16%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 16%,
+    #000 100%
+  );
+}
+
 .hero-terrain-canvas {
   width: 100% !important;
   height: 100% !important;
@@ -47,6 +89,8 @@
   position: relative;
   height: 100%;
   min-height: 100dvh;
+  --hero-label-opacity: 0;
+  --hero-label-y: 28;
 }
 
 .hero-fly-sticky {
@@ -57,9 +101,9 @@
 
 @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
   .hero-stage--fly {
-    /* ~4–5s sticky runway — time to read the drone ascent */
-    height: 480vh;
-    min-height: 480vh;
+    /* ~9–10s sticky runway — cinematic drone beat with room to land */
+    height: 900vh;
+    min-height: 900vh;
   }
 
   .hero-fly-sticky {
@@ -68,7 +112,62 @@
     height: 100dvh;
     min-height: 100dvh;
     max-height: 100dvh;
+    /* Soft unpin: small lift + light fade so Audience isn't shoved into frame */
+    transform: translateY(calc(var(--hero-exit, 0) * -3.2vh));
+    opacity: calc(1 - var(--hero-exit, 0) * 0.22);
+    will-change: transform, opacity;
   }
+}
+
+/* Buffer after the 900vh fly runway — Audience enters with fold progress ≈ 0 */
+.hero-landing-pad {
+  display: none;
+  height: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .hero-landing-pad {
+    display: block;
+    /* Short buffer only — fold itself starts on viewport entry (anchor) */
+    height: clamp(12vh, 16vh, 20vh);
+    background: var(--theme-bg);
+  }
+}
+
+/* 3D scene fades in once the GLB has resolved — no pop-in on first load */
+.hero-terrain-fade {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.hero-terrain-fade.is-ready {
+  opacity: 1;
+}
+
+/* Headline glued to the sticky viewport — micro-float with the flight (vars from HeroFlyContext). */
+.hero-title--fly {
+  transform: translate3d(0, calc(var(--hero-title-y, 0) * 1vh), 0)
+    scale(var(--hero-title-scale, 1));
+  opacity: var(--hero-title-opacity, 1);
+  transform-origin: left top;
+  will-change: transform, opacity;
+}
+
+/* Label rises with the right-column stats during the fly scrub */
+.hero-fly-label {
+  margin: 0 0 0.85rem;
+  font-size: clamp(0.68rem, 0.78vw, 0.8125rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: var(--hero-label-opacity, 0);
+  transform: translate3d(0, calc(var(--hero-label-y, 28) * 1px), 0);
+  will-change: transform, opacity;
+}
+
+/* Light: gold-on-cream washes out over the wire — use red ink like the ghost stats */
+[data-theme="light"] .hero-fly-label {
+  color: var(--theme-accent-secondary);
 }
 
 .hero-lede {
@@ -76,15 +175,55 @@
 }
 
 .hero-content {
+  /* Headline tucked under nav in the left sky pocket; stats anchor lower-right */
   padding-top: calc(var(--site-header-height) + var(--hero-content-gap));
+  padding-bottom: clamp(5rem, 11vh, 7.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .hero-layout {
-  align-items: end;
+  align-items: start;
+  width: 100%;
+  min-height: calc(100dvh - var(--site-header-height) - 6.5rem);
+}
+
+.hero-copy {
+  /* Drop below the nav so it reads as part of the sky, not the header */
+  max-width: min(34rem, 46vw);
+  padding-top: clamp(1.75rem, 5.5vh, 3.75rem);
+}
+
+.hero-title--hero {
+  /* Stretch right + down within the left sky pocket */
+  font-size: clamp(3.05rem, 8.6vh, 6.15rem);
+  max-width: 100%;
+  line-height: 0.88;
+  text-wrap: unset;
+}
+
+.hero-title--hero > .block {
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .hero-copy {
+    max-width: 100%;
+  }
+
+  .hero-title--hero {
+    font-size: clamp(2.15rem, 9.5vw, 3.1rem);
+  }
+
+  .hero-title--hero > .block {
+    white-space: normal;
+  }
 }
 
 .hero-stats-wrap {
   align-self: end;
+  margin-top: auto;
   width: 100%;
 }
 

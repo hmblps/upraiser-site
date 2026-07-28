@@ -1,4 +1,4 @@
-/* ── Site atmosphere ── */
+/* ── Site atmosphere + section rhythm ── */
 
 .site-grain {
   opacity: var(--theme-grain-opacity);
@@ -6,19 +6,14 @@
   z-index: 30;
 }
 
-/* Partnership strip paints above the grain veil */
+/* Partnership strip — pops over sticky hero (above SiteGrain) */
 .lenovo-trust-strip {
-  background-color: var(--theme-bg-card);
+  background-color: color-mix(in srgb, var(--theme-bg-card) 95%, transparent);
 }
 
 .lenovo-trust-strip--revealed {
   border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
-  border-bottom: 1px solid var(--theme-border);
-}
-
-.lenovo-trust-strip--hidden {
-  pointer-events: none;
-  visibility: hidden;
+  box-shadow: 0 -12px 40px color-mix(in srgb, var(--theme-fg) 6%, transparent);
 }
 
 .site-grain svg {
@@ -34,80 +29,45 @@ main > section.section-band:nth-of-type(even) {
 }
 
 main > section.section-band {
-  padding-block: 3rem;
-}
-
-@media (min-width: 768px) {
-  main > section.section-band {
-    padding-block: 5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  main > section.section-band {
-    padding-block: 7rem;
-  }
-
-  main > section#contact.section-band {
-    padding-block: 8rem;
-  }
+  padding-block: var(--section-y);
 }
 
 /* Intentional density — breaks mechanical odd/even sameness */
 main > section.section-band--quiet {
-  padding-block: 4rem;
+  padding-block: var(--section-y);
 }
 
 main > section.section-band--dense {
-  padding-block: 3.25rem;
+  padding-block: var(--section-y-dense);
 }
 
 main > section.section-band--statement {
-  padding-block: 5rem;
+  padding-block: var(--section-y-statement);
   background-color: var(--theme-bg);
 }
 
 main > section.section-band--strip {
-  padding-block: 2.75rem;
-}
-
-@media (min-width: 768px) {
-  main > section.section-band--quiet {
-    padding-block: 5.5rem;
-  }
-
-  main > section.section-band--dense {
-    padding-block: 4.25rem;
-  }
-
-  main > section.section-band--statement {
-    padding-block: 6.5rem;
-  }
-
-  main > section.section-band--strip {
-    padding-block: 3.5rem;
-  }
+  padding-block: calc(var(--section-y-dense) * 0.85);
 }
 
 @media (min-width: 1024px) {
-  main > section.section-band--quiet {
-    padding-block: 7.5rem;
-  }
-
-  main > section.section-band--dense {
-    padding-block: 5.5rem;
-  }
-
-  main > section.section-band--statement {
-    padding-block: 9rem;
-  }
-
-  main > section.section-band--strip {
-    padding-block: 4.5rem;
+  main > section#contact.section-band {
+    padding-block: calc(var(--section-y) + 1rem);
   }
 }
 
-main > section.section-band + section.section-band {
-  border-top: 1px solid var(--theme-border);
+/* Shared section inner rail — prefer over ad-hoc max-w-* + px-* */
+.section-inner {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
 }
 
+.section-inner--narrow {
+  max-width: var(--content-max-narrow);
+}
+
+.section-inner--copy {
+  max-width: var(--content-max-copy);
+}

@@ -50,8 +50,8 @@ export function CasePreviewCard({
       tabIndex={isClone ? -1 : undefined}
       onClick={handleClick}
       className={[
-        "case-preview-card card-lift group flex h-full flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-orange/30",
-        isCarousel ? "case-preview-card--carousel" : "",
+        "case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-orange/30",
+        isCarousel ? "case-preview-card--carousel" : "h-full",
         className,
       ]
         .filter(Boolean)
@@ -63,24 +63,29 @@ export function CasePreviewCard({
         } as CSSProperties
       }
     >
-      <CaseBrandHeader item={item} compact={!isCarousel} />
-      <div className="card-pad flex flex-1 flex-col">
-        <p className="case-teaser-metric">{primary.value}</p>
-        <p className="case-teaser-metric-label">{primary.label}</p>
+      {/* Compact header in carousel — full header was clipping CTA under viewport max-height */}
+      <CaseBrandHeader item={item} compact />
+      <div className="card-pad flex min-h-0 flex-1 flex-col">
+        <p className="case-teaser-metric shrink-0">{primary.value}</p>
+        <p className="case-teaser-metric-label case-preview-card__primary-label shrink-0">{primary.label}</p>
 
         {isCarousel ? (
-          <div className="case-preview-metrics case-preview-metrics--secondary mt-4">
-            {secondary.map((metric) => (
+          <div className="case-preview-metrics case-preview-metrics--secondary mt-3 shrink-0" aria-hidden={secondary.length === 0}>
+            {secondary.slice(0, 2).map((metric) => (
               <div key={metric.label} className="case-preview-metrics__cell">
                 <p className="case-preview-metrics__value">{metric.value}</p>
-                <p className="case-teaser-metric-label">{metric.label}</p>
+                <p className="case-teaser-metric-label" title={metric.label}>
+                  {metric.label}
+                </p>
               </div>
             ))}
           </div>
         ) : null}
 
-        <p className="case-preview-card__headline">{item.headline}</p>
-        <p className="case-preview-card__cta">
+        <p className="case-preview-card__headline" title={item.headline}>
+          {item.headline}
+        </p>
+        <p className="case-preview-card__cta mt-auto shrink-0">
           {ctaLabel} <span aria-hidden>→</span>
         </p>
       </div>

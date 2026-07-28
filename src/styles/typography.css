@@ -1,15 +1,16 @@
 .section-title {
   margin-top: 0.75rem;
-  font-size: 1.875rem;
+  font-family: var(--font-display);
+  font-size: var(--text-title);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-snug);
   text-transform: uppercase;
 }
 
 @media (min-width: 640px) {
   .section-title {
-    font-size: 2.25rem;
+    font-size: var(--text-title);
   }
 }
 
@@ -81,8 +82,9 @@
 }
 
 .hero-title {
+  font-family: var(--font-display);
   text-transform: uppercase;
-  letter-spacing: -0.055em;
+  letter-spacing: var(--tracking-display);
   color: var(--theme-fg);
   text-wrap: balance;
   line-height: 0.9;
@@ -91,9 +93,9 @@
 .hero-title--display {
   margin-inline: auto;
   max-width: 16ch;
-  font-size: clamp(2.15rem, 5.4vw, 4.1rem);
+  font-size: var(--text-display);
   font-weight: 800;
-  letter-spacing: -0.055em;
+  letter-spacing: var(--tracking-display);
   line-height: 0.94;
   text-align: center;
 }
@@ -134,17 +136,18 @@
 }
 
 .section-header .section-description {
-  max-width: 36rem;
+  max-width: var(--content-max-copy);
   margin-top: 0.75rem;
-  font-size: 0.9375rem;
-  line-height: 1.55;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--theme-muted-light);
 }
 
 .stat-value {
   font-size: clamp(1.375rem, 2.5vw, 1.625rem);
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title);
   font-variant-numeric: tabular-nums;
   color: var(--theme-accent-ink);
 }
@@ -171,80 +174,45 @@
   border-color: color-mix(in srgb, var(--theme-accent) 32%, var(--theme-border));
 }
 
-.hero-stat-card.tilt-surface {
-  min-height: var(--hero-stat-min-h);
-  border-width: 1px;
-  border-style: solid;
-  border-color: color-mix(in srgb, var(--theme-border) 45%, transparent);
-  /* No frosted glass slab — keep mountain continuous behind type/cards */
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: none;
-}
-
-.hero-stat-card.tilt-surface:hover {
-  border-color: color-mix(in srgb, var(--theme-accent) 28%, var(--theme-border));
-  background: color-mix(in srgb, var(--theme-bg) 18%, transparent);
-}
-
-.hero-stat-card .card-pad {
+/* Hero stat ghosts — frameless, chart-ghost DNA: big contrast number + caps label.
+   Secondary (red) accent so figures pop against the gold wire terrain. */
+.hero-stat-ghost {
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: var(--hero-stat-min-h);
-  padding: 1.125rem 1.25rem;
+  padding: 0.35rem 0.2rem;
 }
 
-.hero-stat-card .stat-value {
-  min-height: 1.65em;
-  color: color-mix(in srgb, var(--theme-accent-ink) 70%, var(--theme-fg));
+.hero-stat-ghost__value {
+  min-height: 1.05em;
+  font-size: clamp(1.85rem, 3.25vw, 2.65rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--theme-accent-secondary) 82%, var(--theme-fg) 12%);
+  text-shadow: 0 2px 26px color-mix(in srgb, var(--theme-accent-secondary) 22%, transparent);
 }
 
-.hero-stat-card .stat-label {
-  min-height: 2.55em;
-  margin-top: 0.375rem;
+.hero-stat-ghost__label {
+  min-height: 2.4em;
+  margin-top: 0.4rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   line-height: 1.35;
+  color: color-mix(in srgb, var(--theme-muted) 88%, var(--theme-fg) 12%);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-[data-theme="light"] .hero-stat-card.tilt-surface {
-  border-color: color-mix(in srgb, var(--theme-border) 85%, transparent);
-  background: rgb(255 255 255 / 72%);
-  box-shadow:
-    0 10px 30px rgb(10 10 10 / 5%),
-    inset 0 1px 0 rgb(255 255 255 / 80%);
-}
-
-[data-theme="light"] .hero-stat-card .stat-value {
-  color: var(--logo-gold);
-}
-
-[data-theme="light"] .hero-stat-card.tilt-surface:hover {
-  background: color-mix(in srgb, var(--logo-gold) 10%, transparent);
-  border-color: color-mix(in srgb, var(--logo-gold) 35%, var(--theme-border));
-}
-
-[data-theme="light"] .hero-stat-card:hover .stat-value {
-  color: var(--logo-gold);
-}
-
-[data-theme="dark"] .hero-stat-card.tilt-surface {
-  border-color: rgb(255 204 0 / 14%);
-  background: transparent;
-  box-shadow: none;
-}
-
-[data-theme="dark"] .hero-stat-card.tilt-surface:hover {
-  background: rgb(8 8 10 / 22%);
-  border-color: rgb(255 204 0 / 22%);
-}
-
-.hero-stat-card:hover .stat-value {
-  color: var(--theme-accent-ink);
+[data-theme="dark"] .hero-stat-ghost__value {
+  color: color-mix(in srgb, var(--theme-accent-secondary-light) 78%, var(--theme-fg) 16%);
+  text-shadow: 0 2px 30px color-mix(in srgb, var(--theme-accent-secondary-light) 30%, transparent);
 }
 
 .spec-strip > div {
@@ -277,7 +245,7 @@
 .text-kicker {
   font-size: var(--text-kicker);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-kicker);
   text-transform: uppercase;
 }
 
@@ -296,9 +264,9 @@
 }
 
 .nav-link {
-  font-size: 0.75rem;
+  font-size: var(--text-kicker);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
 }
 
@@ -334,6 +302,7 @@ header nav .nav-link:focus-visible::after {
 .btn-caps {
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  border-radius: var(--radius-pill);
   transition:
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.25s ease,
@@ -362,6 +331,7 @@ header nav .nav-link:focus-visible::after {
   border: 1px solid color-mix(in srgb, var(--theme-fg) 24%, var(--theme-border));
   background-color: color-mix(in srgb, var(--theme-bg-card) 78%, transparent);
   color: var(--theme-fg);
+  border-radius: var(--radius-pill);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }

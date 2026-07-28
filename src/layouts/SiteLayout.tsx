@@ -5,7 +5,9 @@ import { SmoothScroll } from "../components/SmoothScroll";
 import { SiteGrain } from "../components/SiteGrain";
 import { ScrollLink } from "../components/ScrollLink";
 import { ScrollToTop } from "../components/ScrollToTop";
+import { ViewportChrome } from "../components/ViewportChrome";
 import { useApplePreview } from "../hooks/useApplePreview";
+import { useViewportRoute } from "../hooks/useViewportRoute";
 import { CaseModalProvider } from "../context/CaseModalContext";
 
 const ApplePreviewPanel = lazy(() =>
@@ -54,6 +56,7 @@ export function LazySection({ children, minHeight = "28vh" }: { children: ReactN
 
 export function SiteLayout() {
   const { isPreviewMode: applePreview, features: appleFeatures } = useApplePreview();
+  const viewportRoute = useViewportRoute();
 
   return (
     <SmoothScroll>
@@ -65,14 +68,20 @@ export function SiteLayout() {
         <SiteGrain />
         <DeferredCustomCursor />
         <Header />
-        <Outlet />
-        {/* Same as production: integrations strip above Footer on every page */}
-        <LazySection minHeight="12vh">
-          <PartnersCarousel />
-        </LazySection>
-        <LazySection minHeight="20vh">
-          <Footer />
-        </LazySection>
+        <div className={viewportRoute ? "viewport-route-frame" : undefined}>
+          <Outlet />
+          {viewportRoute ? <ViewportChrome /> : null}
+        </div>
+        {!viewportRoute ? (
+          <>
+            <LazySection minHeight="3.5rem">
+              <PartnersCarousel />
+            </LazySection>
+            <LazySection minHeight="20vh">
+              <Footer />
+            </LazySection>
+          </>
+        ) : null}
         {applePreview && appleFeatures ? (
           <Suspense fallback={null}>
             <ApplePreviewPanel active={appleFeatures} />

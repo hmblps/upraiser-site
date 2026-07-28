@@ -17,7 +17,7 @@ export function TechSpotlightBand({ className }: TechSpotlightBandProps) {
 
   return (
     <section className={cn("section-band section-band--ambience border-y border-border/40", className)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner">
         <Reveal>
           <div className="tech-spotlight">
             <div className="tech-spotlight__copy">

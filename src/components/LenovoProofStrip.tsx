@@ -29,7 +29,7 @@ export function LenovoProofStrip({ className, variant = "band" }: LenovoProofStr
 
   return (
     <section className={cn("section-band section-band--strip border-y border-border/40", className)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">{body}</div>
+      <div className="section-inner">{body}</div>
     </section>
   );
 }

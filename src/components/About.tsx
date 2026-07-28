@@ -38,7 +38,7 @@ export function About() {
         <div className="about-archive__year" aria-hidden>
           2017
         </div>
-        <div className="relative z-[1] mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="section-inner relative z-[1]">
           <Reveal>
             <p className="about-positioning text-2xl font-bold tracking-tight text-fg sm:text-3xl md:text-4xl">
               {aboutPage.positioningLead}{" "}
@@ -64,7 +64,7 @@ export function About() {
       </section>
 
       <section className="section-band section-band--dense border-y border-border/40">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="section-inner">
           <Reveal>
             <p className="section-label">{aboutPage.teamLabel}</p>
             <p className="copy mt-3 max-w-2xl">{aboutPage.teamLead}</p>
@@ -83,7 +83,7 @@ export function About() {
       <LenovoProofStrip />
 
       <section className="section-band">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="section-inner">
           <Reveal>
             <AboutFaq />
           </Reveal>
@@ -94,7 +94,7 @@ export function About() {
                 Solutions
               </Link>
               {" · "}
-              <Link to="/measurement" className="font-semibold text-fg underline-offset-4 hover:underline">
+              <Link to="/clarity" className="font-semibold text-fg underline-offset-4 hover:underline">
                 Measurement
               </Link>
               {" · "}

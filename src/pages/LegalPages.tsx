@@ -11,13 +11,13 @@ function LegalDocument({ title, updated, paragraphs }: LegalPageProps) {
   return (
     <main className="site-main pt-[var(--site-header-height)]">
       <section className="section-band">
-        <div className="mx-auto max-w-3xl px-6 lg:px-8">
+        <div className="section-inner section-inner--narrow">
           <p className="section-label">Legal</p>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-fg sm:text-4xl">{title}</h1>
+          <h1 className="section-title mt-3 normal-case tracking-tight">{title}</h1>
           <p className="mt-3 text-sm text-muted">Last updated {updated}</p>
           <div className="mt-10 space-y-5">
             {paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 48)} className="copy text-sm text-muted sm:text-[0.9375rem]">
+              <p key={paragraph.slice(0, 48)} className="copy text-muted">
                 {paragraph}
               </p>
             ))}

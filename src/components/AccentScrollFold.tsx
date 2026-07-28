@@ -72,8 +72,9 @@ export function AccentScrollFold({
   const anchorProgress = useScrollScene(sectionRef, {
     mode: "anchor",
     anchorRef: stageRef,
-    startLine: 0.9,
-    endLine: 0.22,
+    // Start as soon as the hero word enters the lower viewport (prod feel).
+    startLine: 0.92,
+    endLine: 0.28,
     spring: false,
     resetKey: remountKey,
   });
@@ -120,7 +121,7 @@ export function AccentScrollFold({
       id={id}
       className={`accent-scroll-section accent-scroll-section--lite ${sceneClass} ${runwayClass} section-band section-band--quiet ${className}${ambient === "clarity" ? " accent-scroll-section--clarity" : ""}`.trim()}
     >
-      <div className="accent-scroll-sticky relative mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="accent-scroll-sticky section-inner relative">
         {backdrop?.({ progress })}
         {ambient === "chart" ? (
           mode === "infrastructure" ? (
