@@ -14,7 +14,6 @@ type ContactIntentChipsProps = {
 const CHIP_VALUES = new Set([
   "app-growth",
   "oem",
-  "clarity",
   "studio",
   "brand",
   "careers",

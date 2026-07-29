@@ -8,7 +8,7 @@ import { ScrollLink } from "./ScrollLink";
 
 /**
  * /cases — one viewport: horizontal deck (no page scroll).
- * MagicUI reserved for Expertise (Beam), Studio (Bento), Clarity (List) only.
+ * MagicUI reserved for Expertise (Beam) and Studio (Bento) only.
  */
 export function CaseStudies() {
   const sectionRef = useRef<HTMLElement>(null);

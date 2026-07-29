@@ -12,9 +12,6 @@ const FoldAreaMass = lazy(() => import("./FoldAreaMass").then((m) => ({ default:
 const FraudScrollChart = lazy(() =>
   import("./FraudScrollChart").then((m) => ({ default: m.FraudScrollChart })),
 );
-const ClarityLedger = lazy(() =>
-  import("./ClarityLedger").then((m) => ({ default: m.ClarityLedger })),
-);
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -30,7 +27,7 @@ type AccentScrollFoldProps = {
   label: ReactNode;
   scrollHeroWord: string;
   /** Ambient visual in the empty fold air */
-  ambient?: "chart" | "bars" | "fraud" | "clarity" | "none";
+  ambient?: "chart" | "bars" | "fraud" | "none";
   children: (ctx: {
     progress: MotionValue<number>;
     inlineRef: RefObject<HTMLSpanElement | null>;
@@ -48,7 +45,7 @@ type AccentScrollFoldProps = {
 };
 
 /**
- * Shared sticky word-fold used by Audience (SCALE/PROOF) and Promise (RESULTS/CLARITY).
+ * Shared sticky word-fold used by Audience (SCALE/PROOF) and Promise (RESULTS).
  */
 export function AccentScrollFold({
   id,
@@ -119,7 +116,7 @@ export function AccentScrollFold({
     <section
       ref={sectionRef}
       id={id}
-      className={`accent-scroll-section accent-scroll-section--lite ${sceneClass} ${runwayClass} section-band section-band--quiet ${className}${ambient === "clarity" ? " accent-scroll-section--clarity" : ""}`.trim()}
+      className={`accent-scroll-section accent-scroll-section--lite ${sceneClass} ${runwayClass} section-band section-band--quiet ${className}`.trim()}
     >
       <div className="accent-scroll-sticky section-inner relative">
         {backdrop?.({ progress })}
@@ -140,11 +137,6 @@ export function AccentScrollFold({
         {ambient === "fraud" ? (
           <Suspense fallback={null}>
             <FraudScrollChart progress={progress} />
-          </Suspense>
-        ) : null}
-        {ambient === "clarity" ? (
-          <Suspense fallback={null}>
-            <ClarityLedger progress={progress} />
           </Suspense>
         ) : null}
 

@@ -9,7 +9,6 @@ export type NavLink = {
 export const contactVerticalOptions = [
   { value: "app-growth", label: "App Growth / media" },
   { value: "oem", label: "OEM / Lenovo" },
-  { value: "clarity", label: "Clarity / measurement" },
   { value: "studio", label: "Studio / creatives" },
   { value: "brand", label: "Brand partnership" },
   { value: "advertising-partner", label: "Advertising Partner" },
@@ -21,7 +20,6 @@ export const contactVerticalOptions = [
 
 export const navLinks: NavLink[] = [
   { label: "Solutions", href: "/solutions" },
-  { label: "Clarity", href: "/clarity" },
   { label: "Studio", href: "/studio" },
   { label: "Cases", href: "/cases" },
   { label: "About", href: "/company" },
@@ -623,7 +621,6 @@ export const bridgeByMode = {
 export const footerLinks = {
   explore: [
     { label: "Solutions", href: "/solutions" },
-    { label: "Clarity", href: "/clarity" },
     { label: "Studio", href: "/studio" },
     { label: "Cases", href: "/cases" },
     { label: "Contact", href: "/contact" },
@@ -640,78 +637,6 @@ export const footerLinks = {
     { label: "Terms", href: "/terms" },
   ],
 };
-
-export const measurementPage = {
-  label: "Measurement",
-  productName: "Clarity",
-  title: "Clarity",
-  titleAccent: "Every bid has a receipt",
-  chapter: {
-    scrollHeroWord: "RECEIPT",
-    line1: "Measurement is not a slide at the end of the month.",
-    line2Prefix: "It is the",
-    inlineWord: "receipt",
-    description:
-      "Scoring, logs, and Your MMP on one path — so Ad Ops and finance close without a war room.",
-  },
-  heroLead:
-    "Scoring, logs, and Your MMP on one path — so Ad Ops and finance close without a war room.",
-  ctaLabel: "Request a Clarity review",
-  heroStats: [
-    { value: "0%", label: "Post-flight drift" },
-    { value: "<2s", label: "Log to MMP" },
-    { value: "48h", label: "Brief to live" },
-  ],
-  panel: {
-    eyebrow: "Clarity",
-    title: "Bid-time and bill-time agree",
-    body: "Server events, delivery logs, and media bills share one path. Month-end is a file pull — not a reconciliation call.",
-    rows: [
-      { event: "Install", bid: "Device postback", bill: "MMP install", tone: "ok" },
-      { event: "FTD", bid: "Event fire", bill: "Finance event", tone: "ok" },
-      { event: "Fraud", bid: "Pre-bid block", bill: "Never billed", tone: "warn" },
-      { event: "Media bill", bid: "Delivery log", bill: "Invoice line", tone: "ok" },
-      { event: "Drift", bid: "0.0%", bill: "0.0%", tone: "ok" },
-    ],
-  },
-  modulesHeading: "What You get on every flight",
-  modules: [
-    {
-      title: "Pre-bid guard",
-      description: "Fraud and cohort checks before the impression clears. Bad supply never hits the cap.",
-    },
-    {
-      title: "Live caps",
-      description: "GEO and KPI caps follow outcomes in flight — overspend dies before overnight batch.",
-    },
-    {
-      title: "Month-end file",
-      description: "Raw logs on demand. Finance and Ad Ops pull the same receipt.",
-    },
-  ],
-  stepsHeading: "How we wire Clarity",
-  steps: [
-    {
-      step: "01",
-      title: "Map the stack",
-      description: "MMP endpoints, log pipes, pre-bid rules — written down before anything goes live.",
-    },
-    {
-      step: "02",
-      title: "Connect and verify",
-      description: "Raw logs into Your MMP. If bid-time and bill-time disagree, we fix the pipe first.",
-    },
-    {
-      step: "03",
-      title: "Deploy and monitor",
-      description: "Lanes go live with drift checks. The invoice already matches the log.",
-    },
-  ],
-  mmpHeading: "Works with Your MMP",
-  mmpLead: "Raw events into Your stack. Clarity connects — it does not replace.",
-  closeTitle: "See Clarity on Your stack",
-  closeDescription: "Bring Your MMP events and GEO caps — we show where bid-time and bill-time diverge.",
-} as const;
 
 export const lenovoPartnership = {
   badge: "Official Agency Partner",
@@ -835,10 +760,10 @@ export const solutionsPage = {
     line2Prefix: "Pick a lane — we open the",
     inlineWord: "story",
     description:
-      "App Growth, OEM, Creators, premium. Every path runs on Clarity so finance reads the same receipt as Ad Ops.",
+      "App Growth, OEM, Creators, premium. Every path ships with MMP receipts so finance reads the same file as Ad Ops.",
   },
   description:
-    "Four buying paths. Every path runs on Clarity so finance reads the same receipt as Ad Ops.",
+    "Four buying paths. Every path ships with MMP receipts so finance reads the same file as Ad Ops.",
   ctaLabel: "Request Pilot",
   closeTitle: "Brief the path You need",
   closeDescription: "Tell us the vertical, GEO, and KPI event — we route to the right buying lane.",

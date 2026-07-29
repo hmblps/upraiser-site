@@ -74,10 +74,6 @@ export function Studio() {
                     <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
                       Solutions lanes
                     </ScrollLink>
-                    {" · "}
-                    <ScrollLink href="/clarity" className="font-semibold text-fg/80 hover:text-orange">
-                      Clarity
-                    </ScrollLink>
                   </p>
                 </>
               ) : null}
@@ -109,10 +105,6 @@ export function Studio() {
                     Ships into{" "}
                     <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
                       Solutions lanes
-                    </ScrollLink>
-                    {" · "}
-                    <ScrollLink href="/clarity" className="font-semibold text-fg/80 hover:text-orange">
-                      Clarity
                     </ScrollLink>
                   </p>
                 </>
@@ -146,10 +138,6 @@ export function Studio() {
                     Ships into{" "}
                     <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
                       Solutions lanes
-                    </ScrollLink>
-                    {" · "}
-                    <ScrollLink href="/clarity" className="font-semibold text-fg/80 hover:text-orange">
-                      Clarity
                     </ScrollLink>
                   </p>
                 </>

@@ -10,7 +10,7 @@ type ProofFrameProps = {
 
 /**
  * Proactiv-style product frame — chrome + soft glow.
- * Wraps Beam / Clarity widgets so the right column fills like a product panel.
+ * Wraps Beam / proof widgets so the right column fills like a product panel.
  */
 export function ProofFrame({ label, meta, children, className }: ProofFrameProps) {
   return (

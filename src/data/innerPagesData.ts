@@ -3,7 +3,6 @@
  *
  * IA:
  *  /solutions  — flat channel rail (programmatic, OEM, performance, …)
- *  /clarity    — measurement layer (AnimatedList only)
  *  /studio     — Creative performance (Craft · Formats · Production)
  *  /cases      — horizontal deck
  *  /clients    — brand proof board (also About → Clients)
@@ -11,7 +10,7 @@
  *  /contact    — form (untouched)
  *
  * Panel recipe: promise → 3 bullets → proof widget → one CTA
- * MagicUI only: Expertise Beam · Studio Bento · Clarity List
+ * MagicUI only: Expertise Beam · Studio Bento
  * Skip: SEO / SEM / ASO / retail media / resources hub / Partners mega-page
  */
 
@@ -21,8 +20,7 @@ export type ExpertiseClusterId =
   | "social"
   | "creators"
   | "ctv"
-  | "oem"
-  | "clarity";
+  | "oem";
 
 export type ExpertiseCluster = {
   id: ExpertiseClusterId;
@@ -40,7 +38,7 @@ export type ExpertiseCluster = {
   contactIntent: string;
   casePreview: string;
   caseLabel: string;
-  /** Beam nodes for non-Clarity lanes */
+  /** Beam nodes for buying lanes */
   beam?: readonly { id: string; label: string; mark: string }[];
 };
 
@@ -68,7 +66,7 @@ export const EXPERTISE_CONTENT = {
   hubLabel: "Lanes",
   inventoryLabel: "Inventory",
 
-  /** Top-level desks — Clarity lives on /clarity */
+  /** Top-level desks */
   primaryTabs: [
     { id: "media", label: "App Growth" },
     { id: "oem", label: "OEM" },
@@ -91,7 +89,6 @@ export const EXPERTISE_CONTENT = {
     { id: "creators", label: "Creators" },
     { id: "ctv", label: "CTV" },
     { id: "oem", label: "OEM" },
-    { id: "clarity", label: "Clarity" },
   ] as const,
 
   clusters: [
@@ -113,7 +110,7 @@ export const EXPERTISE_CONTENT = {
         { title: "Measure", body: "Wire FTD / Reg / Sub into Your MMP before launch." },
         { title: "Scale", body: "Raise caps only while unit economics hold." },
       ],
-      related: ["programmatic", "social", "clarity"],
+      related: ["programmatic", "social"],
       casePreview: "/cases/fanatics",
       caseLabel: "Fanatics growth path",
       beam: [
@@ -141,7 +138,7 @@ export const EXPERTISE_CONTENT = {
         { title: "Measure", body: "Pre-bid screen + caps on KPI events." },
         { title: "Scale", body: "Widen inventory only where the receipt clears." },
       ],
-      related: ["media", "ctv", "clarity"],
+      related: ["media", "ctv"],
       casePreview: "/cases/autodoc",
       caseLabel: "Programmatic case",
       beam: [
@@ -169,7 +166,7 @@ export const EXPERTISE_CONTENT = {
         { title: "Measure", body: "Conversion events in the MMP same day." },
         { title: "Scale", body: "Kill / raise creatives against deposits and subs." },
       ],
-      related: ["creators", "media", "clarity"],
+      related: ["creators", "media"],
       casePreview: "/cases/fiverr",
       caseLabel: "Social scale case",
       beam: [
@@ -197,7 +194,7 @@ export const EXPERTISE_CONTENT = {
         { title: "Measure", body: "Tracked links live before the first post." },
         { title: "Scale", body: "Keep creators who clear GEO and disclosure." },
       ],
-      related: ["social", "media", "clarity"],
+      related: ["social", "media"],
       casePreview: "/cases/azar",
       caseLabel: "Creator path",
       beam: [
@@ -225,7 +222,7 @@ export const EXPERTISE_CONTENT = {
         { title: "Measure", body: "Caps on outcomes, not only completes." },
         { title: "Scale", body: "Expand GEOs where the receipt holds." },
       ],
-      related: ["programmatic", "media", "clarity"],
+      related: ["programmatic", "media"],
       casePreview: "/cases",
       caseLabel: "See CTV-ready cases",
       beam: [
@@ -253,7 +250,7 @@ export const EXPERTISE_CONTENT = {
         { title: "Measure", body: "SDK postbacks into Your MMP." },
         { title: "Scale", body: "Add GEOs where device logs stay clean." },
       ],
-      related: ["media", "clarity"],
+      related: ["media"],
       casePreview: "/cases/block-blast-pai",
       caseLabel: "OEM / PAI case",
       beam: [
@@ -263,75 +260,14 @@ export const EXPERTISE_CONTENT = {
         { id: "len", label: "Lenovo", mark: "LN" },
       ],
     },
-    {
-      id: "clarity",
-      title: "Clarity",
-      problem: "Bid-time and bill-time disagree until month-end becomes a war room.",
-      outcome: "Month-end is a file pull — not a reconciliation call.",
-      primaryChannel: "clarity",
-      channelIds: [],
-      contactIntent: "clarity",
-      deliverables: [
-        "Scoring before the auction closes",
-        "Caps wired to MMP events in flight",
-        "One export for Ad Ops and finance",
-      ],
-      process: [
-        { title: "Plan", body: "Agree KPI event and GEO caps with Ad Ops and finance." },
-        { title: "Measure", body: "Score before auction; wire S2S into Your MMP." },
-        { title: "Scale", body: "Raise spend only while bid-time and bill-time agree." },
-      ],
-      related: ["media", "oem", "programmatic"],
-      casePreview: "/cases",
-      caseLabel: "Cases with receipts",
-    },
   ] as const satisfies readonly ExpertiseCluster[],
 
   close: {
     ctaLabel: "Request Pilot",
   },
 
-  clarityLink: {
-    label: "Clarity",
-    href: "/clarity",
-  },
 } as const;
 
-/** Clarity — measurement layer (agency pipe, not SaaS). */
-export const CLARITY_CONTENT = {
-  hero: {
-    badge: "Clarity",
-    h1: "Bid-time meets bill-time.",
-    lead: "Scoring, logs, and Your MMP on one path — Ad Ops and finance close without a war room.",
-  },
-  promise: "Month-end is a file pull — not a reconciliation call.",
-  deliverables: [
-    "Pre-bid scoring — bad supply never hits the cap",
-    "GEO / KPI caps follow outcomes in flight",
-    "One export Ad Ops and finance pull the same day",
-  ],
-  process: [
-    { title: "Map", body: "MMP endpoints, log pipes, pre-bid rules — written before go-live." },
-    { title: "Wire", body: "Raw logs into Your MMP. Fix the pipe if bid and bill disagree." },
-    { title: "Fly", body: "Lanes live with drift checks. Invoice already matches the log." },
-  ],
-  mmpHeading: "Connects to Your MMP — does not replace it",
-  mmpLead: "AppsFlyer, Adjust, Singular, Kochava stay Your system of record.",
-  stats: [
-    { value: "0%", label: "Post-flight drift" },
-    { value: "<2s", label: "Log to MMP" },
-    { value: "48h", label: "Brief to live" },
-  ],
-  related: [
-    { label: "Programmatic", href: "/solutions?channel=programmatic#channels" },
-    { label: "OEM", href: "/solutions?channel=oem#channels" },
-    { label: "Studio", href: "/studio" },
-  ],
-  close: {
-    ctaLabel: "Request Clarity review",
-    contactIntent: "clarity",
-  },
-} as const;
 
 export const COMPANY_CONTENT = {
   hero: {
@@ -357,7 +293,7 @@ export const COMPANY_CONTENT = {
     {
       title: "S2S measurement",
       value:
-        "Server-to-server postbacks into AppsFlyer, Adjust, Singular, or Kochava. Clarity wires the pipe — Your MMP stays the system of record.",
+        "Server-to-server postbacks into AppsFlyer, Adjust, Singular, or Kochava. We wire the pipe — Your MMP stays the system of record.",
     },
   ],
 
@@ -384,7 +320,7 @@ export const COMPANY_CONTENT = {
       mark: "Now",
       year: 2026,
       title: "One desk, receipts attached",
-      body: "App Growth through Clarity on one desk — Programmatic, Social, Creators, CTV, OEM included. You talk to the buyer on the flight.",
+      body: "App Growth on one desk — Programmatic, Social, Creators, CTV, OEM included. You talk to the buyer on the flight.",
     },
   ],
 
@@ -436,7 +372,7 @@ export const COMPANY_CONTENT = {
     {
       question: "Do you replace Our MMP?",
       answer:
-        "No. Clarity connects into AppsFlyer, Adjust, Singular, or Kochava and keeps raw events in Your system of record.",
+        "No. We connect into AppsFlyer, Adjust, Singular, or Kochava and keep raw events in Your system of record.",
     },
     {
       question: "How fast can a pilot go live?",
@@ -451,11 +387,6 @@ export const COMPANY_CONTENT = {
       question: "Do you run Paid Social and Creators too?",
       answer:
         "Yes — Social and Creators are tabs on Solutions. Both cap to the same MMP events. Studio builds the creatives into that brief.",
-    },
-    {
-      question: "Is Clarity a replacement for Our MMP?",
-      answer:
-        "No. Clarity connects the pipe. AppsFlyer, Adjust, Singular, or Kochava stays Your system of record. Open /clarity for the measurement layer.",
     },
   ],
 
@@ -505,7 +436,7 @@ export const STUDIO_CONTENT = {
       },
       {
         title: "Creative testing loops",
-        description: "Hypothesis → flight → kill/scale, wired to Clarity receipts.",
+        description: "Hypothesis → flight → kill/scale, wired to MMP receipts.",
         span: "",
       },
       {
@@ -529,7 +460,7 @@ export const STUDIO_CONTENT = {
     steps: [
       { title: "Brief from the buyer", body: "GEO, event, cap — same sheet the media team flies." },
       { title: "Build in the lane", body: "Assets land where the desk already buys." },
-      { title: "Prove on Clarity", body: "Variants inherit the reconciliation file." },
+      { title: "Prove on receipts", body: "Variants inherit the reconciliation file." },
     ],
   },
   close: {

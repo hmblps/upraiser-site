@@ -94,10 +94,6 @@ export function About() {
                 Solutions
               </Link>
               {" · "}
-              <Link to="/clarity" className="font-semibold text-fg underline-offset-4 hover:underline">
-                Measurement
-              </Link>
-              {" · "}
               <Link to="/cases" className="font-semibold text-fg underline-offset-4 hover:underline">
                 Cases
               </Link>

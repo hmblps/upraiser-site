@@ -30,7 +30,7 @@ export const integrationPartners: IntegrationPartner[] = [
   { name: "Singular", slug: "singular", logo: withLogo("singular"), scale: 1 },
 ];
 
-/** Attribution / MMP logos shown on Clarity */
+/** Attribution / MMP logos */
 export const mmpPartnerSlugs = ["appsflyer", "kochava", "singular"] as const;
 
 /** Supply-side logos emphasized on OEM / supply contexts */
@@ -51,7 +51,6 @@ export const studioPartnerSlugs = ["meta", "tiktok", "snapchat", "discord", "uni
 
 export type PartnerLogoSetId =
   | "default"
-  | "clarity"
   | "oem"
   | "growth"
   | "social"
@@ -61,7 +60,6 @@ export type PartnerLogoSetId =
 
 const LOGO_SETS: Record<PartnerLogoSetId, readonly string[]> = {
   default: integrationPartners.map((p) => p.slug),
-  clarity: mmpPartnerSlugs,
   oem: oemPartnerSlugs,
   growth: ["meta", "tiktok", "google", "applovin", "unity", "appsflyer", "lenovo"],
   social: socialPartnerSlugs,
@@ -82,13 +80,11 @@ export function partnersForSet(set: PartnerLogoSetId) {
 
 /** Pick logo set from pathname + optional expertise pillar. */
 export function partnerSetForRoute(pathname: string, pillar: string | null = null): PartnerLogoSetId {
-  if (pathname.startsWith("/clarity") || pathname.startsWith("/measurement")) return "clarity";
   if (pathname.startsWith("/studio")) return "studio";
   if (pathname.startsWith("/solutions") || pathname.startsWith("/expertise")) {
     if (pillar === "oem") return "oem";
     if (pillar === "social" || pillar === "creators") return "social";
     if (pillar === "programmatic" || pillar === "ctv") return "programmatic";
-    if (pillar === "clarity") return "clarity";
     return "growth";
   }
   if (pathname.startsWith("/company") || pathname.startsWith("/clients")) return "default";

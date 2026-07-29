@@ -33,5 +33,5 @@ export function RedirectExpertiseToSolutions() {
 }
 
 export function RedirectMeasurementToExpertise() {
-  return <Navigate to="/clarity" replace />;
+  return <Navigate to="/solutions" replace />;
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link, Navigate, useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import {
   EXPERTISE_CONTENT,
   isExpertiseGrowthId,
@@ -12,15 +12,13 @@ import { ProofFrame } from "../components/ProofFrame";
 import { ScrollLink } from "../components/ScrollLink";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
-const BUYING_IDS = EXPERTISE_CONTENT.tabs
-  .map((t) => t.id)
-  .filter((id) => id !== "clarity") as ExpertiseClusterId[];
+const BUYING_IDS = EXPERTISE_CONTENT.tabs.map((t) => t.id) as ExpertiseClusterId[];
 
 const PANEL_SPRING = { type: "spring" as const, stiffness: 340, damping: 30, mass: 0.7 };
 
-function clusterFromParams(pillar: string | null, channel: string | null): ExpertiseClusterId | "clarity" {
+function clusterFromParams(pillar: string | null, channel: string | null): ExpertiseClusterId {
   if (pillar === "clarity" || pillar === "measurement" || pillar === "oneview" || pillar === "data") {
-    return "clarity";
+    return "media";
   }
   if (pillar && BUYING_IDS.includes(pillar as ExpertiseClusterId)) {
     return pillar as ExpertiseClusterId;
@@ -34,31 +32,24 @@ function clusterFromParams(pillar: string | null, channel: string | null): Exper
     const match = EXPERTISE_CONTENT.clusters.find((c) =>
       (c.channelIds as readonly string[]).includes(channel),
     );
-    if (match && match.id !== "clarity") return match.id;
+    if (match) return match.id;
   }
   return "media";
 }
 
-/**
- * Expertise — App Growth inventory + OEM.
- * Clarity lives on /clarity (no AnimatedList duplicate here).
- */
+/** Legacy Expertise shell — App Growth inventory + OEM (routed via /expertise → /solutions). */
 export function ExpertisePage() {
   const reduced = useReducedMotion();
   const [searchParams, setSearchParams] = useSearchParams();
   const resolved = clusterFromParams(searchParams.get("pillar"), searchParams.get("channel"));
-  const [activeId, setActiveId] = useState<ExpertiseClusterId>(() =>
-    resolved === "clarity" ? "media" : resolved,
-  );
+  const [activeId, setActiveId] = useState<ExpertiseClusterId>(() => resolved);
 
   useEffect(() => {
-    const next = clusterFromParams(searchParams.get("pillar"), searchParams.get("channel"));
-    if (next !== "clarity") setActiveId(next);
+    setActiveId(clusterFromParams(searchParams.get("pillar"), searchParams.get("channel")));
   }, [searchParams]);
 
   const selectCluster = useCallback(
     (id: ExpertiseClusterId, primaryChannel: string) => {
-      if (id === "clarity") return;
       setActiveId(id);
       setSearchParams(
         (prev) => {
@@ -73,8 +64,9 @@ export function ExpertisePage() {
     [setSearchParams],
   );
 
-  if (resolved === "clarity") {
-    return <Navigate to="/clarity" replace />;
+  // Prefer Solutions rail — keep this page only if something still deep-links here.
+  if (searchParams.get("pillar") === "clarity") {
+    return <Navigate to="/solutions" replace />;
   }
 
   const activeCluster =
@@ -147,37 +139,25 @@ export function ExpertisePage() {
                       {related.map((lane, index) => (
                         <span key={lane.id}>
                           {index > 0 ? " · " : null}
-                          {lane.id === "clarity" ? (
-                            <Link to="/clarity" className="font-semibold text-fg/80 transition hover:text-orange">
-                              {lane.title}
-                            </Link>
-                          ) : (
-                            <button
-                              type="button"
-                              className="font-semibold text-fg/80 transition hover:text-orange"
-                              onClick={() => selectCluster(lane.id, lane.primaryChannel)}
-                            >
-                              {lane.title}
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            className="font-semibold text-fg/80 transition hover:text-orange"
+                            onClick={() => selectCluster(lane.id, lane.primaryChannel)}
+                          >
+                            {lane.title}
+                          </button>
                         </span>
                       ))}
                     </p>
                   ) : null}
                   {isExpertiseGrowthId(activeId) ? (
-                    <p className="text-[0.65rem] text-muted/80">
-                      Same desk. Different supply path.
-                    </p>
+                    <p className="text-[0.65rem] text-muted/80">Same desk. Different supply path.</p>
                   ) : null}
                 </div>
               </div>
 
               <div className="flex min-h-0 flex-col overflow-hidden">
-                <ProofFrame
-                  label={activeCluster.title}
-                  meta="Live path"
-                  className="h-full min-h-0"
-                >
+                <ProofFrame label={activeCluster.title} meta="Live path" className="h-full min-h-0">
                   <ChannelBeam
                     className="h-full min-h-0 border-0 bg-transparent shadow-none"
                     nodes={"beam" in activeCluster ? [...(activeCluster.beam ?? [])] : []}

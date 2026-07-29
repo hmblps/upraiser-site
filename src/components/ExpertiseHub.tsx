@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
   EXPERTISE_CONTENT,
   isExpertiseGrowthId,
@@ -14,7 +13,6 @@ type ExpertiseHubProps = {
 /**
  * Two-level Expertise nav:
  * App Growth | OEM  + inventory strip under App Growth
- * Clarity → /clarity (no duplicate AnimatedList here)
  */
 export function ExpertiseHub({ activeId, onSelect }: ExpertiseHubProps) {
   const growthActive = isExpertiseGrowthId(activeId);
@@ -51,12 +49,6 @@ export function ExpertiseHub({ activeId, onSelect }: ExpertiseHubProps) {
           layoutId="expertise-primary-pill"
           className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         />
-        <Link
-          to={EXPERTISE_CONTENT.clarityLink.href}
-          className="shrink-0 rounded-full border border-border/70 px-3.5 py-1.5 text-micro tracking-wide text-muted-light transition hover:border-orange/50 hover:text-orange"
-        >
-          {EXPERTISE_CONTENT.clarityLink.label} →
-        </Link>
       </div>
 
       {growthActive ? (

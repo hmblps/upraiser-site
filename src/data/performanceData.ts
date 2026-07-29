@@ -2,18 +2,16 @@
  * Saatchi Performance → UPRAISER depth-page data map.
  * Home / Cases / Contact stay owned elsewhere — do not rewire them from this file.
  *
- * Shared depth IA (Solutions · Measurement · About):
+ * Shared depth IA (Solutions · About):
  *  1. Hero intro
  *  2. Trust marquee
  *  3. Philosophy (where page needs thesis)
  *  4. Page-owned taxonomy / product surface
- *  5. Tech spotlight → Clarity (Solutions)
- *  6. Proof rows → /cases
- *  7. Footer CTA
+ *  5. Proof rows → /cases
+ *  6. Footer CTA
  *
  * Visual languages stay page-specific:
  *  Solutions  → route spine
- *  Measurement → receipt reconcile
  *  About      → archive / registry
  */
 
@@ -26,7 +24,7 @@ export interface ServiceItem {
   description: string;
   iconName: string;
   badge?: string;
-  /** Deep-link into Solutions / Measurement when wired */
+  /** Deep-link into Solutions when wired */
   href?: string;
 }
 
@@ -60,7 +58,6 @@ export const PERFORMANCE_IA = [
   "trustMarquee",
   "philosophy",
   "services",
-  "techSpotlight",
   "caseStudies",
   "footerCta",
 ] as const;
@@ -77,7 +74,6 @@ export const PERFORMANCE_TO_HOME: Record<PerformanceBlock, string> = {
   trustMarquee: "LenovoTrustStrip (+ optional Cases logo marquee)",
   philosophy: "Audience + Difference + Promise (fold charts live here only)",
   services: "TrafficChannels variant=home → /solutions",
-  techSpotlight: "Clarity teaser → /clarity",
   caseStudies: "CasesTeaser → /cases",
   footerCta: "HomePilotCta + Footer",
 };
@@ -130,7 +126,7 @@ export const PERFORMANCE_CONTENT = {
       {
         number: "03",
         title: "Receipt-first measurement",
-        subtitle: "Clarity on every flight",
+        subtitle: "Receipt on every flight",
         description:
           "Bid-time and bill-time agree. Month-end is a file pull, not a war room.",
       },
@@ -175,11 +171,11 @@ export const PERFORMANCE_CONTENT = {
     },
     {
       id: "attribution-tech",
-      title: "Clarity",
+      title: "Measurement",
       category: "Data & Tech",
       description: "S2S postbacks, MMP wiring, and bid-time / bill-time reconciliation.",
       iconName: "BarChart3",
-      href: "/clarity",
+      href: "/solutions",
     },
     {
       id: "premium-ctv",
@@ -190,21 +186,6 @@ export const PERFORMANCE_CONTENT = {
       href: "/solutions?channel=ctv#channels",
     },
   ] as ServiceItem[],
-
-  techSpotlight: {
-    badge: "Measurement stack",
-    productName: "Clarity",
-    title: "Every bid has a receipt",
-    description:
-      "Scoring, logs, and Your MMP on one path — so Ad Ops and finance close without a reconciliation call.",
-    features: [
-      "Pre-bid guard — fraud and cohort checks before the impression clears",
-      "Live GEO and KPI caps that follow outcomes in flight",
-      "Month-end file finance and Ad Ops can pull the same day",
-    ],
-    ctaText: "Open Clarity",
-    ctaHref: "/clarity",
-  },
 
   caseStudies: [
     {

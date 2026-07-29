@@ -10,9 +10,6 @@ import {
 const SolutionsPage = lazy(() =>
   import("./pages/SolutionsPage").then((m) => ({ default: m.SolutionsPage })),
 );
-const ClarityPage = lazy(() =>
-  import("./pages/ClarityPage").then((m) => ({ default: m.ClarityPage })),
-);
 const StudioPage = lazy(() => import("./pages/StudioPage").then((m) => ({ default: m.StudioPage })));
 const CasesPage = lazy(() => import("./pages/CasesPage").then((m) => ({ default: m.CasesPage })));
 const ClientsPage = lazy(() =>
@@ -46,12 +43,12 @@ export default function App() {
         <Route element={<SiteLayout />}>
           <Route index element={<HomePage />} />
           <Route path="solutions" element={<SolutionsPage />} />
-          <Route path="clarity" element={<ClarityPage />} />
           <Route path="studio" element={<StudioPage />} />
           <Route path="clients" element={<ClientsPage />} />
           <Route path="company" element={<CompanyPage />} />
 
           {/* Legacy depth URLs → consolidated IA */}
+          <Route path="clarity" element={<Navigate to="/solutions" replace />} />
           <Route path="expertise" element={<RedirectExpertiseToSolutions />} />
           <Route path="measurement" element={<RedirectMeasurementToExpertise />} />
           <Route path="technology" element={<RedirectMeasurementToExpertise />} />

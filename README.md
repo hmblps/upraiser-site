@@ -75,12 +75,11 @@ Mobile / reduced motion: CSS sky only (no WebGL).
 
 ## Структура (React Router)
 
-**Nav:** Solutions · Clarity · Studio · Cases · About (`/company`) · theme · **Request Pilot**
+**Nav:** Solutions · Studio · Cases · About (`/company`) · theme · **Request Pilot**
 
 ```
 /              Pitch + killer folds (dual-mode home)
 /solutions     Format lanes + sticky phone glass (App Growth / OEM & CTV)
-/clarity       Measurement / reconcile story
 /studio        Craft / studio surface
 /clients       Client roster
 /company       About / story / footprint (legacy /about → here)
@@ -94,7 +93,7 @@ Mobile / reduced motion: CSS sky only (no WebGL).
 | Old | New |
 |-----|-----|
 | `/expertise` | → `/solutions` |
-| `/measurement`, `/technology` | → Clarity / Solutions helpers |
+| `/clarity`, `/measurement`, `/technology` | → `/solutions` |
 | `/partners` | → `/solutions?channel=oem#channels` |
 | `/about`, `/how-we-work`, `/resources` | → `/company` |
 
