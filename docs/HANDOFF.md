@@ -1,12 +1,12 @@
 # UPRAISER Site — Full AI Handoff Document
 
 > **Purpose:** give another AI (or engineer) complete context to continue — including a **refactor-ready** map of current truth vs debt.  
-> Human summary: [`README.md`](../README.md) · Hero 3D: [`HERO.md`](./HERO.md) · Assets: [`ASSETS.md`](./ASSETS.md) · Index: [`README.md`](./README.md).  
-> **Updated:** 28 July 2026  
+> Human summary: [`README.md`](../README.md) · Solutions: [`SOLUTIONS.md`](./SOLUTIONS.md) · Hero 3D: [`HERO.md`](./HERO.md) · Assets: [`ASSETS.md`](./ASSETS.md) · Index: [`README.md`](./README.md).  
+> **Updated:** 29 July 2026  
 > **Local path:** `Upraiser New Website Cursor Project`  
 > **Production:** https://upraiser-site.vercel.app  
 > **Target domain:** https://upraiser.co.uk (SPA not on custom DNS yet)  
-> **HEAD (ship):** `83a04c8` (deps fix) · hero `95bcd27` · IA baseline `3fc2205`  
+> **HEAD (ship):** `e8ed2ef` (Solutions harden) · glass+MP4 `71ddab1` · sticky phone `c0572d8` · hero `95bcd27`  
 > **Backups:** branch `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
 
 ---
@@ -93,14 +93,14 @@ Mode-aware bodies: **`ModeContentTransition`**. Header: frosted glass.
 
 ---
 
-## 4. Site map — Clarity / Studio IA (28 Jul 2026)
+## 4. Site map — Solutions + Clarity / Studio IA (29 Jul 2026)
 
 **Source of truth:** `src/App.tsx` + `navLinks` in `liveContent.ts`.
 
 | Route | Role | Dual-mode? |
 |-------|------|------------|
 | `/` | Pitch + killer folds | **Yes** |
-| `/expertise` | Pillars / OEM help | Soft |
+| `/solutions` | Format lanes + sticky phone glass | Soft (chassis + copy) |
 | `/clarity` | Clarity / measurement story | Soft |
 | `/studio` | Studio / craft | Soft |
 | `/clients` | Client roster | Soft |
@@ -109,22 +109,24 @@ Mode-aware bodies: **`ModeContentTransition`**. Header: frosted glass.
 | `/contact` | Request Pilot | No |
 | `/privacy` · `/terms` | Legal | No |
 
-**Nav:** Expertise · Clarity · Studio · Cases · About (`/company`) · theme · Request Pilot.
+**Nav:** Solutions · Clarity · Studio · Cases · About (`/company`) · theme · Request Pilot.
 
 **Legacy redirects (keep for SEO until refactor decides):**
 
 | From | To |
 |------|-----|
-| `/solutions` | Expertise redirect |
-| `/measurement`, `/technology` | Expertise / Clarity helpers |
-| `/partners` | `/expertise?pillar=oem#help-with` |
+| `/expertise` | `/solutions` |
+| `/measurement`, `/technology` | Clarity / Solutions helpers |
+| `/partners` | `/solutions?channel=oem#channels` |
 | `/about`, `/how-we-work`, `/resources*` | `/company` |
 
 **Flows:**
-- Advertiser: `/` → `/expertise` → `/contact`
+- Advertiser: `/` → `/solutions` → `/contact`
 - Clarity depth: `/` → `/clarity` → `/contact`
 - Studio: `/` → `/studio` → `/contact`
 - Proof: `/` → `/cases` → `/cases/:slug` → `/contact`
+
+**Solutions detail:** [`SOLUTIONS.md`](./SOLUTIONS.md).
 
 ```
 SiteGrain · DeferredCustomCursor · Header
@@ -176,11 +178,11 @@ Killer folds (Audience / Promise) stay on **home**.
     ├── context/            Theme · Scroll · HeroFly · CaseModal
     ├── data/               liveContent · cases · clients · partners · innerPagesData
     ├── lib/                heroModel · motion · scrollScene · accent · …
-    ├── pages/              Home · Expertise · Clarity · Studio · Clients · Company · Cases · Contact · Legal · LegacyRedirects
-    │                       (+ stale SolutionsPage / MeasurementPage / AboutPage — candidates for delete)
+    ├── pages/              Home · Solutions · Clarity · Studio · Clients · Company · Cases · Contact · Legal · LegacyRedirects
     └── components/
         ├── Hero · HeroAtmosphere · Everest
         ├── hero-terrain/   Scene · Camera · Halo · Bird · Beams · Haze · Stars · Fog · Rim
+        ├── solutions/      Phone3D · CssPhone · ProgrammaticScrollSection · FormatCopy · …
         └── …
 ```
 
@@ -215,7 +217,8 @@ Killer folds (Audience / Promise) stay on **home**.
 
 ### Depth / IA pages
 
-`ExpertiseHub` · `ClarityReconcile` · `Studio` / `StudioCraftVisual` · `Clients` · `Company` · `CompanyFootprint` · `CompanyStoryTimeline` · `CaseStudies` · `CasesTeaser` · `Contact`
+`SolutionsPage` + `components/solutions/*` · `ClarityReconcile` · `Studio` / `StudioCraftVisual` · `Clients` · `Company` · `CompanyFootprint` · `CompanyStoryTimeline` · `CaseStudies` · `CasesTeaser` · `Contact`  
+(Expertise hub superseded by `/solutions` — see [`SOLUTIONS.md`](./SOLUTIONS.md).)
 
 ### Shell / motion
 
@@ -282,7 +285,7 @@ Layout: `styles/base.css`. Motion: `lib/motion.ts` (`SPRING`, `SPRING_SOFT`).
 npm run deploy
 ```
 
-**Last production:** 28 Jul 2026 — light Everest maps, white sky, ice halo, soar bird; deps fix.
+**Last production:** 29 Jul 2026 — `/solutions` phone glass (still→MP4) + DPI/touch/transform harden (`e8ed2ef` / `71ddab1`).
 
 ---
 
@@ -329,12 +332,12 @@ Prompt assumptions to **correct** before coding:
 
 ## 15. Product direction — IA (shipped)
 
-Clarity / Studio IA replaced Solutions / Technology / Partners / About nav.
+Solutions restored as primary traffic surface; Clarity / Studio remain depth routes.
 
 | Route | Content |
 |-------|---------|
 | `/` | Hero 3D → Audience → Difference → Process → Channels → Cases teaser → Promise → Pilot |
-| `/expertise` | Consolidated pillars / OEM |
+| `/solutions` | Sticky format lanes + 3D/CSS phone (App Growth / OEM & CTV) |
 | `/clarity` | Clarity / measurement |
 | `/studio` | Studio craft |
 | `/company` | About / footprint / story |
@@ -363,6 +366,14 @@ R3F Everest fly · BrandHazeSky + ScrollBeams / NightStars · reject Rayleigh Sk
 - Restored full `package.json` deps after accidental strip  
 - Orphan unused components moved to `_local_drafts/` (gitignored)
 
+### Jul 29
+
+- **`/solutions` live again** (nav Solutions; `/expertise` redirects here)  
+- Sticky phone: GLB still PNG → format MP4 on same materials (no Suspense flash)  
+- Format feed MP4s + stills under `public/channels/programmatic-*`  
+- DPI / touch / transform-only harden (`e8ed2ef`) — see [`SOLUTIONS.md`](./SOLUTIONS.md)  
+- Docs hub + `SOLUTIONS.md`
+
 ---
 
 ## 17. Agent rules (owner)
@@ -386,6 +397,7 @@ R3F Everest fly · BrandHazeSky + ScrollBeams / NightStars · reject Rayleigh Sk
 | Model URLs | `lib/heroModel.ts` |
 | Runway progress | `HeroFlyContext.tsx` |
 | Routes / IA | `App.tsx`, `liveContent.ts` `navLinks` |
+| Solutions glass / formats | `components/solutions/*`, [`SOLUTIONS.md`](./SOLUTIONS.md) |
 | Section copy | `liveContent.ts` `*ByMode` |
 | Theme colors | `index.css` |
 | Home order | `HomePage.tsx`, `scrollSections.ts` |
@@ -400,8 +412,9 @@ R3F Everest fly · BrandHazeSky + ScrollBeams / NightStars · reject Rayleigh Sk
 - [ ] Light: white UI, photo mountain, halo, soft bird on scroll  
 - [ ] Dark: wire + stars, no bird/halo/beams  
 - [ ] Header theme stay-in-place  
-- [ ] Nav hits Expertise / Clarity / Studio / Cases / Company  
-- [ ] Legacy URLs redirect  
+- [ ] Nav hits Solutions / Clarity / Studio / Cases / Company  
+- [ ] `/solutions` glass never blank; formats scroll-sync  
+- [ ] Legacy URLs redirect (`/expertise` → Solutions)  
 - [ ] Mobile: no WebGL  
 - [ ] Deploy **upraiser-site-v2** · alias `upraiser-site.vercel.app`  
 - [ ] `package.json` still lists three, R3F, router, recharts, lucide, ogl  
@@ -416,10 +429,10 @@ Use this as the backlog when the owner says “рефактор”.
 
 | Item | Why |
 |------|-----|
-| `src/pages/SolutionsPage.tsx`, `MeasurementPage.tsx`, `AboutPage.tsx` | Superseded by Expertise / Clarity / Company; still on disk |
+| `src/pages/MeasurementPage.tsx`, `AboutPage.tsx` (if unused) | Superseded by Clarity / Company |
 | Local `ascent-bird.glb` under assets/public | Unused; bird is procedural |
 | `_local_drafts/` | Already outside `src`; optional purge |
-| Stale comments in `HomePage.tsx` mentioning `/solutions` | Docs drift |
+| Scratch `.tmp-*` / unused phone GLBs / HyperFrames thumbs | Local only — do not ship |
 
 ### B. Consolidate
 
@@ -443,8 +456,9 @@ Use this as the backlog when the owner says “рефактор”.
 - HeroFly + Lenis (no drei ScrollControls / GSAP)  
 - Dual narrative theme  
 - Killer folds on home  
-- Clarity/Studio IA routes + legacy redirects until SEO cutover  
+- Clarity/Studio IA routes + **live `/solutions`** + legacy redirects until SEO cutover  
 - White light paper + photoreal light mountain + silhouette bird  
+- Solutions still→MP4 glass pipeline (no Suspense Still↔Video remount)  
 
 ### E. Suggested refactor order
 
@@ -465,6 +479,7 @@ README.md                 # short human entry + links
 docs/
   README.md               # index
   HANDOFF.md              # IA, stack, refactor (this file)
+  SOLUTIONS.md            # /solutions sticky phone + format media
   HERO.md                 # 3D Everest only
   ASSETS.md               # media sync / verify
 ```
@@ -473,4 +488,4 @@ Root `AI_HANDOFF.md` / `CONTEXT.md` / `assets/README.md` are **stubs** that poin
 
 ---
 
-*End of handoff. Update when architecture, IA, deploy, or hero FX change — especially before a refactor.*
+*End of handoff. Update when architecture, IA, deploy, Solutions glass, or hero FX change — especially before a refactor.*

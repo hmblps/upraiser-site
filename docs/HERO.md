@@ -4,8 +4,9 @@
 > Light = white paper + photoreal `everest-light.glb` + ice halo + atmospheric soar silhouette.  
 > Dark = wire Everest + night stars.  
 > Legacy scroll-scrub MP4 is **superseded** — do not bring it back as the live hero without an explicit ask.  
-> Full site: **[HANDOFF.md](./HANDOFF.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
-> Live: https://upraiser-site.vercel.app/
+> Full site: **[HANDOFF.md](./HANDOFF.md)** · Solutions: **[SOLUTIONS.md](./SOLUTIONS.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
+> Live: https://upraiser-site.vercel.app/  
+> **Docs sync:** 29 July 2026 (IA / Solutions links refreshed; hero FX unchanged).
 
 ---
 

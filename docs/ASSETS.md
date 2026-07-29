@@ -23,6 +23,11 @@ Canonical deploy media lives under **`assets/`**. Before build, `scripts/sync-as
 | `public/fonts/*` | Self-hosted fonts |
 | `public/privacy`, `public/terms`, `public/legal` | Legal static pages |
 | `public/hero/*-fallback.png` | CSS / lite fallbacks (optional polish) |
+| `public/phones/deep-blue.glb` | Solutions phone (growth / light) |
+| `public/phones/orange.glb` | Solutions phone (infrastructure / dark) |
+| `public/channels/programmatic-refs/screens/*.png` | Solutions glass stills (instant) |
+| `public/channels/programmatic-feed/formats/*.mp4` | Solutions glass format videos |
+| `public/channels/programmatic-feed/*.{jpg}` | Live HTML feed backgrounds |
 
 ### Not shipped / ignore
 
@@ -32,6 +37,8 @@ Canonical deploy media lives under **`assets/`**. Before build, `scripts/sync-as
 | `assets/hero/snowy-mountain-v2.src.glb` | Quarantined wrong mountain — do not sync |
 | `assets/hero/ascent-bird.glb` | Leftover; live bird is procedural (`AscentBird.tsx`) — safe to delete locally |
 | `assets/hero/light-mountains-loop.mp4` | Legacy loop — **not** synced; optional OG tooling only |
+| `videos/solutions-pilot/` | HyperFrames source for format MP4s — local authoring only |
+| `.tmp-*` | Scratch screenshots / strips — do not commit |
 
 ### Commands
 
@@ -43,6 +50,6 @@ npm run optimize:everest-light   # light maps + roughness bake
 npm run generate:og              # regenerate og-image.png
 ```
 
-Partner SVGs, fonts, and legal HTML stay under `public/` (edited in place).
+Partner SVGs, fonts, legal HTML, phone GLBs, and Solutions channel media stay under `public/` (edited in place).
 
-See **[HERO.md](./HERO.md)** for hero 3D · **[README.md](../README.md)** for deploy · **[HANDOFF.md](./HANDOFF.md)** for IA + refactor notes.
+See **[SOLUTIONS.md](./SOLUTIONS.md)** for glass pipeline · **[HERO.md](./HERO.md)** for hero 3D · **[README.md](../README.md)** for deploy · **[HANDOFF.md](./HANDOFF.md)** for IA.
