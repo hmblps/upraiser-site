@@ -16,6 +16,7 @@ const PANEL_SPRING = { type: "spring" as const, stiffness: 340, damping: 30, mas
 
 const TABS = [
   { id: "story", label: "Story" },
+  { id: "why-us", label: "Why Us" },
   { id: "clients", label: "Clients" },
   { id: "compliance", label: "Compliance" },
   { id: "footprint", label: "Footprint" },
@@ -86,6 +87,44 @@ export function Company() {
                 </div>
               ) : null}
 
+              {activeId === "why-us" ? (
+                <div className="flex h-full min-h-0 flex-col overflow-hidden">
+                  <div className="shrink-0">
+                    <p className="stat-label text-orange">{COMPANY_CONTENT.whyUs.label}</p>
+                    <h2 className="card-title mt-2 text-base sm:text-lg">{COMPANY_CONTENT.whyUs.title}</h2>
+                    <p className="copy mt-2 max-w-2xl text-sm text-muted">{COMPANY_CONTENT.whyUs.lead}</p>
+                  </div>
+                  <ul className="depth-feature-list mt-4 min-h-0 flex-1 overflow-hidden">
+                    {COMPANY_CONTENT.whyUs.points.map((point, index) => (
+                      <li key={point.title} className="depth-feature-row">
+                        <span className="depth-feature-row__index" aria-hidden>
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <div className="depth-feature-row__body">
+                          <h3 className="depth-feature-row__title">{point.title}</h3>
+                          <p className="depth-feature-row__text">{point.text}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-3 flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
+                    <ScrollLink
+                      href={primaryCta.href}
+                      data-cursor="cta"
+                      className="btn-caps inline-block rounded-full bg-orange px-5 py-2.5 text-xs font-semibold text-on-accent"
+                    >
+                      {COMPANY_CONTENT.close.ctaLabel}
+                    </ScrollLink>
+                    <Link
+                      to="/solutions"
+                      className="text-xs font-semibold text-muted underline-offset-4 transition hover:text-orange hover:underline"
+                    >
+                      See Solutions →
+                    </Link>
+                  </div>
+                </div>
+              ) : null}
+
               {activeId === "clients" ? (
                 <div className="flex h-full min-h-0 flex-col overflow-hidden">
                   <div className="flex shrink-0 flex-wrap items-end justify-between gap-3">
@@ -95,7 +134,7 @@ export function Company() {
                         iGaming, fintech, gaming, marketplace — brands that need receipts, not decks.
                       </p>
                     </div>
-                    <p className="text-[0.65rem] uppercase tracking-[0.08em] text-muted">
+                    <p className="text-micro text-muted">
                       {CLIENT_PREVIEW.length} marks
                     </p>
                   </div>

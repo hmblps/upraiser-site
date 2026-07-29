@@ -176,6 +176,12 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  gap: 2cqi;
+}
+
+.pf-feed__section-label span {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .pf-feed__section-label span:first-child {
@@ -241,6 +247,12 @@
   font-size: var(--pf-text-sm);
   font-weight: 700;
   line-height: 1.2;
+  min-width: 0;
+}
+
+.pf-banner-ad__left > span {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .pf-banner-ad__icon {

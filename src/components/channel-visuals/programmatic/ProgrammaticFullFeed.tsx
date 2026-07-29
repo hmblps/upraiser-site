@@ -23,7 +23,7 @@ function Icon({ name, filled = false, className = "" }: { name: string; filled?:
 }
 
 function BrandMark({ className = "" }: { className?: string }) {
-  return <img src={LOGO} alt="" className={className} decoding="async" fetchPriority="low" />;
+  return <img src={LOGO} alt="" className={className} decoding="async" loading="lazy" fetchPriority="low" />;
 }
 
 function FormatPanel({ id }: { id: string }) {

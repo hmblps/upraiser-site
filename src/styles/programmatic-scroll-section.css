@@ -28,7 +28,7 @@
   width: 100%;
   max-width: var(--site-max-width, 1280px);
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 4vw, 3rem);
+  padding-inline: var(--page-gutter);
   padding-block: 0.35rem 0.75rem;
 }
 
@@ -44,8 +44,8 @@
 
 .prog-scroll-headline .section-title {
   white-space: nowrap;
-  font-size: clamp(1.45rem, 2.4vw, 2.35rem);
-  letter-spacing: -0.03em;
+  font-size: var(--text-title-compact);
+  letter-spacing: var(--tracking-title);
 }
 
 .prog-scroll-headline .section-label {
@@ -60,13 +60,13 @@
   z-index: 0;
   background:
     radial-gradient(ellipse 55% 50% at 22% 38%, color-mix(in srgb, var(--theme-accent) 16%, transparent), transparent 70%),
-    radial-gradient(ellipse 40% 35% at 78% 58%, rgba(255, 190, 120, 0.1), transparent 70%);
+    radial-gradient(ellipse 40% 35% at 78% 58%, color-mix(in srgb, var(--theme-accent-light, var(--theme-accent)) 10%, transparent), transparent 70%);
 }
 
 [data-theme="dark"] .prog-scroll-ambience {
   background:
-    radial-gradient(ellipse 55% 50% at 22% 38%, rgba(247, 126, 45, 0.16), transparent 70%),
-    radial-gradient(ellipse 40% 35% at 78% 58%, rgba(255, 200, 120, 0.08), transparent 70%);
+    radial-gradient(ellipse 55% 50% at 22% 38%, color-mix(in srgb, var(--theme-accent) 16%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 78% 58%, color-mix(in srgb, var(--theme-accent-light, var(--theme-accent)) 8%, transparent), transparent 70%);
 }
 
 .prog-scroll-layout {
@@ -311,19 +311,21 @@
 }
 
 .format-copy__title {
-  font-size: clamp(1.85rem, 3.6vw, 2.85rem);
+  font-family: var(--font-display);
+  font-size: var(--text-feature);
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  letter-spacing: var(--tracking-feature);
+  line-height: var(--leading-tight);
   margin-top: 0.35rem;
+  text-transform: uppercase;
   color: var(--theme-fg);
 }
 
 .format-copy__body {
   margin-top: 0.85rem;
   max-width: 38ch;
-  color: var(--theme-muted);
-  line-height: 1.55;
+  color: var(--theme-muted-light);
+  line-height: var(--leading-body);
 }
 
 .format-copy__progress {
@@ -527,7 +529,8 @@
 }
 
 .prog-scroll-section__mobile-card .card-title {
-  font-size: clamp(1.65rem, 7vw, 2.15rem);
+  font-size: var(--text-feature);
+  letter-spacing: var(--tracking-feature);
 }
 
 .prog-scroll-section__mobile-card .stat-label {
@@ -562,7 +565,8 @@
 }
 
 .prog-mobile-headline .section-title {
-  letter-spacing: -0.03em;
+  font-size: var(--text-title-compact);
+  letter-spacing: var(--tracking-title);
 }
 
 @media (max-width: 1100px) {

@@ -60,7 +60,7 @@ export function LocaleSwitcher({ className = "" }: { className?: string }) {
       >
         <Languages className="h-3.5 w-3.5 opacity-70" strokeWidth={2} aria-hidden />
         <span>{current.code}</span>
-        <span aria-hidden className="text-[0.6rem] opacity-45">
+        <span aria-hidden className="text-micro opacity-45">
           ▾
         </span>
       </motion.button>

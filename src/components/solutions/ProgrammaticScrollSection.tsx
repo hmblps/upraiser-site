@@ -281,7 +281,7 @@ function MobileFormats({
             <p className="copy mt-3">{fmt.description}</p>
             <ul className="channel-inventory-points mt-4 space-y-2">
               {fmt.points.map((point) => (
-                <li key={point} className="channel-inventory-points__item copy text-sm text-muted">
+                <li key={point} className="channel-inventory-points__item copy text-muted">
                   {point}
                 </li>
               ))}

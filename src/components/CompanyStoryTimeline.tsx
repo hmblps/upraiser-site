@@ -40,7 +40,7 @@ export function CompanyStoryTimeline() {
                 selected ? "text-orange" : "text-muted hover:text-fg",
               ].join(" ")}
             >
-              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.14em]">{item.mark}</span>
+              <span className="text-micro">{item.mark}</span>
               <span
                 className={[
                   "h-1.5 w-full max-w-[3.5rem] rounded-full transition",

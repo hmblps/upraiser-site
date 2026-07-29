@@ -225,7 +225,7 @@
 
 .card-title {
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-card);
 }
 
 .card-kicker {
@@ -238,7 +238,7 @@
 .text-micro {
   font-size: var(--text-micro);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-kicker);
   text-transform: uppercase;
 }
 
@@ -247,6 +247,12 @@
   font-weight: 600;
   letter-spacing: var(--tracking-kicker);
   text-transform: uppercase;
+}
+
+/** Muted helper / secondary line — not uppercase */
+.text-caption {
+  font-size: var(--text-caption);
+  line-height: 1.45;
 }
 
 .section-stack {
@@ -358,6 +364,12 @@ header nav .nav-link:focus-visible::after {
   text-transform: uppercase;
 }
 
+/** Dense page titles (Studio / Cases / Company / Solutions sticky head) */
+.section-title--compact {
+  font-size: var(--text-title-compact);
+  letter-spacing: var(--tracking-title);
+}
+
 .footer-heading {
   font-size: var(--text-kicker);
   font-weight: 600;
@@ -382,13 +394,13 @@ header nav .nav-link:focus-visible::after {
 
 .section-lead {
   max-width: 42rem;
-  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.5rem);
+  font-size: var(--text-lead);
   font-weight: 600;
   line-height: var(--leading-snug);
 }
 
 .copy {
   font-size: var(--text-body);
-  line-height: 1.625;
+  line-height: var(--leading-body);
   color: var(--theme-muted-light);
 }

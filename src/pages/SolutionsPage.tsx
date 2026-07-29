@@ -36,7 +36,7 @@ export function SolutionsPage() {
       : "Pre-install, OEM storefronts, and CTV — same sticky format path, proof that survives procurement.";
 
   return (
-    <main className="site-main depth-page depth-page--solutions overflow-x-hidden pt-[var(--site-header-height)]">
+    <main className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
       <ProgrammaticScrollSection
         key={lane}
         mode={mode}

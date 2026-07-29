@@ -5,7 +5,6 @@ import { SectionNav } from "../components/SectionNav";
 import { HomePilotCta } from "../components/HomePilotCta";
 
 const Audience = lazy(() => import("../components/Audience").then((m) => ({ default: m.Audience })));
-const Difference = lazy(() => import("../components/Difference").then((m) => ({ default: m.Difference })));
 const Process = lazy(() => import("../components/Process").then((m) => ({ default: m.Process })));
 const TrafficChannels = lazy(() =>
   import("../components/TrafficChannels").then((m) => ({ default: m.TrafficChannels })),
@@ -21,7 +20,6 @@ function usePreloadHome() {
   useEffect(() => {
     const runNear = () => {
       void import("../components/Audience");
-      void import("../components/Difference");
     };
     const runMid = () => {
       void import("../components/Process");
@@ -69,9 +67,6 @@ export function HomePage() {
         </div>
         <LazySection minHeight="70vh">
           <Audience />
-        </LazySection>
-        <LazySection>
-          <Difference />
         </LazySection>
         <LazySection minHeight="52vh">
           <Process />

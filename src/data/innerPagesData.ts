@@ -280,6 +280,30 @@ export const COMPANY_CONTENT = {
   positioningLead: "Built from logs.",
   positioningAccent: "Built for trust.",
 
+  whyUs: {
+    label: "Why Us",
+    title: "Direct pipe. Not resale.",
+    lead: "Finance needs a buying route that climbs with spend — direct supply, pre-bid checks, caps on revenue events.",
+    points: [
+      {
+        title: "Direct source access",
+        text: "Contracts on the publisher path. Fewer hops from bid to device event.",
+      },
+      {
+        title: "Pre-bid verification",
+        text: "Bots scored before auction close. Clean S2S into Your MMP — not after invoice.",
+      },
+      {
+        title: "Buying pipe that holds",
+        text: "Account and supply continuity so volume ramps without the mid-flight cliff.",
+      },
+      {
+        title: "Payback-tuned caps",
+        text: "Bids follow ROAS / payback You already track — not CPI vanity.",
+      },
+    ],
+  },
+
   compliance: [
     {
       title: "UK jurisdiction",

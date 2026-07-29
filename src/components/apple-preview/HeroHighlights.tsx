@@ -5,11 +5,10 @@ import { ScrollLink } from "../ScrollLink";
 
 /** Section jumpers only — no metrics (hero stats) or header nav duplicates */
 const HIGHLIGHT_CHIPS = [
-  { label: "Value", href: "#value" },
   { label: "Promise", href: "#promise" },
-  { label: "Difference", href: "#difference" },
-  { label: "About", href: "#about" },
   { label: "Process", href: "#process" },
+  { label: "Channels", href: "#channels" },
+  { label: "About", href: "/company" },
 ] as const;
 
 export function HeroHighlights() {
@@ -22,7 +21,7 @@ export function HeroHighlights() {
       transition={{ duration: 0.5, delay: 0.68, ease: EASE_OUT }}
       className="mt-10 border-t border-border/60 pt-8"
     >
-      <p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted">
+      <p className="mb-3 text-kicker text-muted">
         Explore
       </p>
       <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

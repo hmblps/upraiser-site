@@ -75,7 +75,7 @@ export function ChannelBeam({
         <div className="flex flex-col items-start justify-between gap-5 py-1 sm:gap-6">
           {left.map((node, i) => (
             <BeamNode key={node.id} ref={spokeRefs[i]} label={node.label}>
-              <span className="text-[0.65rem] font-bold tracking-tight text-fg">{node.mark}</span>
+              <span className="text-micro tracking-tight text-fg">{node.mark}</span>
             </BeamNode>
           ))}
         </div>
@@ -91,7 +91,7 @@ export function ChannelBeam({
         <div className="flex flex-col items-end justify-between gap-5 py-1 sm:gap-6">
           {right.map((node, i) => (
             <BeamNode key={node.id} ref={spokeRefs[mid + i]} label={node.label}>
-              <span className="text-[0.65rem] font-bold tracking-tight text-fg">{node.mark}</span>
+              <span className="text-micro tracking-tight text-fg">{node.mark}</span>
             </BeamNode>
           ))}
         </div>

@@ -186,79 +186,6 @@ export const promiseByMode = {
   }
 >;
 
-export const differenceByMode = {
-  growth: [
-    {
-      title: "Uncapped premium supply",
-      text: "Inventory others rarely see at scale. Blended CPA stays flat as daily caps increase — because we filter before the bid, not after the bill.",
-    },
-    {
-      title: "48 hours brief to bid",
-      text: "Creative, tracking, and MMP events wired before the first impression. Live inside two days, optimized by the metrics Your board reviews.",
-    },
-    {
-      title: "Cohort value drives bids",
-      text: "Optimization follows LTV and payback — not yesterday's CPI. Unit economics hold when spend doubles because every bid is tied to a revenue signal, not a click.",
-    },
-  ],
-  infrastructure: [
-    {
-      title: "Fraud stopped pre-auction",
-      text: "Bots, emulators, click floods, and install hijacking never clear the bid. Invalid traffic dies before it hits Your cap — verified in the raw log, not in a post-campaign report.",
-    },
-    {
-      title: "MMP logs match server side",
-      text: "Adjust, AppsFlyer, and Kochava reconciled before the flight closes. No post-campaign dispute call because the numbers already agreed at bid time.",
-    },
-    {
-      title: "OEM deploys fully audited",
-      text: "Lenovo ROM and Google PAI with SDK trails compliance and engineering teams accept. Factory-floor supply You can defend to finance, not just to marketing.",
-    },
-  ],
-} satisfies Record<SiteMode, unknown>;
-
-/** Two-column market contrast — Standard Way vs Upraiser pipe. */
-export const differenceCompare = {
-  restLabel: "The Rest",
-  oursLabel: "Upraiser",
-  rest: [
-    {
-      title: "Black-box arbitrage",
-      text: "Resold supply. No steer. No trail when finance asks.",
-    },
-    {
-      title: "Attribution leakage",
-      text: "Late fraud screens. Soft postbacks. Conversions vanish before the receipt.",
-    },
-    {
-      title: "Account burn",
-      text: "Accounts die mid-ascent. Flights stall while the pipe is rebuilt.",
-    },
-    {
-      title: "Vanity KPIs",
-      text: "Paid for clicks and soft leads — LTV and payback never enter the bid.",
-    },
-  ],
-  ours: [
-    {
-      title: "Direct source access",
-      text: "Contracts on the publisher path. Fewer hops from bid to device event.",
-    },
-    {
-      title: "Pre-bid verification",
-      text: "Bots scored before auction close. Clean S2S into Your MMP — not after invoice.",
-    },
-    {
-      title: "Buying pipe that holds",
-      text: "Account and supply continuity so volume ramps without the mid-flight cliff.",
-    },
-    {
-      title: "Payback-tuned caps",
-      text: "Bids follow ROAS / payback You already track — not CPI vanity.",
-    },
-  ],
-} as const;
-
 export const trafficChannelsByMode = {
   growth: [
     {
@@ -951,17 +878,6 @@ export const sectionsByMode = {
     label: "Case Studies",
     growth: { title: "Campaigns that hold up in review" },
     infrastructure: { title: "Pipelines built for audit" },
-  },
-  difference: {
-    label: "Why Us",
-    growth: {
-      title: "Direct pipe. Not resale.",
-      description: "Finance needs a buying route that climbs with spend — direct supply, pre-bid checks, caps on revenue events.",
-    },
-    infrastructure: {
-      title: "Precision vs the rest",
-      description: "Black-box arbitrage burns accounts. Infrastructure means every bid clears with a trail Ad Ops and finance pull the same day.",
-    },
   },
   technology: {
     label: "Measurement",

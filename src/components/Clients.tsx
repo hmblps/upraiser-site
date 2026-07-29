@@ -39,7 +39,7 @@ export function Clients() {
                   type="button"
                   onClick={() => setVertical(item)}
                   className={cn(
-                    "shrink-0 rounded-full px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.08em] transition",
+                    "shrink-0 rounded-full px-3 py-1.5 text-micro tracking-wide transition",
                     active
                       ? "bg-orange text-on-accent"
                       : "border border-border/60 text-muted hover:border-orange/40 hover:text-fg",
@@ -77,7 +77,7 @@ export function Clients() {
                     decoding="async"
                   />
                 ) : (
-                  <span className="text-center text-[0.7rem] font-bold tracking-tight text-fg/80">
+                  <span className="text-center text-caption font-bold tracking-tight text-fg/80">
                     {brand.name}
                   </span>
                 )}

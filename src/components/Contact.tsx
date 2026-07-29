@@ -146,11 +146,11 @@ export function Contact() {
             <div className="relative z-[1] grid h-full min-h-0 overflow-hidden lg:grid-cols-2">
             <div className="relative flex min-h-0 flex-col overflow-hidden bg-bg-elevated p-5 sm:p-6 lg:p-8">
               <p className="section-label">{contactPage.label}</p>
-              <h1 className="section-title mt-1.5 text-[1.45rem] sm:text-2xl lg:text-[1.85rem]">
+              <h1 className="section-title section-title--compact mt-1.5">
                 {contactPage.titleLead}
                 <AccentWord tone="red">{contactPage.accentWord}</AccentWord>?
               </h1>
-              <p className="section-description mt-2 line-clamp-2 text-sm">{contactPage.description}</p>
+              <p className="section-description mt-2 line-clamp-2">{contactPage.description}</p>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {ctaRow.map((item) => (

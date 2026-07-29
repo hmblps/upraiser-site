@@ -26,7 +26,7 @@ export function ContactIntentChips({ value, onChange, disabled }: ContactIntentC
 
   return (
     <div>
-      <p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted">
+      <p className="mb-3 text-kicker text-muted">
         What brings You here
       </p>
       <div className="flex flex-wrap gap-2" role="listbox" aria-label="Contact intent">

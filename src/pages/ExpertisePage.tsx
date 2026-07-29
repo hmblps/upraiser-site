@@ -117,10 +117,10 @@ export function ExpertisePage() {
                 <ol className="mt-3 grid shrink-0 grid-cols-3 gap-2 border-t border-border/45 pt-3">
                   {activeCluster.process.map((step, index) => (
                     <li key={step.title} className="min-w-0">
-                      <p className="text-[0.65rem] font-bold uppercase tracking-[0.1em] text-orange">
+                      <p className="stat-label text-orange">
                         {String(index + 1).padStart(2, "0")} · {step.title}
                       </p>
-                      <p className="mt-1 line-clamp-2 text-[0.7rem] leading-snug text-muted">{step.body}</p>
+                      <p className="mt-1 line-clamp-2 text-caption leading-snug text-muted">{step.body}</p>
                     </li>
                   ))}
                 </ol>
@@ -134,7 +134,7 @@ export function ExpertisePage() {
                     {EXPERTISE_CONTENT.close.ctaLabel}
                   </ScrollLink>
                   {related.length > 0 ? (
-                    <p className="text-[0.7rem] text-muted">
+                    <p className="text-caption text-muted">
                       Related:{" "}
                       {related.map((lane, index) => (
                         <span key={lane.id}>
@@ -151,7 +151,7 @@ export function ExpertisePage() {
                     </p>
                   ) : null}
                   {isExpertiseGrowthId(activeId) ? (
-                    <p className="text-[0.65rem] text-muted/80">Same desk. Different supply path.</p>
+                    <p className="text-micro text-muted/80">Same desk. Different supply path.</p>
                   ) : null}
                 </div>
               </div>

@@ -69,7 +69,7 @@ export function Studio() {
                   >
                     {STUDIO_CONTENT.close.ctaLabel}
                   </ScrollLink>
-                  <p className="mt-2 shrink-0 text-[0.7rem] text-muted">
+                  <p className="mt-2 shrink-0 text-caption text-muted">
                     Ships into{" "}
                     <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
                       Solutions lanes
@@ -101,7 +101,7 @@ export function Studio() {
                   >
                     {STUDIO_CONTENT.close.ctaLabel}
                   </ScrollLink>
-                  <p className="mt-2 shrink-0 text-[0.7rem] text-muted">
+                  <p className="mt-2 shrink-0 text-caption text-muted">
                     Ships into{" "}
                     <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
                       Solutions lanes
@@ -119,7 +119,7 @@ export function Studio() {
                         key={step.title}
                         className="flex min-h-0 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border/60 bg-bg-card/70 p-3"
                       >
-                        <span className="text-xs font-bold tracking-widest text-orange">
+                        <span className="stat-label text-orange">
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         <h3 className="card-title mt-2 text-sm">{step.title}</h3>
@@ -134,7 +134,7 @@ export function Studio() {
                   >
                     {STUDIO_CONTENT.close.ctaLabel}
                   </ScrollLink>
-                  <p className="mt-2 shrink-0 text-[0.7rem] text-muted">
+                  <p className="mt-2 shrink-0 text-caption text-muted">
                     Ships into{" "}
                     <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
                       Solutions lanes

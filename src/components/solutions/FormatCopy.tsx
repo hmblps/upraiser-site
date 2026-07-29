@@ -48,7 +48,9 @@ export function FormatCopy({
           exit={reduced ? undefined : "exit"}
           style={reduced ? undefined : { willChange: "transform, opacity" }}
         >
-          <p className={`stat-label format-copy__tagline ${accentClass}`}>{format.tagline}</p>
+          <p className={`stat-label format-copy__tagline whitespace-nowrap shrink-0 ${accentClass}`}>
+            {format.tagline}
+          </p>
 
           <h2 className="format-copy__title">{format.label}</h2>
 
@@ -56,9 +58,9 @@ export function FormatCopy({
 
           <ul className="channel-inventory-points mt-5 space-y-2.5">
             {format.points.map((point) => (
-              <li key={point} className="channel-inventory-points__item copy text-sm text-muted">
-                {point}
-              </li>
+              <li key={point} className="channel-inventory-points__item copy text-muted">
+                  {point}
+                </li>
             ))}
           </ul>
 
@@ -74,7 +76,7 @@ export function FormatCopy({
                   role="tab"
                   aria-selected={idx === index}
                   aria-label={`${idx + 1}. ${fmt.label}`}
-                  className={`format-copy__dot${idx === index ? " format-copy__dot--active" : ""}`}
+                  className={`format-copy__dot min-h-11 min-w-11${idx === index ? " format-copy__dot--active" : ""}`}
                   onClick={() => onJump?.(idx)}
                 />
               ))}

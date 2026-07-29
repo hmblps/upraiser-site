@@ -72,7 +72,7 @@ export const PERFORMANCE_TO_HOME: Record<PerformanceBlock, string> = {
   header: "Header + SectionNav",
   hero: "Hero (video + Charting the Ascent)",
   trustMarquee: "LenovoTrustStrip (+ optional Cases logo marquee)",
-  philosophy: "Audience + Difference + Promise (fold charts live here only)",
+  philosophy: "Audience + Promise (fold charts live here only)",
   services: "TrafficChannels variant=home → /solutions",
   caseStudies: "CasesTeaser → /cases",
   footerCta: "HomePilotCta + Footer",

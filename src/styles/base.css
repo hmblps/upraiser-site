@@ -27,21 +27,28 @@ html {
   --section-y-statement: clamp(4.5rem, 8vw, 7rem);
   --section-stack-gap: 2.5rem;
 
-  /* ── Type scale (Inter roles) — fluid body, clamped display ── */
+  /* ── Type scale — fluid body, clamped display (one scale site-wide) ── */
   --text-micro: clamp(0.625rem, 0.58rem + 0.2vw, 0.6875rem);
   --text-kicker: clamp(0.6875rem, 0.64rem + 0.22vw, 0.75rem);
   --text-caption: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
   --text-body: clamp(0.875rem, 0.82rem + 0.28vw, 0.9375rem);
   --text-body-lg: clamp(0.9375rem, 0.88rem + 0.35vw, 1.0625rem);
+  --text-lead: clamp(1.15rem, 1rem + 0.7vw, 1.5rem);
+  /** Sticky / viewport page H1 — denser than home section titles */
+  --text-title-compact: clamp(1.35rem, 2.4vw, 2.1rem);
   --text-title: clamp(1.75rem, 3.2vw, 2.35rem);
+  /** Format / feature names inside product panels (Solutions copy col) */
+  --text-feature: clamp(1.75rem, 3.2vw, 2.65rem);
   --text-display: clamp(2.15rem, 5.4vw, 4.1rem);
   --leading-tight: 1.1;
   --leading-snug: 1.2;
   --leading-body: 1.55;
   --tracking-display: -0.055em;
   --tracking-title: -0.025em;
+  --tracking-feature: -0.02em;
   --tracking-caps: 0.1em;
   --tracking-kicker: 0.12em;
+  --tracking-card: 0.04em;
 
   /* ── Surfaces ── */
   --card-pad: 1.5rem;
