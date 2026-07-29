@@ -24,10 +24,10 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
       {items.map((item) => {
         const active = item.id === activeId;
         const classes = cn(
-          "slide-tab relative shrink-0 rounded-full px-3.5 py-1.5 text-micro tracking-wide transition",
+          "slide-tab relative inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-3.5 py-1.5 text-micro tracking-wide transition",
           active
             ? "slide-tab--active text-on-accent"
-            : "border border-border text-muted-light hover:border-fg/20 hover:text-fg",
+            : "border border-border text-muted-light [@media(hover:hover)_and_(pointer:fine)]:hover:border-fg/20 [@media(hover:hover)_and_(pointer:fine)]:hover:text-fg",
         );
 
         const highlight =

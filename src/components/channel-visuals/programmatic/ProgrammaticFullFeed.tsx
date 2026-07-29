@@ -13,7 +13,7 @@ const SPRING = { type: "spring" as const, stiffness: 320, damping: 30, mass: 0.8
 function Icon({ name, filled = false, className = "" }: { name: string; filled?: boolean; className?: string }) {
   return (
     <span
-      className={`pb-icon material-symbols-outlined ${className}`.trim()}
+      className={`pb-icon material-symbols-outlined shrink-0 ${className}`.trim()}
       style={filled ? { fontVariationSettings: "'FILL' 1" } : undefined}
       aria-hidden
     >
@@ -23,7 +23,7 @@ function Icon({ name, filled = false, className = "" }: { name: string; filled?:
 }
 
 function BrandMark({ className = "" }: { className?: string }) {
-  return <img src={LOGO} alt="" className={className} />;
+  return <img src={LOGO} alt="" className={className} decoding="async" fetchPriority="low" />;
 }
 
 function FormatPanel({ id }: { id: string }) {
@@ -44,7 +44,7 @@ function FormatPanel({ id }: { id: string }) {
             Conquer the market with strategic ascent tools designed for the next generation of mobile engagement.
           </p>
           <div className="pf-native__media">
-            <img src={NATIVE_HERO} alt="" />
+            <img src={NATIVE_HERO} alt="" decoding="async" loading="lazy" />
             <div className="pf-native__media-cap">The Peak of Strategy</div>
           </div>
           <div className="pf-native__foot">
@@ -61,7 +61,7 @@ function FormatPanel({ id }: { id: string }) {
     case "interstitial":
       return (
         <div className="pf-interstitial pf-interstitial--fill">
-          <img src={INTERSTITIAL_BG} alt="" className="pf-interstitial__bg" />
+          <img src={INTERSTITIAL_BG} alt="" className="pf-interstitial__bg" decoding="async" loading="lazy" />
           <div className="pf-interstitial__dim" />
           <div className="pf-format-tag" aria-hidden>
             <span>03.</span> Interstitial
@@ -84,7 +84,7 @@ function FormatPanel({ id }: { id: string }) {
     case "rich":
       return (
         <div className="pf-rich pf-rich--fill">
-          <img src={RICH_BG} alt="" className="pf-rich__bg" />
+          <img src={RICH_BG} alt="" className="pf-rich__bg" decoding="async" loading="lazy" />
           <div className="pf-rich__overlay">
             <div className="pf-format-tag pf-format-tag--on-dark" aria-hidden>
               <span>04.</span> Rich Media
@@ -110,7 +110,7 @@ function FormatPanel({ id }: { id: string }) {
     case "video":
       return (
         <div className="pf-video pf-video--fill">
-          <img src={VIDEO_BG} alt="" className="pf-video__bg" />
+          <img src={VIDEO_BG} alt="" className="pf-video__bg" decoding="async" loading="lazy" />
           <div className="pf-video__grad" />
           <div className="pf-format-tag pf-format-tag--center" aria-hidden>
             <span>05.</span> Video
@@ -131,7 +131,7 @@ function FormatPanel({ id }: { id: string }) {
               <span />
             </div>
             <div className="pf-video__meta">
-              <img src={LOGO_MARK} alt="" />
+              <img src={LOGO_MARK} alt="" decoding="async" loading="lazy" />
               <span>The Uprising Continues</span>
             </div>
           </div>

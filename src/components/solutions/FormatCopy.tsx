@@ -39,15 +39,16 @@ export function FormatCopy({
       {laneSwitcher ? <div className="format-copy-wrap__switcher">{laneSwitcher}</div> : null}
 
       <AnimatePresence mode="wait">
-        <motion.div
+          <motion.div
           key={format.id + format.label}
           className="format-copy"
           variants={reduced ? undefined : panel}
           initial={reduced ? false : "hidden"}
           animate="visible"
           exit={reduced ? undefined : "exit"}
+          style={reduced ? undefined : { willChange: "transform, opacity" }}
         >
-          <p className={`stat-label ${accentClass}`}>{format.tagline}</p>
+          <p className={`stat-label format-copy__tagline ${accentClass}`}>{format.tagline}</p>
 
           <h2 className="format-copy__title">{format.label}</h2>
 
@@ -62,7 +63,7 @@ export function FormatCopy({
           </ul>
 
           <div className="format-copy__progress">
-            <span className="format-copy__progress-label stat-label text-muted">
+            <span className="format-copy__progress-label stat-label text-muted whitespace-nowrap shrink-0">
               {index + 1} / {total}
             </span>
             <div className="format-copy__dots" role="tablist" aria-label="Formats">

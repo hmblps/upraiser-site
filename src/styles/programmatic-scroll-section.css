@@ -3,6 +3,7 @@
 .prog-scroll-outer {
   position: relative;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .prog-scroll-sticky {
@@ -14,6 +15,7 @@
   justify-content: stretch;
   overflow: hidden;
   background: transparent;
+  touch-action: pan-y;
 }
 
 .prog-scroll-sticky-inner {
@@ -44,6 +46,11 @@
   white-space: nowrap;
   font-size: clamp(1.45rem, 2.4vw, 2.35rem);
   letter-spacing: -0.03em;
+}
+
+.prog-scroll-headline .section-label {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .prog-scroll-ambience {
@@ -78,7 +85,7 @@
 /* Left column — tall stage so the 3D phone can actually fill it */
 .prog-scroll-phone-col {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   height: 100%;
   min-height: 0;
@@ -88,11 +95,13 @@
 
 .prog-scroll-canvas {
   width: 100%;
-  height: 100%;
-  min-height: calc(100vh - var(--site-header-height, 72px) - 8.25rem);
-  max-height: none;
+  height: clamp(420px, 65vh, 750px);
+  max-height: min(750px, calc(100vh - var(--site-header-height, 72px) - 7.5rem));
+  min-height: 420px;
   cursor: grab;
-  align-self: stretch;
+  align-self: center;
+  touch-action: none; /* rotate drag owns gestures on the glass */
+  will-change: transform;
 }
 
 .prog-scroll-canvas[data-dragging="true"] {
@@ -103,7 +112,7 @@
 .prog-css-phone {
   position: relative;
   flex-shrink: 0;
-  aspect-ratio: 390 / 844;
+  aspect-ratio: 9 / 19.5;
   border-radius: 2.35rem;
   padding: 0.22rem;
   box-shadow:
@@ -140,6 +149,7 @@
   border-radius: 999px;
   background: #050505;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
 .prog-css-phone__screen {
@@ -153,8 +163,9 @@
 }
 
 .prog-css-phone--desktop {
-  height: calc(100vh - var(--site-header-height, 72px) - 8.25rem);
-  max-height: none;
+  height: clamp(420px, 65vh, 750px);
+  max-height: min(750px, calc(100vh - var(--site-header-height, 72px) - 7.5rem));
+  min-height: 420px;
   width: auto;
   max-width: min(100%, 22.5rem);
   margin-inline: auto;
@@ -190,6 +201,7 @@
   min-height: 0;
   padding-top: 0;
   padding-inline-start: 0.25rem;
+  touch-action: pan-y;
 }
 
 .format-copy-wrap {
@@ -211,10 +223,22 @@
   flex-wrap: wrap;
 }
 
+.format-lane-tabs .slide-tab,
+.format-lane-tabs .slide-tab span {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .format-copy {
   width: 100%;
   display: flex;
   flex-direction: column;
+  will-change: transform, opacity;
+}
+
+.format-copy__tagline {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .format-copy__title {
@@ -242,34 +266,61 @@
 
 .format-copy__progress-label {
   min-width: 2.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .format-copy__dots {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.35rem;
 }
 
+/* Dot visual via ::after + scaleX — avoids width layout thrashing; hit area ≥44px */
 .format-copy__dot {
-  width: 0.4rem;
-  height: 0.4rem;
+  position: relative;
+  width: 1.25rem;
+  height: 2.75rem;
   padding: 0;
   border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  touch-action: manipulation;
+}
+
+.format-copy__dot::after {
+  content: "";
+  display: block;
+  width: 0.4rem;
+  height: 0.4rem;
   border-radius: 999px;
   background: color-mix(in srgb, var(--theme-border) 80%, transparent);
-  cursor: pointer;
+  transform: scaleX(1);
+  transform-origin: left center;
   transition:
     background 0.25s ease,
-    width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
-.format-copy__dot:hover {
-  background: color-mix(in srgb, var(--theme-accent) 55%, transparent);
-}
-
-.format-copy__dot--active {
-  width: 1.25rem;
+.format-copy__dot--active::after {
+  transform: scaleX(3.125);
   background: var(--theme-accent);
   box-shadow: 0 0 8px color-mix(in srgb, var(--theme-accent) 40%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .format-copy__dot:hover::after {
+    background: color-mix(in srgb, var(--theme-accent) 55%, transparent);
+  }
+
+  .format-copy__dot--active:hover::after {
+    background: var(--theme-accent);
+  }
 }
 
 /* Scroll hint — removed; native scroll is self-explanatory */
@@ -288,7 +339,9 @@
 .prog-scroll-section--mobile {
   position: relative;
   padding: 0 0 clamp(2.5rem, 10vw, 4rem);
-  overflow: clip;
+  overflow-x: hidden;
+  overflow-y: clip;
+  touch-action: pan-y;
 }
 
 .prog-mobile-ambience {
@@ -334,24 +387,43 @@
 
 .prog-mobile-dots {
   display: flex;
-  gap: 0.45rem;
+  align-items: center;
+  gap: 0.35rem;
   padding-bottom: 0.15rem;
 }
 
 .prog-mobile-dots button {
-  width: 0.4rem;
-  height: 0.4rem;
+  position: relative;
+  width: 1.15rem;
+  height: 2.75rem;
   padding: 0;
   border: none;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--theme-border) 80%, transparent);
-  transition:
-    width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.28s ease;
+  background: transparent;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
-.prog-mobile-dots button.is-active {
-  width: 1.15rem;
+.prog-mobile-dots button::after {
+  content: "";
+  display: block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-border) 80%, transparent);
+  transform: scaleX(1);
+  transform-origin: left center;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.28s ease;
+  will-change: transform;
+}
+
+.prog-mobile-dots button.is-active::after {
+  transform: scaleX(2.875);
   background: var(--theme-accent);
 }
 
@@ -373,6 +445,7 @@
   scroll-snap-align: center;
   opacity: 0.45;
   transition: opacity 0.35s ease;
+  will-change: opacity;
 }
 
 .prog-scroll-section__mobile-card.is-active {
@@ -383,6 +456,11 @@
   font-size: clamp(1.65rem, 7vw, 2.15rem);
 }
 
+.prog-scroll-section__mobile-card .stat-label {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* phone-3d-canvas default */
 .phone-3d-canvas {
   width: 100%;
@@ -390,6 +468,10 @@
 }
 
 /* Solutions sticky — headline lives inside the phone band */
+.depth-page--solutions {
+  overflow-x: hidden;
+}
+
 .depth-page--solutions .solutions-intro {
   padding-block: clamp(1.25rem, 3vw, 2rem) clamp(0.75rem, 2vw, 1.25rem);
 }
@@ -406,4 +488,14 @@
 
 .prog-mobile-headline .section-header {
   margin-bottom: 0;
+}
+
+.prog-mobile-headline .section-title {
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 1100px) {
+  .prog-scroll-headline .section-title {
+    white-space: normal;
+  }
 }
