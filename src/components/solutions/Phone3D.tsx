@@ -1,5 +1,6 @@
 import {
   Suspense,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -30,8 +31,8 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import "../../styles/phone-css-3d.css";
 
 /** Theme chassis — no Draco dependency (copper-opt needs DRACOLoader). */
-const MODEL_LIGHT = "/phones/deep-blue.glb";
-const MODEL_DARK = "/phones/orange.glb";
+export const MODEL_LIGHT = "/phones/deep-blue.glb";
+export const MODEL_DARK = "/phones/orange.glb";
 
 /**
  * After normalizing the iPhone node quaternion, both GLBs share:
@@ -59,6 +60,23 @@ const SCREEN_STILL: Record<string, string> = {
 /** Stable URL list — must not be recreated each render (breaks useTexture/useLoader). */
 const FORMAT_IDS = ["banner", "native", "interstitial", "rich", "video"] as const;
 const STILL_URLS = FORMAT_IDS.map((id) => SCREEN_STILL[id]);
+
+/** Warm GLB + stills + format MP4s so Suspense rarely shows the silhouette. */
+export function preloadPhone3DAssets() {
+  void useGLTF.preload(MODEL_LIGHT);
+  void useGLTF.preload(MODEL_DARK);
+  void useTexture.preload(STILL_URLS);
+  FORMAT_IDS.forEach((id) => {
+    const src = SCREEN_VIDEO[id];
+    if (!src) return;
+    const video = document.createElement("video");
+    video.muted = true;
+    video.preload = "auto";
+    video.playsInline = true;
+    video.src = src;
+    video.load();
+  });
+}
 
 const REST_Y = 0.32;
 const REST_X = -0.06;
@@ -159,12 +177,14 @@ function PhoneMesh({
   inView,
   rotX,
   rotY,
+  onReady,
 }: {
   url: string;
   formatId: string;
   inView: boolean;
   rotX: { get: () => number };
   rotY: { get: () => number };
+  onReady?: () => void;
 }) {
   const { scene } = useGLTF(url);
   // All stills once — format changes never re-suspend.
@@ -194,7 +214,8 @@ function PhoneMesh({
     if (!rootRef.current) return;
     modeRef.current = "still";
     applyScreenTexture(rootRef.current, still);
-  }, [still, prepared]);
+    onReady?.();
+  }, [still, prepared, onReady]);
 
   // Video promotes onto the same materials (no remount → no flash).
   useEffect(() => {
@@ -302,6 +323,7 @@ function PhoneScene({
   rotX,
   rotY,
   isDark,
+  onMeshReady,
 }: {
   url: string;
   formatId: string;
@@ -309,6 +331,7 @@ function PhoneScene({
   rotX: { get: () => number };
   rotY: { get: () => number };
   isDark: boolean;
+  onMeshReady?: () => void;
 }) {
   return (
     <>
@@ -318,8 +341,17 @@ function PhoneScene({
       <spotLight position={[0, 5.2, 3.2]} angle={0.42} penumbra={0.7} intensity={1.05} />
       <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.55} />
 
+      {/* Suspense only for initial GLB/texture resolve — never Still↔Video remount.
+          Fallback stays null; Phone3D’s dark boot layer covers the transparent hole. */}
       <Suspense fallback={null}>
-        <PhoneMesh url={url} formatId={formatId} inView={inView} rotX={rotX} rotY={rotY} />
+        <PhoneMesh
+          url={url}
+          formatId={formatId}
+          inView={inView}
+          rotX={rotX}
+          rotY={rotY}
+          onReady={onMeshReady}
+        />
       </Suspense>
 
       <ContactShadows position={[0, -2.15, 0]} opacity={0.28} scale={4.4} blur={2.6} far={4.2} />
@@ -345,9 +377,18 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
 
   const [isDragging, setIsDragging] = useState(false);
   const [inView, setInView] = useState(true);
+  const [meshReady, setMeshReady] = useState(false);
 
   const isDark = mode !== "growth";
   const url = isDark ? MODEL_DARK : MODEL_LIGHT;
+
+  useEffect(() => {
+    setMeshReady(false);
+  }, [url]);
+
+  const markMeshReady = useCallback(() => {
+    setMeshReady(true);
+  }, []);
 
   useLayoutEffect(() => {
     void useGLTF.preload(MODEL_LIGHT);
@@ -434,6 +475,9 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
       <span className="phone-css-light phone-css-light--rim" aria-hidden />
       <span className="phone-css-light phone-css-light--floor" aria-hidden />
 
+      {/* Dark stand-in while GLB/stills suspend — no white flash, no nested CssPhone tree */}
+      {!meshReady ? <div className="phone-glb-boot-fallback" aria-hidden /> : null}
+
       <div className="phone-glb-canvas-wrap">
         <Canvas
           key={url}
@@ -462,6 +506,7 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
             isDark={isDark}
             rotX={springX}
             rotY={springY}
+            onMeshReady={markMeshReady}
           />
         </Canvas>
       </div>

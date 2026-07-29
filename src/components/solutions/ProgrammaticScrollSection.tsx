@@ -13,11 +13,18 @@ import { SectionHeader } from "../SectionHeader";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
 import { CssPhone } from "./CssPhone";
+import { PhoneSilhouette } from "./PhoneSilhouette";
 import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import "../../styles/programmatic-scroll-section.css";
 import "../../styles/programmatic-full-feed.css";
 
-const Phone3D = lazy(() => import("./Phone3D").then((m) => ({ default: m.Phone3D })));
+const phone3DImport = () =>
+  import("./Phone3D").then((m) => {
+    m.preloadPhone3DAssets();
+    return { default: m.Phone3D };
+  });
+
+const Phone3D = lazy(phone3DImport);
 
 /** Scroll distance per format — short enough that a fast wheel doesn’t skip steps. */
 const FORMAT_HEIGHT = 480;
@@ -39,8 +46,7 @@ type ProgrammaticScrollSectionProps = {
 
 /**
  * Native sticky scroll drives the active format — no wheel hijack.
- * Desktop: headline + 3D phone under it + format copy.
- * Mobile: CssPhone with live HTML feed (same scenes).
+ * Desktop: 3D phone (dark silhouette while booting). Mobile: CssPhone + live feed.
  */
 export function ProgrammaticScrollSection({
   mode,
@@ -55,7 +61,6 @@ export function ProgrammaticScrollSection({
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [canRender3D, setCanRender3D] = useState(false);
   const rafRef = useRef(0);
   const lastIndexRef = useRef(0);
   const totalVirtual = formats.length * FORMAT_HEIGHT;
@@ -72,21 +77,10 @@ export function ProgrammaticScrollSection({
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  // A: preload chunk + GLB/stills/MP4 as soon as desktop Solutions mounts.
   useEffect(() => {
     if (reduced || isMobile) return;
-    const node = sectionRef.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setCanRender3D(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
+    void phone3DImport();
   }, [reduced, isMobile]);
 
   useEffect(() => {
@@ -166,17 +160,13 @@ export function ProgrammaticScrollSection({
           </div>
           <div className="prog-scroll-layout">
             <div className="prog-scroll-phone-col">
-              {canRender3D ? (
-                <Suspense fallback={<CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />}>
-                  <CanvasErrorBoundary
-                    fallback={<CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />}
-                  >
-                    <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
-                  </CanvasErrorBoundary>
-                </Suspense>
-              ) : (
-                <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />
-              )}
+              <Suspense fallback={<PhoneSilhouette mode={mode} className="prog-scroll-canvas" />}>
+                <CanvasErrorBoundary
+                  fallback={<PhoneSilhouette mode={mode} className="prog-scroll-canvas" />}
+                >
+                  <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
+                </CanvasErrorBoundary>
+              </Suspense>
             </div>
 
             <div className="prog-scroll-copy-col">
@@ -269,7 +259,7 @@ function MobileFormats({
               role="tab"
               aria-selected={i === activeIndex}
               aria-label={fmt.label}
-              className={i === activeIndex ? "is-active" : undefined}
+              className={`min-h-11 min-w-11${i === activeIndex ? " is-active" : ""}`}
               onClick={() => goTo(i)}
             />
           ))}
@@ -286,7 +276,7 @@ function MobileFormats({
             data-index={i}
             className={`prog-scroll-section__mobile-card${i === activeIndex ? " is-active" : ""}`}
           >
-            <p className="stat-label text-orange">{fmt.tagline}</p>
+            <p className="stat-label whitespace-nowrap shrink-0 text-orange">{fmt.tagline}</p>
             <h3 className="card-title mt-2">{fmt.label}</h3>
             <p className="copy mt-3">{fmt.description}</p>
             <ul className="channel-inventory-points mt-4 space-y-2">
