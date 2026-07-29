@@ -7,6 +7,8 @@ type ScrollContextValue = {
   scrollTo: (targetId: string, offset?: number) => void;
   /** Instant snap — for section arrow navigation */
   jumpToSection: (targetId: string) => void;
+  /** Absolute Y scroll (Lenis-aware) — format dots, etc. */
+  scrollToY: (top: number, opts?: { immediate?: boolean }) => void;
   /** Force top of page (Lenis + window) — refresh / route change without hash */
   resetScroll: () => void;
   /** Lenis-aware scroll position (falls back to window when Lenis is off) */
@@ -21,6 +23,7 @@ export function ScrollProvider({
   children,
   scrollTo,
   jumpToSection,
+  scrollToY,
   resetScroll,
   registerScrollListener,
   setScrollLocked,
@@ -28,13 +31,14 @@ export function ScrollProvider({
   children: ReactNode;
   scrollTo: (targetId: string, offset?: number) => void;
   jumpToSection: (targetId: string) => void;
+  scrollToY: (top: number, opts?: { immediate?: boolean }) => void;
   resetScroll: () => void;
   registerScrollListener: (listener: ScrollListener) => () => void;
   setScrollLocked: (locked: boolean) => void;
 }) {
   return (
     <ScrollContext.Provider
-      value={{ scrollTo, jumpToSection, resetScroll, registerScrollListener, setScrollLocked }}
+      value={{ scrollTo, jumpToSection, scrollToY, resetScroll, registerScrollListener, setScrollLocked }}
     >
       {children}
     </ScrollContext.Provider>

@@ -71,8 +71,8 @@ export function Studio() {
                   </ScrollLink>
                   <p className="mt-2 shrink-0 text-[0.7rem] text-muted">
                     Ships into{" "}
-                    <ScrollLink href="/expertise" className="font-semibold text-fg/80 hover:text-orange">
-                      Expertise lanes
+                    <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
+                      Solutions lanes
                     </ScrollLink>
                     {" · "}
                     <ScrollLink href="/clarity" className="font-semibold text-fg/80 hover:text-orange">
@@ -107,8 +107,8 @@ export function Studio() {
                   </ScrollLink>
                   <p className="mt-2 shrink-0 text-[0.7rem] text-muted">
                     Ships into{" "}
-                    <ScrollLink href="/expertise" className="font-semibold text-fg/80 hover:text-orange">
-                      Expertise lanes
+                    <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
+                      Solutions lanes
                     </ScrollLink>
                     {" · "}
                     <ScrollLink href="/clarity" className="font-semibold text-fg/80 hover:text-orange">
@@ -144,8 +144,8 @@ export function Studio() {
                   </ScrollLink>
                   <p className="mt-2 shrink-0 text-[0.7rem] text-muted">
                     Ships into{" "}
-                    <ScrollLink href="/expertise" className="font-semibold text-fg/80 hover:text-orange">
-                      Expertise lanes
+                    <ScrollLink href="/solutions" className="font-semibold text-fg/80 hover:text-orange">
+                      Solutions lanes
                     </ScrollLink>
                     {" · "}
                     <ScrollLink href="/clarity" className="font-semibold text-fg/80 hover:text-orange">

@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { sectionsByMode, solutionsHub, trafficChannelsByMode } from "../data/liveContent";
+import { sectionsByMode, trafficChannelsByMode } from "../data/liveContent";
+import { getSolutionsChannelDetail } from "../data/solutionsChannelDetails";
+import { sortSolutionsChannels, SOLUTIONS_CHANNEL_IDS, type SolutionsChannelId } from "../data/solutionsChannels";
+import { getSolutionsChannelVideo } from "../data/solutionsChannelVideos";
+import { ChannelVisual } from "./channel-visuals/ChannelVisual";
 import { SectionHeader, SectionHeaderRow, useMode } from "./SectionHeader";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { Reveal } from "./motion/Reveal";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SlideTabs } from "./SlideTabs";
+import { cn } from "../lib/cn";
 
 const PANEL_SPRING = { type: "spring" as const, stiffness: 340, damping: 30, mass: 0.7 };
 
@@ -22,24 +27,28 @@ const panelItem = {
 };
 
 type TrafficChannelsProps = {
-  /** `home` = switcher + short teaser; tab click opens /solutions with that channel. */
-  variant?: "home" | "full";
-  /** When set (Solutions pillars), only these channel ids appear as tabs. */
+  /** `home` = teaser + link to Solutions; `solutions` = full flat rail; `full` = legacy pillar filter. */
+  variant?: "home" | "full" | "solutions";
+  /** When set (legacy pillars), only these channel ids appear as tabs. */
   channelIds?: string[];
+  /** Exclude a specific channel id from the tab rail (used on Solutions to hide programmatic). */
+  excludeId?: string;
 };
 
-export function TrafficChannels({ variant = "full", channelIds }: TrafficChannelsProps) {
+export function TrafficChannels({ variant = "full", channelIds, excludeId }: TrafficChannelsProps) {
   const { mode } = useMode();
   const reduced = useReducedMotion();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const allChannels = trafficChannelsByMode[mode];
-  const trafficChannels =
-    channelIds && channelIds.length > 0
-      ? allChannels.filter((c) => channelIds.includes(c.id))
-      : allChannels;
-  const section = sectionsByMode.channels[mode];
   const isHome = variant === "home";
+  const isSolutions = variant === "solutions";
+  const trafficChannels = isSolutions
+    ? sortSolutionsChannels(allChannels).filter((c) => !excludeId || c.id !== excludeId)
+    : channelIds && channelIds.length > 0
+      ? allChannels.filter((c) => channelIds.includes(c.id))
+      : allChannels.filter((c) => !excludeId || c.id !== excludeId);
+  const section = sectionsByMode.channels[mode];
   const channels = trafficChannels.length > 0 ? trafficChannels : allChannels;
 
   const channelFromUrl = searchParams.get("channel");
@@ -60,12 +69,8 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
 
   const openOnSolutions = useCallback(
     (id: string) => {
-      const pillar = solutionsHub.categories.find((c) =>
-        (c.channelIds as readonly string[]).includes(id),
-      );
       const search = new URLSearchParams({ channel: id });
-      if (pillar) search.set("pillar", pillar.id);
-      navigate({ pathname: "/expertise", search: `?${search.toString()}`, hash: "#help-with" });
+      navigate({ pathname: "/solutions", search: `?${search.toString()}`, hash: "#channels" });
     },
     [navigate],
   );
@@ -139,23 +144,50 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [stepChannel]);
 
+  const solutionsDetail = isSolutions ? getSolutionsChannelDetail(mode, active.id) : undefined;
+
+  /** Programmatic panel always shows growth copy; other channels follow theme mode. */
+  const growthProgrammatic = trafficChannelsByMode.growth.find((c) => c.id === "programmatic");
+  const panelChannel =
+    isSolutions && active.id === "programmatic" && growthProgrammatic ? growthProgrammatic : active;
+
   const body =
-    isHome && "teaser" in active && typeof active.teaser === "string" ? active.teaser : active.description;
+    isHome && "teaser" in active && typeof active.teaser === "string"
+      ? active.teaser
+      : isSolutions && solutionsDetail
+        ? solutionsDetail.description
+        : active.description;
   const points =
-    !isHome && "points" in active && Array.isArray(active.points) ? (active.points as string[]) : [];
+    isSolutions && solutionsDetail
+      ? [...solutionsDetail.points]
+      : !isHome && "points" in active && Array.isArray(active.points)
+        ? (active.points as string[])
+        : [];
+
+  const isPilotChannel = SOLUTIONS_CHANNEL_IDS.includes(active.id as SolutionsChannelId);
+  const hasPilotVideo = isPilotChannel && Boolean(getSolutionsChannelVideo(active.id as SolutionsChannelId));
+  const showChannelVisual = (isSolutions && isPilotChannel) || (isHome && hasPilotVideo);
+  const showSplitLayout = isSolutions && isPilotChannel;
+
+  const renderChannelVisual = () =>
+    showChannelVisual ? (
+      <ChannelVisual channelId={active.id as SolutionsChannelId} mode={mode} />
+    ) : null;
 
   return (
     <section id="channels" ref={sectionRef} className="section-band section-band--strip">
       <ModeContentTransition mode={mode} className="section-inner">
-        {isHome || !channelIds ? (
+        {isHome || isSolutions || !channelIds ? (
           <SectionHeaderRow>
             <SectionHeader
               label={sectionsByMode.channels.label}
               title={section.title}
               description={
                 isHome
-                  ? "Switch sources here. Open a type on Solutions for the full inventory write-up — no separate depth pages."
-                  : undefined
+                  ? "Switch sources here. Open a channel on Solutions for the full inventory write-up."
+                  : isSolutions
+                    ? "One tab per buying lane — same control plane, deeper copy than the home teaser."
+                    : undefined
               }
             />
             <div className="flex shrink-0 gap-2">
@@ -221,16 +253,39 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
                 animate="visible"
                 exit={reduced ? undefined : "exit"}
                 variants={panelVariants}
-                className="transition-panel relative"
+                className={cn(
+                  "transition-panel relative",
+                  showSplitLayout && "channel-panel__layout channel-panel__layout--split",
+                  showSplitLayout && active.id === "programmatic" && "channel-panel__layout--programmatic",
+                )}
               >
-                <div>
+                <div className="channel-panel__copy">
                   <motion.p variants={reduced ? undefined : panelItem} className="stat-label text-orange">
-                    {active.tagline}
+                    {panelChannel.tagline}
                   </motion.p>
                   <motion.h3 variants={reduced ? undefined : panelItem} className="card-title mt-2">
-                    {active.title}
+                    {panelChannel.title}
                   </motion.h3>
-                  <motion.p variants={reduced ? undefined : panelItem} className="copy mt-3 max-w-2xl">
+                {showChannelVisual && isHome ? (
+                  <motion.div
+                    variants={reduced ? undefined : panelItem}
+                    className="channel-panel__visual channel-panel__visual--home mt-4"
+                  >
+                    {renderChannelVisual()}
+                  </motion.div>
+                ) : null}
+                  {showChannelVisual && showSplitLayout ? (
+                    <motion.div
+                      variants={reduced ? undefined : panelItem}
+                      className="channel-panel__visual channel-panel__visual--mobile"
+                    >
+                      {renderChannelVisual()}
+                    </motion.div>
+                  ) : null}
+                  <motion.p
+                    variants={reduced ? undefined : panelItem}
+                    className={cn("copy mt-3", !isSolutions && "max-w-3xl")}
+                  >
                     {body}
                   </motion.p>
                   {points.length > 0 ? (
@@ -250,7 +305,7 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
                     className="mt-6 border-t border-border pt-4"
                   >
                     <p className="stat-label text-muted">Best for</p>
-                    <p className="copy mt-1">{active.bestFor}</p>
+                    <p className="copy mt-1">{panelChannel.bestFor}</p>
                   </motion.div>
                   {isHome ? (
                     <motion.p variants={reduced ? undefined : panelItem} className="mt-5">
@@ -268,6 +323,17 @@ export function TrafficChannels({ variant = "full", channelIds }: TrafficChannel
                     </motion.p>
                   ) : null}
                 </div>
+                {showChannelVisual && showSplitLayout ? (
+                  <motion.div
+                    variants={reduced ? undefined : panelItem}
+                    className={cn(
+                      "channel-panel__visual channel-panel__visual--desktop",
+                      active.id === "programmatic" && "channel-panel__visual--programmatic",
+                    )}
+                  >
+                    {renderChannelVisual()}
+                  </motion.div>
+                ) : null}
               </motion.div>
             </AnimatePresence>
           </article>

@@ -84,7 +84,7 @@ export function partnersForSet(set: PartnerLogoSetId) {
 export function partnerSetForRoute(pathname: string, pillar: string | null = null): PartnerLogoSetId {
   if (pathname.startsWith("/clarity") || pathname.startsWith("/measurement")) return "clarity";
   if (pathname.startsWith("/studio")) return "studio";
-  if (pathname.startsWith("/expertise")) {
+  if (pathname.startsWith("/solutions") || pathname.startsWith("/expertise")) {
     if (pillar === "oem") return "oem";
     if (pillar === "social" || pillar === "creators") return "social";
     if (pillar === "programmatic" || pillar === "ctv") return "programmatic";

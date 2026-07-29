@@ -1,0 +1,517 @@
+/* ── CSS 3D phone — hinge sides off front edges (no centered face strips) ── */
+
+.phone-css-stage {
+  --phone-depth: 22px;
+  --phone-w: min(40vw, 16.5rem);
+  --phone-radius: clamp(1.55rem, 2.6vw, 2.2rem);
+  --phone-edge-inset: 14px;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  isolation: isolate;
+  perspective: 1100px;
+  perspective-origin: 50% 45%;
+  background: transparent;
+}
+
+@media (min-width: 1280px) {
+  .phone-css-stage {
+    --phone-w: min(36vw, 18rem);
+  }
+}
+
+.phone-css-stage[data-dragging="true"] {
+  cursor: grabbing;
+}
+
+/* Soft stage lighting */
+.phone-css-light {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(42px);
+}
+
+.phone-css-light--key {
+  width: min(78%, 26rem);
+  height: min(62%, 22rem);
+  top: 8%;
+  left: 4%;
+  opacity: 0.7;
+}
+
+.phone-css-stage--deepblue .phone-css-light--key {
+  background: radial-gradient(circle, rgba(110, 165, 255, 0.65), rgba(70, 120, 210, 0.18) 45%, transparent 72%);
+}
+
+.phone-css-stage--copper .phone-css-light--key {
+  background: radial-gradient(circle, rgba(255, 160, 90, 0.6), rgba(220, 110, 50, 0.2) 45%, transparent 72%);
+}
+
+.phone-css-light--rim {
+  width: min(58%, 17rem);
+  height: min(48%, 15rem);
+  right: 4%;
+  bottom: 18%;
+  opacity: 0.42;
+}
+
+.phone-css-stage--deepblue .phone-css-light--rim {
+  background: radial-gradient(circle, rgba(255, 210, 140, 0.45), transparent 70%);
+}
+
+.phone-css-stage--copper .phone-css-light--rim {
+  background: radial-gradient(circle, rgba(255, 230, 180, 0.5), transparent 70%);
+}
+
+.phone-css-light--floor {
+  width: min(60%, 17rem);
+  height: 4rem;
+  left: 50%;
+  bottom: 6%;
+  transform: translateX(-50%);
+  opacity: 0.5;
+  filter: blur(26px);
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.38), transparent 70%);
+}
+
+/* Bob lives OUTSIDE the preserve-3d rotator so it can't flatten faces */
+.phone-css-bob {
+  position: relative;
+  z-index: 1;
+}
+
+.phone-css-bob--on {
+  animation: phone-css-bob 5.5s ease-in-out infinite;
+}
+
+@keyframes phone-css-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.phone-css-rotator {
+  transform-style: preserve-3d !important;
+  transform-origin: center center;
+}
+
+.phone-css-box {
+  position: relative;
+  width: var(--phone-w);
+  aspect-ratio: 430 / 879;
+  transform-style: preserve-3d !important;
+}
+
+.phone-css-face {
+  position: absolute;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Front — sits at z=0; sides hinge backward from its edges */
+.phone-css-face--front {
+  inset: 0;
+  z-index: 2;
+  border-radius: var(--phone-radius);
+  padding: clamp(0.14rem, 0.4vw, 0.24rem);
+  transform: translateZ(0);
+  backface-visibility: visible;
+}
+
+.phone-css-box--deepblue .phone-css-face--front {
+  background: linear-gradient(155deg, #5a7498 0%, #2a4060 34%, #152238 68%, #0c1524 100%);
+  box-shadow:
+    22px 30px 50px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(210, 230, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+    inset 1px 0 0 rgba(190, 215, 255, 0.2);
+}
+
+.phone-css-box--copper .phone-css-face--front {
+  background: linear-gradient(145deg, #f0a06a, #c96f3a 42%, #9a5228);
+  box-shadow:
+    22px 30px 50px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 1px 0 0 rgba(255, 220, 180, 0.25);
+}
+
+/* Left / right — hinge from front edges; inset so they don't poke past radius */
+.phone-css-face--left,
+.phone-css-face--right {
+  top: var(--phone-edge-inset);
+  bottom: var(--phone-edge-inset);
+  width: var(--phone-depth);
+  z-index: 1;
+}
+
+.phone-css-face--left {
+  left: 0;
+  transform-origin: left center;
+  transform: rotateY(-90deg);
+  border-radius: 2px;
+}
+
+.phone-css-face--right {
+  right: 0;
+  left: auto;
+  transform-origin: right center;
+  transform: rotateY(90deg);
+  border-radius: 2px;
+}
+
+.phone-css-box--deepblue .phone-css-face--left {
+  background: linear-gradient(
+    90deg,
+    #b8cef0 0%,
+    #6a8ab8 18%,
+    #2a4060 55%,
+    #0e1828 100%
+  );
+}
+
+.phone-css-box--deepblue .phone-css-face--right {
+  background: linear-gradient(
+    90deg,
+    #0a1220 0%,
+    #152238 45%,
+    #2a4060 100%
+  );
+}
+
+.phone-css-box--copper .phone-css-face--left {
+  background: linear-gradient(
+    90deg,
+    #ffe0c0 0%,
+    #f0a06a 18%,
+    #a85828 55%,
+    #5a2c10 100%
+  );
+}
+
+.phone-css-box--copper .phone-css-face--right {
+  background: linear-gradient(
+    90deg,
+    #5a2c10 0%,
+    #8a4520 45%,
+    #c96f3a 100%
+  );
+}
+
+/* Top / bottom — same inset */
+.phone-css-face--top,
+.phone-css-face--bottom {
+  left: var(--phone-edge-inset);
+  right: var(--phone-edge-inset);
+  height: var(--phone-depth);
+  z-index: 1;
+}
+
+.phone-css-face--top {
+  top: 0;
+  transform-origin: center top;
+  transform: rotateX(90deg);
+  border-radius: 2px;
+}
+
+.phone-css-face--bottom {
+  bottom: 0;
+  top: auto;
+  transform-origin: center bottom;
+  transform: rotateX(-90deg);
+  border-radius: 2px;
+}
+
+.phone-css-box--deepblue .phone-css-face--top,
+.phone-css-box--deepblue .phone-css-face--bottom {
+  background: linear-gradient(90deg, #0e1828, #4a6488 50%, #1a2c44);
+}
+
+.phone-css-box--copper .phone-css-face--top,
+.phone-css-box--copper .phone-css-face--bottom {
+  background: linear-gradient(90deg, #8a4520, #e08a52 50%, #c96f3a);
+}
+
+/* Back — pushed behind by phone depth */
+.phone-css-face--back {
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--phone-radius);
+  transform: translateZ(calc(var(--phone-depth) * -1));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12% 8% 10%;
+  backface-visibility: hidden;
+}
+
+.phone-css-box--deepblue .phone-css-face--back {
+  background: linear-gradient(165deg, #2f4668 0%, #1a2c44 48%, #0e1828 100%);
+}
+
+.phone-css-box--copper .phone-css-face--back {
+  background: linear-gradient(165deg, #d47a45 0%, #b45a2e 50%, #8a4520 100%);
+}
+
+.phone-css-back__camera {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  width: 38%;
+  aspect-ratio: 1;
+  padding: 0.45rem;
+  border-radius: 1.1rem;
+  background: color-mix(in srgb, #1a1a1a 88%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.phone-css-back__camera span {
+  display: block;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, #6a8ab8, #1a2540 55%, #0a0a0a);
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.45);
+}
+
+.phone-css-back__camera span:nth-child(3) {
+  grid-column: 1 / -1;
+  width: 48%;
+  justify-self: center;
+  aspect-ratio: 1;
+}
+
+.phone-css-back__logo {
+  margin-top: auto;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.phone-css-shell__btn {
+  position: absolute;
+  border-radius: 2px;
+  z-index: 3;
+}
+
+.phone-css-box--deepblue .phone-css-shell__btn {
+  background: linear-gradient(90deg, #0e1728, #3a4f6e);
+}
+
+.phone-css-box--copper .phone-css-shell__btn {
+  background: linear-gradient(90deg, #9a5228, #e08a52);
+}
+
+.phone-css-shell__btn--silent {
+  left: -2px;
+  top: 18%;
+  width: 3px;
+  height: 1.35rem;
+  transform: translateZ(1px);
+}
+
+.phone-css-shell__btn--vol-up {
+  left: -2px;
+  top: 23%;
+  width: 3px;
+  height: 2.4rem;
+  transform: translateZ(1px);
+}
+
+.phone-css-shell__btn--vol-down {
+  left: -2px;
+  top: 31%;
+  width: 3px;
+  height: 2.4rem;
+  transform: translateZ(1px);
+}
+
+.phone-css-shell__btn--power {
+  right: -2px;
+  top: 26%;
+  width: 3px;
+  height: 3.4rem;
+  transform: translateZ(1px);
+}
+
+.phone-css-shell__screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: clamp(1.3rem, 2.3vw, 1.95rem);
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 2px solid rgba(0, 0, 0, 0.84);
+}
+
+.phone-css-shell__island {
+  position: absolute;
+  top: clamp(0.45rem, 1.2vw, 0.65rem);
+  left: 50%;
+  z-index: 3;
+  width: clamp(2.2rem, 20%, 3.1rem);
+  height: clamp(0.5rem, 1.4vw, 0.7rem);
+  margin-left: calc(clamp(2.2rem, 20%, 3.1rem) / -2);
+  border-radius: 999px;
+  background: #0a0a0a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.phone-css-shell__content {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #fcf9f8;
+}
+
+.phone-css-shell__glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    transparent 26%,
+    transparent 72%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  mix-blend-mode: soft-light;
+}
+
+.phone-screen-root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.phone-screen-root__slide {
+  position: absolute;
+  inset: 0;
+}
+
+.phone-screen-root__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.phone-css-shell__content .cv-prog-screen-slot {
+  position: absolute;
+  inset: 0;
+}
+
+.phone-css-hint {
+  display: none !important;
+}
+
+/* ── GLB phone canvas shell ── */
+
+.phone-glb-stage {
+  perspective: none;
+  background: transparent !important;
+  max-height: none;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.phone-glb-canvas-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  background: transparent !important;
+}
+
+.phone-glb-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  touch-action: none;
+  background: transparent !important;
+}
+
+.phone-glb-canvas canvas {
+  background: transparent !important;
+}
+
+/* Live HTML glass overlay — disabled (misaligns with GLB bezel).
+   Kept as hooks in case we revisit render-to-texture later. */
+.phone-glb-feed-glass {
+  display: none !important;
+}
+
+/* Legacy drei Html hooks — kept inert */
+.phone-glb-html {
+  pointer-events: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.phone-glb-html,
+.phone-glb-html > div {
+  background: transparent !important;
+}
+
+.phone-glb-screen {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  overflow: hidden !important;
+  border-radius: 48px;
+  background: #0a0a0a;
+  transform-origin: center center;
+  pointer-events: none;
+  isolation: isolate;
+  clip-path: inset(0 round 48px);
+  -webkit-clip-path: inset(0 round 48px);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.phone-glb-screen .phone-screen-root,
+.phone-glb-screen .cv-prog-screen-slot,
+.phone-glb-screen .pf-feed {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.phone-glb-screen .cv-prog-screen-scale {
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+.phone-glb-stage--tint .phone-css-light--key {
+  background: radial-gradient(circle, rgba(247, 126, 45, 0.55), rgba(247, 126, 45, 0.12) 45%, transparent 72%);
+}
+
+.phone-glb-stage--tint .phone-css-light--rim {
+  background: radial-gradient(circle, rgba(255, 200, 120, 0.4), transparent 70%);
+}
+
+.phone-glb-stage--deepblue .phone-css-light--key {
+  background: radial-gradient(circle, rgba(80, 120, 200, 0.45), rgba(40, 70, 140, 0.12) 45%, transparent 72%);
+}

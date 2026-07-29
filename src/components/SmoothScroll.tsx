@@ -105,6 +105,22 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     window.scrollTo({ top, behavior: "auto" });
   }, []);
 
+  const scrollToY = useCallback(
+    (top: number, opts?: { immediate?: boolean }) => {
+      const immediate = opts?.immediate ?? false;
+      if (lenisRef.current && useLenis) {
+        lenisRef.current.scrollTo(top, {
+          immediate,
+          force: true,
+          duration: immediate ? 0 : 0.95,
+        });
+        return;
+      }
+      window.scrollTo({ top, behavior: immediate || reduced ? "auto" : "smooth" });
+    },
+    [reduced, useLenis],
+  );
+
   const resetScroll = useCallback(() => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true, force: true });
@@ -268,6 +284,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     <ScrollProvider
       scrollTo={scrollTo}
       jumpToSection={jumpToSection}
+      scrollToY={scrollToY}
       resetScroll={resetScroll}
       registerScrollListener={registerScrollListener}
       setScrollLocked={setScrollLocked}

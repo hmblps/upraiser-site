@@ -1,17 +1,35 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 
-/** Preserve query when legacy /solutions URLs land on /expertise. */
-export function RedirectSolutionsToExpertise() {
+const PILLAR_TO_CHANNEL: Record<string, string> = {
+  oem: "oem",
+  media: "programmatic",
+  performance: "performance",
+  programmatic: "programmatic",
+  social: "social",
+  "paid-social": "social",
+  creators: "influencer",
+  influencer: "influencer",
+  ctv: "ctv",
+  premium: "native",
+  retargeting: "retargeting",
+  rewarded: "rewarded",
+};
+
+/** Legacy /expertise URLs → flat /solutions channel rail. */
+export function RedirectExpertiseToSolutions() {
   const [params] = useSearchParams();
-  const next = new URLSearchParams(params);
-  const pillar = next.get("pillar");
-  if (pillar === "performance" || pillar === "creators" || pillar === "premium") {
-    next.set("pillar", "media");
-  } else if (pillar === "oem") {
-    next.set("pillar", "oem");
+  const next = new URLSearchParams();
+  const channel = params.get("channel");
+  const pillar = params.get("pillar");
+
+  if (channel) {
+    next.set("channel", channel);
+  } else if (pillar && PILLAR_TO_CHANNEL[pillar]) {
+    next.set("channel", PILLAR_TO_CHANNEL[pillar]!);
   }
+
   const qs = next.toString();
-  return <Navigate to={qs ? `/expertise?${qs}` : "/expertise"} replace />;
+  return <Navigate to={qs ? `/solutions?${qs}#channels` : "/solutions#channels"} replace />;
 }
 
 export function RedirectMeasurementToExpertise() {

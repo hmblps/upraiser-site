@@ -1,0 +1,373 @@
+/* ── Programmatic scroll-hijack section ── */
+
+.prog-scroll-outer {
+  position: relative;
+  width: 100%;
+}
+
+.prog-scroll-sticky {
+  position: sticky;
+  top: var(--site-header-height, 72px);
+  height: calc(100vh - var(--site-header-height, 72px));
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  overflow: hidden;
+  background: transparent;
+}
+
+.prog-scroll-ambience {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 50% at 22% 42%, color-mix(in srgb, var(--theme-accent) 16%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 78% 58%, rgba(255, 190, 120, 0.1), transparent 70%);
+}
+
+[data-theme="dark"] .prog-scroll-ambience {
+  background:
+    radial-gradient(ellipse 55% 50% at 22% 42%, rgba(247, 126, 45, 0.16), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 78% 58%, rgba(255, 200, 120, 0.08), transparent 70%);
+}
+
+.prog-scroll-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  width: 100%;
+  max-width: var(--site-max-width, 1280px);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+  padding-block: 1rem 1.25rem;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+/* Left column — 3D phone fills sticky band */
+.prog-scroll-phone-col {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.prog-scroll-canvas {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  cursor: grab;
+}
+
+.prog-scroll-canvas[data-dragging="true"] {
+  cursor: grabbing;
+}
+
+/* CSS phone chassis */
+.prog-css-phone {
+  position: relative;
+  flex-shrink: 0;
+  aspect-ratio: 390 / 844;
+  border-radius: 2.35rem;
+  padding: 0.22rem;
+  box-shadow:
+    0 28px 56px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+
+.prog-css-phone--deepblue {
+  background: linear-gradient(155deg, #4a6488 0%, #243a58 40%, #0c1524 100%);
+}
+
+.prog-css-phone--orange {
+  background: linear-gradient(145deg, #ff9a4a, #f77e2d 45%, #c45a18);
+}
+
+.prog-css-phone__bezel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 2.15rem;
+  overflow: hidden;
+  background: #050505;
+  border: 2px solid rgba(0, 0, 0, 0.85);
+}
+
+.prog-css-phone__notch {
+  position: absolute;
+  top: 0.55rem;
+  left: 50%;
+  z-index: 6;
+  width: 28%;
+  height: 1.05rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #050505;
+  pointer-events: none;
+}
+
+.prog-css-phone__screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #fcf9f8;
+  /* Scale feed typography to phone width (design ~390px) */
+  container-type: inline-size;
+  container-name: phone-screen;
+}
+
+.prog-css-phone--desktop {
+  height: min(100%, calc(100vh - var(--site-header-height, 72px) - 2.5rem));
+  width: auto;
+  max-width: min(100%, 22rem);
+  margin-inline: auto;
+}
+
+.prog-css-phone--mobile {
+  width: min(52vw, 14.5rem);
+  height: auto;
+  border-radius: 1.65rem;
+  padding: 0.16rem;
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+}
+
+.prog-css-phone--mobile .prog-css-phone__bezel {
+  border-radius: 1.5rem;
+}
+
+.prog-css-phone--mobile .prog-css-phone__notch {
+  top: 0.4rem;
+  height: 0.75rem;
+  width: 30%;
+}
+
+/* Right column — copy */
+.prog-scroll-copy-col {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.format-copy-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.format-copy-wrap__switcher {
+  width: 100%;
+}
+
+.format-lane-tabs {
+  flex-wrap: wrap;
+}
+
+.format-copy {
+  width: 100%;
+}
+
+.format-copy__title {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-top: 0.5rem;
+  color: var(--theme-fg);
+}
+
+.format-copy__body {
+  margin-top: 1rem;
+  max-width: 42ch;
+  color: var(--theme-muted);
+}
+
+.format-copy__progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.format-copy__progress-label {
+  min-width: 2.5rem;
+}
+
+.format-copy__dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.format-copy__dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-border) 80%, transparent);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.format-copy__dot:hover {
+  background: color-mix(in srgb, var(--theme-accent) 55%, transparent);
+}
+
+.format-copy__dot--active {
+  width: 1.25rem;
+  background: var(--theme-accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--theme-accent) 40%, transparent);
+}
+
+/* Scroll hint — removed; native scroll is self-explanatory */
+
+.prog-scroll-hint {
+  display: none;
+}
+
+@keyframes prog-shimmer {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.55; }
+}
+
+/* ── Mobile fallback ─────────────────────────────────────── */
+
+.prog-scroll-section--mobile {
+  position: relative;
+  padding: 0 0 clamp(2.5rem, 10vw, 4rem);
+  overflow: clip;
+}
+
+.prog-mobile-ambience {
+  pointer-events: none;
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(70vh, 36rem);
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 20%, color-mix(in srgb, var(--theme-accent) 16%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 50%, rgba(255, 190, 120, 0.1), transparent 70%);
+}
+
+[data-theme="dark"] .prog-mobile-ambience {
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 20%, rgba(255, 120, 60, 0.14), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 50%, rgba(255, 200, 120, 0.08), transparent 70%);
+}
+
+.prog-mobile-sticky {
+  position: sticky;
+  top: var(--site-header-height, 72px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem clamp(1rem, 5vw, 2rem) 0.7rem;
+  background: color-mix(in srgb, var(--theme-bg, #fcf9f8) 82%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-border, #e3beb7) 35%, transparent);
+}
+
+.prog-mobile-switcher {
+  width: 100%;
+  max-width: 24rem;
+}
+
+.prog-mobile-sticky .prog-css-phone--mobile {
+  /* Keep sticky band readable without eating the whole viewport */
+  width: min(48vw, 13.75rem);
+}
+
+.prog-mobile-dots {
+  display: flex;
+  gap: 0.45rem;
+  padding-bottom: 0.15rem;
+}
+
+.prog-mobile-dots button {
+  width: 0.4rem;
+  height: 0.4rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-border) 80%, transparent);
+  transition:
+    width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.28s ease;
+}
+
+.prog-mobile-dots button.is-active {
+  width: 1.15rem;
+  background: var(--theme-accent);
+}
+
+.prog-scroll-section__mobile-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0.5rem clamp(1rem, 5vw, 2rem) 0;
+  scroll-snap-type: y proximity;
+}
+
+.prog-scroll-section__mobile-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 42vh;
+  padding: 1.25rem 0 2rem;
+  scroll-snap-align: center;
+  opacity: 0.45;
+  transition: opacity 0.35s ease;
+}
+
+.prog-scroll-section__mobile-card.is-active {
+  opacity: 1;
+}
+
+.prog-scroll-section__mobile-card .card-title {
+  font-size: clamp(1.65rem, 7vw, 2.15rem);
+}
+
+/* phone-3d-canvas default */
+.phone-3d-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Solutions page intro strip — tighter so sticky phone starts sooner */
+.depth-page--solutions .solutions-intro {
+  padding-block: clamp(1.25rem, 3vw, 2rem) clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.depth-page--solutions .solutions-intro .section-header {
+  margin-bottom: 0;
+}
+
+.format-copy__title {
+  font-size: clamp(1.75rem, 3.5vw, 2.65rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin-top: 0.4rem;
+  color: var(--theme-fg);
+}
+
+.format-copy__body {
+  margin-top: 0.85rem;
+  max-width: 40ch;
+  color: var(--theme-muted);
+  line-height: 1.55;
+}

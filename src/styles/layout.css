@@ -31,6 +31,10 @@
   padding: 1.5rem 0 0;
 }
 
+.channel-panel.live-panel:has([data-channel="programmatic"]) {
+  overflow: visible;
+}
+
 .channel-panel.live-panel {
   position: relative;
   overflow: hidden;

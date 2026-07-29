@@ -3,6 +3,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { MODEL_URL, MODEL_URL_LIGHT, VOYAGER_URL } from "../lib/heroModel";
+import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 
 const HeroTerrainCanvas = lazy(() =>
   import("./HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas })),
@@ -90,9 +91,11 @@ export function HeroAtmosphere() {
     >
       <div className="hero-atmosphere__sky hero-terrain-shell">
         {use3d && canvasReady ? (
-          <Suspense fallback={null}>
-            <HeroTerrainCanvas className="hero-terrain-root" />
-          </Suspense>
+          <CanvasErrorBoundary>
+            <Suspense fallback={null}>
+              <HeroTerrainCanvas className="hero-terrain-root" />
+            </Suspense>
+          </CanvasErrorBoundary>
         ) : null}
       </div>
     </div>

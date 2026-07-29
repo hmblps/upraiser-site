@@ -20,7 +20,7 @@ export const contactVerticalOptions = [
 ] as const;
 
 export const navLinks: NavLink[] = [
-  { label: "Expertise", href: "/expertise" },
+  { label: "Solutions", href: "/solutions" },
   { label: "Clarity", href: "/clarity" },
   { label: "Studio", href: "/studio" },
   { label: "Cases", href: "/cases" },
@@ -329,6 +329,23 @@ export const trafficChannelsByMode = {
       ],
     },
     {
+      id: "rewarded",
+      title: "Rewarded Traffic",
+      tagline: "Opt-in completion, not accidental taps",
+      teaser: "Rewarded video and offerwalls — bids on engaged completions inside games and utilities.",
+      description:
+        "Rewarded traffic is inventory users opt into — watch, play, or complete an action for in-app value. We buy rewarded video and offerwall units where completion signals predict downstream LTV. Every impression still clears pre-bid filtration. Caps tie to installs and deep events in the MMP, not raw volume.",
+      bestFor: "Games, utilities, high-engagement CPI",
+      points: [
+        "Rewarded video and offerwalls in high-engagement apps",
+        "Completion-based optimization — not click-chasing",
+        "Pre-bid fraud screen on every rewarded impression",
+        "Caps wired to MMP install and deep events",
+        "Supply path visible for Ad Ops review",
+        "Engagement quality scored before bids clear",
+      ],
+    },
+    {
       id: "native",
       title: "Native & Editorial",
       tagline: "Trust-driven conversions",
@@ -456,6 +473,23 @@ export const trafficChannelsByMode = {
         "Intent cohorts with a clear log path",
         "Platform vs MMP gaps closed before invoice",
         "Search and social under one reconciliation schema",
+      ],
+    },
+    {
+      id: "rewarded",
+      title: "Rewarded Traffic",
+      tagline: "Completion telemetry",
+      teaser: "Rewarded video and offerwalls — completion scored pre-bid, caps tied to MMP events.",
+      description:
+        "Rewarded inventory with completion telemetry scored pre-bid. High-engagement units stay on whitelists compliance already accepted. Every completion traces to a device log before month-end.",
+      bestFor: "Games, rewarded CPI, offerwall scale",
+      points: [
+        "Completion signals scored pre-bid",
+        "Rewarded video and offerwall supply",
+        "Device-level completion trails",
+        "Caps tied to MMP events",
+        "Whitelist-ready for regulated buyers",
+        "Finance-readable completion metrics",
       ],
     },
     {
@@ -588,7 +622,7 @@ export const bridgeByMode = {
 
 export const footerLinks = {
   explore: [
-    { label: "Expertise", href: "/expertise" },
+    { label: "Solutions", href: "/solutions" },
     { label: "Clarity", href: "/clarity" },
     { label: "Studio", href: "/studio" },
     { label: "Cases", href: "/cases" },

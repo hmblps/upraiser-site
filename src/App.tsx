@@ -3,12 +3,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
 import { HomePage } from "./pages/HomePage";
 import {
+  RedirectExpertiseToSolutions,
   RedirectMeasurementToExpertise,
-  RedirectSolutionsToExpertise,
 } from "./pages/LegacyRedirects";
 
-const ExpertisePage = lazy(() =>
-  import("./pages/ExpertisePage").then((m) => ({ default: m.ExpertisePage })),
+const SolutionsPage = lazy(() =>
+  import("./pages/SolutionsPage").then((m) => ({ default: m.SolutionsPage })),
 );
 const ClarityPage = lazy(() =>
   import("./pages/ClarityPage").then((m) => ({ default: m.ClarityPage })),
@@ -45,17 +45,17 @@ export default function App() {
       <Routes>
         <Route element={<SiteLayout />}>
           <Route index element={<HomePage />} />
-          <Route path="expertise" element={<ExpertisePage />} />
+          <Route path="solutions" element={<SolutionsPage />} />
           <Route path="clarity" element={<ClarityPage />} />
           <Route path="studio" element={<StudioPage />} />
           <Route path="clients" element={<ClientsPage />} />
           <Route path="company" element={<CompanyPage />} />
 
           {/* Legacy depth URLs → consolidated IA */}
-          <Route path="solutions" element={<RedirectSolutionsToExpertise />} />
+          <Route path="expertise" element={<RedirectExpertiseToSolutions />} />
           <Route path="measurement" element={<RedirectMeasurementToExpertise />} />
           <Route path="technology" element={<RedirectMeasurementToExpertise />} />
-          <Route path="partners" element={<Navigate to="/expertise?pillar=oem#help-with" replace />} />
+          <Route path="partners" element={<Navigate to="/solutions?channel=oem#channels" replace />} />
           <Route path="about" element={<Navigate to="/company" replace />} />
           <Route path="how-we-work" element={<Navigate to="/company" replace />} />
           <Route path="resources" element={<Navigate to="/company" replace />} />

@@ -1,0 +1,15 @@
+/** Stitch in-app banner reference imagery (Community app slide). */
+export const BANNER_HERO_IMAGE =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuAgZ4C6meAo589sbQ7K8nuHCn6UexXwknvfgwOB9KXBTT3U0-yLX11NJEkEyCDrJEhfXWsV3PAiC9tmVNcCfzU2brK5T9nU8KHvFFkIzmLxB6P34gIeMpOfge__isdPwGwgHKNbskjwhQN1vlkpq-gGWmipdzcHzV1no-NLLklRRjSvxfy1GYuTt6odbVnGZ2hwM-BlJ06AbSDFYZ5_L5RZ84ScXf76i3R8ccCGzn3hT2bN2NB0BDRn";
+
+export const BANNER_EVENT_IMAGE =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCo8Sq2fjma_aLLfuuU3Kim2hfDlIKMPMmlm2IjOWLhKKp_Bi8kPo-gCv6gCbddeiR2ppKeOGn0-OJMtS4aNMl1PKVaiCyOK63gPWvYqSInFeyulDtKTkCbTshlpCN2NNVEwCRW27ogV7_A0XDb58kIJRnDKljGLxcs7tHOPNGRwkBzYIYD6V68YvMoDYc4VEdvVMdtxA1SQIZ_yPb2WXCFaQctNyZgpjVA5snwIXlK9Q4FZ0Pne30s";
+
+export const BANNER_AVATAR_IMAGE =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBX0DxfpIgxA-oNfjca9XLe2ExiEoPLFOxRarMVlHzwju0dvfKcaI5TssW_5SuuPljhd0OKckpEK9d8nS0DA09bnK38GsiSeCDxS7PRKUip5h20ZcEcZM81UD4_MU4Ebf174dQEuP5HwUGUuLsBH5Tgp1sXAxoPd-Fz-0f7E_PikF9PPx_EkNWJU0Sv09b80v3cjabDdgCM51vRn0o3t8SYOE6YSvawfisbkBEk36-MG6s00B7ZtBjA";
+
+export const BANNER_FEED_IMAGE =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuACiXja-LMCNRdnUj7r9uWGCq_2BSOCQ0ZQa7P2H3P7W0JyEiBIjgilFXzFflZtjz6xJF4ceYExGW97gp4z1yNLXtA-3xVDH6cOakt1LZMfR5ftK2rzqA1iForJn43Pj4evDTeiWH1-Laougnx015mpFAVBatEk__FyJHEfq_MAszBMbnFpxmIfhZCA3kmuU8wAB9CZrLltwoM5Jyq31rHFsQrEk19Pz2Y8Od2p5F_TXippu42qkIKQ";
+
+/** Logical mobile viewport for scale-to-fit inside phone screen. */
+export const PROGRAMMATIC_SCREEN_WIDTH = 390;

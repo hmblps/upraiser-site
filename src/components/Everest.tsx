@@ -218,4 +218,5 @@ export function Everest({
 }
 
 useGLTF.preload(MODEL_URL, DRACO_PATH);
-useGLTF.preload(MODEL_URL_LIGHT, DRACO_PATH);
+// Light model is large — preload only when requested, not at module parse time.
+// useGLTF.preload(MODEL_URL_LIGHT, DRACO_PATH);

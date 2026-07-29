@@ -145,7 +145,7 @@ export const PERFORMANCE_CONTENT = {
       description: "DSP buying with pre-bid scoring across in-app and open web inventory.",
       iconName: "Cpu",
       badge: "High Scale",
-      href: "/solutions?pillar=performance&channel=programmatic",
+      href: "/solutions?channel=programmatic#channels",
     },
     {
       id: "in-app",
@@ -154,7 +154,7 @@ export const PERFORMANCE_CONTENT = {
       description: "UA for apps measured on installs, FTD, and subscription — not vanity CPI.",
       iconName: "Smartphone",
       badge: "Mobile",
-      href: "/solutions?pillar=performance",
+      href: "/solutions?channel=performance#channels",
     },
     {
       id: "paid-search-social",
@@ -162,7 +162,7 @@ export const PERFORMANCE_CONTENT = {
       category: "Media Buying",
       description: "Meta, TikTok, and creator placements wired to MMP events.",
       iconName: "Search",
-      href: "/solutions?pillar=creators",
+      href: "/solutions?channel=influencer#channels",
     },
     {
       id: "oem-inventory",
@@ -171,7 +171,7 @@ export const PERFORMANCE_CONTENT = {
       description: "Factory ROM and Google PAI — official Lenovo agency lanes with SDK trails.",
       iconName: "Layers",
       badge: "Official Partner",
-      href: "/solutions?pillar=oem",
+      href: "/solutions?channel=oem#channels",
     },
     {
       id: "attribution-tech",
@@ -187,7 +187,7 @@ export const PERFORMANCE_CONTENT = {
       category: "Optimization",
       description: "Native editorial and connected TV with pre-bid household scoring.",
       iconName: "Palette",
-      href: "/solutions?pillar=premium",
+      href: "/solutions?channel=ctv#channels",
     },
   ] as ServiceItem[],
 

@@ -90,8 +90,8 @@ export function Clients() {
               {grid.length} brands
               {vertical !== "All" ? ` · ${vertical}` : ""}
               {" · "}
-              <ScrollLink href="/expertise" className="font-semibold text-fg/75 hover:text-orange">
-                Expertise
+              <ScrollLink href="/solutions" className="font-semibold text-fg/75 hover:text-orange">
+                Solutions
               </ScrollLink>
               {" · "}
               <ScrollLink href="/cases" className="font-semibold text-fg/75 hover:text-orange">

@@ -2,7 +2,7 @@
  * Inner pages — viewport shells (no document scroll). Home keeps cinematic scroll.
  *
  * IA:
- *  /expertise  — App Growth (inventory channels) · OEM
+ *  /solutions  — flat channel rail (programmatic, OEM, performance, …)
  *  /clarity    — measurement layer (AnimatedList only)
  *  /studio     — Creative performance (Craft · Formats · Production)
  *  /cases      — horizontal deck
@@ -323,8 +323,8 @@ export const CLARITY_CONTENT = {
     { value: "48h", label: "Brief to live" },
   ],
   related: [
-    { label: "App Growth", href: "/expertise?pillar=media" },
-    { label: "OEM", href: "/expertise?pillar=oem" },
+    { label: "Programmatic", href: "/solutions?channel=programmatic#channels" },
+    { label: "OEM", href: "/solutions?channel=oem#channels" },
     { label: "Studio", href: "/studio" },
   ],
   close: {
@@ -445,12 +445,12 @@ export const COMPANY_CONTENT = {
     },
     {
       question: "Where does Lenovo / OEM live?",
-      answer: "Under Expertise · OEM — factory ROM and Google PAI with SDK trails.",
+      answer: "Under Solutions · OEM — factory ROM and Google PAI with SDK trails.",
     },
     {
       question: "Do you run Paid Social and Creators too?",
       answer:
-        "Yes — under Expertise · App Growth inventory. Social and Creators cap to the same MMP events. Studio builds the creatives into that brief.",
+        "Yes — Social and Creators are tabs on Solutions. Both cap to the same MMP events. Studio builds the creatives into that brief.",
     },
     {
       question: "Is Clarity a replacement for Our MMP?",

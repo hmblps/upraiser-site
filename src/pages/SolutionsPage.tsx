@@ -1,137 +1,61 @@
-import { lazy, useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { solutionsHub, solutionsPage, primaryCta } from "../data/liveContent";
-import { PERFORMANCE_CONTENT } from "../data/performanceData";
-import { LazySection } from "../layouts/SiteLayout";
-import { CaseMetricMatrix } from "../components/CaseMetricMatrix";
+import { useState, type ReactNode } from "react";
+import { primaryCta } from "../data/liveContent";
 import { DepthCloseCta } from "../components/DepthCloseCta";
-import { PageIntro } from "../components/PageIntro";
-import { PhilosophyBand } from "../components/PhilosophyBand";
-import { SolutionPathStory } from "../components/SolutionPathStory";
-import { SolutionsHub } from "../components/SolutionsHub";
-import { TechSpotlightBand } from "../components/TechSpotlightBand";
-import { TrustMarquee } from "../components/TrustMarquee";
-import { Reveal } from "../components/motion/Reveal";
-
-const TrafficChannels = lazy(() =>
-  import("../components/TrafficChannels").then((m) => ({ default: m.TrafficChannels })),
-);
-
-function pillarFromParams(pillar: string | null, channel: string | null) {
-  if (pillar && solutionsHub.categories.some((c) => c.id === pillar)) return pillar;
-  if (channel) {
-    const match = solutionsHub.categories.find((c) =>
-      (c.channelIds as readonly string[]).includes(channel),
-    );
-    if (match) return match.id;
-  }
-  return solutionsHub.categories[0]!.id;
-}
+import { SectionHeader, useMode } from "../components/SectionHeader";
+import { SlideTabs } from "../components/SlideTabs";
+import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticScrollSection";
+import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/ProgrammaticFormats";
 
 /**
- * Solutions — Saatchi services IA in UPRAISER style.
- * Hero → trust → philosophy → path spine → tech → proof → CTA.
- * No Home / Cases / Contact edits.
+ * Solutions — App Growth (scroll formats + phone) / OEM & CTV.
+ * Lane switcher lives in the right column above format copy.
  */
 export function SolutionsPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [activePillarId, setActivePillarId] = useState(() =>
-    pillarFromParams(searchParams.get("pillar"), searchParams.get("channel")),
+  const { mode } = useMode();
+  const [lane, setLane] = useState<"app-growth" | "oem-ctv">("app-growth");
+
+  const laneTabs = [
+    { id: "app-growth", label: "App Growth" },
+    { id: "oem-ctv", label: "OEM & CTV" },
+  ];
+
+  const laneSwitcher: ReactNode = (
+    <SlideTabs
+      items={laneTabs}
+      activeId={lane}
+      onChange={(id) => setLane(id === "oem-ctv" ? "oem-ctv" : "app-growth")}
+      layoutId="solutions-lane-pill"
+      className="format-lane-tabs"
+    />
   );
 
-  const activePillar =
-    solutionsHub.categories.find((c) => c.id === activePillarId) ?? solutionsHub.categories[0]!;
-
-  const channelIds = useMemo(() => [...activePillar.channelIds] as string[], [activePillar]);
-
-  useEffect(() => {
-    setActivePillarId(pillarFromParams(searchParams.get("pillar"), searchParams.get("channel")));
-  }, [searchParams]);
-
-  useEffect(() => {
-    const run = () => {
-      void import("../components/TrafficChannels");
-    };
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(run, { timeout: 1500 });
-      return () => window.cancelIdleCallback(id);
-    }
-    const t = window.setTimeout(run, 500);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  const selectPillar = useCallback(
-    (pillarId: string, primaryChannel: string) => {
-      setActivePillarId(pillarId);
-      setSearchParams(
-        (prev) => {
-          const next = new URLSearchParams(prev);
-          next.set("pillar", pillarId);
-          next.set("channel", primaryChannel);
-          return next;
-        },
-        { replace: true },
-      );
-      requestAnimationFrame(() => {
-        document.getElementById("path-story")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    },
-    [setSearchParams],
-  );
-
-  const footer = PERFORMANCE_CONTENT.footerCta;
+  const headerTitle = lane === "app-growth" ? "Every Format. One Supply Path." : "OEM / CTV — measured supply";
+  const headerDescription =
+    lane === "app-growth"
+      ? undefined
+      : "Pre-install, OEM storefronts, and CTV — same sticky format path, proof that survives procurement.";
 
   return (
     <main className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
-      <PageIntro
-        label={solutionsPage.label}
-        title={solutionsPage.title}
-        description={solutionsPage.description}
-        ctaLabel={solutionsPage.ctaLabel}
-        ctaHref={primaryCta.href}
-        secondaryLabel="Clarity"
-        secondaryHref="/clarity"
-        dense={false}
+      <div className="section-band section-band--strip solutions-intro">
+        <div className="section-inner">
+          <SectionHeader label="Lanes" title={headerTitle} description={headerDescription} />
+        </div>
+      </div>
+
+      <ProgrammaticScrollSection
+        key={lane}
+        mode={mode}
+        laneSwitcher={laneSwitcher}
+        formats={lane === "app-growth" ? AD_FORMATS : OEM_CTV_FORMATS}
       />
 
-      <TrustMarquee />
-      <PhilosophyBand />
-
-      <SolutionsHub activeId={activePillar.id} onSelect={selectPillar} />
-
-      <LazySection minHeight="36vh">
-        <section className="section-band section-band--ambience border-t border-border/40">
-          <div className="section-inner">
-            <SolutionPathStory pillar={activePillar} />
-          </div>
-        </section>
-      </LazySection>
-
-      <LazySection minHeight="36vh">
-        <section className="section-band border-t border-border/40">
-          <div className="section-inner">
-            <Reveal>
-              <p className="section-label">Channels in this path</p>
-              <p className="copy mt-2 max-w-xl text-sm text-muted">
-                Inventory for {activePillar.title}. Open a channel for the full write-up.
-              </p>
-            </Reveal>
-            <div className="mt-6">
-              <TrafficChannels variant="full" channelIds={channelIds} />
-            </div>
-          </div>
-        </section>
-      </LazySection>
-
-      <TechSpotlightBand />
-      <CaseMetricMatrix />
-
       <DepthCloseCta
-        title={footer.title}
-        description={footer.subtitle}
-        ctaLabel={footer.buttonText}
-        ctaHref={footer.buttonHref}
-        contactIntent={activePillar.contactIntent}
+        title="Brief the channel You need"
+        description="Tell us vertical, GEO, and KPI event — we route to the right inventory lane."
+        ctaLabel={primaryCta.label}
+        ctaHref={primaryCta.href}
+        contactIntent="brand"
       />
     </main>
   );
