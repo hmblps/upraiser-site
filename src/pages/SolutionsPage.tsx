@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { primaryCta } from "../data/liveContent";
 import { DepthCloseCta } from "../components/DepthCloseCta";
-import { SectionHeader, useMode } from "../components/SectionHeader";
+import { useMode } from "../components/SectionHeader";
 import { SlideTabs } from "../components/SlideTabs";
 import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticScrollSection";
 import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/ProgrammaticFormats";
@@ -37,17 +37,14 @@ export function SolutionsPage() {
 
   return (
     <main className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
-      <div className="section-band section-band--strip solutions-intro">
-        <div className="section-inner">
-          <SectionHeader label="Lanes" title={headerTitle} description={headerDescription} />
-        </div>
-      </div>
-
       <ProgrammaticScrollSection
         key={lane}
         mode={mode}
         laneSwitcher={laneSwitcher}
         formats={lane === "app-growth" ? AD_FORMATS : OEM_CTV_FORMATS}
+        headerLabel="Lanes"
+        headerTitle={headerTitle}
+        headerDescription={headerDescription}
       />
 
       <DepthCloseCta

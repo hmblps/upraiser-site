@@ -262,14 +262,15 @@
 .pf-banner-ad button {
   border: none;
   border-radius: 999px;
-  padding: 1.4cqi 3cqi;
+  padding: 1.4cqi 3.2cqi;
   background: var(--pf-secondary);
   color: #1c1b1b;
   font-size: var(--pf-text-xs);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .pf-banner-note {
@@ -395,6 +396,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  animation: pf-kenburns 5.5s ease-out forwards;
 }
 
 .pf-interstitial__dim {
@@ -492,11 +494,12 @@
 
 .pf-rich__bg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -4%;
+  width: 108%;
+  height: 108%;
   object-fit: cover;
   filter: brightness(0.5) contrast(1.15);
+  animation: pf-parallax 5.5s linear forwards;
 }
 
 .pf-rich__overlay {
@@ -568,11 +571,12 @@
 
 .pf-video__bg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
   object-fit: cover;
   opacity: 0.9;
+  animation: pf-kenburns 5.5s ease-out forwards;
 }
 
 .pf-video__grad {
@@ -609,6 +613,7 @@
   height: 1.4cqi;
   border-radius: 999px;
   background: #fff;
+  animation: pf-live-blink 0.7s ease-in-out infinite alternate;
 }
 
 .pf-video__top button {
@@ -663,10 +668,11 @@
 
 .pf-video__bar span {
   display: block;
-  width: 40%;
+  width: 8%;
   height: 100%;
   background: var(--pf-primary);
   box-shadow: 0 0 10px var(--pf-primary);
+  animation: pf-progress 3.6s linear 0.4s forwards;
 }
 
 .pf-video__meta {
@@ -719,3 +725,116 @@
   background: color-mix(in srgb, var(--pf-primary) 8%, transparent);
   border-radius: 2.8cqi;
 }
+
+.pf-feed__nav span.is-active .pb-icon {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.pf-format-tag {
+  position: absolute;
+  top: 4cqi;
+  left: 4cqi;
+  z-index: 3;
+  font-size: 2.4cqi;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  pointer-events: none;
+}
+
+.pf-format-tag span {
+  color: var(--pf-secondary);
+}
+
+.pf-format-tag--on-dark {
+  top: 4.5cqi;
+  left: 4.5cqi;
+}
+
+.pf-format-tag--center {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 3.2cqi;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pf-rich__nudge {
+  animation: pf-nudge-up 1s ease-in-out 1.2s infinite alternate;
+}
+
+.pf-video__play {
+  animation: pf-play-pulse 1s ease-in-out 1.4s infinite alternate;
+}
+
+.pf-native__verified {
+  color: var(--pf-primary);
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+@keyframes pf-kenburns {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes pf-parallax {
+  from {
+    transform: scale(1.16) translateX(-2%);
+  }
+  to {
+    transform: scale(1.04) translateX(1.5%);
+  }
+}
+
+@keyframes pf-progress {
+  from {
+    width: 8%;
+  }
+  to {
+    width: 72%;
+  }
+}
+
+@keyframes pf-live-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.35;
+  }
+}
+
+@keyframes pf-nudge-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1.4cqi);
+  }
+}
+
+@keyframes pf-play-pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-interstitial__bg,
+  .pf-rich__bg,
+  .pf-video__bg,
+  .pf-video__bar span,
+  .pf-video__live i,
+  .pf-rich__nudge,
+  .pf-video__play {
+    animation: none !important;
+  }
+}
+

@@ -9,6 +9,7 @@ import {
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useScroll } from "../../context/ScrollContext";
 import type { SiteMode } from "../../data/liveContent";
+import { SectionHeader } from "../SectionHeader";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
 import { CssPhone } from "./CssPhone";
@@ -18,8 +19,8 @@ import "../../styles/programmatic-full-feed.css";
 
 const Phone3D = lazy(() => import("./Phone3D").then((m) => ({ default: m.Phone3D })));
 
-/** Scroll distance per format — longer = calmer transitions. */
-const FORMAT_HEIGHT = 720;
+/** Scroll distance per format — short enough that a fast wheel doesn’t skip steps. */
+const FORMAT_HEIGHT = 480;
 
 function progressToIndex(progress: number, count: number): number {
   const raw = progress * count;
@@ -31,17 +32,23 @@ type ProgrammaticScrollSectionProps = {
   laneSwitcher?: ReactNode;
   /** Defaults to App Growth formats. */
   formats?: readonly AdFormat[];
+  headerLabel?: string;
+  headerTitle?: string;
+  headerDescription?: string;
 };
 
 /**
  * Native sticky scroll drives the active format — no wheel hijack.
- * Desktop: 3D GLB + live HTML glass overlay (no CSS3D).
- * Mobile: CssPhone with the same feed.
+ * Desktop: headline + 3D phone under it + format copy.
+ * Mobile: CssPhone with live HTML feed (same scenes).
  */
 export function ProgrammaticScrollSection({
   mode,
   laneSwitcher,
   formats = AD_FORMATS,
+  headerLabel = "Lanes",
+  headerTitle = "Every Format. One Supply Path.",
+  headerDescription,
 }: ProgrammaticScrollSectionProps) {
   const reduced = useReducedMotion();
   const { scrollToY } = useScroll();
@@ -137,6 +144,9 @@ export function ProgrammaticScrollSection({
         laneSwitcher={laneSwitcher}
         reduced={reduced}
         formats={formats}
+        headerLabel={headerLabel}
+        headerTitle={headerTitle}
+        headerDescription={headerDescription}
       />
     );
   }
@@ -150,32 +160,37 @@ export function ProgrammaticScrollSection({
     >
       <div className="prog-scroll-sticky">
         <div className="prog-scroll-ambience" aria-hidden />
-        <div className="prog-scroll-layout">
-          <div className="prog-scroll-phone-col">
-            {canRender3D ? (
-              <Suspense fallback={<CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />}>
-                <CanvasErrorBoundary
-                  fallback={<CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />}
-                >
-                  <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
-                </CanvasErrorBoundary>
-              </Suspense>
-            ) : (
-              <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />
-            )}
+        <div className="prog-scroll-sticky-inner">
+          <div className="prog-scroll-headline">
+            <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
           </div>
+          <div className="prog-scroll-layout">
+            <div className="prog-scroll-phone-col">
+              {canRender3D ? (
+                <Suspense fallback={<CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />}>
+                  <CanvasErrorBoundary
+                    fallback={<CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />}
+                  >
+                    <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
+                  </CanvasErrorBoundary>
+                </Suspense>
+              ) : (
+                <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--desktop" />
+              )}
+            </div>
 
-          <div className="prog-scroll-copy-col">
-            <FormatCopy
-              format={format}
-              index={activeIndex}
-              total={formats.length}
-              mode={mode}
-              reduced={false}
-              laneSwitcher={laneSwitcher}
-              formats={formats}
-              onJump={jumpTo}
-            />
+            <div className="prog-scroll-copy-col">
+              <FormatCopy
+                format={format}
+                index={activeIndex}
+                total={formats.length}
+                mode={mode}
+                reduced={false}
+                laneSwitcher={laneSwitcher}
+                formats={formats}
+                onJump={jumpTo}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -188,11 +203,17 @@ function MobileFormats({
   laneSwitcher,
   reduced,
   formats,
+  headerLabel,
+  headerTitle,
+  headerDescription,
 }: {
   mode: SiteMode;
   laneSwitcher?: ReactNode;
   reduced: boolean;
   formats: readonly AdFormat[];
+  headerLabel: string;
+  headerTitle: string;
+  headerDescription?: string;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
@@ -230,6 +251,10 @@ function MobileFormats({
   return (
     <section className="prog-scroll-section prog-scroll-section--mobile" aria-label="Ad formats">
       <div className="prog-mobile-ambience" aria-hidden />
+
+      <div className="prog-mobile-headline section-inner">
+        <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
+      </div>
 
       <div className="prog-mobile-sticky">
         {laneSwitcher ? <div className="prog-mobile-switcher">{laneSwitcher}</div> : null}

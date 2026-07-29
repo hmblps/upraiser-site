@@ -8,8 +8,7 @@ type CssPhoneProps = {
 };
 
 /**
- * CSS phone chassis with live HTML feed — used while polishing the feed
- * (and as mobile sticky). 3D GLB maps the same feed later without CSS3D.
+ * CSS phone chassis with live HTML format feed (Solutions glass).
  */
 export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";

@@ -1,17 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 
-/** Local brand marks — remote aida URLs often 404 as white holes. */
+/** Frozen local assets — same set as HyperFrames format scenes. */
 const LOGO = "/brand/upraiser-logo.png";
 const LOGO_MARK = "/logo.svg";
-
-const NATIVE_HERO =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCcy27WAIFExo-KnfpDyZwIfPj9mkVCrcB7y7-2MkBJQsTwWAG73Y4PyY-PQYZkwV-GBe_ZpqMgGua7eCa2xAo_FpQV3D7GSAT3ATO2cMwKVxJzUipo_NFj3jKrV8ajazsMbE3DYatuPulurdjOSleOLXBi6Gu1ap7uf5ZCF_lL3H7Q76-y7yZQ0pxWmSQbySJCtxueTy8a2ZZTBTSQFqThLW8zaixoF6KQ_2bYyx_mfhoD1RfcezYO";
-
-const INTERSTITIAL_BG =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDVDGU895lPp3HvPGQgYYFM2YhBMoK-ubGnEja1wD5i7L467vW64cokTX2B3iJCzrPa8YoBCMAf_ahLlsFnBA5PWUbe5iyZair3R_ASAftI_0cYZPCB91VuhMDedjmiA1oa4YicbJb6Bed_KCWSw7bUhSOV7zW4rrm2np-yq6VH3v3PlPD4zSPthw1C-wYmeEAfz05cxIkJhCDLn1CnQ-QR8bOwEt_6KQ22wM_NgF7SVk8S47Pc0awY";
-
-const RICH_BG =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuBhHx__OrMfK8ZzQWiBrHGNPjQM0wus7Zb5I-9IArR5HH5QerTTdKdQCQ9jX_6oMuDN4ebFnBI5QdRFsl28JcPqtaLDJXBY7vJebDnVUfIKAmzC_Pmt1mxRdJW2mOy7Kv-freZxH8ML4XI1oLx_5oc55dt_L9isLBzKJvGNVVjdXjLIw2I7pemUL2aB0kh5xU9HNQVTYH_XHF1xFR6nHBEFkL0U_fY-oig085XsXyuwZBA7b9U4ndyO";
+const NATIVE_HERO = "/channels/programmatic-feed/native-hero.jpg";
+const INTERSTITIAL_BG = "/channels/programmatic-feed/interstitial-bg.jpg";
+const RICH_BG = "/channels/programmatic-feed/rich-bg.jpg";
+const VIDEO_BG = "/channels/programmatic-feed/video-bg.jpg";
 
 const SPRING = { type: "spring" as const, stiffness: 320, damping: 30, mass: 0.8 };
 
@@ -68,6 +63,9 @@ function FormatPanel({ id }: { id: string }) {
         <div className="pf-interstitial pf-interstitial--fill">
           <img src={INTERSTITIAL_BG} alt="" className="pf-interstitial__bg" />
           <div className="pf-interstitial__dim" />
+          <div className="pf-format-tag" aria-hidden>
+            <span>03.</span> Interstitial
+          </div>
           <button type="button" className="pf-interstitial__close" tabIndex={-1} aria-hidden>
             <Icon name="close" />
           </button>
@@ -88,6 +86,9 @@ function FormatPanel({ id }: { id: string }) {
         <div className="pf-rich pf-rich--fill">
           <img src={RICH_BG} alt="" className="pf-rich__bg" />
           <div className="pf-rich__overlay">
+            <div className="pf-format-tag pf-format-tag--on-dark" aria-hidden>
+              <span>04.</span> Rich Media
+            </div>
             <span className="pf-rich__chip">Conquer 2026</span>
             <h2>
               Summit
@@ -99,7 +100,7 @@ function FormatPanel({ id }: { id: string }) {
               <span>
                 <Icon name="ads_click" />
               </span>
-              <span>
+              <span className="pf-rich__nudge">
                 <Icon name="swipe_up" />
               </span>
             </div>
@@ -109,8 +110,11 @@ function FormatPanel({ id }: { id: string }) {
     case "video":
       return (
         <div className="pf-video pf-video--fill">
-          <img src={INTERSTITIAL_BG} alt="" className="pf-video__bg" />
+          <img src={VIDEO_BG} alt="" className="pf-video__bg" />
           <div className="pf-video__grad" />
+          <div className="pf-format-tag pf-format-tag--center" aria-hidden>
+            <span>05.</span> Video
+          </div>
           <div className="pf-video__top">
             <span className="pf-video__live">
               <i /> LIVE
