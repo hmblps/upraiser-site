@@ -2,7 +2,6 @@ import {
   Suspense,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -28,9 +27,11 @@ import {
 import type { SiteMode } from "../../data/liveContent";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { DRACO_PATH } from "../../lib/heroModel";
+import { PhoneSilhouette } from "./PhoneSilhouette";
 import "../../styles/phone-css-3d.css";
 
-/** Theme chassis — no Draco dependency (copper-opt needs DRACOLoader). */
+/** Theme chassis — Draco-compressed (~1.9MB each). */
 export const MODEL_LIGHT = "/phones/deep-blue.glb";
 export const MODEL_DARK = "/phones/orange.glb";
 
@@ -61,21 +62,26 @@ const SCREEN_STILL: Record<string, string> = {
 const FORMAT_IDS = ["banner", "native", "interstitial", "rich", "video"] as const;
 const STILL_URLS = FORMAT_IDS.map((id) => SCREEN_STILL[id]);
 
-/** Warm GLB + stills + format MP4s so Suspense rarely shows the silhouette. */
-export function preloadPhone3DAssets() {
-  void useGLTF.preload(MODEL_LIGHT);
-  void useGLTF.preload(MODEL_DARK);
-  void useTexture.preload(STILL_URLS);
-  FORMAT_IDS.forEach((id) => {
-    const src = SCREEN_VIDEO[id];
-    if (!src) return;
-    const video = document.createElement("video");
-    video.muted = true;
-    video.preload = "auto";
-    video.playsInline = true;
-    video.src = src;
-    video.load();
-  });
+/**
+ * Warm the active chassis first (critical path). Alternate GLB + remaining stills
+ * ride idle — never blast all five format MP4s on mount (was ~7MB competing).
+ */
+export function preloadPhone3DAssets(mode: SiteMode = "growth") {
+  const primary = mode === "growth" ? MODEL_LIGHT : MODEL_DARK;
+  const secondary = mode === "growth" ? MODEL_DARK : MODEL_LIGHT;
+  void useGLTF.preload(primary, DRACO_PATH);
+  void useTexture.preload([SCREEN_STILL.banner!]);
+
+  const warmRest = () => {
+    void useGLTF.preload(secondary, DRACO_PATH);
+    void useTexture.preload(STILL_URLS);
+  };
+
+  if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(warmRest, { timeout: 2200 });
+  } else {
+    window.setTimeout(warmRest, 900);
+  }
 }
 
 const REST_Y = 0.32;
@@ -186,7 +192,7 @@ function PhoneMesh({
   rotY: { get: () => number };
   onReady?: () => void;
 }) {
-  const { scene } = useGLTF(url);
+  const { scene } = useGLTF(url, DRACO_PATH);
   // All stills once — format changes never re-suspend.
   const stillMaps = useTexture(STILL_URLS) as Texture[];
   const stillIndex = Math.max(
@@ -305,7 +311,8 @@ function PhoneMesh({
 
   return (
     <group ref={group}>
-      <Bounds fit clip observe margin={0.8}>
+      {/* 1.08 = slightly larger chassis; keep a slim air band so short laptops don’t clip */}
+      <Bounds fit observe margin={1.08}>
         <Center>
           <group rotation={SHARED_ORIENT}>
             <primitive object={prepared} />
@@ -339,7 +346,7 @@ function PhoneScene({
       <directionalLight position={[2.8, 4.2, 3.2]} intensity={isDark ? 1.85 : 1.7} castShadow />
       <directionalLight position={[-3, 2.2, -1]} intensity={0.55} color={isDark ? "#ffb070" : "#8eb0e8"} />
       <spotLight position={[0, 5.2, 3.2]} angle={0.42} penumbra={0.7} intensity={1.05} />
-      <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.55} />
+      <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.55} frames={1} />
 
       {/* Suspense only for initial GLB/texture resolve — never Still↔Video remount.
           Fallback stays null; Phone3D’s dark boot layer covers the transparent hole. */}
@@ -390,29 +397,9 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
     setMeshReady(true);
   }, []);
 
-  useLayoutEffect(() => {
-    void useGLTF.preload(MODEL_LIGHT);
-    void useGLTF.preload(MODEL_DARK);
-    void useTexture.preload(STILL_URLS);
-    const warmers = FORMAT_IDS.map((id) => {
-      const src = SCREEN_VIDEO[id];
-      if (!src) return null;
-      const video = document.createElement("video");
-      video.muted = true;
-      video.preload = "auto";
-      video.playsInline = true;
-      video.src = src;
-      video.load();
-      return video;
-    });
-    return () => {
-      warmers.forEach((video) => {
-        if (!video) return;
-        video.removeAttribute("src");
-        video.load();
-      });
-    };
-  }, []);
+  useEffect(() => {
+    preloadPhone3DAssets(mode);
+  }, [mode]);
 
   useEffect(() => {
     const node = stageRef.current;
@@ -475,14 +462,14 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
       <span className="phone-css-light phone-css-light--rim" aria-hidden />
       <span className="phone-css-light phone-css-light--floor" aria-hidden />
 
-      {/* Dark stand-in while GLB/stills suspend — no white flash, no nested CssPhone tree */}
-      {!meshReady ? <div className="phone-glb-boot-fallback" aria-hidden /> : null}
+      {/* Chassis stand-in while Draco GLB boots */}
+      {!meshReady ? <PhoneSilhouette mode={mode} className="phone-glb-boot-silhouette" /> : null}
 
       <div className="phone-glb-canvas-wrap">
         <Canvas
           key={url}
           className="phone-glb-canvas"
-          dpr={[1, 1.75]}
+          dpr={[1, 1.5]}
           frameloop={inView ? "always" : "never"}
           gl={{
             antialias: true,
@@ -490,7 +477,7 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
             premultipliedAlpha: false,
             powerPreference: "high-performance",
           }}
-          camera={{ position: [0, -0.08, 3.75], fov: 28, near: 0.05, far: 80 }}
+          camera={{ position: [0, -0.08, 3.78], fov: 28, near: 0.05, far: 80 }}
           style={{ background: "transparent" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
@@ -514,6 +501,6 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
   );
 }
 
-useGLTF.preload(MODEL_LIGHT);
-useGLTF.preload(MODEL_DARK);
-useTexture.preload(STILL_URLS);
+/* Active growth chassis only at module eval — dark / stills warm on idle via preloadPhone3DAssets */
+useGLTF.preload(MODEL_LIGHT, DRACO_PATH);
+useTexture.preload([SCREEN_STILL.banner!]);

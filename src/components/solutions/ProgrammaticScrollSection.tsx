@@ -19,10 +19,7 @@ import "../../styles/programmatic-scroll-section.css";
 import "../../styles/programmatic-full-feed.css";
 
 const phone3DImport = () =>
-  import("./Phone3D").then((m) => {
-    m.preloadPhone3DAssets();
-    return { default: m.Phone3D };
-  });
+  import("./Phone3D").then((m) => ({ default: m.Phone3D }));
 
 const Phone3D = lazy(phone3DImport);
 
@@ -77,11 +74,13 @@ export function ProgrammaticScrollSection({
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // A: preload chunk + GLB/stills/MP4 as soon as desktop Solutions mounts.
+  // Preload chunk + active GLB as soon as desktop Solutions mounts.
   useEffect(() => {
     if (reduced || isMobile) return;
-    void phone3DImport();
-  }, [reduced, isMobile]);
+    void import("./Phone3D").then((m) => {
+      m.preloadPhone3DAssets(mode);
+    });
+  }, [reduced, isMobile, mode]);
 
   useEffect(() => {
     if (isMobile || reduced) return;

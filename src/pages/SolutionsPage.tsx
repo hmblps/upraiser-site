@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { primaryCta } from "../data/liveContent";
 import { DepthCloseCta } from "../components/DepthCloseCta";
 import { useMode } from "../components/SectionHeader";
@@ -13,6 +13,20 @@ import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/Programmati
 export function SolutionsPage() {
   const { mode } = useMode();
   const [lane, setLane] = useState<"app-growth" | "oem-ctv">("app-growth");
+
+  // Kick the active chassis download before the lazy Phone3D chunk finishes parsing.
+  useEffect(() => {
+    const href = mode === "growth" ? "/phones/deep-blue.glb" : "/phones/orange.glb";
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "fetch";
+    link.href = href;
+    link.crossOrigin = "anonymous";
+    document.head.appendChild(link);
+    return () => {
+      link.remove();
+    };
+  }, [mode]);
 
   const laneTabs = [
     { id: "app-growth", label: "App Growth" },

@@ -434,6 +434,11 @@
   height: 100%;
 }
 
+/* Solutions sticky column owns the budget — don't explode past the fold */
+.prog-scroll-phone-col > .phone-glb-stage {
+  max-height: 100%;
+}
+
 .phone-glb-boot-fallback {
   position: absolute;
   inset: 0;
@@ -441,6 +446,21 @@
   pointer-events: none;
   background:
     radial-gradient(ellipse 42% 58% at 48% 48%, #1a1a1a 0%, #0a0a0a 55%, transparent 72%);
+}
+
+.phone-glb-boot-silhouette {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-glb-boot-silhouette .phone-silhouette__body {
+  height: min(100%, 90%);
+  max-height: 100%;
 }
 
 .phone-glb-canvas-wrap {
