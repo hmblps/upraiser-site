@@ -184,7 +184,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
               title={section.title}
               description={
                 isHome
-                  ? "Switch sources here. Open a channel on Solutions for the full inventory write-up."
+                  ? section.description
                   : isSolutions
                     ? "One tab per buying lane — same control plane, deeper copy than the home teaser."
                     : undefined

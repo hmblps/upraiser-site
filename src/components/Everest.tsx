@@ -217,6 +217,4 @@ export function Everest({
   );
 }
 
-useGLTF.preload(MODEL_URL, DRACO_PATH);
-// Light model is large — preload only when requested, not at module parse time.
-// useGLTF.preload(MODEL_URL_LIGHT, DRACO_PATH);
+// Preloads owned by HeroTerrainCanvas (active theme first) — avoid parse-time dual fetch.

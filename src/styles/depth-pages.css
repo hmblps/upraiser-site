@@ -803,12 +803,62 @@ html.viewport-route body {
   overflow: hidden;
 }
 
+.viewport-page__intro {
+  flex-shrink: 0;
+  position: relative;
+  padding-block: var(--viewport-intro-pad-block);
+}
+
+.viewport-page__intro::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--theme-accent) 40%, transparent) 18%,
+    color-mix(in srgb, var(--theme-accent) 40%, transparent) 82%,
+    transparent
+  );
+  opacity: 0.55;
+}
+
+.viewport-page__intro .section-title {
+  max-width: 42rem;
+  margin-top: var(--space-2);
+  font-size: var(--text-title-compact);
+  letter-spacing: var(--tracking-title);
+}
+
+.viewport-page__intro .section-description,
+.viewport-page__intro .copy {
+  margin-top: var(--stack-snug);
+  max-width: var(--content-max-copy);
+  font-size: var(--text-caption);
+  line-height: 1.45;
+  color: var(--theme-muted-light);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.viewport-page__tabs {
+  flex-shrink: 0;
+  padding-block: var(--viewport-tabs-pad-block);
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-border) 50%, transparent);
+}
+
 .viewport-page__panel {
   flex: 1;
   min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-top: var(--viewport-panel-pad-top);
 }
 
 /* Children of panel must fill without introducing scroll */
@@ -826,35 +876,32 @@ html.viewport-route body {
   overflow: visible;
 }
 
-.viewport-page__intro {
+.viewport-page__cta {
+  margin-top: var(--viewport-cta-mt);
   flex-shrink: 0;
-  padding-block: 0.65rem 0.5rem;
+  align-self: flex-start;
 }
 
-@media (min-width: 640px) {
-  .viewport-page__intro {
-    padding-block: 0.85rem 0.65rem;
-  }
-}
-
-.viewport-page__intro .section-title {
-  font-size: var(--text-title-compact);
-  letter-spacing: var(--tracking-title);
-  margin-top: 0.35rem;
-}
-
-.viewport-page__intro .copy {
-  margin-top: 0.35rem;
+.viewport-page__footnote {
+  margin-top: var(--viewport-footnote-mt);
+  flex-shrink: 0;
   font-size: var(--text-caption);
   line-height: 1.45;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  color: var(--theme-muted);
+}
+
+.viewport-page__footnote a {
+  font-weight: 600;
+  color: color-mix(in srgb, var(--theme-fg) 80%, transparent);
+  transition: color 0.2s ease;
+}
+
+.viewport-page__footnote a:hover {
+  color: var(--theme-accent);
 }
 
 .viewport-page .depth-feature-list {
-  margin-top: 0.75rem;
+  margin-top: var(--stack-snug);
 }
 
 .viewport-page .depth-feature-row {
@@ -971,6 +1018,104 @@ html.viewport-route body {
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--theme-accent) 35%, transparent),
     0 0 22px -2px color-mix(in srgb, var(--theme-accent) 55%, transparent);
+}
+
+/* ——— The Gear — blueprint / x-ray glass ——— */
+.depth-page--gear .gear-spec {
+  position: relative;
+  border-radius: var(--radius-lg, 0.75rem);
+  border: 1px solid color-mix(in srgb, var(--theme-border) 70%, transparent);
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--theme-bg-card) 78%, transparent),
+      color-mix(in srgb, var(--theme-bg) 55%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 12%, transparent),
+    0 18px 40px -28px color-mix(in srgb, #000 45%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.gear-spec__blueprint {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+}
+
+.gear-spec__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--theme-accent) 14%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--theme-accent) 14%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse at 30% 20%, #000 0%, transparent 72%);
+}
+
+.gear-spec__crosshair {
+  position: absolute;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-color: color-mix(in srgb, var(--theme-accent) 55%, transparent);
+  border-style: solid;
+}
+
+.gear-spec__crosshair--tl {
+  top: 0.85rem;
+  left: 0.85rem;
+  border-width: 1px 0 0 1px;
+}
+
+.gear-spec__crosshair--br {
+  right: 0.85rem;
+  bottom: 0.85rem;
+  border-width: 0 1px 1px 0;
+}
+
+.gear-spec__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .gear-spec__body {
+    padding: var(--space-5);
+  }
+}
+
+.gear-spec__sheet {
+  margin-top: auto;
+  padding-top: var(--space-5);
+  border-top: 1px dashed color-mix(in srgb, var(--theme-border) 80%, transparent);
+}
+
+html.theme-light .depth-page--gear .gear-spec,
+[data-theme="light"] .depth-page--gear .gear-spec {
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, #fff 88%, transparent),
+      color-mix(in srgb, var(--theme-bg-card) 70%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+    0 16px 36px -26px color-mix(in srgb, #0a1628 22%, transparent);
 }
 
 /* ——— Studio craft mini-visuals ——— */

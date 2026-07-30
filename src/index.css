@@ -25,6 +25,8 @@
   --color-on-accent: var(--theme-on-accent);
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Inter", system-ui, sans-serif;
+  /** In-phone mock feeds only (Solutions glass) — not site chrome */
+  --font-feed: "Plus Jakarta Sans", system-ui, sans-serif;
   --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;

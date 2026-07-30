@@ -11,6 +11,7 @@ const SolutionsPage = lazy(() =>
   import("./pages/SolutionsPage").then((m) => ({ default: m.SolutionsPage })),
 );
 const StudioPage = lazy(() => import("./pages/StudioPage").then((m) => ({ default: m.StudioPage })));
+const CraftPage = lazy(() => import("./pages/CraftPage").then((m) => ({ default: m.CraftPage })));
 const CasesPage = lazy(() => import("./pages/CasesPage").then((m) => ({ default: m.CasesPage })));
 const ClientsPage = lazy(() =>
   import("./pages/ClientsPage").then((m) => ({ default: m.ClientsPage })),
@@ -44,6 +45,8 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path="solutions" element={<SolutionsPage />} />
           <Route path="studio" element={<StudioPage />} />
+          <Route path="craft" element={<CraftPage />} />
+          <Route path="rigging" element={<Navigate to="/craft" replace />} />
           <Route path="clients" element={<ClientsPage />} />
           <Route path="company" element={<CompanyPage />} />
 

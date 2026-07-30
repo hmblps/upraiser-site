@@ -32,8 +32,8 @@ export function SolutionsPage() {
   const headerTitle = lane === "app-growth" ? "Every Format. One Supply Path." : "OEM / CTV — measured supply";
   const headerDescription =
     lane === "app-growth"
-      ? undefined
-      : "Pre-install, OEM storefronts, and CTV — same sticky format path, proof that survives procurement.";
+      ? "Equipment for altitude — formats on a direct supply path You can defend."
+      : "Pre-install, OEM storefronts, and CTV — fixed lines that survive procurement.";
 
   return (
     <main className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
@@ -42,14 +42,14 @@ export function SolutionsPage() {
         mode={mode}
         laneSwitcher={laneSwitcher}
         formats={lane === "app-growth" ? AD_FORMATS : OEM_CTV_FORMATS}
-        headerLabel="Lanes"
+        headerLabel="The Routes"
         headerTitle={headerTitle}
         headerDescription={headerDescription}
       />
 
       <DepthCloseCta
-        title="Brief the channel You need"
-        description="Tell us vertical, GEO, and KPI event — we route to the right inventory lane."
+        title="Ready to be Upraised?"
+        description="Brief the route: vertical, GEO, and KPI event — we route to the right inventory lane."
         ctaLabel={primaryCta.label}
         ctaHref={primaryCta.href}
         contactIntent="brand"

@@ -9,7 +9,7 @@ export type NavLink = {
 export const contactVerticalOptions = [
   { value: "app-growth", label: "App Growth / media" },
   { value: "oem", label: "OEM / Lenovo" },
-  { value: "studio", label: "Studio / creatives" },
+  { value: "studio", label: "The Craft / creatives" },
   { value: "brand", label: "Brand partnership" },
   { value: "advertising-partner", label: "Advertising Partner" },
   { value: "app-web-owner", label: "App / Web Owner" },
@@ -19,10 +19,11 @@ export const contactVerticalOptions = [
 ] as const;
 
 export const navLinks: NavLink[] = [
-  { label: "Solutions", href: "/solutions" },
-  { label: "Studio", href: "/studio" },
-  { label: "Cases", href: "/cases" },
-  { label: "About", href: "/company" },
+  { label: "The Routes", href: "/solutions" },
+  { label: "The Gear", href: "/studio" },
+  { label: "The Craft", href: "/craft" },
+  { label: "The Peaks", href: "/cases" },
+  { label: "The Expedition", href: "/company" },
 ];
 
 export const primaryCta = {
@@ -32,8 +33,14 @@ export const primaryCta = {
 
 export const heroFounded = "Founded 17 July 2017 · Based in London";
 
-export const heroLede =
-  "Every bid earns a receipt — before the invoice climbs the board deck.";
+/** Shared poetic H1 stays in Hero.tsx — lede annotates by mode (ascent brand). */
+export const heroLedeByMode = {
+  growth: "Most agencies talk about the view. We focus on the velocity.",
+  infrastructure: "Scaling is the climb. Verification is the oxygen.",
+} as const satisfies Record<SiteMode, string>;
+
+/** @deprecated use heroLedeByMode — kept for any stray imports */
+export const heroLede = heroLedeByMode.growth;
 
 export const heroHighlightsByMode = {
   growth: [
@@ -52,26 +59,26 @@ export const heroHighlightsByMode = {
 
 export const audienceByMode = {
   growth: {
-    label: "Who We Serve",
-    title: "Brands measured by post-install revenue",
-    line1: "Revenue events over install vanity.",
+    label: "The Route to the Peak",
+    title: "The cleanest route to the top.",
+    line1: "We don't just buy media; we engineer Your ascent.",
     line2Prefix: "Built to",
     inlineWord: "SCALE",
     scrollHeroWord: "SCALE",
     cta: primaryCta.label,
     description:
-      "You operate in iGaming, fintech, gaming, or premium e-commerce — markets where install-to-revenue distance is measurable, and where most agencies burn budget in the gap. We work only there. Awareness that cannot tie spend to FTDs is not our lane. Scale You can audit is.",
+      "UPRAISER provides a direct supply path across OEM, Programmatic, and Social channels. No middlemen to slow You down, no black boxes to hide the risk. Just pure, measurable momentum for Your unit economics.",
   },
   infrastructure: {
-    label: "Who We Serve",
-    title: "Teams who need numbers to match the invoice",
-    line1: "When the MMP and media bill diverge, fix the pipe — not the dashboard.",
+    label: "The Fixed Lines",
+    title: "A supply path You can defend in a review.",
+    line1: "At high altitude, even a 5% drift in data is fatal.",
     line2Prefix: "Run on",
     inlineWord: "PROOF",
     scrollHeroWord: "PROOF",
     cta: primaryCta.label,
     description:
-      "You are the Ad Ops lead, the finance controller, or the UA manager who has explained attribution drift one time too many. Your stack is Adjust, AppsFlyer, Singular, or Kochava. What You need is not more dashboard widgets — it is a supply path where every bid and KPI event traces to a raw device log. White-glove reporting that hides gaps is elsewhere. Supply You can defend in a review starts here.",
+      "When Your MMP and media bill diverge, You don't need a new dashboard — You need a better pipe. We verify the route before You start the climb, ensuring every bid has a receipt and every install is human.",
   },
 } satisfies Record<SiteMode, {
   label: string;
@@ -147,29 +154,28 @@ export const valueByMode = {
 
 export const promiseByMode = {
   growth: {
-    label: "Our Commitment",
-    title: "If it's not on the P&L, we don't call it a win",
+    label: "Proven Summits",
+    title: "We know these peaks well.",
     scrollHeroWord: "RESULTS",
-    line1: "Leadership reviews outcomes — not CPI charts that fall apart after the flight.",
+    line1: "+305% ROAS for subscription leaders — and factory lanes that hold at altitude.",
     line2Prefix: "We answer in",
     inlineWord: "RESULTS",
     titleLead: "We answer in ",
     accentWord: "RESULTS",
     description:
-      "We skip brand studies and install vanity. Caps follow events Your CFO already trusts, proven with device-level logs — not impressions and CPMs.",
+      "Block Blast: scaling to 32K+ daily installs via factory lanes. If it is not on the P&L, we don't call it a win — caps follow events Your CFO already trusts.",
   },
   infrastructure: {
-    label: "Our Commitment",
-    title: "Logs Your team can audit on demand",
+    label: "The Oxygen Level",
+    title: "Run on PROOF.",
     scrollHeroWord: "CLARITY",
-    line1:
-      "Every line item traces to a device event. No black-box reporting — pull and verify whenever You need.",
+    line1: "0% post-flight log drift. 0.4ms bid scoring. 180+ device signals.",
     line2Prefix: "We bring",
     inlineWord: "CLARITY",
     titleLead: "We bring ",
     accentWord: "CLARITY",
     description:
-      "Attribution drift and 300-vs-400 install debates end before the flight opens. Raw logs, real-time reconciliation, pre-bid filtration — month-end stays uneventful because the numbers already agree.",
+      "Fraud filtered before the bid. Verification at the source. Month-end stays uneventful because the numbers never disagree — the ultimate signal of clarity.",
   },
 } satisfies Record<
   SiteMode,
@@ -488,19 +494,19 @@ export const processByMode = {
   growth: [
     {
       step: "01",
-      title: "Understand the Funnel",
+      title: "Chart the Route",
       description:
         "We map where revenue actually happens — deposits, subscriptions, registrations — and set caps around those events. No install-only optimization. No CPM vanity.",
     },
     {
       step: "02",
-      title: "Pick the Mix",
+      title: "Pick the Fixed Lines",
       description:
         "OEM, programmatic, social — chosen by unit economics for Your vertical, not platform politics. We pick the channels that move the P&L, not the ones with the best sales decks.",
     },
     {
       step: "03",
-      title: "Go Live and Ramp",
+      title: "Push for the Summit",
       description:
         "48 hours to first bid. Real-time optimization. CPAs held inside the target You set — verified in the MMP, not estimated.",
     },
@@ -508,21 +514,21 @@ export const processByMode = {
   infrastructure: [
     {
       step: "01",
-      title: "Map the Stack",
+      title: "Map the Terrain",
       description:
-        "MMP endpoints, log pipelines, pre-bid requirements, fraud vectors — documented before anything goes live. No surprises on week one.",
+        "We document Your stack, log pipelines, and fraud vectors before a single impression is bought.",
     },
     {
       step: "02",
-      title: "Connect and Test",
+      title: "Wire the Fixed Lines",
       description:
-        "Raw logs wired to Adjust or AppsFlyer. Reconciliation verified before the first impression. If the numbers do not match at bid time, we fix the pipe — not the dashboard.",
+        "Raw device logs connect directly to Your attribution. If numbers don't match at bid-time, we fix the pipe, not the report.",
     },
     {
       step: "03",
-      title: "Deploy and Monitor",
+      title: "Verify the Ascent",
       description:
-        "ROM and programmatic lanes live with SDK compliance and continuous drift monitoring. Month-end is uneventful because the numbers never disagree.",
+        "Continuous drift monitoring ensures month-end is uneventful. The numbers never disagree.",
     },
   ],
 } satisfies Record<SiteMode, unknown>;
@@ -531,13 +537,13 @@ export const bridgeByMode = {
   growth: {
     eyebrow: "Alternate view",
     lead: "See the infrastructure story",
-    preview: "Log parity, pre-bid filtration, and audit-ready OEM — how Ad Ops closes the month without a war room.",
+    preview: "Fixed lines, oxygen-level proof, and audit-ready OEM — how Ad Ops closes the month without a war room.",
     cta: "Switch to Infrastructure",
   },
   infrastructure: {
     eyebrow: "Alternate view",
     lead: "See the growth story",
-    preview: "Event-weighted buying, OEM scale, and verified outcomes — how brands ramp without breaking unit economics.",
+    preview: "Velocity over the view — OEM scale, event-weighted buying, and proven summits without breaking unit economics.",
     cta: "Switch to Growth",
   },
 } satisfies Record<
@@ -547,13 +553,14 @@ export const bridgeByMode = {
 
 export const footerLinks = {
   explore: [
-    { label: "Solutions", href: "/solutions" },
-    { label: "Studio", href: "/studio" },
-    { label: "Cases", href: "/cases" },
-    { label: "Contact", href: "/contact" },
+    { label: "The Routes", href: "/solutions" },
+    { label: "The Gear", href: "/studio" },
+    { label: "The Craft", href: "/craft" },
+    { label: "The Peaks", href: "/cases" },
+    { label: "Request Pilot", href: "/contact" },
   ],
   company: [
-    { label: "About", href: "/company" },
+    { label: "The Expedition", href: "/company" },
     { label: "Clients", href: "/clients" },
     { label: "Careers inquiry", href: "/contact", contactIntent: "careers" },
     { label: "Contact", href: "/contact" },
@@ -579,7 +586,7 @@ export const lenovoPartnership = {
 
 export const aboutPage = {
   label: "About",
-  title: "Born from FraudOps. Built for Scale.",
+  title: "Built to end the attribution call",
   chapter: {
     scrollHeroWord: "LOGS",
     line1: "We started by explaining attribution drift to finance.",
@@ -606,7 +613,7 @@ export const aboutPage = {
     {
       mark: "Now",
       title: "Small team, direct access",
-      body: "You talk to the buyer optimizing the flight. Paths sit under Solutions. Proof sits under Measurement.",
+      body: "You talk to the buyer optimizing the flight. Buying paths sit under Solutions. Proof sits in the reconciliation file Ad Ops and finance already share.",
     },
   ],
   facts: [
@@ -638,7 +645,7 @@ export const aboutPage = {
     {
       question: "Where does Lenovo / OEM live?",
       answer:
-        "Under Solutions · OEM — factory ROM and Google PAI with SDK trails. Measurement covers how those trails reconcile into Your MMP.",
+        "Under Solutions · OEM — factory ROM and Google PAI with SDK trails. Device logs show how those trails reconcile into Your MMP.",
     },
     {
       question: "What does the log actually prove?",
@@ -652,10 +659,10 @@ export const aboutPage = {
 } as const;
 
 export const casesPage = {
-  label: "Cases",
-  title: "Campaigns that hold up in review",
+  label: "The Peaks",
+  title: "We know these peaks well.",
   description:
-    "Auditable campaigns for clients who need revenue events — not brand-lift slides.",
+    "Auditable campaigns for clients who need revenue events — not brand-lift slides. Block Blast: 32K+ daily installs via factory lanes.",
   intro:
     "Open any case: hero numbers first, then Brand / Market / KPI / Channels, then Challenge → Approach → Result.",
   structureLabel: "How to read a case",
@@ -789,7 +796,7 @@ export const contactPage = {
   titleLead: "Ready to be ",
   accentWord: "Upraised",
   description:
-    "Tell us Your vertical, GEO, and the KPI event that matters. We reply with a scoped path — not a deck of awareness line items.",
+    "Brief the route: vertical, GEO, and the KPI event that matters. We reply with a scoped path — not a deck of awareness line items.",
   subline:
     "1–2 business days. Brand brief, OEM / supply, or careers — pick an intent and we route it.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
@@ -870,22 +877,30 @@ export const sectionsByMode = {
     },
   },
   channels: {
-    label: "Channels",
-    growth: { title: "Where high-value users come from" },
-    infrastructure: { title: "How supply reaches Your stack" },
+    label: "Tools for Altitude",
+    growth: {
+      title: "Equipment for 30K+ daily installs.",
+      description:
+        "Direct supply, event-weighted optimization, and proven routes across GCC, US, and emerging markets — open a lane on The Routes for the full write-up.",
+    },
+    infrastructure: {
+      title: "Fixed lines into Your stack.",
+      description:
+        "OEM, programmatic, and social under one control plane — every lane with a receipt Ad Ops can defend.",
+    },
   },
   cases: {
-    label: "Case Studies",
-    growth: { title: "Campaigns that hold up in review" },
-    infrastructure: { title: "Pipelines built for audit" },
+    label: "Proven Summits",
+    growth: { title: "We know these peaks well." },
+    infrastructure: { title: "Peaks with oxygen — audit-ready." },
   },
   technology: {
-    label: "Measurement",
+    label: "The Gear",
     growth: { title: "Every bid has a receipt" },
     infrastructure: { title: "Every line item has a receipt" },
   },
   about: {
-    label: "About",
+    label: "The Expedition",
     growth: {
       title: "We are UPRAISER",
       description:
@@ -898,9 +913,9 @@ export const sectionsByMode = {
     },
   },
   process: {
-    label: "How We Work",
-    growth: { title: "Brief. Launch. Ramp.", cta: "Talk to us" },
-    infrastructure: { title: "Map. Wire. Verify.", cta: "Talk to us" },
+    label: "The Map. The Wire. The Verify.",
+    growth: { title: "Chart. Line. Summit.", cta: "Request Pilot" },
+    infrastructure: { title: "Map. Wire. Verify.", cta: "Request Pilot" },
   },
   contact: {
     label: "Contact",

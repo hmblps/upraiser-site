@@ -19,6 +19,9 @@ dist-ssr
 # Local drafts / exports (not deployed)
 pdf-pages/
 Integrations Logos/
+.tmp-*
+.tmp-*/
+videos/
 
 # Hero local backup (optional; use assets/hero/ as source of truth)
 public/hero/_original/

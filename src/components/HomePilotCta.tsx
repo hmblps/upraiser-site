@@ -67,10 +67,10 @@ export function HomePilotCta() {
             <div className="max-w-xl">
               <p className="section-label">Next step</p>
               <h2 className="mt-2 text-2xl font-bold tracking-tight text-fg sm:text-3xl">
-                Request a pilot on Your stack
+                Ready to be Upraised?
               </h2>
               <p className="copy mt-3 text-muted">
-                Tell us the vertical, GEO, and KPI event — we reply with a scoped path, not a deck.
+                Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.
               </p>
             </div>
             <Magnetic>

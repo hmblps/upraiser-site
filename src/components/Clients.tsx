@@ -25,11 +25,11 @@ export function Clients() {
       <div className="viewport-page__shell section-inner flex flex-col">
         <header className="viewport-page__intro shrink-0">
           <p className="section-label">{CLIENTS_CONTENT.hero.badge}</p>
-          <h1 className="section-title max-w-3xl">{CLIENTS_CONTENT.hero.h1}</h1>
-          <p className="copy mt-2 max-w-xl text-sm text-muted">{CLIENTS_CONTENT.lead}</p>
+          <h1 className="section-title">{CLIENTS_CONTENT.hero.h1}</h1>
+          <p className="section-description">{CLIENTS_CONTENT.lead}</p>
         </header>
 
-        <div className="viewport-page__tabs shrink-0 border-b border-border/50 py-2">
+        <div className="viewport-page__tabs">
           <div className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {CLIENTS_CONTENT.verticals.map((item) => {
               const active = item === vertical;
@@ -39,7 +39,7 @@ export function Clients() {
                   type="button"
                   onClick={() => setVertical(item)}
                   className={cn(
-                    "shrink-0 rounded-full px-3 py-1.5 text-micro tracking-wide transition",
+                    "shrink-0 rounded-full px-3 py-1.5 text-micro transition",
                     active
                       ? "bg-orange text-on-accent"
                       : "border border-border/60 text-muted hover:border-orange/40 hover:text-fg",
@@ -52,7 +52,7 @@ export function Clients() {
           </div>
         </div>
 
-        <div className="viewport-page__panel relative flex min-h-0 flex-1 flex-col overflow-hidden pt-3">
+        <div className="viewport-page__panel relative flex min-h-0 flex-1 flex-col overflow-hidden">
           <ul className="grid min-h-0 flex-1 auto-rows-fr grid-cols-3 gap-2 overflow-hidden sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 lg:gap-3">
             {grid.slice(0, 24).map((brand, index) => (
               <motion.li
@@ -86,22 +86,18 @@ export function Clients() {
           </ul>
 
           <div className="mt-3 flex shrink-0 items-center justify-between gap-3">
-            <p className="text-xs text-muted">
+            <p className="viewport-page__footnote mt-0">
               {grid.length} brands
               {vertical !== "All" ? ` · ${vertical}` : ""}
               {" · "}
-              <ScrollLink href="/solutions" className="font-semibold text-fg/75 hover:text-orange">
-                Solutions
-              </ScrollLink>
+              <ScrollLink href="/solutions">The Routes</ScrollLink>
               {" · "}
-              <ScrollLink href="/cases" className="font-semibold text-fg/75 hover:text-orange">
-                Cases
-              </ScrollLink>
+              <ScrollLink href="/cases">The Peaks</ScrollLink>
             </p>
             <ScrollLink
               href="/contact"
               data-cursor="cta"
-              className="btn-caps inline-block rounded-full bg-orange px-5 py-2.5 text-xs font-semibold text-on-accent"
+              className="btn-caps btn-caps--primary"
             >
               {CLIENTS_CONTENT.ctaLabel}
             </ScrollLink>

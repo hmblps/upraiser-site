@@ -40,10 +40,11 @@ export function Company() {
       <div className="viewport-page__shell section-inner flex flex-col">
         <header className="viewport-page__intro shrink-0">
           <p className="section-label">{COMPANY_CONTENT.hero.badge}</p>
-          <h1 className="section-title max-w-3xl">{COMPANY_CONTENT.hero.h1}</h1>
+          <h1 className="section-title">{COMPANY_CONTENT.hero.h1}</h1>
+          <p className="section-description">{COMPANY_CONTENT.hero.description}</p>
         </header>
 
-        <div className="viewport-page__tabs shrink-0 border-b border-border/50 py-2">
+        <div className="viewport-page__tabs">
           <SlideTabs
             items={[...TABS]}
             activeId={activeId}
@@ -53,7 +54,7 @@ export function Company() {
           />
         </div>
 
-        <div className="viewport-page__panel relative min-h-0 flex-1 pt-3">
+        <div className="viewport-page__panel relative min-h-0 flex-1">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeId}
@@ -64,24 +65,31 @@ export function Company() {
               className="h-full min-h-0 overflow-hidden"
             >
               {activeId === "story" ? (
-                <div className="grid h-full min-h-0 gap-5 overflow-hidden lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+                <div className="grid h-full min-h-0 gap-5 overflow-hidden lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
                   <CompanyStoryTimeline />
                   <div className="flex min-h-0 flex-col justify-between gap-4 overflow-hidden">
-                    <LenovoProofStrip variant="inline" />
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                      <ScrollLink
-                        href={primaryCta.href}
-                        data-cursor="cta"
-                        className="btn-caps inline-block self-start rounded-full bg-orange px-5 py-2.5 text-xs font-semibold text-on-accent"
-                      >
-                        {COMPANY_CONTENT.close.ctaLabel}
-                      </ScrollLink>
-                      <Link
-                        to="/clients"
-                        className="text-xs font-semibold text-muted underline-offset-4 transition hover:text-orange hover:underline"
-                      >
-                        See clients →
-                      </Link>
+                    <div className="min-h-0 space-y-3 overflow-hidden">
+                      <p className="panel-lede">{COMPANY_CONTENT.expedition.synergy}</p>
+                      <p className="panel-lede">{COMPANY_CONTENT.expedition.uniqueness}</p>
+                      <p className="copy font-semibold text-fg">
+                        {COMPANY_CONTENT.philosophy.text}{" "}
+                        <span className="text-orange">{COMPANY_CONTENT.expedition.proofLine}</span>
+                      </p>
+                    </div>
+                    <div className="shrink-0 space-y-3">
+                      <LenovoProofStrip variant="inline" />
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <ScrollLink
+                          href={primaryCta.href}
+                          data-cursor="cta"
+                          className="btn-caps btn-caps--primary"
+                        >
+                          {COMPANY_CONTENT.close.ctaLabel}
+                        </ScrollLink>
+                        <Link to="/clients" className="link-quiet">
+                          See clients →
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -91,10 +99,10 @@ export function Company() {
                 <div className="flex h-full min-h-0 flex-col overflow-hidden">
                   <div className="shrink-0">
                     <p className="stat-label text-orange">{COMPANY_CONTENT.whyUs.label}</p>
-                    <h2 className="card-title mt-2 text-base sm:text-lg">{COMPANY_CONTENT.whyUs.title}</h2>
-                    <p className="copy mt-2 max-w-2xl text-sm text-muted">{COMPANY_CONTENT.whyUs.lead}</p>
+                    <h2 className="card-title mt-2">{COMPANY_CONTENT.whyUs.title}</h2>
+                    <p className="panel-lede">{COMPANY_CONTENT.whyUs.lead}</p>
                   </div>
-                  <ul className="depth-feature-list mt-4 min-h-0 flex-1 overflow-hidden">
+                  <ul className="depth-feature-list min-h-0 flex-1 overflow-hidden">
                     {COMPANY_CONTENT.whyUs.points.map((point, index) => (
                       <li key={point.title} className="depth-feature-row">
                         <span className="depth-feature-row__index" aria-hidden>
@@ -111,14 +119,11 @@ export function Company() {
                     <ScrollLink
                       href={primaryCta.href}
                       data-cursor="cta"
-                      className="btn-caps inline-block rounded-full bg-orange px-5 py-2.5 text-xs font-semibold text-on-accent"
+                      className="btn-caps btn-caps--primary"
                     >
                       {COMPANY_CONTENT.close.ctaLabel}
                     </ScrollLink>
-                    <Link
-                      to="/solutions"
-                      className="text-xs font-semibold text-muted underline-offset-4 transition hover:text-orange hover:underline"
-                    >
+                    <Link to="/solutions" className="link-quiet">
                       See Solutions →
                     </Link>
                   </div>
@@ -130,7 +135,7 @@ export function Company() {
                   <div className="flex shrink-0 flex-wrap items-end justify-between gap-3">
                     <div>
                       <p className="stat-label text-orange">Who we buy for</p>
-                      <p className="copy mt-1.5 max-w-xl text-sm text-muted">
+                      <p className="panel-lede">
                         iGaming, fintech, gaming, marketplace — brands that need receipts, not decks.
                       </p>
                     </div>
@@ -156,11 +161,7 @@ export function Company() {
                     ))}
                   </ul>
                   <div className="mt-3 flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
-                    <Link
-                      to="/clients"
-                      data-cursor="cta"
-                      className="btn-caps inline-block rounded-full bg-orange px-5 py-2.5 text-xs font-semibold text-on-accent"
-                    >
+                    <Link to="/clients" data-cursor="cta" className="btn-caps btn-caps--primary">
                       Open clients board
                     </Link>
                   </div>

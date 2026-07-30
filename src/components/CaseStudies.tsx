@@ -42,10 +42,10 @@ export function CaseStudies() {
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               <p className="section-label">{casesPage.label}</p>
-              <h1 className="section-title max-w-2xl">{casesPage.title}</h1>
-              <p className="copy max-w-xl text-muted">{casesPage.description}</p>
+              <h1 className="section-title">{casesPage.title}</h1>
+              <p className="section-description">{casesPage.description}</p>
             </div>
-            <p className="shrink-0 font-mono text-sm font-bold tabular-nums text-muted">
+            <p className="shrink-0 font-mono text-caption font-bold tabular-nums text-muted">
               <span className="text-orange">{caseStudies.length}</span> cases
             </p>
           </div>
@@ -111,7 +111,7 @@ export function CaseStudies() {
             <ScrollLink
               href="/contact"
               data-cursor="cta"
-              className="btn-caps hidden rounded-full bg-orange px-5 py-2.5 text-xs font-semibold text-on-accent sm:inline-block"
+              className="btn-caps btn-caps--primary hidden sm:inline-block"
             >
               Request Pilot
             </ScrollLink>

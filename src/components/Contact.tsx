@@ -125,7 +125,7 @@ export function Contact() {
   };
 
   const ctaRow = [
-    { label: "Request Pilot", href: primaryCta.href },
+    { label: primaryCta.label, href: primaryCta.href },
     { label: "See Cases", href: "/cases" },
     { label: "Solutions", href: "/solutions" },
     { label: "Company", href: "/company" },

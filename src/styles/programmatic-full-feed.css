@@ -40,7 +40,7 @@
   overflow: hidden;
   background: var(--pf-surface);
   color: var(--pf-on);
-  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-feed);
   pointer-events: none;
   display: flex;
   flex-direction: column;

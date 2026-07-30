@@ -27,6 +27,25 @@ html {
   --section-y-statement: clamp(4.5rem, 8vw, 7rem);
   --section-stack-gap: 2.5rem;
 
+  /* ── Spacing scale (4px base) — prefer over ad-hoc rem / Tailwind gaps on brand surfaces ── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --stack-tight: var(--space-2);
+  --stack-snug: var(--space-3);
+  --stack: var(--space-4);
+  --stack-loose: var(--space-6);
+  --viewport-intro-pad-block: 0.65rem 0.5rem;
+  --viewport-tabs-pad-block: var(--space-2);
+  --viewport-panel-pad-top: var(--space-3);
+  --viewport-cta-mt: var(--space-4);
+  --viewport-footnote-mt: var(--space-2);
+
   /* ── Type scale — fluid body, clamped display (one scale site-wide) ── */
   --text-micro: clamp(0.625rem, 0.58rem + 0.2vw, 0.6875rem);
   --text-kicker: clamp(0.6875rem, 0.64rem + 0.22vw, 0.75rem);
@@ -49,6 +68,8 @@ html {
   --tracking-caps: 0.1em;
   --tracking-kicker: 0.12em;
   --tracking-card: 0.04em;
+  --tracking-btn: 0.08em;
+  --text-panel: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);
 
   /* ── Surfaces ── */
   --card-pad: 1.5rem;
@@ -59,6 +80,14 @@ html {
   --radius-lg: 1rem;
   --radius-xl: 1.25rem;
   --radius-pill: 9999px;
+}
+
+@media (min-width: 640px) {
+  :root,
+  [data-theme="dark"],
+  [data-theme="light"] {
+    --viewport-intro-pad-block: 0.85rem 0.65rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -208,12 +237,14 @@ html.is-scrolling .sparkline-live-dot {
 
 /* Legacy upraiser.co.uk: red sign-up → peach-gold hover wash */
 [data-theme="light"] .btn-caps.bg-orange,
+[data-theme="light"] .btn-caps--primary,
 [data-theme="light"] .bg-orange.text-on-accent {
   background-color: var(--theme-accent-secondary);
   color: var(--theme-on-accent);
 }
 
 [data-theme="light"] .btn-caps.bg-orange:hover:not(:disabled),
+[data-theme="light"] .btn-caps--primary:hover:not(:disabled),
 [data-theme="light"] .bg-orange.text-on-accent:hover {
   background-color: var(--theme-accent-light);
   color: var(--theme-fg);

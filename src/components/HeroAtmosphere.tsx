@@ -37,7 +37,8 @@ function prefetchHeroGlb(href: string) {
 
 /**
  * CSS sky paints immediately; WebGL mounts after idle.
- * Prefetch both Everest GLBs so theme toggle does not wait on a cold light download.
+ * Prefetch the *active* theme GLB first so cold Home isn't racing an 11MB light download;
+ * alternate theme (+ Voyager on dark) follows on a later idle so theme toggle still warms.
  */
 export function HeroAtmosphere() {
   const { theme } = useTheme();
@@ -59,18 +60,32 @@ export function HeroAtmosphere() {
       setCanvasReady(true);
     };
 
-    const darkPrefetch = prefetchHeroGlb(MODEL_URL);
-    const lightPrefetch = prefetchHeroGlb(MODEL_URL_LIGHT);
-    const voyagerPrefetch = !isLight ? prefetchHeroGlb(`${VOYAGER_URL}?v=tex6`) : null;
+    const activeHref = isLight ? MODEL_URL_LIGHT : MODEL_URL;
+    const alternateHref = isLight ? MODEL_URL : MODEL_URL_LIGHT;
+    const links: HTMLLinkElement[] = [prefetchHeroGlb(activeHref)];
+    let altIdleId: number | undefined;
+    let altTimer: number | undefined;
+
+    const prefetchAlternate = () => {
+      if (cancelled) return;
+      links.push(prefetchHeroGlb(alternateHref));
+      if (!isLight) links.push(prefetchHeroGlb(`${VOYAGER_URL}?v=tex6`));
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+      altIdleId = window.requestIdleCallback(prefetchAlternate, { timeout: 2800 });
+    } else {
+      altTimer = window.setTimeout(prefetchAlternate, 1600);
+    }
 
     if (typeof window.requestIdleCallback === "function") {
       const id = window.requestIdleCallback(boot, { timeout: 900 });
       return () => {
         cancelled = true;
         window.cancelIdleCallback(id);
-        darkPrefetch.remove();
-        lightPrefetch.remove();
-        voyagerPrefetch?.remove();
+        if (altIdleId !== undefined) window.cancelIdleCallback(altIdleId);
+        if (altTimer !== undefined) window.clearTimeout(altTimer);
+        links.forEach((link) => link.remove());
       };
     }
 
@@ -78,9 +93,9 @@ export function HeroAtmosphere() {
     return () => {
       cancelled = true;
       window.clearTimeout(t);
-      darkPrefetch.remove();
-      lightPrefetch.remove();
-      voyagerPrefetch?.remove();
+      if (altIdleId !== undefined) window.cancelIdleCallback(altIdleId);
+      if (altTimer !== undefined) window.clearTimeout(altTimer);
+      links.forEach((link) => link.remove());
     };
   }, [use3d, isLight]);
 

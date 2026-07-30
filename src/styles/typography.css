@@ -224,13 +224,17 @@
 }
 
 .card-title {
+  font-size: var(--text-panel);
+  font-weight: 700;
+  line-height: var(--leading-snug);
   text-transform: uppercase;
   letter-spacing: var(--tracking-card);
+  color: var(--theme-fg);
 }
 
 .card-kicker {
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-kicker);
   font-size: var(--text-kicker);
   font-weight: 600;
 }
@@ -306,7 +310,9 @@ header nav .nav-link:focus-visible::after {
 }
 
 .btn-caps {
-  letter-spacing: 0.06em;
+  font-size: var(--text-kicker);
+  font-weight: 600;
+  letter-spacing: var(--tracking-btn);
   text-transform: uppercase;
   border-radius: var(--radius-pill);
   transition:
@@ -315,6 +321,18 @@ header nav .nav-link:focus-visible::after {
     background-color 0.25s ease,
     box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     border-color 0.25s ease;
+}
+
+/** Primary solid CTA — viewport + close bands */
+.btn-caps--primary {
+  display: inline-block;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--theme-accent);
+  color: var(--theme-on-accent);
+}
+
+.btn-caps--primary:hover:not(:disabled) {
+  opacity: 0.96;
 }
 
 .btn-caps:hover {
@@ -360,7 +378,7 @@ header nav .nav-link:focus-visible::after {
 .stat-label {
   font-size: var(--text-kicker);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-kicker);
   text-transform: uppercase;
 }
 
@@ -373,20 +391,34 @@ header nav .nav-link:focus-visible::after {
 .footer-heading {
   font-size: var(--text-kicker);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
 }
 
 .link-caps {
   font-size: var(--text-kicker);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-kicker);
   text-transform: uppercase;
 }
 
+/** Quiet text link under viewport CTAs */
+.link-quiet {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--theme-muted);
+  text-underline-offset: 4px;
+  transition: color 0.2s ease;
+}
+
+.link-quiet:hover {
+  color: var(--theme-accent);
+  text-decoration: underline;
+}
+
 .section-description {
-  margin-top: 1rem;
-  max-width: 36rem;
+  margin-top: var(--stack-snug);
+  max-width: var(--content-max-copy);
   font-size: var(--text-body);
   line-height: var(--leading-body);
   color: var(--theme-muted-light);
@@ -395,12 +427,31 @@ header nav .nav-link:focus-visible::after {
 .section-lead {
   max-width: 42rem;
   font-size: var(--text-lead);
-  font-weight: 600;
+  font-weight: 700;
   line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-title);
 }
 
 .copy {
   font-size: var(--text-body);
   line-height: var(--leading-body);
   color: var(--theme-muted-light);
+}
+
+/** Panel body under a tab metaphor — denser than home section copy */
+.panel-lede {
+  margin-top: var(--stack-tight);
+  max-width: var(--content-max-copy);
+  font-size: var(--text-caption);
+  line-height: 1.45;
+  color: var(--theme-muted);
+}
+
+.spec-mono {
+  margin-top: var(--space-1);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: var(--text-caption);
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--theme-fg) 88%, transparent);
 }

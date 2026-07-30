@@ -31,8 +31,8 @@ export function CasesTeaser() {
           title={section.title}
           description={
             mode === "growth"
-              ? "Killer outcomes from live flights — full stories under Cases."
-              : "Audit-ready pipelines in brief — full stories under Cases."
+              ? "Killer outcomes from live flights — Block Blast and more under The Peaks."
+              : "Audit-ready pipelines in brief — full stories under The Peaks."
           }
         />
 

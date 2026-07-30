@@ -80,7 +80,8 @@ export function partnersForSet(set: PartnerLogoSetId) {
 
 /** Pick logo set from pathname + optional expertise pillar. */
 export function partnerSetForRoute(pathname: string, pillar: string | null = null): PartnerLogoSetId {
-  if (pathname.startsWith("/studio")) return "studio";
+  if (pathname.startsWith("/studio") || pathname.startsWith("/craft") || pathname.startsWith("/rigging"))
+    return "studio";
   if (pathname.startsWith("/solutions") || pathname.startsWith("/expertise")) {
     if (pillar === "oem") return "oem";
     if (pillar === "social" || pillar === "creators") return "social";

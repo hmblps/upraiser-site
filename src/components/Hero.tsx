@@ -7,7 +7,7 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SPRING_SOFT } from "../lib/motion";
 import { HeroFlyProvider, useHeroFly } from "../context/HeroFlyContext";
 import { HeroHighlights } from "./apple-preview/HeroHighlights";
-import { heroHighlightsByMode } from "../data/liveContent";
+import { heroHighlightsByMode, heroLedeByMode } from "../data/liveContent";
 import { HeroAtmosphere } from "./HeroAtmosphere";
 import { LenovoTrustStrip } from "./LenovoTrustStrip";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
@@ -134,6 +134,19 @@ function HeroPinnedScene() {
                   </motion.span>
                 ))}
               </h1>
+
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.p
+                  key={mode}
+                  className="hero-lede mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg"
+                  initial={reduced ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduced ? undefined : { opacity: 0, y: -6 }}
+                  transition={HERO_SPRING}
+                >
+                  {heroLedeByMode[mode]}
+                </motion.p>
+              </AnimatePresence>
 
               {isActive("highlights") ? <HeroHighlights /> : null}
             </motion.div>

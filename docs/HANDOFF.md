@@ -2,10 +2,11 @@
 
 > **Purpose:** give another AI (or engineer) complete context to continue — including a **refactor-ready** map of current truth vs debt.  
 > Human summary: [`README.md`](../README.md) · Solutions: [`SOLUTIONS.md`](./SOLUTIONS.md) · Hero 3D: [`HERO.md`](./HERO.md) · Assets: [`ASSETS.md`](./ASSETS.md) · Index: [`README.md`](./README.md).  
-> **Updated:** 29 July 2026  
+> **Updated:** 30 July 2026  
 > **Local path:** `Upraiser New Website Cursor Project`  
 > **Production:** https://upraiser-site.vercel.app  
 > **Target domain:** https://upraiser.co.uk (SPA not on custom DNS yet)  
+> **Brand doctrine:** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md)  
 > **HEAD (ship):** `e8ed2ef` (Solutions harden) · glass+MP4 `71ddab1` · sticky phone `c0572d8` · hero `95bcd27`  
 > **Backups:** branch `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
 
@@ -14,14 +15,15 @@
 ## 0. How to use this document
 
 1. Read **§1–4** (who / dual-mode / **current** page map) before layout or copy edits.  
-2. Edit copy/metrics in `src/data/liveContent.ts` + `src/data/cases.ts` — avoid hardcoding unless Hero slogans.  
-3. Preserve **dual theme = dual narrative** (`light` → growth, `dark` → infrastructure).  
-4. **Do not** commit or deploy unless the human explicitly asks.  
-5. Framer Motion **springs**; honour `prefers-reduced-motion`.  
-6. Keep slogans: **«Charting the Ascent»** · Hero H1 **«We see how stunning / Your rise to the top / can be.»**  
-7. UPRAISER = **agency / traffic operator** — not antifraud SaaS.  
-8. UI polish → **refero-design** skill (research-first).  
-9. Before a big refactor, read **§20 Refactor readiness** and trust **`App.tsx`** over stale comments.
+2. **Brand spirit (locked):** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md) + [`.agents/product-marketing.md`](../.agents/product-marketing.md) — expedition IA, sacred CTAs/H1, Growth ↔ Infrastructure.  
+3. Edit copy/metrics in `src/data/liveContent.ts` + `src/data/cases.ts` + `innerPagesData.ts` — avoid hardcoding unless Hero slogans.  
+4. Preserve **dual theme = dual narrative** (`light` → growth, `dark` → infrastructure).  
+5. **Do not** commit or deploy unless the human explicitly asks.  
+6. Framer Motion **springs**; honour `prefers-reduced-motion`.  
+7. Keep slogans: **«Charting the Ascent»** · Hero H1 **«We see how stunning / Your rise to the top / can be.»** · **Request Pilot** · **Ready to be Upraised?**  
+8. UPRAISER = **agency / traffic operator** — not antifraud SaaS.  
+9. UI polish → **refero-design** skill (research-first).  
+10. Before a big refactor, read **§20 Refactor readiness** and trust **`App.tsx`** over stale comments.
 
 ---
 
@@ -93,38 +95,40 @@ Mode-aware bodies: **`ModeContentTransition`**. Header: frosted glass.
 
 ---
 
-## 4. Site map — Solutions + Clarity / Studio IA (29 Jul 2026)
+## 4. Site map — expedition IA (30 Jul 2026)
 
-**Source of truth:** `src/App.tsx` + `navLinks` in `liveContent.ts`.
+**Source of truth:** `src/App.tsx` + `navLinks` in `liveContent.ts`.  
+**Brand doctrine:** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md).
 
-| Route | Role | Dual-mode? |
-|-------|------|------------|
-| `/` | Pitch + killer folds | **Yes** |
-| `/solutions` | Format lanes + sticky phone glass | Soft (chassis + copy) |
-| `/clarity` | Clarity / measurement story | Soft |
-| `/studio` | Studio / craft | Soft |
-| `/clients` | Client roster | Soft |
-| `/company` | About / story / footprint | Soft |
-| `/cases` · `/cases/:slug` | Archive + detail | Soft |
-| `/contact` | Request Pilot | No |
-| `/privacy` · `/terms` | Legal | No |
+| Route | Nav label | Role | Dual-mode? |
+|-------|-----------|------|------------|
+| `/` | — | Pitch + killer folds | **Yes** |
+| `/solutions` | **The Routes** | Format lanes + sticky phone glass | Soft (chassis + copy) |
+| `/studio` | **The Gear** | Tech kit: Fixed Line · Oxygen · Map (`GEAR_CONTENT`) | **Yes** (Growth scale vs Infra audit) |
+| `/craft` | **The Craft** | Full-spectrum: Creative Lab · Proprietary (`CRAFT_CONTENT`) | **Yes** |
+| `/clients` | — | Client roster | Soft |
+| `/company` | **The Expedition** | Leaders / story / Why Us | Soft |
+| `/cases` · `/cases/:slug` | **The Peaks** | Archive + detail | Soft |
+| `/contact` | **Request Pilot** | Final push | No |
+| `/privacy` · `/terms` | Legal | Legal | No |
 
-**Nav:** Solutions · Clarity · Studio · Cases · About (`/company`) · theme · Request Pilot.
+**Nav:** The Routes · The Gear · The Craft · The Peaks · The Expedition · theme · Request Pilot.
 
 **Legacy redirects (keep for SEO until refactor decides):**
 
 | From | To |
-|------|-----|
+|------|----|
 | `/expertise` | `/solutions` |
-| `/measurement`, `/technology` | Clarity / Solutions helpers |
+| `/clarity`, `/measurement`, `/technology` | `/solutions` helpers / retired Clarity |
 | `/partners` | `/solutions?channel=oem#channels` |
 | `/about`, `/how-we-work`, `/resources*` | `/company` |
 
 **Flows:**
-- Advertiser: `/` → `/solutions` → `/contact`
-- Clarity depth: `/` → `/clarity` → `/contact`
-- Studio: `/` → `/studio` → `/contact`
-- Proof: `/` → `/cases` → `/cases/:slug` → `/contact`
+- Advertiser: `/` → `/solutions` (Routes) → `/contact`
+- Gear depth: `/` → `/studio` → `/contact`
+- Craft: `/` → `/craft` → `/contact`
+- Proof: `/` → `/cases` (Peaks) → `/cases/:slug` → `/contact`
+- Expedition: `/` → `/company` → `/contact`
 
 **Solutions detail:** [`SOLUTIONS.md`](./SOLUTIONS.md).
 
@@ -332,18 +336,18 @@ Prompt assumptions to **correct** before coding:
 
 ## 15. Product direction — IA (shipped)
 
-Solutions restored as primary traffic surface; Clarity / Studio remain depth routes.
+Expedition Basecamp IA. Doctrine: [`BRAND-ASCENT.md`](./BRAND-ASCENT.md).
 
 | Route | Content |
 |-------|---------|
-| `/` | Hero 3D → Audience → Difference → Process → Channels → Cases teaser → Promise → Pilot |
-| `/solutions` | Sticky format lanes + 3D/CSS phone (App Growth / OEM & CTV) |
-| `/clarity` | Clarity / measurement |
-| `/studio` | Studio craft |
-| `/company` | About / footprint / story |
+| `/` | Hero 3D → ascent folds → Peaks teaser → Promise → Pilot |
+| `/solutions` | **The Routes** — sticky format glass |
+| `/studio` | **The Gear** — Fixed Line · Oxygen · Map (`GEAR_CONTENT`, dual-mode) |
+| `/craft` | **The Craft** — Creative Lab · Proprietary Layer |
+| `/company` | **The Expedition** — Leaders / Why Us / footprint |
 | `/clients` | Clients |
-| `/cases` | Archive |
-| `/contact` | Form |
+| `/cases` | **The Peaks** |
+| `/contact` | Request Pilot |
 
 ---
 
@@ -429,10 +433,11 @@ Use this as the backlog when the owner says “рефактор”.
 
 | Item | Why |
 |------|-----|
-| `src/pages/MeasurementPage.tsx`, `AboutPage.tsx` (if unused) | Superseded by Clarity / Company |
-| Local `ascent-bird.glb` under assets/public | Unused; bird is procedural |
+| ~~`AboutPage.tsx`, `ExpertisePage.tsx`~~ | **Removed** on `001-load-speed-refactor` (dead; redirects remain) |
+| ~~`PixelSnow`~~ | **Removed** (unused) |
+| Local `ascent-bird*.glb` under assets | Unused; bird is procedural — keep gitignored `*.src.glb` |
 | `_local_drafts/` | Already outside `src`; optional purge |
-| Scratch `.tmp-*` / unused phone GLBs / HyperFrames thumbs | Local only — do not ship |
+| Scratch `.tmp-*` / `videos/` (HyperFrames) | **gitignored** — do not ship |
 
 ### B. Consolidate
 

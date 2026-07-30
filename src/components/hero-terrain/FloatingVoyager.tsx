@@ -172,4 +172,4 @@ export function FloatingVoyager() {
   );
 }
 
-useGLTF.preload(VOYAGER_SRC);
+// Voyager preload is owned by HeroTerrainCanvas (dark theme idle) — avoid light-theme fetch.

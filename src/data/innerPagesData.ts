@@ -1,17 +1,14 @@
 /**
  * Inner pages — viewport shells (no document scroll). Home keeps cinematic scroll.
  *
- * IA:
- *  /solutions  — flat channel rail (programmatic, OEM, performance, …)
- *  /studio     — Creative performance (Craft · Formats · Production)
- *  /cases      — horizontal deck
- *  /clients    — brand proof board (also About → Clients)
- *  /company    — About (Story · Clients · Compliance · Footprint · FAQ)
- *  /contact    — form (untouched)
- *
- * Panel recipe: promise → 3 bullets → proof widget → one CTA
- * MagicUI only: Expertise Beam · Studio Bento
- * Skip: SEO / SEM / ASO / retail media / resources hub / Partners mega-page
+ * IA (expedition Basecamp):
+ *  /solutions  — The Routes (format lanes + glass)
+ *  /studio     — The Gear (Fixed Line · Oxygen · Map)
+ *  /craft      — The Craft (Creative Lab · Proprietary Layer)
+ *  /cases      — The Peaks
+ *  /clients    — brand proof board
+ *  /company    — The Expedition
+ *  /contact    — Request Pilot
  */
 
 export type ExpertiseClusterId =
@@ -271,35 +268,43 @@ export const EXPERTISE_CONTENT = {
 
 export const COMPANY_CONTENT = {
   hero: {
-    badge: "About",
-    h1: "UPRAISER Agency LLP",
+    badge: "The Expedition",
+    h1: "The Expedition Leaders.",
     description:
-      "London-based performance agency. We buy and reconcile mobile growth so Ad Ops and finance read the same file.",
+      "We didn't just join the AdTech industry; we mapped it. Since 2017, UPRAISER has been a convergence of different worlds.",
   },
 
-  positioningLead: "Built from logs.",
-  positioningAccent: "Built for trust.",
+  positioningLead: "We don't sell the view from the top.",
+  positioningAccent: "We build the path that gets You there.",
+
+  expedition: {
+    synergy:
+      "Our squad is a synergy of operators: Engineers who wire the pipes, Developers who build the gear, Economists who balance the P&L, and Creatives who understand human intent.",
+    uniqueness:
+      "We don't have account managers to hide behind. You work directly with the people who built the tools. This synergy is why we see the terrain differently — and why the numbers never disagree.",
+    proofLine: "Run on PROOF.",
+  },
 
   whyUs: {
     label: "Why Us",
-    title: "Direct pipe. Not resale.",
-    lead: "Finance needs a buying route that climbs with spend — direct supply, pre-bid checks, caps on revenue events.",
+    title: "Direct Pipe. Not Resale.",
+    lead: "We are operators, not account managers. We don't sell the view; we build the path.",
     points: [
       {
         title: "Direct source access",
-        text: "Contracts on the publisher path. Fewer hops from bid to device event.",
+        text: "You work with the traders who optimize Your spend — contracts on the publisher path, fewer hops from bid to device event.",
       },
       {
         title: "Pre-bid verification",
-        text: "Bots scored before auction close. Clean S2S into Your MMP — not after invoice.",
+        text: "Engineers who wire Your logs. Bots scored before auction close. Clean S2S into Your MMP — not after invoice.",
       },
       {
         title: "Buying pipe that holds",
         text: "Account and supply continuity so volume ramps without the mid-flight cliff.",
       },
       {
-        title: "Payback-tuned caps",
-        text: "Bids follow ROAS / payback You already track — not CPI vanity.",
+        title: "Clarity over smoke",
+        text: "In an industry of smoke and mirrors, we bring CLARITY — bids follow ROAS / payback You already track.",
       },
     ],
   },
@@ -325,8 +330,8 @@ export const COMPANY_CONTENT = {
     {
       mark: "2017",
       year: 2017,
-      title: "Founded in London",
-      body: "Ad Ops engineers tired of post-flight fights. Built so bid-time and bill-time agree — UK entity, US-registered roots.",
+      title: "We mapped the industry",
+      body: "We didn't just join AdTech; we mapped it. Since 2017, UPRAISER has been a convergence of different worlds — UK entity, operator roots.",
     },
     {
       mark: "2019",
@@ -344,7 +349,7 @@ export const COMPANY_CONTENT = {
       mark: "Now",
       year: 2026,
       title: "One desk, receipts attached",
-      body: "App Growth on one desk — Programmatic, Social, Creators, CTV, OEM included. You talk to the buyer on the flight.",
+      body: "App Growth on one desk — Programmatic, Social, Creators, CTV, OEM included. You talk to the people who built the tools.",
     },
   ],
 
@@ -357,7 +362,7 @@ export const COMPANY_CONTENT = {
 
   philosophy: {
     title: "Why we built UPRAISER",
-    text: "The vendor stack for mobile growth was fragmented — DSPs, social, OEM, and a month-end fight with finance. We built one buying desk with receipts.",
+    text: "We don't sell the view from the top. We build the path that gets You there.",
   },
 
   /** London HQ + markets where traffic actually runs (from live cases — not fake offices). */
@@ -410,88 +415,180 @@ export const COMPANY_CONTENT = {
     {
       question: "Do you run Paid Social and Creators too?",
       answer:
-        "Yes — Social and Creators are tabs on Solutions. Both cap to the same MMP events. Studio builds the creatives into that brief.",
+        "Yes — Social and Creators live on The Routes. Both cap to the same MMP events. The Gear wires trails and scoring; The Craft dresses the flight with creatives and proprietary pipelines.",
     },
   ],
 
   close: {
-    title: "Meet the team on a pilot",
-    description: "Vertical, GEO, KPI event — we reply with a scoped path.",
+    title: "Ready to be Upraised?",
+    description: "Brief the route: vertical, GEO, KPI event — we reply with a scoped path.",
     ctaLabel: "Request Pilot",
   },
 } as const;
 
-/* ——— Studio (creative services inside the performance machine) ——— */
+/* ——— The Gear (/studio) — tech stack as expedition equipment ——— */
 
-export type StudioTabId = "craft" | "formats" | "production";
+export type GearTabId = "fixed-line" | "oxygen" | "map";
 
-export const STUDIO_CONTENT = {
+export const GEAR_CONTENT = {
   hero: {
-    badge: "Creative performance",
-    h1: "Creatives that survive the auction.",
+    badge: "The Gear",
+    h1: "Precision Gear for the Death Zone.",
+  },
+  byMode: {
+    growth: {
+      lead: "Reliability at altitude requires equipment that scales with You. We don't use off-the-shelf tools; we build the hardware Your ascent depends on.",
+    },
+    infrastructure: {
+      lead: "Reliability at altitude requires equipment that never fails. We don't use off-the-shelf tools; we build the hardware Your audit depends on.",
+    },
   },
   tabs: [
-    { id: "craft", label: "Craft" },
-    { id: "formats", label: "Formats" },
-    { id: "production", label: "Production" },
+    { id: "fixed-line", label: "Fixed Line" },
+    { id: "oxygen", label: "Oxygen" },
+    { id: "map", label: "The Map" },
   ] as const,
-  craft: {
-    lead: "Built for the KPI event — not moodboards.",
+  pieces: {
+    "fixed-line": {
+      mark: "01",
+      title: "The Fixed Line",
+      kicker: "SDK Trails",
+      growth: {
+        body: "Trace every install back to the raw device log — then scale the same transparent path. Supply that matches Your attribution as volume climbs.",
+        spec: "Factory → postback trails built for ramp, not one-off demos.",
+      },
+      infrastructure: {
+        body: "Trace every install back to the raw device log. We provide a transparent supply path that matches Your attribution data to the penny.",
+        spec: "Device-level SDK trails Ad Ops can export into the MMP.",
+      },
+    },
+    oxygen: {
+      mark: "02",
+      title: "The Oxygen",
+      kicker: "0.4ms Bid Scoring",
+      growth: {
+        body: "Performance requires speed at scale. Our p99 scoring filters fraud in 0.4ms — before the bid — so velocity never breathes bad air.",
+        spec: "Clean inventory capacity when spend doubles.",
+      },
+      infrastructure: {
+        body: "Performance requires speed. Our p99 scoring filters fraud in 0.4ms — before the bid is even placed. Clean air only.",
+        spec: "0.4ms p99 · fraud screened pre-auction.",
+      },
+    },
+    map: {
+      mark: "03",
+      title: "The Map",
+      kicker: "180+ Device Signals",
+      growth: {
+        body: "High-resolution visibility across markets. We analyze 180+ signals to verify human intent so You scale routes — not ghosts.",
+        spec: "Signal density for GEO expansion without blind spend.",
+      },
+      infrastructure: {
+        body: "High-resolution visibility. We analyze 180+ signals to verify human intent, ensuring You never pay for ghosts.",
+        spec: "180+ signals scored before clear.",
+      },
+    },
+  },
+  close: {
+    ctaLabel: "Request Pilot",
+    contactIntent: "brand",
+    footnote: "Gear ships into The Routes — same control plane as the buy.",
+  },
+} as const;
+
+/** @deprecated Use GEAR_CONTENT — Studio IA is now The Gear */
+export const STUDIO_CONTENT = {
+  hero: {
+    badge: GEAR_CONTENT.hero.badge,
+    h1: GEAR_CONTENT.hero.h1,
+  },
+  tabs: GEAR_CONTENT.tabs,
+  close: GEAR_CONTENT.close,
+} as const;
+
+export type StudioTabId = GearTabId;
+
+/* ——— The Craft (/craft) — full-spectrum creative + proprietary ——— */
+
+export type CraftTabId = "creative-lab" | "proprietary";
+
+export const CRAFT_CONTENT = {
+  hero: {
+    badge: "The Craft",
+    h1: "The Craft: Where Logic Meets Art.",
+  },
+  byMode: {
+    growth: {
+      lead: "We write code and draw meaning. Our craft is not buying inventory — it is building the tools for it. Proprietary SDK trails protect Your budget; our creative studio turns reach into measurable revenue.",
+    },
+    infrastructure: {
+      lead: "We write code and draw meaning. Our craft is not buying inventory — it is building the tools for it. Proprietary SDK trails defend Your invoice; our creative studio turns reach into a trail Ad Ops can audit.",
+    },
+  },
+  tabs: [
+    { id: "creative-lab", label: "Creative Lab" },
+    { id: "proprietary", label: "Proprietary Layer" },
+  ] as const,
+  creativeLab: {
+    metaphor: "Bright markers on the trail.",
+    byMode: {
+      growth: {
+        lead: "Visual triggers for aggressive verticals — iGaming, fintech — where a miss costs attention in 0.2 seconds. Creatives that hit psychology, then scale with the buy.",
+      },
+      infrastructure: {
+        lead: "Visual triggers for aggressive verticals — iGaming, fintech — where a miss costs attention in 0.2 seconds. Creatives that hit psychology and leave a measurable trail into Your MMP.",
+      },
+    },
     items: [
       {
         title: "Performance creatives",
-        description: "UGC, static, and motion cut for FTD, registration, or subscription.",
-        span: "",
+        description: "UGC, static, and motion cut for FTD, registration, or subscription — not moodboards.",
       },
       {
         title: "Landing & store assets",
-        description: "Store screens, LPs, and end-cards that match the bid thesis.",
-        span: "",
+        description: "Store screens, LPs, and end-cards that match the bid thesis before the flight.",
       },
       {
         title: "Channel packs",
-        description: "Meta, TikTok, CTV, OEM — sized for each surface before the flight.",
-        span: "",
-      },
-      {
-        title: "Brand systems for UA",
-        description: "Lightweight kits so every GEO launch stays on-voice.",
-        span: "md:col-span-2",
-      },
-      {
-        title: "Creative testing loops",
-        description: "Hypothesis → flight → kill/scale, wired to MMP receipts.",
-        span: "",
-      },
-      {
-        title: "Pitch & sales kits",
-        description: "One-pagers Ad Ops and finance can read the same way.",
-        span: "",
+        description: "Meta, TikTok, CTV, OEM — sized for each surface so the marker stays visible at altitude.",
       },
     ],
   },
-  formats: {
-    lead: "Formats we ship into the buying lanes.",
-    rows: [
-      { label: "Social & UGC", detail: "Hook-first cuts, native captions, A/B batches" },
-      { label: "Playables & end-cards", detail: "Store conversion after the install event" },
-      { label: "CTV & premium", detail: "Brand-safe frames with performance CTAs" },
-      { label: "OEM surfaces", detail: "ROM / PAI constraints respected end-to-end" },
-    ],
-  },
-  production: {
-    lead: "How studio plugs into Expertise.",
-    steps: [
-      { title: "Brief from the buyer", body: "GEO, event, cap — same sheet the media team flies." },
-      { title: "Build in the lane", body: "Assets land where the desk already buys." },
-      { title: "Prove on receipts", body: "Variants inherit the reconciliation file." },
+  proprietary: {
+    metaphor: "Belay lines on the pitch.",
+    byMode: {
+      growth: {
+        lead: "Not off-the-shelf SaaS. Homegrown data pipelines that reconcile MMP and device logs in real time — so invoice defense scales inside Your traffic.",
+      },
+      infrastructure: {
+        lead: "Not off-the-shelf SaaS. Homegrown data pipelines that reconcile MMP and device logs in real time. We build invoice defense inside Your traffic.",
+      },
+    },
+    points: [
+      {
+        title: "SDK trails",
+        text: "Factory → postback paths You can export — the same Fixed Line story as The Gear, wired into creative flights.",
+      },
+      {
+        title: "Pre-bid filtration",
+        text: "Score before the bid. Clean air into the auction so creatives never spend on ghosts.",
+      },
+      {
+        title: "MMP parity",
+        text: "Device logs and media bill agree before month-end — one file Ad Ops and finance can both pull.",
+      },
     ],
   },
   close: {
-    ctaLabel: "Brief the studio",
+    ctaLabel: "Request Pilot",
     contactIntent: "studio",
+    footnote: "Craft dresses The Routes — creatives and code on one ascent line.",
   },
 } as const;
+
+/** @deprecated Use CRAFT_CONTENT — The Rigging renamed to The Craft */
+export const RIGGING_CONTENT = CRAFT_CONTENT;
+export type RiggingTabId = CraftTabId;
 
 /* ——— Clients (Saatchi-style proof board) ——— */
 
