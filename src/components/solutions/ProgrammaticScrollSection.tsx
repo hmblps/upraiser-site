@@ -149,7 +149,7 @@ export function ProgrammaticScrollSection({
     <div
       ref={sectionRef}
       className="prog-scroll-outer"
-      style={{ height: `calc(100vh + ${totalVirtual}px)` }}
+      style={{ height: `calc(100dvh + ${totalVirtual}px)` }}
       aria-label="Ad formats"
     >
       <div className="prog-scroll-sticky">

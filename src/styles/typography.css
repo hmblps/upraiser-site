@@ -170,8 +170,10 @@
   transition: border-color 0.25s ease;
 }
 
-.tilt-surface:hover {
-  border-color: color-mix(in srgb, var(--theme-accent) 32%, var(--theme-border));
+@media (hover: hover) and (pointer: fine) {
+  .tilt-surface:hover {
+    border-color: color-mix(in srgb, var(--theme-accent) 32%, var(--theme-border));
+  }
 }
 
 /* Hero stat ghosts — frameless, chart-ghost DNA: big contrast number + caps label.
@@ -304,9 +306,14 @@ header nav .nav-link::after {
   transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-header nav .nav-link:hover::after,
 header nav .nav-link:focus-visible::after {
   transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  header nav .nav-link:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 .btn-caps {
@@ -325,23 +332,27 @@ header nav .nav-link:focus-visible::after {
 
 /** Primary solid CTA — viewport + close bands */
 .btn-caps--primary {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.625rem 1.25rem;
   background-color: var(--theme-accent);
   color: var(--theme-on-accent);
 }
 
-.btn-caps--primary:hover:not(:disabled) {
-  opacity: 0.96;
-}
-
-.btn-caps:hover {
-  transform: scale(1.02);
-  opacity: 0.96;
-}
-
 .btn-caps:active {
   transform: scale(0.985);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-caps--primary:hover:not(:disabled) {
+    opacity: 0.96;
+  }
+
+  .btn-caps:hover {
+    transform: scale(1.02);
+    opacity: 0.96;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -360,9 +371,11 @@ header nav .nav-link:focus-visible::after {
   -webkit-backdrop-filter: blur(10px);
 }
 
-.btn-secondary:hover {
-  border-color: color-mix(in srgb, var(--theme-fg) 38%, var(--theme-border));
-  background-color: color-mix(in srgb, var(--theme-bg-card) 94%, transparent);
+@media (hover: hover) and (pointer: fine) {
+  .btn-secondary:hover {
+    border-color: color-mix(in srgb, var(--theme-fg) 38%, var(--theme-border));
+    background-color: color-mix(in srgb, var(--theme-bg-card) 94%, transparent);
+  }
 }
 
 [data-theme="light"] .btn-secondary {
@@ -370,9 +383,11 @@ header nav .nav-link:focus-visible::after {
   background-color: color-mix(in srgb, var(--theme-bg-elevated) 90%, transparent);
 }
 
-[data-theme="light"] .btn-secondary:hover {
-  border-color: color-mix(in srgb, var(--theme-fg) 28%, var(--theme-border));
-  background-color: var(--theme-bg-elevated);
+@media (hover: hover) and (pointer: fine) {
+  [data-theme="light"] .btn-secondary:hover {
+    border-color: color-mix(in srgb, var(--theme-fg) 28%, var(--theme-border));
+    background-color: var(--theme-bg-elevated);
+  }
 }
 
 .stat-label {
@@ -411,9 +426,11 @@ header nav .nav-link:focus-visible::after {
   transition: color 0.2s ease;
 }
 
-.link-quiet:hover {
-  color: var(--theme-accent);
-  text-decoration: underline;
+@media (hover: hover) and (pointer: fine) {
+  .link-quiet:hover {
+    color: var(--theme-accent);
+    text-decoration: underline;
+  }
 }
 
 .section-description {

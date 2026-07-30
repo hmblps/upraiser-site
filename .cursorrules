@@ -1,0 +1,30 @@
+# CROSS-PLATFORM & CROSS-DEVICE FRONTEND RULES
+
+## 1. Layout & Viewport (все экраны и ОС)
+
+- Используй `100dvh` вместо `100vh` для корректной высоты на iOS Safari и Android Chrome.
+- Учитывай физические вырезы экранов (Safe Areas): `env(safe-area-inset-top)`, `env(safe-area-inset-bottom)`, `env(safe-area-inset-left)`, `env(safe-area-inset-right)` для фиксированных элементов (шапки, футеры, плашки).
+- Используй гибкие размеры через CSS `clamp()`, `rem` и `flex`/`grid`. Избегай жёсткого хардкода пикселей в ширине и высоте контейнеров.
+
+## 2. Touch & Pointer Interaction (тач + мышь + трекпад)
+
+- Оборачивай ВСЕ стили наведения в `@media (hover: hover) and (pointer: fine) { ... }`, чтобы `:hover` не «залипал» на тач-экранах iOS и Android.
+- Назначай `touch-action: manipulation;` для кликабельных элементов, чтобы убрать 300ms задержку на мобильных.
+- Используй `user-select: none;` на кнопках, иконках и интерактивных карточках, чтобы избежать случайного выделения текста при быстрых тапах.
+- Для сложного интерактива (свайпы, перетаскивание) используй Pointer Events (`onPointerDown`, `onPointerMove`, `onPointerUp`) вместо устаревших Touch/Mouse events.
+
+## 3. Touch Targets & Accessibility
+
+- Минимальный размер интерактивной зоны (кнопки, ссылки, иконки) для тач-устройств — **44×44px** (`min-width: 44px; min-height: 44px;`). Если иконка меньше, увеличивай кликабельную зону через `padding` или `::before` / `::after`.
+- Используй `:focus-visible` вместо `:focus`, чтобы рамка фокуса появлялась только при клавиатурной навигации, не при кликах мыши или тапах.
+
+## 4. Performance & Scrolling
+
+- Используй `overscroll-behavior: contain;` для модалок, выпадающих меню и внутренних скролл-зон, чтобы предотвратить «резиновый» проскролл всей страницы на iOS.
+- Назначай `-webkit-overflow-scrolling: touch;` для плавного инертного скролла на мобильных Safari.
+
+## UPRAISER context
+
+- Сохраняй dual theme (Growth ↔ Infrastructure), Framer Motion `type: "spring"`, и expedition IA (Routes / Gear / Craft / Peaks / Expedition).
+- Не ломай Everest hero и Solutions glass (still → MP4).
+- Copy SOT: `src/data/liveContent.ts`, `src/data/innerPagesData.ts`; brand doctrine: `docs/BRAND-ASCENT.md`.

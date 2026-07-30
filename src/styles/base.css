@@ -12,7 +12,8 @@ html {
 [data-theme="dark"],
 [data-theme="light"] {
   /* ── Layout ── */
-  --site-header-height: 3.5rem;
+  --site-header-bar: 3.5rem;
+  --site-header-height: calc(var(--site-header-bar) + env(safe-area-inset-top, 0px));
   --hero-content-gap: clamp(0.35rem, 1.2vh, 0.85rem);
   --scroll-sticky-top: calc(var(--site-header-height) + 1.25rem);
   --scroll-margin-section: calc(var(--site-header-height) + 1.5rem);
@@ -103,7 +104,7 @@ html {
   :root,
   [data-theme="dark"],
   [data-theme="light"] {
-    --site-header-height: 3.75rem;
+    --site-header-bar: 3.75rem;
     --section-stack-gap: 3.5rem;
     --section-y: clamp(5rem, 8vw, 7rem);
     --section-y-dense: clamp(3.25rem, 5vw, 5.5rem);
@@ -243,11 +244,13 @@ html.is-scrolling .sparkline-live-dot {
   color: var(--theme-on-accent);
 }
 
-[data-theme="light"] .btn-caps.bg-orange:hover:not(:disabled),
-[data-theme="light"] .btn-caps--primary:hover:not(:disabled),
-[data-theme="light"] .bg-orange.text-on-accent:hover {
-  background-color: var(--theme-accent-light);
-  color: var(--theme-fg);
+@media (hover: hover) and (pointer: fine) {
+  [data-theme="light"] .btn-caps.bg-orange:hover:not(:disabled),
+  [data-theme="light"] .btn-caps--primary:hover:not(:disabled),
+  [data-theme="light"] .bg-orange.text-on-accent:hover {
+    background-color: var(--theme-accent-light);
+    color: var(--theme-fg);
+  }
 }
 
 .contact-field:focus-visible {
@@ -459,25 +462,27 @@ header nav .nav-link:focus-visible::after {
     background-color 0.4s ease;
 }
 
-.card-lift:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--theme-card-hover-mid) 26%, transparent);
-  box-shadow:
-    0 10px 32px var(--theme-card-hover-shadow),
-    0 0 0 1px color-mix(in srgb, var(--theme-card-hover-mid) 12%, transparent);
-}
+@media (hover: hover) and (pointer: fine) {
+  .card-lift:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--theme-card-hover-mid) 26%, transparent);
+    box-shadow:
+      0 10px 32px var(--theme-card-hover-shadow),
+      0 0 0 1px color-mix(in srgb, var(--theme-card-hover-mid) 12%, transparent);
+  }
 
-.card-lift.bg-bg-card:hover {
-  background-color: var(--theme-card-hover-gold);
-  border-color: var(--theme-card-hover-border);
-  box-shadow:
-    0 12px 30px var(--theme-card-hover-shadow),
-    0 0 0 1px color-mix(in srgb, var(--theme-card-hover-mid) 20%, transparent);
-}
+  .card-lift.bg-bg-card:hover {
+    background-color: var(--theme-card-hover-gold);
+    border-color: var(--theme-card-hover-border);
+    box-shadow:
+      0 12px 30px var(--theme-card-hover-shadow),
+      0 0 0 1px color-mix(in srgb, var(--theme-card-hover-mid) 20%, transparent);
+  }
 
-.card-lift.bg-bg-card:hover [class*="bg-orange/"],
-.card-lift.bg-bg-card:hover [class*="bg-magenta/"] {
-  background-color: color-mix(in srgb, var(--theme-card-hover-mid) 14%, var(--theme-bg-card)) !important;
+  .card-lift.bg-bg-card:hover [class*="bg-orange/"],
+  .card-lift.bg-bg-card:hover [class*="bg-magenta/"] {
+    background-color: color-mix(in srgb, var(--theme-card-hover-mid) 14%, var(--theme-bg-card)) !important;
+  }
 }
 
 main [id] {

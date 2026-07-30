@@ -1,0 +1,112 @@
+/**
+ * Cross-platform foundation — .cursorrules
+ * Safe areas, touch targets, hover gating helpers, scroll containment.
+ */
+
+:root,
+[data-theme="dark"],
+[data-theme="light"] {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --touch-min: 2.75rem; /* 44px */
+}
+
+/* Fixed chrome — notches / home indicator */
+.site-header {
+  padding-top: var(--safe-top);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+.site-menu {
+  top: calc(var(--site-header-height) + 0.65rem);
+  right: max(1rem, var(--safe-right));
+  max-height: min(70dvh, calc(100dvh - var(--site-header-height) - var(--safe-bottom) - 1.5rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.site-menu-backdrop {
+  overscroll-behavior: contain;
+}
+
+/* Interactive defaults — buttons, CTAs, icon controls, tabs */
+button,
+[role="button"],
+.btn-caps,
+.btn-secondary,
+.nav-link,
+.slide-tab,
+.site-menu-trigger,
+.site-menu__close,
+.site-menu__link,
+.site-menu__cta,
+.locale-switcher__trigger,
+.header-brand,
+.link-quiet,
+.touch-target {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ≥44×44 hit area — pad small controls without growing visual chrome */
+.site-menu-trigger,
+.site-menu__close,
+.locale-switcher__trigger,
+.header-brand,
+.theme-toggle,
+.touch-target {
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+}
+
+.btn-caps,
+.btn-caps--primary,
+.btn-secondary {
+  min-height: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.slide-tab {
+  min-height: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-link {
+  min-height: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Nested scroll regions (viewport panels, carousels, menus) */
+.viewport-page__panel,
+.cases-carousel,
+.locale-switcher__menu,
+.case-detail-modal__body {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Contact / forms — avoid layout jump when mobile keyboard opens */
+.contact-field,
+input,
+textarea,
+select {
+  font-size: max(1rem, 16px); /* iOS zoom lock */
+}
+
+/* Utility: fine-pointer hover only (prefer this over bare :hover in new CSS) */
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+}

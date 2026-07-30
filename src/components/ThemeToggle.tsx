@@ -16,7 +16,7 @@ export function ThemeToggle() {
       whileHover={reduced ? undefined : { scale: 1.06 }}
       whileTap={reduced ? undefined : { scale: 0.94 }}
       transition={SPRING}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-border/80 text-fg transition-colors hover:border-orange/40 hover:bg-bg-card/60"
+      className="theme-toggle flex h-11 w-11 items-center justify-center rounded-full border border-border/80 text-fg transition-colors [@media(hover:hover)_and_(pointer:fine)]:hover:border-orange/40 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-bg-card/60"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       <motion.span

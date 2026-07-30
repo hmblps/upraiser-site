@@ -9,7 +9,7 @@
 .prog-scroll-sticky {
   position: sticky;
   top: var(--site-header-height, 72px);
-  height: calc(100vh - var(--site-header-height, 72px));
+  height: calc(100dvh - var(--site-header-height, 72px));
   display: flex;
   flex-direction: column;
   justify-content: stretch;
@@ -96,7 +96,7 @@
 .prog-scroll-canvas {
   width: 100%;
   height: clamp(420px, 65vh, 750px);
-  max-height: min(750px, calc(100vh - var(--site-header-height, 72px) - 7.5rem));
+  max-height: min(750px, calc(100dvh - var(--site-header-height, 72px) - 7.5rem));
   min-height: 420px;
   cursor: grab;
   align-self: center;
@@ -233,7 +233,7 @@
 
 .prog-css-phone--desktop {
   height: clamp(420px, 65vh, 750px);
-  max-height: min(750px, calc(100vh - var(--site-header-height, 72px) - 7.5rem));
+  max-height: min(750px, calc(100dvh - var(--site-header-height, 72px) - 7.5rem));
   min-height: 420px;
   width: auto;
   max-width: min(100%, 22.5rem);

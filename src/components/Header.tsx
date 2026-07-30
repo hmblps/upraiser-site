@@ -29,10 +29,10 @@ export function Header() {
   return (
     <>
       <header className="site-header fixed inset-x-0 top-0 z-[100] isolate">
-        <div className="header-bar page-container flex h-[var(--site-header-height)] w-full items-center justify-between">
+        <div className="header-bar page-container flex h-[var(--site-header-bar)] w-full items-center justify-between">
           <ScrollLink
             href="/"
-            className="header-brand flex items-center rounded-[var(--radius-sm)] transition-opacity hover:opacity-90"
+            className="header-brand flex items-center rounded-[var(--radius-sm)] transition-opacity [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-90"
             aria-label="UPRAISER home"
           >
             <img src="/upraiser-logo.png" alt="" className="h-9 w-9 object-contain" />

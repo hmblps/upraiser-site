@@ -896,8 +896,14 @@ html.viewport-route body {
   transition: color 0.2s ease;
 }
 
-.viewport-page__footnote a:hover {
+.viewport-page__footnote a:focus-visible {
   color: var(--theme-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .viewport-page__footnote a:hover {
+    color: var(--theme-accent);
+  }
 }
 
 .viewport-page .depth-feature-list {
