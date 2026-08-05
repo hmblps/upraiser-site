@@ -155,7 +155,7 @@ function HeroPinnedScene() {
               <p className="section-label hero-fly-label">UPRAISER · Charting the Ascent</p>
               <div
                 ref={setStatsRef}
-                className="hero-stats -mx-6 overflow-x-auto px-6 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
+                className="hero-stats overflow-x-auto px-0 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div

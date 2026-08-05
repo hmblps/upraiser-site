@@ -241,6 +241,43 @@
   }
 }
 
+.cases-chrome-nav {
+  margin-inline: auto;
+}
+
+.cases-chrome-dot {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: none;
+  padding: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.cases-chrome-dot::after {
+  content: "";
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-border) 90%, transparent);
+  transition:
+    width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.28s ease;
+}
+
+.cases-chrome-dot.is-active::after {
+  width: 1.5rem;
+  background: var(--theme-accent);
+}
+
 .case-preview-card--carousel {
   width: min(88vw, 26.5rem);
   flex-shrink: 0;

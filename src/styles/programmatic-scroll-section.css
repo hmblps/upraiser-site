@@ -439,7 +439,7 @@
  */
 
 .prog-scroll-section--mobile {
-  --prog-dock-h: 13.25rem;
+  --prog-dock-h: 10.5rem;
   position: relative;
   padding: 0 0 clamp(2.5rem, 10vw, 4rem);
   /* Avoid overflow-* on sticky ancestors — breaks mobile sticky chrome */
@@ -529,7 +529,7 @@
 .prog-mobile-dock__phone {
   position: relative;
   flex-shrink: 0;
-  width: 5.85rem;
+  width: 4.75rem;
 }
 
 .prog-mobile-dock__phone .prog-mobile-stage__glow {
@@ -551,8 +551,8 @@
 .prog-mobile-dock__phone .prog-css-phone--mobile {
   position: relative;
   z-index: 1;
-  width: 5.85rem;
-  max-width: 5.85rem;
+  width: 4.75rem;
+  max-width: 4.75rem;
 }
 
 .prog-mobile-dock__caption {
@@ -589,7 +589,7 @@
   color: var(--theme-accent);
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   overflow: hidden;
 }
 
@@ -792,22 +792,26 @@
 
 @media (max-height: 760px) {
   .prog-scroll-section--mobile {
-    --prog-dock-h: 11.5rem;
+    --prog-dock-h: 9.25rem;
   }
 
   .prog-mobile-sticky {
-    padding-block: 0.4rem calc(0.4rem + env(safe-area-inset-bottom, 0px));
+    padding-block: 0.35rem calc(0.35rem + env(safe-area-inset-bottom, 0px));
   }
 
   .prog-mobile-dock__phone,
   .prog-css-phone--dock,
   .prog-mobile-dock__phone .prog-css-phone--mobile {
-    width: 5rem;
-    max-width: 5rem;
+    width: 4.25rem;
+    max-width: 4.25rem;
   }
 
   .prog-mobile-dock__label {
-    font-size: clamp(1.1rem, 5vw, 1.35rem);
+    font-size: clamp(1.05rem, 4.8vw, 1.25rem);
+  }
+
+  .prog-mobile-dock__tag {
+    display: none;
   }
 }
 

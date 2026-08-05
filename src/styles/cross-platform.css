@@ -110,3 +110,33 @@ select {
     transform: translateY(-2px);
   }
 }
+
+/* Mobile performance + layout budget */
+@media (max-width: 767px), (pointer: coarse) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  /* Decorative infinite loops — keep intentional card transitions */
+  .border-beam,
+  .value-bento [class*="value-"],
+  .live-panel::after,
+  .phone-css-bob,
+  .sparkline-live-dot {
+    animation: none !important;
+  }
+
+  .viewport-page__intro {
+    --viewport-intro-pad-block: 0.45rem 0.35rem;
+  }
+
+  .viewport-page .case-preview-card--carousel .case-preview-metrics--secondary {
+    display: none;
+  }
+
+  .viewport-page .case-preview-card--carousel .case-preview-card__headline {
+    -webkit-line-clamp: 2;
+    min-height: 0;
+  }
+}

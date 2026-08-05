@@ -200,6 +200,16 @@
   .lenovo-trust-strip .stat-label.text-orange {
     color: var(--theme-accent);
   }
+
+  /* Compact Lenovo dock — logo + title only on phones */
+  .lenovo-trust-strip .rail-strip__inner {
+    gap: 0.65rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .lenovo-trust-strip .rail-strip__inner > div:last-child {
+    display: none;
+  }
 }
 
 /* 3D scene veils until GLB ready — fast out on theme swap, softer in */
@@ -249,6 +259,34 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+@media (max-width: 899px) {
+  .hero-content {
+    padding-bottom: clamp(5.5rem, 14vh, 7.5rem);
+  }
+
+  .hero-stats-wrap {
+    margin-bottom: clamp(0.75rem, 2vh, 1.25rem);
+  }
+
+  .hero-title--hero {
+    font-size: clamp(2.15rem, 9.5vw, 3.1rem);
+  }
+
+  .hero-title--hero > .block {
+    white-space: normal;
+  }
+
+  .hero-copy {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-content {
+    padding-bottom: clamp(4.75rem, 12vh, 6.5rem);
+  }
 }
 
 /* Fly hero — brand block hugs the left edge of the viewport square, not the centered page rail */
@@ -303,20 +341,6 @@
   white-space: nowrap;
 }
 
-@media (max-width: 767px) {
-  .hero-copy {
-    max-width: 100%;
-  }
-
-  .hero-title--hero {
-    font-size: clamp(2.15rem, 9.5vw, 3.1rem);
-  }
-
-  .hero-title--hero > .block {
-    white-space: normal;
-  }
-}
-
 .hero-stats-wrap {
   align-self: end;
   margin-top: auto;
@@ -345,19 +369,35 @@
 }
 
 .hero-stats-dot {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: none;
+  padding: 0;
+  border-radius: 999px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.hero-stats-dot::after {
+  content: "";
+  display: block;
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 999px;
-  border: none;
-  padding: 0;
   background: color-mix(in srgb, var(--theme-fg) 22%, transparent);
   transition:
     width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
 }
 
-.hero-stats-dot.is-active {
+.hero-stats-dot.is-active::after {
   width: 1.125rem;
   background: var(--theme-accent);
 }

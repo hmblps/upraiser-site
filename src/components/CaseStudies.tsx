@@ -77,14 +77,14 @@ export function CaseStudies() {
             </div>
           </div>
 
-          <div className="viewport-page__chrome mt-3 flex shrink-0 items-center justify-between gap-4">
-            <p className="scroll-hint text-xs text-muted opacity-70">Swipe or ← → · tap to open</p>
-            <div className="flex items-center gap-2">
+          <div className="viewport-page__chrome mt-3 flex shrink-0 items-center justify-between gap-3">
+            <p className="scroll-hint hidden text-xs text-muted opacity-70 sm:block">Swipe or ← → · tap to open</p>
+            <div className="cases-chrome-nav flex items-center gap-1">
               <button
                 type="button"
                 aria-label="Previous case"
                 onClick={() => scrollByCard("left")}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                className="touch-target flex items-center justify-center rounded-full border border-border transition hover:border-orange/40"
               >
                 ←
               </button>
@@ -94,16 +94,14 @@ export function CaseStudies() {
                   type="button"
                   aria-label={`Go to case ${index + 1}: ${item.client}`}
                   onClick={() => scrollToIndex(index)}
-                  className={`h-2 rounded-full transition-all ${
-                    activeIndex === index ? "w-6 bg-orange" : "w-2 bg-border hover:bg-muted"
-                  }`}
+                  className={`cases-chrome-dot${activeIndex === index ? " is-active" : ""}`}
                 />
               ))}
               <button
                 type="button"
                 aria-label="Next case"
                 onClick={() => scrollByCard("right")}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                className="touch-target flex items-center justify-center rounded-full border border-border transition hover:border-orange/40"
               >
                 →
               </button>
