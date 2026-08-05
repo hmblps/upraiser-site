@@ -269,18 +269,6 @@
   .hero-stats-wrap {
     margin-bottom: clamp(0.75rem, 2vh, 1.25rem);
   }
-
-  .hero-title--hero {
-    font-size: clamp(2.15rem, 9.5vw, 3.1rem);
-  }
-
-  .hero-title--hero > .block {
-    white-space: normal;
-  }
-
-  .hero-copy {
-    max-width: 100%;
-  }
 }
 
 @media (max-width: 767px) {
@@ -339,6 +327,43 @@
 
 .hero-title--hero > .block {
   white-space: nowrap;
+}
+
+/*
+ * Mobile must win over fly-rail desktop pocket rules above.
+ * Without this, copy locks to ~52vw (~175px at 390) and title stays ~8.6vh/nowrap.
+ */
+@media (max-width: 899px) {
+  .hero-layout {
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+  }
+
+  .hero-content--fly-rail .hero-copy,
+  .hero-copy {
+    width: 100%;
+    max-width: none;
+  }
+
+  .hero-title--hero {
+    font-size: clamp(2.15rem, 9.5vw, 3.1rem);
+    line-height: 0.94;
+  }
+
+  .hero-title--hero > .block {
+    white-space: normal;
+  }
+
+  .hero-stats-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    justify-self: stretch;
+  }
+
+  .hero-stats {
+    min-width: 0;
+  }
 }
 
 .hero-stats-wrap {
