@@ -1,4 +1,4 @@
-import { useRef, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
 import type { CaseStudy } from "../data/cases";
 import { useCaseModal } from "../context/CaseModalContext";
 import { CaseBrandHeader } from "./CaseBrandHeader";
@@ -14,16 +14,13 @@ type CasePreviewCardProps = {
   variant?: "teaser" | "carousel";
 };
 
-/** Movement under this still counts as a tap inside the swipe carousel. */
-const TAP_SLOP_PX = 16;
-
 /**
  * Infinite deck renders 3 copies and scrolls to the middle lane (`copy === 1`).
  * Only that lane should be exposed to AT; opening must work on every copy a user can tap.
  */
 const LIVE_CAROUSEL_COPY = 1;
 
-/** Preview card — opens the global case modal (no <a> navigation fight with the swipe deck). */
+/** Preview card — opens the global case modal via plain click/keyboard. */
 export function CasePreviewCard({
   item,
   ctaLabel = "Read the case",
@@ -37,39 +34,14 @@ export function CasePreviewCard({
   const secondary = item.metrics.slice(1);
   const isCarousel = variant === "carousel";
   const isReplica = isCarousel && copy !== LIVE_CAROUSEL_COPY;
-  const pointerOrigin = useRef<{ x: number; y: number; id: number } | null>(null);
 
   const open = () => {
     openCase(item.id);
   };
 
-  const handlePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
-    if (event.button != null && event.button !== 0) return;
-    pointerOrigin.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
-  };
-
-  const handlePointerUp = (event: ReactPointerEvent<HTMLElement>) => {
-    const origin = pointerOrigin.current;
-    pointerOrigin.current = null;
-    if (!origin || origin.id !== event.pointerId) return;
-
-    const dx = Math.abs(event.clientX - origin.x);
-    const dy = Math.abs(event.clientY - origin.y);
-    if (dx > TAP_SLOP_PX || dy > TAP_SLOP_PX) return;
-
-    // Whole-card tap — mouse, touch, and pen.
-    event.preventDefault();
-    open();
-  };
-
-  const handlePointerCancel = () => {
-    pointerOrigin.current = null;
-  };
-
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-    // pointerup already opened on a clean tap; ignore the synthetic follow-up click.
-    if (event.detail === 0) return;
     event.preventDefault();
+    event.stopPropagation();
     open();
   };
 
@@ -81,7 +53,7 @@ export function CasePreviewCard({
 
   return (
     <article
-      role="link"
+      role="button"
       data-cursor="link"
       data-case-card
       data-case-id={item.id}
@@ -90,9 +62,6 @@ export function CasePreviewCard({
       aria-label={`${item.client} case study. ${ctaLabel}`}
       aria-hidden={isReplica || undefined}
       tabIndex={isReplica ? -1 : 0}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerCancel}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={[
@@ -130,9 +99,9 @@ export function CasePreviewCard({
         <p className="case-preview-card__headline" title={item.headline}>
           {item.headline}
         </p>
-        <p className="case-preview-card__cta mt-auto shrink-0" aria-hidden>
-          {ctaLabel} <span>→</span>
-        </p>
+        <span className="case-preview-card__cta mt-auto shrink-0">
+          {ctaLabel} <span aria-hidden>→</span>
+        </span>
       </div>
     </article>
   );

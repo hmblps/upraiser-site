@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -30,19 +31,26 @@ function caseIdFromPath(pathname: string): string | null {
 }
 
 export function CaseModalProvider({ children }: { children: ReactNode }) {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(() =>
+    typeof window !== "undefined" ? caseIdFromPath(window.location.pathname) : null,
+  );
   const [panelItem, setPanelItem] = useState<CaseStudy | null>(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const openingRef = useRef<string | null>(null);
   const item: CaseStudy | null = activeId ? (getCaseById(activeId) ?? null) : null;
 
-  // URL is source of truth for deep links and browser back/forward.
+  // Keep modal in sync with deep links / back-forward, without clobbering an in-flight open.
   useEffect(() => {
     const fromUrl = caseIdFromPath(pathname);
     if (fromUrl && getCaseById(fromUrl)) {
+      openingRef.current = null;
       setActiveId(fromUrl);
       return;
     }
+
+    if (openingRef.current) return;
+
     if (pathname === "/cases" || pathname === "/cases/" || !pathname.startsWith("/cases")) {
       setActiveId(null);
     }
@@ -55,16 +63,19 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
   const openCase = useCallback(
     (id: string) => {
       if (!getCaseById(id)) return;
+      openingRef.current = id;
       setActiveId(id);
       if (pathname !== `/cases/${id}`) {
-        // Keep shareable URL from home teaser and /cases alike.
         navigate(`/cases/${id}`, { replace: pathname.startsWith("/cases") });
+      } else {
+        openingRef.current = null;
       }
     },
     [navigate, pathname],
   );
 
   const closeCase = useCallback(() => {
+    openingRef.current = null;
     setActiveId(null);
     if (caseIdFromPath(pathname)) {
       navigate("/cases", { replace: true });

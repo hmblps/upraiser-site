@@ -10,6 +10,8 @@ type HorizontalScrollOptions = {
   mapVertical?: boolean | "viewport-locked";
 };
 
+const DRAG_THRESHOLD_PX = 8;
+
 /** Mouse drag + wheel → horizontal scroll for overflow-x carousels (desktop). */
 export function useHorizontalPointerScroll(
   ref: RefObject<HTMLElement | null>,
@@ -77,43 +79,56 @@ export function useHorizontalPointerScroll(
     let moved = false;
     let startX = 0;
     let startScrollLeft = 0;
+    let activePointerId: number | null = null;
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0 || event.pointerType !== "mouse") return;
+      // Don't steal the gesture until the pointer actually drags —
+      // Responsively / DevTools mobile panes still report pointer:fine.
       dragging = true;
       moved = false;
+      activePointerId = event.pointerId;
       startX = event.clientX;
       startScrollLeft = el.scrollLeft;
-      el.style.scrollSnapType = "none";
-      el.setPointerCapture(event.pointerId);
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      if (!dragging) return;
+      if (!dragging || event.pointerId !== activePointerId) return;
       const dx = event.clientX - startX;
-      if (Math.abs(dx) > 4) {
+      if (!moved && Math.abs(dx) < DRAG_THRESHOLD_PX) return;
+
+      if (!moved) {
         moved = true;
         el.classList.add("is-drag-scrolling");
+        el.style.scrollSnapType = "none";
+        // Capture only after a real drag so clicks on cards still fire.
+        if (!el.hasPointerCapture(event.pointerId)) {
+          el.setPointerCapture(event.pointerId);
+        }
       }
-      if (moved) el.scrollLeft = startScrollLeft - dx;
+      el.scrollLeft = startScrollLeft - dx;
     };
 
     const endDrag = (event: PointerEvent) => {
-      if (!dragging) return;
+      if (!dragging || event.pointerId !== activePointerId) return;
       dragging = false;
+      activePointerId = null;
       el.classList.remove("is-drag-scrolling");
       el.style.scrollSnapType = "";
       if (el.hasPointerCapture(event.pointerId)) {
         el.releasePointerCapture(event.pointerId);
       }
+      // Keep `moved` until click capture sees it (same event turn / next click).
+      window.setTimeout(() => {
+        moved = false;
+      }, 0);
     };
 
     const onClickCapture = (event: MouseEvent) => {
-      if (moved) {
-        event.preventDefault();
-        event.stopPropagation();
-        moved = false;
-      }
+      if (!moved) return;
+      event.preventDefault();
+      event.stopPropagation();
+      moved = false;
     };
 
     el.addEventListener("pointerdown", onPointerDown);
