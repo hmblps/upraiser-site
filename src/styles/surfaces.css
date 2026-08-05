@@ -225,6 +225,8 @@
 
 .case-preview-card {
   min-height: 100%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .case-preview-card--carousel {
@@ -610,7 +612,7 @@
 .case-detail-modal {
   position: fixed;
   inset: 0;
-  z-index: 110;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -624,9 +626,9 @@
   margin: 0;
   padding: 0;
   cursor: pointer;
-  background: color-mix(in srgb, var(--theme-bg) 55%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--theme-bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .case-detail-modal__panel {

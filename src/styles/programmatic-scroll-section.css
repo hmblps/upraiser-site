@@ -267,7 +267,7 @@
 }
 
 .prog-css-phone--mobile {
-  width: min(56vw, 15.25rem);
+  width: min(52vw, 14.25rem);
   height: auto;
   border-radius: 1.65rem;
   padding: 0.16rem;
@@ -439,84 +439,167 @@
  */
 
 .prog-scroll-section--mobile {
+  --prog-dock-h: 13.25rem;
   position: relative;
   padding: 0 0 clamp(2.5rem, 10vw, 4rem);
-  /* Avoid overflow-* on sticky ancestors — breaks mobile sticky phone band */
+  /* Avoid overflow-* on sticky ancestors — breaks mobile sticky chrome */
   touch-action: pan-y;
+  scroll-padding-top: calc(var(--site-header-height, 72px) + 0.75rem);
+  scroll-padding-bottom: calc(var(--prog-dock-h) + env(safe-area-inset-bottom, 0px) + 0.75rem);
 }
 
 .prog-mobile-ambience {
   pointer-events: none;
   position: absolute;
   inset: 0 0 auto;
-  height: min(78dvh, 42rem);
+  height: min(52dvh, 28rem);
   z-index: 0;
   background:
-    radial-gradient(ellipse 78% 58% at 50% 28%, color-mix(in srgb, var(--theme-accent) 18%, transparent), transparent 72%),
-    radial-gradient(ellipse 46% 36% at 78% 58%, color-mix(in srgb, var(--theme-accent-light, var(--theme-accent)) 10%, transparent), transparent 70%);
+    radial-gradient(ellipse 70% 50% at 50% 18%, color-mix(in srgb, var(--theme-accent) 12%, transparent), transparent 72%);
 }
 
 [data-theme="dark"] .prog-mobile-ambience {
   background:
-    radial-gradient(ellipse 78% 58% at 50% 28%, rgba(255, 120, 60, 0.16), transparent 72%),
-    radial-gradient(ellipse 46% 36% at 78% 58%, rgba(255, 200, 120, 0.09), transparent 70%);
+    radial-gradient(ellipse 70% 50% at 50% 18%, rgba(255, 120, 60, 0.12), transparent 72%);
 }
 
 .prog-mobile-sticky {
-  position: sticky;
-  top: var(--site-header-height, 72px);
-  z-index: 2;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.45rem clamp(1.25rem, 5vw, 1.5rem) 0.85rem;
-  background: color-mix(in srgb, var(--theme-bg, #fdf8f6) 78%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid color-mix(in srgb, var(--theme-border, #e9bcba) 28%, transparent);
+  align-items: stretch;
+  gap: 0;
+  padding: 0.55rem clamp(1rem, 4vw, 1.35rem) calc(0.55rem + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--theme-bg, #fdf8f6) 92%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--theme-border, #e9bcba) 45%, transparent);
+  box-shadow: 0 -10px 28px color-mix(in srgb, var(--theme-bg, #fdf8f6) 78%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translate3d(0, 110%, 0);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.24s ease,
+    visibility 0.24s;
+}
+
+.prog-mobile-sticky.is-pinned {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prog-mobile-sticky {
+    transition: opacity 0.01ms linear, visibility 0.01ms linear;
+  }
 }
 
 [data-theme="dark"] .prog-mobile-sticky {
-  background: color-mix(in srgb, var(--theme-bg, #141312) 82%, transparent);
-  border-bottom-color: color-mix(in srgb, #353532 70%, transparent);
+  background: color-mix(in srgb, var(--theme-bg, #141312) 90%, transparent);
+  border-top-color: color-mix(in srgb, #353532 80%, transparent);
+  box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .prog-mobile-switcher {
-  width: 100%;
-  max-width: 22rem;
-}
-
-.prog-mobile-stage {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 1;
   width: 100%;
-  max-width: 18rem;
-  padding-block: 0.35rem 0.15rem;
+  max-width: none;
+  padding-inline: clamp(1.25rem, 5vw, 1.5rem);
+  margin-bottom: 0.35rem;
 }
 
-.prog-mobile-stage__glow {
+/* Mini phone + live caption — screen stays tied to scroll like desktop */
+.prog-mobile-dock {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem 1rem;
+  width: 100%;
+}
+
+.prog-mobile-dock__phone {
+  position: relative;
+  flex-shrink: 0;
+  width: 5.85rem;
+}
+
+.prog-mobile-dock__phone .prog-mobile-stage__glow {
   position: absolute;
-  inset: 8% 12% 4%;
+  inset: 6% 4% 2%;
   z-index: 0;
   border-radius: 50%;
   background: radial-gradient(
     ellipse 55% 48% at 50% 48%,
-    color-mix(in srgb, var(--theme-accent) 28%, transparent),
+    color-mix(in srgb, var(--theme-accent) 22%, transparent),
     transparent 72%
   );
-  filter: blur(18px);
+  filter: blur(10px);
   pointer-events: none;
+  opacity: 0.8;
 }
 
-.prog-mobile-sticky .prog-css-phone--mobile,
-.prog-mobile-stage .prog-css-phone--mobile {
+.prog-css-phone--dock,
+.prog-mobile-dock__phone .prog-css-phone--mobile {
   position: relative;
   z-index: 1;
-  /* Middle: readable glass, not full-bleed nor postage stamp */
-  width: min(56vw, 15.25rem);
+  width: 5.85rem;
+  max-width: 5.85rem;
+}
+
+.prog-mobile-dock__caption {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+
+.prog-mobile-dock__index {
+  margin: 0;
+  font-size: var(--text-caption, 0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--theme-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.prog-mobile-dock__label {
+  margin: 0;
+  font-size: clamp(1.35rem, 5.5vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-feature, -0.02em);
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--theme-fg);
+}
+
+.prog-mobile-dock__tag {
+  margin: 0;
+  font-size: var(--text-caption, 0.75rem);
+  line-height: 1.35;
+  color: var(--theme-accent);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.prog-mobile-dock__caption .prog-mobile-dots {
+  margin-top: 0.35rem;
+  justify-content: flex-start;
+}
+
+.prog-mobile-stage {
+  display: none;
 }
 
 .prog-mobile-dots {
@@ -571,7 +654,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  padding: 0.95rem clamp(1.25rem, 5vw, 1.5rem) 0;
+  padding: 0.95rem clamp(1.25rem, 5vw, 1.5rem) calc(var(--prog-dock-h) + 1.25rem);
   scroll-snap-type: y proximity;
 }
 
@@ -582,7 +665,9 @@
   min-height: 0;
   padding: 1.15rem 1.15rem 1.2rem;
   scroll-snap-align: start;
-  opacity: 0.5;
+  scroll-margin-top: calc(var(--site-header-height, 72px) + 0.5rem);
+  scroll-margin-bottom: calc(var(--prog-dock-h) + 0.75rem);
+  opacity: 0.78;
   border-radius: 1rem;
   /* Kinetic Quartz light: white card on warm page */
   border: 1px solid color-mix(in srgb, var(--theme-border, #e9bcba) 70%, transparent);
@@ -632,8 +717,10 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1.25;
-  color: var(--theme-accent);
-  background: color-mix(in srgb, var(--theme-accent) 12%, transparent);
+  /* Accent fill + dark ink — light yellow-on-yellow was unreadable */
+  color: color-mix(in srgb, var(--theme-fg, #1a1a1a) 88%, var(--theme-accent));
+  background: color-mix(in srgb, var(--theme-accent) 16%, var(--theme-bg-card, #fff));
+  border: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -642,8 +729,9 @@
 }
 
 [data-theme="dark"] .prog-mobile-card__tag {
-  background: color-mix(in srgb, var(--theme-accent) 16%, #1c1c1a);
-  color: color-mix(in srgb, var(--theme-accent) 85%, #fff);
+  color: color-mix(in srgb, #fff 82%, var(--theme-accent));
+  background: color-mix(in srgb, var(--theme-accent) 18%, #1c1c1a);
+  border-color: color-mix(in srgb, var(--theme-accent) 40%, #353532);
 }
 
 .prog-mobile-card__index {
@@ -703,18 +791,23 @@
 }
 
 @media (max-height: 760px) {
-  .prog-mobile-sticky .prog-css-phone--mobile,
-  .prog-mobile-stage .prog-css-phone--mobile {
-    width: min(46vw, 12.5rem);
-  }
-
-  .prog-mobile-stage {
-    padding-block: 0.15rem;
+  .prog-scroll-section--mobile {
+    --prog-dock-h: 11.5rem;
   }
 
   .prog-mobile-sticky {
-    gap: 0.45rem;
-    padding-block: 0.35rem 0.55rem;
+    padding-block: 0.4rem calc(0.4rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .prog-mobile-dock__phone,
+  .prog-css-phone--dock,
+  .prog-mobile-dock__phone .prog-css-phone--mobile {
+    width: 5rem;
+    max-width: 5rem;
+  }
+
+  .prog-mobile-dock__label {
+    font-size: clamp(1.1rem, 5vw, 1.35rem);
   }
 }
 

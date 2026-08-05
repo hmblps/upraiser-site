@@ -1,4 +1,4 @@
-import type { CSSProperties, MouseEvent } from "react";
+import { useRef, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { Link } from "react-router-dom";
 import type { CaseStudy } from "../data/cases";
 import { useCaseModal } from "../context/CaseModalContext";
@@ -15,6 +15,15 @@ type CasePreviewCardProps = {
   variant?: "teaser" | "carousel";
 };
 
+/** Movement under this still counts as a tap inside the swipe carousel. */
+const TAP_SLOP_PX = 14;
+
+/**
+ * Infinite deck renders 3 copies and scrolls to the middle lane (`copy === 1`).
+ * Only that lane should be exposed to AT; opening must work on every copy a user can tap.
+ */
+const LIVE_CAROUSEL_COPY = 1;
+
 /** Preview card — opens the global case modal without leaving the current page. */
 export function CasePreviewCard({
   item,
@@ -27,16 +36,54 @@ export function CasePreviewCard({
   const { openCase } = useCaseModal();
   const primary = item.metrics[0];
   const secondary = item.metrics.slice(1);
-  const isClone = copy > 0;
   const isCarousel = variant === "carousel";
+  const isReplica = isCarousel && copy !== LIVE_CAROUSEL_COPY;
+  const pointerOrigin = useRef<{ x: number; y: number; id: number } | null>(null);
+  const openedByPointerTap = useRef(false);
+
+  const open = () => {
+    openCase(item.id);
+  };
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLAnchorElement>) => {
+    if (event.button != null && event.button !== 0) return;
+    pointerOrigin.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    openedByPointerTap.current = false;
+  };
+
+  const handlePointerUp = (event: ReactPointerEvent<HTMLAnchorElement>) => {
+    const origin = pointerOrigin.current;
+    pointerOrigin.current = null;
+    if (!origin || origin.id !== event.pointerId) return;
+    // Mouse keeps using click (cmd/ctrl-click etc). Touch/pen often lose click inside overflow-x carousels.
+    if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
+
+    const dx = Math.abs(event.clientX - origin.x);
+    const dy = Math.abs(event.clientY - origin.y);
+    if (dx > TAP_SLOP_PX || dy > TAP_SLOP_PX) return;
+
+    openedByPointerTap.current = true;
+    event.preventDefault();
+    open();
+  };
+
+  const handlePointerCancel = () => {
+    pointerOrigin.current = null;
+  };
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    // Keep cmd/ctrl/middle-click as real navigation to /cases/:slug.
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+    if (openedByPointerTap.current) {
+      event.preventDefault();
+      openedByPointerTap.current = false;
       return;
     }
+
+    // Keep cmd/ctrl/middle-click as real navigation to /cases/:slug.
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (event.button != null && event.button !== 0) return;
+
     event.preventDefault();
-    openCase(item.id);
+    open();
   };
 
   return (
@@ -46,8 +93,11 @@ export function CasePreviewCard({
       data-case-card
       data-case-index={caseIndex}
       data-case-copy={copy}
-      aria-hidden={isClone || undefined}
-      tabIndex={isClone ? -1 : undefined}
+      aria-hidden={isReplica || undefined}
+      tabIndex={isReplica ? -1 : undefined}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       onClick={handleClick}
       className={[
         "case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-orange/30",

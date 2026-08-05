@@ -198,13 +198,8 @@ html.is-scrolling .sparkline-live-dot {
 }
 
 @media (max-width: 767px) {
-  :root,
-  [data-theme="dark"] {
-    --theme-grain-opacity: 0.032;
-  }
-
-  [data-theme="light"] {
-    --theme-grain-opacity: 0.028;
+  .border-beam {
+    display: none !important;
   }
 }
 
@@ -660,7 +655,7 @@ main [id] {
 }
 
 .cases-carousel {
-  touch-action: pan-x pan-y;
+  touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
 }
 
