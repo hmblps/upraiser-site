@@ -21,13 +21,14 @@ copy "assets/hero/everest.glb" "public/hero/everest.glb"
 copy "assets/hero/everest-light.glb" "public/hero/everest-light.glb"
 copy "assets/hero/voyager-nasa.glb" "public/hero/voyager-nasa.glb"
 
+# Mobile hero atmosphere — original mountains loop (desktop keeps WebGL Everest).
+copy "assets/hero/light-mountains-loop.mp4" "public/hero/light-mountains-loop.mp4"
+
 # Brand / legal / maps
 copy "assets/brand/upraiser-logo.png" "public/upraiser-logo.png"
 copy "assets/brand/favicon.png" "public/favicon.png"
 copy "assets/brand/og-image.png" "public/og-image.png"
 copy "assets/maps/world-dots-dark.svg" "public/maps/world-dots-dark.svg"
 copy "assets/maps/world-dots-light.svg" "public/maps/world-dots-light.svg"
-
-# Optional: OG tooling still reads assets/hero/light-mountains-loop.mp4 (not required in public/)
 
 echo "Synced assets/ → public/."

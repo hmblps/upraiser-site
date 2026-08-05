@@ -742,7 +742,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 1rem 1.25rem 1.75rem;
+  padding: 0.65rem 1.1rem 1.75rem;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -750,6 +750,10 @@
   .case-detail-modal__body {
     padding: 1.25rem 1.75rem 2rem;
   }
+}
+
+.case-detail-brand {
+  margin-top: 0;
 }
 
 .case-detail-result__value {

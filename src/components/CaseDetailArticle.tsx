@@ -76,7 +76,11 @@ export function CaseDetailArticle({ item, showCta = false, className = "" }: Cas
         } as CSSProperties
       }
     >
-      <div ref={resultsRef} className="case-detail-results case-detail-results--hero">
+      <div className="case-detail-brand overflow-hidden rounded-2xl border border-border/50">
+        <CaseBrandHeader item={item} />
+      </div>
+
+      <div ref={resultsRef} className="case-detail-results case-detail-results--hero mt-8">
         <p className="section-label">Results</p>
         <h2 className="case-detail-hero-title">{item.headline}</h2>
         <div className="case-detail-results__grid">
@@ -92,10 +96,6 @@ export function CaseDetailArticle({ item, showCta = false, className = "" }: Cas
       </div>
 
       <CaseMeta item={item} />
-
-      <div className="mt-8 overflow-hidden rounded-2xl border border-border/50">
-        <CaseBrandHeader item={item} />
-      </div>
 
       <EditorialStack className="mt-10">
         {story.map((block) => (

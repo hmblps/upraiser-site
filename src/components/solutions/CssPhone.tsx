@@ -15,11 +15,19 @@ export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
 
   return (
     <div className={`prog-css-phone prog-css-phone--${finish} ${className}`.trim()}>
+      <span className="prog-css-phone__btn prog-css-phone__btn--silent" aria-hidden />
+      <span className="prog-css-phone__btn prog-css-phone__btn--vol-up" aria-hidden />
+      <span className="prog-css-phone__btn prog-css-phone__btn--vol-down" aria-hidden />
+      <span className="prog-css-phone__btn prog-css-phone__btn--power" aria-hidden />
       <div className="prog-css-phone__bezel">
-        <div className="prog-css-phone__notch" aria-hidden />
+        <div className="prog-css-phone__notch" aria-hidden>
+          <span className="prog-css-phone__speaker" />
+          <span className="prog-css-phone__lens" />
+        </div>
         <div className="prog-css-phone__screen">
           <ProgrammaticFullFeed activeFormatId={formatId} />
         </div>
+        <span className="prog-css-phone__home-glow" aria-hidden />
       </div>
     </div>
   );
