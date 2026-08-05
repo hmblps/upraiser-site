@@ -267,12 +267,12 @@
 }
 
 .prog-css-phone--mobile {
-  width: min(52vw, 14.5rem);
+  width: min(56vw, 15.25rem);
   height: auto;
   border-radius: 1.65rem;
   padding: 0.16rem;
   box-shadow:
-    0 16px 32px rgba(0, 0, 0, 0.22),
+    0 18px 36px rgba(0, 0, 0, 0.24),
     0 0 0 1px rgba(255, 255, 255, 0.14) inset;
 }
 
@@ -433,7 +433,10 @@
   50% { opacity: 0.55; }
 }
 
-/* ── Mobile fallback ─────────────────────────────────────── */
+/* ── Mobile golden middle ──────────────────────────────────
+ * Stitch wow-mobile: centered hero visual, soft glow, stacked panels, 20px rhythm.
+ * Keep Upraiser expedition tokens + sticky CssPhone — no dark-fintech bottom nav.
+ */
 
 .prog-scroll-section--mobile {
   position: relative;
@@ -446,17 +449,17 @@
   pointer-events: none;
   position: absolute;
   inset: 0 0 auto;
-  height: min(70vh, 36rem);
+  height: min(78dvh, 42rem);
   z-index: 0;
   background:
-    radial-gradient(ellipse 70% 55% at 50% 20%, color-mix(in srgb, var(--theme-accent) 16%, transparent), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 50%, rgba(255, 190, 120, 0.1), transparent 70%);
+    radial-gradient(ellipse 78% 58% at 50% 28%, color-mix(in srgb, var(--theme-accent) 18%, transparent), transparent 72%),
+    radial-gradient(ellipse 46% 36% at 78% 58%, color-mix(in srgb, var(--theme-accent-light, var(--theme-accent)) 10%, transparent), transparent 70%);
 }
 
 [data-theme="dark"] .prog-mobile-ambience {
   background:
-    radial-gradient(ellipse 70% 55% at 50% 20%, rgba(255, 120, 60, 0.14), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 50%, rgba(255, 200, 120, 0.08), transparent 70%);
+    radial-gradient(ellipse 78% 58% at 50% 28%, rgba(255, 120, 60, 0.16), transparent 72%),
+    radial-gradient(ellipse 46% 36% at 78% 58%, rgba(255, 200, 120, 0.09), transparent 70%);
 }
 
 .prog-mobile-sticky {
@@ -466,28 +469,62 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.55rem clamp(1rem, 5vw, 2rem) 0.7rem;
-  background: color-mix(in srgb, var(--theme-bg, #fcf9f8) 82%, transparent);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid color-mix(in srgb, var(--theme-border, #e3beb7) 35%, transparent);
+  gap: 0.65rem;
+  padding: 0.45rem clamp(1.25rem, 5vw, 1.5rem) 0.85rem;
+  background: color-mix(in srgb, var(--theme-bg, #fdf8f6) 78%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-border, #e9bcba) 28%, transparent);
+}
+
+[data-theme="dark"] .prog-mobile-sticky {
+  background: color-mix(in srgb, var(--theme-bg, #141312) 82%, transparent);
+  border-bottom-color: color-mix(in srgb, #353532 70%, transparent);
 }
 
 .prog-mobile-switcher {
   width: 100%;
-  max-width: 24rem;
+  max-width: 22rem;
 }
 
-.prog-mobile-sticky .prog-css-phone--mobile {
-  /* Keep sticky band readable without eating the whole viewport */
-  width: min(48vw, 13.75rem);
+.prog-mobile-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 18rem;
+  padding-block: 0.35rem 0.15rem;
+}
+
+.prog-mobile-stage__glow {
+  position: absolute;
+  inset: 8% 12% 4%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 55% 48% at 50% 48%,
+    color-mix(in srgb, var(--theme-accent) 28%, transparent),
+    transparent 72%
+  );
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.prog-mobile-sticky .prog-css-phone--mobile,
+.prog-mobile-stage .prog-css-phone--mobile {
+  position: relative;
+  z-index: 1;
+  /* Middle: readable glass, not full-bleed nor postage stamp */
+  width: min(56vw, 15.25rem);
 }
 
 .prog-mobile-dots {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
-  padding-bottom: 0.15rem;
+  padding-bottom: 0.1rem;
 }
 
 .prog-mobile-dots button {
@@ -533,34 +570,152 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  padding: 0.5rem clamp(1rem, 5vw, 2rem) 0;
+  gap: 0.85rem;
+  padding: 0.95rem clamp(1.25rem, 5vw, 1.5rem) 0;
   scroll-snap-type: y proximity;
 }
 
 .prog-scroll-section__mobile-card {
   display: flex;
   flex-direction: column;
-  min-height: 42vh;
-  padding: 1.25rem 0 2rem;
-  scroll-snap-align: center;
-  opacity: 0.45;
-  transition: opacity 0.35s ease;
-  will-change: opacity;
+  gap: 0.65rem;
+  min-height: 0;
+  padding: 1.15rem 1.15rem 1.2rem;
+  scroll-snap-align: start;
+  opacity: 0.5;
+  border-radius: 1rem;
+  /* Kinetic Quartz light: white card on warm page */
+  border: 1px solid color-mix(in srgb, var(--theme-border, #e9bcba) 70%, transparent);
+  background: var(--theme-bg-card, #ffffff);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-fg, #1a1a1a) 5%, transparent);
+  transition:
+    opacity 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+/* Kinetic Obsidian dark: elevated charcoal panel */
+[data-theme="dark"] .prog-scroll-section__mobile-card {
+  background: color-mix(in srgb, var(--theme-bg-elevated, #121211) 92%, var(--theme-accent) 4%);
+  border-color: color-mix(in srgb, var(--theme-border, #262624) 90%, transparent);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
 }
 
 .prog-scroll-section__mobile-card.is-active {
   opacity: 1;
+  border-color: color-mix(in srgb, var(--theme-accent) 38%, var(--theme-border, #e3beb7));
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--theme-accent) 12%, transparent);
 }
 
-.prog-scroll-section__mobile-card .card-title {
+[data-theme="dark"] .prog-scroll-section__mobile-card.is-active {
+  border-color: color-mix(in srgb, var(--theme-accent) 45%, #353532);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--theme-accent) 18%, transparent);
+}
+
+.prog-mobile-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.prog-mobile-card__tag {
+  margin: 0;
+  max-width: 78%;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: var(--text-caption, 0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.25;
+  color: var(--theme-accent);
+  background: color-mix(in srgb, var(--theme-accent) 12%, transparent);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  white-space: normal;
+}
+
+[data-theme="dark"] .prog-mobile-card__tag {
+  background: color-mix(in srgb, var(--theme-accent) 16%, #1c1c1a);
+  color: color-mix(in srgb, var(--theme-accent) 85%, #fff);
+}
+
+.prog-mobile-card__index {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-caption, 0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--theme-muted, #9ca3af);
+}
+
+.prog-mobile-card__title {
+  margin: 0;
   font-size: var(--text-feature);
   letter-spacing: var(--tracking-feature);
 }
 
-.prog-scroll-section__mobile-card .stat-label {
-  white-space: nowrap;
-  flex-shrink: 0;
+.prog-mobile-card__body {
+  margin: 0;
+  color: var(--theme-muted-light, var(--theme-muted));
+}
+
+.prog-mobile-card__points {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0.55rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--theme-bg, #fdf8f6) 88%, var(--theme-accent) 4%);
+  border: 1px solid color-mix(in srgb, var(--theme-border, #e9bcba) 45%, transparent);
+}
+
+[data-theme="dark"] .prog-mobile-card__points {
+  background: color-mix(in srgb, #0e0e0c 88%, var(--theme-accent) 6%);
+  border-color: color-mix(in srgb, #353532 80%, transparent);
+}
+
+.prog-mobile-card__point {
+  position: relative;
+  padding-inline-start: 0.85rem;
+  font-size: var(--text-caption, 0.8rem);
+  line-height: 1.45;
+  color: var(--theme-muted-light, var(--theme-muted));
+}
+
+.prog-mobile-card__point::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 1px;
+  background: var(--theme-accent);
+}
+
+@media (max-height: 760px) {
+  .prog-mobile-sticky .prog-css-phone--mobile,
+  .prog-mobile-stage .prog-css-phone--mobile {
+    width: min(46vw, 12.5rem);
+  }
+
+  .prog-mobile-stage {
+    padding-block: 0.15rem;
+  }
+
+  .prog-mobile-sticky {
+    gap: 0.45rem;
+    padding-block: 0.35rem 0.55rem;
+  }
 }
 
 /* phone-3d-canvas default */
@@ -582,16 +737,43 @@
 .prog-mobile-headline {
   position: relative;
   z-index: 1;
-  padding-block: 0.75rem 0.35rem;
+  padding-block: 0.85rem 0.45rem;
+  text-align: start;
 }
 
 .prog-mobile-headline .section-header {
   margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: start;
 }
 
 .prog-mobile-headline .section-title {
-  font-size: var(--text-title-compact);
+  font-size: clamp(1.55rem, 6.2vw, 1.85rem);
   letter-spacing: var(--tracking-title);
+  text-wrap: balance;
+  max-width: 18ch;
+}
+
+.prog-mobile-headline .section-description {
+  margin-inline: 0;
+  max-width: 34rem;
+}
+
+.prog-mobile-headline .section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-accent) 28%, transparent);
+}
+
+[data-theme="dark"] .prog-mobile-headline .section-label {
+  background: color-mix(in srgb, var(--theme-accent) 14%, #1c1c1a);
+  border-color: color-mix(in srgb, var(--theme-accent) 32%, #353532);
 }
 
 @media (max-width: 1100px) {

@@ -225,7 +225,7 @@ function MobileFormats({
         const idx = Number((visible.target as HTMLElement).dataset.index);
         if (!Number.isNaN(idx)) setActiveIndex(idx);
       },
-      { rootMargin: "-28% 0px -48% 0px", threshold: [0.2, 0.45, 0.7] },
+      { rootMargin: "-22% 0px -42% 0px", threshold: [0.2, 0.45, 0.7] },
     );
 
     nodes.forEach((n) => observer.observe(n));
@@ -248,7 +248,10 @@ function MobileFormats({
       <div className="prog-mobile-sticky">
         {laneSwitcher ? <div className="prog-mobile-switcher">{laneSwitcher}</div> : null}
 
-        <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--mobile" />
+        <div className="prog-mobile-stage">
+          <span className="prog-mobile-stage__glow" aria-hidden />
+          <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--mobile" />
+        </div>
 
         <div className="prog-mobile-dots" role="tablist" aria-label="Formats">
           {formats.map((fmt, i) => (
@@ -275,12 +278,17 @@ function MobileFormats({
             data-index={i}
             className={`prog-scroll-section__mobile-card${i === activeIndex ? " is-active" : ""}`}
           >
-            <p className="stat-label whitespace-nowrap shrink-0 text-orange">{fmt.tagline}</p>
-            <h3 className="card-title mt-2">{fmt.label}</h3>
-            <p className="copy mt-3">{fmt.description}</p>
-            <ul className="channel-inventory-points mt-4 space-y-2">
+            <div className="prog-mobile-card__meta">
+              <p className="prog-mobile-card__tag">{fmt.tagline}</p>
+              <span className="prog-mobile-card__index" aria-hidden>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+            </div>
+            <h3 className="card-title prog-mobile-card__title">{fmt.label}</h3>
+            <p className="copy prog-mobile-card__body">{fmt.description}</p>
+            <ul className="prog-mobile-card__points">
               {fmt.points.map((point) => (
-                <li key={point} className="channel-inventory-points__item copy text-muted">
+                <li key={point} className="prog-mobile-card__point">
                   {point}
                 </li>
               ))}
