@@ -17,6 +17,9 @@ type CaseDetailModalProps = {
 export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDetailModalProps) {
   const reduced = useReducedMotion();
   const visible = open && Boolean(item);
+  const coarse =
+    typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+  const simpleMotion = reduced || coarse;
 
   useEffect(() => {
     if (!visible) return;
@@ -49,7 +52,7 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={reduced ? { duration: 0.15 } : SPRING_SOFT}
+          transition={simpleMotion ? { duration: 0.15 } : SPRING_SOFT}
         >
           <button
             type="button"
@@ -64,10 +67,10 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             aria-labelledby={`case-modal-title-${item.id}`}
             data-lenis-prevent
             className="case-detail-modal__panel"
-            initial={reduced ? false : { opacity: 0, y: 36, scale: 0.96 }}
+            initial={simpleMotion ? false : { opacity: 0, y: 36, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? undefined : { opacity: 0, y: 24, scale: 0.97 }}
-            transition={reduced ? { duration: 0.15 } : SPRING}
+            exit={simpleMotion ? undefined : { opacity: 0, y: 24, scale: 0.97 }}
+            transition={simpleMotion ? { duration: 0.15 } : SPRING}
           >
             <div className="case-detail-modal__toolbar">
               <p id={`case-modal-title-${item.id}`} className="sr-only">

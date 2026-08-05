@@ -1,23 +1,15 @@
-import { useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { getCaseById } from "../data/cases";
-import { useCaseModal } from "../context/CaseModalContext";
 
 /**
- * Deep link `/cases/:slug` — opens the shared modal and keeps the slug in the URL
- * until the visitor closes the brief.
+ * Deep link `/cases/:slug` — CaseModalProvider syncs the modal from the URL.
+ * This route keeps the archive mounted via the parent Outlet.
  */
 export function CaseDetailPage() {
   const { slug = "" } = useParams();
-  const { openCase, activeId } = useCaseModal();
   const item = getCaseById(slug);
 
-  useEffect(() => {
-    if (!item) return;
-    openCase(item.id);
-  }, [item, openCase]);
-
-  if (!item && !activeId) return <Navigate to="/cases" replace />;
+  if (!item) return <Navigate to="/cases" replace />;
 
   return null;
 }

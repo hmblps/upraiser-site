@@ -1,5 +1,4 @@
-import { useRef, type CSSProperties, type MouseEvent, type PointerEvent as ReactPointerEvent } from "react";
-import { Link } from "react-router-dom";
+import { useRef, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent as ReactPointerEvent } from "react";
 import type { CaseStudy } from "../data/cases";
 import { useCaseModal } from "../context/CaseModalContext";
 import { CaseBrandHeader } from "./CaseBrandHeader";
@@ -16,7 +15,7 @@ type CasePreviewCardProps = {
 };
 
 /** Movement under this still counts as a tap inside the swipe carousel. */
-const TAP_SLOP_PX = 14;
+const TAP_SLOP_PX = 16;
 
 /**
  * Infinite deck renders 3 copies and scrolls to the middle lane (`copy === 1`).
@@ -24,7 +23,7 @@ const TAP_SLOP_PX = 14;
  */
 const LIVE_CAROUSEL_COPY = 1;
 
-/** Preview card — opens the global case modal without leaving the current page. */
+/** Preview card — opens the global case modal (no <a> navigation fight with the swipe deck). */
 export function CasePreviewCard({
   item,
   ctaLabel = "Read the case",
@@ -39,30 +38,26 @@ export function CasePreviewCard({
   const isCarousel = variant === "carousel";
   const isReplica = isCarousel && copy !== LIVE_CAROUSEL_COPY;
   const pointerOrigin = useRef<{ x: number; y: number; id: number } | null>(null);
-  const openedByPointerTap = useRef(false);
 
   const open = () => {
     openCase(item.id);
   };
 
-  const handlePointerDown = (event: ReactPointerEvent<HTMLAnchorElement>) => {
+  const handlePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
     if (event.button != null && event.button !== 0) return;
     pointerOrigin.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
-    openedByPointerTap.current = false;
   };
 
-  const handlePointerUp = (event: ReactPointerEvent<HTMLAnchorElement>) => {
+  const handlePointerUp = (event: ReactPointerEvent<HTMLElement>) => {
     const origin = pointerOrigin.current;
     pointerOrigin.current = null;
     if (!origin || origin.id !== event.pointerId) return;
-    // Mouse keeps using click (cmd/ctrl-click etc). Touch/pen often lose click inside overflow-x carousels.
-    if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
 
     const dx = Math.abs(event.clientX - origin.x);
     const dy = Math.abs(event.clientY - origin.y);
     if (dx > TAP_SLOP_PX || dy > TAP_SLOP_PX) return;
 
-    openedByPointerTap.current = true;
+    // Whole-card tap — mouse, touch, and pen.
     event.preventDefault();
     open();
   };
@@ -71,34 +66,35 @@ export function CasePreviewCard({
     pointerOrigin.current = null;
   };
 
-  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (openedByPointerTap.current) {
-      event.preventDefault();
-      openedByPointerTap.current = false;
-      return;
-    }
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    // pointerup already opened on a clean tap; ignore the synthetic follow-up click.
+    if (event.detail === 0) return;
+    event.preventDefault();
+    open();
+  };
 
-    // Keep cmd/ctrl/middle-click as real navigation to /cases/:slug.
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    if (event.button != null && event.button !== 0) return;
-
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
     open();
   };
 
   return (
-    <Link
-      to={`/cases/${item.id}`}
+    <article
+      role="link"
       data-cursor="link"
       data-case-card
+      data-case-id={item.id}
       data-case-index={caseIndex}
       data-case-copy={copy}
+      aria-label={`${item.client} case study. ${ctaLabel}`}
       aria-hidden={isReplica || undefined}
-      tabIndex={isReplica ? -1 : undefined}
+      tabIndex={isReplica ? -1 : 0}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       className={[
         "case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-orange/30",
         isCarousel ? "case-preview-card--carousel" : "h-full",
@@ -113,7 +109,6 @@ export function CasePreviewCard({
         } as CSSProperties
       }
     >
-      {/* Compact header in carousel — full header was clipping CTA under viewport max-height */}
       <CaseBrandHeader item={item} compact />
       <div className="card-pad flex min-h-0 flex-1 flex-col">
         <p className="case-teaser-metric shrink-0">{primary.value}</p>
@@ -135,10 +130,10 @@ export function CasePreviewCard({
         <p className="case-preview-card__headline" title={item.headline}>
           {item.headline}
         </p>
-        <p className="case-preview-card__cta mt-auto shrink-0">
-          {ctaLabel} <span aria-hidden>→</span>
+        <p className="case-preview-card__cta mt-auto shrink-0" aria-hidden>
+          {ctaLabel} <span>→</span>
         </p>
       </div>
-    </Link>
+    </article>
   );
 }

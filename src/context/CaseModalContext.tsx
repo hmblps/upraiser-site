@@ -24,8 +24,9 @@ type CaseModalContextValue = {
 
 const CaseModalContext = createContext<CaseModalContextValue | null>(null);
 
-function isCasesRoute(pathname: string) {
-  return pathname === "/cases" || pathname.startsWith("/cases/");
+function caseIdFromPath(pathname: string): string | null {
+  const match = pathname.match(/^\/cases\/([^/]+)\/?$/);
+  return match?.[1] ?? null;
 }
 
 export function CaseModalProvider({ children }: { children: ReactNode }) {
@@ -35,6 +36,18 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const item: CaseStudy | null = activeId ? (getCaseById(activeId) ?? null) : null;
 
+  // URL is source of truth for deep links and browser back/forward.
+  useEffect(() => {
+    const fromUrl = caseIdFromPath(pathname);
+    if (fromUrl && getCaseById(fromUrl)) {
+      setActiveId(fromUrl);
+      return;
+    }
+    if (pathname === "/cases" || pathname === "/cases/" || !pathname.startsWith("/cases")) {
+      setActiveId(null);
+    }
+  }, [pathname]);
+
   useEffect(() => {
     if (item) setPanelItem(item);
   }, [item]);
@@ -43,9 +56,9 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
     (id: string) => {
       if (!getCaseById(id)) return;
       setActiveId(id);
-      // Shareable URL only while browsing the cases archive.
-      if (isCasesRoute(pathname) && pathname !== `/cases/${id}`) {
-        navigate(`/cases/${id}`, { replace: true });
+      if (pathname !== `/cases/${id}`) {
+        // Keep shareable URL from home teaser and /cases alike.
+        navigate(`/cases/${id}`, { replace: pathname.startsWith("/cases") });
       }
     },
     [navigate, pathname],
@@ -53,7 +66,7 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
 
   const closeCase = useCallback(() => {
     setActiveId(null);
-    if (pathname.startsWith("/cases/") && pathname !== "/cases") {
+    if (caseIdFromPath(pathname)) {
       navigate("/cases", { replace: true });
     }
   }, [navigate, pathname]);

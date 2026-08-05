@@ -111,7 +111,7 @@ export function CaseStudies() {
             <ScrollLink
               href="/contact"
               data-cursor="cta"
-              className="btn-caps btn-caps--primary hidden sm:inline-block"
+              className="btn-caps btn-caps--primary cases-chrome-pilot"
             >
               Request Pilot
             </ScrollLink>
