@@ -16,10 +16,7 @@ export function CompanyStoryTimeline() {
 
   return (
     <div className="company-story-scrub flex h-full min-h-0 flex-col overflow-hidden">
-      <p className="about-positioning section-lead text-fg">
-        {COMPANY_CONTENT.positioningLead}{" "}
-        <span className="text-orange">{COMPANY_CONTENT.positioningAccent}</span>
-      </p>
+
 
       <div
         className="company-story-scrub__rail mt-5 flex shrink-0 items-center gap-1"
