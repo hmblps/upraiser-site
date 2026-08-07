@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { partnersForSet, partnerSetForRoute } from "../data/partners";
 
@@ -13,11 +13,42 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   const [params] = useSearchParams();
   const setId = partnerSetForRoute(pathname, params.get("pillar"));
   const partners = partnersForSet(setId);
-  const items = partners.length > 0 ? [...partners, ...partners] : [];
+  const [index, setIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
 
-  if (items.length === 0) return null;
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const visibleCount = width < 640 ? 3 : width < 1024 ? 4 : 6;
+  const extendedItems = [...partners, ...partners];
+
+  useEffect(() => {
+    if (partners.length === 0) return;
+    const timer = setInterval(() => {
+      setIsTransitioning(true);
+      setIndex((prev) => prev + 1);
+    }, 3500); // Step every 3.5s
+    return () => clearInterval(timer);
+  }, [partners.length]);
+
+  useEffect(() => {
+    if (index >= partners.length) {
+      const timeout = setTimeout(() => {
+        setIsTransitioning(false);
+        setIndex(0);
+      }, 500); // Match transition speed
+      return () => clearTimeout(timeout);
+    }
+  }, [index, partners.length]);
+
+  if (partners.length === 0) return null;
 
   if (compact) {
+    const items = [...partners, ...partners];
     return (
       <div className="partners-strip partners-strip--chrome relative overflow-hidden" aria-label="Integrations">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-bg to-transparent" />
@@ -38,7 +69,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
     );
   }
 
-  /* Home / footer runway — transparent, border-less, and spacious look like thingortwo.com */
+  /* Home / footer runway — stepped sliding carousel like thingortwo.com */
   return (
     <section
       className="partners-strip partners-strip--home relative overflow-hidden bg-transparent"
@@ -50,17 +81,27 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
         </span>
       </div>
 
-      <div className="relative w-full">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-bg to-transparent sm:w-28" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-bg to-transparent sm:w-28" />
+      {/* Centered, boxed container so it does not stretch edge-to-edge */}
+      <div className="relative w-full max-w-[1100px] mx-auto px-6 overflow-hidden">
+        {/* Soft edge-fade gradients inside the box boundary */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-bg to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-bg to-transparent" />
 
-        <div className="partners-marquee flex w-max items-center">
-          {items.map((partner, index) => (
+        <div
+          className="flex items-center"
+          style={{
+            transform: `translateX(-${(index / extendedItems.length) * 100}%)`,
+            transition: isTransitioning ? "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)" : "none",
+          }}
+        >
+          {extendedItems.map((partner, idx) => (
             <div
-              key={`${partner.slug}-${index}`}
-              className="partner-logo-slot partner-logo-slot--home"
-              style={{ "--logo-scale": partner.scale ?? 1 } as CSSProperties}
-              aria-hidden={index >= partners.length}
+              key={`${partner.slug}-${idx}`}
+              className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0"
+              style={{
+                width: `${100 / visibleCount}%`,
+                "--logo-scale": partner.scale ?? 1,
+              } as CSSProperties}
             >
               <img
                 src={partner.logo}
