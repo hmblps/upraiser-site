@@ -25,11 +25,7 @@ export function CaseBrandHeader({ item, compact = false }: CaseBrandHeaderProps)
       <div className="case-brand-header__wash" aria-hidden />
 
       <div className="case-brand-header__content">
-        <motion.div
-          className="case-brand-icon"
-          whileHover={{ scale: 1.04, rotate: -2 }}
-          transition={SPRING}
-        >
+        <div className="case-brand-icon">
           <img
             src={brand.icon}
             alt={`${item.client} app icon`}
@@ -37,7 +33,7 @@ export function CaseBrandHeader({ item, compact = false }: CaseBrandHeaderProps)
             loading="lazy"
             decoding="async"
           />
-        </motion.div>
+        </div>
 
         <div className="case-brand-header__copy min-w-0">
           <span className="text-micro case-brand-header__category">{meta}</span>
