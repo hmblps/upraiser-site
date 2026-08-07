@@ -42,6 +42,7 @@ type AccentScrollFoldProps = {
   /** `anchor` = natural section height, progress tied to copy block (no sticky runway) */
   runway?: "default" | "compact" | "anchor";
   className?: string;
+  startLine?: number;
 };
 
 /**
@@ -57,6 +58,7 @@ export function AccentScrollFold({
   runway = "default",
   children,
   className = "",
+  startLine = 0.92,
 }: AccentScrollFoldProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -69,8 +71,7 @@ export function AccentScrollFold({
   const anchorProgress = useScrollScene(sectionRef, {
     mode: "anchor",
     anchorRef: stageRef,
-    // Start as soon as the hero word enters the lower viewport (prod feel).
-    startLine: 0.92,
+    startLine,
     endLine: 0.28,
     spring: false,
     resetKey: remountKey,

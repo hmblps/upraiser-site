@@ -1305,7 +1305,8 @@ html.theme-light .depth-page--gear .gear-spec,
 /* Home footer runway — spacious, transparent, and floating like thingortwo.com */
 .partners-strip--home {
   height: auto;
-  padding-block: 1rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2.5rem;
 }
 
 .partners-strip--home .partners-marquee {
@@ -1324,7 +1325,8 @@ html.theme-light .depth-page--gear .gear-spec,
 
 @media (min-width: 640px) {
   .partners-strip--home {
-    padding-block: 1.75rem;
+    padding-top: 2.5rem;
+    padding-bottom: 4.5rem;
   }
 
   .partner-logo-slot--home {

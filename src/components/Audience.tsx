@@ -39,6 +39,7 @@ function AudienceAnimated() {
       id="audience"
       remountKey={key}
       runway="anchor"
+      startLine={0.76}
       ambient={mode === "infrastructure" ? "fraud" : "chart"}
       className={`accent-scroll-section--fold-pair${mode === "infrastructure" ? " accent-scroll-section--split-copy" : ""}`.trim()}
       scrollHeroWord={content.scrollHeroWord}
