@@ -190,24 +190,26 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                     : undefined
               }
             />
-            <div className="flex shrink-0 gap-2">
-              <button
-                type="button"
-                onClick={() => scrollTabs("left")}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
-                aria-label="Scroll channels left"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollTabs("right")}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
-                aria-label="Scroll channels right"
-              >
-                →
-              </button>
-            </div>
+            {!isHome && (
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={() => scrollTabs("left")}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                  aria-label="Scroll channels left"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollTabs("right")}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                  aria-label="Scroll channels right"
+                >
+                  →
+                </button>
+              </div>
+            )}
           </SectionHeaderRow>
         ) : (
           <div className="mb-4 flex justify-end gap-2">
