@@ -38,32 +38,40 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
     );
   }
 
-  /* Home / footer runway — medium density (between chrome and old py-12 block) */
+  /* Home / footer runway — transparent, border-less, and spacious look like thingortwo.com */
   return (
     <section
-      className="partners-strip partners-strip--home relative overflow-hidden border-t border-border bg-bg-elevated"
+      className="partners-strip partners-strip--home relative overflow-hidden bg-transparent"
       aria-label="Trusted integrations and partners"
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-bg-elevated to-transparent sm:w-20" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-bg-elevated to-transparent sm:w-20" />
+      <div className="text-center mb-6 mt-8">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-fg-muted/40">
+          Our Partners
+        </span>
+      </div>
 
-      <div className="partners-marquee flex w-max items-center px-6">
-        {items.map((partner, index) => (
-          <div
-            key={`${partner.slug}-${index}`}
-            className="partner-logo-slot partner-logo-slot--home"
-            style={{ "--logo-scale": partner.scale ?? 1 } as CSSProperties}
-            aria-hidden={index >= partners.length}
-          >
-            <img
-              src={partner.logo}
-              alt={partner.name}
-              className="partner-logo"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        ))}
+      <div className="relative w-full">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-bg to-transparent sm:w-28" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-bg to-transparent sm:w-28" />
+
+        <div className="partners-marquee flex w-max items-center">
+          {items.map((partner, index) => (
+            <div
+              key={`${partner.slug}-${index}`}
+              className="partner-logo-slot partner-logo-slot--home"
+              style={{ "--logo-scale": partner.scale ?? 1 } as CSSProperties}
+              aria-hidden={index >= partners.length}
+            >
+              <img
+                src={partner.logo}
+                alt={partner.name}
+                className="partner-logo"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

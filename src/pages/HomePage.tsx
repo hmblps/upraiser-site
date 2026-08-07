@@ -3,6 +3,7 @@ import { Hero } from "../components/Hero";
 import { LazySection } from "../layouts/SiteLayout";
 import { SectionNav } from "../components/SectionNav";
 import { HomePilotCta } from "../components/HomePilotCta";
+import { PartnersCarousel } from "../components/PartnersCarousel";
 
 const Audience = lazy(() => import("../components/Audience").then((m) => ({ default: m.Audience })));
 const Process = lazy(() => import("../components/Process").then((m) => ({ default: m.Process })));
@@ -65,6 +66,9 @@ export function HomePage() {
         >
           <Hero />
         </div>
+        <LazySection minHeight="8rem">
+          <PartnersCarousel />
+        </LazySection>
         <LazySection minHeight="70vh">
           <Audience />
         </LazySection>

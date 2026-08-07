@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Header } from "../components/Header";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { SiteGrain } from "../components/SiteGrain";
@@ -57,6 +57,8 @@ export function LazySection({ children, minHeight = "28vh" }: { children: ReactN
 export function SiteLayout() {
   const { isPreviewMode: applePreview, features: appleFeatures } = useApplePreview();
   const viewportRoute = useViewportRoute();
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
 
   return (
     <SmoothScroll>
@@ -74,9 +76,11 @@ export function SiteLayout() {
         </div>
         {!viewportRoute ? (
           <>
-            <LazySection minHeight="3.5rem">
-              <PartnersCarousel />
-            </LazySection>
+            {!isHome && (
+              <LazySection minHeight="3.5rem">
+                <PartnersCarousel />
+              </LazySection>
+            )}
             <LazySection minHeight="20vh">
               <Footer />
             </LazySection>

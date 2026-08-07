@@ -1302,39 +1302,39 @@ html.theme-light .depth-page--gear .gear-spec,
   max-height: 1.5rem;
 }
 
-/* Home footer runway — between chrome and former py-12 block */
+/* Home footer runway — spacious, transparent, and floating like thingortwo.com */
 .partners-strip--home {
-  height: 3.25rem;
-  padding-block: 0;
+  height: auto;
+  padding-block: 1rem;
 }
 
 .partners-strip--home .partners-marquee {
-  animation-duration: 46s;
+  animation-duration: 52s; /* Slower, smoother speed for a premium, non-distracting feel */
 }
 
 .partner-logo-slot--home {
-  height: 3.25rem;
-  padding-inline: 1rem;
+  height: 4rem;
+  padding-inline: 1.75rem;
 }
 
 .partner-logo-slot--home .partner-logo {
-  height: calc(1.45rem * var(--logo-scale, 1));
-  max-height: 1.85rem;
+  height: calc(1.6rem * var(--logo-scale, 1));
+  max-height: 2.2rem;
 }
 
 @media (min-width: 640px) {
   .partners-strip--home {
-    height: 3.5rem;
+    padding-block: 1.75rem;
   }
 
   .partner-logo-slot--home {
-    height: 3.5rem;
-    padding-inline: 1.15rem;
+    height: 4.5rem;
+    padding-inline: 2.5rem; /* Large spacing (50px) between logos */
   }
 
   .partner-logo-slot--home .partner-logo {
-    height: calc(1.55rem * var(--logo-scale, 1));
-    max-height: 2rem;
+    height: calc(2.1rem * var(--logo-scale, 1));
+    max-height: 2.85rem;
   }
 }
 
