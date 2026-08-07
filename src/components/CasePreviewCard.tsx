@@ -51,6 +51,14 @@ export function CasePreviewCard({
     open();
   };
 
+  const handleMouseMove = (event: MouseEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    event.currentTarget.style.setProperty("--mouse-x", `${x}%`);
+    event.currentTarget.style.setProperty("--mouse-y", `${y}%`);
+  };
+
   return (
     <article
       role="button"
@@ -64,6 +72,7 @@ export function CasePreviewCard({
       tabIndex={isReplica ? -1 : 0}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
+      onMouseMove={handleMouseMove}
       className={[
         "case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-orange/30",
         isCarousel ? "case-preview-card--carousel" : "h-full",
