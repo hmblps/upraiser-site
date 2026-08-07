@@ -601,3 +601,48 @@ export const CLIENTS_CONTENT = {
   ctaLabel: "Request Pilot",
   verticals: ["All", "iGaming", "Gaming", "Fintech", "Marketplace", "E-commerce", "Social"] as const,
 } as const;
+
+export interface AscentProtocolItem {
+  protocolNumber: string; // "PROT-01", "PROT-02" etc.
+  question: string;
+  answer: string;
+  ogilvyProof: string; // Compact fact label
+}
+
+export const ASCENT_PROTOCOLS: AscentProtocolItem[] = [
+  {
+    protocolNumber: "PROT-01",
+    question: "Is UPRAISER built to support in-house media teams?",
+    answer:
+      "Yes. We empower Your in-house team. We do not take ownership away from Your operators. Instead, we wire the SDK trails and clear the data pipelines so Your team can execute campaigns on clean, audit-ready logs. Think of us as Your rigging crew on the mountain. We secure the lines and ensure the oxygen supply while Your traders run the climb.",
+    ogilvyProof: "Operator Control · Direct SDK Integration",
+  },
+  {
+    protocolNumber: "PROT-02",
+    question: "How does UPRAISER ensure zero-drift data transparency?",
+    answer:
+      "We map Your stack and align log pipelines before going live. Every campaign matches Your MMP data to the penny. By verifying attribution at bid-time, we guarantee 0% post-flight log drift. Your finance directors and UA traders always read the same invoice.",
+    ogilvyProof: "0% Post-Flight Log Drift · Match to the Penny",
+  },
+  {
+    protocolNumber: "PROT-03",
+    question: "How do You block mobile fraud before the bid happens?",
+    answer:
+      "We deploy The Gear. Our pre-bid engine scores every incoming opportunity in 0.4ms, analyzing over 180 raw device signals. We filter out the noise at the source, ensuring You never buy a ghost.",
+    ogilvyProof: "0.4ms p99 Latency · 180+ Device Signals",
+  },
+  {
+    protocolNumber: "PROT-04",
+    question: "What is CGC and how does it fit into Your routes?",
+    answer:
+      "Creator-Generated Content (CGC) is the visual oxygen for Your funnel. We source high-performing creator media and amplify it across programmatic, social, and OEM routes. We do not just run ads. We trace every creative asset down to the raw install log, optimizing for user LTV rather than simple clicks.",
+    ogilvyProof: "Visual Oxygen · LTV Event Tracing",
+  },
+  {
+    protocolNumber: "PROT-05",
+    question: "Are You a SaaS tool or a full-spectrum performance desk?",
+    answer:
+      "We are a full-spectrum boutique agency. We write the code, wire the pipelines, and buy the media. You work directly with the 6 operators who built Your gear and trade Your budgets. No account managers, no black boxes.",
+    ogilvyProof: "6 Core Operators · Direct Execution",
+  },
+];

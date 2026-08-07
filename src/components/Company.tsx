@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { primaryCta } from "../data/liveContent";
 import { COMPANY_CONTENT } from "../data/innerPagesData";
 import { clientBrands } from "../data/clients";
-import { AboutFaq } from "./AboutFaq";
+import { AscentProtocol } from "./AscentProtocol";
 import { CompanyFootprint } from "./CompanyFootprint";
 import { CompanyStoryTimeline } from "./CompanyStoryTimeline";
 import { LenovoProofStrip } from "./LenovoProofStrip";
@@ -20,7 +20,7 @@ const TABS = [
   { id: "clients", label: "Clients" },
   { id: "compliance", label: "Compliance" },
   { id: "footprint", label: "Footprint" },
-  { id: "faq", label: "FAQ" },
+  { id: "protocol", label: "Protocol" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -196,13 +196,9 @@ export function Company() {
 
               {activeId === "footprint" ? <CompanyFootprint embedded /> : null}
 
-              {activeId === "faq" ? (
+              {activeId === "protocol" ? (
                 <div className="h-full min-h-0 overflow-hidden">
-                  <AboutFaq
-                    heading={COMPANY_CONTENT.faqHeading}
-                    items={[...COMPANY_CONTENT.faq]}
-                    compact
-                  />
+                  <AscentProtocol />
                 </div>
               ) : null}
             </motion.div>
