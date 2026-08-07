@@ -1,13 +1,14 @@
 import { useState, useEffect, type CSSProperties } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { partnersForSet, partnerSetForRoute } from "../data/partners";
+import { clientBrands } from "../data/clients";
 
 type PartnersCarouselProps = {
   /** Compact strip for viewport chrome */
   compact?: boolean;
 };
 
-/** Partners marquee — same strip; logos swap by route/section. */
+/** Partners/Clients marquee — same component; maps to Clients on homepage runway, Partners in chrome. */
 export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   const { pathname } = useLocation();
   const [params] = useSearchParams();
@@ -23,29 +24,30 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const itemsList = compact ? partners : clientBrands;
   const visibleCount = width < 640 ? 3 : width < 1024 ? 4 : 6;
-  const extendedItems = [...partners, ...partners];
+  const extendedItems = [...itemsList, ...itemsList];
 
   useEffect(() => {
-    if (partners.length === 0) return;
+    if (itemsList.length === 0) return;
     const timer = setInterval(() => {
       setIsTransitioning(true);
       setIndex((prev) => prev + 1);
     }, 3500); // Step every 3.5s
     return () => clearInterval(timer);
-  }, [partners.length]);
+  }, [itemsList.length]);
 
   useEffect(() => {
-    if (index >= partners.length) {
+    if (index >= itemsList.length) {
       const timeout = setTimeout(() => {
         setIsTransitioning(false);
         setIndex(0);
       }, 500); // Match transition speed
       return () => clearTimeout(timeout);
     }
-  }, [index, partners.length]);
+  }, [index, itemsList.length]);
 
-  if (partners.length === 0) return null;
+  if (itemsList.length === 0) return null;
 
   if (compact) {
     const items = [...partners, ...partners];
@@ -73,11 +75,11 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   return (
     <section
       className="partners-strip partners-strip--home relative overflow-hidden bg-transparent"
-      aria-label="Trusted integrations and partners"
+      aria-label="Trusted clients"
     >
       <div className="text-center mb-6 mt-8">
         <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-fg-muted/40">
-          Our Partners
+          Our Clients
         </span>
       </div>
 
@@ -94,22 +96,28 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
             transition: isTransitioning ? "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)" : "none",
           }}
         >
-          {extendedItems.map((partner, idx) => (
+          {extendedItems.map((brand, idx) => (
             <div
-              key={`${partner.slug}-${idx}`}
+              key={`${brand.slug}-${idx}`}
               className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0"
               style={{
                 width: `${100 / visibleCount}%`,
-                "--logo-scale": partner.scale ?? 1,
+                "--logo-scale": brand.scale ?? 1,
               } as CSSProperties}
             >
-              <img
-                src={partner.logo}
-                alt={partner.name}
-                className="partner-logo"
-                loading="lazy"
-                decoding="async"
-              />
+              {brand.logo ? (
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="partner-logo"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span className="partner-logo-wordmark">
+                  {brand.name}
+                </span>
+              )}
             </div>
           ))}
         </div>
