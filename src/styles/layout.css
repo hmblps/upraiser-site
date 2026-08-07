@@ -15,7 +15,7 @@
 
 /* Viewport /cases: stretch equal-height cards; keep tiny side inset for fade */
 .viewport-page .cases-carousel-picker {
-  padding-block: 0;
+  padding-block: 0.65rem;
   padding-inline: 0.5rem;
   align-items: stretch;
 }

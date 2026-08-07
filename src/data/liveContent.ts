@@ -67,7 +67,7 @@ export const audienceByMode = {
     scrollHeroWord: "SCALE",
     cta: primaryCta.label,
     description:
-      "UPRAISER provides a direct supply path across OEM, Programmatic, and Social channels. No middlemen to slow You down, no black boxes to hide the risk. Just pure, measurable momentum for Your unit economics.",
+      "Direct pipe. Not resale. UPRAISER provides a direct supply path across OEM, Programmatic, and Social channels. No middlemen to slow You down, no black boxes to hide the risk. Just pure, measurable momentum for Your unit economics.",
   },
   infrastructure: {
     label: "The Fixed Lines",
@@ -78,7 +78,7 @@ export const audienceByMode = {
     scrollHeroWord: "PROOF",
     cta: primaryCta.label,
     description:
-      "When Your MMP and media bill diverge, You don't need a new dashboard — You need a better pipe. We verify the route before You start the climb, ensuring every bid has a receipt and every install is human.",
+      "Direct pipe. Not resale. When Your MMP and media bill diverge, You don't need a new dashboard — You need a better pipe. We verify the route before You start the climb, ensuring every bid has a receipt and every install is human.",
   },
 } satisfies Record<SiteMode, {
   label: string;
@@ -662,7 +662,7 @@ export const casesPage = {
   label: "The Peaks",
   title: "We know these peaks well.",
   description:
-    "Auditable campaigns for clients who need revenue events — not brand-lift slides. Block Blast: 32K+ daily installs via factory lanes.",
+    "Auditable campaigns for clients who need revenue events — not brand-lift slides. Direct publisher paths, pre-bid filtration, and event-based performance across global markets.",
   intro:
     "Open any case: hero numbers first, then Brand / Market / KPI / Channels, then Challenge → Approach → Result.",
   structureLabel: "How to read a case",
