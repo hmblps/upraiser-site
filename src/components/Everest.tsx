@@ -4,9 +4,9 @@ Adapted for UPRAISER Hero — dark: brand gold wire + ghost; light: photo maps.
 */
 
 import { useEffect, useMemo } from "react";
-import { Center, useGLTF } from "@react-three/drei";
+import { Center, useGLTF, useTexture } from "@react-three/drei";
 import { useFrame, type ThreeElements } from "@react-three/fiber";
-import { Box3, Color, MeshStandardMaterial, Vector3, type Mesh, type Object3D } from "three";
+import { Box3, Color, MeshStandardMaterial, Vector3, type Mesh, type Object3D, SRGBColorSpace, LinearSRGBColorSpace, RepeatWrapping, LinearMipmapLinearFilter, LinearFilter } from "three";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "../lib/heroModel";
 import { IDLE_BREATHE } from "./hero-terrain/shared";
 
@@ -134,24 +134,31 @@ export function Everest({
   const fill = useMemo(() => {
     const mat = materials.Default.clone();
     if (isLight) {
-      // Keep Sketchfab albedo + normal + derived roughness (snow sparkle / rock matte).
+      // Keep Sketchfab photogrammetry albedo + normal + derived roughness.
       mat.color = new Color("#ffffff");
       mat.emissive = new Color("#000000");
       mat.emissiveIntensity = 0;
-      mat.metalness = 0;
-      mat.roughness = 1; // driven by metallicRoughnessTexture (G channel)
-      mat.envMapIntensity = 0.95;
-      mat.normalScale?.set(1.75, 1.75);
+      
+      // Fix for "plastic/metallic" look: zero metalness.
+      // Roughness is kept at 1.0 so the metallicRoughnessTexture (G channel) can drive the varied specular response for snow vs rock.
+      mat.metalness = 0.0;
+      mat.roughness = 1.0;
+      
+      // Slightly lower envMap intensity to reduce overall brightness / neon effect, but keep it high enough for natural ambient light.
+      mat.envMapIntensity = 0.65; 
+      
+      mat.normalScale?.set(1.5, 1.5);
+      
       if (mat.map) {
-        mat.map.anisotropy = 8;
+        mat.map.anisotropy = 16;
         mat.map.needsUpdate = true;
       }
       if (mat.normalMap) {
-        mat.normalMap.anisotropy = 8;
+        mat.normalMap.anisotropy = 16;
         mat.normalMap.needsUpdate = true;
       }
       if (mat.roughnessMap) {
-        mat.roughnessMap.anisotropy = 4;
+        mat.roughnessMap.anisotropy = 8;
         mat.roughnessMap.needsUpdate = true;
       }
     } else {
@@ -163,12 +170,14 @@ export function Everest({
       mat.roughness = 0.98;
       mat.envMapIntensity = 0;
     }
+    
     mat.wireframe = false;
     mat.transparent = false;
     mat.opacity = 1;
     mat.depthWrite = true;
     mat.depthTest = true;
     mat.needsUpdate = true;
+    
     return mat;
   }, [materials.Default, isLight]);
 
