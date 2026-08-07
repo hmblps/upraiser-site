@@ -70,7 +70,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
   const openOnSolutions = useCallback(
     (id: string) => {
       const search = new URLSearchParams({ channel: id });
-      navigate({ pathname: "/solutions", search: `?${search.toString()}`, hash: "#channels" });
+      navigate({ pathname: "/solutions", search: `?${search.toString()}` });
     },
     [navigate],
   );
@@ -230,114 +230,176 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
           </div>
         )}
 
-        <Reveal delay={0.1}>
-          <div
-            ref={scrollRef}
-            className="section-stack overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            <SlideTabs
-              layoutId={`channel-tab-${variant}-${mode}`}
-              activeId={activeId}
-              onChange={selectChannel}
-              items={channels.map((channel) => ({ id: channel.id, label: channel.title }))}
-            />
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.15}>
-          <article className="channel-panel live-panel mt-5">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`${mode}-${active.id}-${variant}`}
-                initial={reduced ? false : "hidden"}
-                animate="visible"
-                exit={reduced ? undefined : "exit"}
-                variants={panelVariants}
-                className={cn(
-                  "transition-panel relative",
-                  showSplitLayout && "channel-panel__layout channel-panel__layout--split",
-                  showSplitLayout && active.id === "programmatic" && "channel-panel__layout--programmatic",
-                )}
-              >
-                <div className="channel-panel__copy">
-                  <motion.p variants={reduced ? undefined : panelItem} className="stat-label text-orange">
-                    {panelChannel.tagline}
-                  </motion.p>
-                  <motion.h3 variants={reduced ? undefined : panelItem} className="card-title mt-2">
-                    {panelChannel.title}
-                  </motion.h3>
-                {showChannelVisual && isHome ? (
-                  <motion.div
-                    variants={reduced ? undefined : panelItem}
-                    className="channel-panel__visual channel-panel__visual--home mt-4"
+        {isHome ? (
+          <Reveal delay={0.15}>
+            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {channels
+                .filter((c) => ["oem", "programmatic", "performance"].includes(c.id))
+                .map((channel) => (
+                  <article
+                    key={channel.id}
+                    className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-border bg-bg-card p-6 transition hover:border-orange/35 lg:p-7"
                   >
-                    {renderChannelVisual()}
-                  </motion.div>
-                ) : null}
-                  {showChannelVisual && showSplitLayout ? (
-                    <motion.div
-                      variants={reduced ? undefined : panelItem}
-                      className="channel-panel__visual channel-panel__visual--mobile"
-                    >
-                      {renderChannelVisual()}
-                    </motion.div>
-                  ) : null}
-                  <motion.p
-                    variants={reduced ? undefined : panelItem}
-                    className={cn("copy mt-3", !isSolutions && "max-w-3xl")}
-                  >
-                    {body}
-                  </motion.p>
-                  {points.length > 0 ? (
-                    <motion.ul
-                      variants={reduced ? undefined : panelItem}
-                      className="channel-inventory-points mt-5 space-y-2.5"
-                    >
-                      {points.map((point) => (
-                        <li key={point} className="channel-inventory-points__item copy text-sm text-muted">
-                          {point}
-                        </li>
-                      ))}
-                    </motion.ul>
-                  ) : null}
-                  <motion.div
-                    variants={reduced ? undefined : panelItem}
-                    className="mt-6 border-t border-border pt-4"
-                  >
-                    <p className="stat-label text-muted">Best for</p>
-                    <p className="copy mt-1">{panelChannel.bestFor}</p>
-                  </motion.div>
-                  {isHome ? (
-                    <motion.p variants={reduced ? undefined : panelItem} className="mt-5">
+                    <div>
+                      <p className="stat-label text-orange">{channel.tagline}</p>
+                      <h3 className="card-title mt-1.5 text-xl font-bold">{channel.title}</h3>
+                      <p className="copy mt-3 text-sm leading-relaxed text-muted-light">
+                        {"teaser" in channel && typeof channel.teaser === "string"
+                          ? channel.teaser
+                          : channel.description}
+                      </p>
+                    </div>
+                    <div className="mt-6 pt-2">
+                      <div className="border-t border-border/70 pt-3">
+                        <p className="stat-label text-xs text-muted">Best for</p>
+                        <p className="copy mt-0.5 text-xs text-fg">{channel.bestFor}</p>
+                      </div>
                       <button
                         type="button"
                         data-cursor="link"
-                        onClick={() => openOnSolutions(active.id)}
-                        className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold hover:border-orange/35"
+                        onClick={() => openOnSolutions(channel.id)}
+                        className="btn-caps btn-secondary mt-4 inline-flex items-center rounded-full px-4 py-2 text-xs font-semibold hover:border-orange/35"
                       >
-                        Open {active.title} on Solutions
-                        <span aria-hidden className="ml-1.5">
-                          →
-                        </span>
+                        Explore {channel.title} →
                       </button>
-                    </motion.p>
-                  ) : null}
+                    </div>
+                  </article>
+                ))}
+              
+              <article
+                className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-orange/20 bg-orange/[0.01] p-6 transition hover:border-orange/60 lg:p-7 group cursor-pointer"
+                onClick={() => navigate("/solutions")}
+              >
+                <div>
+                  <p className="stat-label text-orange">THE ROUTES</p>
+                  <h3 className="card-title mt-1.5 text-xl font-bold group-hover:text-orange transition-colors">
+                    Explore All 9 Buying Lanes
+                  </h3>
+                  <p className="copy mt-3 text-sm leading-relaxed text-muted-light">
+                    From Connected TV and Influencer networks to Native publisher whitelists. Discover the full inventory spec and tracking models.
+                  </p>
                 </div>
-                {showChannelVisual && showSplitLayout ? (
+                <div className="mt-6 pt-2">
+                  <div className="border-t border-border/70 pt-3 flex items-center justify-between">
+                    <span className="text-xs font-semibold text-fg">View All Solutions</span>
+                    <span className="text-orange group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </Reveal>
+        ) : (
+          <>
+            <Reveal delay={0.1}>
+              <div
+                ref={scrollRef}
+                className="section-stack overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
+                <SlideTabs
+                  layoutId={`channel-tab-${variant}-${mode}`}
+                  activeId={activeId}
+                  onChange={selectChannel}
+                  items={channels.map((channel) => ({ id: channel.id, label: channel.title }))}
+                />
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <article className="channel-panel live-panel mt-5">
+                <AnimatePresence mode="wait">
                   <motion.div
-                    variants={reduced ? undefined : panelItem}
+                    key={`${mode}-${active.id}-${variant}`}
+                    initial={reduced ? false : "hidden"}
+                    animate="visible"
+                    exit={reduced ? undefined : "exit"}
+                    variants={panelVariants}
                     className={cn(
-                      "channel-panel__visual channel-panel__visual--desktop",
-                      active.id === "programmatic" && "channel-panel__visual--programmatic",
+                      "transition-panel relative",
+                      showSplitLayout && "channel-panel__layout channel-panel__layout--split",
+                      showSplitLayout && active.id === "programmatic" && "channel-panel__layout--programmatic",
                     )}
                   >
-                    {renderChannelVisual()}
+                    <div className="channel-panel__copy">
+                      <motion.p variants={reduced ? undefined : panelItem} className="stat-label text-orange">
+                        {panelChannel.tagline}
+                      </motion.p>
+                      <motion.h3 variants={reduced ? undefined : panelItem} className="card-title mt-2">
+                        {panelChannel.title}
+                      </motion.h3>
+                    {showChannelVisual && isHome ? (
+                      <motion.div
+                        variants={reduced ? undefined : panelItem}
+                        className="channel-panel__visual channel-panel__visual--home mt-4"
+                      >
+                        {renderChannelVisual()}
+                      </motion.div>
+                    ) : null}
+                      {showChannelVisual && showSplitLayout ? (
+                        <motion.div
+                          variants={reduced ? undefined : panelItem}
+                          className="channel-panel__visual channel-panel__visual--mobile"
+                        >
+                          {renderChannelVisual()}
+                        </motion.div>
+                      ) : null}
+                      <motion.p
+                        variants={reduced ? undefined : panelItem}
+                        className={cn("copy mt-3", !isSolutions && "max-w-3xl")}
+                      >
+                        {body}
+                      </motion.p>
+                      {points.length > 0 ? (
+                        <motion.ul
+                          variants={reduced ? undefined : panelItem}
+                          className="channel-inventory-points mt-5 space-y-2.5"
+                        >
+                          {points.map((point) => (
+                            <li key={point} className="channel-inventory-points__item copy text-sm text-muted">
+                              {point}
+                            </li>
+                          ))}
+                        </motion.ul>
+                      ) : null}
+                      <motion.div
+                        variants={reduced ? undefined : panelItem}
+                        className="mt-6 border-t border-border pt-4"
+                      >
+                        <p className="stat-label text-muted">Best for</p>
+                        <p className="copy mt-1">{panelChannel.bestFor}</p>
+                      </motion.div>
+                      {isHome ? (
+                        <motion.p variants={reduced ? undefined : panelItem} className="mt-5">
+                          <button
+                            type="button"
+                            data-cursor="link"
+                            onClick={() => openOnSolutions(active.id)}
+                            className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold hover:border-orange/35"
+                          >
+                            Open {active.title} on Solutions
+                            <span aria-hidden className="ml-1.5">
+                              →
+                            </span>
+                          </button>
+                        </motion.p>
+                      ) : null}
+                    </div>
+                    {showChannelVisual && showSplitLayout ? (
+                      <motion.div
+                        variants={reduced ? undefined : panelItem}
+                        className={cn(
+                          "channel-panel__visual channel-panel__visual--desktop",
+                          active.id === "programmatic" && "channel-panel__visual--programmatic",
+                        )}
+                      >
+                        {renderChannelVisual()}
+                      </motion.div>
+                    ) : null}
                   </motion.div>
-                ) : null}
-              </motion.div>
-            </AnimatePresence>
-          </article>
-        </Reveal>
+                </AnimatePresence>
+              </article>
+            </Reveal>
+          </>
+        )}
       </ModeContentTransition>
     </section>
   );
