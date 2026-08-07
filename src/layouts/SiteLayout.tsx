@@ -75,16 +75,9 @@ export function SiteLayout() {
           {viewportRoute ? <ViewportChrome /> : null}
         </div>
         {!viewportRoute ? (
-          <>
-            {!isHome && (
-              <LazySection minHeight="3.5rem">
-                <PartnersCarousel />
-              </LazySection>
-            )}
-            <LazySection minHeight="20vh">
-              <Footer />
-            </LazySection>
-          </>
+          <LazySection minHeight="20vh">
+            <Footer />
+          </LazySection>
         ) : null}
         {applePreview && appleFeatures ? (
           <Suspense fallback={null}>

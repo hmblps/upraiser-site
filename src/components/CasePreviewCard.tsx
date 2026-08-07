@@ -3,6 +3,48 @@ import type { CaseStudy } from "../data/cases";
 import { useCaseModal } from "../context/CaseModalContext";
 import { CaseBrandHeader } from "./CaseBrandHeader";
 
+function Sparkline({ trend, accent, id }: { trend: number[]; accent: string; id: string }) {
+  if (!trend || trend.length === 0) return null;
+  const width = 320;
+  const height = 64;
+  const paddingX = 4;
+  const paddingY = 8;
+  const maxX = trend.length - 1;
+  const maxY = Math.max(...trend);
+  const minY = Math.min(...trend);
+  const yRange = maxY - minY || 1;
+
+  const points = trend.map((val, idx) => {
+    const x = paddingX + (idx / maxX) * (width - paddingX * 2);
+    const y = height - paddingY - ((val - minY) / yRange) * (height - paddingY * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  const linePath = `M ${points.join(" L ")}`;
+  const areaPath = `${linePath} L ${width - paddingX},${height} L ${paddingX},${height} Z`;
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-11 overflow-visible" aria-hidden="true">
+      <defs>
+        <linearGradient id={`spark-grad-${id}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={accent} stopOpacity={0.16} />
+          <stop offset="100%" stopColor={accent} stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <path d={areaPath} fill={`url(#spark-grad-${id})`} />
+      <path
+        d={linePath}
+        fill="none"
+        stroke={accent}
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="opacity-70 group-hover:opacity-100 transition-opacity duration-300"
+      />
+    </svg>
+  );
+}
+
 type CasePreviewCardProps = {
   item: CaseStudy;
   ctaLabel?: string;
@@ -108,7 +150,21 @@ export function CasePreviewCard({
         <p className="case-preview-card__headline" title={item.headline}>
           {item.headline}
         </p>
-        <span className="case-preview-card__cta mt-auto shrink-0">
+
+        <p className="mt-2.5 text-[0.78rem] leading-relaxed text-muted-light line-clamp-2">
+          {item.growthFocus.approach}
+        </p>
+
+        {/* Glowing vector sparkline chart */}
+        <div className="mt-auto pt-4 mb-2 shrink-0 w-full">
+          <Sparkline trend={item.trend} accent={item.brand.accent} id={item.id} />
+          <div className="flex justify-between items-center mt-1 text-[0.5625rem] text-muted tracking-wider uppercase font-bold">
+            <span>Volume Index</span>
+            <span>12W Scale</span>
+          </div>
+        </div>
+
+        <span className="case-preview-card__cta mt-2 shrink-0">
           {ctaLabel} <span aria-hidden>→</span>
         </span>
       </div>

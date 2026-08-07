@@ -12,9 +12,6 @@ const PartnersCarousel = lazy(() =>
 export function ViewportChrome() {
   return (
     <div className="viewport-chrome shrink-0 border-t border-border/40">
-      <Suspense fallback={null}>
-        <PartnersCarousel compact />
-      </Suspense>
       <div className="section-inner flex h-9 items-center justify-between gap-4 text-[0.6875rem] text-muted">
         <p className="truncate">
           <span className="font-semibold tracking-wide text-fg/80">UPRAISER</span>
