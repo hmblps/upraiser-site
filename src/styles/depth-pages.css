@@ -1340,6 +1340,20 @@ html.theme-light .depth-page--gear .gear-spec,
   }
 }
 
+/* Disable hover effects for homepage clients to keep them purely monochromatic and non-interactive */
+.partners-strip--home .partner-logo-slot:hover .partner-logo,
+.partners-strip--home .partner-logo-slot:focus-within .partner-logo {
+  opacity: 0.5;
+  filter: brightness(0) invert(1);
+  transform: none;
+}
+
+[data-theme="light"] .partners-strip--home .partner-logo-slot:hover .partner-logo,
+[data-theme="light"] .partners-strip--home .partner-logo-slot:focus-within .partner-logo {
+  opacity: 0.34;
+  filter: brightness(0);
+}
+
 @media (min-width: 900px) {
   /* Nested channels strip shouldn't re-introduce a full section runway */
   .viewport-page .section-band {
