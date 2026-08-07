@@ -19,28 +19,50 @@ const TRAFFIC_ARCS: WorldMapDot[] = [
 type CompanyFootprintProps = {
   /** Fits Company viewport tab — map + stats, no page runway */
   embedded?: boolean;
+  /** Layout rendering style */
+  variant?: "embedded" | "flat" | "section";
 };
 
 /**
  * Footprint — Aceternity WorldMap as the widget; copy stays thin.
  * Arc color follows theme (ink-gold on white, bright gold on dark).
  */
-export function CompanyFootprint({ embedded = false }: CompanyFootprintProps) {
+export function CompanyFootprint({
+  embedded,
+  variant = embedded ? "embedded" : "section",
+}: CompanyFootprintProps) {
   const { footprint } = COMPANY_CONTENT;
   const { theme } = useTheme();
   const lineColor = theme === "light" ? "#b8860b" : "#ffcc00";
   const pulseColor = theme === "light" ? "#f80038" : "#ffe066";
 
+  const isEmbedded = variant === "embedded";
+  const isFlat = variant === "flat";
+
   const body = (
     <div
       className={cn(
         "company-footprint",
-        embedded && "company-footprint--embedded h-full min-h-0 overflow-hidden",
+        isEmbedded && "company-footprint--embedded h-full min-h-0 overflow-hidden",
         theme === "light" && "company-footprint--light",
       )}
     >
-      <div className={cn(!embedded && "section-inner")}>
-        {!embedded ? (
+      <div className={cn((isFlat || !isEmbedded) && "section-inner")}>
+        {isFlat || isEmbedded ? (
+          <div className="mb-3 shrink-0">
+            <p className="stat-label text-orange">{footprint.label}</p>
+            <p className="company-footprint__hq-line mt-1.5 text-xs sm:text-sm">
+              <span className="company-footprint__hq-code">{footprint.hq.code}</span>
+              <span className="company-footprint__hq-sep" aria-hidden>
+                ·
+              </span>
+              <span>
+                <strong className="text-fg">{footprint.hq.name}</strong>
+                <span className="text-muted"> — {footprint.hq.role}</span>
+              </span>
+            </p>
+          </div>
+        ) : (
           <div className="company-footprint__intro">
             <p className="section-label">{footprint.label}</p>
             <h2 className="section-title mt-3 max-w-xl">{footprint.title}</h2>
@@ -56,37 +78,23 @@ export function CompanyFootprint({ embedded = false }: CompanyFootprintProps) {
               </span>
             </p>
           </div>
-        ) : (
-          <div className="mb-3 shrink-0">
-            <p className="stat-label text-orange">{footprint.label}</p>
-            <p className="company-footprint__hq-line mt-1.5 text-xs sm:text-sm">
-              <span className="company-footprint__hq-code">{footprint.hq.code}</span>
-              <span className="company-footprint__hq-sep" aria-hidden>
-                ·
-              </span>
-              <span>
-                <strong className="text-fg">{footprint.hq.name}</strong>
-                <span className="text-muted"> — {footprint.hq.role}</span>
-              </span>
-            </p>
-          </div>
         )}
 
         <div
           className={cn(
             "company-footprint__map",
-            embedded ? "min-h-0 flex-1 overflow-hidden" : "mt-8",
+            isEmbedded ? "min-h-0 flex-1 overflow-hidden" : "mt-8",
           )}
         >
           <WorldMap
             dots={TRAFFIC_ARCS}
             lineColor={lineColor}
             pulseColor={pulseColor}
-            className={embedded ? "aspect-[2.4/1] max-h-[min(280px,32vh)]" : undefined}
+            className={isEmbedded ? "aspect-[2.4/1] max-h-[min(280px,32vh)]" : undefined}
           />
         </div>
 
-        <dl className={cn("company-footprint__stats", embedded ? "mt-3 shrink-0" : "mt-8")}>
+        <dl className={cn("company-footprint__stats", isEmbedded ? "mt-3 shrink-0" : "mt-8")}>
           {footprint.stats.map((stat) => (
             <div key={stat.label} className="company-footprint__stat">
               <dt className="company-footprint__stat-value">{stat.value}</dt>
@@ -95,7 +103,7 @@ export function CompanyFootprint({ embedded = false }: CompanyFootprintProps) {
           ))}
         </dl>
 
-        {!embedded ? (
+        {isFlat || isEmbedded ? null : (
           <ul className="company-footprint__chips mt-8" aria-label="Traffic markets">
             {footprint.trafficPoints.map((point) => (
               <li key={point.code} className="company-footprint__chip">
@@ -105,13 +113,16 @@ export function CompanyFootprint({ embedded = false }: CompanyFootprintProps) {
               </li>
             ))}
           </ul>
-        ) : null}
+        )}
       </div>
     </div>
   );
 
-  if (embedded) {
+  if (isEmbedded) {
     return <div className="flex h-full min-h-0 flex-col overflow-hidden">{body}</div>;
+  }
+  if (isFlat) {
+    return <div>{body}</div>;
   }
 
   return <section className="section-band border-y border-border/40">{body}</section>;
