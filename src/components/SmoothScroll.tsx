@@ -126,8 +126,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       lenisRef.current.scrollTo(0, { immediate: true, force: true });
     }
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
     notifyScroll(0);
   }, [notifyScroll]);
 
@@ -185,8 +185,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       if (hasHash || userIntent) return;
       lenis.scrollTo(0, { immediate: true, force: true });
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
     };
 
     pinTop();

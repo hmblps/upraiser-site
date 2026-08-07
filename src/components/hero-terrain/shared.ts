@@ -14,7 +14,7 @@ export const IDLE_BREATHE = (Math.PI * 2) / 7;
  */
 export const FOG = {
   light: {
-    color: "#f4f6f9",
+    color: "#d0ddec",
     nearStart: 130,
     farStart: 420,
     nearEnd: 160,

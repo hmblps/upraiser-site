@@ -13,7 +13,7 @@ import { SectionHeader } from "../SectionHeader";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
 import { CssPhone } from "./CssPhone";
-import { PhoneSilhouette } from "./PhoneSilhouette";
+
 import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import "../../styles/programmatic-scroll-section.css";
 import "../../styles/programmatic-full-feed.css";
@@ -23,8 +23,13 @@ const phone3DImport = () =>
 
 const Phone3D = lazy(phone3DImport);
 
-/** Scroll distance per format — short enough that a fast wheel doesn’t skip steps. */
-const FORMAT_HEIGHT = 480;
+// Trigger chunk fetch immediately so Suspense fallback never blinks
+if (typeof window !== "undefined") {
+  void phone3DImport();
+}
+
+/** Scroll distance per format — much longer so fast swiping doesn’t skip steps. */
+const FORMAT_HEIGHT = 2800;
 
 function progressToIndex(progress: number, count: number): number {
   const raw = progress * count;
@@ -159,9 +164,13 @@ export function ProgrammaticScrollSection({
           </div>
           <div className="prog-scroll-layout">
             <div className="prog-scroll-phone-col">
-              <Suspense fallback={<PhoneSilhouette mode={mode} className="prog-scroll-canvas" />}>
+              <Suspense fallback={<div className="prog-scroll-canvas" />}>
                 <CanvasErrorBoundary
-                  fallback={<PhoneSilhouette mode={mode} className="prog-scroll-canvas" />}
+                  fallback={
+                    <div className="prog-scroll-canvas" style={{ background: "red", color: "white", display: "grid", placeItems: "center" }}>
+                      <h1>3D CRASHED! Error caught by boundary.</h1>
+                    </div>
+                  }
                 >
                   <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
                 </CanvasErrorBoundary>

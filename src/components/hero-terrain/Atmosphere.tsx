@@ -37,9 +37,10 @@ export function Atmosphere({ theme }: { theme: ThemeMode }) {
       />
       {isLight ? (
         <>
-          {/* Camera-side fill — cooler alpine daylight, keep photo contrast */}
-          <directionalLight color="#f2f6ff" intensity={1.05} position={[-36, 52, 78]} />
-          <directionalLight color="#dce8ff" intensity={0.35} position={[48, 28, 42]} />
+          {/* Raking Light — strong side angle to highlight normal map details */}
+          <directionalLight color="#f2f6ff" intensity={1.5} position={[-80, 20, 60]} />
+          {/* Fill light to soften harsh shadows */}
+          <directionalLight color="#dce8ff" intensity={0.4} position={[48, 28, 42]} />
         </>
       ) : null}
     </>

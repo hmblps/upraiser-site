@@ -8,7 +8,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Bounds, Center, ContactShadows, Environment, useGLTF, useTexture } from "@react-three/drei";
+import { Center, ContactShadows, Environment, useGLTF, useTexture } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
@@ -28,7 +28,8 @@ import type { SiteMode } from "../../data/liveContent";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH } from "../../lib/heroModel";
-import { PhoneSilhouette } from "./PhoneSilhouette";
+import { CssPhone } from "./CssPhone";
+
 import "../../styles/phone-css-3d.css";
 
 /** Theme chassis — Draco-compressed (~1.9MB each). */
@@ -158,8 +159,8 @@ function applyScreenTexture(root: Object3D, map: Texture) {
       screen.map = map;
       screen.emissiveMap = map;
       screen.color = new Color("#ffffff");
-      screen.emissive = new Color("#111111");
-      screen.emissiveIntensity = 0.55;
+      screen.emissive = new Color("#ffffff");
+      screen.emissiveIntensity = 1.25;
       screen.roughness = 0.9;
       screen.metalness = 0;
       screen.transparent = false;
@@ -203,10 +204,24 @@ function PhoneMesh({
 
   const group = useRef<Group>(null);
   const rootRef = useRef<Object3D | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const videoTexRef = useRef<VideoTexture | null>(null);
   const visitToken = useRef(0);
   const modeRef = useRef<"still" | "video">("still");
+
+  // Create video and texture EXACTLY ONCE to prevent GPU memory leaks and Context Lost.
+  const { video, videoTex } = useMemo(() => {
+    const v = document.createElement("video");
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+    v.setAttribute("playsinline", "true");
+    v.setAttribute("muted", "true");
+    v.preload = "auto";
+    v.loop = false;
+    v.crossOrigin = "anonymous";
+    const t = new VideoTexture(v);
+    configureMap(t, true);
+    return { video: v, videoTex: t };
+  }, []);
 
   const prepared = useMemo(() => {
     const cloned = scene.clone(true);
@@ -229,39 +244,16 @@ function PhoneMesh({
     const token = visitToken.current;
     const root = rootRef.current;
 
-    const prevVideo = videoRef.current;
-    const prevTex = videoTexRef.current;
-    videoRef.current = null;
-    videoTexRef.current = null;
-    if (prevVideo) {
-      prevVideo.pause();
-      prevVideo.removeAttribute("src");
-      prevVideo.load();
-    }
-    if (prevTex) prevTex.dispose();
-
     if (root) {
       modeRef.current = "still";
       applyScreenTexture(root, still);
     }
 
     const src = SCREEN_VIDEO[formatId];
-    if (!src || !inView || !root) return;
-
-    const video = document.createElement("video");
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-    video.setAttribute("playsinline", "true");
-    video.setAttribute("muted", "true");
-    video.preload = "auto";
-    video.loop = false;
-    video.src = src;
-    videoRef.current = video;
-
-    const tex = new VideoTexture(video);
-    configureMap(tex, true);
-    videoTexRef.current = tex;
+    if (!src || !inView || !root) {
+      video.pause();
+      return;
+    }
 
     let promoted = false;
     const promote = () => {
@@ -269,7 +261,7 @@ function PhoneMesh({
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
       promoted = true;
       modeRef.current = "video";
-      applyScreenTexture(rootRef.current, tex);
+      applyScreenTexture(rootRef.current, videoTex);
       void video.play().catch(() => {
         if (token !== visitToken.current || !rootRef.current) return;
         modeRef.current = "still";
@@ -277,12 +269,11 @@ function PhoneMesh({
       });
     };
 
+    video.src = src;
     video.addEventListener("loadeddata", promote);
     video.addEventListener("canplay", promote);
     video.addEventListener("playing", promote);
-    video.addEventListener("ended", () => {
-      video.pause();
-    });
+    video.addEventListener("ended", () => video.pause());
 
     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
     else video.load();
@@ -294,31 +285,30 @@ function PhoneMesh({
       video.pause();
       video.removeAttribute("src");
       video.load();
-      tex.dispose();
-      if (videoRef.current === video) videoRef.current = null;
-      if (videoTexRef.current === tex) videoTexRef.current = null;
+      
+      if (modeRef.current === "video" && rootRef.current) {
+        applyScreenTexture(rootRef.current, still);
+        modeRef.current = "still";
+      }
     };
-  }, [formatId, inView, still]);
+  }, [formatId, inView, still, video, videoTex]);
 
   useFrame(() => {
     if (!group.current) return;
     group.current.rotation.x = rotX.get();
     group.current.rotation.y = rotY.get();
-    if (modeRef.current === "video" && videoTexRef.current) {
-      videoTexRef.current.needsUpdate = true;
+    if (modeRef.current === "video") {
+      videoTex.needsUpdate = true;
     }
   });
 
   return (
     <group ref={group}>
-      {/* 1.08 = slightly larger chassis; keep a slim air band so short laptops don’t clip */}
-      <Bounds fit observe margin={1.08}>
-        <Center>
-          <group rotation={SHARED_ORIENT}>
-            <primitive object={prepared} />
-          </group>
-        </Center>
-      </Bounds>
+      <Center>
+        <group rotation={SHARED_ORIENT} scale={8.5} position={[0, -0.6, 0]}>
+          <primitive object={prepared} />
+        </group>
+      </Center>
     </group>
   );
 }
@@ -425,8 +415,8 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
     const dx = e.clientX - last.current.x;
     const dy = e.clientY - last.current.y;
     last.current = { x: e.clientX, y: e.clientY };
-    rotY.set(Math.max(-0.95, Math.min(0.95, rotY.get() + dx * 0.007)));
-    rotX.set(Math.max(-0.35, Math.min(0.28, rotX.get() - dy * 0.005)));
+    rotY.set(Math.max(-0.45, Math.min(0.45, rotY.get() + dx * 0.006)));
+    rotX.set(Math.max(-0.15, Math.min(0.15, rotX.get() - dy * 0.004)));
   };
 
   const endDrag = (e: ReactPointerEvent) => {
@@ -462,15 +452,14 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
       <span className="phone-css-light phone-css-light--rim" aria-hidden />
       <span className="phone-css-light phone-css-light--floor" aria-hidden />
 
-      {/* Chassis stand-in while Draco GLB boots */}
-      {!meshReady ? <PhoneSilhouette mode={mode} className="phone-glb-boot-silhouette" /> : null}
+      {/* 2D Fallback removed as requested by user. */}
 
-      <div className="phone-glb-canvas-wrap">
+      <div className={cn("phone-glb-canvas-wrap transition-opacity duration-700 ease-out", meshReady ? "opacity-100" : "opacity-0")}>
         <Canvas
           key={url}
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={inView ? "always" : "never"}
+          frameloop="always"
           gl={{
             antialias: true,
             alpha: true,

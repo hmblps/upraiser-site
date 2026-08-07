@@ -10,7 +10,7 @@ export function InfrastructureGrid({ progress }: { progress: MotionValue<number>
     useTransform(progress, [0, 1], [-40, 0]),
   ];
 
-  const opacity = useTransform(progress, [0.1, 0.5], [0.1, 0.4]);
+    const opacity = useTransform(progress, [0.1, 0.5], [0.3, 0.8]);
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden>
@@ -26,7 +26,7 @@ export function InfrastructureGrid({ progress }: { progress: MotionValue<number>
               y, 
               opacity,
               stroke: "var(--theme-accent)", 
-              strokeWidth: 0.5 
+              strokeWidth: 2 
             }}
           />
         ))}

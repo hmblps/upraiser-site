@@ -3,15 +3,24 @@ import { cn } from "../../lib/cn";
 
 type PhoneSilhouetteProps = {
   mode: SiteMode;
+  formatId?: string;
   className?: string;
 };
 
+const SCREEN_STILL: Record<string, string> = {
+  banner: "/channels/programmatic-refs/screens/banner.png",
+  native: "/channels/programmatic-refs/screens/native.png",
+  interstitial: "/channels/programmatic-refs/screens/interstitial.png",
+  rich: "/channels/programmatic-refs/screens/rich-media.png",
+  video: "/channels/programmatic-refs/screens/video.png",
+};
+
 /**
- * Neutral dark chassis stand-in while GLB / textures boot.
- * Same footprint as the desktop 3D stage — not a flat live-feed mock.
+ * Chassis stand-in with active format screen image — no pitch-black empty glass.
  */
-export function PhoneSilhouette({ mode, className = "" }: PhoneSilhouetteProps) {
+export function PhoneSilhouette({ mode, formatId = "banner", className = "" }: PhoneSilhouetteProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
+  const stillSrc = SCREEN_STILL[formatId] || SCREEN_STILL.banner;
 
   return (
     <div
@@ -20,7 +29,17 @@ export function PhoneSilhouette({ mode, className = "" }: PhoneSilhouetteProps) 
     >
       <div className="phone-silhouette__body">
         <span className="phone-silhouette__island" />
-        <span className="phone-silhouette__glass" />
+        <div className="phone-silhouette__glass">
+          {stillSrc ? (
+            <img
+              src={stillSrc}
+              alt=""
+              className="h-full w-full object-fill object-top"
+              loading="eager"
+              decoding="sync"
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );

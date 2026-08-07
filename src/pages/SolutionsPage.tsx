@@ -50,7 +50,7 @@ export function SolutionsPage() {
       : "Pre-install, OEM storefronts, and CTV — fixed lines that survive procurement.";
 
   return (
-    <main className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
+    <main id="channels" className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
       <ProgrammaticScrollSection
         key={lane}
         mode={mode}

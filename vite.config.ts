@@ -4,6 +4,10 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    allowedHosts: true,
+    host: true,
+  },
   optimizeDeps: {
     include: ["three", "@react-three/fiber", "@react-three/drei"],
   },

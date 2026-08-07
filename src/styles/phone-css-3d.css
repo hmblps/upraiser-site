@@ -461,10 +461,12 @@
 .phone-glb-boot-silhouette .phone-silhouette__body {
   height: min(100%, 90%);
   max-height: 100%;
+  transform: none;
 }
 
 .phone-glb-canvas-wrap {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 1;
   width: 100%;
   height: 100%;

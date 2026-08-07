@@ -1,6 +1,7 @@
-import { type AnchorHTMLAttributes, type MouseEvent, type ReactNode } from "react";
+import { type AnchorHTMLAttributes, type MouseEvent, type PointerEvent as ReactPointerEvent, type FocusEvent as ReactFocusEvent, type ReactNode } from "react";
 import { useScroll } from "../context/ScrollContext";
 import { publishContactIntent } from "../lib/contactIntent";
+import { preloadRoute } from "../lib/routePreloader";
 
 type ScrollLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   href: string;
@@ -13,7 +14,7 @@ function isHashLink(href: string) {
 }
 
 /** In-page anchors go through Lenis-aware scrollTo (header offset). External / mailto stay native. */
-export function ScrollLink({ href, children, onClick, contactIntent, ...props }: ScrollLinkProps) {
+export function ScrollLink({ href, children, onClick, onPointerEnter, onFocus, contactIntent, ...props }: ScrollLinkProps) {
   const { scrollTo } = useScroll();
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -27,8 +28,18 @@ export function ScrollLink({ href, children, onClick, contactIntent, ...props }:
     scrollTo(href.slice(1));
   };
 
+  const handlePointerEnter = (event: ReactPointerEvent<HTMLAnchorElement>) => {
+    preloadRoute(href);
+    onPointerEnter?.(event);
+  };
+
+  const handleFocus = (event: ReactFocusEvent<HTMLAnchorElement>) => {
+    preloadRoute(href);
+    onFocus?.(event);
+  };
+
   return (
-    <a href={href} onClick={handleClick} {...props}>
+    <a href={href} onClick={handleClick} onPointerEnter={handlePointerEnter} onFocus={handleFocus} {...props}>
       {children}
     </a>
   );

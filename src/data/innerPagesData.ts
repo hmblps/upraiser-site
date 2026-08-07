@@ -268,43 +268,43 @@ export const EXPERTISE_CONTENT = {
 
 export const COMPANY_CONTENT = {
   hero: {
-    badge: "The Expedition",
-    h1: "The Expedition Leaders.",
+    badge: "About UPRAISER",
+    h1: "London performance desk since 2017.",
     description:
-      "We didn't just join the AdTech industry; we mapped it. Since 2017, UPRAISER has been a convergence of different worlds.",
+      "Direct OEM distribution, programmatic buying, and pre-bid fraud filtration for iGaming, Fintech, and premium media.",
   },
 
-  positioningLead: "We don't sell the view from the top.",
-  positioningAccent: "We build the path that gets You there.",
+  positioningLead: "We don't sell vanity impressions.",
+  positioningAccent: "We buy verified outcomes.",
 
   expedition: {
     synergy:
-      "Our squad is a synergy of operators: Engineers who wire the pipes, Developers who build the gear, Economists who balance the P&L, and Creatives who understand human intent.",
+      "Engineers who wire postback streams, buyers who configure bid logic, and traders who manage performance work in the same thread.",
     uniqueness:
-      "We don't have account managers to hide behind. You work directly with the people who built the tools. This synergy is why we see the terrain differently — and why the numbers never disagree.",
+      "No account managers to relay messages. You work directly with the operators managing your inventory paths and server logs.",
     proofLine: "Run on PROOF.",
   },
 
   whyUs: {
     label: "Why Us",
     title: "Direct Pipe. Not Resale.",
-    lead: "We are operators, not account managers. We don't sell the view; we build the path.",
+    lead: "Direct supply contracts, factory OEM distribution, and real-time log verification.",
     points: [
       {
         title: "Direct source access",
-        text: "You work with the traders who optimize Your spend — contracts on the publisher path, fewer hops from bid to device event.",
+        text: "Direct publisher contracts and Tier-1 OEM supply. Fewer hops between bid request and conversion event.",
       },
       {
-        title: "Pre-bid verification",
-        text: "Engineers who wire Your logs. Bots scored before auction close. Clean S2S into Your MMP — not after invoice.",
+        title: "Pre-bid fraud filtration",
+        text: "Invalid traffic rejected before auction close. Bots, emulators, and ghost clicks drop before spend posts to your MMP.",
       },
       {
-        title: "Buying pipe that holds",
-        text: "Account and supply continuity so volume ramps without the mid-flight cliff.",
+        title: "Lenovo OEM alliance",
+        text: "Official Lenovo agency partner. Pre-installs and storefront placement at factory ROM level.",
       },
       {
-        title: "Clarity over smoke",
-        text: "In an industry of smoke and mirrors, we bring CLARITY — bids follow ROAS / payback You already track.",
+        title: "Audit-ready logs",
+        text: "Raw postback logs and server receipts on demand. Reconciles with Adjust, AppsFlyer, and Kochava without disputed rows.",
       },
     ],
   },

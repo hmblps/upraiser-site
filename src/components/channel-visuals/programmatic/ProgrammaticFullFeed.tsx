@@ -8,7 +8,7 @@ const INTERSTITIAL_BG = "/channels/programmatic-feed/interstitial-bg.jpg";
 const RICH_BG = "/channels/programmatic-feed/rich-bg.jpg";
 const VIDEO_BG = "/channels/programmatic-feed/video-bg.jpg";
 
-const SPRING = { type: "spring" as const, stiffness: 320, damping: 30, mass: 0.8 };
+const SPRING = { type: "spring" as const, stiffness: 200, damping: 28, mass: 1 };
 
 function Icon({ name, filled = false, className = "" }: { name: string; filled?: boolean; className?: string }) {
   return (
@@ -211,7 +211,7 @@ export function ProgrammaticFullFeed({ activeFormatId }: ProgrammaticFullFeedPro
           </div>
         ) : null}
 
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={activeFormatId}
             className="pf-feed__panel"
