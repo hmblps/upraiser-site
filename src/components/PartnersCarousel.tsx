@@ -92,6 +92,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
         <div
           className="flex items-center"
           style={{
+            width: `${(extendedItems.length / visibleCount) * 100}%`,
             transform: `translateX(-${(index / extendedItems.length) * 100}%)`,
             transition: isTransitioning ? "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)" : "none",
           }}
@@ -101,7 +102,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
               key={`${brand.slug}-${idx}`}
               className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0"
               style={{
-                width: `${100 / visibleCount}%`,
+                width: `${100 / extendedItems.length}%`,
                 "--logo-scale": brand.scale ?? 1,
               } as CSSProperties}
             >
