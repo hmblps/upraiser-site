@@ -46,7 +46,7 @@ export function HomePilotCta() {
                   whileHover={reduced ? undefined : { scale: 1.03 }}
                   whileTap={reduced ? undefined : { scale: 0.97 }}
                   transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                  className="btn-caps inline-flex shrink-0 items-center gap-2 rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-orange-light"
+                  className="btn-caps inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
                 >
                   {bridge.cta}
                   <span aria-hidden>→</span>
@@ -77,7 +77,7 @@ export function HomePilotCta() {
               <ScrollLink
                 href={primaryCta.href}
                 data-cursor="cta"
-                className="btn-caps inline-block shrink-0 rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-orange-light"
+                className="btn-caps inline-block shrink-0 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
               >
                 {primaryCta.label}
               </ScrollLink>

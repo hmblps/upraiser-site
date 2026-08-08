@@ -43,8 +43,8 @@ export function ContactIntentChips({ value, onChange, disabled }: ContactIntentC
               className={cn(
                 "rounded-full border px-3.5 py-2 text-xs font-semibold tracking-wide transition-colors",
                 active
-                  ? "border-orange bg-orange text-on-accent"
-                  : "border-border bg-bg-card/40 text-muted-light hover:border-orange/35 hover:text-fg",
+                  ? "border-accent bg-accent text-on-accent"
+                  : "border-border bg-bg-card/40 text-muted-light hover:border-accent/35 hover:text-fg",
               )}
               whileTap={reduced || disabled ? undefined : { scale: 0.96 }}
               transition={SPRING_SOFT}

@@ -7,7 +7,7 @@ type CursorMode = "default" | "link" | "cta" | "card";
 
 function resolveCursorMode(element: Element | null): CursorMode {
   if (!element) return "default";
-  if (element.closest('[data-cursor="cta"], a.bg-orange, .bg-orange.btn-caps')) return "cta";
+  if (element.closest('[data-cursor="cta"], a.bg-accent, .bg-accent.btn-caps')) return "cta";
   if (element.closest(".card-lift")) return "card";
   if (element.closest('[data-cursor="link"], ' + INTERACTIVE_SELECTOR)) return "link";
   return "default";

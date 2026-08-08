@@ -159,7 +159,7 @@
   background: linear-gradient(155deg, #4a6488 0%, #243a58 40%, #0c1524 100%);
 }
 
-.phone-silhouette--orange .phone-silhouette__body {
+.phone-silhouette--accent .phone-silhouette__body {
   background: linear-gradient(145deg, #ff9a4a, #f77e2d 45%, #c45a18);
 }
 
@@ -218,7 +218,7 @@
     linear-gradient(155deg, #6a84a8 0%, #2f4668 38%, #121c2c 72%, #070b12 100%);
 }
 
-.prog-css-phone--orange {
+.prog-css-phone--accent {
   background:
     linear-gradient(145deg, #ffb06a, #f77e2d 42%, #c45a18 78%, #7a340c 100%);
 }

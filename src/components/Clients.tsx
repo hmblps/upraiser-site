@@ -1,77 +1,32 @@
-import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { CLIENTS_CONTENT } from "../data/innerPagesData";
 import { clientBrands } from "../data/clients";
 import { ScrollLink } from "./ScrollLink";
-import { cn } from "../lib/cn";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-
-type VerticalFilter = (typeof CLIENTS_CONTENT.verticals)[number];
 
 /**
- * Clients — Saatchi-style proof board in one viewport.
+ * Clients — Saatchi-style proof board in a seamless vertical flow.
  */
 export function Clients() {
-  const reduced = useReducedMotion();
-  const [vertical, setVertical] = useState<VerticalFilter>("All");
-
-  const grid = useMemo(() => {
-    if (vertical === "All") return clientBrands;
-    return clientBrands.filter((brand) => brand.vertical === vertical);
-  }, [vertical]);
-
   return (
-    <div className="depth-page depth-page--clients viewport-page">
-      <div className="viewport-page__shell section-inner flex flex-col">
-        <header className="viewport-page__intro shrink-0">
-          <p className="section-label">{CLIENTS_CONTENT.hero.badge}</p>
-          <h1 className="section-title">{CLIENTS_CONTENT.hero.h1}</h1>
-          <p className="section-description">{CLIENTS_CONTENT.lead}</p>
+    <div className="depth-page depth-page--clients pb-32">
+      <div className="section-inner flex flex-col pt-8 lg:pt-16">
+        <header className="viewport-page__intro shrink-0 max-w-2xl">
+          <p className="section-label text-accent">{CLIENTS_CONTENT.hero.badge}</p>
+          <h1 className="section-title mt-2 lg:mt-4 text-4xl lg:text-5xl tracking-tight leading-[1.1]">{CLIENTS_CONTENT.hero.h1}</h1>
+          <p className="section-description mt-4 lg:mt-6 text-lg text-muted-light">{CLIENTS_CONTENT.lead}</p>
         </header>
 
-        <div className="viewport-page__tabs">
-          <div className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {CLIENTS_CONTENT.verticals.map((item) => {
-              const active = item === vertical;
-              return (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => setVertical(item)}
-                  className={cn(
-                    "shrink-0 rounded-full px-3 py-1.5 text-micro transition",
-                    active
-                      ? "bg-orange text-on-accent"
-                      : "border border-border/60 text-muted hover:border-orange/40 hover:text-fg",
-                  )}
-                >
-                  {item}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="viewport-page__panel relative flex min-h-0 flex-1 flex-col overflow-hidden">
-          <ul className="grid min-h-0 flex-1 auto-rows-fr grid-cols-3 gap-2 overflow-hidden sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 lg:gap-3">
-            {grid.slice(0, 24).map((brand, index) => (
-              <motion.li
+        <div className="mt-16 lg:mt-24">
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 lg:gap-4">
+            {clientBrands.map((brand) => (
+              <li
                 key={brand.slug}
-                initial={reduced ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 380,
-                  damping: 30,
-                  delay: reduced ? 0 : index * 0.015,
-                }}
-                className="flex min-h-0 items-center justify-center rounded-xl border border-border/50 bg-bg-card/60 px-2 py-2 sm:px-3"
+                className="flex h-24 lg:h-32 items-center justify-center rounded-xl border border-border/20 bg-bg-card/40 px-4 py-4 hover:border-accent/30 transition-colors"
               >
                 {brand.logo ? (
                   <img
                     src={brand.logo}
                     alt={brand.name}
-                    className="max-h-8 max-w-full object-contain opacity-90"
+                    className="max-h-12 max-w-full object-contain opacity-90"
                     style={{ transform: `scale(${brand.scale ?? 1})` }}
                     loading="lazy"
                     decoding="async"
@@ -81,19 +36,11 @@ export function Clients() {
                     {brand.name}
                   </span>
                 )}
-              </motion.li>
+              </li>
             ))}
           </ul>
 
-          <div className="mt-3 flex shrink-0 items-center justify-between gap-3">
-            <p className="viewport-page__footnote mt-0">
-              {grid.length} brands
-              {vertical !== "All" ? ` · ${vertical}` : ""}
-              {" · "}
-              <ScrollLink href="/solutions">The Routes</ScrollLink>
-              {" · "}
-              <ScrollLink href="/cases">The Peaks</ScrollLink>
-            </p>
+          <div className="mt-16 pt-8 border-t border-border/20 max-w-xl">
             <ScrollLink
               href="/contact"
               data-cursor="cta"
@@ -101,6 +48,13 @@ export function Clients() {
             >
               {CLIENTS_CONTENT.ctaLabel}
             </ScrollLink>
+            <p className="viewport-page__footnote mt-6 text-muted-light">
+              {clientBrands.length} brands total
+              {" · "}
+              <ScrollLink href="/solutions" className="text-accent hover:text-accent/80 transition-colors">The Routes</ScrollLink>
+              {" · "}
+              <ScrollLink href="/cases" className="text-accent hover:text-accent/80 transition-colors">The Peaks</ScrollLink>
+            </p>
           </div>
         </div>
       </div>

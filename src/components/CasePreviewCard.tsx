@@ -116,7 +116,7 @@ export function CasePreviewCard({
       onKeyDown={handleKeyDown}
       onMouseMove={handleMouseMove}
       className={[
-        "case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-orange/30",
+        "case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-accent/30",
         isCarousel ? "case-preview-card--carousel" : "h-full",
         className,
       ]

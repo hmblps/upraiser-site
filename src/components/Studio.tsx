@@ -1,101 +1,105 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { GEAR_CONTENT, type GearTabId } from "../data/innerPagesData";
+import { GEAR_CONTENT } from "../data/innerPagesData";
 import { ScrollLink } from "./ScrollLink";
-import { SlideTabs } from "./SlideTabs";
 import { useMode } from "./SectionHeader";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-
-const PANEL_SPRING = { type: "spring" as const, stiffness: 340, damping: 30, mass: 0.7 };
-const HOVER_SPRING = { type: "spring" as const, stiffness: 420, damping: 28, mass: 0.55 };
 
 /**
  * The Gear (/studio) — tech stack as expedition equipment.
  * Growth → scalability · Infrastructure → audit / precision.
  */
 export function Studio() {
-  const reduced = useReducedMotion();
   const { mode } = useMode();
-  const [activeId, setActiveId] = useState<GearTabId>("fixed-line");
-  const piece = GEAR_CONTENT.pieces[activeId];
-  const copy = piece[mode];
   const lead = GEAR_CONTENT.byMode[mode].lead;
 
   return (
-    <div className="depth-page depth-page--studio depth-page--gear viewport-page">
-      <div className="viewport-page__shell section-inner flex flex-col">
-        <header className="viewport-page__intro shrink-0">
-          <p className="section-label">{GEAR_CONTENT.hero.badge}</p>
-          <h1 className="section-title">{GEAR_CONTENT.hero.h1}</h1>
+    <div className="depth-page depth-page--studio depth-page--gear pb-32">
+      <div className="section-inner flex flex-col pt-8 lg:pt-16">
+        <header className="viewport-page__intro shrink-0 max-w-2xl">
+          <p className="section-label text-accent">{GEAR_CONTENT.hero.badge}</p>
+          <h1 className="section-title mt-2 lg:mt-4 text-4xl lg:text-5xl tracking-tight leading-[1.1]">{GEAR_CONTENT.hero.h1}</h1>
           <ModeContentTransition mode={mode}>
-            <p className="section-description">{lead}</p>
+            <p className="section-description mt-4 lg:mt-6 text-lg text-muted-light">{lead}</p>
           </ModeContentTransition>
         </header>
 
-        <div className="viewport-page__tabs">
-          <SlideTabs
-            items={[...GEAR_CONTENT.tabs]}
-            activeId={activeId}
-            onChange={(id) => setActiveId(id as GearTabId)}
-            layoutId="gear-tab-pill"
-            className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          />
-        </div>
-
-        <div className="viewport-page__panel relative min-h-0 flex-1">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`${activeId}-${mode}`}
-              initial={reduced ? false : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduced ? undefined : { opacity: 0, y: -8 }}
-              transition={PANEL_SPRING}
-              className="flex h-full min-h-0 flex-col overflow-hidden"
-            >
-              <motion.article
-                className="gear-spec flex min-h-0 flex-1 flex-col overflow-hidden"
-                whileHover={reduced ? undefined : { y: -2 }}
-                transition={HOVER_SPRING}
-              >
-                <div className="gear-spec__blueprint" aria-hidden>
-                  <span className="gear-spec__grid" />
-                  <span className="gear-spec__crosshair gear-spec__crosshair--tl" />
-                  <span className="gear-spec__crosshair gear-spec__crosshair--br" />
-                </div>
-
-                <div className="gear-spec__body">
-                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <span className="stat-label text-orange">{piece.mark}</span>
-                    <span className="text-micro text-muted">{piece.kicker}</span>
-                  </div>
-                  <h2 className="card-title mt-2">{piece.title}</h2>
-                  <p className="copy mt-3 max-w-2xl">{copy.body}</p>
-
-                  <div className="gear-spec__sheet">
-                    <p className="text-micro text-orange">
-                      {mode === "growth" ? "Scale spec" : "Audit spec"}
-                    </p>
-                    <p className="spec-mono">{copy.spec}</p>
-                  </div>
-                </div>
-              </motion.article>
-
+        <div className="flex flex-col lg:flex-row lg:items-start lg:gap-16 mt-16 lg:mt-24 relative">
+          
+          {/* Sticky Visual Column */}
+          <div className="lg:w-5/12 shrink-0 lg:sticky lg:top-32 hidden lg:block">
+            <div className="gear-spec__blueprint aspect-square relative" aria-hidden>
+              <span className="gear-spec__grid" />
+              <span className="gear-spec__crosshair gear-spec__crosshair--tl" />
+              <span className="gear-spec__crosshair gear-spec__crosshair--br" />
+            </div>
+            
+            <div className="mt-8 pt-8 border-t border-border/20">
               <ScrollLink
                 href={`/contact?intent=${GEAR_CONTENT.close.contactIntent}`}
                 data-cursor="cta"
-                className="btn-caps btn-caps--primary viewport-page__cta"
+                className="btn-caps btn-caps--primary"
               >
                 {GEAR_CONTENT.close.ctaLabel}
               </ScrollLink>
-              <p className="viewport-page__footnote">
+              <p className="viewport-page__footnote mt-4">
                 {GEAR_CONTENT.close.footnote}{" "}
                 <ScrollLink href="/solutions">The Routes →</ScrollLink>
               </p>
-            </motion.div>
-          </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Scrolling Specs Column */}
+          <div className="flex-1 flex flex-col gap-16 lg:gap-32">
+            {GEAR_CONTENT.tabs.map((tab) => {
+              const piece = GEAR_CONTENT.pieces[tab.id];
+              const copy = piece[mode];
+              
+              return (
+                <article key={tab.id} className="gear-spec flex flex-col">
+                  {/* Mobile-only visual */}
+                  <div className="gear-spec__blueprint aspect-square relative mb-6 lg:hidden" aria-hidden>
+                    <span className="gear-spec__grid" />
+                    <span className="gear-spec__crosshair gear-spec__crosshair--tl" />
+                    <span className="gear-spec__crosshair gear-spec__crosshair--br" />
+                  </div>
+
+                  <div className="gear-spec__body">
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <span className="stat-label text-accent">{piece.mark}</span>
+                      <span className="text-micro text-muted uppercase tracking-widest">{piece.kicker}</span>
+                    </div>
+                    <h2 className="card-title mt-2 text-2xl lg:text-3xl">{piece.title}</h2>
+                    <p className="copy mt-3 max-w-2xl text-base lg:text-lg">{copy.body}</p>
+
+                    <div className="gear-spec__sheet mt-6 bg-bg-card/40 border border-border/20 rounded-lg p-5">
+                      <p className="text-micro text-accent mb-2">
+                        {mode === "growth" ? "Scale spec" : "Audit spec"}
+                      </p>
+                      <p className="spec-mono font-mono text-sm leading-relaxed">{copy.spec}</p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+
+            {/* Mobile-only close CTA */}
+            <div className="lg:hidden mt-8 pt-8 border-t border-border/20">
+              <ScrollLink
+                href={`/contact?intent=${GEAR_CONTENT.close.contactIntent}`}
+                data-cursor="cta"
+                className="btn-caps btn-caps--primary"
+              >
+                {GEAR_CONTENT.close.ctaLabel}
+              </ScrollLink>
+              <p className="viewport-page__footnote mt-4">
+                {GEAR_CONTENT.close.footnote}{" "}
+                <ScrollLink href="/solutions">The Routes →</ScrollLink>
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   );
 }
+

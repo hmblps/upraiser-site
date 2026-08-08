@@ -276,7 +276,7 @@
     color: var(--theme-muted);
   }
 
-  .lenovo-trust-strip .stat-label.text-orange {
+  .lenovo-trust-strip .stat-label.text-accent {
     color: var(--theme-accent);
   }
 

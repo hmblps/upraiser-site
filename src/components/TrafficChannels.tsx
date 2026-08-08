@@ -195,7 +195,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                 <button
                   type="button"
                   onClick={() => scrollTabs("left")}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-accent/40"
                   aria-label="Scroll channels left"
                 >
                   ←
@@ -203,7 +203,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                 <button
                   type="button"
                   onClick={() => scrollTabs("right")}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-accent/40"
                   aria-label="Scroll channels right"
                 >
                   →
@@ -216,7 +216,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
             <button
               type="button"
               onClick={() => scrollTabs("left")}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-accent/40"
               aria-label="Scroll channels left"
             >
               ←
@@ -224,7 +224,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
             <button
               type="button"
               onClick={() => scrollTabs("right")}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition hover:border-accent/40"
               aria-label="Scroll channels right"
             >
               →
@@ -240,10 +240,10 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                 .map((channel) => (
                   <article
                     key={channel.id}
-                    className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-border bg-bg-card p-6 transition hover:border-orange/35 lg:p-7"
+                    className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-border bg-bg-card p-6 transition hover:border-accent/35 lg:p-7"
                   >
                     <div>
-                      <p className="stat-label text-orange">{channel.tagline}</p>
+                      <p className="stat-label text-accent">{channel.tagline}</p>
                       <h3 className="card-title mt-1.5 text-xl font-bold">{channel.title}</h3>
                       <p className="copy mt-3 text-sm leading-relaxed text-muted-light">
                         {"teaser" in channel && typeof channel.teaser === "string"
@@ -260,7 +260,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                         type="button"
                         data-cursor="link"
                         onClick={() => openOnSolutions(channel.id)}
-                        className="btn-caps btn-secondary mt-4 inline-flex items-center rounded-full px-4 py-2 text-xs font-semibold hover:border-orange/35"
+                        className="btn-caps btn-secondary mt-4 inline-flex items-center rounded-full px-4 py-2 text-xs font-semibold hover:border-accent/35"
                       >
                         Explore {channel.title} →
                       </button>
@@ -269,12 +269,12 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                 ))}
               
               <article
-                className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-orange/20 bg-orange/[0.01] p-6 transition hover:border-orange/60 lg:p-7 group cursor-pointer"
+                className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-accent/20 bg-accent/[0.01] p-6 transition hover:border-accent/60 lg:p-7 group cursor-pointer"
                 onClick={() => navigate("/solutions")}
               >
                 <div>
-                  <p className="stat-label text-orange">THE ROUTES</p>
-                  <h3 className="card-title mt-1.5 text-xl font-bold group-hover:text-orange transition-colors">
+                  <p className="stat-label text-accent">THE ROUTES</p>
+                  <h3 className="card-title mt-1.5 text-xl font-bold group-hover:text-accent transition-colors">
                     Explore All 9 Buying Lanes
                   </h3>
                   <p className="copy mt-3 text-sm leading-relaxed text-muted-light">
@@ -284,7 +284,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                 <div className="mt-6 pt-2">
                   <div className="border-t border-border/70 pt-3 flex items-center justify-between">
                     <span className="text-xs font-semibold text-fg">View All Solutions</span>
-                    <span className="text-orange group-hover:translate-x-1 transition-transform">→</span>
+                    <span className="text-accent group-hover:translate-x-1 transition-transform">→</span>
                   </div>
                 </div>
               </article>
@@ -322,7 +322,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                     )}
                   >
                     <div className="channel-panel__copy">
-                      <motion.p variants={reduced ? undefined : panelItem} className="stat-label text-orange">
+                      <motion.p variants={reduced ? undefined : panelItem} className="stat-label text-accent">
                         {panelChannel.tagline}
                       </motion.p>
                       <motion.h3 variants={reduced ? undefined : panelItem} className="card-title mt-2">
@@ -375,7 +375,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                             type="button"
                             data-cursor="link"
                             onClick={() => openOnSolutions(active.id)}
-                            className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold hover:border-orange/35"
+                            className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold hover:border-accent/35"
                           >
                             Open {active.title} on Solutions
                             <span aria-hidden className="ml-1.5">

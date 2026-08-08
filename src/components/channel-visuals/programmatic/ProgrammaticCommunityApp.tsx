@@ -92,7 +92,7 @@ export function ProgrammaticCommunityApp() {
           </article>
 
           <article className="pb-app__card pb-app__card--stat">
-            <MaterialIcon name="bolt" filled className="pb-app__stat-icon pb-app__stat-icon--orange" />
+            <MaterialIcon name="bolt" filled className="pb-app__stat-icon pb-app__stat-icon--accent" />
             <p className="pb-app__stat-value">12</p>
             <p className="pb-app__stat-label">Active chats</p>
           </article>

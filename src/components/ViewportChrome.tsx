@@ -1,9 +1,4 @@
-import { lazy, Suspense } from "react";
 import { ScrollLink } from "./ScrollLink";
-
-const PartnersCarousel = lazy(() =>
-  import("./PartnersCarousel").then((m) => ({ default: m.PartnersCarousel })),
-);
 
 /**
  * Compact chrome for viewport pages — replaces full Footer.

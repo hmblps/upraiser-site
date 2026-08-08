@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
-import { motion } from "framer-motion";
+
 import type { CaseStudy } from "../data/cases";
-import { SPRING } from "../lib/motion";
+
 
 type CaseBrandHeaderProps = {
   item: CaseStudy;

@@ -2,12 +2,12 @@
 
 > **Purpose:** give another AI (or engineer) complete context to continue — including a **refactor-ready** map of current truth vs debt.  
 > Human summary: [`README.md`](../README.md) · Solutions: [`SOLUTIONS.md`](./SOLUTIONS.md) · Hero 3D: [`HERO.md`](./HERO.md) · Assets: [`ASSETS.md`](./ASSETS.md) · Index: [`README.md`](./README.md).  
-> **Updated:** 30 July 2026  
+> **Updated:** 8 August 2026  
 > **Local path:** `Upraiser New Website Cursor Project`  
 > **Production:** https://upraiser-site.vercel.app  
 > **Target domain:** https://upraiser.co.uk (SPA not on custom DNS yet)  
 > **Brand doctrine:** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md)  
-> **HEAD (ship):** `e8ed2ef` (Solutions harden) · glass+MP4 `71ddab1` · sticky phone `c0572d8` · hero `95bcd27`  
+> **HEAD (ship):** [LATEST] UI/UX Polish: 60fps Grid layout animations, fixed Sticky position bug by moving overflow-x to clip, updated MCP settings, exact brand colors #ff003b.  
 > **Backups:** branch `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
 
 ---

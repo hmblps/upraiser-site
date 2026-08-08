@@ -18,7 +18,7 @@ export function NotFoundPage() {
             <Link
               to="/"
               data-cursor="cta"
-              className="btn-caps inline-block rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-orange-light"
+              className="btn-caps inline-block rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
             >
               Home
             </Link>
@@ -26,7 +26,7 @@ export function NotFoundPage() {
           <Magnetic strength={0.22}>
             <Link
               to="/solutions"
-              className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5 text-sm font-semibold hover:border-orange/35"
+              className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5 text-sm font-semibold hover:border-accent/35"
             >
               Solutions
             </Link>

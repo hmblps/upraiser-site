@@ -46,7 +46,7 @@ export function CaseStudies() {
               <p className="section-description">{casesPage.description}</p>
             </div>
             <p className="shrink-0 font-mono text-caption font-bold tabular-nums text-muted">
-              <span className="text-orange">{caseStudies.length}</span> cases
+              <span className="text-accent">{caseStudies.length}</span> cases
             </p>
           </div>
         </header>
@@ -84,7 +84,7 @@ export function CaseStudies() {
                 type="button"
                 aria-label="Previous case"
                 onClick={() => scrollByCard("left")}
-                className="touch-target flex items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                className="touch-target flex items-center justify-center rounded-full border border-border transition hover:border-accent/40"
               >
                 ←
               </button>
@@ -101,7 +101,7 @@ export function CaseStudies() {
                 type="button"
                 aria-label="Next case"
                 onClick={() => scrollByCard("right")}
-                className="touch-target flex items-center justify-center rounded-full border border-border transition hover:border-orange/40"
+                className="touch-target flex items-center justify-center rounded-full border border-border transition hover:border-accent/40"
               >
                 →
               </button>

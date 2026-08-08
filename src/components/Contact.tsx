@@ -157,7 +157,7 @@ export function Contact() {
                   <Link
                     key={item.label}
                     to={item.href}
-                    className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-fg hover:border-orange hover:text-orange"
+                    className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-fg hover:border-accent hover:text-accent"
                   >
                     {item.label}
                   </Link>
@@ -167,7 +167,7 @@ export function Contact() {
               <div className="mt-auto space-y-2 pt-4 text-sm">
                 <div>
                   <div className="text-muted stat-label">Email</div>
-                  <a href={`mailto:${contactPage.email}`} className="font-semibold text-fg hover:text-orange">
+                  <a href={`mailto:${contactPage.email}`} className="font-semibold text-fg hover:text-accent">
                     {contactPage.email}
                   </a>
                 </div>
@@ -180,7 +180,7 @@ export function Contact() {
             <div className="min-h-0 overflow-hidden p-5 sm:p-6 lg:p-8">
               {status === "success" ? (
                 <div className="flex h-full min-h-0 flex-col items-center justify-center text-center" role="status" aria-live="polite">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange/10 text-orange">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
@@ -191,7 +191,7 @@ export function Contact() {
                   </p>
                   <button
                     type="button"
-                    className="mt-5 text-sm font-semibold text-orange hover:underline"
+                    className="mt-5 text-sm font-semibold text-accent hover:underline"
                     onClick={() => {
                       setStatus("idle");
                       setForm(initialForm);
@@ -291,7 +291,7 @@ export function Contact() {
                       type="submit"
                       disabled={status === "loading"}
                       data-cursor="cta"
-                      className="btn-caps w-full rounded-full bg-orange py-2.5 text-sm font-semibold text-on-accent transition hover:bg-orange-light disabled:cursor-not-allowed disabled:opacity-60"
+                      className="btn-caps w-full rounded-full bg-accent py-2.5 text-sm font-semibold text-on-accent transition hover:bg-accent-light disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {status === "loading" ? "Sending…" : contactPage.ctaLabel}
                     </button>

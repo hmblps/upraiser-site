@@ -34,21 +34,21 @@ export function CompanyStoryTimeline() {
               onClick={() => setActive(index)}
               className={[
                 "company-story-scrub__tick relative flex min-w-0 flex-1 flex-col items-center gap-2 rounded-lg px-1 py-2 transition",
-                selected ? "text-orange" : "text-muted hover:text-fg",
+                selected ? "text-accent" : "text-muted hover:text-fg",
               ].join(" ")}
             >
               <span className="text-micro">{item.mark}</span>
               <span
                 className={[
                   "h-1.5 w-full max-w-[3.5rem] rounded-full transition",
-                  selected ? "bg-orange" : "bg-border",
+                  selected ? "bg-accent" : "bg-border",
                 ].join(" ")}
                 aria-hidden
               />
               {selected && !reduced ? (
                 <motion.span
                   layoutId="company-story-tick"
-                  className="pointer-events-none absolute inset-x-1 inset-y-0 rounded-lg border border-orange/35 bg-orange/5"
+                  className="pointer-events-none absolute inset-x-1 inset-y-0 rounded-lg border border-accent/35 bg-accent/5"
                   transition={SPRING}
                 />
               ) : null}
@@ -68,7 +68,7 @@ export function CompanyStoryTimeline() {
             transition={SPRING}
             className="company-story-scrub__panel"
           >
-            <p className="stat-label text-orange">{beat.year}</p>
+            <p className="stat-label text-accent">{beat.year}</p>
             <h3 className="mt-1.5 text-lg font-bold tracking-tight text-fg sm:text-xl">{beat.title}</h3>
             <p className="copy mt-2 max-w-xl text-sm text-muted">{beat.body}</p>
           </motion.div>

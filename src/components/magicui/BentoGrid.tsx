@@ -38,13 +38,13 @@ export function BentoGridItem({
   return (
     <div
       className={cn(
-        "bento-grid__item group/bento row-span-1 flex flex-col justify-between space-y-3 rounded-[var(--radius-lg)] border border-border/70 bg-bg-card/80 p-4 transition duration-200 hover:border-orange/35",
+        "bento-grid__item group/bento row-span-1 flex flex-col justify-between space-y-3 rounded-[var(--radius-lg)] border border-border/70 bg-bg-card/80 p-4 transition duration-200 hover:border-accent/35",
         className,
       )}
     >
       {header ? <div className="min-h-[3.5rem]">{header}</div> : null}
       <div className="transition duration-200 group-hover/bento:translate-x-1">
-        {icon ? <div className="mb-2 text-orange">{icon}</div> : null}
+        {icon ? <div className="mb-2 text-accent">{icon}</div> : null}
         <h3 className="card-title text-sm font-bold tracking-tight text-fg">{title}</h3>
         <p className="copy mt-1.5 text-xs leading-relaxed text-muted">{description}</p>
       </div>

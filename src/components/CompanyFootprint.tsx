@@ -34,7 +34,7 @@ export function CompanyFootprint({
   const { footprint } = COMPANY_CONTENT;
   const { theme } = useTheme();
   const lineColor = theme === "light" ? "#b8860b" : "#ffcc00";
-  const pulseColor = theme === "light" ? "#f80038" : "#ffe066";
+  const pulseColor = theme === "light" ? "#ff003b" : "#ffe066";
 
   const isEmbedded = variant === "embedded";
   const isFlat = variant === "flat";
@@ -50,7 +50,7 @@ export function CompanyFootprint({
       <div className={cn((isFlat || !isEmbedded) && "section-inner")}>
         {isFlat || isEmbedded ? (
           <div className="mb-3 shrink-0">
-            <p className="stat-label text-orange">{footprint.label}</p>
+            <p className="stat-label text-accent">{footprint.label}</p>
             <p className="company-footprint__hq-line mt-1.5 text-xs sm:text-sm">
               <span className="company-footprint__hq-code">{footprint.hq.code}</span>
               <span className="company-footprint__hq-sep" aria-hidden>

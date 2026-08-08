@@ -28,7 +28,7 @@ import type { SiteMode } from "../../data/liveContent";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH } from "../../lib/heroModel";
-import { CssPhone } from "./CssPhone";
+
 
 import "../../styles/phone-css-3d.css";
 

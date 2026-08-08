@@ -112,7 +112,7 @@ export function CaseDetailArticle({ item, showCta = false, className = "" }: Cas
             <ScrollLink
               href={primaryCta.href}
               data-cursor="cta"
-              className="btn-caps inline-block rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-orange-light"
+              className="btn-caps inline-block rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
             >
               {primaryCta.label}
             </ScrollLink>

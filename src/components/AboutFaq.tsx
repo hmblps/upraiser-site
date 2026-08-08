@@ -67,20 +67,21 @@ export function AboutFaq({
                 {isOpen ? (
                   <motion.div
                     key="panel"
-                    initial={reduced ? false : { height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={reduced ? undefined : { height: 0, opacity: 0 }}
+                    initial={reduced ? false : { gridTemplateRows: "0fr", opacity: 0 }}
+                    animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                    exit={reduced ? undefined : { gridTemplateRows: "0fr", opacity: 0 }}
                     transition={reduced ? { duration: 0 } : SPRING_SOFT}
-                    className="overflow-hidden"
+                    className="grid"
                   >
+                    <div className="overflow-hidden">
                     <p
                       className={cn(
                         "copy accordion-panel pr-10 text-muted",
-                        compact ? "line-clamp-3 pb-2.5 text-xs" : "pb-5 text-sm",
                       )}
                     >
                       {item.answer}
                     </p>
+                  </div>
                   </motion.div>
                 ) : null}
               </AnimatePresence>

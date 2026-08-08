@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { SiteGrain } from "../components/SiteGrain";
@@ -18,9 +18,7 @@ const CustomCursor = lazy(() =>
   import("../components/CustomCursor").then((m) => ({ default: m.CustomCursor })),
 );
 
-const PartnersCarousel = lazy(() =>
-  import("../components/PartnersCarousel").then((m) => ({ default: m.PartnersCarousel })),
-);
+
 
 const Footer = lazy(() => import("../components/Footer").then((m) => ({ default: m.Footer })));
 
@@ -57,8 +55,6 @@ export function LazySection({ children, minHeight = "28vh" }: { children: ReactN
 export function SiteLayout() {
   const { isPreviewMode: applePreview, features: appleFeatures } = useApplePreview();
   const viewportRoute = useViewportRoute();
-  const { pathname } = useLocation();
-  const isHome = pathname === "/";
 
   return (
     <SmoothScroll>

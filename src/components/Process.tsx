@@ -113,7 +113,7 @@ export function Process() {
             <ScrollLink
               href="#contact"
               data-cursor="cta"
-              className="btn-caps inline-block rounded-full bg-orange px-7 py-3 text-sm font-semibold text-on-accent transition hover:bg-orange-light hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--theme-accent-light)_25%,transparent)]"
+              className="btn-caps inline-block rounded-full bg-accent px-7 py-3 text-sm font-semibold text-on-accent transition hover:bg-accent-light hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--theme-accent-light)_25%,transparent)]"
             >
               {section.cta}
             </ScrollLink>

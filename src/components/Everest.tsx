@@ -4,9 +4,9 @@ Adapted for UPRAISER Hero — dark: brand gold wire + ghost; light: photo maps.
 */
 
 import { useEffect, useMemo } from "react";
-import { Center, useGLTF, useTexture } from "@react-three/drei";
+import { Center, useGLTF } from "@react-three/drei";
 import { useFrame, type ThreeElements } from "@react-three/fiber";
-import { Box3, Color, MeshStandardMaterial, Vector3, type Mesh, type Object3D, SRGBColorSpace, LinearSRGBColorSpace, RepeatWrapping, LinearMipmapLinearFilter, LinearFilter } from "three";
+import { Box3, Color, MeshStandardMaterial, Vector3, type Mesh, type Object3D } from "three";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "../lib/heroModel";
 import { IDLE_BREATHE } from "./hero-terrain/shared";
 
@@ -162,7 +162,7 @@ export function Everest({
         mat.roughnessMap.needsUpdate = true;
       }
       
-      mat.onBeforeCompile = (shader) => {
+      mat.onBeforeCompile = (shader: any) => {
         shader.vertexShader = `
           varying vec3 vLocalPosition;
           varying vec3 vLocalNormal;

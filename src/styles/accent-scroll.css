@@ -30,7 +30,7 @@
 }
 
 .accent-word-gold {
-  color: var(--color-orange);
+  color: var(--color-accent);
 }
 
 .accent-word-red {
@@ -119,7 +119,7 @@
 }
 
 .accent-scroll-hero-word-gold {
-  color: var(--color-orange);
+  color: var(--color-accent);
   text-shadow:
     0 0 36px color-mix(in srgb, var(--theme-accent) 32%, transparent),
     0 0 72px color-mix(in srgb, var(--theme-accent) 14%, transparent);

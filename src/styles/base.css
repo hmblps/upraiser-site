@@ -6,6 +6,13 @@ html {
   /* Instant jumps — Lenis owns smooth scroll. Global `smooth` fought refresh resets. */
   scroll-behavior: auto;
   overflow-anchor: none;
+  width: 100%;
+}
+
+body {
+  /* Use clip instead of hidden to prevent breaking position: sticky in child elements */
+  overflow-x: clip;
+  width: 100%;
 }
 
 :root,
@@ -232,17 +239,17 @@ html.is-scrolling .sparkline-live-dot {
 }
 
 /* Legacy upraiser.co.uk: red sign-up → peach-gold hover wash */
-[data-theme="light"] .btn-caps.bg-orange,
+[data-theme="light"] .btn-caps.bg-accent,
 [data-theme="light"] .btn-caps--primary,
-[data-theme="light"] .bg-orange.text-on-accent {
+[data-theme="light"] .bg-accent.text-on-accent {
   background-color: var(--theme-accent-secondary);
-  color: var(--theme-on-accent);
+  color: #ffffff;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  [data-theme="light"] .btn-caps.bg-orange:hover:not(:disabled),
+  [data-theme="light"] .btn-caps.bg-accent:hover:not(:disabled),
   [data-theme="light"] .btn-caps--primary:hover:not(:disabled),
-  [data-theme="light"] .bg-orange.text-on-accent:hover {
+  [data-theme="light"] .bg-accent.text-on-accent:hover {
     background-color: var(--theme-accent-light);
     color: var(--theme-fg);
   }
@@ -474,7 +481,7 @@ header nav .nav-link:focus-visible::after {
       0 0 0 1px color-mix(in srgb, var(--theme-card-hover-mid) 20%, transparent);
   }
 
-  .card-lift.bg-bg-card:hover [class*="bg-orange/"],
+  .card-lift.bg-bg-card:hover [class*="bg-accent/"],
   .card-lift.bg-bg-card:hover [class*="bg-magenta/"] {
     background-color: color-mix(in srgb, var(--theme-card-hover-mid) 14%, var(--theme-bg-card)) !important;
   }

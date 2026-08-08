@@ -32,7 +32,7 @@ export function FormatCopy({
   formats,
   onJump,
 }: FormatCopyProps) {
-  const accentClass = mode === "growth" ? "text-orange" : "text-orange";
+  const accentClass = mode === "growth" ? "text-accent" : "text-accent";
 
   return (
     <div className="format-copy-wrap">

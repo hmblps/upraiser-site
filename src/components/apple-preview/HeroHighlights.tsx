@@ -29,7 +29,7 @@ export function HeroHighlights() {
           <ScrollLink
             key={chip.label}
             href={chip.href}
-            className="hero-highlight-chip shrink-0 rounded-full border border-border bg-bg-card/60 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-light transition hover:border-orange/35 hover:bg-bg-card hover:text-fg"
+            className="hero-highlight-chip shrink-0 rounded-full border border-border bg-bg-card/60 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-light transition hover:border-accent/35 hover:bg-bg-card hover:text-fg"
           >
             {chip.label}
           </ScrollLink>

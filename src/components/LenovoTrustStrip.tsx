@@ -21,7 +21,7 @@ export function LenovoTrustStrip() {
             <div className="flex items-center gap-4">
               <LenovoPartnershipLogo className="h-9 w-auto shrink-0 sm:h-10" />
               <div>
-                <p className="stat-label text-orange">{lenovoPartnership.badge}</p>
+                <p className="stat-label text-accent">{lenovoPartnership.badge}</p>
                 <p className="mt-0.5 text-sm font-semibold text-fg">{lenovoPartnership.title}</p>
               </div>
             </div>

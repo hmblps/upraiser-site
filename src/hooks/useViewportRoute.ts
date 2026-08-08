@@ -3,10 +3,7 @@ import { useLocation } from "react-router-dom";
 
 /** Routes that must fit one viewport — no page scroll, no partners/footer runway. */
 const VIEWPORT_PREFIXES = [
-  "/studio",
-  "/craft",
   "/cases",
-  "/clients",
   "/company",
   "/contact",
 ] as const;

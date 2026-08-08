@@ -15,9 +15,9 @@
   --color-bg-card: var(--theme-bg-card);
   --color-border: var(--theme-border);
   --color-fg: var(--theme-fg);
-  --color-orange: var(--theme-accent);
-  --color-orange-light: var(--theme-accent-light);
-  --color-orange-dim: var(--theme-accent-dim);
+  --color-accent: var(--theme-accent);
+  --color-accent-light: var(--theme-accent-light);
+  --color-accent-dim: var(--theme-accent-dim);
   --color-magenta: var(--theme-accent-secondary);
   --color-magenta-light: var(--theme-accent-secondary-light);
   --color-muted: var(--theme-muted);
@@ -50,7 +50,7 @@
 [data-theme="dark"] {
   color-scheme: dark;
   --logo-gold: #ffcc00;
-  --logo-red: #e63558;
+  --logo-red: #ff003b;
 
   --theme-bg: #050504;
   --theme-bg-elevated: #0e0d0b;
@@ -88,7 +88,7 @@
 [data-theme="light"] {
   color-scheme: light;
   --logo-gold: #f8c800;
-  --logo-red: #f80038;
+  --logo-red: #ff003b;
 
   /* White paper — cool grey elevates; hero sun is cooler / prismatic */
   --theme-bg: #ffffff;
@@ -104,7 +104,7 @@
   --theme-accent-dim: #f8c80024;
   --theme-accent-secondary: var(--logo-red);
   --theme-accent-secondary-light: #ff4060;
-  --theme-on-accent: #ffffff;
+  --theme-on-accent: #121212;
   --theme-hero-glow: #a8c8ff22;
   --theme-input-bg: #f8f9fb;
   --theme-case-panel: #f8f9fb;

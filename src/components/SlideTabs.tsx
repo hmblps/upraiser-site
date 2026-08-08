@@ -34,11 +34,11 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
           active && !reduced ? (
             <motion.span
               layoutId={layoutId}
-              className="slide-tab__pill absolute inset-0 rounded-full bg-orange"
+              className="slide-tab__pill absolute inset-0 rounded-full bg-accent"
               transition={{ type: "spring", stiffness: 420, damping: 32 }}
             />
           ) : active ? (
-            <span className="slide-tab__pill absolute inset-0 rounded-full bg-orange" aria-hidden />
+            <span className="slide-tab__pill absolute inset-0 rounded-full bg-accent" aria-hidden />
           ) : null;
 
         if (item.href) {

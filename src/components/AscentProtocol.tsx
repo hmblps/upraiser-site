@@ -23,7 +23,7 @@ export function AscentProtocol() {
                 onClick={() => setOpenNumber(isOpen ? null : item.protocolNumber)}
               >
                 <div className="flex flex-1 items-start gap-4 sm:gap-6 min-w-0">
-                  <span className="font-mono text-xs font-semibold tracking-wider text-orange shrink-0 pt-0.5 select-none w-14 sm:w-16">
+                  <span className="font-mono text-xs font-semibold tracking-wider text-accent shrink-0 pt-0.5 select-none w-14 sm:w-16">
                     {item.protocolNumber}
                   </span>
                   <span className="font-sans text-sm sm:text-base font-bold leading-snug text-fg flex-1">
@@ -45,23 +45,25 @@ export function AscentProtocol() {
                 {isOpen ? (
                   <motion.div
                     key="panel"
-                    initial={reduced ? false : { height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={reduced ? undefined : { height: 0, opacity: 0 }}
+                    initial={reduced ? false : { gridTemplateRows: "0fr", opacity: 0 }}
+                    animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                    exit={reduced ? undefined : { gridTemplateRows: "0fr", opacity: 0 }}
                     transition={reduced ? { duration: 0 } : SPRING_SOFT}
-                    className="overflow-hidden"
+                    className="grid"
                   >
+                    <div className="overflow-hidden">
                     <div className="pl-14 sm:pl-[5.25rem] pb-5">
                       <p className="font-sans text-xs sm:text-sm leading-relaxed text-muted-light max-w-3xl">
                         {item.answer}
                       </p>
                       
                       <div className="mt-3.5 flex">
-                        <span className="inline-flex items-center gap-1.5 rounded border border-orange/20 bg-orange/5 px-2.5 py-1 font-mono text-[0.6875rem] font-semibold text-orange-light">
-                          <span className="h-1.5 w-1.5 rounded-full bg-orange animate-pulse" aria-hidden />
+                        <span className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2.5 py-1 font-mono text-[0.6875rem] font-semibold text-accent-light">
+                          <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
                           {item.ogilvyProof}
                         </span>
                       </div>
+                    </div>
                     </div>
                   </motion.div>
                 ) : null}
