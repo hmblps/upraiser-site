@@ -250,5 +250,6 @@ Poetic / Zero-like = atmosphere + ascent language + restraint. Marketing = one c
 
 ## Changelog
 
+- 2026-08-08 — Applied Stop-Slop and Ogilvy rules across liveContent.ts (removed em-dashes, negative constructions, added BidMatrix SDK events). Fixed UI contrast for light theme red buttons. Adjusted Lenovo dock to be always visible and reduced 900vh hero runway to 300vh.
 - 2026-07-30 — Expedition voice **adopted in product copy** (nav, hero ledes, folds, Why Us). This file stays advisory; live SOT is `liveContent.ts`.
 - 2026-07-30 — Initial advisory audit from product-marketing context + council + page pass. Explicit: not SOT; poetic layer retained.
