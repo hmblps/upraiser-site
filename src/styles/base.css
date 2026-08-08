@@ -242,16 +242,15 @@ html.is-scrolling .sparkline-live-dot {
 [data-theme="light"] .btn-caps.bg-accent,
 [data-theme="light"] .btn-caps--primary,
 [data-theme="light"] .bg-accent.text-on-accent {
-  background-color: var(--theme-accent-secondary);
-  color: #ffffff;
+  background-color: var(--theme-accent-secondary) !important;
+  color: #ffffff !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
   [data-theme="light"] .btn-caps.bg-accent:hover:not(:disabled),
   [data-theme="light"] .btn-caps--primary:hover:not(:disabled),
-  [data-theme="light"] .bg-accent.text-on-accent:hover {
-    background-color: var(--theme-accent-light);
-    color: var(--theme-fg);
+  [data-theme="light"] .bg-accent.text-on-accent:hover:not(:disabled) {
+    background-color: var(--theme-accent-secondary-light) !important;
   }
 }
 

@@ -182,9 +182,9 @@
 
 @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
   .hero-stage--fly {
-    /* ~9–10s sticky runway — cinematic drone beat with room to land */
-    height: 900vh;
-    min-height: 900vh;
+    /* ~3s sticky runway — cinematic drone beat with room to land */
+    height: 300vh;
+    min-height: 300vh;
   }
 
   .hero-fly-sticky {

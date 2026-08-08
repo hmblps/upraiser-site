@@ -73,11 +73,10 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
       progressRef.current = next;
       stage.dataset.heroFly = next.toFixed(3);
 
-      // Lenovo dock: settle flush on the sticky bottom before soft exit.
-      const lenovoIn = smoothstep(next, 0.7, 0.86);
-      stage.style.setProperty("--hero-lenovo-opacity", lenovoIn.toFixed(4));
-      stage.style.setProperty("--hero-lenovo-y", ((1 - lenovoIn) * 108).toFixed(2));
-      stage.dataset.lenovoDock = lenovoIn > 0.55 ? "1" : "0";
+      // Lenovo dock: always visible flush on the sticky bottom
+      stage.style.setProperty("--hero-lenovo-opacity", "1");
+      stage.style.setProperty("--hero-lenovo-y", "0");
+      stage.dataset.lenovoDock = "1";
 
       // Soft handoff: only the last ~5% — after Lenovo is fully docked.
       const exit = clamp((next - 0.95) / 0.05, 0, 1);
