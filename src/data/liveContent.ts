@@ -67,7 +67,7 @@ export const audienceByMode = {
     scrollHeroWord: "PROOF",
     cta: primaryCta.label,
     description:
-      "We do not just edit Your dashboard reports. You are the Ad Ops lead, the finance controller, or the UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava. You require a direct supply path where every bid and KPI event traces back to a raw device log. We leave opaque, summarized PDF reporting to traditional media vendors. Our team has built clean, verified supply lines since 2017. You can defend Your media spend in any financial review.",
+      "You are the Ad Ops lead, finance controller, or UA director who has explained attribution drift too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava. You require a direct supply path where every KPI event traces back to a raw device log. We leave opaque PDF reporting to traditional vendors. We build clean, verified supply lines so You can defend Your media spend in any financial review.",
   },
   infrastructure: {
     label: "Teams who require campaign metrics to match the media invoice",
@@ -78,7 +78,7 @@ export const audienceByMode = {
     scrollHeroWord: "PROOF",
     cta: primaryCta.label,
     description:
-      "We do not just edit Your dashboard reports. You are the Ad Ops lead, the finance controller, or the UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava. You require a direct supply path where every bid and KPI event traces back to a raw device log. We leave opaque, summarized PDF reporting to traditional media vendors. Our team has built clean, verified supply lines since 2017. You can defend Your media spend in any financial review.",
+      "You are the Ad Ops lead, finance controller, or UA director who has explained attribution drift too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava. You require a direct supply path where every KPI event traces back to a raw device log. We leave opaque PDF reporting to traditional vendors. We build clean, verified supply lines so You can defend Your media spend in any financial review.",
   },
 } satisfies Record<SiteMode, {
   label: string;
