@@ -25,14 +25,8 @@
   --color-on-accent: var(--theme-on-accent);
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Inter", system-ui, sans-serif;
-  /** In-phone mock feeds only (Solutions glass) — not site chrome */
   --font-feed: "Plus Jakarta Sans", system-ui, sans-serif;
   --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.25rem;
-  --radius-pill: 9999px;
 }
 
 @keyframes orbit {
@@ -75,6 +69,7 @@
   --theme-card-hover-gold: color-mix(in srgb, var(--theme-card-hover-mid) 38%, var(--theme-bg-card));
   --theme-card-hover-border: color-mix(in srgb, var(--theme-card-hover-mid) 24%, var(--theme-border));
   --theme-card-hover-shadow: color-mix(in srgb, var(--theme-card-hover-mid) 9%, transparent);
+  --theme-card-shadow-base: rgba(0, 0, 0, 0.45);
 
   --brand-section-label: var(--theme-accent-secondary);
   --theme-accent-ink: var(--theme-accent);
@@ -114,12 +109,15 @@
   --theme-card-hover-gold: color-mix(in srgb, var(--theme-card-hover-mid) 38%, var(--theme-bg-card));
   --theme-card-hover-border: color-mix(in srgb, var(--theme-card-hover-mid) 24%, var(--theme-border));
   --theme-card-hover-shadow: color-mix(in srgb, var(--theme-card-hover-mid) 9%, transparent);
+  --theme-card-shadow-base: rgba(0, 0, 0, 0.08);
 
   --brand-section-label: var(--logo-gold);
   --theme-accent-ink: var(--logo-gold);
   --fraud-segment-farms: var(--logo-gold);
   --fraud-segment-ai: var(--logo-red);
 }
+
+
 
 @import "./styles/base.css";
 @import "./styles/cross-platform.css";
