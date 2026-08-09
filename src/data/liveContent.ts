@@ -31,54 +31,54 @@ export const primaryCta = {
   href: "/contact",
 };
 
-export const heroFounded = "Founded 17 July 2017 · Based in London";
+export const heroFounded = "Founded 17 July 2017 based in London";
 
-/** Shared poetic H1 stays in Hero.tsx — lede annotates by mode (ascent brand). */
+/** Shared poetic H1 stays in Hero.tsx lede annotates by mode (ascent brand). */
 export const heroLedeByMode = {
-  growth: "Most agencies talk about the view. We focus on the velocity.",
+  growth: "Most agencies admire the view. We engineer the velocity.",
   infrastructure: "Scaling is the climb. Verification is the oxygen.",
 } as const satisfies Record<SiteMode, string>;
 
-/** @deprecated use heroLedeByMode — kept for any stray imports */
+/** @deprecated use heroLedeByMode kept for any stray imports */
 export const heroLede = heroLedeByMode.growth;
 
 export const heroHighlightsByMode = {
   growth: [
-    { value: "100+", label: "Markets" },
-    { value: "100K+", label: "Apps in Network" },
-    { value: "48h", label: "Avg. Launch Time" },
-    { value: "$250K+", label: "Revenue Attributed" },
+    { value: "35+", label: "Active GEOs" },
+    { value: "800M+", label: "OEM Device Reach" },
+    { value: "48h", label: "SLA Setup" },
+    { value: "$150M+", label: "Spent Optimized" },
   ],
   infrastructure: [
-    { value: "97.3%", label: "Fraud Blocked Pre-Bid" },
-    { value: "0%", label: "Post-Flight Log Drift" },
-    { value: "0.4ms", label: "p99 Bid Scoring" },
-    { value: "180+", label: "Device Signals" },
+    { value: "35+", label: "Active GEOs" },
+    { value: "800M+", label: "OEM Device Reach" },
+    { value: "48h", label: "SLA Setup" },
+    { value: "$150M+", label: "Spent Optimized" },
   ],
 } satisfies Record<SiteMode, readonly { value: string; label: string }[]>;
 
 export const audienceByMode = {
   growth: {
-    label: "The Route to the Peak",
-    title: "The cleanest route to the top.",
-    line1: "We don't just buy media; we engineer Your ascent.",
-    line2Prefix: "Built to",
-    inlineWord: "SCALE",
-    scrollHeroWord: "SCALE",
-    cta: primaryCta.label,
-    description:
-      "Direct pipe. Not resale. UPRAISER provides a direct supply path across OEM, Programmatic, and Social channels. No middlemen to slow You down, no black boxes to hide the risk. Just pure, measurable momentum for Your unit economics.",
-  },
-  infrastructure: {
-    label: "The Fixed Lines",
-    title: "A supply path You can defend in a review.",
-    line1: "At high altitude, even a 5% drift in data is fatal.",
+    label: "Teams who require campaign metrics to match the media invoice",
+    title: "Who We Serve",
+    line1: "When Your MMP and media bills diverge, we rebuild Your data pipelines.",
     line2Prefix: "Run on",
     inlineWord: "PROOF",
     scrollHeroWord: "PROOF",
     cta: primaryCta.label,
     description:
-      "Direct pipe. Not resale. When Your MMP and media bill diverge, You don't need a new dashboard — You need a better pipe. We verify the route before You start the climb, ensuring every bid has a receipt and every install is human.",
+      "We do not just edit Your dashboard reports. You are the Ad Ops lead, the finance controller, or the UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava. You require a direct supply path where every bid and KPI event traces back to a raw device log. We leave opaque, summarized PDF reporting to traditional media vendors. Our team has built clean, verified supply lines since 2017. You can defend Your media spend in any financial review.",
+  },
+  infrastructure: {
+    label: "Teams who require campaign metrics to match the media invoice",
+    title: "Who We Serve",
+    line1: "When Your MMP and media bills diverge, we rebuild Your data pipelines.",
+    line2Prefix: "Run on",
+    inlineWord: "PROOF",
+    scrollHeroWord: "PROOF",
+    cta: primaryCta.label,
+    description:
+      "We do not just edit Your dashboard reports. You are the Ad Ops lead, the finance controller, or the UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava. You require a direct supply path where every bid and KPI event traces back to a raw device log. We leave opaque, summarized PDF reporting to traditional media vendors. Our team has built clean, verified supply lines since 2017. You can defend Your media spend in any financial review.",
   },
 } satisfies Record<SiteMode, {
   label: string;
@@ -97,7 +97,7 @@ export const valueByMode = {
       kicker: "Event-weighted buying",
       title: "Buy the event Your board tracks",
       description:
-        "Caps wire to revenue events before the first impression clears — not CPI charts that break after the flight.",
+        "Caps wire directly to revenue events before the first impression clears, ensuring absolute alignment with Your goals.",
     },
     metrics: [
       { value: "97.3%", label: "Fraud killed before auction close", progress: 0.973 },
@@ -107,18 +107,18 @@ export const valueByMode = {
       {
         title: "Spend that scales under scrutiny",
         description:
-          "Every bid scored before it clears. Bad traffic never hits Your cap — not because we say so, because the log proves it.",
+          "Every bid is scored before it clears. Bad traffic drops instantly, and the exact device log proves our absolute transparency.",
       },
       {
         title: "CPA that holds at scale",
         description:
-          "Unit economics stay flat when budget doubles. Cohort LTV drives the bid, not yesterday's CPI.",
+          "Unit economics stay flat when budget doubles. Precise cohort LTV entirely drives the bid strategy.",
       },
     ],
     brand: {
       badge: "Official partner",
       title: "Lenovo OEM",
-      description: "Factory lanes — full inventory story on Solutions.",
+      description: "Factory lanes detailed completely on Solutions.",
     },
   },
   infrastructure: {
@@ -126,7 +126,7 @@ export const valueByMode = {
       kicker: "Log-native buying",
       title: "Every bid has a receipt",
       description:
-        "Server logs reconcile to Adjust and AppsFlyer in real time. Month-end without the attribution war room — because the numbers already agree.",
+        "Server logs reconcile perfectly to Adjust and AppsFlyer in real time. Month-end closes seamlessly because the numbers already agree.",
     },
     metrics: [
       { value: "0%", label: "Post-flight log drift", progress: 0.02 },
@@ -136,46 +136,46 @@ export const valueByMode = {
       {
         title: "Traffic that passes audit",
         description:
-          "Invalid requests drop before auction close. Ad Ops can defend every dollar in a finance review without last-minute reconciliation.",
+          "Invalid requests drop flawlessly before auction close. Ad Ops confidently defends every dollar in a finance review without last-minute reconciliation.",
       },
       {
         title: "Numbers that match",
         description:
-          "MMP and media bill tell the same story — raw logs, not estimates. No more reconciling at 2 a.m. before the board deck.",
+          "The MMP and media bill tell exactly the same story through raw logs. Ad Ops and finance operate in absolute alignment.",
       },
     ],
     brand: {
       badge: "Official partner",
       title: "Lenovo OEM",
-      description: "SDK-audited ROM — inventory depth on Solutions.",
+      description: "SDK-audited ROM with deep inventory mapped on Solutions.",
     },
   },
 } satisfies Record<SiteMode, unknown>;
 
 export const promiseByMode = {
   growth: {
-    label: "Proven Summits",
-    title: "We know these peaks well.",
-    scrollHeroWord: "RESULTS",
-    line1: "+305% ROAS for subscription leaders — and factory lanes that hold at altitude.",
-    line2Prefix: "We answer in",
-    inlineWord: "RESULTS",
-    titleLead: "We answer in ",
-    accentWord: "RESULTS",
-    description:
-      "Block Blast: scaling to 32K+ daily installs via factory lanes. If it is not on the P&L, we don't call it a win — caps follow events Your CFO already trusts.",
-  },
-  infrastructure: {
-    label: "The Oxygen Level",
-    title: "Run on PROOF.",
+    label: "Raw logs Your team can audit on demand",
+    title: "Our Commitment",
     scrollHeroWord: "CLARITY",
-    line1: "0% post-flight log drift. 0.4ms bid scoring. 180+ device signals.",
+    line1: "We trace every media invoice line item back to a raw device event.",
     line2Prefix: "We bring",
     inlineWord: "CLARITY",
     titleLead: "We bring ",
     accentWord: "CLARITY",
     description:
-      "Fraud filtered before the bid. Verification at the source. Month-end stays uneventful because the numbers never disagree — the ultimate signal of clarity.",
+      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean.",
+  },
+  infrastructure: {
+    label: "Raw logs Your team can audit on demand",
+    title: "Our Commitment",
+    scrollHeroWord: "CLARITY",
+    line1: "We trace every media invoice line item back to a raw device event.",
+    line2Prefix: "We bring",
+    inlineWord: "CLARITY",
+    titleLead: "We bring ",
+    accentWord: "CLARITY",
+    description:
+      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean.",
   },
 } satisfies Record<
   SiteMode,
@@ -196,297 +196,84 @@ export const trafficChannelsByMode = {
   growth: [
     {
       id: "oem",
-      title: "OEM",
-      tagline: "On device before day one",
-      teaser:
-        "Lenovo ROM and Google PAI — factory-side presence before the open-exchange auction even opens.",
-      description:
-        "OEM traffic reaches users where trust already lives — on the device itself. Through our official Lenovo agency partnership we place Your app via factory ROM and Google PAI: system recommendations and pre-installs, not another open-exchange interstitial dressed up as OEM. In an ad-saturated feed, that authenticity compounds into higher CR and LTV than auction leftovers. Competitors still bid the exchange; You ship from the factory floor — with SDK trails from install to postback Your finance team can pull anytime.",
-      bestFor: "Launches, emerging markets, ROM-first scale",
+      title: "OEM & On-Device Discovery",
+      tagline: "OEM Volume",
+      teaser: "Launch campaigns on new Android devices at the moment of first activation.",
+      description: "We deliver direct, factory-level placement across premium global devices. As an official Lenovo agency partner, we secure pre-installs and device activation campaigns with certified SDK trails. We bypass traditional resellers and competitive bidding to place Your application directly in front of new users. You scale Your user base with direct device access and verified logs for first_deposit_complete events.",
+      bestFor: "Direct Access · Factory ROM · Verified Logs",
       points: [
-        "Direct Lenovo ROM and Google PAI lanes — not resold exchange supply",
-        "SDK trail from factory floor to MMP postback",
-        "Pre-bid filtration on every OEM impression before the cap clears",
-        "Operator-grade authenticity vs open-exchange bleed",
-        "Retention and unit economics built for day-zero presence",
-      ],
+        "Lenovo agency partner",
+        "Pre-installs",
+        "SDK trails"
+      ]
     },
     {
       id: "programmatic",
-      title: "In-App Programmatic",
-      tagline: "Scale inside 100K+ apps",
-      teaser: "SDK inventory across 100K+ apps — bids fire on intent signals, not leftover impressions.",
-      description:
-        "In-app programmatic is how You reach users already inside high-engagement environments — games, utilities, content apps — without guessing on open exchange leftovers. We buy SDK inventory with behavioral signals: session depth, engagement peaks, reward completion. Every impression still clears pre-bid filtration before it hits Your cap. Formats span rewarded video, interstitials, native, and rich media — chosen by unit economics for the vertical, not by what a network wants to push this quarter.",
-      bestFor: "Volume scaling, rewarded video, high-intent units",
+      title: "Programmatic Media Buying",
+      tagline: "Event-Weighted DSP",
+      teaser: "Target high-spending audiences using predictive event optimization.",
+      description: "We run programmatic campaigns across curated global exchanges, bypassing the noise of public bidding. Our system optimizes Your spend for downstream events, including registration_success and subscription_started. We buy media based on real player lifetime value rather than cheap clicks. You achieve ROI-focused growth across premium ad networks.",
+      bestFor: "Curated Exchanges · ROI Focus · Event Optimization",
       points: [
-        "100K+ app graph with behavioral bid signals",
-        "Pre-bid fraud screen on every in-app impression",
-        "Rewarded, interstitial, native, and rich media in one accountable mix",
-        "Caps wired to downstream events — not CPM vanity",
-        "Supply path clear enough for Ad Ops to defend in review",
-      ],
+        "Predictive optimization",
+        "Downstream events",
+        "Lifetime value bidding"
+      ]
     },
     {
       id: "performance",
-      title: "App Growth",
-      tagline: "Pay for what converts",
-      teaser: "CPI, CPA, CPL tied to deposits and subs — not install charts that break after the flight.",
-      description:
-        "App Growth is end-to-end mobile acquisition across display, video, and in-app — priced on outcomes finance already tracks. We run CPI, CPA, and CPL models where the bid follows revenue signals: first deposit, funded account, paid subscription. Real-time fraud filtering sits on every buy. iGaming, fintech, gaming, and subscription apps are the core — verticals where a cheap install that never converts is worse than no install at all.",
-      bestFor: "iGaming, fintech, games, subscription apps",
+      title: "In-App, Social & CGC",
+      tagline: "CGC Performance",
+      teaser: "Convert user attention into measurable revenue using authentic creators.",
+      description: "We combine high-performing Creator-Generated Content (CGC) with algorithmic paid distribution. Our creative studio sources creators to design visual hooks tailored for competitive verticals, including iGaming and Fintech. We test hundreds of video variations and scale only the formats that convert. You watch Your average revenue per user climb.",
+      bestFor: "Authentic Creators · iGaming & Fintech · Measurable Revenue",
       points: [
-        "Event-priced buying: FTD, registration, subscription — not vanity CPI",
-        "Fraud filtration before the impression clears the cap",
-        "Display, video, and in-app under one optimization loop",
-        "Unit economics held flat when budget scales",
-        "MMP reconciliation before the flight closes",
-      ],
-    },
-    {
-      id: "social",
-      title: "Social & Search",
-      tagline: "Catch intent in motion",
-      teaser: "Meta, TikTok, and Google — funnel segments with same-day MMP events, no black-box lag.",
-      description:
-        "Social and search catch intent while it is still in motion — someone searching, scrolling, comparing. We build Meta, TikTok, and Google campaigns with segments mapped to Your funnel stages, then wire conversion events into the MMP the same day. No black-box lag. No last-month reconciliation theater. Creatives and bids iterate against deposits and subscriptions, not estimated reach.",
-      bestFor: "Intent capture, paid social, search CPA",
-      points: [
-        "Meta, TikTok, and Google under one event schema",
-        "Same-day MMP conversion wiring — no estimated reach theater",
-        "Funnel-stage segments, not broad spray",
-        "Creative and bid loops tied to revenue KPIs",
-        "Spend You can defend in a weekly performance review",
-      ],
-    },
-    {
-      id: "rewarded",
-      title: "Rewarded Traffic",
-      tagline: "Opt-in completion, not accidental taps",
-      teaser: "Rewarded video and offerwalls — bids on engaged completions inside games and utilities.",
-      description:
-        "Rewarded traffic is inventory users opt into — watch, play, or complete an action for in-app value. We buy rewarded video and offerwall units where completion signals predict downstream LTV. Every impression still clears pre-bid filtration. Caps tie to installs and deep events in the MMP, not raw volume.",
-      bestFor: "Games, utilities, high-engagement CPI",
-      points: [
-        "Rewarded video and offerwalls in high-engagement apps",
-        "Completion-based optimization — not click-chasing",
-        "Pre-bid fraud screen on every rewarded impression",
-        "Caps wired to MMP install and deep events",
-        "Supply path visible for Ad Ops review",
-        "Engagement quality scored before bids clear",
-      ],
-    },
-    {
-      id: "native",
-      title: "Native & Editorial",
-      tagline: "Trust-driven conversions",
-      teaser: "Finance and tech publishers — editorial context that converts deposits, not clickbait inventory.",
-      description:
-        "Native and editorial placements sit inside high-authority finance and tech publishers — context that already earns trust before the click. We run brand-safe inventory with pre-flight compliance checks so regulated verticals (fintech, iGaming, premium subscriptions) can scale without legal fire drills. The goal is deposits and subscriptions from readers who were already evaluating a category, not drive-by clickbait.",
-      bestFor: "Fintech, iGaming, premium subscriptions",
-      points: [
-        "Curated finance and tech publisher whitelist",
-        "Pre-flight brand and compliance checks",
-        "Editorial context that supports conversion, not clickbait",
-        "Placements legal and brand teams can accept",
-        "Event tracking aligned to deposit and subscription KPIs",
-      ],
-    },
-    {
-      id: "ctv",
-      title: "CTV & Connected TV",
-      tagline: "Reach that activates",
-      teaser: "Roku and streaming — household reach scored pre-bid, activation matched post-flight.",
-      description:
-        "CTV is household reach with a performance mandate. We run Roku and streaming campaigns built for installs and deep events — account link, first deposit, paid subscription — not brand lift slides. Household and device signals are scored pre-bid; activation is matched post-flight to the delivery log so You are not left with view-through black holes when finance asks what the spend bought.",
-      bestFor: "Brand + performance, UK/US fintech, awareness",
-      points: [
-        "Roku and premium streaming inventory",
-        "Pre-bid household and device scoring",
-        "Activation events matched to delivery logs",
-        "Built for deep events — not view-through vanity",
-        "Clean measurement paths for UK/US performance teams",
-      ],
-    },
-    {
-      id: "retargeting",
-      title: "Retargeting",
-      tagline: "MMP feed, not pixels",
-      teaser: "Audience pools from MMP events — reactivation bids on real behavior, device-level proof.",
-      description:
-        "Retargeting should bring back users who already showed intent — trial starts, cart views, deposit abandoners — not everyone who glanced at an ad. We build cross-channel reactivation from MMP event pools, not brittle pixels. Bids weight LTV and likelihood to convert. Every win-back flight traces to a device-level event Your team can pull when the month closes.",
-      bestFor: "Trial users, cart abandoners, reactivation",
-      points: [
-        "MMP event pools — not fragile pixel segments",
-        "LTV-weighted bids on real intent cohorts",
-        "Cross-channel reactivation under one reconciliation file",
-        "Device-level proof for every win-back dollar",
-        "Lifecycle UA that finance can read without a translator",
-      ],
-    },
-    {
-      id: "influencer",
-      title: "Influencer & Creator",
-      tagline: "Trusted voices, tracked outcomes",
-      teaser: "Creator placements with MMP links — social reach that closes into deposits, not brand-lift slides.",
-      description:
-        "Creator marketing only works when the voice is trusted and the outcome is tracked. We place influencers and UGC creators with MMP-tracked links and event KPIs — installs, deposits, subscriptions — not 'brand lift' metrics that cannot tie to a revenue event. Social reach shows up in the same reconciliation file as paid media, so creator spend lives next to performance spend without a separate story for the board.",
-      bestFor: "Consumer apps, fintech onboarding, brand lift",
-      points: [
-        "MMP-tracked creator and UGC placements",
-        "Event KPIs: deposits and subs — not vanity views",
-        "Creator spend reconciled with paid media",
-        "Voices matched to vertical trust, not follower counts alone",
-        "Clear path from impression to revenue event",
-      ],
-    },
+        "Algorithmic distribution",
+        "High-volume testing",
+        "LTV scaling"
+      ]
+    }
   ],
   infrastructure: [
     {
       id: "oem",
-      title: "OEM",
-      tagline: "Auditable factory supply",
-      teaser: "Lenovo ROM and PAI with SDK trails — one log for compliance, UA, and finance.",
-      description:
-        "Lenovo ROM and Google PAI with SDK trails from factory floor to postback — the inventory path Ad Ops can defend in a finance review. This is not open-exchange supply marketed as OEM. Compliance and buying share one log: who installed, which device, which lane, which revenue event. Pre-bid filtration still runs on every impression; bad cohorts never clear the cap just because the placement sat on-device.",
-      bestFor: "Regulated launches, OEM scale, SDK audit",
+      title: "OEM & On-Device Discovery",
+      tagline: "OEM Audit",
+      teaser: "Audit every factory pre-install down to the raw hardware log.",
+      description: "Opaque attribution models have no place in Your marketing sheets. We secure direct Lenovo ROM and PAI lanes with complete SDK trails for absolute compliance. Our engineers connect device logs directly to Your Adjust or AppsFlyer endpoints for subscription_started tracking. You verify every device activation before You pay the invoice, protecting Your media budget from resale fraud.",
+      bestFor: "Absolute Compliance · Raw Hardware Logs · SDK Trails",
       points: [
-        "Factory-side ROM and PAI with device-level SDK trails",
-        "One shared log for compliance, UA, and finance",
-        "Pre-bid fraud screen on OEM lanes — not a free pass",
-        "No open-exchange ambiguity labeled as pre-install",
-        "Exportable proof for regulated and enterprise reviews",
-      ],
+        "Lenovo ROM & PAI",
+        "Adjust/AppsFlyer endpoints",
+        "Resale fraud protection"
+      ]
     },
     {
       id: "programmatic",
-      title: "In-App Programmatic",
-      tagline: "100K+ apps, full path visibility",
-      teaser: "SDK inventory with 180+ pre-bid signals — every impression defendable in a finance review.",
-      description:
-        "In-app programmatic at infrastructure grade means the supply path is visible enough for Ad Ops to defend every dollar. We buy across 100K+ apps with 180+ signals scored pre-bid — bots, emulators, and hijacked installs drop before auction close. Rewarded video and high-telemetry units stay on the whitelist Your compliance team already accepted. Month-end is a file pull, not a war room.",
-      bestFor: "Volume, rewarded video, rich telemetry",
+      title: "Programmatic Media Buying",
+      tagline: "Pre-Bid Filtration",
+      teaser: "Filter out bot traffic in 0.4 milliseconds before the bid occurs.",
+      description: "We enforce absolute pipeline cleanliness. Our proprietary engine analyzes 180 device signals in 0.4 milliseconds to block fraud before we spend Your budget, securing clean first_deposit_complete events. We maintain a rigorously vetted safelist of direct exchanges, ensuring a clean supply path. Your media buyers work with transparent data, and Your accounting ledgers match Your media invoices perfectly.",
+      bestFor: "Clean Supply Path · 0.4ms Filtration · Transparent Data",
       points: [
-        "180+ signals scored before the bid clears",
-        "Full path visibility from impression to postback",
-        "Whitelist-ready supply for regulated buyers",
-        "Raw logs exportable to Your MMP anytime",
-        "Volume without open-ended fraud exposure",
-      ],
+        "180 device signals",
+        "Direct exchange safelist",
+        "Ledger matching"
+      ]
     },
     {
       id: "performance",
-      title: "App Growth",
-      tagline: "Event-verified mobile buying",
-      teaser: "FTD/CPA models with pre-auction filtration — every paid action reconciles to a device log.",
-      description:
-        "App Growth for Ad Ops means FTD and CPA models where every paid action reconciles to a device log before the flight closes. In-app, display, and video supply is filtered pre-auction. Caps and bids wire to MMP events — not CPI vanity. When finance asks why the bill matches the MMP, the answer is already in the raw export.",
-      bestFor: "FTD/CPA models, games, finance-grade reporting",
+      title: "In-App, Social & CGC",
+      tagline: "Creative Log Trace",
+      teaser: "Connect every visual asset to a raw device receipt.",
+      description: "Traditional agencies sell beautiful banners but hide performance gaps. We treat creative production as data science. Our traders trace every creative asset directly to Your raw install logs, showing You exactly which video generated real lifetime value. We remove the guesswork from Your creative testing, ensuring every ad dollar works for Your ledger.",
+      bestFor: "Data Science · Install Logs · Ad Dollar Tracing",
       points: [
-        "Pre-auction filtration on every performance buy",
-        "Caps and bids wired to MMP events",
-        "Device-log reconciliation before flight close",
-        "FTD/CPA models — not install vanity",
-        "One story for UA, Ad Ops, and finance",
-      ],
-    },
-    {
-      id: "social",
-      title: "Social & Search",
-      tagline: "Logged intent paths",
-      teaser: "Meta, TikTok, Google with same-day MMP events — spend justified by logs, not estimated reach.",
-      description:
-        "Social and search paths are logged the same day they convert. Meta, TikTok, and Google fire into Your MMP without black-box lag. Spend is justified by events — deposits, registrations, subscriptions — not estimated reach. When a platform report disagrees with the MMP, You have the event trail to close the gap before the invoice cycle.",
-      bestFor: "Search CPA, paid social, intent cohorts",
-      points: [
-        "Same-day MMP conversion wiring",
-        "Event-justified spend — not estimated reach",
-        "Intent cohorts with a clear log path",
-        "Platform vs MMP gaps closed before invoice",
-        "Search and social under one reconciliation schema",
-      ],
-    },
-    {
-      id: "rewarded",
-      title: "Rewarded Traffic",
-      tagline: "Completion telemetry",
-      teaser: "Rewarded video and offerwalls — completion scored pre-bid, caps tied to MMP events.",
-      description:
-        "Rewarded inventory with completion telemetry scored pre-bid. High-engagement units stay on whitelists compliance already accepted. Every completion traces to a device log before month-end.",
-      bestFor: "Games, rewarded CPI, offerwall scale",
-      points: [
-        "Completion signals scored pre-bid",
-        "Rewarded video and offerwall supply",
-        "Device-level completion trails",
-        "Caps tied to MMP events",
-        "Whitelist-ready for regulated buyers",
-        "Finance-readable completion metrics",
-      ],
-    },
-    {
-      id: "native",
-      title: "Native & Editorial",
-      tagline: "Whitelist-only publishers",
-      teaser: "Curated finance and news inventory — every placement on the list legal already accepted.",
-      description:
-        "Native inventory for regulated buyers means whitelist-only publishers with brand and compliance filters applied before spend clears. Every placement sits on a list Your legal team would accept. Editorial context stays brand-safe; event tracking stays aligned to the same revenue KPIs as the rest of the mix.",
-      bestFor: "Premium media, regulated verticals",
-      points: [
-        "Whitelist-only finance and news publishers",
-        "Compliance filters before spend clears",
-        "Brand-safe editorial context",
-        "Event KPIs aligned to the rest of the mix",
-        "Audit-ready placement records",
-      ],
-    },
-    {
-      id: "ctv",
-      title: "CTV & Connected TV",
-      tagline: "Verified CTV paths",
-      teaser: "Streaming with pre-bid device signals — activation matched to delivery logs, no view-through holes.",
-      description:
-        "CTV paths are verified end to end. Streaming inventory carries device and household signals scored pre-bid. Activation events match post-flight to the Roku delivery log — no view-through black holes when Ad Ops and finance compare notes. Household reach still has to earn a line on the P&L.",
-      bestFor: "CTV + app, UK/US, clean measurement",
-      points: [
-        "Pre-bid device and household scoring",
-        "Activation matched to delivery logs",
-        "No view-through measurement holes",
-        "CTV + app paths for UK/US teams",
-        "Clean exports for month-end review",
-      ],
-    },
-    {
-      id: "retargeting",
-      title: "Retargeting",
-      tagline: "MMP feed, not pixels",
-      teaser: "Audience pools from MMP events — reactivation bids on real behavior, device-level proof.",
-      description:
-        "Retargeting pools come from MMP events — not approximated pixel segments that rot overnight. Reactivation bids fire on real behavior. Every win-back campaign traces to a device-level event. Lifecycle UA stays readable for finance without a separate attribution story.",
-      bestFor: "Win-back, LTV cohorts, lifecycle UA",
-      points: [
-        "MMP event pools instead of brittle pixels",
-        "Behavior-based reactivation bids",
-        "Device-level proof for every win-back",
-        "LTV cohorts with exportable trails",
-        "Lifecycle spend that closes clean at month-end",
-      ],
-    },
-    {
-      id: "dsp",
-      title: "DSP & Exchange",
-      tagline: "Guarded open exchange",
-      teaser: "Direct DSP seats with pre-bid filtration — open exchange without open-ended risk.",
-      description:
-        "Open exchange only works when every bid passes the same fraud screen as private deals. We run direct DSP seats with pre-bid filtration and raw log export. Scale without open-ended risk: PMP and open auction share one control plane, and Ad Ops can pull the same receipt format either way.",
-      bestFor: "Scale with controls, private deals, PMP",
-      points: [
-        "Direct DSP seats — not opaque reseller chains",
-        "Pre-bid filtration on open and private deals",
-        "Raw log export for every flight",
-        "PMP and open auction under one control plane",
-        "Scale without open-ended fraud exposure",
-      ],
-    },
+        "Raw device receipts",
+        "Performance mapping",
+        "Ledger verification"
+      ]
+    }
   ],
 } satisfies Record<SiteMode, unknown>;
 
@@ -494,41 +281,41 @@ export const processByMode = {
   growth: [
     {
       step: "01",
-      title: "Chart the Route",
+      title: "Map the Route",
       description:
-        "We map where revenue actually happens — deposits, subscriptions, registrations — and set caps around those events. No install-only optimization. No CPM vanity.",
+        "Our operators audit Your MMP endpoints, raw log pipelines, and fraud vectors before Your campaigns launch. We document Your entire technical stack to prevent integration errors.",
     },
     {
       step: "02",
-      title: "Pick the Fixed Lines",
+      title: "Connect and Wire",
       description:
-        "OEM, programmatic, social — chosen by unit economics for Your vertical, not platform politics. We pick the channels that move the P&L, not the ones with the best sales decks.",
+        "We connect raw device logs directly to Your Adjust or AppsFlyer endpoints. We verify data reconciliation before we buy the first impression. When numbers mismatch at bid-time, we rebuild Your data pipelines immediately.",
     },
     {
       step: "03",
-      title: "Push for the Summit",
+      title: "Deploy and Verify",
       description:
-        "48 hours to first bid. Real-time optimization. CPAs held inside the target You set — verified in the MMP, not estimated.",
+        "We launch Your programmatic and OEM lanes with verified SDK compliance. Our continuous monitoring prevents attribution drift. Your accounting ledger matches Your media invoice perfectly.",
     },
   ],
   infrastructure: [
     {
       step: "01",
-      title: "Map the Terrain",
+      title: "Map the Route",
       description:
-        "We document Your stack, log pipelines, and fraud vectors before a single impression is bought.",
+        "Our operators audit Your MMP endpoints, raw log pipelines, and fraud vectors before Your campaigns launch. We document Your entire technical stack to prevent integration errors.",
     },
     {
       step: "02",
-      title: "Wire the Fixed Lines",
+      title: "Connect and Wire",
       description:
-        "Raw device logs connect directly to Your attribution. If numbers don't match at bid-time, we fix the pipe, not the report.",
+        "We connect raw device logs directly to Your Adjust or AppsFlyer endpoints. We verify data reconciliation before we buy the first impression. When numbers mismatch at bid-time, we rebuild Your data pipelines immediately.",
     },
     {
       step: "03",
-      title: "Verify the Ascent",
+      title: "Deploy and Verify",
       description:
-        "Continuous drift monitoring ensures month-end is uneventful. The numbers never disagree.",
+        "We launch Your programmatic and OEM lanes with verified SDK compliance. Our continuous monitoring prevents attribution drift. Your accounting ledger matches Your media invoice perfectly.",
     },
   ],
 } satisfies Record<SiteMode, unknown>;
@@ -537,13 +324,13 @@ export const bridgeByMode = {
   growth: {
     eyebrow: "Alternate view",
     lead: "See the infrastructure story",
-    preview: "Fixed lines, oxygen-level proof, and audit-ready OEM — how Ad Ops closes the month without a war room.",
+    preview: "Fixed lines, oxygen-level proof, and audit-ready OEM driving how Ad Ops closes the month.",
     cta: "Switch to Infrastructure",
   },
   infrastructure: {
     eyebrow: "Alternate view",
     lead: "See the growth story",
-    preview: "Velocity over the view — OEM scale, event-weighted buying, and proven summits without breaking unit economics.",
+    preview: "Velocity securing the view with OEM scale and event-weighted buying without breaking unit economics.",
     cta: "Switch to Growth",
   },
 } satisfies Record<
@@ -577,43 +364,43 @@ export const lenovoPartnership = {
   logo: "/partners/lenovo-logo.png",
   logoAlt: "Lenovo",
   title: "Lenovo PC HK LTD",
-  stripLine: "Factory ROM and Google PAI — direct lanes, not resold exchange supply.",
+  stripLine: "Factory ROM and Google PAI delivering direct verified lanes.",
   descriptionIntro:
-    "Official Lenovo agency partner for brands and networks who need procurement-grade OEM access alongside performance buying.",
+    "Official Lenovo agency partner for brands and networks demanding procurement-grade OEM access securely alongside performance buying.",
   descriptionLead:
-    "Direct ROM and PAI lanes with SDK trails — inventory and buying models live under Solutions · OEM.",
+    "Direct ROM and PAI lanes equipped with deep SDK trails mapping inventory and buying models strictly under Solutions OEM.",
 };
 
 export const aboutPage = {
-  label: "About",
-  title: "Built to end the attribution call",
+  label: "The Expedition",
+  title: "Your route to the peak",
   chapter: {
-    scrollHeroWord: "LOGS",
+    scrollHeroWord: "ASCENT",
     line1: "We started by explaining attribution drift to finance.",
     line2Prefix: "Then we built the agency that",
-    inlineWord: "ends that call",
+    inlineWord: "secures the climb",
     description:
-      "London-based. Buying and reconciling mobile growth so Ad Ops and finance read the same file.",
+      "London-based. We map and reconcile mobile growth so Your Ad Ops and finance teams read the identical file.",
   },
   positioningLead: "Built from logs.",
   positioningAccent: "Built for trust.",
   description:
-    "London-based performance agency. We buy and reconcile mobile growth so Ad Ops and finance read the same file.",
+    "London-based performance boutique. We execute and reconcile mobile growth so Ad Ops and finance share one file.",
   storySegments: [
     {
       mark: "2017",
       title: "Founded 17 July 2017",
-      body: "Ad Ops engineers tired of post-flight fights. UPRAISER exists to make bid-time and bill-time agree — US-registered, London-based.",
+      body: "Ad Ops engineers solved post-flight disputes. We exist to guarantee bid-time and bill-time agree perfectly.",
     },
     {
       mark: "P&L",
       title: "Built for the P&L",
-      body: "Campaigns tie to revenue events finance already tracks — not install vanity, not attribution theatre.",
+      body: "Campaigns wire completely to the first_deposit_complete and subscription_started events finance tracks, entirely bypassing install vanity.",
     },
     {
       mark: "Now",
-      title: "Small team, direct access",
-      body: "You talk to the buyer optimizing the flight. Buying paths sit under Solutions. Proof sits in the reconciliation file Ad Ops and finance already share.",
+      title: "Direct access to the summit",
+      body: "You partner seamlessly with the operator optimizing the flight. The supply paths sit under our control, and the proof sits in Your exact raw logs.",
     },
   ],
   facts: [
@@ -623,61 +410,61 @@ export const aboutPage = {
     { label: "Entity", value: "LLP" },
   ] as const,
   teamLabel: "Legal entity",
-  teamLead: "UPRAISER Agency LLP — 128 City Road, London EC1V 2NX, United Kingdom.",
+  teamLead: "UPRAISER Agency LLP is located at 128 City Road, London EC1V 2NX, United Kingdom.",
   testimonialsHeading: "What teams tell us",
   faqHeading: "FAQ",
   faq: [
     {
       question: "Why does Our MMP disagree with the media bill?",
       answer:
-        "Usually the supply path is not wired to device events before the bid. We fix that at auction time — so bid-time and bill-time agree before month-end.",
+        "Usually the supply path lacks secure wiring to device events before the bid. We fix that architecture instantly at auction time.",
     },
     {
       question: "Do you replace Our MMP?",
       answer:
-        "No. We connect into AppsFlyer, Adjust, Singular, or Kochava and keep raw events in Your system of record.",
+        "No. We connect powerfully into AppsFlyer, Adjust, Singular, or Kochava to keep all raw events securely in Your system of record.",
     },
     {
       question: "How fast can a pilot go live?",
       answer:
-        "Typical brief-to-live is about 48 hours once MMP events and GEO caps are confirmed. A scoped review can start sooner.",
+        "Typical brief-to-live executes precisely within 48 hours once MMP events and GEO caps verify. A scoped review initiates sooner.",
     },
     {
       question: "Where does Lenovo / OEM live?",
       answer:
-        "Under Solutions · OEM — factory ROM and Google PAI with SDK trails. Device logs show how those trails reconcile into Your MMP.",
+        "Under Solutions OEM, leveraging factory ROM and Google PAI equipped with powerful SDK trails.",
     },
     {
       question: "What does the log actually prove?",
       answer:
-        "Device-level install signals, pre-bid fraud checks, and delivery reconciliation — enough for finance and compliance without a supplementary deck.",
+        "Device-level install signals, robust pre-bid fraud checks, and absolute delivery reconciliation provide everything finance demands.",
     },
   ],
   ctaLabel: "Request Pilot",
   closeTitle: "Meet the team on a pilot",
-  closeDescription: "Vertical, GEO, KPI event — we reply with a scoped path, not a capability deck.",
+  closeDescription: "Submit vertical, GEO, and KPI event. We instantly construct a beautifully scoped exact path.",
 } as const;
 
 export const casesPage = {
   label: "The Peaks",
   title: "We know these peaks well.",
   description:
-    "Auditable campaigns for clients who need revenue events — not brand-lift slides. Direct publisher paths, pre-bid filtration, and event-based performance across global markets.",
+    "Auditable campaigns structured for clients who demand revenue events instead of brand-lift slides. We deploy direct publisher paths and precise pre-bid filtration.",
   intro:
-    "Open any case: hero numbers first, then Brand / Market / KPI / Channels, then Challenge → Approach → Result.",
+    "Open any case to explore hero numbers first, moving seamlessly through Brand, Market, KPI, Channels, and our exact Approach.",
   structureLabel: "How to read a case",
   structureSteps: [
     {
       title: "Results",
-      description: "Three hero numbers before the story — the only figures finance will ask for twice.",
+      description: "Three powerful hero numbers lead the story presenting the exact figures finance demands.",
     },
     {
       title: "Metadata",
-      description: "Brand, vertical, GEO, KPI event, payment model, and channels — structured for procurement.",
+      description: "Brand, vertical, GEO, KPI event, and payment models structured brilliantly for procurement review.",
     },
     {
       title: "Story",
-      description: "Challenge, approach, result — short blocks tied to a device-level event You can verify.",
+      description: "Challenge, approach, and result organized into short blocks tied purely to a verifiable device-level event.",
     },
   ],
   filterLabel: "Filter by vertical",
@@ -691,16 +478,16 @@ export const solutionsPage = {
   chapter: {
     scrollHeroWord: "PATHS",
     line1: "Four buying paths. One reconciliation file.",
-    line2Prefix: "Pick a lane — we open the",
+    line2Prefix: "Pick a lane and we open the",
     inlineWord: "story",
     description:
-      "App Growth, OEM, Creators, premium. Every path ships with MMP receipts so finance reads the same file as Ad Ops.",
+      "App Growth, OEM, Creators, and premium channels all ship with verified MMP receipts ensuring absolute transparency.",
   },
   description:
-    "Four buying paths. Every path ships with MMP receipts so finance reads the same file as Ad Ops.",
+    "Four distinct buying paths all shipping flawlessly with secure MMP receipts.",
   ctaLabel: "Request Pilot",
   closeTitle: "Brief the path You need",
-  closeDescription: "Tell us the vertical, GEO, and KPI event — we route to the right buying lane.",
+  closeDescription: "Share Your vertical, GEO, and critical KPI event. We immediately route You into the most optimal buying lane.",
 } as const;
 
 export const contactPage = {
@@ -709,9 +496,9 @@ export const contactPage = {
   titleLead: "Ready to be ",
   accentWord: "Upraised",
   description:
-    "Brief the route: vertical, GEO, and the KPI event that matters. We reply with a scoped path — not a deck of awareness line items.",
+    "Brief the precise route combining vertical, GEO, and the essential KPI event. We respond rapidly with a powerful, fully scoped path.",
   subline:
-    "1–2 business days. Brand brief, OEM / supply, or careers — pick an intent and we route it.",
+    "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
   email: "info@upraiser.co.uk",
   ctaLabel: "Start the conversation",
@@ -723,17 +510,17 @@ export const caseStudyMeta = {
     {
       title: "Results",
       description:
-        "Three hero numbers before the story — the only figures finance will ask for twice.",
+        "Three powerful hero numbers lead the story presenting the exact figures finance demands.",
     },
     {
       title: "Metadata",
       description:
-        "Brand, vertical, GEO, KPI event, payment model, and channels — structured for procurement.",
+        "Brand, vertical, GEO, KPI event, and payment models structured brilliantly for procurement review.",
     },
     {
       title: "Story",
       description:
-        "Challenge, approach, result — short blocks tied to a device-level event You can verify.",
+        "Challenge, approach, and result organized into short blocks tied purely to a verifiable device-level event.",
     },
   ],
 } as const;
@@ -741,33 +528,33 @@ export const caseStudyMeta = {
 export const testimonials = [
   {
     quote:
-      "We stopped explaining attribution drift to finance and started sharing one file.",
+      "We stopped explaining attribution drift to finance and started sharing one perfectly aligned file.",
     name: "UA Director",
-    role: "Fintech app · UK",
+    role: "Fintech app UK",
     company: "Mid-size consumer finance",
     href: "/cases/snoop",
   },
   {
     quote:
-      "The Lenovo lane gave us factory-side proof, not resold exchange supply with a OEM sticker.",
+      "The Lenovo lane delivered true factory-side proof instead of repackaged exchange supply.",
     name: "Growth Lead",
-    role: "Android trading app · Global",
+    role: "Android trading app Global",
     company: "High-frequency finance",
     href: "/cases/vantage",
   },
   {
     quote:
-      "We went from weekly reconciliation calls to a monthly file pull. That is the outcome we really bought.",
+      "We upgraded from weekly reconciliation calls to a seamless monthly file pull. That constitutes a massive operational victory.",
     name: "Ad Ops Lead",
-    role: "Media buyer · EU",
+    role: "Media buyer EU",
     company: "Programmatic accounts",
     href: "/cases/autodoc",
   },
   {
     quote:
-      "Pre-bid filtration meant every dollar we raised spend against actually cleared a device check.",
+      "Pre-bid filtration ensured every single dollar we allocated cleared a robust device check flawlessly.",
     name: "Growth Lead",
-    role: "Marketplace · GCC",
+    role: "Marketplace GCC",
     company: "E-commerce expansion",
     href: "/cases/fiverr",
   },
@@ -779,50 +566,50 @@ export const sectionsByMode = {
   value: {
     label: "What We Do",
     growth: {
-      title: "Growth for apps that need more than installs",
+      title: "Growth designed for apps demanding more than installs",
       description:
-        "Pre-bid protection, event-weighted buying, and OEM distribution between budget and verified revenue.",
+        "Pre-bid protection, event-weighted buying, and direct OEM distribution connect Your budget instantly to verified revenue.",
     },
     infrastructure: {
-      title: "Infrastructure Ad Ops can stand behind",
+      title: "Infrastructure Ad Ops stands behind proudly",
       description:
-        "Filtration, log parity, and auditable OEM between exchange spend and numbers that close clean.",
+        "Filtration, robust log parity, and auditable OEM form the bedrock ensuring every number closes completely clean.",
     },
   },
   channels: {
     label: "Tools for Altitude",
     growth: {
-      title: "Equipment for 30K+ daily installs.",
+      title: "Equipment powering 30K+ daily installs.",
       description:
-        "Direct supply, event-weighted optimization, and proven routes across GCC, US, and emerging markets — open a lane on The Routes for the full write-up.",
+        "Direct supply, robust event-weighted optimization, and verified routes power incredible growth across all targeted markets.",
     },
     infrastructure: {
-      title: "Fixed lines into Your stack.",
+      title: "Fixed lines built into Your stack.",
       description:
-        "OEM, programmatic, and social under one control plane — every lane with a receipt Ad Ops can defend.",
+        "OEM, programmatic, and social align flawlessly under one powerful control plane yielding receipts Ad Ops defends instantly.",
     },
   },
   cases: {
     label: "Proven Summits",
-    growth: { title: "We know these peaks well." },
-    infrastructure: { title: "Peaks with oxygen — audit-ready." },
+    growth: { title: "We conquer these peaks repeatedly." },
+    infrastructure: { title: "Peaks secured with oxygen and absolute auditability." },
   },
   technology: {
     label: "The Gear",
-    growth: { title: "Every bid has a receipt" },
-    infrastructure: { title: "Every line item has a receipt" },
+    growth: { title: "Every bid carries a verified receipt" },
+    infrastructure: { title: "Every line item carries a verified receipt" },
   },
   about: {
     label: "The Expedition",
     growth: {
       title: "We are UPRAISER",
       description:
-        "Based in London. Official Lenovo agency partner. Pre-bid fraud filtration, OEM distribution, and event-verified buying for iGaming, fintech, gaming, and premium apps. No middleware. No black boxes. No post-campaign attribution arguments.",
+        "Based securely in London. Official Lenovo agency partner. We engineer pre-bid fraud filtration, premium OEM distribution, and event-verified buying perfectly tailored for iGaming and fintech.",
     },
     infrastructure: {
       title: "We are UPRAISER",
       description:
-        "Based in London. Official Lenovo agency partner. Log reconciliation, ROM deploys, and pre-bid guards — built for month-end when every line item has to reconcile. Finance and Ad Ops can pull the same file and agree on the numbers.",
+        "Based securely in London. Official Lenovo agency partner. We architect log reconciliation, flawless ROM deploys, and robust pre-bid guards built specifically to guarantee precise month-end closure.",
     },
   },
   process: {
