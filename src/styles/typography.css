@@ -321,7 +321,8 @@ header nav .nav-link:focus-visible::after {
   font-weight: 600;
   letter-spacing: var(--tracking-btn);
   text-transform: uppercase;
-  border-radius: var(--radius-pill);
+  /* Asymmetrical Editorial Styling */
+  border-radius: 0 1rem 0 1rem;
   transition:
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.25s ease,
@@ -332,16 +333,24 @@ header nav .nav-link:focus-visible::after {
 
 /** Primary solid CTA — viewport + close bands */
 .btn-caps--primary {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.625rem 1.25rem;
+  padding: 0.5rem 1.5rem;
   background-color: var(--theme-accent);
   color: var(--theme-on-accent);
+  font-weight: 700;
+  /* Hardware styling: stronger drop shadow + sharp top highlight + deep bottom shadow */
+  box-shadow: 
+    0 8px 24px -4px color-mix(in srgb, var(--theme-accent) 45%, transparent),
+    inset 0 1.5px 2px color-mix(in srgb, white 35%, transparent),
+    inset 0 -1.5px 3px color-mix(in srgb, black 35%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--theme-accent) 80%, transparent);
 }
 
 .btn-caps:active {
-  transform: scale(0.985);
+  transform: scale(0.96);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -363,12 +372,30 @@ header nav .nav-link:focus-visible::after {
 }
 
 .btn-secondary {
+  position: relative;
+  overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--theme-fg) 24%, var(--theme-border));
   background-color: color-mix(in srgb, var(--theme-bg-card) 78%, transparent);
   color: var(--theme-fg);
-  border-radius: var(--radius-pill);
+  /* Asymmetrical Editorial Styling */
+  border-radius: 0 1rem 0 1rem;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  /* Depth shadow + stronger inner top bevel */
+  box-shadow: 
+    0 6px 16px -4px rgba(0, 0, 0, 0.45),
+    inset 0 1.5px 2px color-mix(in srgb, white 20%, transparent);
+}
+
+.btn-secondary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(--noise-url);
+  opacity: 0.15;
+  mix-blend-mode: overlay;
 }
 
 @media (hover: hover) and (pointer: fine) {
