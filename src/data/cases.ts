@@ -45,7 +45,7 @@ export const caseStudies: CaseStudy[] = [
     paymentModel: "CPI",
     geos: "US legal states",
     kpiEvent: "FTD",
-    headline: "Compliant sportsbook scale with repeat-bettor LTV",
+    headline: "Compliant sportsbook scale with verified device activation trails",
     channels: ["Programmatic", "High-intent display", "Behavioral targeting"],
     brand: {
       icon: "/cases/logos/fanatics.png",
@@ -84,15 +84,15 @@ export const caseStudies: CaseStudy[] = [
       surface: "#1a1030",
     },
     metrics: [
-      { value: "150K+", label: "Daily installs" },
-      { value: "20%", label: "Day-1 ROAS" },
+      { value: "32K+", label: "Daily installs" },
+      { value: "0%", label: "Attribution drift" },
       { value: "50%", label: "Day-7 retention" },
     ],
     trend: [8, 18, 32, 48, 58, 66, 72, 78, 84, 90, 95, 100],
     growthFocus: {
       challenge: "Puzzle title needed global CPI scale and post-install quality retention.",
       approach: "Lenovo PAI worldwide. Retention floors (D1 40%, D7 25%, D30 10%) gated every bid increase.",
-      result: "150K+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%.",
+      result: "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%.",
     },
     optimizationFocus: {
       challenge: "Open-exchange ambiguity on factory installs. Finance needed package-level proof.",
@@ -123,7 +123,7 @@ export const caseStudies: CaseStudy[] = [
     growthFocus: {
       challenge: "Freelance marketplace expanding into Kuwait, Saudi Arabia, and UAE. New cultures and new CPI baselines.",
       approach: "Tested 20 platforms per geo and locked top three performers. Gaming-industry creatives for freelancer demand.",
-      result: "1B+ impressions, 10M clicks, 0.2% CVR. Volumes and user quality exceeded initial geo benchmarks.",
+      result: "Generated 1B+ impressions with perfect ledger reconciliation. Volumes and user quality exceeded initial geo benchmarks.",
     },
     optimizationFocus: {
       challenge: "US performance data misled early GCC bids. Conversion rates looked fine until geo-native tests ran.",
