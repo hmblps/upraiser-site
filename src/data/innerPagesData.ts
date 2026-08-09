@@ -1,14 +1,14 @@
 /**
- * Inner pages — viewport shells (no document scroll). Home keeps cinematic scroll.
+ * Inner pages viewport shells (no document scroll). Home keeps cinematic scroll.
  *
  * IA (expedition Basecamp):
- *  /solutions  — The Routes (format lanes + glass)
- *  /studio     — The Gear (Fixed Line · Oxygen · Map)
- *  /craft      — The Craft (Creative Lab · Proprietary Layer)
- *  /cases      — The Peaks
- *  /clients    — brand proof board
- *  /company    — The Expedition
- *  /contact    — Request Pilot
+ *  /solutions   The Routes (format lanes + glass)
+ *  /studio      The Gear (Fixed Line · Oxygen · Map)
+ *  /craft       The Craft (Creative Lab · Proprietary Layer)
+ *  /cases       The Peaks
+ *  /clients     brand proof board
+ *  /company     The Expedition
+ *  /contact     Request Pilot
  */
 
 export type ExpertiseClusterId =
@@ -27,7 +27,7 @@ export type ExpertiseCluster = {
   /** What changes for the client */
   outcome: string;
   deliverables: readonly string[];
-  /** Saatchi-style planning → measure → scale */
+  /** Saatchi-style planning measure scale */
   process: readonly { title: string; body: string }[];
   related: readonly ExpertiseClusterId[];
   channelIds: readonly string[];
@@ -78,7 +78,7 @@ export const EXPERTISE_CONTENT = {
     { id: "ctv", label: "CTV" },
   ] as const,
 
-  /** @deprecated use primaryTabs + inventoryTabs — kept for redirects */
+  /** @deprecated use primaryTabs + inventoryTabs kept for redirects */
   tabs: [
     { id: "media", label: "App Growth" },
     { id: "programmatic", label: "Programmatic" },
@@ -92,20 +92,20 @@ export const EXPERTISE_CONTENT = {
     {
       id: "media",
       title: "App Growth",
-      problem: "Installs climb. Revenue and finance do not.",
-      outcome: "Spend scales while CPA and the MMP stay on one file.",
+      problem: "Installs climb. Revenue and finance need to match the ascent.",
+      outcome: "Spend scales precisely while CPA and the MMP stay on one unified file.",
       primaryChannel: "performance",
       channelIds: ["performance", "retargeting"],
       contactIntent: "app-growth",
       deliverables: [
-        "CPI / CPA / CPL on FTD, registration, or subscription",
-        "Pre-bid check before every impression clears",
-        "Same-day MMP export for Ad Ops and finance",
+        "CPI / CPA / CPL wired to first_deposit_complete and subscription_started",
+        "Pre-bid check executed before every impression clears",
+        "Same-day MMP export prepared for Ad Ops and finance",
       ],
       process: [
-        { title: "Plan", body: "Vertical, GEO, KPI event — one sheet for the buyer." },
-        { title: "Measure", body: "Wire FTD / Reg / Sub into Your MMP before launch." },
-        { title: "Scale", body: "Raise caps only while unit economics hold." },
+        { title: "Plan", body: "Vertical, GEO, and KPI events aligned on one sheet for the buyer." },
+        { title: "Measure", body: "Wire first_deposit_complete and subscription_started into Your MMP before launch." },
+        { title: "Scale", body: "Raise caps confidently while unit economics hold steady." },
       ],
       related: ["programmatic", "social"],
       casePreview: "/cases/fanatics",
@@ -120,20 +120,20 @@ export const EXPERTISE_CONTENT = {
     {
       id: "programmatic",
       title: "Programmatic",
-      problem: "Cheap exchange until the bill and MMP disagree.",
-      outcome: "Exchange buys with a trail Ad Ops can defend.",
+      problem: "Exchange buying requires total alignment between the bill and the MMP.",
+      outcome: "Exchange buys generate a definitive log trail Ad Ops can defend.",
       primaryChannel: "programmatic",
       channelIds: ["programmatic", "native"],
       contactIntent: "app-growth",
       deliverables: [
-        "Supply paths with device-level logs — not opaque resale",
-        "Caps on downstream events, not CPM vanity",
-        "Fraud screen before auction close",
+        "Supply paths illuminated with precise device-level logs",
+        "Caps triggered exclusively by downstream SDK events",
+        "Fraud screen finalized before auction close",
       ],
       process: [
-        { title: "Plan", body: "Pick supply with device logs — skip black-box resale." },
-        { title: "Measure", body: "Pre-bid screen + caps on KPI events." },
-        { title: "Scale", body: "Widen inventory only where the receipt clears." },
+        { title: "Plan", body: "Select premium supply paths built on transparent device logs." },
+        { title: "Measure", body: "Implement pre-bid screens and strict caps on KPI events." },
+        { title: "Scale", body: "Widen inventory exclusively where the receipt clears." },
       ],
       related: ["media", "ctv"],
       casePreview: "/cases/autodoc",
@@ -148,20 +148,20 @@ export const EXPERTISE_CONTENT = {
     {
       id: "social",
       title: "Paid Social",
-      problem: "Social scale is easy. Revenue reconcile is not.",
-      outcome: "Meta / TikTok flights capped to MMP events — not estimated reach.",
+      problem: "Social scale demands precise revenue reconciliation.",
+      outcome: "Meta and TikTok flights mapped precisely to verified MMP events.",
       primaryChannel: "social",
       channelIds: ["social"],
       contactIntent: "app-growth",
       deliverables: [
-        "Meta and TikTok capped to events You already track",
-        "Creative and bid share one brief with Studio",
-        "GEO / age rules Ad Ops can defend in review",
+        "Meta and TikTok capped to SDK events You already track",
+        "Creative and bid strategies unified in one brief with Studio",
+        "GEO and age rules Ad Ops can present confidently in review",
       ],
       process: [
-        { title: "Plan", body: "Segments mapped to funnel stages." },
-        { title: "Measure", body: "Conversion events in the MMP same day." },
-        { title: "Scale", body: "Kill / raise creatives against deposits and subs." },
+        { title: "Plan", body: "Segments mapped clearly to specific funnel stages." },
+        { title: "Measure", body: "Conversion events delivered to the MMP the same day." },
+        { title: "Scale", body: "Optimize creatives strictly against first_deposit_complete and subscription_started." },
       ],
       related: ["creators", "media"],
       casePreview: "/cases/fiverr",
@@ -176,20 +176,20 @@ export const EXPERTISE_CONTENT = {
     {
       id: "creators",
       title: "Creators",
-      problem: "Creator spend looks alive until you ask which installs paid.",
-      outcome: "Tracked path: post → install → KPI event.",
+      problem: "Creator spend requires a clear link between social posts and verified installs.",
+      outcome: "Tracked path from initial post to install to downstream KPI event.",
       primaryChannel: "influencer",
       channelIds: ["influencer"],
       contactIntent: "app-growth",
       deliverables: [
-        "UGC / creator flights with tracked links into Your MMP",
-        "Briefs to the KPI event — not vanity views",
-        "Disclosure and GEO rules procurement accepts",
+        "UGC and creator flights equipped with tracked links straight into Your MMP",
+        "Briefs optimized for deep KPI events and registrations",
+        "Disclosure and GEO rules fully aligned with procurement standards",
       ],
       process: [
-        { title: "Plan", body: "Brief to the KPI event." },
-        { title: "Measure", body: "Tracked links live before the first post." },
-        { title: "Scale", body: "Keep creators who clear GEO and disclosure." },
+        { title: "Plan", body: "Build the brief entirely around the deep KPI event." },
+        { title: "Measure", body: "Ensure tracked links are fully live before the first post." },
+        { title: "Scale", body: "Expand creator partnerships that clear GEO and disclosure metrics." },
       ],
       related: ["social", "media"],
       casePreview: "/cases/azar",
@@ -204,20 +204,20 @@ export const EXPERTISE_CONTENT = {
     {
       id: "ctv",
       title: "CTV",
-      problem: "Premium TV without a household trail is expensive reach.",
-      outcome: "Brand-safe CTV with a trail finance can audit.",
+      problem: "Premium TV demands a concrete household trail for exact measurement.",
+      outcome: "Brand-safe CTV delivers a verified trail finance can audit easily.",
       primaryChannel: "ctv",
       channelIds: ["ctv"],
       contactIntent: "app-growth",
       deliverables: [
-        "Connected TV with pre-bid household scoring",
-        "Brand-safe supply with an auditable path",
-        "Caps follow outcomes — not completion rates alone",
+        "Connected TV enhanced with pre-bid household scoring",
+        "Brand-safe supply mapped with an auditable data path",
+        "Caps follow verified outcomes and actual device registrations",
       ],
       process: [
-        { title: "Plan", body: "Brand-safe CTV with household scoring." },
-        { title: "Measure", body: "Caps on outcomes, not only completes." },
-        { title: "Scale", body: "Expand GEOs where the receipt holds." },
+        { title: "Plan", body: "Execute brand-safe CTV with verified household scoring." },
+        { title: "Measure", body: "Align caps directly to first_deposit_complete and registrations." },
+        { title: "Scale", body: "Expand GEOs explicitly where the receipt holds." },
       ],
       related: ["programmatic", "media"],
       casePreview: "/cases",
@@ -232,20 +232,20 @@ export const EXPERTISE_CONTENT = {
     {
       id: "oem",
       title: "OEM",
-      problem: "OEM looks premium until procurement asks for the install trail.",
-      outcome: "Factory ROM / PAI with an SDK trail procurement accepts.",
+      problem: "OEM scale requires a definitive install trail for procurement verification.",
+      outcome: "Factory ROM and PAI deliver an SDK trail procurement accepts instantly.",
       primaryChannel: "oem",
       channelIds: ["oem"],
       contactIntent: "oem",
       deliverables: [
-        "Lenovo factory ROM and Google PAI — official agency lanes",
-        "SDK trail from device to postback",
-        "Pre-bid fraud screen on every OEM impression",
+        "Lenovo factory ROM and Google PAI executed via official agency lanes",
+        "SDK trail tracked seamlessly from device to postback",
+        "Pre-bid fraud screen deployed on every single OEM impression",
       ],
       process: [
-        { title: "Plan", body: "Lenovo ROM / Google PAI — official lanes only." },
-        { title: "Measure", body: "SDK postbacks into Your MMP." },
-        { title: "Scale", body: "Add GEOs where device logs stay clean." },
+        { title: "Plan", body: "Leverage Lenovo ROM and Google PAI via official lanes." },
+        { title: "Measure", body: "Route SDK postbacks directly into Your MMP." },
+        { title: "Scale", body: "Add GEOs confidently where device logs stay perfectly clean." },
       ],
       related: ["media"],
       casePreview: "/cases/block-blast-pai",
@@ -267,89 +267,63 @@ export const EXPERTISE_CONTENT = {
 
 
 export const COMPANY_CONTENT = {
-  hero: {
-    badge: "About UPRAISER",
-    h1: "London performance desk since 2017.",
-    description:
-      "Direct OEM distribution, programmatic buying, and pre-bid fraud filtration for iGaming, Fintech, and premium media.",
-  },
-
-  positioningLead: "We don't sell vanity impressions.",
-  positioningAccent: "We buy verified outcomes.",
-
-  expedition: {
-    synergy:
-      "Engineers who wire postback streams, buyers who configure bid logic, and traders who manage performance work in the same thread.",
-    uniqueness:
-      "No account managers to relay messages. You work directly with the operators managing your inventory paths and server logs.",
-    proofLine: "Run on PROOF.",
-  },
-
-  whyUs: {
-    label: "Why Us",
-    title: "Direct Pipe. Not Resale.",
-    lead: "Direct supply contracts, factory OEM distribution, and real-time log verification.",
-    points: [
+  aboutExpedition: {
+    hero: {
+      label: "The Expedition",
+      title: "We helped shape the mobile advertising terrain.",
+      text: "Upraiser operates from our basecamp in London. In 2017, we brought together operators from different technical worlds to form this performance desk. Our crew includes systems engineers, software developers, financial economists, and conversion creatives. Each operator built proprietary tools and managed traffic pipelines within the AdTech industry. This convergence of disciplines is our strength.",
+    },
+    blocks: [
       {
-        title: "Direct source access",
-        text: "Direct publisher contracts and Tier-1 OEM supply. Fewer hops between bid request and conversion event.",
+        id: "convergence",
+        label: "The Convergence",
+        title: "Expertise from four disciplines working as one crew.",
+        text: "We exclude account managers and client-service layers to keep Your path direct. When You partner with Upraiser, You work with the operators who built Your tracking gear and trade Your media budgets.\n\nOur systems engineers write the pre-bid scoring engines. Our software developers maintain the SDK log tracing. Our economists balance Your unit economics. Our creatives design the visual hooks. This synergy allows us to see the data terrain with clarity. Your UA and finance teams sign off on the same numbers before the invoice is issued.",
       },
       {
-        title: "Pre-bid fraud filtration",
-        text: "Invalid traffic rejected before auction close. Bots, emulators, and ghost clicks drop before spend posts to your MMP.",
+        id: "terrain",
+        label: "Mapping the Terrain",
+        title: "We helped shape the rules of this industry from its early days.",
+        text: "We choose direct, verified pathways over public exchanges and crowded bidding auctions. Our early work in AdTech allowed us to build custom data verification methods from the ground up. Because we understand how fraud vectors and attribution systems operate, we designed our own pre-bid scoring engine.\n\nWe built the pipelines that connect raw log files to Your measurement endpoints. We did not wait for the industry to offer transparency. We built our own verification tools to guarantee it.",
       },
       {
-        title: "Lenovo OEM alliance",
-        text: "Official Lenovo agency partner. Pre-installs and storefront placement at factory ROM level.",
-      },
-      {
-        title: "Audit-ready logs",
-        text: "Raw postback logs and server receipts on demand. Reconciles with Adjust, AppsFlyer, and Kochava without disputed rows.",
+        id: "code",
+        label: "The Code of the Ascent",
+        title: "Data transparency and voluntary compliance by design.",
+        text: "Technical precision requires trust. Upraiser follows the European Digital Advertising Alliance guidelines. We exclude summarized PDF charts that hide discrepancies.\n\nWe provide raw, unedited device logs on demand so Your team can verify every install back to a physical device. Your accounting ledger matches Your media invoice to the penny.",
       },
     ],
+    cta: {
+      title: "Ready to be Upraised?",
+      text: "Brief Your route to our operators: vertical, GEOs, and KPI events.",
+      button: "Request Pilot",
+    },
   },
-
-  compliance: [
-    {
-      title: "UK jurisdiction",
-      value:
-        "UPRAISER Agency LLP — 128 City Road, London EC1V 2NX. Governed by UK corporate law for transparent B2B contracting.",
-    },
-    {
-      title: "ICO registration",
-      value: "Information Commissioner's Office — ZC000436. GDPR-aligned handling of campaign and contact data.",
-    },
-    {
-      title: "S2S measurement",
-      value:
-        "Server-to-server postbacks into AppsFlyer, Adjust, Singular, or Kochava. We wire the pipe — Your MMP stays the system of record.",
-    },
-  ],
 
   archive: [
     {
       mark: "2017",
       year: 2017,
       title: "We mapped the industry",
-      body: "We didn't just join AdTech; we mapped it. Since 2017, UPRAISER has been a convergence of different worlds — UK entity, operator roots.",
+      body: "Since 2017, UPRAISER merges deep operator roots with strict UK entity governance to build a transparent buying ecosystem.",
     },
     {
       mark: "2019",
       year: 2019,
       title: "Outcome buying hardens",
-      body: "CPI / CPA / CPL wired to FTD and subscription events finance already tracks — not install vanity charts.",
+      body: "We wire CPI, CPA, and CPL models directly to first_deposit_complete and subscription_started events that finance relies on.",
     },
     {
       mark: "2022",
       year: 2022,
       title: "OEM lane opens",
-      body: "Official Lenovo agency path — factory ROM and Google PAI with device-level trails procurement can audit.",
+      body: "We launch the official Lenovo agency path offering factory ROM and Google PAI inventory with device-level trails procurement can audit.",
     },
     {
       mark: "Now",
       year: 2026,
       title: "One desk, receipts attached",
-      body: "App Growth on one desk — Programmatic, Social, Creators, CTV, OEM included. You talk to the people who built the tools.",
+      body: "App Growth unified on one desk integrating Programmatic, Social, Creators, CTV, and OEM. You talk straight to the team building the tools.",
     },
   ],
 
@@ -360,34 +334,29 @@ export const COMPANY_CONTENT = {
     { label: "Entity", value: "LLP" },
   ] as const,
 
-  philosophy: {
-    title: "Why we built UPRAISER",
-    text: "We don't sell the view from the top. We build the path that gets You there.",
-  },
-
-  /** London HQ + markets where traffic actually runs (from live cases — not fake offices). */
+  /** London HQ + markets where traffic actually runs */
   footprint: {
     label: "Footprint",
     title: "London HQ. Traffic where the flights run.",
-    lead: "One registered entity in London. Buying across the GEOs in our case file — not a franchise map of empty hubs.",
+    lead: "One registered entity in London buying efficiently across all verified GEOs in our case file.",
     hq: {
       code: "LND",
       name: "London",
       role: "HQ",
-      detail: "UPRAISER Agency LLP · 128 City Road, EC1V 2NX · settlement & governance",
+      detail: "UPRAISER Agency LLP 128 City Road, EC1V 2NX settlement & governance",
     },
     stats: [
-      { value: "100+", label: "Territories in reach" },
+      { value: "35+", label: "Active GEOs" },
       { value: "24/7", label: "Buying coverage" },
       { value: "1", label: "Legal entity" },
     ],
     trafficPoints: [
-      { code: "US", name: "United States", detail: "Legal-state iGaming · Fanatics-type flights" },
-      { code: "UK", name: "United Kingdom", detail: "Fintech & premium · Snoop / EU lanes" },
-      { code: "EU", name: "Europe", detail: "DE · FR · ES · PL · Autodoc / Azar markets" },
-      { code: "GCC", name: "Gulf", detail: "KW · SA · AE · Fiverr-scale app growth" },
-      { code: "LATAM", name: "LatAm", detail: "MX · BR · PH corridors · Banco Azteca / Shopee" },
-      { code: "WW", name: "OEM global", detail: "Lenovo PAI · Block Blast 15+ GEOs" },
+      { code: "US", name: "United States", detail: "Legal-state iGaming Fanatics-type flights" },
+      { code: "UK", name: "United Kingdom", detail: "Fintech & premium Snoop / EU lanes" },
+      { code: "EU", name: "Europe", detail: "DE FR ES PL Autodoc / Azar markets" },
+      { code: "GCC", name: "Gulf", detail: "KW SA AE Fiverr-scale app growth" },
+      { code: "LATAM", name: "LatAm", detail: "MX BR PH corridors Banco Azteca / Shopee" },
+      { code: "WW", name: "OEM global", detail: "Lenovo PAI Block Blast 15+ GEOs" },
     ],
   },
 
@@ -396,37 +365,37 @@ export const COMPANY_CONTENT = {
     {
       question: "Why does Our MMP disagree with the media bill?",
       answer:
-        "Usually the supply path is not wired to device events before the bid. We fix that at auction time — so bid-time and bill-time agree before month-end.",
+        "Usually the supply path lacks wiring to deep device events before the bid. We fix this architecture at auction time so bid-time and bill-time agree perfectly before month-end.",
     },
     {
       question: "Do you replace Our MMP?",
       answer:
-        "No. We connect into AppsFlyer, Adjust, Singular, or Kochava and keep raw events in Your system of record.",
+        "We connect directly into AppsFlyer, Adjust, Singular, or Kochava and keep all raw events secure inside Your system of record.",
     },
     {
       question: "How fast can a pilot go live?",
       answer:
-        "Typical brief-to-live is about 48 hours once MMP events and GEO caps are confirmed.",
+        "Typical brief-to-live takes about 48 hours once Your MMP events and GEO caps are verified.",
     },
     {
       question: "Where does Lenovo / OEM live?",
-      answer: "Under Solutions · OEM — factory ROM and Google PAI with SDK trails.",
+      answer: "Find it under Solutions OEM featuring factory ROM and Google PAI with exportable SDK trails.",
     },
     {
       question: "Do you run Paid Social and Creators too?",
       answer:
-        "Yes — Social and Creators live on The Routes. Both cap to the same MMP events. The Gear wires trails and scoring; The Craft dresses the flight with creatives and proprietary pipelines.",
+        "Yes, Social and Creators live on The Routes. Both cap directly to Your MMP events. The Gear wires the tracking trails, and The Craft equips the flight with tailored creatives and proprietary pipelines.",
     },
   ],
 
   close: {
     title: "Ready to be Upraised?",
-    description: "Brief the route: vertical, GEO, KPI event — we reply with a scoped path.",
+    description: "Brief the route: vertical, GEO, KPI event and we reply with a fully scoped path.",
     ctaLabel: "Request Pilot",
   },
 } as const;
 
-/* ——— The Gear (/studio) — tech stack as expedition equipment ——— */
+/* The Gear (/studio) tech stack as expedition equipment */
 
 export type GearTabId = "fixed-line" | "oxygen" | "map";
 
@@ -437,10 +406,10 @@ export const GEAR_CONTENT = {
   },
   byMode: {
     growth: {
-      lead: "Reliability at altitude requires equipment that scales with You. We don't use off-the-shelf tools; we build the hardware Your ascent depends on.",
+      lead: "Reliability at altitude requires equipment that scales seamlessly with You. We build the exact proprietary hardware Your ascent depends on.",
     },
     infrastructure: {
-      lead: "Reliability at altitude requires equipment that never fails. We don't use off-the-shelf tools; we build the hardware Your audit depends on.",
+      lead: "Reliability at altitude requires equipment that never fails. We build the precise data hardware Your compliance audit relies on.",
     },
   },
   tabs: [
@@ -454,12 +423,12 @@ export const GEAR_CONTENT = {
       title: "The Fixed Line",
       kicker: "SDK Trails",
       growth: {
-        body: "Trace every install back to the raw device log — then scale the same transparent path. Supply that matches Your attribution as volume climbs.",
-        spec: "Factory → postback trails built for ramp, not one-off demos.",
+        body: "Trace every install back to the raw device log and scale that exact transparent path. We deliver supply that matches Your attribution as volume climbs.",
+        spec: "Factory to postback trails built specifically for exponential ramp.",
       },
       infrastructure: {
-        body: "Trace every install back to the raw device log. We provide a transparent supply path that matches Your attribution data to the penny.",
-        spec: "Device-level SDK trails Ad Ops can export into the MMP.",
+        body: "Trace every install back to the raw device log. We provide a fully transparent supply path that matches Your attribution data to the exact penny.",
+        spec: "Device-level SDK trails Ad Ops can export instantly into the MMP.",
       },
     },
     oxygen: {
@@ -467,12 +436,12 @@ export const GEAR_CONTENT = {
       title: "The Oxygen",
       kicker: "0.4ms Bid Scoring",
       growth: {
-        body: "Performance requires speed at scale. Our p99 scoring filters fraud in 0.4ms — before the bid — so velocity never breathes bad air.",
-        spec: "Clean inventory capacity when spend doubles.",
+        body: "Performance requires absolute speed at scale. Our p99 scoring filters fraud in 0.4ms before the bid so velocity breathes only pure verified air.",
+        spec: "Maintains clean inventory capacity even when spend doubles.",
       },
       infrastructure: {
-        body: "Performance requires speed. Our p99 scoring filters fraud in 0.4ms — before the bid is even placed. Clean air only.",
-        spec: "0.4ms p99 · fraud screened pre-auction.",
+        body: "Performance requires speed and precision. Our p99 scoring filters fraud in 0.4ms before the bid is placed to guarantee clean air.",
+        spec: "0.4ms p99 fraud screened securely pre-auction.",
       },
     },
     map: {
@@ -480,23 +449,23 @@ export const GEAR_CONTENT = {
       title: "The Map",
       kicker: "180+ Device Signals",
       growth: {
-        body: "High-resolution visibility across markets. We analyze 180+ signals to verify human intent so You scale routes — not ghosts.",
-        spec: "Signal density for GEO expansion without blind spend.",
+        body: "High-resolution visibility across all markets. We analyze 180+ signals to verify human intent so You scale precise routes and real users.",
+        spec: "Unmatched signal density supports GEO expansion without blind spend.",
       },
       infrastructure: {
-        body: "High-resolution visibility. We analyze 180+ signals to verify human intent, ensuring You never pay for ghosts.",
-        spec: "180+ signals scored before clear.",
+        body: "High-resolution visibility anchors our approach. We analyze 180+ signals to verify human intent and ensure You only pay for verified actions.",
+        spec: "180+ signals scored definitively before clear.",
       },
     },
   },
   close: {
     ctaLabel: "Request Pilot",
     contactIntent: "brand",
-    footnote: "Gear ships into The Routes — same control plane as the buy.",
+    footnote: "Gear ships directly into The Routes using the same control plane as the buy.",
   },
 } as const;
 
-/** @deprecated Use GEAR_CONTENT — Studio IA is now The Gear */
+/** @deprecated Use GEAR_CONTENT Studio IA is now The Gear */
 export const STUDIO_CONTENT = {
   hero: {
     badge: GEAR_CONTENT.hero.badge,
@@ -508,7 +477,7 @@ export const STUDIO_CONTENT = {
 
 export type StudioTabId = GearTabId;
 
-/* ——— The Craft (/craft) — full-spectrum creative + proprietary ——— */
+/* The Craft (/craft) full-spectrum creative + proprietary */
 
 export type CraftTabId = "creative-lab" | "proprietary";
 
@@ -519,10 +488,10 @@ export const CRAFT_CONTENT = {
   },
   byMode: {
     growth: {
-      lead: "We write code and draw meaning. Our craft is not buying inventory — it is building the tools for it. Proprietary SDK trails protect Your budget; our creative studio turns reach into measurable revenue.",
+      lead: "We write code and construct visual meaning. Our craft builds the precise tools for inventory buying. Proprietary SDK trails protect Your budget while our creative studio turns reach into measurable revenue.",
     },
     infrastructure: {
-      lead: "We write code and draw meaning. Our craft is not buying inventory — it is building the tools for it. Proprietary SDK trails defend Your invoice; our creative studio turns reach into a trail Ad Ops can audit.",
+      lead: "We write code and construct visual meaning. Our craft builds the precise tools for inventory verification. Proprietary SDK trails defend Your invoice while our creative studio ensures reach generates a trail Ad Ops can audit.",
     },
   },
   tabs: [
@@ -533,24 +502,24 @@ export const CRAFT_CONTENT = {
     metaphor: "Bright markers on the trail.",
     byMode: {
       growth: {
-        lead: "Visual triggers for aggressive verticals — iGaming, fintech — where a miss costs attention in 0.2 seconds. Creatives that hit psychology, then scale with the buy.",
+        lead: "Visual triggers designed for aggressive iGaming and fintech verticals where attention must be secured in 0.2 seconds. We build creatives that hit psychology and scale efficiently with the buy.",
       },
       infrastructure: {
-        lead: "Visual triggers for aggressive verticals — iGaming, fintech — where a miss costs attention in 0.2 seconds. Creatives that hit psychology and leave a measurable trail into Your MMP.",
+        lead: "Visual triggers engineered for aggressive iGaming and fintech verticals where attention must be secured in 0.2 seconds. We build creatives that leave a verified, measurable trail directly into Your MMP.",
       },
     },
     items: [
       {
         title: "Performance creatives",
-        description: "UGC, static, and motion cut for FTD, registration, or subscription — not moodboards.",
+        description: "UGC, static, and motion assets cut explicitly for first_deposit_complete and subscription_started conversions.",
       },
       {
         title: "Landing & store assets",
-        description: "Store screens, LPs, and end-cards that match the bid thesis before the flight.",
+        description: "Store screens, LPs, and end-cards match the exact bid thesis before the flight launches.",
       },
       {
         title: "Channel packs",
-        description: "Meta, TikTok, CTV, OEM — sized for each surface so the marker stays visible at altitude.",
+        description: "Meta, TikTok, CTV, and OEM assets sized for each surface so the marker stays visible at high altitude.",
       },
     ],
   },
@@ -558,46 +527,46 @@ export const CRAFT_CONTENT = {
     metaphor: "Belay lines on the pitch.",
     byMode: {
       growth: {
-        lead: "Not off-the-shelf SaaS. Homegrown data pipelines that reconcile MMP and device logs in real time — so invoice defense scales inside Your traffic.",
+        lead: "We build homegrown data pipelines that reconcile MMP and device logs in real time. We deploy invoice defense that scales naturally inside Your traffic.",
       },
       infrastructure: {
-        lead: "Not off-the-shelf SaaS. Homegrown data pipelines that reconcile MMP and device logs in real time. We build invoice defense inside Your traffic.",
+        lead: "We build homegrown data pipelines that reconcile MMP and device logs in real time. We embed invoice defense deep inside Your traffic architecture.",
       },
     },
     points: [
       {
         title: "SDK trails",
-        text: "Factory → postback paths You can export — the same Fixed Line story as The Gear, wired into creative flights.",
+        text: "Factory to postback paths You can export easily. We wire the same Fixed Line story from The Gear directly into creative flights.",
       },
       {
         title: "Pre-bid filtration",
-        text: "Score before the bid. Clean air into the auction so creatives never spend on ghosts.",
+        text: "We score definitively before the bid. Clean air flows into the auction so creatives engage exclusively with real users.",
       },
       {
         title: "MMP parity",
-        text: "Device logs and media bill agree before month-end — one file Ad Ops and finance can both pull.",
+        text: "Device logs and the media bill agree seamlessly before month-end producing one file Ad Ops and finance both pull.",
       },
     ],
   },
   close: {
     ctaLabel: "Request Pilot",
     contactIntent: "studio",
-    footnote: "Craft dresses The Routes — creatives and code on one ascent line.",
+    footnote: "Craft dresses The Routes directly, putting creatives and code on one ascent line.",
   },
 } as const;
 
-/** @deprecated Use CRAFT_CONTENT — The Rigging renamed to The Craft */
+/** @deprecated Use CRAFT_CONTENT The Rigging renamed to The Craft */
 export const RIGGING_CONTENT = CRAFT_CONTENT;
 export type RiggingTabId = CraftTabId;
 
-/* ——— Clients (Saatchi-style proof board) ——— */
+/* Clients (Saatchi-style proof board) */
 
 export const CLIENTS_CONTENT = {
   hero: {
     badge: "Clients",
-    h1: "Brands that need receipts, not decks.",
+    h1: "Brands that need receipts.",
   },
-  lead: "iGaming, fintech, gaming, marketplace — verticals where install-to-revenue is measurable.",
+  lead: "iGaming, fintech, gaming, and marketplace verticals where install-to-revenue tracking is an absolute requirement.",
   ctaLabel: "Request Pilot",
   verticals: ["All", "iGaming", "Gaming", "Fintech", "Marketplace", "E-commerce", "Social"] as const,
 } as const;
@@ -614,35 +583,35 @@ export const ASCENT_PROTOCOLS: AscentProtocolItem[] = [
     protocolNumber: "PROT-01",
     question: "Is UPRAISER built to support in-house media teams?",
     answer:
-      "Yes. We empower Your in-house team. We do not take ownership away from Your operators. Instead, we wire the SDK trails and clear the data pipelines so Your team can execute campaigns on clean, audit-ready logs. Think of us as Your rigging crew on the mountain. We secure the lines and ensure the oxygen supply while Your traders run the climb.",
-    ogilvyProof: "Operator Control · Direct SDK Integration",
+      "Yes. We empower Your in-house team. We wire the SDK trails and clear the data pipelines so Your operators can execute campaigns on clean, audit-ready logs. Think of us as Your rigging crew on the mountain. We secure the lines and ensure the oxygen supply while Your traders execute the climb.",
+    ogilvyProof: "Operator Control Direct SDK Integration",
   },
   {
     protocolNumber: "PROT-02",
     question: "How does UPRAISER ensure zero-drift data transparency?",
     answer:
-      "We map Your stack and align log pipelines before going live. Every campaign matches Your MMP data to the penny. By verifying attribution at bid-time, we guarantee 0% post-flight log drift. Your finance directors and UA traders always read the same invoice.",
-    ogilvyProof: "0% Post-Flight Log Drift · Match to the Penny",
+      "We map Your stack and align log pipelines before going live. Every campaign matches Your MMP data to the exact penny. By verifying attribution at bid-time, we guarantee 0% post-flight log drift. Your finance directors and UA traders always review the identical invoice.",
+    ogilvyProof: "0% Post-Flight Log Drift Match to the Penny",
   },
   {
     protocolNumber: "PROT-03",
     question: "How do You block mobile fraud before the bid happens?",
     answer:
-      "We deploy The Gear. Our pre-bid engine scores every incoming opportunity in 0.4ms, analyzing over 180 raw device signals. We filter out the noise at the source, ensuring You never buy a ghost.",
-    ogilvyProof: "0.4ms p99 Latency · 180+ Device Signals",
+      "We deploy The Gear. Our pre-bid engine scores every incoming opportunity in 0.4ms by analyzing over 180 raw device signals. We filter out the noise at the source, ensuring You exclusively buy verified human intent.",
+    ogilvyProof: "0.4ms p99 Latency 180+ Device Signals",
   },
   {
     protocolNumber: "PROT-04",
     question: "What is CGC and how does it fit into Your routes?",
     answer:
-      "Creator-Generated Content (CGC) is the visual oxygen for Your funnel. We source high-performing creator media and amplify it across programmatic, social, and OEM routes. We do not just run ads. We trace every creative asset down to the raw install log, optimizing for user LTV rather than simple clicks.",
-    ogilvyProof: "Visual Oxygen · LTV Event Tracing",
+      "Creator-Generated Content (CGC) is the visual oxygen for Your funnel. We source high-performing creator media and amplify it across programmatic, social, and OEM routes. We trace every creative asset down to the raw install log, optimizing entirely for user LTV and subscription_started events.",
+    ogilvyProof: "Visual Oxygen LTV Event Tracing",
   },
   {
     protocolNumber: "PROT-05",
     question: "Are You a SaaS tool or a full-spectrum performance desk?",
     answer:
-      "We are a full-spectrum boutique agency. We write the code, wire the pipelines, and buy the media. You work directly with the 6 operators who built Your gear and trade Your budgets. No account managers, no black boxes.",
-    ogilvyProof: "6 Core Operators · Direct Execution",
+      "We operate as a full-spectrum boutique agency. We write the code, wire the pipelines, and buy the media. You work directly with the dedicated operators who build Your gear and trade Your budgets.",
+    ogilvyProof: "Boutique Agency Direct Execution",
   },
 ];

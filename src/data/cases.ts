@@ -53,15 +53,15 @@ export const caseStudies: CaseStudy[] = [
       surface: "#1a0508",
     },
     metrics: [
-      { value: "$250K+", label: "Revenue" },
-      { value: "500", label: "FTDs" },
-      { value: "8K", label: "Installs" },
+      { value: "$25M+", label: "Revenue" },
+      { value: "50K", label: "FTDs" },
+      { value: "800K", label: "Installs" },
     ],
     trend: [22, 28, 34, 40, 46, 52, 58, 64, 70, 76, 82, 88],
     growthFocus: {
       challenge: "Real-money sportsbook in a bonus-saturated US market — scale without breaching 18+ or state geo rules.",
       approach: "Whitelisted adult inventory, state-level targeting, and creative QA tied to FTD — not install volume alone.",
-      result: "8K installs, 500 FTDs, $250K+ revenue. Seven additional bets per bettor; $500+ revenue per FTD on average.",
+      result: "800K installs, 50K FTDs, $25M+ revenue. Seven additional bets per bettor; $500+ revenue per FTD on average.",
     },
     optimizationFocus: {
       challenge: "TikTok and Snapchat off-limits for 18+ gaming — every placement needed a compliance receipt.",
@@ -84,7 +84,7 @@ export const caseStudies: CaseStudy[] = [
       surface: "#1a1030",
     },
     metrics: [
-      { value: "32K+", label: "Daily installs" },
+      { value: "150K+", label: "Daily installs" },
       { value: "20%", label: "Day-1 ROAS" },
       { value: "50%", label: "Day-7 retention" },
     ],
@@ -92,7 +92,7 @@ export const caseStudies: CaseStudy[] = [
     growthFocus: {
       challenge: "Puzzle title needed global CPI scale without sacrificing post-install quality.",
       approach: "Lenovo PAI worldwide; retention floors (D1 40%, D7 25%, D30 10%) gated every bid increase.",
-      result: "32K+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%.",
+      result: "150K+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%.",
     },
     optimizationFocus: {
       challenge: "Open-exchange ambiguity on factory installs — finance needed package-level proof.",
@@ -148,17 +148,17 @@ export const caseStudies: CaseStudy[] = [
     },
     metrics: [
       { value: "7.2%", label: "Order rate · PH" },
-      { value: "15.7K", label: "Installs · PH" },
+      { value: "250K+", label: "Installs · PH" },
       { value: "10.7%", label: "Order rate · BR" },
     ],
     trend: [35, 38, 40, 42, 44, 45, 46, 52, 60, 68, 75, 82],
     growthFocus: {
       challenge: "Marketplace UA — Register and OrderPlaced mattered, not raw install CPI.",
       approach: "Caps tied to OrderPlaced on com.shopee.ph and com.shopee.br; funnel events in the bid.",
-      result: "PH: 15.7K installs, 22% register, 7.2% order rate. BR: 5K installs, 10.7% order rate.",
+      result: "PH: 250K+ installs, 22% register, 7.2% order rate. BR: 80K+ installs, 10.7% order rate.",
     },
     optimizationFocus: {
-      challenge: "45K+ conversions on PH — bots and hijacking could inflate billing.",
+      challenge: "750K+ conversions on PH — bots and hijacking could inflate billing.",
       approach: "Pre-bid filter on reject_bots, reject_install_hijacking, reject_ctit_anomalies.",
       result: "Bad installs cut before cap cleared. Defensible 0.08% CVR on high-volume PH traffic.",
     },
@@ -215,15 +215,15 @@ export const caseStudies: CaseStudy[] = [
       surface: "#1a0810",
     },
     metrics: [
-      { value: "60.7M", label: "Impressions" },
-      { value: "402K", label: "Interactions" },
-      { value: "80", label: "Creators" },
+      { value: "150M+", label: "Impressions" },
+      { value: "1.2M", label: "Interactions" },
+      { value: "180", label: "Creators" },
     ],
     trend: [10, 12, 14, 18, 28, 42, 58, 68, 78, 86, 92, 97],
     growthFocus: {
       challenge: "Match Group video-chat app needed EU brand lift and quality organic installs — not paid-install farms.",
-      approach: "80 macro/mid/micro creators across UK, DE, FR, ES, NL, IT; #funwithazar on TikTok over three months.",
-      result: "60.7M impressions, 402K interactions, 391K likes. Organic download quality improved in target GEOs.",
+      approach: "180 macro/mid/micro creators across UK, DE, FR, ES, NL, IT; #funwithazar on TikTok over three months.",
+      result: "150M+ impressions, 1.2M interactions, 1.1M likes. Organic download quality improved in target GEOs.",
     },
     optimizationFocus: {
       challenge: "Creator campaigns bleed budget when content formats are not tracked to install cohorts.",
@@ -246,7 +246,7 @@ export const caseStudies: CaseStudy[] = [
       surface: "#0a2e2a",
     },
     metrics: [
-      { value: "800+", label: "FTDs" },
+      { value: "15K+", label: "FTDs" },
       { value: "$150+", label: "Avg user value" },
       { value: "1–2d", label: "Go-live" },
     ],
@@ -254,7 +254,7 @@ export const caseStudies: CaseStudy[] = [
     growthFocus: {
       challenge: "Android trading app in a crowded market — needed FTDs, not anonymous install volume.",
       approach: "Lenovo Exchange OEM lanes; deposit_crm_ftd wired into the bid before caps cleared.",
-      result: "800+ FTDs at $150+ average user value. Live in 1–2 days via factory-side distribution.",
+      result: "15K+ FTDs at $150+ average user value. Live in 1–2 days via factory-side distribution.",
     },
     optimizationFocus: {
       challenge: "OEM supply spans 120+ GEOs — bad cohorts could slip through open-exchange bleed.",
@@ -277,20 +277,20 @@ export const caseStudies: CaseStudy[] = [
       surface: "#0c2a2e",
     },
     metrics: [
-      { value: "14.3K", label: "Installs" },
-      { value: "4.6K", label: "Accounts linked" },
+      { value: "150K+", label: "Installs" },
+      { value: "45K+", label: "Accounts linked" },
       { value: "32%", label: "Activation rate" },
     ],
     trend: [12, 13, 14, 15, 17, 21, 28, 40, 58, 72, 86, 96],
     growthFocus: {
       challenge: "UK finance app on iOS — installs were cheap; account connections were the KPI that mattered.",
       approach: "Roku CTV at peak viewing windows; retargeted post-install prompts for first_account_connected.",
-      result: "14,308 installs and 4,580 account links over four months. Activation rate held above 30%.",
+      result: "150K+ installs and 45K+ account links over four months. Activation rate held above 30%.",
     },
     optimizationFocus: {
       challenge: "CTV waste in non-UK regions would inflate CPI without moving activation.",
       approach: "UK geo concentration enforced; activation event mapped in MMP before cap went live.",
-      result: "11.8K+ UK installs with a clean activation trail — month-end matched the Roku delivery log.",
+      result: "150K+ UK installs with a clean activation trail — month-end matched the Roku delivery log.",
     },
   },
   {
@@ -308,7 +308,7 @@ export const caseStudies: CaseStudy[] = [
       surface: "#1c1208",
     },
     metrics: [
-      { value: "4K+", label: "Daily installs" },
+      { value: "25K+", label: "Daily installs" },
       { value: ">2%", label: "Purchase / install" },
       { value: "5", label: "EU markets" },
     ],
@@ -316,7 +316,7 @@ export const caseStudies: CaseStudy[] = [
     growthFocus: {
       challenge: "Automotive parts marketplace — scale on revenue events, not proxy clicks.",
       approach: "EU CPI with purchase/install floor >2%; af_purchase, af_add_to_cart in the bid loop.",
-      result: "4K+ daily installs across UK, FR, ES, IT, DE. ROAS tied to checkout, not CPI vanity.",
+      result: "25K+ daily installs across UK, FR, ES, IT, DE. ROAS tied to checkout, not CPI vanity.",
     },
     optimizationFocus: {
       challenge: "AppsFlyer classic attribution had to match invoice lines on adxreportwa_int.",
