@@ -1,14 +1,7 @@
-/** Flat channel rail on /solutions — matches buying lanes, no App Growth / OEM tier tabs. */
 export const SOLUTIONS_CHANNEL_IDS = [
-  "programmatic",
   "oem",
+  "programmatic",
   "performance",
-  "social",
-  "rewarded",
-  "ctv",
-  "retargeting",
-  "native",
-  "influencer",
 ] as const;
 
 export type SolutionsChannelId = (typeof SOLUTIONS_CHANNEL_IDS)[number];

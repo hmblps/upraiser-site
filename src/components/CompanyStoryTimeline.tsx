@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { COMPANY_CONTENT } from "../data/innerPagesData";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { formatEventNames } from "../lib/formatEventNames";
 
 const SPRING = { type: "spring" as const, stiffness: 380, damping: 32, mass: 0.65 };
 
@@ -70,7 +71,7 @@ export function CompanyStoryTimeline() {
           >
             <p className="stat-label text-accent">{beat.year}</p>
             <h3 className="mt-1.5 text-lg font-bold tracking-tight text-fg sm:text-xl">{beat.title}</h3>
-            <p className="copy mt-2 max-w-xl text-sm text-muted">{beat.body}</p>
+            <p className="copy mt-2 max-w-xl text-sm text-muted">{formatEventNames(beat.body)}</p>
           </motion.div>
         </AnimatePresence>
       </div>

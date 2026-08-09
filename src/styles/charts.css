@@ -60,19 +60,26 @@
 }
 
 @keyframes fold-ghost-float {
-  0%,
-  100% {
-    opacity: calc(var(--ghost-peak, 0.58) * 0.55);
-    transform: translate3d(0, 0, 0);
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
   }
-  50% {
+  22% {
     opacity: var(--ghost-peak, 0.58);
-    transform: translate3d(var(--ghost-drift, 0px), calc(var(--ghost-travel, 160px) * -0.12), 0);
+    transform: translate3d(calc(var(--ghost-drift, 0px) * 0.28), calc(var(--ghost-travel, 160px) * -0.28), 0);
+  }
+  72% {
+    opacity: calc(var(--ghost-peak, 0.58) * 0.88);
+    transform: translate3d(calc(var(--ghost-drift, 0px) * 0.64), calc(var(--ghost-travel, 160px) * -0.64), 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--ghost-drift, 0px), calc(var(--ghost-travel, 160px) * -1), 0);
   }
 }
 
 .fold-chart-ghost--float {
-  animation: fold-ghost-float var(--ghost-duration, 7s) ease-in-out var(--ghost-delay, 0s) infinite;
+  animation: fold-ghost-float var(--ghost-duration, 7s) linear var(--ghost-delay, 0s) infinite;
 }
 
 /* Tablet: left-lane ghosts sit under full-width fold copy — keep the right half only */

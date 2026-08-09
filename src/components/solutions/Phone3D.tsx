@@ -336,11 +336,10 @@ function PhoneScene({
       <directionalLight position={[2.8, 4.2, 3.2]} intensity={isDark ? 1.85 : 1.7} castShadow />
       <directionalLight position={[-3, 2.2, -1]} intensity={0.55} color={isDark ? "#ffb070" : "#8eb0e8"} />
       <spotLight position={[0, 5.2, 3.2]} angle={0.42} penumbra={0.7} intensity={1.05} />
-      <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.55} frames={1} />
-
       {/* Suspense only for initial GLB/texture resolve — never Still↔Video remount.
           Fallback stays null; Phone3D’s dark boot layer covers the transparent hole. */}
       <Suspense fallback={null}>
+        <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.55} frames={1} />
         <PhoneMesh
           url={url}
           formatId={formatId}
@@ -456,7 +455,6 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
 
       <div className={cn("phone-glb-canvas-wrap transition-opacity duration-700 ease-out", meshReady ? "opacity-100" : "opacity-0")}>
         <Canvas
-          key={url}
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
           frameloop="always"

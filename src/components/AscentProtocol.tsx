@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ASCENT_PROTOCOLS } from "../data/innerPagesData";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SPRING_SOFT } from "../lib/motion";
+import { formatEventNames } from "../lib/formatEventNames";
 
 export function AscentProtocol() {
   const reduced = useReducedMotion();
@@ -54,7 +55,7 @@ export function AscentProtocol() {
                     <div className="overflow-hidden">
                     <div className="pl-14 sm:pl-[5.25rem] pb-5">
                       <p className="font-sans text-xs sm:text-sm leading-relaxed text-muted-light max-w-3xl">
-                        {item.answer}
+                        {formatEventNames(item.answer)}
                       </p>
                       
                       <div className="mt-3.5 flex">

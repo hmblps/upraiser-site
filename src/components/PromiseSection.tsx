@@ -4,6 +4,7 @@ import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
+import { formatEventNames } from "../lib/formatEventNames";
 
 function GrowthWordInline({ word }: { word: string }) {
   return <span className="growth-word-inline">{word}</span>;
@@ -22,7 +23,7 @@ function PromiseClean() {
           <p className="section-lead">
             {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />.
           </p>
-          <p className="section-description max-w-2xl">{content.description}</p>
+          <p className="section-description max-w-2xl">{formatEventNames(content.description)}</p>
         </div>
       </ModeContentTransition>
     </section>
@@ -62,7 +63,7 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
             </motion.span>
           </p>
           <motion.p className="section-description relative z-[2] mt-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
-            {content.description}
+            {formatEventNames(content.description)}
           </motion.p>
         </>
       )}

@@ -12,6 +12,7 @@ import { Reveal } from "./motion/Reveal";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SlideTabs } from "./SlideTabs";
 import { cn } from "../lib/cn";
+import { formatEventNames } from "../lib/formatEventNames";
 
 const PANEL_SPRING = { type: "spring" as const, stiffness: 340, damping: 30, mass: 0.7 };
 
@@ -246,9 +247,11 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                       <p className="stat-label text-accent">{channel.tagline}</p>
                       <h3 className="card-title mt-1.5 text-xl font-bold">{channel.title}</h3>
                       <p className="copy mt-3 text-sm leading-relaxed text-muted-light">
-                        {"teaser" in channel && typeof channel.teaser === "string"
-                          ? channel.teaser
-                          : channel.description}
+                        {formatEventNames(
+                          "teaser" in channel && typeof channel.teaser === "string"
+                            ? channel.teaser
+                            : channel.description
+                        )}
                       </p>
                     </div>
                     <div className="mt-6 pt-2">
@@ -348,7 +351,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                         variants={reduced ? undefined : panelItem}
                         className={cn("copy mt-3", !isSolutions && "max-w-3xl")}
                       >
-                        {body}
+                        {formatEventNames(body)}
                       </motion.p>
                       {points.length > 0 ? (
                         <motion.ul
@@ -357,7 +360,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                         >
                           {points.map((point) => (
                             <li key={point} className="channel-inventory-points__item copy text-sm text-muted">
-                              {point}
+                              {formatEventNames(point)}
                             </li>
                           ))}
                         </motion.ul>

@@ -9,6 +9,7 @@ import { SectionHeader, useMode } from "./SectionHeader";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { SPRING_SOFT } from "../lib/motion";
 import { ScrollLink } from "./ScrollLink";
+import { formatEventNames } from "../lib/formatEventNames";
 
 function useProcessActiveIndex(
   sectionRef: React.RefObject<HTMLElement | null>,
@@ -73,7 +74,7 @@ function ProcessStep({
         {step}
       </span>
       <h3 className="card-title">{title}</h3>
-      <p className="copy">{description}</p>
+      <p className="copy">{formatEventNames(description)}</p>
     </motion.article>
   );
 }

@@ -40,7 +40,8 @@
   top: 0;
   width: 100%;
   background: var(--theme-accent);
-  transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: top;
 }
 
 .solutions-route .solutions-path-list {
@@ -481,6 +482,7 @@
   gap: 2.75rem;
   align-items: center;
   animation: trust-marquee-scroll 42s linear infinite;
+  will-change: transform;
 }
 
 .trust-marquee__item {
@@ -663,8 +665,10 @@
   transition: background 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.case-metric-row:hover {
-  background: color-mix(in srgb, var(--theme-accent) 4%, transparent);
+@media (hover: hover) and (pointer: fine) {
+  .case-metric-row:hover {
+    background: color-mix(in srgb, var(--theme-accent) 4%, transparent);
+  }
 }
 
 .case-metric-row__value {

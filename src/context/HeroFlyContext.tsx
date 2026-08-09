@@ -71,12 +71,18 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
 
       const next = flyProgressForScroll(stage, scrollY);
       progressRef.current = next;
-      stage.dataset.heroFly = next.toFixed(3);
+      stage.style.setProperty("--hero-fly", next.toFixed(3));
 
-      // Lenovo dock: always visible flush on the sticky bottom
-      stage.style.setProperty("--hero-lenovo-opacity", "1");
-      stage.style.setProperty("--hero-lenovo-y", "0");
-      stage.dataset.lenovoDock = "1";
+      // Lenovo popup: appears on scroll
+      const lenovoProgress = clamp((next - 0.3) / 0.25, 0, 1);
+      const lenovoEase = lenovoProgress * lenovoProgress * (3 - 2 * lenovoProgress);
+      
+      stage.style.setProperty("--hero-lenovo-opacity", lenovoEase.toFixed(3));
+      stage.style.setProperty("--hero-lenovo-y", ((1 - lenovoEase) * 150).toFixed(1));
+
+      if (stage.dataset.lenovoDock !== (lenovoEase > 0.9 ? "1" : "0")) {
+        stage.dataset.lenovoDock = lenovoEase > 0.9 ? "1" : "0";
+      }
 
       // Soft handoff: only the last ~5% — after Lenovo is fully docked.
       const exit = clamp((next - 0.95) / 0.05, 0, 1);

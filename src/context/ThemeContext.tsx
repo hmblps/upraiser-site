@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 
 type Theme = "light" | "dark";
 
@@ -98,15 +98,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     });
   }, [theme]);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     userChoseRef.current = true;
     setTheme((t) => (t === "dark" ? "light" : "dark"));
-  };
+  }, []);
 
   const dualStoryReady = useMemo(() => seen.light && seen.dark, [seen.light, seen.dark]);
 
+  const value = useMemo(() => ({ theme, toggleTheme, dualStoryReady }), [theme, toggleTheme, dualStoryReady]);
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, dualStoryReady }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

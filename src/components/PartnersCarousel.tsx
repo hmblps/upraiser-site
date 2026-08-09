@@ -30,12 +30,50 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
 
   useEffect(() => {
     if (itemsList.length === 0) return;
-    const timer = setInterval(() => {
-      setIsTransitioning(true);
-      setIndex((prev) => prev + 1);
-    }, 3500); // Step every 3.5s
-    return () => clearInterval(timer);
-  }, [itemsList.length]);
+
+    let timer: ReturnType<typeof setInterval>;
+    let started = false;
+
+    const startCarousel = () => {
+      if (started) return;
+      started = true;
+      
+      // If we are not in compact mode, we want the first slide to tick immediately on scale-ready
+      if (!compact) {
+        setIsTransitioning(true);
+        setIndex((prev) => prev + 1);
+      }
+      
+      timer = setInterval(() => {
+        setIsTransitioning(true);
+        setIndex((prev) => prev + 1);
+      }, 3500); // Step every 3.5s
+    };
+
+    // If we're on the compact strip (like in Footer or somewhere else)
+    // we don't necessarily have a hero to wait for.
+    if (compact) {
+      startCarousel();
+    } else {
+      if (typeof window !== "undefined" && (window as any).scaleReady) {
+        startCarousel();
+      } else {
+        window.addEventListener("scale-ready", startCarousel);
+        // Fallback in case event missed, but give Hero plenty of time to load (10s)
+        const fallback = setTimeout(startCarousel, 10000);
+
+        return () => {
+          window.removeEventListener("scale-ready", startCarousel);
+          clearTimeout(fallback);
+          if (timer) clearInterval(timer);
+        };
+      }
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [itemsList.length, compact]);
 
   useEffect(() => {
     if (index >= itemsList.length) {

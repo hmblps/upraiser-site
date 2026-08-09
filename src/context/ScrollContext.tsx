@@ -1,4 +1,4 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useMemo, type ReactNode } from "react";
 
 type ScrollListener = (scrollY: number) => void;
 
@@ -36,10 +36,13 @@ export function ScrollProvider({
   registerScrollListener: (listener: ScrollListener) => () => void;
   setScrollLocked: (locked: boolean) => void;
 }) {
+  const value = useMemo(
+    () => ({ scrollTo, jumpToSection, scrollToY, resetScroll, registerScrollListener, setScrollLocked }),
+    [scrollTo, jumpToSection, scrollToY, resetScroll, registerScrollListener, setScrollLocked]
+  );
+
   return (
-    <ScrollContext.Provider
-      value={{ scrollTo, jumpToSection, scrollToY, resetScroll, registerScrollListener, setScrollLocked }}
-    >
+    <ScrollContext.Provider value={value}>
       {children}
     </ScrollContext.Provider>
   );

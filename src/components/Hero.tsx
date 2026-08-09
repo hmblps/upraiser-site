@@ -118,6 +118,11 @@ function HeroPinnedScene() {
               initial={reduced ? false : "hidden"}
               animate="visible"
               variants={reduced ? undefined : containerVariants}
+              onAnimationComplete={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new Event("hero-ready"));
+                }
+              }}
             >
               <h1 className="hero-title hero-title--fly hero-title--hero font-extrabold tracking-tighter">
                 {headlineLines.map((line) => (
@@ -125,6 +130,16 @@ function HeroPinnedScene() {
                     key={line.text}
                     variants={reduced ? undefined : itemVariants}
                     className="block"
+                    onAnimationComplete={
+                      line.text === "Your rise"
+                        ? () => {
+                            if (typeof window !== "undefined") {
+                              (window as any).scaleReady = true;
+                              window.dispatchEvent(new Event("scale-ready"));
+                            }
+                          }
+                        : undefined
+                    }
                   >
                     {"accent" in line && line.accent ? (
                       <span className="hero-title-accent">{line.text}</span>
@@ -138,7 +153,7 @@ function HeroPinnedScene() {
               <AnimatePresence mode="wait" initial={false}>
                 <motion.p
                   key={mode}
-                  className="hero-lede mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg"
+                  className="hero-lede mt-5 max-w-xl text-balance text-base leading-relaxed text-muted sm:text-lg"
                   initial={reduced ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={reduced ? undefined : { opacity: 0, y: -6 }}

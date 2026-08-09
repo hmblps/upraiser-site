@@ -224,24 +224,24 @@
 
 .lenovo-hero-dock {
   position: absolute;
-  inset-inline: 0;
+  left: 0;
   bottom: 0;
-  z-index: 22;
+  z-index: 50;
   width: 100%;
   opacity: var(--hero-lenovo-opacity, 0);
-  transform: translate3d(0, calc(var(--hero-lenovo-y, 108) * 1%), 0);
+  transform: translate3d(0, calc(var(--hero-lenovo-y, 150) * 1%), 0);
   pointer-events: none;
   will-change: transform, opacity;
 }
 
 .lenovo-hero-dock .lenovo-trust-strip {
   width: 100%;
-  background-color: color-mix(in srgb, var(--theme-bg-card) 95%, transparent);
-}
-
-.lenovo-trust-strip--revealed {
-  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
-  box-shadow: 0 -12px 40px color-mix(in srgb, var(--theme-fg) 6%, transparent);
+  background-color: color-mix(in srgb, var(--theme-bg-card) 90%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--theme-accent) 20%, transparent);
+  box-shadow: 0 -8px 40px -12px color-mix(in srgb, var(--theme-bg) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0;
 }
 
 /* Interactive once mostly revealed */
@@ -249,7 +249,7 @@
   pointer-events: auto;
 }
 
-@media (max-width: 899px), (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
   .hero-stage--fly {
     --hero-lenovo-opacity: 1;
     --hero-lenovo-y: 0;

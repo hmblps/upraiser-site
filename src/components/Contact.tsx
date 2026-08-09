@@ -10,11 +10,11 @@ import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
 import { CONTACT_INTENT_EVENT, consumeContactIntent } from "../lib/contactIntent";
 
 type FormState = {
-  name: string;
   email: string;
-  company: string;
-  message: string;
+  appUrl: string;
   vertical: string;
+  mmp: string;
+  eventHook: string;
 };
 
 type FormErrors = Partial<FormState> & {
@@ -24,12 +24,20 @@ type FormErrors = Partial<FormState> & {
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
 const initialForm: FormState = {
-  name: "",
   email: "",
-  company: "",
-  message: "",
-  vertical: "app-growth",
+  appUrl: "",
+  vertical: "igaming",
+  mmp: "adjust",
+  eventHook: "",
 };
+
+const mmpOptions = [
+  { value: "adjust", label: "Adjust" },
+  { value: "appsflyer", label: "AppsFlyer" },
+  { value: "singular", label: "Singular" },
+  { value: "kochava", label: "Kochava" },
+  { value: "custom", label: "Custom API / Server-to-Server" },
+];
 
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
 
@@ -61,10 +69,10 @@ export function Contact() {
 
   const validate = () => {
     const next: FormErrors = {};
-    if (!form.name.trim()) next.name = "Required";
     if (!form.email.trim()) next.email = "Required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Invalid email";
-    if (!form.message.trim()) next.message = "Required";
+    if (!form.appUrl.trim()) next.appUrl = "Required";
+    if (!form.eventHook.trim()) next.eventHook = "Required";
     if (!privacyAccepted) next.privacyAccepted = "Required";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -92,17 +100,14 @@ export function Contact() {
         },
         body: JSON.stringify({
           access_key: accessKey,
-          subject:
-            form.vertical === "careers"
-              ? "UPRAISER Careers inquiry"
-              : `UPRAISER Contact - ${form.company || form.name}`,
+          subject: `UPRAISER Pilot Request - ${form.appUrl}`,
           from_name: "UPRAISER Website",
-          name: form.name,
           email: form.email,
           replyto: form.email,
-          company: form.company || "-",
-          vertical: form.vertical,
-          message: form.message,
+          app_url: form.appUrl,
+          route: form.vertical,
+          mmp: form.mmp,
+          event_hook: form.eventHook,
           privacy_policy_accepted: "Yes",
         }),
       });
@@ -213,15 +218,7 @@ export function Contact() {
                     </div>
                   )}
 
-                  <ContactFormField label="Full name" id="name" error={errors.name} disabled={status === "loading"}>
-                    <input
-                      type="text"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    />
-                  </ContactFormField>
-
-                  <ContactFormField label="Work email" id="email" error={errors.email} disabled={status === "loading"}>
+                  <ContactFormField label="Business email" id="email" error={errors.email} disabled={status === "loading"}>
                     <input
                       type="email"
                       value={form.email}
@@ -229,11 +226,11 @@ export function Contact() {
                     />
                   </ContactFormField>
 
-                  <ContactFormField label="Company" id="company" disabled={status === "loading"}>
+                  <ContactFormField label="App Store URL / Website" id="appUrl" error={errors.appUrl} disabled={status === "loading"}>
                     <input
-                      type="text"
-                      value={form.company}
-                      onChange={(e) => setForm({ ...form, company: e.target.value })}
+                      type="url"
+                      value={form.appUrl}
+                      onChange={(e) => setForm({ ...form, appUrl: e.target.value })}
                     />
                   </ContactFormField>
 
@@ -246,7 +243,7 @@ export function Contact() {
                     }}
                   />
 
-                  <ContactFormField label="I am a..." id="vertical" disabled={status === "loading"}>
+                  <ContactFormField label="Target Geo Route" id="vertical" disabled={status === "loading"}>
                     <select
                       value={form.vertical}
                       onChange={(e) => setForm({ ...form, vertical: e.target.value })}
@@ -259,11 +256,24 @@ export function Contact() {
                     </select>
                   </ContactFormField>
 
-                  <ContactFormField label="Message" id="message" error={errors.message} disabled={status === "loading"}>
-                    <textarea
-                      rows={2}
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  <ContactFormField label="MMP Attribution Partner" id="mmp" disabled={status === "loading"}>
+                    <select
+                      value={form.mmp}
+                      onChange={(e) => setForm({ ...form, mmp: e.target.value })}
+                    >
+                      {mmpOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </ContactFormField>
+
+                  <ContactFormField label="Target Event Hook (e.g. FTD, purchase)" id="eventHook" error={errors.eventHook} disabled={status === "loading"}>
+                    <input
+                      type="text"
+                      value={form.eventHook}
+                      onChange={(e) => setForm({ ...form, eventHook: e.target.value })}
                     />
                   </ContactFormField>
 

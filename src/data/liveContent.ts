@@ -35,8 +35,8 @@ export const heroFounded = "Founded 17 July 2017 based in London";
 
 /** Shared poetic H1 stays in Hero.tsx lede annotates by mode (ascent brand). */
 export const heroLedeByMode = {
-  growth: "Most agencies admire the view. We engineer the velocity.",
-  infrastructure: "Scaling is the climb. Verification is the oxygen.",
+  growth: "Every bid earns a device receipt. We buy and reconcile global mobile media for apps requiring absolute attribution proof.",
+  infrastructure: "Every bid earns a device receipt. We buy and reconcile global mobile media for apps requiring absolute attribution proof.",
 } as const satisfies Record<SiteMode, string>;
 
 /** @deprecated use heroLedeByMode kept for any stray imports */
@@ -50,10 +50,10 @@ export const heroHighlightsByMode = {
     { value: "$150M+", label: "Spent Optimized" },
   ],
   infrastructure: [
-    { value: "35+", label: "Active GEOs" },
-    { value: "800M+", label: "OEM Device Reach" },
-    { value: "48h", label: "SLA Setup" },
-    { value: "$150M+", label: "Spent Optimized" },
+    { value: "97.3%", label: "Fraud Blocked Pre-Bid" },
+    { value: "0%", label: "Post-Flight Log Drift" },
+    { value: "0.4ms", label: "p99 Bid Scoring" },
+    { value: "180+", label: "Device Signals" },
   ],
 } satisfies Record<SiteMode, readonly { value: string; label: string }[]>;
 
@@ -196,83 +196,59 @@ export const trafficChannelsByMode = {
   growth: [
     {
       id: "oem",
-      title: "OEM & On-Device Discovery",
-      tagline: "OEM Volume",
+      title: "Direct OEM Discovery",
+      tagline: "Direct OEM Discovery",
       teaser: "Launch campaigns on new Android devices at the moment of first activation.",
-      description: "We deliver direct, factory-level placement across premium global devices. As an official Lenovo agency partner, we secure pre-installs and device activation campaigns with certified SDK trails. We bypass traditional resellers and competitive bidding to place Your application directly in front of new users. You scale Your user base with direct device access and verified logs for first_deposit_complete events.",
+      description: "We deliver direct, factory-level placement across premium global devices. As an official Lenovo agency partner, we secure pre-installs and device activation campaigns with certified SDK trails. We bypass traditional resellers and competitive bidding to place Your application directly in front of new users. You scale Your user base with direct device access and verified installation logs.",
       bestFor: "Direct Access · Factory ROM · Verified Logs",
-      points: [
-        "Lenovo agency partner",
-        "Pre-installs",
-        "SDK trails"
-      ]
+      points: ["Lenovo agency partner", "Pre-installs", "SDK trails"]
     },
     {
       id: "programmatic",
-      title: "Programmatic Media Buying",
-      tagline: "Event-Weighted DSP",
+      title: "Programmatic Scale",
+      tagline: "Programmatic Scale",
       teaser: "Target high-spending audiences using predictive event optimization.",
-      description: "We run programmatic campaigns across curated global exchanges, bypassing the noise of public bidding. Our system optimizes Your spend for downstream events, including registration_success and subscription_started. We buy media based on real player lifetime value rather than cheap clicks. You achieve ROI-focused growth across premium ad networks.",
+      description: "We run programmatic campaigns across curated global exchanges, bypassing the noise of public bidding. Our system optimizes Your spend for downstream events, including level completions, registrations, and subscription renewals. We buy media based on real player lifetime value rather than cheap clicks. You achieve ROI-focused growth across premium ad networks.",
       bestFor: "Curated Exchanges · ROI Focus · Event Optimization",
-      points: [
-        "Predictive optimization",
-        "Downstream events",
-        "Lifetime value bidding"
-      ]
+      points: ["Predictive optimization", "Downstream events", "Lifetime value bidding"]
     },
     {
       id: "performance",
-      title: "In-App, Social & CGC",
-      tagline: "CGC Performance",
+      title: "CGC Media Amplification",
+      tagline: "CGC Media Amplification",
       teaser: "Convert user attention into measurable revenue using authentic creators.",
       description: "We combine high-performing Creator-Generated Content (CGC) with algorithmic paid distribution. Our creative studio sources creators to design visual hooks tailored for competitive verticals, including iGaming and Fintech. We test hundreds of video variations and scale only the formats that convert. You watch Your average revenue per user climb.",
       bestFor: "Authentic Creators · iGaming & Fintech · Measurable Revenue",
-      points: [
-        "Algorithmic distribution",
-        "High-volume testing",
-        "LTV scaling"
-      ]
+      points: ["Algorithmic distribution", "High-volume testing", "LTV scaling"]
     }
   ],
   infrastructure: [
     {
       id: "oem",
-      title: "OEM & On-Device Discovery",
-      tagline: "OEM Audit",
+      title: "Procurement-Grade OEM Access",
+      tagline: "Procurement-Grade OEM Access",
       teaser: "Audit every factory pre-install down to the raw hardware log.",
-      description: "Opaque attribution models have no place in Your marketing sheets. We secure direct Lenovo ROM and PAI lanes with complete SDK trails for absolute compliance. Our engineers connect device logs directly to Your Adjust or AppsFlyer endpoints for subscription_started tracking. You verify every device activation before You pay the invoice, protecting Your media budget from resale fraud.",
+      description: "Opaque attribution models ruin Your marketing sheets. We secure direct Lenovo ROM and PAI lanes with complete SDK trails for absolute compliance. Our engineers connect device logs directly to Your Adjust or AppsFlyer endpoints. You verify every device activation before You pay the invoice, protecting Your media budget from resale fraud.",
       bestFor: "Absolute Compliance · Raw Hardware Logs · SDK Trails",
-      points: [
-        "Lenovo ROM & PAI",
-        "Adjust/AppsFlyer endpoints",
-        "Resale fraud protection"
-      ]
+      points: ["Lenovo ROM & PAI", "Adjust/AppsFlyer endpoints", "Resale fraud protection"]
     },
     {
       id: "programmatic",
-      title: "Programmatic Media Buying",
-      tagline: "Pre-Bid Filtration",
+      title: "Verified Programmatic Pipe",
+      tagline: "Verified Programmatic Pipe",
       teaser: "Filter out bot traffic in 0.4 milliseconds before the bid occurs.",
-      description: "We enforce absolute pipeline cleanliness. Our proprietary engine analyzes 180 device signals in 0.4 milliseconds to block fraud before we spend Your budget, securing clean first_deposit_complete events. We maintain a rigorously vetted safelist of direct exchanges, ensuring a clean supply path. Your media buyers work with transparent data, and Your accounting ledgers match Your media invoices perfectly.",
+      description: "We enforce absolute pipeline cleanliness. Our proprietary engine analyzes 180 device signals in 0.4 milliseconds to block fraud before we spend Your budget. We maintain a rigorously vetted safelist of direct exchanges, ensuring a clean supply path. Your media buyers work with transparent data, and Your accounting ledgers match Your media invoices perfectly.",
       bestFor: "Clean Supply Path · 0.4ms Filtration · Transparent Data",
-      points: [
-        "180 device signals",
-        "Direct exchange safelist",
-        "Ledger matching"
-      ]
+      points: ["180 device signals", "Direct exchange safelist", "Ledger matching"]
     },
     {
       id: "performance",
-      title: "In-App, Social & CGC",
-      tagline: "Creative Log Trace",
+      title: "Traceable Creative Performance",
+      tagline: "Traceable Creative Performance",
       teaser: "Connect every visual asset to a raw device receipt.",
       description: "Traditional agencies sell beautiful banners but hide performance gaps. We treat creative production as data science. Our traders trace every creative asset directly to Your raw install logs, showing You exactly which video generated real lifetime value. We remove the guesswork from Your creative testing, ensuring every ad dollar works for Your ledger.",
       bestFor: "Data Science · Install Logs · Ad Dollar Tracing",
-      points: [
-        "Raw device receipts",
-        "Performance mapping",
-        "Ledger verification"
-      ]
+      points: ["Raw device receipts", "Performance mapping", "Ledger verification"]
     }
   ],
 } satisfies Record<SiteMode, unknown>;
@@ -281,27 +257,27 @@ export const processByMode = {
   growth: [
     {
       step: "01",
-      title: "Map the Route",
+      title: "Route the Mix",
       description:
-        "Our operators audit Your MMP endpoints, raw log pipelines, and fraud vectors before Your campaigns launch. We document Your entire technical stack to prevent integration errors.",
+        "We map Your target market and select premium inventory lanes across OEM partners and direct programmatic exchanges.",
     },
     {
       step: "02",
-      title: "Connect and Wire",
+      title: "Build the Hooks",
       description:
-        "We connect raw device logs directly to Your Adjust or AppsFlyer endpoints. We verify data reconciliation before we buy the first impression. When numbers mismatch at bid-time, we rebuild Your data pipelines immediately.",
+        "Our creative studio sources authentic creators to write and film high-converting video assets for Your app vertical.",
     },
     {
       step: "03",
-      title: "Deploy and Verify",
+      title: "Open the Flow",
       description:
-        "We launch Your programmatic and OEM lanes with verified SDK compliance. Our continuous monitoring prevents attribution drift. Your accounting ledger matches Your media invoice perfectly.",
+        "We deploy Your campaigns with active budget bidding within forty-eight hours, optimizing for downstream conversion events.",
     },
   ],
   infrastructure: [
     {
       step: "01",
-      title: "Map the Route",
+      title: "Map the Stack",
       description:
         "Our operators audit Your MMP endpoints, raw log pipelines, and fraud vectors before Your campaigns launch. We document Your entire technical stack to prevent integration errors.",
     },
@@ -315,7 +291,7 @@ export const processByMode = {
       step: "03",
       title: "Deploy and Verify",
       description:
-        "We launch Your programmatic and OEM lanes with verified SDK compliance. Our continuous monitoring prevents attribution drift. Your accounting ledger matches Your media invoice perfectly.",
+        "We launch Your programmatic and OEM lanes with verified SDK compliance. Our continuous monitoring prevents attribution drift. Your accounting ledger matches Your media invoice perfectly at month-end.",
     },
   ],
 } satisfies Record<SiteMode, unknown>;
@@ -373,14 +349,14 @@ export const lenovoPartnership = {
 
 export const aboutPage = {
   label: "The Expedition",
-  title: "Your route to the peak",
+  title: "We helped shape the mobile advertising terrain.",
   chapter: {
     scrollHeroWord: "ASCENT",
-    line1: "We started by explaining attribution drift to finance.",
-    line2Prefix: "Then we built the agency that",
-    inlineWord: "secures the climb",
+    line1: "We helped shape the mobile advertising terrain.",
+    line2Prefix: "We brought together operators from",
+    inlineWord: "different technical worlds",
     description:
-      "London-based. We map and reconcile mobile growth so Your Ad Ops and finance teams read the identical file.",
+      "Upraiser operates from our basecamp in London. In 2017, we brought together operators from different technical worlds to form this performance desk. Our crew includes systems engineers, software developers, financial economists, and conversion creatives. Each operator built proprietary tools and managed traffic pipelines within the AdTech industry. This convergence of disciplines is our strength.",
   },
   positioningLead: "Built from logs.",
   positioningAccent: "Built for trust.",
@@ -388,19 +364,19 @@ export const aboutPage = {
     "London-based performance boutique. We execute and reconcile mobile growth so Ad Ops and finance share one file.",
   storySegments: [
     {
-      mark: "2017",
-      title: "Founded 17 July 2017",
-      body: "Ad Ops engineers solved post-flight disputes. We exist to guarantee bid-time and bill-time agree perfectly.",
+      mark: "Convergence",
+      title: "Expertise from four disciplines working as one crew",
+      body: "We exclude account managers and client-service layers to keep Your path direct. When You partner with Upraiser, You work with the operators who built Your tracking gear and trade Your media budgets.\n\nOur systems engineers write the pre-bid scoring engines. Our software developers maintain the SDK log tracing. Our economists balance Your unit economics. Our creatives design the visual hooks. This synergy allows us to see the data terrain with clarity. Your UA and finance teams sign off on the same numbers before the invoice is issued.",
     },
     {
-      mark: "P&L",
-      title: "Built for the P&L",
-      body: "Campaigns wire completely to the first_deposit_complete and subscription_started events finance tracks, entirely bypassing install vanity.",
+      mark: "Terrain",
+      title: "We helped shape the rules of this industry from its early days",
+      body: "We choose direct, verified pathways over public exchanges and crowded bidding auctions. Our early work in AdTech allowed us to build custom data verification methods from the ground up. Because we understand how fraud vectors and attribution systems operate, we designed our own pre-bid scoring engine.\n\nWe built the pipelines that connect raw log files to Your measurement endpoints. We did not wait for the industry to offer transparency. We built our own verification tools to guarantee it.",
     },
     {
-      mark: "Now",
-      title: "Direct access to the summit",
-      body: "You partner seamlessly with the operator optimizing the flight. The supply paths sit under our control, and the proof sits in Your exact raw logs.",
+      mark: "Code",
+      title: "Data transparency and voluntary compliance by design",
+      body: "Technical precision requires trust. Upraiser follows the European Digital Advertising Alliance guidelines. We exclude summarized PDF charts that hide discrepancies.\n\nWe provide raw, unedited device logs on demand so Your team can verify every install back to a physical device. Your accounting ledger matches Your media invoice to the penny.",
     },
   ],
   facts: [
@@ -473,18 +449,18 @@ export const casesPage = {
 } as const;
 
 export const solutionsPage = {
-  label: "Solutions",
-  title: "We can help you with",
+  label: "The Routes",
+  title: "We build four buying paths.",
   chapter: {
     scrollHeroWord: "PATHS",
-    line1: "Four buying paths. One reconciliation file.",
-    line2Prefix: "Pick a lane and we open the",
-    inlineWord: "story",
+    line1: "We build four buying paths.",
+    line2Prefix: "Every path ships one",
+    inlineWord: "reconciliation file",
     description:
-      "App Growth, OEM, Creators, and premium channels all ship with verified MMP receipts ensuring absolute transparency.",
+      "App Growth, OEM, Creators, and programmatic channels operate on verified MMP receipts ensuring absolute transparency.",
   },
   description:
-    "Four distinct buying paths all shipping flawlessly with secure MMP receipts.",
+    "App Growth, OEM, Creators, and programmatic channels operate on verified MMP receipts ensuring absolute transparency.",
   ctaLabel: "Request Pilot",
   closeTitle: "Brief the path You need",
   closeDescription: "Share Your vertical, GEO, and critical KPI event. We immediately route You into the most optimal buying lane.",
@@ -496,12 +472,12 @@ export const contactPage = {
   titleLead: "Ready to be ",
   accentWord: "Upraised",
   description:
-    "Brief the precise route combining vertical, GEO, and the essential KPI event. We respond rapidly with a powerful, fully scoped path.",
+    "Brief Your route to our operators: vertical, GEOs, and KPI events.",
   subline:
     "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
   email: "info@upraiser.co.uk",
-  ctaLabel: "Start the conversation",
+  ctaLabel: "Request Pilot",
 } as const;
 
 export const caseStudyMeta = {
