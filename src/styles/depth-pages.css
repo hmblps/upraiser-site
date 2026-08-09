@@ -804,7 +804,6 @@ html.viewport-route body {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .viewport-page__intro {
