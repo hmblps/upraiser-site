@@ -374,7 +374,7 @@ header nav .nav-link:focus-visible::after {
 .btn-secondary {
   position: relative;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--theme-fg) 24%, var(--theme-border));
+  border: 1px solid color-mix(in srgb, var(--theme-fg) 12%, transparent);
   background-color: color-mix(in srgb, var(--theme-bg-card) 78%, transparent);
   color: var(--theme-fg);
   /* Asymmetrical Editorial Styling */
@@ -383,8 +383,8 @@ header nav .nav-link:focus-visible::after {
   -webkit-backdrop-filter: blur(10px);
   /* Depth shadow + stronger inner top bevel */
   box-shadow: 
-    0 6px 16px -4px var(--theme-card-shadow-base, rgba(0, 0, 0, 0.45)),
-    inset 0 1.5px 2px color-mix(in srgb, white 20%, transparent);
+    0 2px 8px -2px var(--theme-card-shadow-base, rgba(0, 0, 0, 0.2)),
+    inset 0 1px 1px color-mix(in srgb, white 8%, transparent);
 }
 
 .btn-secondary::before {
@@ -400,7 +400,7 @@ header nav .nav-link:focus-visible::after {
 
 @media (hover: hover) and (pointer: fine) {
   .btn-secondary:hover {
-    border-color: color-mix(in srgb, var(--theme-fg) 38%, var(--theme-border));
+    border-color: color-mix(in srgb, var(--theme-fg) 25%, transparent);
     background-color: color-mix(in srgb, var(--theme-bg-card) 94%, transparent);
   }
 }
