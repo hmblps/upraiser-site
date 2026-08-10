@@ -237,54 +237,7 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
   const gradBase = `fold-area-base-${reactId}`;
   const gradLift = `fold-area-lift-${reactId}`;
 
-function FoldLogParity({ progress, opacity, ghosts, morph, reduced }: any) {
-  const y = useTransform(progress, [0, 1], ["8%", "-8%"]);
-  
-  const lines = [
-    "[SYS] AUDIT INITIATED: 0x8F9A -> INVOICE_ID: 9918231",
-    "[MMP] POST /adjust/postback?event=install&device_id=A8B9C - VERIFIED",
-    "MATCH: 0x8F9A -> 0x8F9A [PARITY_LOCK]",
-    "[SYS] SYNC /billing/reconciliation - DRIFT: 0.00%",
-    "[MMP] POST /appsflyer/postback?event=purchase - VERIFIED",
-    "MATCH: 0x1A2B -> 0x1A2B [PARITY_LOCK]",
-    "[WARN] INVALID_SIGNATURE /mmp/adjust/postback - DROPPED",
-    "[SYS] OEM_LOG_PULL /lenovo/activation?imei=89F1 - VERIFIED",
-    "[MMP] POST /kochava/postback?event=registration - VERIFIED",
-    "MATCH: 0x4B3A -> 0x4B3A [PARITY_LOCK]",
-    "[SYS] SYNC /billing/reconciliation - DRIFT: 0.00%",
-  ];
-
-  return (
-    <motion.div className="fold-area fold-area--infrastructure" style={reduced ? { opacity: 0.75 } : { opacity }} aria-hidden>
-      <div className="fold-area-ghosts fold-chart-ghosts z-10 relative">
-        {ghosts.map((g: any) => (
-          <GhostBubble key={g.id} metric={g} morph={morph} />
-        ))}
-      </div>
-      
-      <motion.div 
-        style={reduced ? {} : { y }} 
-        className="absolute inset-0 flex flex-col justify-center overflow-hidden opacity-20 text-[9px] sm:text-[10px] md:text-xs leading-[2] tracking-wider px-4 md:px-8 pointer-events-none font-mono"
-      >
-        {lines.map((line, i) => {
-          const isVerified = line.includes("VERIFIED") || line.includes("PARITY_LOCK");
-          const isWarn = line.includes("WARN") || line.includes("DROPPED");
-          return (
-            <div key={i} className={`flex justify-between border-b border-accent/10 pb-1 mb-2 whitespace-nowrap overflow-hidden ${isVerified ? 'text-accent' : isWarn ? 'text-red-500/80' : 'text-muted'}`}>
-              <span className="truncate">{line}</span>
-            </div>
-          );
-        })}
-      </motion.div>
-    </motion.div>
-  );
-}
-
   if (!enabled) return null;
-
-  if (!isGrowth) {
-    return <FoldLogParity progress={progress} opacity={opacity} ghosts={ghosts} morph={morph} reduced={reduced} />;
-  }
 
   return (
     <motion.div className={`fold-area fold-area--${mode}`} style={reduced ? { opacity: 0.75 } : { opacity }} aria-hidden>
@@ -313,7 +266,7 @@ function FoldLogParity({ progress, opacity, ghosts, morph, reduced }: any) {
             <YAxis hide domain={[0, 150]} />
 
             <Area
-              type="monotone"
+              type={isGrowth ? "monotone" : "step"}
               stackId="mass"
               dataKey={names.Base}
               stroke="none"
@@ -321,7 +274,7 @@ function FoldLogParity({ progress, opacity, ghosts, morph, reduced }: any) {
               isAnimationActive={false}
             />
             <Area
-              type="monotone"
+              type={isGrowth ? "monotone" : "step"}
               stackId="mass"
               dataKey={names.Lift}
               stroke={colors[0]}
