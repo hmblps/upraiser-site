@@ -10,7 +10,7 @@ export const contactVerticalOptions = [
   { value: "app-growth", label: "App Growth / media" },
   { value: "oem", label: "OEM / Lenovo" },
   { value: "studio", label: "The Craft / creatives" },
-  { value: "brand", label: "Brand partnership" },
+  { value: "brand", label: "Brand Partnership" },
   { value: "advertising-partner", label: "Advertising Partner" },
   { value: "app-web-owner", label: "App / Web Owner" },
   { value: "direct-publisher", label: "Direct publisher" },
@@ -35,8 +35,8 @@ export const heroFounded = "Founded 17 July 2017 based in London";
 
 /** Shared poetic H1 stays in Hero.tsx lede annotates by mode (ascent brand). */
 export const heroLedeByMode = {
-  growth: "We run global performance campaigns for apps requiring absolute attribution proof. We manage Your media spend across direct OEM and programmatic exchanges, optimizing strictly for downstream revenue events.",
-  infrastructure: "Every bid earns a device receipt. We reconcile Your programmatic and OEM campaigns against raw device logs daily, eliminating post-flight billing drift and protecting Your budget from inventory resale.",
+  growth: "We run global performance campaigns requiring absolute attribution proof. We manage Your media spend across direct OEM and programmatic exchanges.",
+  infrastructure: "We build transparent trading infrastructure delivering absolute attribution proof. We verify Your media spend through raw device logs and direct OEM integrations.",
 } as const satisfies Record<SiteMode, string>;
 
 /** @deprecated use heroLedeByMode kept for any stray imports */
@@ -124,9 +124,9 @@ export const valueByMode = {
   infrastructure: {
     hero: {
       kicker: "Log-native buying",
-      title: "Every bid has a receipt",
+      title: "Verify the event Your board tracks",
       description:
-        "Server logs reconcile perfectly to Adjust and AppsFlyer in real time. Month-end closes seamlessly because the numbers already agree.",
+        "Server logs wire directly to Adjust and AppsFlyer before the month closes, ensuring absolute alignment with Your data.",
     },
     metrics: [
       { value: "0%", label: "Post-flight log drift", progress: 0.02 },
@@ -467,17 +467,17 @@ export const solutionsPage = {
 } as const;
 
 export const contactPage = {
-  label: "Let's Talk",
-  title: "Ready to be Upraised?",
-  titleLead: "Ready to be ",
-  accentWord: "Upraised",
+  label: "[ Upraiser Briefing Room ]",
+  title: "Intake & Pilot Briefing",
+  titleLead: "Intake & Pilot ",
+  accentWord: "Briefing",
   description:
-    "Brief Your route to our operators: vertical, GEOs, and KPI events.",
+    "Provide Your production parameters. Our operators review Your application and configure Your data pipelines within 24 hours. We bypass generic sales funnels to establish direct partner alignment.",
   subline:
     "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
   email: "info@upraiser.co.uk",
-  ctaLabel: "Request Pilot",
+  ctaLabel: "[ START ASCENT ]",
 } as const;
 
 export const caseStudyMeta = {
@@ -520,7 +520,7 @@ export const testimonials = [
   },
   {
     quote:
-      "We upgraded from weekly reconciliation calls to a seamless monthly file pull. That constitutes a massive operational victory.",
+      "We upgraded from weekly reconciliation calls to a direct monthly file pull. That constitutes a massive operational victory.",
     name: "Ad Ops Lead",
     role: "Media buyer EU",
     company: "Programmatic accounts",
@@ -547,9 +547,9 @@ export const sectionsByMode = {
         "Pre-bid protection, event-weighted buying, and direct OEM distribution connect Your budget instantly to verified revenue.",
     },
     infrastructure: {
-      title: "Infrastructure Ad Ops stands behind proudly",
+      title: "Infrastructure designed for teams demanding more than installs",
       description:
-        "Filtration, robust log parity, and auditable OEM form the bedrock ensuring every number closes completely clean.",
+        "Pre-bid filtration, robust log parity, and direct OEM distribution secure Your budget instantly against ad fraud.",
     },
   },
   channels: {
@@ -560,15 +560,15 @@ export const sectionsByMode = {
         "Direct supply, robust event-weighted optimization, and verified routes power incredible growth across all targeted markets.",
     },
     infrastructure: {
-      title: "Fixed lines built into Your stack.",
+      title: "Equipment powering transparent media buying.",
       description:
-        "OEM, programmatic, and social align flawlessly under one powerful control plane yielding receipts Ad Ops defends instantly.",
+        "Direct supply, robust pre-bid filtration, and verified routes secure incredible performance across all targeted markets.",
     },
   },
   cases: {
     label: "Proven Summits",
     growth: { title: "We conquer these peaks repeatedly." },
-    infrastructure: { title: "Peaks secured with oxygen and absolute auditability." },
+    infrastructure: { title: "We secure these peaks repeatedly." },
   },
   technology: {
     label: "The Gear",
@@ -585,7 +585,7 @@ export const sectionsByMode = {
     infrastructure: {
       title: "We are UPRAISER",
       description:
-        "Based securely in London. Official Lenovo agency partner. We architect log reconciliation, flawless ROM deploys, and robust pre-bid guards built specifically to guarantee precise month-end closure.",
+        "Based securely in London. Official Lenovo agency partner. We architect log reconciliation, direct ROM deploys, and robust pre-bid guards perfectly tailored for transparent media buying.",
     },
   },
   process: {
