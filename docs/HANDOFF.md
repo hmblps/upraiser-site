@@ -4,7 +4,7 @@
 > **Primary AI SoT (prefer on conflicts):** [`AI-FULL.md`](./AI-FULL.md)  
 > Human summary: [`README.md`](../README.md) · Solutions: [`SOLUTIONS.md`](./SOLUTIONS.md) · Hero 3D: [`HERO.md`](./HERO.md) · Assets: [`ASSETS.md`](./ASSETS.md) · Index: [`README.md`](./README.md).  
 > **Updated:** 11 August 2026  
-> **Local path:** `Upraiser New Website Cursor Project`  
+> **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** https://upraiser-site.vercel.app  
 > **Target domain:** https://upraiser.co.uk (SPA DNS cutover pending)  
 > **Brand doctrine:** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md)  
