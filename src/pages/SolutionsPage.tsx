@@ -5,6 +5,7 @@ import { useMode } from "../components/SectionHeader";
 import { SlideTabs } from "../components/SlideTabs";
 import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticScrollSection";
 import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/ProgrammaticFormats";
+import { useBrandAuroraNav } from "../hooks/useBrandAuroraNav";
 
 /**
  * Solutions — App Growth (scroll formats + phone) / OEM & CTV.
@@ -13,6 +14,7 @@ import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/Programmati
 export function SolutionsPage() {
   const { mode } = useMode();
   const [lane, setLane] = useState<"app-growth" | "oem-ctv">("app-growth");
+  useBrandAuroraNav();
 
   // Kick the active chassis download before the lazy Phone3D chunk finishes parsing.
   useEffect(() => {
@@ -50,7 +52,7 @@ export function SolutionsPage() {
       : "Pre-install, OEM storefronts, and CTV. Fixed lines that survive procurement.";
 
   return (
-    <main id="channels" className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
+    <main id="channels" className="site-main depth-page depth-page--solutions">
       <ProgrammaticScrollSection
         key={lane}
         mode={mode}

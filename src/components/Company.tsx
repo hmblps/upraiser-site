@@ -1,117 +1,100 @@
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { COMPANY_CONTENT, ASCENT_PROTOCOLS } from "../data/innerPagesData";
 import { formatEventNames } from "../lib/formatEventNames";
-import { BorderBeam } from "./BorderBeam";
-import { TerminalBlock, NodeGraphDecoration } from "./CompanyVisuals";
+import { SPRING_SOFT } from "../lib/motion";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { AscentCamps } from "./company/AscentCamps";
 
 /**
- * About/Expedition — Monolithic engineering dossier layout.
- * Clean 1-screen presentation focused purely on the Basecamp intro and the Ascent Protocol.
+ * The Expedition (/company) — short intro + ascent camps visual + lean FAQ.
  */
 export function Company() {
   const { aboutExpedition } = COMPANY_CONTENT;
+  const reduced = useReducedMotion();
+  const [openNumber, setOpenNumber] = useState<string | null>(ASCENT_PROTOCOLS[0]?.protocolNumber ?? null);
+  const faq = ASCENT_PROTOCOLS.slice(0, 4);
 
   return (
     <div className="depth-page depth-page--company viewport-page">
-      <div className="viewport-page__shell section-inner flex flex-col lg:flex-row lg:gap-16 pt-8 pb-12 lg:pt-16 min-h-0">
-        
-        {/* Left: Basecamp Intro */}
-        <header className="viewport-page__intro shrink-0 lg:w-5/12 lg:flex lg:flex-col lg:justify-between pb-8 lg:pb-0">
-          <div>
-            <p className="section-label text-accent">{aboutExpedition.hero.label}</p>
-            <h1 className="section-title mt-2 lg:mt-4 text-4xl lg:text-5xl tracking-tight leading-[1.1]">
-              {aboutExpedition.hero.title}
-            </h1>
-            <p className="section-description mt-4 lg:mt-6 max-w-xl text-lg text-muted-light whitespace-pre-wrap">
-              {aboutExpedition.hero.text}
-            </p>
-          </div>
+      <div className="viewport-page__shell section-inner flex min-h-0 flex-col gap-10 pt-8 pb-12 lg:gap-14 lg:pt-14">
+        <header className="viewport-page__intro max-w-3xl shrink-0">
+          <p className="section-label text-accent">{aboutExpedition.hero.label}</p>
+          <h1 className="section-title mt-2 text-4xl tracking-tight leading-[1.1] lg:mt-3 lg:text-5xl">
+            {aboutExpedition.hero.title}
+          </h1>
+          <p className="section-description mt-4 max-w-2xl text-lg text-muted-light lg:mt-5">
+            {aboutExpedition.hero.text}
+          </p>
         </header>
 
-        {/* Right: The Expedition Blocks */}
-        <section className="flex-1 min-h-0 flex flex-col overflow-y-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex flex-col gap-12 pb-16">
-            {aboutExpedition.blocks.map((block) => (
-              <article key={block.id} className="relative">
-                <p className="font-mono text-xs font-semibold tracking-wider text-accent mb-2">
-                  {block.label}
-                </p>
-                <h2 className="font-sans text-xl sm:text-2xl font-bold leading-snug text-fg mb-4">
-                  {block.title}
-                </h2>
-                <p className="font-sans text-sm sm:text-base leading-relaxed text-muted-light whitespace-pre-wrap">
-                  {formatEventNames(block.text)}
-                </p>
-                
-                {/* Insert terminal block after the first block */}
-                {block.id === "convergence" && <TerminalBlock />}
-              </article>
-            ))}
+        <AscentCamps camps={aboutExpedition.camps} />
 
-            {/* FAQ Block (The Protocols) */}
-            <article className="mt-8 relative">
-              <NodeGraphDecoration />
-              <p className="font-mono text-xs font-semibold tracking-wider text-accent mb-2">
-                The Protocols
-              </p>
-              <h2 className="font-sans text-xl sm:text-2xl font-bold leading-snug text-fg mb-6">
-                Frequently Asked Questions
-              </h2>
-              <div className="flex flex-col gap-4">
-                {ASCENT_PROTOCOLS.map((item, i) => (
-                  <details
-                    key={i}
-                    className="group rounded-xl border border-border/40 bg-card overflow-hidden transition-colors hover:border-accent/30"
+        <section className="ascent-faq mx-auto w-full max-w-3xl" aria-labelledby="ascent-faq-heading">
+          <p className="font-mono text-xs font-semibold tracking-wider text-accent">Trail notes</p>
+          <h2 id="ascent-faq-heading" className="mt-2 font-sans text-xl font-bold text-fg sm:text-2xl">
+            Before You climb
+          </h2>
+          <ul className="mt-6 divide-y divide-border/30 border-y border-border/30">
+            {faq.map((item) => {
+              const isOpen = openNumber === item.protocolNumber;
+              return (
+                <li key={item.protocolNumber}>
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    data-cursor="link"
+                    className="flex min-h-[44px] w-full select-none items-start justify-between gap-4 py-5 text-left touch-manipulation"
+                    onClick={() => setOpenNumber(isOpen ? null : item.protocolNumber)}
                   >
-                    <summary className="flex cursor-pointer items-center justify-between p-5 sm:p-6 font-sans font-bold text-fg select-none marker:content-none [&::-webkit-details-marker]:hidden">
-                      <span className="pr-6">{item.question}</span>
-                      <span className="shrink-0 text-accent transition-transform duration-300 group-open:rotate-45">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <line x1="12" y1="5" x2="12" y2="19"></line>
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                      </span>
-                    </summary>
-                    <div className="px-5 pb-6 sm:px-6 sm:pb-7">
-                      <p className="font-sans text-sm sm:text-base leading-relaxed text-muted-light whitespace-pre-wrap">
-                        {formatEventNames(item.answer)}
-                      </p>
-                      <div className="mt-4 inline-flex items-center rounded-full border border-border bg-bg-elevated px-3 py-1 text-xs font-mono text-accent">
-                        {item.ogilvyProof}
-                      </div>
-                    </div>
-                  </details>
-                ))}
-              </div>
-            </article>
-
-            {/* CTA Block */}
-            <article className="mt-8 relative overflow-hidden rounded-xl border border-border/40 bg-card p-6 sm:p-8">
-              <BorderBeam
-                className="z-0"
-                duration={12}
-                size={300}
-                colorFrom="var(--theme-accent-light)"
-                colorTo="var(--color-magenta)"
-              />
-              <div className="relative z-10">
-                <h2 className="font-sans text-xl sm:text-2xl font-bold leading-snug text-fg mb-3">
-                  {aboutExpedition.cta.title}
-                </h2>
-                <p className="font-sans text-sm sm:text-base leading-relaxed text-muted-light mb-6">
-                  {aboutExpedition.cta.text}
-                </p>
-                <button 
-                  data-cursor="pointer"
-                  className="inline-flex items-center justify-center bg-accent text-accent-fg font-sans font-bold text-sm sm:text-base px-6 py-3 rounded hover:bg-accent/90 transition-colors"
-                  onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-                >
-                  {aboutExpedition.cta.button}
-                </button>
-              </div>
-            </article>
-          </div>
+                    <span className="flex-1 font-sans text-sm font-bold leading-snug text-fg sm:text-base">
+                      {item.question}
+                    </span>
+                    <motion.span
+                      aria-hidden
+                      className="mt-0.5 w-6 shrink-0 text-center text-xl font-light leading-none text-muted select-none"
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={reduced ? { duration: 0 } : SPRING_SOFT}
+                    >
+                      +
+                    </motion.span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen ? (
+                      <motion.div
+                        key="answer"
+                        initial={reduced ? false : { height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={reduced ? undefined : { height: 0, opacity: 0 }}
+                        transition={reduced ? { duration: 0 } : SPRING_SOFT}
+                        className="overflow-hidden"
+                      >
+                        <p className="pb-5 font-sans text-sm leading-relaxed text-muted-light sm:text-base">
+                          {formatEventNames(item.answer)}
+                        </p>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                </li>
+              );
+            })}
+          </ul>
         </section>
-        
+
+        <section className="mx-auto w-full max-w-3xl border-t border-border/40 pt-8 pb-4">
+          <h2 className="font-sans text-xl font-bold text-fg sm:text-2xl">{aboutExpedition.cta.title}</h2>
+          <p className="mt-2 max-w-xl font-sans text-sm text-muted-light sm:text-base">
+            {aboutExpedition.cta.text}
+          </p>
+          <button
+            type="button"
+            data-cursor="pointer"
+            className="mt-5 inline-flex min-h-[44px] select-none items-center justify-center rounded bg-accent px-6 py-3 font-sans text-sm font-bold text-accent-fg touch-manipulation transition-colors hover:bg-accent/90 sm:text-base"
+            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+          >
+            {aboutExpedition.cta.button}
+          </button>
+        </section>
       </div>
     </div>
   );

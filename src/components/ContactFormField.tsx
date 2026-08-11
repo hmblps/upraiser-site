@@ -1,5 +1,5 @@
 import { cloneElement, useEffect, useRef, useState, type ReactElement, type HTMLAttributes } from "react";
-import { BorderBeam } from "./BorderBeam";
+import { GradientTraceBorder } from "./GradientTraceBorder";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type ContactFormFieldProps = {
@@ -45,9 +45,9 @@ export function ContactFormField({ label, id, error, disabled, expand, children 
         className={`contact-field-wrap strip-beam-wrap relative overflow-hidden rounded-xl${error ? " contact-field-wrap--invalid" : ""}${showBeam ? " contact-field-wrap--beam" : ""}${expand ? " flex-1 flex flex-col min-h-0" : ""}`}
       >
         {showBeam ? (
-          <BorderBeam
-            duration={5.5}
-            size={200}
+          <GradientTraceBorder
+            duration={2.4}
+            strokeWidth={1.5}
             colorFrom="var(--theme-accent)"
             colorTo="var(--theme-accent-secondary)"
           />

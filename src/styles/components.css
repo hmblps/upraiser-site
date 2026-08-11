@@ -1390,8 +1390,8 @@ textarea.contact-field {
   resize: none;
 }
 
-.contact-field-wrap .border-beam::before {
-  opacity: 0.88;
+.contact-field-wrap .gradient-trace-border {
+  opacity: 0.92;
 }
 
 @media (prefers-reduced-motion: reduce) {

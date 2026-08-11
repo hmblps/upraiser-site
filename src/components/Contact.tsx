@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { contactPage, primaryCta } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
-import { BorderBeam } from "./BorderBeam";
+import { GradientTraceBorder } from "./GradientTraceBorder";
 import { ContactFormField } from "./ContactFormField";
 
 type FormState = {
@@ -125,10 +125,10 @@ export function Contact() {
         <div className="viewport-page__panel relative min-h-0 flex-1 !overflow-visible pt-3 pb-8 px-4">
           <div className="flex flex-col justify-center h-full min-h-0 w-full !overflow-visible">
             <div className="strip-beam-wrap relative w-full max-h-full min-h-0 overflow-hidden rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl">
-            <BorderBeam
+            <GradientTraceBorder
               className="z-20"
-              duration={10}
-              size={280}
+              duration={3.4}
+              strokeWidth={1.5}
               colorFrom="var(--theme-accent-light)"
               colorTo="var(--color-magenta)"
             />

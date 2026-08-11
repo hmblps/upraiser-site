@@ -1,0 +1,226 @@
+/* Brand aurora — shared veil (Routes / Contact / Company / Cases) */
+
+.brand-aurora,
+.route-aurora {
+  pointer-events: none;
+}
+
+.brand-aurora--routes,
+.prog-scroll-stage-aurora {
+  z-index: 0;
+  /* Match Contact loudness */
+  opacity: 0.3;
+  mask-image: linear-gradient(
+    90deg,
+    #000 0%,
+    #000 40%,
+    rgba(0, 0, 0, 0.45) 60%,
+    rgba(0, 0, 0, 0.12) 78%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #000 0%,
+    #000 40%,
+    rgba(0, 0, 0, 0.45) 60%,
+    rgba(0, 0, 0, 0.12) 78%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] .brand-aurora--routes,
+[data-theme="dark"] .prog-scroll-stage-aurora {
+  opacity: 0.18;
+}
+
+.brand-aurora--contact {
+  z-index: 0;
+  opacity: 0.3;
+  mask-image: radial-gradient(ellipse 70% 65% at 50% 48%, #000 28%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 48%, #000 28%, transparent 78%);
+}
+
+[data-theme="dark"] .brand-aurora--contact {
+  opacity: 0.18;
+}
+
+.brand-aurora--company {
+  z-index: 0;
+  opacity: 0.22;
+  mask-image: radial-gradient(ellipse 75% 60% at 50% 42%, #000 20%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 60% at 50% 42%, #000 20%, transparent 72%);
+}
+
+[data-theme="dark"] .brand-aurora--company {
+  opacity: 0.14;
+}
+
+.brand-aurora--cases {
+  z-index: 0;
+  opacity: 0.16;
+  /* Intro / nav only — kill right-side bleed into carousel corners */
+  mask-image:
+    linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.12) 30%, transparent 44%),
+    linear-gradient(90deg, #000 0%, #000 55%, rgba(0, 0, 0, 0.35) 75%, transparent 92%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.5) 16%, rgba(0, 0, 0, 0.12) 30%, transparent 44%),
+    linear-gradient(90deg, #000 0%, #000 55%, rgba(0, 0, 0, 0.35) 75%, transparent 92%);
+  -webkit-mask-composite: source-in;
+}
+
+[data-theme="dark"] .brand-aurora--cases {
+  opacity: 0.11;
+}
+
+.brand-aurora--cases .route-aurora__wash {
+  /* No top-right hotspot — keep wash under title / left of intro */
+  background:
+    radial-gradient(ellipse 52% 40% at 32% 10%, color-mix(in srgb, var(--theme-accent) 22%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 36% at 18% 28%, color-mix(in srgb, var(--theme-accent-secondary) 12%, transparent), transparent 72%);
+}
+
+/* Cases page also has viewport-page::before blob at top-right — mute it */
+html[data-brand-aurora="1"] .depth-page--cases.viewport-page::before {
+  opacity: 0;
+}
+
+.route-aurora__wash {
+  position: absolute;
+  inset: -12%;
+  background:
+    radial-gradient(ellipse 55% 48% at 28% 42%, color-mix(in srgb, var(--theme-accent) 28%, transparent), transparent 68%),
+    radial-gradient(ellipse 42% 40% at 48% 68%, color-mix(in srgb, var(--theme-accent-secondary) 18%, transparent), transparent 70%);
+  filter: blur(28px);
+  opacity: 0.85;
+}
+
+[data-theme="light"] .route-aurora__wash {
+  filter: blur(48px);
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .route-aurora__wash {
+  filter: blur(44px);
+  opacity: 0.88;
+}
+
+.route-aurora__sheet {
+  --route-aurora-band: repeating-linear-gradient(
+    100deg,
+    var(--theme-accent) 0%,
+    var(--theme-accent-light, var(--theme-accent)) 8%,
+    transparent 14%,
+    transparent 18%,
+    var(--theme-accent-secondary) 24%,
+    var(--theme-accent) 32%,
+    transparent 40%
+  );
+  --route-aurora-veil: repeating-linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--theme-bg) 88%, transparent) 0%,
+    color-mix(in srgb, var(--theme-bg) 88%, transparent) 7%,
+    transparent 10%,
+    transparent 12%,
+    color-mix(in srgb, var(--theme-bg) 88%, transparent) 16%
+  );
+
+  position: absolute;
+  inset: -8%;
+  background-image: var(--route-aurora-veil), var(--route-aurora-band);
+  background-size: 280% 280%, 220% 220%;
+  background-position: 50% 50%, 50% 50%;
+  filter: blur(18px);
+  opacity: 0.7;
+  will-change: background-position;
+  animation: route-aurora-drift 72s linear infinite;
+}
+
+[data-theme="light"] .route-aurora__sheet {
+  --route-aurora-band: repeating-linear-gradient(
+    100deg,
+    var(--theme-accent) 0%,
+    var(--theme-accent-light, var(--theme-accent)) 6%,
+    transparent 16%,
+    transparent 28%,
+    var(--theme-accent-secondary) 34%,
+    var(--theme-accent) 40%,
+    transparent 52%
+  );
+  filter: blur(36px);
+  opacity: 0.88;
+  background-size: 320% 320%, 260% 260%;
+}
+
+[data-theme="dark"] .route-aurora__sheet {
+  --route-aurora-band: repeating-linear-gradient(
+    100deg,
+    var(--theme-accent) 0%,
+    var(--theme-accent-light, var(--theme-accent)) 6%,
+    transparent 16%,
+    transparent 28%,
+    var(--theme-accent-secondary) 34%,
+    var(--theme-accent) 40%,
+    transparent 52%
+  );
+  filter: blur(34px);
+  opacity: 0.72;
+  background-size: 300% 300%, 240% 240%;
+}
+
+.route-aurora[data-reduced="true"] .route-aurora__sheet {
+  animation: none;
+  opacity: 0.45;
+}
+
+@keyframes route-aurora-drift {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-aurora__sheet {
+    animation: none;
+  }
+}
+
+/* Navbar glass — aurora washes underneath on aurora pages */
+html[data-brand-aurora="1"] .site-header {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--theme-bg) 42%, transparent) 0%,
+    color-mix(in srgb, var(--theme-bg) 12%, transparent) 70%,
+    transparent 100%
+  );
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+}
+
+html[data-theme="dark"][data-brand-aurora="1"] .site-header {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--theme-bg) 55%, transparent) 0%,
+    color-mix(in srgb, var(--theme-bg) 18%, transparent) 72%,
+    transparent 100%
+  );
+}
+
+/* Contact form — glass so aurora reads behind the card */
+html[data-brand-aurora="1"] .depth-page--contact .strip-beam-wrap {
+  background: color-mix(in srgb, var(--theme-bg-card) 72%, transparent);
+  backdrop-filter: blur(18px) saturate(1.08);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+}
+
+html[data-theme="dark"][data-brand-aurora="1"] .depth-page--contact .strip-beam-wrap {
+  background: color-mix(in srgb, var(--theme-bg-card) 68%, transparent);
+}
+
+html[data-brand-aurora="1"] .depth-page--contact .strip-beam-wrap > .relative.bg-bg-elevated,
+html[data-brand-aurora="1"] .depth-page--contact .bg-bg-elevated {
+  background-color: color-mix(in srgb, var(--theme-bg-elevated) 78%, transparent);
+}

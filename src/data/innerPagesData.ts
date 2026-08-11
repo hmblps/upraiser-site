@@ -271,8 +271,35 @@ export const COMPANY_CONTENT = {
     hero: {
       label: "The Expedition",
       title: "We helped shape the mobile advertising terrain.",
-      text: "Upraiser operates from our basecamp in London. In 2017, we brought together operators from different technical worlds to form this performance desk. Our crew includes systems engineers, software developers, financial economists, and conversion creatives. Each operator built proprietary tools and managed traffic pipelines within the AdTech industry. This convergence of disciplines is our strength.",
+      text: "Basecamp London, since 2017. Operators from systems, software, finance, and creative — one desk. You talk to the crew who wire the pipe and trade the budget.",
     },
+    /** Visual anchor — mountain ascent with camp stops (привалы). */
+    camps: [
+      {
+        id: "basecamp",
+        altitude: "Basecamp",
+        title: "Four disciplines. One crew.",
+        text: "Systems, software, economists, creatives. No account-manager layer between You and the operators.",
+      },
+      {
+        id: "fixed-line",
+        altitude: "Camp I · Fixed Line",
+        title: "Direct pipe. Not resale.",
+        text: "Verified pathways over crowded auctions. Pre-bid scoring and SDK trails built in-house.",
+      },
+      {
+        id: "oxygen",
+        altitude: "Camp II · Oxygen",
+        title: "Raw logs. Zero drift.",
+        text: "Device logs on demand. UA and finance sign the same numbers before the invoice lands.",
+      },
+      {
+        id: "summit",
+        altitude: "Summit",
+        title: "Receipts attached.",
+        text: "Brief vertical, GEOs, and KPI events. We rig the line — You climb with clean oxygen.",
+      },
+    ],
     blocks: [
       {
         id: "convergence",

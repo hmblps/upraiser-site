@@ -13,6 +13,7 @@ import { SectionHeader } from "../SectionHeader";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
 import { CssPhone } from "./CssPhone";
+import { BrandAurora } from "../BrandAurora";
 
 import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import "../../styles/programmatic-scroll-section.css";
@@ -158,6 +159,7 @@ export function ProgrammaticScrollSection({
     >
       <div className="prog-scroll-sticky">
         <div className="prog-scroll-ambience" aria-hidden />
+        <BrandAurora tone="routes" className="prog-scroll-stage-aurora" />
         <div className="prog-scroll-sticky-inner">
           <div className="prog-scroll-headline">
             <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />

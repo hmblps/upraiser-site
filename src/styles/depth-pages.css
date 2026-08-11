@@ -1906,3 +1906,30 @@ html.theme-light .depth-page--gear .gear-spec,
   color: var(--theme-muted);
 }
 
+/* ——— Company ascent camps (How It Works → mountain trail) ——— */
+.ascent-camps__card {
+  padding: 0.15rem 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .ascent-camps__card {
+    padding: 0.75rem 0.85rem;
+    border-left: 2px solid color-mix(in srgb, var(--theme-accent) 55%, transparent);
+    background: color-mix(in srgb, var(--theme-bg-card) 72%, transparent);
+  }
+
+  .ascent-camps__camp:nth-child(even) .ascent-camps__card {
+    border-left: 0;
+    border-right: 2px solid color-mix(in srgb, var(--theme-accent) 55%, transparent);
+    text-align: right;
+  }
+}
+
+@media (max-width: 767px) {
+  .ascent-camps__camp {
+    border-left: 2px solid color-mix(in srgb, var(--theme-border) 80%, var(--theme-accent));
+    padding-left: 1rem;
+  }
+}
+
+

@@ -261,10 +261,7 @@
 }
 
 @media (max-width: 899px) {
-  /* Conic border-beam mask fails on narrow viewports — fills the strip as a harsh wedge */
-  .lenovo-trust-strip .border-beam {
-    display: none !important;
-  }
+  /* GradientTraceBorder is SVG — safe on narrow; no conic-mask wedge */
 
   .lenovo-trust-strip,
   .lenovo-hero-dock .lenovo-trust-strip {
