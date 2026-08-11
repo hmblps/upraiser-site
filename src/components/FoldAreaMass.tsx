@@ -3,11 +3,11 @@ import { ParityMatchGraph } from "./ParityMatchGraph";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import {
   Area,
-  CartesianGrid,
   ComposedChart,
   ResponsiveContainer,
   XAxis,
   YAxis,
+  CartesianGrid,
 } from "recharts";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
 import { useTheme } from "../context/ThemeContext";
@@ -23,10 +23,8 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-/** Same period spine as SCALE — reads as a chart, not an abstract ribbon */
 const PERIODS = ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12"];
 
-/** Stack layers — Secondary sits under Primary so the silhouette = accumulated mass */
 function growthTargets() {
   const base = [9, 10, 12, 19, 23, 27, 38, 44, 49, 58, 66, 74];
   const lift = [7, 8, 10, 15, 18, 21, 29, 34, 37, 46, 52, 62];
@@ -37,44 +35,12 @@ function growthTargets() {
   }));
 }
 
-function clarityTargets() {
-  const values = [22, 28, 34, 32, 45, 50, 48, 60, 65, 58, 70, 75];
-  return PERIODS.map((period, i) => ({
-    period,
-    Base: values[i]!,
-    Lift: values[i]!,
+function morphGrowth(targets: ReturnType<typeof growthTargets>, t: number) {
+  return targets.map((row) => ({
+    period: row.period,
+    Base: lerp(row.Base * 0.14, row.Base, t),
+    Lift: lerp(row.Lift * 0.12, row.Lift, t),
   }));
-}
-
-function morphSeries(
-  targets: ReturnType<typeof growthTargets>,
-  t: number,
-  isGrowth: boolean
-) {
-  return targets.map((row, i) => {
-    if (isGrowth) {
-      return {
-        period: row.period,
-        Base: lerp(row.Base * 0.14, row.Base, t),
-        Lift: lerp(row.Lift * 0.12, row.Lift, t),
-      };
-    } else {
-      // Parity convergence: Invoices (Base) are stable targets.
-      // Raw Logs (Lift) are volatile and noisy, slowly catching up and stabilizing.
-      // The noise decays as t approaches 1 (perfect parity).
-      const lagT = Math.pow(t, 2.5); // Logs lag behind
-      
-      // Create a deterministic "noise" that animates with scroll (t) but zeroes out at t=1
-      const volatility = (1 - lagT) * 12; // Max 12 units of noise
-      const noise = Math.sin(i * 4.3 + t * 15) * volatility;
-      
-      return {
-        period: row.period,
-        Base: lerp(row.Base * 0.9, row.Base, Math.pow(t, 0.5)),
-        Lift: lerp(row.Lift * 0.15, row.Lift, lagT) + noise,
-      };
-    }
-  });
 }
 
 type GhostMetric = {
@@ -210,8 +176,9 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: number }) 
 }
 
 /**
- * RESULTS ambient chart — same grammar as SCALE (weeks, dual series, fill under line),
- * but Area-led: accumulated mass / outcomes instead of thin flow lines.
+ * RESULTS ambient chart.
+ * Growth mode  → recharts area chart (accumulated mass / outcomes).
+ * Parity mode  → ParityMatchGraph (quarter chord diagram, bottom-right).
  */
 export function FoldAreaMass({ progress }: FoldAreaMassProps) {
   const { mode } = useMode();
@@ -227,13 +194,6 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
     lerp: theme === "dark" ? 0.075 : 0.09,
   });
   const ghosts = isGrowth ? GROWTH_RESULT_GHOSTS : CLARITY_RESULT_GHOSTS;
-  const targets = useMemo(() => (isGrowth ? growthTargets() : clarityTargets()), [isGrowth]);
-  const primary = "var(--theme-accent)";
-  const secondary = "var(--theme-accent-secondary)";
-  const colors = isGrowth ? [primary, secondary] : [secondary, primary];
-  const names = isGrowth
-    ? { Base: "Deposits", Lift: "Revenue" }
-    : { Base: "Media Invoices", Lift: "Raw Logs" };
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -243,14 +203,21 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
 
+  // Growth chart data (only computed in growth mode)
+  const primary = "var(--theme-accent)";
+  const secondary = "var(--theme-accent-secondary)";
+  const colors = [primary, secondary];
+  const names = { Base: "Deposits", Lift: "Revenue" };
+  const targets = useMemo(() => growthTargets(), []);
   const data = useMemo(() => {
-    const morphed = morphSeries(targets, morph, isGrowth);
+    if (!isGrowth) return [];
+    const morphed = morphGrowth(targets, morph);
     return morphed.map((row) => ({
       period: row.period,
       [names.Base]: row.Base,
       [names.Lift]: row.Lift,
     }));
-  }, [targets, morph, isGrowth, names.Base, names.Lift]);
+  }, [targets, morph, isGrowth]);
 
   const opacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
 
