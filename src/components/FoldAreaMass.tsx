@@ -230,11 +230,14 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
 
   return (
     <motion.div className={`fold-area fold-area--${mode}`} style={reduced ? { opacity: 0.75 } : { opacity }} aria-hidden>
-      <div className="fold-area-ghosts fold-chart-ghosts">
-        {ghosts.map((g) => (
-          <GhostBubble key={g.id} metric={g} morph={morph} />
-        ))}
-      </div>
+      {/* ParityWaterChart renders its own ghosts — skip outer layer to avoid duplicates */}
+      {!isParityDark && (
+        <div className="fold-area-ghosts fold-chart-ghosts">
+          {ghosts.map((g) => (
+            <GhostBubble key={g.id} metric={g} morph={morph} />
+          ))}
+        </div>
+      )}
 
       <div className="fold-area-plot">
         {isParityDark ? (
