@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useState } from "react";
-import { ParityMatchGraph } from "./ParityMatchGraph";
+import { ParityWaterChart } from "./ParityWaterChart";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import {
   Area,
@@ -188,7 +188,9 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
   const reactId = useId().replace(/:/g, "");
 
   const isGrowth = mode === "growth";
-  const morph = useScrollMorph(progress, enabled, {
+  // Dark parity = ParityWaterChart (mirror + caustics). No scroll morph needed for that path.
+  const isParityDark = !isGrowth && theme === "dark";
+  const morph = useScrollMorph(progress, enabled && !isParityDark, {
     start: 0.02,
     span: theme === "dark" ? 0.88 : 0.78,
     lerp: theme === "dark" ? 0.075 : 0.09,
@@ -235,8 +237,30 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
       </div>
 
       <div className="fold-area-plot">
-        {!isGrowth ? (
-          <ParityMatchGraph progress={progress} />
+        {isParityDark ? (
+          <ParityWaterChart progress={progress} />
+        ) : !isGrowth ? (
+          /* light theme parity — recharts area (same as growth but step-style) */
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={data} margin={{ top: 28, right: 24, left: 8, bottom: 8 }}>
+              <defs>
+                <linearGradient id={gradBase} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={colors[1]} stopOpacity={0.78} />
+                  <stop offset="100%" stopColor={colors[1]} stopOpacity={0.22} />
+                </linearGradient>
+                <linearGradient id={gradLift} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={colors[0]} stopOpacity={0.88} />
+                  <stop offset="55%" stopColor={colors[0]} stopOpacity={0.45} />
+                  <stop offset="100%" stopColor={colors[0]} stopOpacity={0.14} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="period" hide />
+              <YAxis hide domain={[0, 150]} />
+              <Area type="step" stackId="mass" dataKey={names.Base} stroke="none" strokeWidth={0} fill={`url(#${gradBase})`} isAnimationActive={false} />
+              <Area type="step" stackId="mass" dataKey={names.Lift} stroke={colors[0]} strokeWidth={2.5} strokeOpacity={0.95} fill={`url(#${gradLift})`} dot={{ r: 3.25, fill: colors[0], strokeWidth: 0 }} activeDot={false} isAnimationActive={false} />
+              <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.55} vertical={false} strokeDasharray="3 6" />
+            </ComposedChart>
+          </ResponsiveContainer>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={data} margin={{ top: 28, right: 24, left: 8, bottom: 8 }}>
@@ -251,38 +275,11 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
                   <stop offset="100%" stopColor={colors[0]} stopOpacity={0.14} />
                 </linearGradient>
               </defs>
-
               <XAxis dataKey="period" hide />
               <YAxis hide domain={[0, 150]} />
-
-              <Area
-                type="monotone"
-                stackId="mass"
-                dataKey={names.Base}
-                stroke="none"
-                strokeWidth={0}
-                fill={`url(#${gradBase})`}
-                isAnimationActive={false}
-              />
-              <Area
-                type="monotone"
-                stackId="mass"
-                dataKey={names.Lift}
-                stroke={colors[0]}
-                strokeWidth={2.5}
-                strokeOpacity={0.95}
-                fill={`url(#${gradLift})`}
-                dot={{ r: 3.25, fill: colors[0], strokeWidth: 0 }}
-                activeDot={false}
-                isAnimationActive={false}
-              />
-
-              <CartesianGrid
-                stroke="var(--theme-border)"
-                strokeOpacity={0.55}
-                vertical={false}
-                strokeDasharray="3 6"
-              />
+              <Area type="monotone" stackId="mass" dataKey={names.Base} stroke="none" strokeWidth={0} fill={`url(#${gradBase})`} isAnimationActive={false} />
+              <Area type="monotone" stackId="mass" dataKey={names.Lift} stroke={colors[0]} strokeWidth={2.5} strokeOpacity={0.95} fill={`url(#${gradLift})`} dot={{ r: 3.25, fill: colors[0], strokeWidth: 0 }} activeDot={false} isAnimationActive={false} />
+              <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.55} vertical={false} strokeDasharray="3 6" />
             </ComposedChart>
           </ResponsiveContainer>
         )}
