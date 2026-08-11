@@ -43,11 +43,11 @@ export function SolutionsPage() {
     />
   );
 
-  const headerTitle = lane === "app-growth" ? "Every Format. One Supply Path." : "OEM / CTV — measured supply";
+  const headerTitle = lane === "app-growth" ? "Every Format. One Supply Path." : "OEM & CTV. Measured supply";
   const headerDescription =
     lane === "app-growth"
-      ? "Equipment for altitude — formats on a direct supply path You can defend."
-      : "Pre-install, OEM storefronts, and CTV — fixed lines that survive procurement.";
+      ? "Equipment for altitude. Formats on a direct supply path You can defend."
+      : "Pre-install, OEM storefronts, and CTV. Fixed lines that survive procurement.";
 
   return (
     <main id="channels" className="site-main depth-page depth-page--solutions pt-[var(--site-header-height)]">
@@ -63,7 +63,7 @@ export function SolutionsPage() {
 
       <DepthCloseCta
         title="Ready to be Upraised?"
-        description="Brief the route: vertical, GEO, and KPI event — we route to the right inventory lane."
+        description="Brief the route: vertical, GEO, and KPI event. We route to the right inventory lane."
         ctaLabel={primaryCta.label}
         ctaHref={primaryCta.href}
         contactIntent="brand"

@@ -1,21 +1,23 @@
 # UPRAISER Site — Full AI Handoff Document
 
 > **Purpose:** give another AI (or engineer) complete context to continue — including a **refactor-ready** map of current truth vs debt.  
+> **Primary AI SoT (prefer on conflicts):** [`AI-FULL.md`](./AI-FULL.md)  
 > Human summary: [`README.md`](../README.md) · Solutions: [`SOLUTIONS.md`](./SOLUTIONS.md) · Hero 3D: [`HERO.md`](./HERO.md) · Assets: [`ASSETS.md`](./ASSETS.md) · Index: [`README.md`](./README.md).  
-> **Updated:** 8 August 2026  
+> **Updated:** 11 August 2026  
 > **Local path:** `Upraiser New Website Cursor Project`  
 > **Production:** https://upraiser-site.vercel.app  
-> **Target domain:** https://upraiser.co.uk (SPA not on custom DNS yet)  
+> **Target domain:** https://upraiser.co.uk (SPA DNS cutover pending)  
 > **Brand doctrine:** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md)  
-> **HEAD (ship):** [LATEST] UI/UX Polish: 60fps Grid layout animations, fixed Sticky position bug by moving overflow-x to clip, updated MCP settings, exact brand colors #ff003b.  
-> **Backups:** branch `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
+> **HEAD:** `e5fb198` — Promise dark **PARITY** + Recharts step/barcode ambient in `FoldAreaMass`; copy Stop-Slop + Company/Cases polish from Aug 8–10.  
+> **Backups:** branch `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`  
+> **WIP (disk only — not committed, pending merge with other folder):** Promise dark water chart replaces barcode ambient — see § WIP Parity water below.
 
 ---
 
 ## 0. How to use this document
 
 1. Read **§1–4** (who / dual-mode / **current** page map) before layout or copy edits.  
-2. **Brand spirit (locked):** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md) + [`.agents/product-marketing.md`](../.agents/product-marketing.md) — expedition IA, sacred CTAs/H1, Growth ↔ Infrastructure.  
+2. **Brand spirit (locked):** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md) + [`.agents/product-marketing.md`](../.agents/product-marketing.md) — expedition IA, sacred CTAs/H1, Growth ↔ Infrastructure. Prefer [`AI-FULL.md`](./AI-FULL.md) when this file’s dated sections lag code.  
 3. Edit copy/metrics in `src/data/liveContent.ts` + `src/data/cases.ts` + `innerPagesData.ts` — avoid hardcoding unless Hero slogans.  
 4. Preserve **dual theme = dual narrative** (`light` → growth, `dark` → infrastructure).  
 5. **Do not** commit or deploy unless the human explicitly asks.  
@@ -169,7 +171,7 @@ Killer folds (Audience / Promise) stay on **home**.
 /
 ├── README.md · docs/ (HANDOFF · HERO · ASSETS)
 ├── assets/                 → sync → public/
-│   └── hero/everest.glb · everest-light.glb · brand/ · maps/
+│   └── hero/everest.glb · everest-light.glb · light-mountains-loop.mp4 · brand/ · maps/
 ├── _local_drafts/          ← orphan drafts moved out of src (gitignored)
 ├── scripts/
 │   ├── sync-assets.sh · verify-assets.sh · deploy-vercel.sh
@@ -199,7 +201,7 @@ Killer folds (Audience / Promise) stay on **home**.
 | File | Role |
 |------|------|
 | `Hero.tsx` | Sticky stage, H1, stats, `HeroFlyProvider` |
-| `HeroAtmosphere.tsx` | CSS sky; idle-lazy canvas |
+| `HeroAtmosphere.tsx` | CSS sky + mobile mountains MP4; idle-lazy canvas on desktop |
 | `hero-terrain/HeroTerrainCanvas.tsx` | R3F root |
 | `hero-terrain/Scene.tsx` | Theme scene graph |
 | `Everest.tsx` | Dark wire vs light photo GLB + planet bend |
@@ -218,6 +220,13 @@ Killer folds (Audience / Promise) stay on **home**.
 ### Scroll folds
 
 `AccentScrollFold` · `Audience` · `PromiseSection` · `ModeChart` · `FoldAreaMass` · `FraudScrollChart`
+
+| Fold | Words (light / dark) | Ambient |
+|------|----------------------|---------|
+| Audience | PROOF / PROOF | `chart` / `fraud` |
+| Promise | CLARITY / **PARITY** | `FoldAreaMass` area (growth) · step/barcode area (infra) |
+
+Promise section titles: **Our Commitment**.
 
 ### Depth / IA pages
 
@@ -289,7 +298,7 @@ Layout: `styles/base.css`. Motion: `lib/motion.ts` (`SPRING`, `SPRING_SOFT`).
 npm run deploy
 ```
 
-**Last production:** 29 Jul 2026 — `/solutions` phone glass (still→MP4) + DPI/touch/transform harden (`e8ed2ef` / `71ddab1`).
+**Code tip:** `e5fb198` (11 Aug 2026 sync) — Promise **PARITY** + step ambient; prior Solutions harden `e8ed2ef` / `71ddab1` still relevant for phone glass.
 
 ---
 
@@ -490,6 +499,23 @@ docs/
 ```
 
 Root `AI_HANDOFF.md` / `CONTEXT.md` / `assets/README.md` are **stubs** that point here. Edit only under `docs/`.
+
+---
+
+## WIP — Parity water chart (uncommitted, 11 Aug 2026 evening)
+
+**Do not commit yet** — keep as working-tree changes until this folder is merged with the other project copy.
+
+| File | Status | Role |
+|------|--------|------|
+| `src/components/ParityWaterChart.tsx` | **untracked** | Promise dark ambient — gold invoice / red log mirror bars |
+| `src/components/ParityCausticsCanvas.tsx` | **untracked** | OGL procedural caustics over the lake |
+| `src/components/FoldAreaMass.tsx` | **modified** | Infra mode → `ParityWaterChart` (not barcode/step Recharts) |
+| `src/styles/charts.css` | **modified** | `.parity-water*` layout, lake scanlines, ghost vertical mask |
+
+**Intent:** calm lake metaphor (not raindrops). Ghosts float from chart band; **vertical** mask dissolves them before Promise body copy (do not clip left lane). Bars use Framer `scaleY` on fold **anchor** progress ~`0.4→0.9` (Promise has no sticky runway — late window). Full-bleed via `margin-left: -50vw` (no CSS `transform` on root — Framer opacity-safe).
+
+**Open polish:** confirm rise/fall while scrolling Promise slowly; tune ghost mask % vs body text if overlap returns.
 
 ---
 

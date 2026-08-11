@@ -1,9 +1,9 @@
 # UPRAISER — Solutions (`/solutions`)
 
-> **Status (29 Jul 2026):** **SHIPPED** — sticky format lanes + 3D/CSS phone glass.  
+> **Status:** **SHIPPED** — sticky format lanes + 3D/CSS phone glass.  
 > Production: https://upraiser-site.vercel.app/solutions  
-> Full site: **[HANDOFF.md](./HANDOFF.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
-> **HEAD:** `e8ed2ef` (DPI / touch / transform motion) · phone glass `71ddab1`
+> Full site: **[AI-FULL.md](./AI-FULL.md)** · **[HANDOFF.md](./HANDOFF.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
+> **Code tip:** `e5fb198` (site-wide) · Solutions glass pipeline unchanged in role
 
 ---
 
@@ -35,7 +35,7 @@ Native scroll drives the active format (no wheel hijack). Desktop: R3F iPhone GL
 | `src/styles/programmatic-full-feed.css` | Feed UI inside the glass |
 | `src/styles/phone-css-3d.css` | GLB stage shell |
 
-**Route:** `/solutions` (live). `/expertise` redirects here. Nav label **Solutions**.
+**Route:** `/solutions` (live). `/expertise` redirects here. Nav label **The Routes**.
 
 ---
 

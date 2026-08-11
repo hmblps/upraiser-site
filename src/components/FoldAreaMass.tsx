@@ -1,4 +1,5 @@
 import { useEffect, useId, useMemo, useState } from "react";
+import { ParityMatchGraph } from "./ParityMatchGraph";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import {
   Area,
@@ -37,24 +38,43 @@ function growthTargets() {
 }
 
 function clarityTargets() {
-  const base = [22, 24, 26, 32, 36, 38, 44, 48, 52, 56, 58, 60];
-  const lift = [16, 18, 18, 26, 28, 30, 35, 36, 36, 38, 40, 40];
+  const values = [22, 28, 34, 32, 45, 50, 48, 60, 65, 58, 70, 75];
   return PERIODS.map((period, i) => ({
     period,
-    Base: base[i]!,
-    Lift: lift[i]!,
+    Base: values[i]!,
+    Lift: values[i]!,
   }));
 }
 
 function morphSeries(
   targets: ReturnType<typeof growthTargets>,
   t: number,
+  isGrowth: boolean
 ) {
-  return targets.map((row) => ({
-    period: row.period,
-    Base: lerp(row.Base * 0.14, row.Base, t),
-    Lift: lerp(row.Lift * 0.12, row.Lift, t),
-  }));
+  return targets.map((row, i) => {
+    if (isGrowth) {
+      return {
+        period: row.period,
+        Base: lerp(row.Base * 0.14, row.Base, t),
+        Lift: lerp(row.Lift * 0.12, row.Lift, t),
+      };
+    } else {
+      // Parity convergence: Invoices (Base) are stable targets.
+      // Raw Logs (Lift) are volatile and noisy, slowly catching up and stabilizing.
+      // The noise decays as t approaches 1 (perfect parity).
+      const lagT = Math.pow(t, 2.5); // Logs lag behind
+      
+      // Create a deterministic "noise" that animates with scroll (t) but zeroes out at t=1
+      const volatility = (1 - lagT) * 12; // Max 12 units of noise
+      const noise = Math.sin(i * 4.3 + t * 15) * volatility;
+      
+      return {
+        period: row.period,
+        Base: lerp(row.Base * 0.9, row.Base, Math.pow(t, 0.5)),
+        Lift: lerp(row.Lift * 0.15, row.Lift, lagT) + noise,
+      };
+    }
+  });
 }
 
 type GhostMetric = {
@@ -65,37 +85,37 @@ type GhostMetric = {
   drift: number;
   duration: number;
   delay: number;
-  format: (t: number) => string;
+  format: (morph: number) => string;
 };
 
 const GROWTH_RESULT_GHOSTS: GhostMetric[] = [
   {
-    id: "revenue",
-    label: "Revenue",
-    left: "14%",
-    originY: 76,
-    drift: 12,
-    duration: 7.4,
-    delay: 0.15,
-    format: (t) => `$${lerp(22, 94, t).toFixed(0)}k`,
-  },
-  {
-    id: "deposits",
-    label: "Deposits",
-    left: "34%",
-    originY: 70,
-    drift: -10,
-    duration: 7.8,
-    delay: 1.2,
-    format: (t) => `${Math.round(lerp(180, 920, t))}`,
-  },
-  {
     id: "roas",
-    label: "ROAS",
+    label: "Day 7 ROAS",
+    left: "12%",
+    originY: 82,
+    drift: 15,
+    duration: 6.5,
+    delay: 0,
+    format: (t) => `${lerp(35, 112, t).toFixed(0)}%`,
+  },
+  {
+    id: "volume",
+    label: "Daily Installs",
+    left: "32%",
+    originY: 76,
+    drift: -10,
+    duration: 7.5,
+    delay: 1.2,
+    format: (t) => `${lerp(1.2, 18.5, t).toFixed(1)}K`,
+  },
+  {
+    id: "arpu",
+    label: "ARPU Lift",
     left: "54%",
-    originY: 78,
+    originY: 68,
     drift: 14,
-    duration: 6.9,
+    duration: 6.2,
     delay: 2.1,
     format: (t) => `${lerp(1.4, 3.8, t).toFixed(1)}x`,
   },
@@ -213,7 +233,7 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
   const colors = isGrowth ? [primary, secondary] : [secondary, primary];
   const names = isGrowth
     ? { Base: "Deposits", Lift: "Revenue" }
-    : { Base: "Verified base", Lift: "Audit lift" };
+    : { Base: "Media Invoices", Lift: "Raw Logs" };
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -224,13 +244,13 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
   }, [reduced]);
 
   const data = useMemo(() => {
-    const morphed = morphSeries(targets, morph);
+    const morphed = morphSeries(targets, morph, isGrowth);
     return morphed.map((row) => ({
       period: row.period,
       [names.Base]: row.Base,
       [names.Lift]: row.Lift,
     }));
-  }, [targets, morph, names.Base, names.Lift]);
+  }, [targets, morph, isGrowth, names.Base, names.Lift]);
 
   const opacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
 
@@ -248,52 +268,57 @@ export function FoldAreaMass({ progress }: FoldAreaMassProps) {
       </div>
 
       <div className="fold-area-plot">
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={data} margin={{ top: 28, right: 24, left: 8, bottom: 8 }}>
-            <defs>
-              <linearGradient id={gradBase} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={colors[1]} stopOpacity={0.78} />
-                <stop offset="100%" stopColor={colors[1]} stopOpacity={0.22} />
-              </linearGradient>
-              <linearGradient id={gradLift} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={colors[0]} stopOpacity={0.88} />
-                <stop offset="55%" stopColor={colors[0]} stopOpacity={0.45} />
-                <stop offset="100%" stopColor={colors[0]} stopOpacity={0.14} />
-              </linearGradient>
-            </defs>
+        {!isGrowth ? (
+          <ParityMatchGraph progress={progress} />
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={data} margin={{ top: 28, right: 24, left: 8, bottom: 8 }}>
+              <defs>
+                <linearGradient id={gradBase} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={colors[1]} stopOpacity={0.78} />
+                  <stop offset="100%" stopColor={colors[1]} stopOpacity={0.22} />
+                </linearGradient>
+                <linearGradient id={gradLift} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={colors[0]} stopOpacity={0.88} />
+                  <stop offset="55%" stopColor={colors[0]} stopOpacity={0.45} />
+                  <stop offset="100%" stopColor={colors[0]} stopOpacity={0.14} />
+                </linearGradient>
+              </defs>
 
-            <XAxis dataKey="period" hide />
-            <YAxis hide domain={[0, 150]} />
+              <XAxis dataKey="period" hide />
+              <YAxis hide domain={[0, 150]} />
 
-            <Area
-              type={isGrowth ? "monotone" : "step"}
-              stackId="mass"
-              dataKey={names.Base}
-              stroke="none"
-              fill={`url(#${gradBase})`}
-              isAnimationActive={false}
-            />
-            <Area
-              type={isGrowth ? "monotone" : "step"}
-              stackId="mass"
-              dataKey={names.Lift}
-              stroke={colors[0]}
-              strokeWidth={2.5}
-              strokeOpacity={0.95}
-              fill={`url(#${gradLift})`}
-              dot={{ r: 3.25, fill: colors[0], strokeWidth: 0 }}
-              activeDot={false}
-              isAnimationActive={false}
-            />
+              <Area
+                type="monotone"
+                stackId="mass"
+                dataKey={names.Base}
+                stroke="none"
+                strokeWidth={0}
+                fill={`url(#${gradBase})`}
+                isAnimationActive={false}
+              />
+              <Area
+                type="monotone"
+                stackId="mass"
+                dataKey={names.Lift}
+                stroke={colors[0]}
+                strokeWidth={2.5}
+                strokeOpacity={0.95}
+                fill={`url(#${gradLift})`}
+                dot={{ r: 3.25, fill: colors[0], strokeWidth: 0 }}
+                activeDot={false}
+                isAnimationActive={false}
+              />
 
-            <CartesianGrid
-              stroke="var(--theme-border)"
-              strokeOpacity={0.55}
-              vertical={false}
-              strokeDasharray="3 6"
-            />
-          </ComposedChart>
-        </ResponsiveContainer>
+              <CartesianGrid
+                stroke="var(--theme-border)"
+                strokeOpacity={0.55}
+                vertical={false}
+                strokeDasharray="3 6"
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </motion.div>
   );

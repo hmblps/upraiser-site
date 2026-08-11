@@ -2,7 +2,7 @@
 
 **Status:** Brand doctrine for copy & IA.  
 **Not a code SOT** — shipping strings live in `src/data/liveContent.ts` + `src/data/innerPagesData.ts`.  
-**Updated:** 2026-07-30  
+**Updated:** 2026-08-11  
 
 When rewriting or continuing the site, **read this first**. Prefer ascent language over generic B2B CRO.
 
@@ -43,7 +43,7 @@ UPRAISER is an **expedition brand**: poetic ascent (Zero-like atmosphere) + oper
 | Theme | Mode | Sell | Lexicon |
 |-------|------|------|---------|
 | Light | **Growth** | Scale & ROI — *velocity*, summit, equipment that scales | view → velocity, peaks, 30K installs, ROAS |
-| Dark | **Infrastructure** | Transparency & no fraud — *oxygen*, fixed lines, audit | drift, pipe, receipt, PROOF, CLARITY |
+| Dark | **Infrastructure** | Transparency & no fraud — *oxygen*, fixed lines, audit | drift, pipe, receipt, PROOF, **PARITY**, CLARITY |
 
 Same company. Same gear. Different emphasis:
 - Growth Gear → **scalability** of tools  

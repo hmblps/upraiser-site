@@ -1,12 +1,13 @@
 # UPRAISER — Hero Context (3D Everest fly)
 
-> **Status (28 Jul 2026):** **SHIPPED** — desktop sticky Lenis runway + R3F Everest fly.  
+> **Status:** **SHIPPED** — desktop sticky Lenis runway + R3F Everest fly.  
 > Light = white paper + photoreal `everest-light.glb` + ice halo + atmospheric soar silhouette.  
 > Dark = wire Everest + night stars.  
-> Legacy scroll-scrub MP4 is **superseded** — do not bring it back as the live hero without an explicit ask.  
-> Full site: **[HANDOFF.md](./HANDOFF.md)** · Solutions: **[SOLUTIONS.md](./SOLUTIONS.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
+> Mobile / reduced = **`light-mountains-loop.mp4`** (not a flat CSS-only sky).  
+> Legacy scroll-scrub MP4 as the *desktop* hero is **superseded** — do not bring it back without an explicit ask.  
+> Full site: **[AI-FULL.md](./AI-FULL.md)** · **[HANDOFF.md](./HANDOFF.md)** · Solutions: **[SOLUTIONS.md](./SOLUTIONS.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
 > Live: https://upraiser-site.vercel.app/  
-> **Docs sync:** 29 July 2026 (IA / Solutions links refreshed; hero FX unchanged).
+> **Docs sync:** 11 August 2026 · code tip `e5fb198`.
 
 ---
 
@@ -43,7 +44,7 @@
 
 ### Mobile / reduced motion
 
-CSS sky only (`HeroAtmosphere`). No WebGL.
+`HeroAtmosphere` → `HeroMountainsMobile`: looping **`/hero/light-mountains-loop.mp4`** + light/dark posters. No WebGL. Poster-only when `prefers-reduced-motion`.
 
 ---
 
@@ -74,7 +75,7 @@ Atmosphere → HorizonGlow → SunRig → ScrollBeams → StudioRimLight → Asc
 | File | Role |
 |------|------|
 | `src/context/HeroFlyContext.tsx` | Sticky runway → `progressRef` |
-| `src/components/HeroAtmosphere.tsx` | CSS sky; idle-mount canvas |
+| `src/components/HeroAtmosphere.tsx` | CSS sky + mobile mountains MP4; idle-mount canvas on desktop |
 | `src/components/hero-terrain/*` | Canvas scene graph (camera, fog, FX) |
 | `src/components/Everest.tsx` | Theme-switched GLB (wire vs photo) |
 | `src/lib/heroModel.ts` | `MODEL_URL` / `MODEL_URL_LIGHT` / `DRACO_PATH` |

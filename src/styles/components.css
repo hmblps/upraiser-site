@@ -748,6 +748,7 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
 
 .process-step .card-title {
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   font-size: 0.875rem;
 }
 
@@ -1352,7 +1353,7 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   border: 1px solid var(--theme-border);
   border-radius: 0.75rem;
   background: var(--theme-bg-elevated);
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.875rem;
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--theme-fg);

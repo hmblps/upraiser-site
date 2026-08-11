@@ -7,10 +7,11 @@ type ContactFormFieldProps = {
   id: string;
   error?: string;
   disabled?: boolean;
+  expand?: boolean;
   children: ReactElement<HTMLAttributes<HTMLElement>>;
 };
 
-export function ContactFormField({ label, id, error, disabled, children }: ContactFormFieldProps) {
+export function ContactFormField({ label, id, error, disabled, expand, children }: ContactFormFieldProps) {
   const reduced = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(false);
@@ -35,13 +36,13 @@ export function ContactFormField({ label, id, error, disabled, children }: Conta
   const showBeam = focused && !reduced && !disabled;
 
   return (
-    <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold">
+    <div className={expand ? "flex-1 flex flex-col min-h-0" : ""}>
+      <label htmlFor={id} className="mb-1 block text-sm font-semibold flex-none">
         {label}
       </label>
       <div
         ref={wrapRef}
-        className={`contact-field-wrap strip-beam-wrap relative overflow-hidden rounded-xl${error ? " contact-field-wrap--invalid" : ""}${showBeam ? " contact-field-wrap--beam" : ""}`}
+        className={`contact-field-wrap strip-beam-wrap relative overflow-hidden rounded-xl${error ? " contact-field-wrap--invalid" : ""}${showBeam ? " contact-field-wrap--beam" : ""}${expand ? " flex-1 flex flex-col min-h-0" : ""}`}
       >
         {showBeam ? (
           <BorderBeam
@@ -54,14 +55,14 @@ export function ContactFormField({ label, id, error, disabled, children }: Conta
         {cloneElement(children, {
           id,
           disabled,
-          className: "contact-field",
+          className: `contact-field${expand ? " h-full flex-1 resize-none" : ""}`,
           ...(error
             ? { "aria-invalid": true as const, "aria-describedby": `${id}-error` }
             : {}),
         } as Record<string, unknown>)}
       </div>
       {error ? (
-        <p id={`${id}-error`} className="mt-1 text-xs text-red-400" role="alert">
+        <p id={`${id}-error`} className="mt-1 flex-none text-xs text-red-400" role="alert">
           {error}
         </p>
       ) : null}

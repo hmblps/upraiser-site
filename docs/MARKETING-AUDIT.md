@@ -1,8 +1,8 @@
 # UPRAISER — Marketing audit & copy proposals
 
 **Status:** Advisory only — **not** source of truth.  
-**Sources of truth remain:** `src/data/liveContent.ts`, `src/data/cases.ts`, `src/data/innerPagesData.ts`, `docs/HANDOFF.md`, shipping UI.  
-**Date:** 2026-07-30  
+**Sources of truth remain:** `src/data/liveContent.ts`, `src/data/cases.ts`, `src/data/innerPagesData.ts`, `docs/AI-FULL.md`, shipping UI.  
+**Date:** 2026-08-11 (fold words refreshed to match `e5fb198` tip)  
 **Context:** `.agents/product-marketing.md` (v1) + marketing-council on Home hero + fold / Solutions / Company / Cases pass.
 
 ---
@@ -69,9 +69,9 @@ Cold B2B visitors may not infer the offer from the poem alone. Ogilvy/Schwartz w
 ## 3. Home — Audience
 
 ### As now
-- Growth: brands measured by post-install revenue; SCALE  
-- Infra: numbers match the invoice; PROOF  
-- Ending fixed: *We scale only what you can audit.*
+- Both modes: **PROOF** hero word (“Who We Serve”)  
+- Ambient: growth line chart · infra fraud radial  
+- Ending fixed around audit / defend-your-spend grammar (see `audienceByMode`)
 
 ### Marketing lens
 Strong ICP filter. Infra body is denser than Growth.
@@ -79,7 +79,7 @@ Strong ICP filter. Infra body is denser than Growth.
 ### Brand-safe better (optional)
 | | As now | Softer trim (same meaning) |
 |--|--------|----------------------------|
-| Infra last beats | Long “dashboard widgets / white-glove…” close | One shorter closer: *Supply you can defend in a review starts here.* — keep prior sentences or cut one clause |
+| Infra last beats | Long Ad Ops / finance / MMP close | One shorter closer if length hurts scan — keep prior sentences or cut one clause |
 
 **Recommendation:** KEEP unless you want a light trim on Infra length only.
 
@@ -131,14 +131,15 @@ Home should tease; depth belongs on `/solutions`. Teasers/taglines are already s
 ## 7. Home — Promise
 
 ### As now
-- Growth: P&L / RESULTS  
-- Infra: audit logs / CLARITY  
+- Title both modes: **Our Commitment**  
+- Growth: invoice → raw device event · word **CLARITY** · area-mass ambient  
+- Infra: invoice ↔ raw logs · word **PARITY** · step/barcode area ambient (`FoldAreaMass`)
 
 ### Marketing lens
 This *is* the commercial promise. Poetic hero + hard Promise fold = Zero-like brand (feeling) + operator truth (proof).
 
 ### Brand-safe better
-**KEEP.** Do not soften RESULTS/CLARITY into generic “outcomes.”
+**KEEP.** Do not soften CLARITY/PARITY into generic “outcomes.”
 
 ---
 

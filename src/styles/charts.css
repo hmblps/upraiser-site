@@ -462,3 +462,420 @@
     display: none;
   }
 }
+}
+
+/* PARITY — full-bleed ambient gold / red water (Promise dark) */
+.parity-water {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .parity-water {
+    display: block;
+    position: absolute;
+    /* Full-bleed via margin — no transform (Framer opacity-safe) */
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    width: 100vw;
+    margin-left: -50vw;
+    pointer-events: none;
+  }
+}
+
+.parity-water__stage {
+  position: absolute;
+  inset: auto 0 2% 0;
+  /* Drop below Promise copy */
+  top: 52%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: stretch;
+}
+
+.parity-water__plot {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+}
+
+.parity-water__rail {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: min(42vh, 420px);
+  max-width: none;
+  margin: 0;
+  padding: 0 2.5vw;
+  gap: 0;
+}
+
+.parity-water__air {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+}
+
+.parity-water__lake {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  width: 100%;
+  overflow: hidden;
+  /* Softer depth fade — keep red bars readable longer */
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 48%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 48%, transparent 100%);
+}
+
+/* Scanline slice — bars only (caustic web stays continuous on top) */
+.parity-water__lake-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  -webkit-mask-image:
+    linear-gradient(to bottom, black 0%, black 48%, transparent 100%),
+    repeating-linear-gradient(
+      to bottom,
+      black 0px,
+      black 3px,
+      transparent 3px,
+      transparent 5px
+    );
+  mask-image:
+    linear-gradient(to bottom, black 0%, black 48%, transparent 100%),
+    repeating-linear-gradient(
+      to bottom,
+      black 0px,
+      black 3px,
+      transparent 3px,
+      transparent 5px
+    );
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.parity-water__lake-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(140, 32, 52, 0.14) 0%,
+    rgba(60, 12, 28, 0.06) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.parity-water__cols {
+  display: grid;
+  grid-template-columns: repeat(var(--parity-cols, 10), minmax(0, 1fr));
+  gap: clamp(0.35rem, 1.1vw, 0.95rem);
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.parity-water__col {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+}
+
+.parity-water__col--air {
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.parity-water__col--logs {
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.parity-water__bar--logs {
+  width: 100%;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(
+    180deg,
+    rgba(246, 110, 122, 0.94) 0%,
+    rgba(210, 64, 82, 0.7) 48%,
+    rgba(140, 36, 52, 0.22) 100%
+  );
+  box-shadow: 0 10px 28px rgba(220, 72, 96, 0.18);
+  will-change: transform;
+}
+
+.parity-water__bar--invoice {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(
+    180deg,
+    rgba(236, 204, 128, 0.98) 0%,
+    rgba(212, 168, 80, 0.92) 55%,
+    rgba(168, 128, 52, 0.88) 100%
+  );
+  box-shadow: 0 6px 22px rgba(212, 168, 80, 0.14);
+  will-change: transform;
+}
+
+/* Soft parity glow downward — no hard white seam */
+.parity-water__meniscus {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 50%;
+  z-index: 2;
+  height: 1px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 47, 171, 0.18) 35%,
+    rgba(255, 47, 171, 0.28) 50%,
+    rgba(255, 47, 171, 0.18) 65%,
+    transparent 100%
+  );
+  box-shadow: 0 10px 20px -5px rgba(255, 47, 171, 0.3);
+}
+
+/* Procedural OGL caustic web over scanlined bars */
+.parity-water__caustics {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  opacity: 0.6;
+}
+
+.parity-water__caustics-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.parity-water__plot::before,
+.parity-water__plot::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: min(6vw, 72px);
+  pointer-events: none;
+}
+
+.parity-water__plot::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg, #050505) 0%, transparent 100%);
+}
+
+.parity-water__plot::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg, #050505) 0%, transparent 100%);
+}
+
+.parity-water__ghosts {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  /*
+    Vertical dissolve only — left ghosts stay.
+    Fully clear through Promise copy; soft fade in the gap above the chart (stage ~52%).
+    Ghosts float up from the chart band and dissolve before they meet the body text.
+  */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 34%,
+    rgba(0, 0, 0, 0.12) 40%,
+    rgba(0, 0, 0, 0.45) 46%,
+    black 52%,
+    black 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 34%,
+    rgba(0, 0, 0, 0.12) 40%,
+    rgba(0, 0, 0, 0.45) 46%,
+    black 52%,
+    black 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parity-water {
+    display: none;
+  }
+}
+
+
+/* RESULTS ambient AreaChart — accumulated mass (sequel to SCALE line) */
+.fold-area {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .fold-area {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 12%;
+    bottom: 10%;
+    z-index: 0;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+}
+
+.fold-area-ghosts {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.fold-area-plot {
+  position: absolute;
+  inset: 0;
+  /* Soft top fade so copy stays clear — still enough chart body to read as a plot */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold-area {
+    display: none;
+  }
+}
+
+/* CLARITY — ledger rows snap to order (infrastructure promise) */
+.clarity-ledger {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .clarity-ledger {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 22%;
+    bottom: 0;
+    z-index: 0;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
+  }
+}
+
+.clarity-ledger__wash {
+  position: absolute;
+  inset: 12% 4% 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 72% 58% at 74% 86%, color-mix(in srgb, var(--theme-accent) 16%, transparent), transparent 72%),
+    radial-gradient(ellipse 42% 38% at 14% 78%, color-mix(in srgb, var(--theme-accent-secondary) 8%, transparent), transparent 68%);
+}
+
+.clarity-ledger__panel {
+  position: absolute;
+  inset: 16% 7% 1% 5%;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 72%, transparent);
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--theme-bg-card) 52%, transparent) 0%,
+    color-mix(in srgb, var(--theme-bg-card) 28%, transparent) 100%
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-fg) 5%, transparent);
+}
+
+[data-theme="dark"] .clarity-ledger__panel {
+  border-color: color-mix(in srgb, var(--theme-accent) 14%, var(--theme-border));
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--theme-bg-card) 78%, #0a0a0a 22%) 0%,
+    color-mix(in srgb, var(--theme-bg-card) 42%, #0a0a0a 58%) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--theme-accent) 10%, transparent),
+    0 28px 90px color-mix(in srgb, black 42%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--theme-accent) 6%, transparent);
+}
+
+[data-theme="dark"] .clarity-ledger__wash {
+  background:
+    radial-gradient(ellipse 78% 62% at 76% 88%, color-mix(in srgb, var(--theme-accent) 22%, transparent), transparent 74%),
+    radial-gradient(ellipse 48% 42% at 12% 80%, color-mix(in srgb, var(--theme-accent-secondary) 12%, transparent), transparent 70%);
+}
+
+[data-theme="light"] .clarity-ledger__panel {
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--theme-bg-card) 72%, transparent) 0%,
+    color-mix(in srgb, var(--theme-bg-card) 38%, transparent) 100%
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 65%, transparent);
+}
+
+[data-theme="dark"] .accent-scroll-section--clarity .accent-scroll-sticky::before {
+  content: "";
+  position: absolute;
+  inset: 38% -12vw -8%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 68% 52% at 68% 88%,
+    color-mix(in srgb, var(--theme-accent) 7%, transparent),
+    transparent 72%
+  );
+}
+
+.clarity-ledger__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.clarity-ledger__ghosts {
+  position: absolute;
+  inset: 0;
+}
+
+.clarity-ledger__ghost .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--clarity-ghost-tone, var(--theme-accent)) 72%, var(--theme-fg) 10%);
+}
+
+.clarity-ledger__ghost .fold-chart-ghost-label {
+  color: color-mix(in srgb, var(--clarity-ghost-tone, var(--theme-muted)) 42%, var(--theme-muted) 38%);
+}
+
+[data-theme="dark"] .clarity-ledger__ghost .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--clarity-ghost-tone, var(--theme-accent)) 78%, var(--theme-fg) 8%);
+}
+
+[data-theme="dark"] .clarity-ledger__columns line {
+  stroke: color-mix(in srgb, var(--theme-accent) 18%, var(--theme-border));
+  stroke-opacity: 0.28;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clarity-ledger {
+    display: none;
+  }
+}
