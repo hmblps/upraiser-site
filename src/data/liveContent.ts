@@ -156,12 +156,12 @@ export const promiseByMode = {
   growth: {
     label: "Raw logs Your team can audit on demand",
     title: "Our Commitment",
-    scrollHeroWord: "CLARITY",
-    line1: "We trace every media invoice line item back to a raw device event.",
-    line2Prefix: "We bring",
-    inlineWord: "CLARITY",
-    titleLead: "We bring ",
-    accentWord: "CLARITY",
+    scrollHeroWord: "PARITY",
+    line1: "We match every media invoice line item directly against raw device logs.",
+    line2Prefix: "We guarantee",
+    inlineWord: "PARITY",
+    titleLead: "We guarantee ",
+    accentWord: "PARITY",
     description:
       "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean.",
   },
