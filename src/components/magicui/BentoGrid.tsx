@@ -45,8 +45,8 @@ export function BentoGridItem({
       {header ? <div className="min-h-[3.5rem]">{header}</div> : null}
       <div className="transition duration-200 group-hover/bento:translate-x-1">
         {icon ? <div className="mb-2 text-accent">{icon}</div> : null}
-        <h3 className="card-title text-sm font-bold tracking-tight text-fg">{title}</h3>
-        <p className="copy mt-1.5 text-xs leading-relaxed text-muted">{description}</p>
+        <h3 className="card-title">{title}</h3>
+        <p className="copy mt-1.5 text-caption leading-relaxed">{description}</p>
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ export const contactVerticalOptions = [
 export const navLinks: NavLink[] = [
   { label: "The Craft", href: "/craft", underConstruction: true },
   { label: "The Basecamp", href: "/" },
-  { label: "The Expedition", href: "/company" },
+  { label: "The Expedition", href: "/expedition" },
 ];
 
 export const primaryCta = {
@@ -319,10 +319,10 @@ export const footerLinks = {
     { label: "The Routes", href: "/#routes" },
     { label: "The Peaks", href: "/#cases" },
     { label: "The Craft", href: "/craft" },
-    { label: "The Expedition", href: "/company" },
+    { label: "The Expedition", href: "/expedition" },
   ],
   company: [
-    { label: "The Expedition", href: "/company" },
+    { label: "The Expedition", href: "/expedition" },
     { label: "Careers inquiry", href: "/contact", contactIntent: "careers" },
   ] satisfies NavLink[],
   social: [{ label: "LinkedIn", href: "https://www.linkedin.com/company/upraiser/" }],
@@ -424,7 +424,7 @@ export const casesPage = {
   description:
     "Auditable campaigns structured for clients who demand revenue events instead of brand-lift slides. We deploy direct publisher paths and precise pre-bid filtration.",
   intro:
-    "Open any case to explore hero numbers first, moving seamlessly through Brand, Market, KPI, Channels, and our exact Approach.",
+    "Open any case to explore hero numbers first — Brand, Market, KPI, Channels, and our exact Approach in order.",
   structureLabel: "How to read a case",
   structureSteps: [
     {

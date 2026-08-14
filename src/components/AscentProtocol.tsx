@@ -24,10 +24,10 @@ export function AscentProtocol() {
                 onClick={() => setOpenNumber(isOpen ? null : item.protocolNumber)}
               >
                 <div className="flex flex-1 items-start gap-4 sm:gap-6 min-w-0">
-                  <span className="font-mono text-xs font-semibold tracking-wider text-accent shrink-0 pt-0.5 select-none w-14 sm:w-16">
+                  <span className="text-kicker font-mono text-accent shrink-0 pt-0.5 select-none w-14 sm:w-16">
                     {item.protocolNumber}
                   </span>
-                  <span className="font-sans text-sm sm:text-base font-bold leading-snug text-fg flex-1">
+                  <span className="section-heading--sm flex-1">
                     {item.question}
                   </span>
                 </div>
@@ -54,12 +54,12 @@ export function AscentProtocol() {
                   >
                     <div className="overflow-hidden">
                     <div className="pl-14 sm:pl-[5.25rem] pb-5">
-                      <p className="font-sans text-xs sm:text-sm leading-relaxed text-muted-light max-w-3xl">
+                      <p className="copy max-w-3xl">
                         {formatEventNames(item.answer)}
                       </p>
                       
                       <div className="mt-3.5 flex">
-                        <span className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2.5 py-1 font-mono text-[0.6875rem] font-semibold text-accent-light">
+                        <span className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2.5 py-1 font-mono text-micro text-accent-light">
                           <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
                           {item.ogilvyProof}
                         </span>

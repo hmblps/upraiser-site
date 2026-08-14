@@ -1394,6 +1394,17 @@ textarea.contact-field {
   opacity: 0.92;
 }
 
+.contact-sidebar__title {
+  font-family: var(--font-sans);
+  font-size: var(--text-kicker);
+  font-weight: 700;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--theme-fg);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--theme-border);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .contact-field-wrap:focus-within .contact-field {
     border-color: color-mix(in srgb, var(--theme-accent) 30%, var(--theme-border));

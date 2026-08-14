@@ -31,15 +31,15 @@ export function DepthCloseCta({
           <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
             <div className="max-w-xl">
               <p className="section-label">{label}</p>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-fg sm:text-3xl">{title}</h2>
-              <p className="copy mt-3 text-muted">{description}</p>
+              <h2 className="section-heading">{title}</h2>
+              <p className="copy mt-3">{description}</p>
             </div>
             <Magnetic>
               <ScrollLink
                 href={ctaHref}
                 contactIntent={contactIntent}
                 data-cursor="cta"
-                className="btn-caps inline-block shrink-0 whitespace-nowrap rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-accent-light"
+                className="btn-caps btn-caps--primary inline-block shrink-0 whitespace-nowrap rounded-full px-7 py-3.5"
               >
                 {ctaLabel}
               </ScrollLink>

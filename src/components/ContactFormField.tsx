@@ -37,7 +37,7 @@ export function ContactFormField({ label, id, error, disabled, expand, children 
 
   return (
     <div className={expand ? "flex-1 flex flex-col min-h-0" : ""}>
-      <label htmlFor={id} className="mb-1 block text-sm font-semibold flex-none">
+      <label htmlFor={id} className="stat-label mb-1 block flex-none">
         {label}
       </label>
       <div
@@ -62,7 +62,7 @@ export function ContactFormField({ label, id, error, disabled, expand, children 
         } as Record<string, unknown>)}
       </div>
       {error ? (
-        <p id={`${id}-error`} className="mt-1 flex-none text-xs text-red-400" role="alert">
+        <p id={`${id}-error`} className="text-caption mt-1 flex-none text-magenta-light" role="alert">
           {error}
         </p>
       ) : null}

@@ -42,6 +42,12 @@
   will-change: transform, opacity;
 }
 
+/* Chart ambient styles */
+@keyframes chart-pulse-ring {
+  0% { transform: scale(0.3); opacity: 0.8; }
+  80%, 100% { transform: scale(1); opacity: 0; }
+}
+
 .fold-chart-ghost-value {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: clamp(1.5rem, 3.2vw, 2.4rem);
@@ -206,7 +212,7 @@
   .fraud-radial-chart {
     display: block;
     position: absolute;
-    left: 54%;
+    left: 57%;
     top: 0;
     bottom: 0;
     z-index: 0;
@@ -329,7 +335,7 @@
     position: absolute;
     left: 52%;
     top: 5%;
-    bottom: -15%;
+    bottom: 35%;
     z-index: 0;
     width: 46vw;
     pointer-events: none;

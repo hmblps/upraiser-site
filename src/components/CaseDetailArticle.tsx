@@ -101,7 +101,7 @@ export function CaseDetailArticle({ item, showCta = false, className = "" }: Cas
         {story.map((block) => (
           <EditorialItem key={block.title}>
             <p className="section-label">{block.title}</p>
-            <p className="copy mt-3 text-sm text-muted md:text-[0.9375rem]">{block.body}</p>
+            <p className="copy mt-3">{block.body}</p>
           </EditorialItem>
         ))}
       </EditorialStack>
@@ -112,7 +112,7 @@ export function CaseDetailArticle({ item, showCta = false, className = "" }: Cas
             <ScrollLink
               href={primaryCta.href}
               data-cursor="cta"
-              className="btn-caps inline-block rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
+              className="btn-caps btn-caps--primary inline-block rounded-full px-7 py-3.5"
             >
               {primaryCta.label}
             </ScrollLink>

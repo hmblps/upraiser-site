@@ -94,7 +94,7 @@ export function Process() {
       className="section-band section-band--ambience section-band--dense relative overflow-hidden"
     >
       <SectionAmbience tone="soft" />
-      <div className="relative z-[1] mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="section-inner relative z-[1]">
         <SectionHeader animated={false} label={sectionsByMode.process.label} title={section.title} />
 
         <div className="process-rail section-stack">
@@ -109,12 +109,12 @@ export function Process() {
           ))}
         </div>
 
-        <div className="mt-8">
+        <div className="section-stack">
           <Magnetic>
             <ScrollLink
-              href="/#pilot"
+              href="/contact"
               data-cursor="cta"
-              className="btn-caps inline-block rounded-full bg-accent px-7 py-3 text-sm font-semibold text-on-accent transition hover:bg-accent-light hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--theme-accent-light)_25%,transparent)]"
+              className="btn-caps btn-caps--primary inline-block rounded-full px-7 py-3"
             >
               {section.cta}
             </ScrollLink>

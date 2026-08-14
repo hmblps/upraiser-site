@@ -40,7 +40,7 @@ export const solutionsChannelDetailsByMode = {
         "Cross-format buying across display, video, in-app, and social retargeting",
         "Pre-bid filtration before the impression clears the cap",
         "Unit economics held flat when budget scales",
-        "MMP reconciliation completed seamlessly before the flight closes",
+        "MMP reconciliation completed before the flight closes",
         "Creative and bid loops tied directly to revenue KPIs Your board already uses",
       ],
     },
@@ -82,7 +82,7 @@ export const solutionsChannelDetailsByMode = {
     },
     retargeting: {
       description:
-        "Retargeting brings back users who already showed intent. We leverage MMP event pools of trial starts, cart views, and deposit abandoners. Our team weights bids by LTV and likelihood to convert. Every win-back flight traces to a specific device-level event Your team can export when the month closes.",
+        "Retargeting brings back users who already showed intent. We bid from MMP event pools of trial starts, cart views, and deposit abandoners. Our team weights bids by LTV and likelihood to convert. Every win-back flight traces to a specific device-level event Your team can export when the month closes.",
       points: [
         "MMP event pools built from genuine trial, cart, and deposit abandoners",
         "LTV-weighted bids focused on real intent cohorts",
@@ -111,7 +111,7 @@ export const solutionsChannelDetailsByMode = {
         "MMP-tracked creator and UGC placements",
         "Event KPIs driven by installs, first_deposit_complete, and subscription_started",
         "Meta, TikTok, and creator bundles unified under one schema",
-        "Creator spend reconciled seamlessly with programmatic and social",
+        "Creator spend reconciled with programmatic and social",
         "Compliance-ready briefs tailored for regulated verticals",
         "Trusted voices delivering outcomes finance can audit",
       ],
@@ -192,7 +192,7 @@ export const solutionsChannelDetailsByMode = {
     },
     retargeting: {
       description:
-        "Retargeting leverages precise MMP event pools. We deliver device-level proof for every win-back campaign. Our operators ensure lifecycle spend closes clean and completely verified.",
+        "Retargeting uses precise MMP event pools. We deliver device-level proof for every win-back campaign. Our operators ensure lifecycle spend closes clean and completely verified.",
       points: [
         "MMP event pools built from highly specific user actions",
         "Behavior-based reactivation bids",

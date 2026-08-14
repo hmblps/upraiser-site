@@ -16,7 +16,7 @@ function PromiseClean() {
 
   return (
     <section id="promise" className="section-band section-band--quiet">
-      <ModeContentTransition mode={mode} className="mx-auto max-w-7xl px-6 lg:px-8">
+      <ModeContentTransition mode={mode} className="section-inner">
         <SectionHeader label={content.label} title={content.title} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-5">
           <p className="section-lead">{content.line1}</p>

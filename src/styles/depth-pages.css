@@ -746,6 +746,7 @@ html.viewport-route body {
   flex-direction: column;
   height: 100dvh;
   max-height: 100dvh;
+  padding-top: var(--site-header-height);
   overflow: hidden;
 }
 

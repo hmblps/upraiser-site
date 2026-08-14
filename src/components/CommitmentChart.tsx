@@ -74,7 +74,17 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
 
         {/* СЛОЙ 2: Убран (была заливка, удалена для визуального баланса с графиком SCALE) */}
 
-        {/* СЛОЙ 3: Главная гладкая магистраль (Stroke) */}
+        {/* СЛОЙ 3.1: Базовая линия (серый трек) */}
+        <path
+          d={pathD}
+          fill="none"
+          stroke="var(--theme-border)"
+          strokeWidth="4"
+          strokeLinecap="round"
+          className="opacity-40"
+        />
+
+        {/* СЛОЙ 3.2: Главная гладкая магистраль (Stroke) */}
         <motion.path
           d={pathD}
           fill="none"
@@ -88,20 +98,38 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
           }}
         />
 
-        {/* СЛОЙ 4: Сканирующая/активная точка на графике */}
-        <motion.g
-          style={{ opacity: useTransform(drawProgress, [0.4, 0.6], [0, 1]) }}
-        >
-          <circle cx="620" cy="170" r="8" fill="var(--theme-bg)" stroke="var(--theme-accent)" strokeWidth="3" className="shadow-lg" />
-          <circle cx="620" cy="170" r="16" fill="none" stroke="var(--theme-accent)" strokeWidth="1" opacity="0.6">
-            <animate attributeName="r" values="8;24" dur="2s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.8;0" dur="2s" repeatCount="indefinite" />
-          </circle>
-        </motion.g>
       </svg>
 
       {/* СЛОЙ 5: Плавающие метрики (HTML поверх SVG для идеальной четкости текста) */}
       <div className="absolute inset-0 pointer-events-none">
+        {/* Сканирующая/активная точка на графике (HTML для сохранения круглых пропорций) */}
+        <motion.div
+          className="absolute flex items-center justify-center"
+          style={{ 
+            left: `${(800 / 1200) * 100}%`,
+            top: `${(180 / 400) * 100}%`,
+            transform: 'translate(-50%, -50%)',
+            opacity: useTransform(drawProgress, [0.4, 0.6], [0, 1]),
+            width: '60px',
+            height: '60px'
+          }}
+        >
+          {/* Пульсирующий круг */}
+          <div 
+            className="absolute rounded-full border border-theme-accent opacity-60"
+            style={{
+              width: '100%',
+              height: '100%',
+              animation: 'chart-pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite'
+            }}
+          />
+          {/* Центральная точка */}
+          <div 
+            className="absolute rounded-full border-[3px] border-theme-accent bg-theme-bg shadow-lg"
+            style={{ width: '16px', height: '16px' }}
+          />
+        </motion.div>
+
         {METRICS.map((metric, index) => {
           // Calculate when this specific metric should appear based on its X position
           const appearanceThreshold = (metric.x / 1200) * 0.9;

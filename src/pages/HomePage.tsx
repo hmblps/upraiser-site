@@ -1,20 +1,27 @@
 import { lazy, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import { Hero } from "../components/Hero";
 import { LazySection } from "../layouts/SiteLayout";
 import { SectionNav } from "../components/SectionNav";
 import { HomePilotCta } from "../components/HomePilotCta";
 import { PartnersCarousel } from "../components/PartnersCarousel";
+import { useRoutesLane } from "../hooks/useRoutesLane";
 
 const Audience = lazy(() => import("../components/Audience").then((m) => ({ default: m.Audience })));
 const Process = lazy(() => import("../components/Process").then((m) => ({ default: m.Process })));
-const HomeRoutesSection = lazy(() =>
-  import("../components/home/HomeRoutesSection").then((m) => ({ default: m.HomeRoutesSection })),
-);
 const CaseStudies = lazy(() =>
   import("../components/CaseStudies").then((m) => ({ default: m.CaseStudies })),
 );
 const PromiseSection = lazy(() =>
   import("../components/PromiseSection").then((m) => ({ default: m.PromiseSection })),
+);
+
+// New Routes implementation directly on Home
+const ProgrammaticScrollSection = lazy(() => 
+  import("../components/solutions/ProgrammaticScrollSection").then((m) => ({ default: m.ProgrammaticScrollSection }))
+);
+const RoutesLaneSwitcher = lazy(() => 
+  import("../components/RoutesLaneSwitcher").then((m) => ({ default: m.RoutesLaneSwitcher }))
 );
 
 function usePreloadHome() {
@@ -24,7 +31,8 @@ function usePreloadHome() {
     };
     const runMid = () => {
       void import("../components/Process");
-      void import("../components/home/HomeRoutesSection");
+      void import("../components/solutions/ProgrammaticScrollSection");
+      void import("../components/RoutesLaneSwitcher");
       void import("../components/CaseStudies");
     };
     const runFar = () => {
@@ -51,11 +59,9 @@ function usePreloadHome() {
   }, []);
 }
 
-/**
- * Home pitch — hero fly → killer folds → Routes sticky phone → full Peaks deck → Promise → Pilot.
- */
 export function HomePage() {
   usePreloadHome();
+  const { mode, lane, setLane, formats, headerLabel, headerTitle, headerDescription } = useRoutesLane();
 
   return (
     <>
@@ -75,12 +81,34 @@ export function HomePage() {
         <LazySection minHeight="52vh">
           <Process />
         </LazySection>
+        
+        {/* Replaced HomeRoutesSection with full Routes programmatic scroll */}
         <LazySection minHeight="100dvh">
-          <HomeRoutesSection />
+          <ProgrammaticScrollSection
+            key={lane}
+            mode={mode}
+            laneSwitcher={
+              <RoutesLaneSwitcher
+                lane={lane}
+                onLaneChange={setLane}
+                layoutId="home-solutions-lane-pill"
+              />
+            }
+            formats={formats}
+            headerLabel={headerLabel}
+            headerTitle={headerTitle}
+            headerDescription={headerDescription}
+          />
         </LazySection>
+
+        {/* Full CaseStudies implementation on Home without variant="home" */}
         <LazySection minHeight="56vh">
-          <CaseStudies variant="home" />
+          <CaseStudies />
         </LazySection>
+        
+        {/* Render Modals like Case Details over Home Page */}
+        <Outlet />
+
         <LazySection minHeight="70vh">
           <PromiseSection />
         </LazySection>

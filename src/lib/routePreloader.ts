@@ -1,25 +1,15 @@
 export const routePreloaders: Record<string, () => void> = {
-  "/solutions": () => {
-    void import("../pages/SolutionsPage");
+  "/": () => {
     void import("../components/solutions/Phone3D").then((m) => {
       m.preloadPhone3DAssets("growth");
       m.preloadPhone3DAssets("infrastructure");
     });
   },
-  "/company": () => {
-    void import("../pages/CompanyPage");
-  },
-  "/clients": () => {
-    void import("../pages/ClientsPage");
-  },
-  "/cases": () => {
-    void import("../pages/CasesPage");
+  "/expedition": () => {
+    void import("../pages/ExpeditionPage");
   },
   "/craft": () => {
     void import("../pages/CraftPage");
-  },
-  "/studio": () => {
-    void import("../pages/StudioPage");
   },
 };
 
@@ -30,15 +20,15 @@ export function preloadRoute(href: string) {
   }
 }
 
-// Automatically warm up solutions & company during browser idle time
+// Automatically warm up assets during browser idle time
 if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
   window.requestIdleCallback(() => {
-    preloadRoute("/solutions");
-    preloadRoute("/company");
+    preloadRoute("/");
+    preloadRoute("/expedition");
   });
 } else if (typeof window !== "undefined") {
   window.setTimeout(() => {
-    preloadRoute("/solutions");
-    preloadRoute("/company");
+    preloadRoute("/");
+    preloadRoute("/expedition");
   }, 1000);
 }

@@ -20,11 +20,11 @@ export function Company() {
     <div className="depth-page depth-page--company viewport-page">
       <div className="viewport-page__shell section-inner flex min-h-0 flex-col gap-10 pt-8 pb-12 lg:gap-14 lg:pt-14">
         <header className="viewport-page__intro max-w-3xl shrink-0">
-          <p className="section-label text-accent">{aboutExpedition.hero.label}</p>
-          <h1 className="section-title mt-2 text-4xl tracking-tight leading-[1.1] lg:mt-3 lg:text-5xl">
+          <p className="section-label">{aboutExpedition.hero.label}</p>
+          <h1 className="section-title section-title--compact mt-2 lg:mt-3">
             {aboutExpedition.hero.title}
           </h1>
-          <p className="section-description mt-4 max-w-2xl text-lg text-muted-light lg:mt-5">
+          <p className="section-description mt-4 max-w-2xl lg:mt-5">
             {aboutExpedition.hero.text}
           </p>
         </header>
@@ -32,8 +32,8 @@ export function Company() {
         <AscentCamps camps={aboutExpedition.camps} />
 
         <section className="ascent-faq mx-auto w-full max-w-3xl" aria-labelledby="ascent-faq-heading">
-          <p className="font-mono text-xs font-semibold tracking-wider text-accent">Trail notes</p>
-          <h2 id="ascent-faq-heading" className="mt-2 font-sans text-xl font-bold text-fg sm:text-2xl">
+          <p className="section-label">Trail notes</p>
+          <h2 id="ascent-faq-heading" className="section-heading section-heading--sm">
             Before You climb
           </h2>
           <ul className="mt-6 divide-y divide-border/30 border-y border-border/30">
@@ -48,7 +48,7 @@ export function Company() {
                     className="flex min-h-[44px] w-full select-none items-start justify-between gap-4 py-5 text-left touch-manipulation"
                     onClick={() => setOpenNumber(isOpen ? null : item.protocolNumber)}
                   >
-                    <span className="flex-1 font-sans text-sm font-bold leading-snug text-fg sm:text-base">
+                    <span className="flex-1 copy font-medium text-fg">
                       {item.question}
                     </span>
                     <motion.span
@@ -70,7 +70,7 @@ export function Company() {
                         transition={reduced ? { duration: 0 } : SPRING_SOFT}
                         className="overflow-hidden"
                       >
-                        <p className="pb-5 font-sans text-sm leading-relaxed text-muted-light sm:text-base">
+                        <p className="copy pb-5">
                           {formatEventNames(item.answer)}
                         </p>
                       </motion.div>
@@ -83,14 +83,14 @@ export function Company() {
         </section>
 
         <section className="mx-auto w-full max-w-3xl border-t border-border/40 pt-8 pb-4">
-          <h2 className="font-sans text-xl font-bold text-fg sm:text-2xl">{aboutExpedition.cta.title}</h2>
-          <p className="mt-2 max-w-xl font-sans text-sm text-muted-light sm:text-base">
+          <h2 className="section-heading section-heading--sm">{aboutExpedition.cta.title}</h2>
+          <p className="copy mt-2 max-w-xl">
             {aboutExpedition.cta.text}
           </p>
           <ScrollLink
-            href="/#pilot"
+            href="/contact"
             data-cursor="cta"
-            className="mt-5 inline-flex min-h-[44px] select-none items-center justify-center rounded bg-accent px-6 py-3 font-sans text-sm font-bold text-accent-fg touch-manipulation transition-colors hover:bg-accent/90 sm:text-base"
+            className="btn-caps btn-caps--primary mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full px-7 py-3 touch-manipulation"
           >
             {aboutExpedition.cta.button}
           </ScrollLink>

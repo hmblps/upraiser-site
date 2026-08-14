@@ -18,9 +18,9 @@ export function Craft() {
       <div className="section-inner flex flex-col pt-8 lg:pt-16">
         <header className="viewport-page__intro shrink-0 max-w-2xl">
           <p className="section-label text-accent">{CRAFT_CONTENT.hero.badge}</p>
-          <h1 className="section-title mt-2 lg:mt-4 text-4xl lg:text-5xl tracking-tight leading-[1.1]">{CRAFT_CONTENT.hero.h1}</h1>
+          <h1 className="section-title section-title--compact mt-2 lg:mt-4">{CRAFT_CONTENT.hero.h1}</h1>
           <ModeContentTransition mode={mode}>
-            <p className="section-description mt-4 lg:mt-6 text-lg text-muted-light">{lead}</p>
+            <p className="section-description mt-4 lg:mt-6">{lead}</p>
           </ModeContentTransition>
         </header>
 
@@ -30,7 +30,7 @@ export function Craft() {
           <section className="flex flex-col gap-6">
             <header className="max-w-2xl">
               <p className="stat-label text-accent">{CRAFT_CONTENT.creativeLab.metaphor}</p>
-              <p className="panel-lede mt-3 text-2xl lg:text-3xl leading-tight">
+              <p className="section-heading mt-3">
                 {CRAFT_CONTENT.creativeLab.byMode[mode].lead}
               </p>
             </header>
@@ -52,7 +52,7 @@ export function Craft() {
           <section className="flex flex-col gap-6 pt-16 border-t border-border/10">
             <header className="max-w-2xl">
               <p className="stat-label text-accent">{CRAFT_CONTENT.proprietary.metaphor}</p>
-              <p className="panel-lede mt-3 text-2xl lg:text-3xl leading-tight">
+              <p className="section-heading mt-3">
                 {CRAFT_CONTENT.proprietary.byMode[mode].lead}
               </p>
             </header>
@@ -64,7 +64,7 @@ export function Craft() {
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div className="depth-feature-row__body">
-                    <p className="depth-feature-row__title text-xl font-medium tracking-tight mb-2">{point.title}</p>
+                    <p className="depth-feature-row__title mb-2">{point.title}</p>
                     <p className="depth-feature-row__text text-muted max-w-3xl leading-relaxed">{point.text}</p>
                   </div>
                 </li>

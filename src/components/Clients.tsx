@@ -3,7 +3,7 @@ import { clientBrands } from "../data/clients";
 import { ScrollLink } from "./ScrollLink";
 
 /**
- * Clients — Saatchi-style proof board in a seamless vertical flow.
+ * Clients — Saatchi-style proof board in a continuous vertical flow.
  */
 export function Clients() {
   return (
@@ -11,8 +11,8 @@ export function Clients() {
       <div className="section-inner flex flex-col pt-8 lg:pt-16">
         <header className="viewport-page__intro shrink-0 max-w-2xl">
           <p className="section-label text-accent">{CLIENTS_CONTENT.hero.badge}</p>
-          <h1 className="section-title mt-2 lg:mt-4 text-4xl lg:text-5xl tracking-tight leading-[1.1]">{CLIENTS_CONTENT.hero.h1}</h1>
-          <p className="section-description mt-4 lg:mt-6 text-lg text-muted-light">{CLIENTS_CONTENT.lead}</p>
+          <h1 className="section-title section-title--compact mt-2 lg:mt-4">{CLIENTS_CONTENT.hero.h1}</h1>
+          <p className="section-description mt-4 lg:mt-6">{CLIENTS_CONTENT.lead}</p>
         </header>
 
         <div className="mt-16 lg:mt-24">
@@ -32,7 +32,7 @@ export function Clients() {
                     decoding="async"
                   />
                 ) : (
-                  <span className="text-center text-caption font-bold tracking-tight text-fg/80">
+                  <span className="text-center text-caption text-fg/80">
                     {brand.name}
                   </span>
                 )}

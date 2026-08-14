@@ -430,6 +430,44 @@ header nav .nav-link:focus-visible::after {
   letter-spacing: var(--tracking-title);
 }
 
+/** Sentence-case band headings (Pilot bridge, Expedition FAQ, close CTAs) */
+.section-heading {
+  margin-top: var(--stack-snug);
+  font-family: var(--font-sans);
+  font-size: clamp(1.35rem, 2.4vw, 1.875rem);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: -0.02em;
+  color: var(--theme-fg);
+}
+
+.section-heading--sm {
+  font-size: clamp(1.125rem, 1.8vw, 1.5rem);
+}
+
+/** Standalone page titles (404, empty states) — sentence case, display scale */
+.section-heading--lg {
+  margin-top: var(--stack-snug);
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--theme-fg);
+}
+
+.footer-link {
+  font-size: var(--text-caption);
+  color: var(--theme-muted-light);
+  transition: color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footer-link:hover {
+    color: var(--theme-fg);
+  }
+}
+
 .footer-heading {
   font-size: var(--text-kicker);
   font-weight: 600;

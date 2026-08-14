@@ -91,13 +91,13 @@ export function AscentCamps({ camps, className }: AscentCampsProps) {
                 transition={reduced ? { duration: 0 } : { ...SPRING_SOFT, delay: index * 0.08 }}
               >
                 <article className="ascent-camps__card">
-                  <p className="font-mono text-[0.7rem] font-semibold tracking-[0.14em] text-accent uppercase">
+                  <p className="text-kicker font-mono text-accent uppercase">
                     {camp.altitude}
                   </p>
-                  <h3 className="mt-2 font-sans text-lg font-bold leading-snug text-fg sm:text-xl">
+                  <h3 className="section-heading--sm mt-2">
                     {camp.title}
                   </h3>
-                  <p className="mt-2 font-sans text-sm leading-relaxed text-muted-light sm:text-[0.95rem]">
+                  <p className="copy mt-2">
                     {camp.text}
                   </p>
                 </article>

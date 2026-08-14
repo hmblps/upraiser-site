@@ -35,8 +35,8 @@ export function HomePilotCta() {
             <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
               <div className="max-w-xl">
                 <p className="section-label">{bridge.eyebrow}</p>
-                <h2 className="mt-2 text-2xl font-bold tracking-tight text-fg sm:text-3xl">{bridge.lead}</h2>
-                <p className="copy mt-3 text-muted">{bridge.preview}</p>
+                <h2 className="section-heading">{bridge.lead}</h2>
+                <p className="copy mt-3">{bridge.preview}</p>
               </div>
               <Magnetic>
                 <motion.button
@@ -46,7 +46,7 @@ export function HomePilotCta() {
                   whileHover={reduced ? undefined : { scale: 1.03 }}
                   whileTap={reduced ? undefined : { scale: 0.97 }}
                   transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                  className="btn-caps inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
+                  className="btn-caps btn-caps--primary inline-flex shrink-0 items-center gap-2 rounded-full px-7 py-3.5"
                 >
                   {bridge.cta}
                   <span aria-hidden>→</span>
@@ -66,10 +66,8 @@ export function HomePilotCta() {
           <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
             <div className="max-w-xl">
               <p className="section-label">Next step</p>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-fg sm:text-3xl">
-                Ready to be Upraised?
-              </h2>
-              <p className="copy mt-3 text-muted">
+              <h2 className="section-heading">Ready to be Upraised?</h2>
+              <p className="copy mt-3">
                 Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.
               </p>
             </div>
@@ -77,7 +75,7 @@ export function HomePilotCta() {
               <ScrollLink
                 href={primaryCta.href}
                 data-cursor="cta"
-                className="btn-caps inline-block shrink-0 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
+                className="btn-caps btn-caps--primary inline-block shrink-0 rounded-full px-7 py-3.5"
               >
                 {primaryCta.label}
               </ScrollLink>

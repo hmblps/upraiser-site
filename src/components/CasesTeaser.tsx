@@ -49,7 +49,7 @@ export function CasesTeaser() {
             <Link
               to="/cases"
               data-cursor="link"
-              className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5 text-sm font-semibold hover:border-accent/35"
+              className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5"
             >
               View all case studies
             </Link>

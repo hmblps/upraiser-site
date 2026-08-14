@@ -239,11 +239,11 @@ export const EXPERTISE_CONTENT = {
       contactIntent: "oem",
       deliverables: [
         "Lenovo factory ROM and Google PAI executed via official agency lanes",
-        "SDK trail tracked seamlessly from device to postback",
+        "SDK trail tracked from device to postback",
         "Pre-bid fraud screen deployed on every single OEM impression",
       ],
       process: [
-        { title: "Plan", body: "Leverage Lenovo ROM and Google PAI via official lanes." },
+        { title: "Plan", body: "Route Lenovo ROM and Google PAI via official lanes." },
         { title: "Measure", body: "Route SDK postbacks directly into Your MMP." },
         { title: "Scale", body: "Add GEOs confidently where device logs stay perfectly clean." },
       ],
@@ -332,7 +332,7 @@ export const COMPANY_CONTENT = {
       mark: "2017",
       year: 2017,
       title: "We mapped the industry",
-      body: "Since 2017, UPRAISER merges deep operator roots with strict UK entity governance to build a transparent buying ecosystem.",
+      body: "Since 2017, UPRAISER merges deep operator roots with strict UK entity governance to build a transparent buying desk.",
     },
     {
       mark: "2019",
@@ -433,7 +433,7 @@ export const GEAR_CONTENT = {
   },
   byMode: {
     growth: {
-      lead: "Reliability at altitude requires equipment that scales seamlessly with You. We build the exact proprietary hardware Your ascent depends on.",
+      lead: "Reliability at altitude requires equipment that scales with You. We build the exact proprietary hardware Your ascent depends on.",
     },
     infrastructure: {
       lead: "Reliability at altitude requires equipment that never fails. We build the precise data hardware Your compliance audit relies on.",
@@ -571,7 +571,7 @@ export const CRAFT_CONTENT = {
       },
       {
         title: "MMP parity",
-        text: "Device logs and the media bill agree seamlessly before month-end producing one file Ad Ops and finance both pull.",
+        text: "Device logs and the media bill match before month-end — one file Ad Ops and finance both pull.",
       },
     ],
   },

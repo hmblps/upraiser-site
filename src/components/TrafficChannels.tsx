@@ -246,10 +246,10 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                   >
                     <div>
                       <p className="stat-label text-accent">{channel.tagline}</p>
-                      <h3 className="card-title mt-1.5 text-xl font-bold group-hover:text-accent transition-colors">{channel.title}</h3>
+                      <h3 className="card-title mt-1.5 group-hover:text-accent transition-colors">{channel.title}</h3>
                       <div className="grid grid-rows-[1fr] lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                         <div className="overflow-hidden">
-                          <p className="copy mt-3 text-sm leading-relaxed text-muted-light lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                          <p className="copy mt-3 leading-relaxed text-muted-light lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-100">
                             {formatEventNames(
                               "teaser" in channel && typeof channel.teaser === "string"
                                 ? channel.teaser
@@ -261,8 +261,8 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                     </div>
                     <div className="mt-6 pt-2">
                       <div className="border-t border-border/70 pt-3">
-                        <p className="stat-label text-xs text-muted">Best for</p>
-                        <p className="copy mt-0.5 text-xs text-fg">{channel.bestFor}</p>
+                        <p className="stat-label text-muted">Best for</p>
+                        <p className="text-caption mt-0.5 text-fg">{channel.bestFor}</p>
                       </div>
                       <div className="grid grid-rows-[1fr] lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                         <div className="overflow-hidden">
@@ -273,7 +273,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                               e.stopPropagation();
                               openOnSolutions(channel.id);
                             }}
-                            className="btn-caps btn-secondary mt-4 inline-flex items-center rounded-full px-4 py-2 text-xs font-semibold hover:border-accent/35 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-150"
+                            className="btn-caps btn-secondary mt-4 inline-flex items-center rounded-full px-4 py-2 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-150"
                           >
                             Explore {channel.title} →
                           </button>
@@ -289,12 +289,12 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
               >
                 <div>
                   <p className="stat-label text-accent">THE ROUTES</p>
-                  <h3 className="card-title mt-1.5 text-xl font-bold group-hover:text-accent transition-colors">
+                  <h3 className="card-title mt-1.5 group-hover:text-accent transition-colors">
                     Explore All 9 Buying Lanes
                   </h3>
                   <div className="grid grid-rows-[1fr] lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                     <div className="overflow-hidden">
-                      <p className="copy mt-3 text-sm leading-relaxed text-muted-light lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                      <p className="copy mt-3 leading-relaxed text-muted-light lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-100">
                         From Connected TV and Influencer networks to Native publisher whitelists. Discover the full inventory spec and tracking models.
                       </p>
                     </div>
@@ -302,7 +302,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                 </div>
                 <div className="mt-6 pt-2">
                   <div className="border-t border-border/70 pt-3 flex items-center justify-between">
-                    <span className="text-xs font-semibold text-fg">View All Solutions</span>
+                    <span className="link-caps text-fg">View All Solutions</span>
                     <span className="text-accent group-hover:translate-x-1 transition-transform">→</span>
                   </div>
                 </div>
@@ -375,7 +375,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                           className="channel-inventory-points mt-5 space-y-2.5"
                         >
                           {points.map((point) => (
-                            <li key={point} className="channel-inventory-points__item copy text-sm text-muted">
+                            <li key={point} className="channel-inventory-points__item copy">
                               {formatEventNames(point)}
                             </li>
                           ))}
@@ -394,7 +394,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                             type="button"
                             data-cursor="link"
                             onClick={() => openOnSolutions(active.id)}
-                            className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold hover:border-accent/35"
+                            className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5"
                           >
                             Open {active.title} on Solutions
                             <span aria-hidden className="ml-1.5">

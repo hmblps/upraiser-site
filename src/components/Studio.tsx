@@ -16,9 +16,9 @@ export function Studio() {
       <div className="section-inner flex flex-col pt-8 lg:pt-16">
         <header className="viewport-page__intro shrink-0 max-w-2xl">
           <p className="section-label text-accent">{GEAR_CONTENT.hero.badge}</p>
-          <h1 className="section-title mt-2 lg:mt-4 text-4xl lg:text-5xl tracking-tight leading-[1.1]">{GEAR_CONTENT.hero.h1}</h1>
+          <h1 className="section-title section-title--compact mt-2 lg:mt-4">{GEAR_CONTENT.hero.h1}</h1>
           <ModeContentTransition mode={mode}>
-            <p className="section-description mt-4 lg:mt-6 text-lg text-muted-light">{lead}</p>
+            <p className="section-description mt-4 lg:mt-6">{lead}</p>
           </ModeContentTransition>
         </header>
 
@@ -67,14 +67,14 @@ export function Studio() {
                       <span className="stat-label text-accent">{piece.mark}</span>
                       <span className="text-micro text-muted uppercase tracking-widest">{piece.kicker}</span>
                     </div>
-                    <h2 className="card-title mt-2 text-2xl lg:text-3xl">{piece.title}</h2>
-                    <p className="copy mt-3 max-w-2xl text-base lg:text-lg">{copy.body}</p>
+                    <h2 className="card-title mt-2">{piece.title}</h2>
+                    <p className="copy mt-3 max-w-2xl">{copy.body}</p>
 
                     <div className="gear-spec__sheet mt-6 bg-bg-card/40 border border-border/20 rounded-lg p-5">
                       <p className="text-micro text-accent mb-2">
                         {mode === "growth" ? "Scale spec" : "Audit spec"}
                       </p>
-                      <p className="spec-mono font-mono text-sm leading-relaxed">{copy.spec}</p>
+                      <p className="spec-mono leading-relaxed">{copy.spec}</p>
                     </div>
                   </div>
                 </article>

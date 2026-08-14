@@ -14,7 +14,7 @@ function LegalDocument({ title, updated, paragraphs }: LegalPageProps) {
         <div className="section-inner section-inner--narrow">
           <p className="section-label">Legal</p>
           <h1 className="section-title mt-3 normal-case tracking-tight">{title}</h1>
-          <p className="mt-3 text-sm text-muted">Last updated {updated}</p>
+          <p className="text-caption mt-3 text-muted">Last updated {updated}</p>
           <div className="mt-10 space-y-5">
             {paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 48)} className="copy text-muted">
@@ -27,7 +27,7 @@ function LegalDocument({ title, updated, paragraphs }: LegalPageProps) {
               <Link
                 to="/contact"
                 data-cursor="cta"
-                className="btn-caps inline-block rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-on-accent hover:bg-accent-light"
+                className="btn-caps btn-caps--primary inline-block rounded-full px-7 py-3.5"
               >
                 Contact
               </Link>

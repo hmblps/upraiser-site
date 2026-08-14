@@ -34,7 +34,7 @@ export function TerminalBlock() {
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
         </div>
-        <div className="ml-4 text-xs font-semibold text-[#8B949E]">bash — init_protocol.sh</div>
+        <div className="ml-4 text-kicker normal-case tracking-normal text-[#8B949E]">bash — init_protocol.sh</div>
       </div>
       <div className="p-4 sm:p-6 space-y-2">
         <div className="flex">

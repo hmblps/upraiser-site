@@ -5,7 +5,7 @@ import { useBrandAuroraNav } from "../hooks/useBrandAuroraNav";
 
 const Company = lazy(() => import("../components/Company").then((m) => ({ default: m.Company })));
 
-export function CompanyPage() {
+export function ExpeditionPage() {
   useBrandAuroraNav();
 
   return (
