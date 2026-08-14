@@ -1,5 +1,5 @@
-# Moved → [docs/AI-FULL.md](./docs/AI-FULL.md) · [docs/HANDOFF.md](./docs/HANDOFF.md)
+# Moved → [docs/UPRAISER-MASTER.md](./docs/UPRAISER-MASTER.md)
 
-**Primary AI context:** `docs/AI-FULL.md`  
-**Engineer handoff:** `docs/HANDOFF.md`  
-Solutions glass: `docs/SOLUTIONS.md`. Edit those files only.
+**Единый документ:** `docs/UPRAISER-MASTER.md` — IA, stack, hero, Routes, Cases, deploy, brand, checklist.
+
+Edit only that file.

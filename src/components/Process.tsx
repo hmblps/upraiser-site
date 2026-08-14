@@ -112,7 +112,7 @@ export function Process() {
         <div className="mt-8">
           <Magnetic>
             <ScrollLink
-              href="#contact"
+              href="/#pilot"
               data-cursor="cta"
               className="btn-caps inline-block rounded-full bg-accent px-7 py-3 text-sm font-semibold text-on-accent transition hover:bg-accent-light hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--theme-accent-light)_25%,transparent)]"
             >

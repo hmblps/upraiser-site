@@ -1,10 +1,9 @@
 import { useEffect, useRef } from "react";
 import { caseStudies } from "../data/cases";
-import { casesPage, primaryCta, sectionsByMode } from "../data/liveContent";
+import { casesPage, sectionsByMode } from "../data/liveContent";
 import { useInfiniteCaseCarousel, CASE_CAROUSEL_COPIES } from "../hooks/useInfiniteCaseCarousel";
 import { useHorizontalPointerScroll } from "../hooks/useHorizontalPointerScroll";
 import { CasePreviewCard } from "./CasePreviewCard";
-import { ScrollLink } from "./ScrollLink";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { SectionHeader, useMode } from "./SectionHeader";
 
@@ -13,13 +12,24 @@ type CaseStudiesProps = {
   variant?: "home" | "page";
 };
 
-function CaseCarouselDeck({ className = "" }: { className?: string }) {
+function CaseCarouselDeck({
+  className = "",
+  mapVertical = "viewport-locked",
+}: {
+  className?: string;
+  /** Home embed: false so page scroll continues; viewport page uses default. */
+  mapVertical?: boolean | "viewport-locked";
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { activeIndex, scrollByCard, scrollToIndex } = useInfiniteCaseCarousel(scrollRef, {
     itemCount: caseStudies.length,
   });
-  useHorizontalPointerScroll(scrollRef, { mapVertical: true });
+  useHorizontalPointerScroll(scrollRef, {
+    mapVertical,
+    // On home embed, never hijack wheel — page scroll must pass through.
+    wheel: mapVertical !== false,
+  });
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -52,8 +62,8 @@ function CaseCarouselDeck({ className = "" }: { className?: string }) {
           role="region"
           aria-roledescription="carousel"
           aria-label="Case studies"
-          data-lenis-prevent-touch
-          className="cases-carousel cases-carousel-loop cases-carousel-picker flex h-full min-h-[min(52vh,28rem)] cursor-grab items-stretch gap-4 overflow-x-auto overflow-y-hidden py-0.5 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          {...(mapVertical !== false ? { "data-lenis-prevent-touch": true } : {})}
+          className={`cases-carousel cases-carousel-loop cases-carousel-picker flex h-full min-h-[min(52vh,28rem)] cursor-grab items-stretch gap-4 overflow-x-auto overflow-y-hidden py-0.5 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden${mapVertical === false ? " cases-carousel--page-embed" : ""}`}
         >
           {loopItems.map(({ item, copy, index }) => (
             <CasePreviewCard
@@ -69,7 +79,7 @@ function CaseCarouselDeck({ className = "" }: { className?: string }) {
 
       <div className="mt-4 flex shrink-0 items-center justify-between gap-3">
         <p className="scroll-hint hidden text-xs text-muted opacity-70 sm:block">Swipe or ← → · tap to open</p>
-        <div className="cases-chrome-nav flex items-center gap-1">
+        <div className="cases-chrome-nav ml-auto flex items-center gap-1">
           <button
             type="button"
             aria-label="Previous case"
@@ -96,13 +106,6 @@ function CaseCarouselDeck({ className = "" }: { className?: string }) {
             →
           </button>
         </div>
-        <ScrollLink
-          href={primaryCta.href}
-          data-cursor="cta"
-          className="btn-caps btn-caps--primary cases-chrome-pilot"
-        >
-          {primaryCta.label}
-        </ScrollLink>
       </div>
     </section>
   );
@@ -154,7 +157,7 @@ export function CaseStudies({ variant = "home" }: CaseStudiesProps) {
           <p className="font-mono text-caption font-bold tabular-nums text-muted">
             <span className="text-accent">{caseStudies.length}</span> cases
           </p>
-          <CaseCarouselDeck />
+          <CaseCarouselDeck mapVertical={false} />
         </div>
       </ModeContentTransition>
     </section>

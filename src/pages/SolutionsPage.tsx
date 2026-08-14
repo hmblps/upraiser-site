@@ -1,64 +1,29 @@
-import { useEffect, useState, type ReactNode } from "react";
 import { primaryCta } from "../data/liveContent";
 import { DepthCloseCta } from "../components/DepthCloseCta";
-import { useMode } from "../components/SectionHeader";
-import { SlideTabs } from "../components/SlideTabs";
 import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticScrollSection";
-import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/ProgrammaticFormats";
+import { RoutesLaneSwitcher } from "../components/RoutesLaneSwitcher";
 import { useBrandAuroraNav } from "../hooks/useBrandAuroraNav";
+import { useRoutesLane } from "../hooks/useRoutesLane";
 
-/**
- * Solutions — App Growth (scroll formats + phone) / OEM & CTV.
- * Lane switcher lives in the right column above format copy.
- */
+/** Legacy depth page — redirects to home `#routes`; kept for deep links. */
 export function SolutionsPage() {
-  const { mode } = useMode();
-  const [lane, setLane] = useState<"app-growth" | "oem-ctv">("app-growth");
   useBrandAuroraNav();
-
-  // Kick the active chassis download before the lazy Phone3D chunk finishes parsing.
-  useEffect(() => {
-    const href = mode === "growth" ? "/phones/deep-blue.glb" : "/phones/orange.glb";
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "fetch";
-    link.href = href;
-    link.crossOrigin = "anonymous";
-    document.head.appendChild(link);
-    return () => {
-      link.remove();
-    };
-  }, [mode]);
-
-  const laneTabs = [
-    { id: "app-growth", label: "App Growth" },
-    { id: "oem-ctv", label: "OEM & CTV" },
-  ];
-
-  const laneSwitcher: ReactNode = (
-    <SlideTabs
-      items={laneTabs}
-      activeId={lane}
-      onChange={(id) => setLane(id === "oem-ctv" ? "oem-ctv" : "app-growth")}
-      layoutId="solutions-lane-pill"
-      className="format-lane-tabs"
-    />
-  );
-
-  const headerTitle = lane === "app-growth" ? "Every Format. One Supply Path." : "OEM & CTV. Measured supply";
-  const headerDescription =
-    lane === "app-growth"
-      ? "Equipment for altitude. Formats on a direct supply path You can defend."
-      : "Pre-install, OEM storefronts, and CTV. Fixed lines that survive procurement.";
+  const { mode, lane, setLane, formats, headerLabel, headerTitle, headerDescription } = useRoutesLane();
 
   return (
     <main id="channels" className="site-main depth-page depth-page--solutions">
       <ProgrammaticScrollSection
         key={lane}
         mode={mode}
-        laneSwitcher={laneSwitcher}
-        formats={lane === "app-growth" ? AD_FORMATS : OEM_CTV_FORMATS}
-        headerLabel="The Routes"
+        laneSwitcher={
+          <RoutesLaneSwitcher
+            lane={lane}
+            onLaneChange={setLane}
+            layoutId="solutions-lane-pill"
+          />
+        }
+        formats={formats}
+        headerLabel={headerLabel}
         headerTitle={headerTitle}
         headerDescription={headerDescription}
       />

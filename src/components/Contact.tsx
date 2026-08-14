@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { contactPage, primaryCta } from "../data/liveContent";
+import { contactPage } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
 import { GradientTraceBorder } from "./GradientTraceBorder";
@@ -113,10 +113,10 @@ export function Contact() {
   };
 
   const ctaRow = [
-    { label: primaryCta.label, href: primaryCta.href },
+    { label: "The Basecamp", href: "/" },
     { label: "See Cases", href: "/#cases" },
     { label: "The Routes", href: "/#routes" },
-    { label: "Company", href: "/company" },
+    { label: "The Expedition", href: "/company" },
   ];
 
   return (

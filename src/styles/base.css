@@ -734,6 +734,13 @@ main [id] {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Home embed: don't lock gestures to horizontal — page scroll must win vertically. */
+.cases-carousel--page-embed {
+  touch-action: auto;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+}
+
 .cases-carousel-loop,
 .cases-carousel-loop.cases-carousel-picker {
   scroll-snap-type: none;

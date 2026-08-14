@@ -5,6 +5,7 @@ import { formatEventNames } from "../lib/formatEventNames";
 import { SPRING_SOFT } from "../lib/motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { AscentCamps } from "./company/AscentCamps";
+import { ScrollLink } from "./ScrollLink";
 
 /**
  * The Expedition (/company) — short intro + ascent camps visual + lean FAQ.
@@ -86,14 +87,13 @@ export function Company() {
           <p className="mt-2 max-w-xl font-sans text-sm text-muted-light sm:text-base">
             {aboutExpedition.cta.text}
           </p>
-          <button
-            type="button"
-            data-cursor="pointer"
+          <ScrollLink
+            href="/#pilot"
+            data-cursor="cta"
             className="mt-5 inline-flex min-h-[44px] select-none items-center justify-center rounded bg-accent px-6 py-3 font-sans text-sm font-bold text-accent-fg touch-manipulation transition-colors hover:bg-accent/90 sm:text-base"
-            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
           >
             {aboutExpedition.cta.button}
-          </button>
+          </ScrollLink>
         </section>
       </div>
     </div>

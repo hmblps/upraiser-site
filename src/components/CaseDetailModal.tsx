@@ -87,7 +87,7 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             </div>
 
             <div className="case-detail-modal__body">
-              <CaseDetailArticle item={item} showCta />
+              <CaseDetailArticle item={item} showCta={false} />
             </div>
           </motion.div>
         </motion.div>

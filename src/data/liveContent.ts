@@ -4,6 +4,7 @@ export type NavLink = {
   label: string;
   href: string;
   contactIntent?: string;
+  underConstruction?: boolean;
 };
 
 export const contactVerticalOptions = [
@@ -19,7 +20,8 @@ export const contactVerticalOptions = [
 ] as const;
 
 export const navLinks: NavLink[] = [
-  { label: "The Craft", href: "/craft" },
+  { label: "The Craft", href: "/craft", underConstruction: true },
+  { label: "The Basecamp", href: "/" },
   { label: "The Expedition", href: "/company" },
 ];
 
@@ -313,15 +315,15 @@ export const bridgeByMode = {
 
 export const footerLinks = {
   explore: [
+    { label: "The Basecamp", href: "/" },
     { label: "The Routes", href: "/#routes" },
     { label: "The Peaks", href: "/#cases" },
     { label: "The Craft", href: "/craft" },
-    { label: "Request Pilot", href: "/contact" },
+    { label: "The Expedition", href: "/company" },
   ],
   company: [
     { label: "The Expedition", href: "/company" },
     { label: "Careers inquiry", href: "/contact", contactIntent: "careers" },
-    { label: "Contact", href: "/contact" },
   ] satisfies NavLink[],
   social: [{ label: "LinkedIn", href: "https://www.linkedin.com/company/upraiser/" }],
   legal: [

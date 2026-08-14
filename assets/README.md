@@ -1,6 +1,5 @@
-# Moved → [docs/ASSETS.md](../docs/ASSETS.md)
+# Moved → [docs/UPRAISER-MASTER.md](../docs/UPRAISER-MASTER.md)
 
-Asset sync / verify documentation lives in **`docs/ASSETS.md`**.  
-Solutions media table is there too; glass pipeline detail: **`docs/SOLUTIONS.md`**.
+Asset sync / verify — **§16** в master doc. Edit only [`docs/UPRAISER-MASTER.md`](../docs/UPRAISER-MASTER.md).
 
-Canonical media still lives under this `assets/` folder (see the docs table for what syncs to `public/`).
+Canonical media still lives under this `assets/` folder.
