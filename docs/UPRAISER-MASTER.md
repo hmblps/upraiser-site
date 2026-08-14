@@ -1,11 +1,11 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Всё, что было разнесено по `AI-FULL`, `HANDOFF`, `SOLUTIONS`, `HERO`, `ASSETS`, `BRAND-ASCENT`, — собрано здесь.  
-> **Updated:** 14 August 2026 (evening)  
+> **Updated:** 14 August 2026 (night)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `**upraiser-site-v2`**  
-> **HEAD (committed):** `20a718d` — Basecamp scroll/nav lock, docs master  
-> **Next:** Expedition polish (trust gaps on `/company`)  
+> **HEAD (committed):** `2e04d94` — Contact page layout fixes, form placeholders, charts polishing  
+> **Next:** Polish remaining trust gaps and mobile typography  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts`
 
 ---
@@ -412,6 +412,16 @@ Fold layout (`charts.css`): chart anchored `left: 52–54%`, `width: 46vw` — c
 | Process CTA   | → `/#pilot`                                                       |
 | Docs          | `UPRAISER-MASTER.md` single-file SoT                              |
 
+### Contact page & Charts polish (Night — commit `2e04d94`)
+
+| Area          | Change                                                            |
+| ------------- | ----------------------------------------------------------------- |
+| Contact Form  | Removed duplicate `ViewportChrome` header; fixed layout overlap   |
+| Contact Form  | Removed placeholders (`Select Type...`) and set default valid opt |
+| Charts        | Fixed `CommitmentChart` pulse ring dot (border-radius: 50%)       |
+| Charts        | Increased `fold-area` padding-bottom to 35% to prevent clipping   |
+| Router        | Fixed ContactPage crash by removing invalid `useScrollToHash`     |
+| Viewport      | Added `padding-top: var(--site-header-height)` to avoid header    |
 
 ---
 
