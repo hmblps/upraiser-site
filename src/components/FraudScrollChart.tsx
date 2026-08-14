@@ -21,10 +21,10 @@ const segments = [
 const radii = [168, 138, 108, 78];
 
 const fraudGhostLayout = [
-  { left: "6%", originY: 79, drift: 16, duration: 7.2, delay: 0 },
-  { left: "23%", originY: 85, drift: -12, duration: 7.8, delay: 1.1 },
-  { left: "42%", originY: 75, drift: 14, duration: 8.1, delay: 2.0 },
-  { left: "58%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
+  { left: "48%", originY: 79, drift: 16, duration: 7.2, delay: 0 },
+  { left: "63%", originY: 85, drift: -12, duration: 7.8, delay: 1.1 },
+  { left: "78%", originY: 75, drift: 14, duration: 8.1, delay: 2.0 },
+  { left: "92%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
 ] as const;
 
 import { clamp } from "../lib/clamp";
@@ -111,7 +111,12 @@ function FraudArc({
         strokeWidth={STROKE}
         strokeLinecap="round"
         className="fraud-radial-chart__arc"
-        style={{ pathLength, color: segment.color }}
+        style={{ 
+          pathLength, 
+          color: segment.color,
+          filter: `drop-shadow(0px 8px 16px ${segment.color})`,
+          WebkitFilter: `drop-shadow(0px 8px 16px ${segment.color})`
+        }}
       />
     </g>
   );

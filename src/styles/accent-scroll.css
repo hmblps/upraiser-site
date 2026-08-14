@@ -44,7 +44,7 @@
 @media (min-width: 768px) {
   .accent-scroll-section--lite.scroll-scene--fold {
     /* Compact runway — fold completes in the first ~¼ of sticky travel */
-    min-height: 125dvh;
+    min-height: 100dvh;
   }
 
   .accent-scroll-section--lite.scroll-scene--fold-compact {
@@ -53,7 +53,11 @@
 }
 
 .accent-scroll-section--anchor.accent-scroll-section--lite {
-  min-height: auto;
+  min-height: 0 !important;
+}
+
+.accent-scroll-section--anchor.accent-scroll-section--dark {
+  min-height: 0 !important;
 }
 
 .accent-scroll-section--anchor .accent-scroll-sticky {
@@ -61,7 +65,7 @@
   top: auto;
   justify-content: flex-start;
   padding-block: 0;
-  min-height: calc(100dvh - var(--scroll-sticky-top));
+  min-height: clamp(320px, 45vh, 500px) !important;
 }
 
 .accent-scroll-section--anchor:not(.accent-scroll-section--fold-pair) .accent-scroll-copy--lite {
@@ -214,10 +218,9 @@
   }
 }
 
-/* Band padding on fold sections — share site rhythm tokens */
 main > section#audience.section-band--quiet,
 main > section#promise.section-band--quiet {
-  padding-block: var(--section-y-dense);
+  padding-top: var(--section-y-dense);
 }
 
 @media (prefers-reduced-motion: reduce) {

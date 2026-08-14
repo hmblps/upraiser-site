@@ -7,11 +7,11 @@ import { PartnersCarousel } from "../components/PartnersCarousel";
 
 const Audience = lazy(() => import("../components/Audience").then((m) => ({ default: m.Audience })));
 const Process = lazy(() => import("../components/Process").then((m) => ({ default: m.Process })));
-const TrafficChannels = lazy(() =>
-  import("../components/TrafficChannels").then((m) => ({ default: m.TrafficChannels })),
+const HomeRoutesSection = lazy(() =>
+  import("../components/home/HomeRoutesSection").then((m) => ({ default: m.HomeRoutesSection })),
 );
-const CasesTeaser = lazy(() =>
-  import("../components/CasesTeaser").then((m) => ({ default: m.CasesTeaser })),
+const CaseStudies = lazy(() =>
+  import("../components/CaseStudies").then((m) => ({ default: m.CaseStudies })),
 );
 const PromiseSection = lazy(() =>
   import("../components/PromiseSection").then((m) => ({ default: m.PromiseSection })),
@@ -24,8 +24,8 @@ function usePreloadHome() {
     };
     const runMid = () => {
       void import("../components/Process");
-      void import("../components/TrafficChannels");
-      void import("../components/CasesTeaser");
+      void import("../components/home/HomeRoutesSection");
+      void import("../components/CaseStudies");
     };
     const runFar = () => {
       void import("../components/PromiseSection");
@@ -52,7 +52,7 @@ function usePreloadHome() {
 }
 
 /**
- * Home pitch — hero fly (Lenovo docks flush at sticky bottom) → killer folds.
+ * Home pitch — hero fly → killer folds → Routes sticky phone → full Peaks deck → Promise → Pilot.
  */
 export function HomePage() {
   usePreloadHome();
@@ -75,11 +75,11 @@ export function HomePage() {
         <LazySection minHeight="52vh">
           <Process />
         </LazySection>
-        <LazySection minHeight="44vh">
-          <TrafficChannels variant="home" />
+        <LazySection minHeight="100dvh">
+          <HomeRoutesSection />
         </LazySection>
-        <LazySection minHeight="40vh">
-          <CasesTeaser />
+        <LazySection minHeight="56vh">
+          <CaseStudies variant="home" />
         </LazySection>
         <LazySection minHeight="70vh">
           <PromiseSection />

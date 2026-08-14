@@ -30,10 +30,10 @@ body {
   --content-max: 80rem; /* aligns with prior max-w-7xl rail */
   --content-max-narrow: 40rem;
   --content-max-copy: 36rem;
-  --section-y: clamp(3rem, 6vw, 5rem);
-  --section-y-dense: clamp(2.5rem, 4.5vw, 3.5rem);
-  --section-y-statement: clamp(4.5rem, 8vw, 7rem);
-  --section-stack-gap: 2.5rem;
+  --section-y: clamp(4rem, 8vw, 6rem);
+  --section-y-dense: clamp(3.5rem, 5.5vw, 4.5rem);
+  --section-y-statement: clamp(5.5rem, 9vw, 8rem);
+  --section-stack-gap: 3.5rem;
 
   /* ── Spacing scale (4px base) — prefer over ad-hoc rem / Tailwind gaps on brand surfaces ── */
   --space-1: 0.25rem;
@@ -80,8 +80,8 @@ body {
   --text-panel: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);
 
   /* ── Surfaces ── */
-  --card-pad: 1.5rem;
-  --card-pad-md: 2rem;
+  --card-pad: 2rem;
+  --card-pad-md: 2.5rem;
   --hero-stat-min-h: 5.25rem;
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -105,8 +105,8 @@ body {
   :root,
   [data-theme="dark"],
   [data-theme="light"] {
-    --section-stack-gap: 3rem;
-    --section-y: clamp(4rem, 7vw, 5.5rem);
+    --section-stack-gap: 4rem;
+    --section-y: clamp(5rem, 9vw, 7rem);
   }
 }
 
@@ -115,10 +115,10 @@ body {
   [data-theme="dark"],
   [data-theme="light"] {
     --site-header-bar: 3.75rem;
-    --section-stack-gap: 3.5rem;
-    --section-y: clamp(5rem, 8vw, 7rem);
-    --section-y-dense: clamp(3.25rem, 5vw, 5.5rem);
-    --section-y-statement: clamp(6rem, 10vw, 9rem);
+    --section-stack-gap: 5rem;
+    --section-y: clamp(6rem, 10vw, 9rem);
+    --section-y-dense: clamp(4rem, 6vw, 6.5rem);
+    --section-y-statement: clamp(7rem, 11vw, 10rem);
   }
 }
 

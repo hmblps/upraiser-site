@@ -235,44 +235,56 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
 
         {isHome ? (
           <Reveal delay={0.15}>
-            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
               {channels
                 .filter((c) => ["oem", "programmatic", "performance"].includes(c.id))
                 .map((channel) => (
                   <article
                     key={channel.id}
-                    className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-border bg-bg-card p-6 transition hover:border-accent/35 lg:p-7"
+                    className="card-lift group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-border bg-bg-card p-8 transition hover:border-accent/35 lg:p-10 cursor-pointer"
+                    onClick={() => openOnSolutions(channel.id)}
                   >
                     <div>
                       <p className="stat-label text-accent">{channel.tagline}</p>
-                      <h3 className="card-title mt-1.5 text-xl font-bold">{channel.title}</h3>
-                      <p className="copy mt-3 text-sm leading-relaxed text-muted-light">
-                        {formatEventNames(
-                          "teaser" in channel && typeof channel.teaser === "string"
-                            ? channel.teaser
-                            : channel.description
-                        )}
-                      </p>
+                      <h3 className="card-title mt-1.5 text-xl font-bold group-hover:text-accent transition-colors">{channel.title}</h3>
+                      <div className="grid grid-rows-[1fr] lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                        <div className="overflow-hidden">
+                          <p className="copy mt-3 text-sm leading-relaxed text-muted-light lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                            {formatEventNames(
+                              "teaser" in channel && typeof channel.teaser === "string"
+                                ? channel.teaser
+                                : channel.description
+                            )}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div className="mt-6 pt-2">
                       <div className="border-t border-border/70 pt-3">
                         <p className="stat-label text-xs text-muted">Best for</p>
                         <p className="copy mt-0.5 text-xs text-fg">{channel.bestFor}</p>
                       </div>
-                      <button
-                        type="button"
-                        data-cursor="link"
-                        onClick={() => openOnSolutions(channel.id)}
-                        className="btn-caps btn-secondary mt-4 inline-flex items-center rounded-full px-4 py-2 text-xs font-semibold hover:border-accent/35"
-                      >
-                        Explore {channel.title} →
-                      </button>
+                      <div className="grid grid-rows-[1fr] lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                        <div className="overflow-hidden">
+                          <button
+                            type="button"
+                            data-cursor="link"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openOnSolutions(channel.id);
+                            }}
+                            className="btn-caps btn-secondary mt-4 inline-flex items-center rounded-full px-4 py-2 text-xs font-semibold hover:border-accent/35 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-150"
+                          >
+                            Explore {channel.title} →
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </article>
                 ))}
               
               <article
-                className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-accent/20 bg-accent/[0.01] p-6 transition hover:border-accent/60 lg:p-7 group cursor-pointer"
+                className="card-lift relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-accent/20 bg-accent/[0.01] p-8 transition hover:border-accent/60 lg:p-10 group cursor-pointer"
                 onClick={() => navigate("/solutions")}
               >
                 <div>
@@ -280,9 +292,13 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                   <h3 className="card-title mt-1.5 text-xl font-bold group-hover:text-accent transition-colors">
                     Explore All 9 Buying Lanes
                   </h3>
-                  <p className="copy mt-3 text-sm leading-relaxed text-muted-light">
-                    From Connected TV and Influencer networks to Native publisher whitelists. Discover the full inventory spec and tracking models.
-                  </p>
+                  <div className="grid grid-rows-[1fr] lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                    <div className="overflow-hidden">
+                      <p className="copy mt-3 text-sm leading-relaxed text-muted-light lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                        From Connected TV and Influencer networks to Native publisher whitelists. Discover the full inventory spec and tracking models.
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div className="mt-6 pt-2">
                   <div className="border-t border-border/70 pt-3 flex items-center justify-between">

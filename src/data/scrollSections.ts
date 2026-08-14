@@ -1,14 +1,12 @@
-/** Ordered blocks for section keyboard / mobile nav — must match App.tsx */
+/** Ordered blocks for section keyboard / mobile nav — must match home sections */
 export const scrollSectionIds = [
   "hero",
   "audience",
   "process",
-  "value",
-  "channels",
+  "routes",
   "cases",
   "promise",
-  "about",
-  "contact",
+  "pilot",
 ] as const;
 
 export type ScrollSectionId = (typeof scrollSectionIds)[number];

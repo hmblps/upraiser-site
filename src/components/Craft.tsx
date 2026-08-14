@@ -83,7 +83,7 @@ export function Craft() {
             </ScrollLink>
             <p className="viewport-page__footnote mt-6 text-muted-light">
               {CRAFT_CONTENT.close.footnote}{" "}
-              <ScrollLink href="/solutions" className="text-accent hover:text-accent/80 transition-colors">The Routes →</ScrollLink>
+              <ScrollLink href="/#routes" className="text-accent hover:text-accent/80 transition-colors">The Routes →</ScrollLink>
             </p>
           </div>
 

@@ -2,7 +2,7 @@
 
 **Status:** Advisory only — **not** source of truth.  
 **Sources of truth remain:** `src/data/liveContent.ts`, `src/data/cases.ts`, `src/data/innerPagesData.ts`, `docs/AI-FULL.md`, shipping UI.  
-**Date:** 2026-08-11 (fold words refreshed to match `e5fb198` tip)  
+**Date:** 2026-08-14 (aligned with `e951e9e` + disk WIP in [`AI-FULL.md`](./AI-FULL.md))  
 **Context:** `.agents/product-marketing.md` (v1) + marketing-council on Home hero + fold / Solutions / Company / Cases pass.
 
 ---
@@ -69,9 +69,9 @@ Cold B2B visitors may not infer the offer from the poem alone. Ogilvy/Schwartz w
 ## 3. Home — Audience
 
 ### As now
-- Both modes: **PROOF** hero word (“Who We Serve”)  
-- Ambient: growth line chart · infra fraud radial  
-- Ending fixed around audit / defend-your-spend grammar (see `audienceByMode`)
+- **Growth:** hero word **SCALE** · ambient SVG line chart  
+- **Infrastructure:** hero word **PROOF** · fraud radial + infra grid morph  
+- Copy: growth leans unit economics / ROAS control; infra keeps audit / invoice-match grammar (see `audienceByMode`)
 
 ### Marketing lens
 Strong ICP filter. Infra body is denser than Growth.
@@ -102,7 +102,9 @@ Clear how-it-works; mechanism language fits sophisticated buyers.
 ## 5. Home — Channels
 
 ### As now
-- Up to ~9 channels × 2 modes; long `description` + points on Home  
+- Home teaser: **2×2 channel grid** (OEM · Programmatic · Performance · “All 9 Lanes”)  
+- Desktop: description + CTA **hover-reveal** on cards (shipped Aug 14 disk WIP)  
+- Full depth on `/solutions`  
 
 ### Marketing lens
 Home should tease; depth belongs on `/solutions`. Teasers/taglines are already strong.
@@ -110,7 +112,7 @@ Home should tease; depth belongs on `/solutions`. Teasers/taglines are already s
 ### Brand-safe better (optional)
 | | As now | Better for Home |
 |--|--------|-----------------|
-| Body | Full description on Home | **Teaser + tagline + “Open on Solutions”** only |
+| Body | Hover-reveal teaser on desktop | **KEEP** — depth stays on Solutions |
 | Points | 5–6 bullets | Hide on Home; keep on Solutions / expand |
 
 **Recommendation:** Highest-leverage *copy structure* change on Home — shorten surface, don’t rewrite voice.
@@ -132,8 +134,8 @@ Home should tease; depth belongs on `/solutions`. Teasers/taglines are already s
 
 ### As now
 - Title both modes: **Our Commitment**  
-- Growth: invoice → raw device event · word **CLARITY** · area-mass ambient  
-- Infra: invoice ↔ raw logs · word **PARITY** · step/barcode area ambient (`FoldAreaMass`)
+- Growth: invoice → raw device event · word **CLARITY** · `CommitmentChart` SVG ambient  
+- Infra: invoice ↔ raw logs · word **PARITY** · `ParityWaterChart` + OGL caustics
 
 ### Marketing lens
 This *is* the commercial promise. Poetic hero + hard Promise fold = Zero-like brand (feeling) + operator truth (proof).

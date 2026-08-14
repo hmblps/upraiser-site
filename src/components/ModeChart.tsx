@@ -4,7 +4,6 @@ import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScrollMorph } from "../hooks/useScrollMorph";
 import { useMode } from "./SectionHeader";
-import { LineChart, type LineChartDatum } from "./LineChart";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
 
 const PERIODS = ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12"];
@@ -15,7 +14,8 @@ function lerp(a: number, b: number, t: number) {
 
 type SeriesKey = "Primary" | "Secondary";
 
-function growthTargets(): LineChartDatum[] {
+// We use `any` here for simplicity to replace the old LineChartDatum requirement
+function growthTargets() {
   const primary = [42, 48, 55, 68, 79, 92, 108, 124, 141, 162, 188, 214];
   const secondary = [28, 31, 36, 40, 44, 49, 53, 58, 64, 71, 78, 86];
   return PERIODS.map((period, i) => ({
@@ -25,7 +25,7 @@ function growthTargets(): LineChartDatum[] {
   }));
 }
 
-function fraudTargets(): LineChartDatum[] {
+function fraudTargets() {
   const primary = [11.4, 10.6, 9.8, 8.7, 7.5, 6.4, 5.3, 4.2, 3.3, 2.4, 1.5, 0.8];
   const secondary = [7.1, 6.6, 5.9, 5.2, 4.6, 4.0, 3.4, 2.8, 2.2, 1.7, 1.1, 0.6];
   return PERIODS.map((period, i) => ({
@@ -35,11 +35,10 @@ function fraudTargets(): LineChartDatum[] {
   }));
 }
 
-/** Morph every point from rest → target by scroll t (0→1). */
-function morphSeries(targets: LineChartDatum[], t: number, kind: "growth" | "fraud"): LineChartDatum[] {
+function morphSeries(targets: any[], t: number, kind: "growth" | "fraud") {
   const keys: SeriesKey[] = ["Primary", "Secondary"];
   return targets.map((row) => {
-    const next: LineChartDatum = { date: row.date };
+    const next: any = { date: row.date };
     for (const key of keys) {
       const target = Number(row[key]);
       const rest = kind === "growth" ? target * 0.18 : lerp(target, target * 2.4, 0.55);
@@ -53,7 +52,6 @@ type GhostMetric = {
   id: string;
   label: string;
   left: string;
-  /** Vertical lane start — bubbles rise from here */
   originY: number;
   drift: number;
   duration: number;
@@ -172,13 +170,30 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: number }) 
   );
 }
 
+function smoothLine(points: { x: number; y: number }[]): string {
+  if (points.length === 0) return "";
+  let path = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i === 0 ? 0 : i - 1];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2 < points.length ? i + 2 : i + 1];
+
+    // Catmull-Rom to Bezier conversion
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+    path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+  }
+  return path;
+}
+
 type FoldChartProps = {
   progress: MotionValue<number>;
 };
 
-/**
- * Full-bleed fold chart: values rise/fall with scroll; metric bubbles float & fade.
- */
 export function FoldChart({ progress }: FoldChartProps) {
   const { mode } = useMode();
   const { theme } = useTheme();
@@ -191,14 +206,9 @@ export function FoldChart({ progress }: FoldChartProps) {
     span: theme === "dark" ? 0.88 : 0.78,
     lerp: theme === "dark" ? 0.075 : 0.09,
   });
+  
   const targets = useMemo(() => (isGrowth ? growthTargets() : fraudTargets()), [isGrowth]);
   const ghosts = isGrowth ? GROWTH_GHOSTS : FRAUD_GHOSTS;
-  const colors = isGrowth
-    ? ["var(--theme-accent)", "var(--theme-accent-secondary)"]
-    : ["var(--theme-accent-secondary)", "var(--theme-accent)"];
-  const names = isGrowth
-    ? { Primary: "Revenue index", Secondary: "Unique users" }
-    : { Primary: "Fraud rate", Secondary: "Residual risk" };
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -213,50 +223,101 @@ export function FoldChart({ progress }: FoldChartProps) {
     [targets, morph, isGrowth],
   );
 
-  const labeledData = useMemo(
-    () =>
-      data.map((row) => ({
-        date: row.date,
-        [names.Primary]: row.Primary,
-        [names.Secondary]: row.Secondary,
-      })),
-    [data, names.Primary, names.Secondary],
-  );
+  const yDomain = isGrowth ? [0, 240] : [0, 14];
+  const chartHeight = 400;
+  const chartWidth = 1200;
 
-  const labeledCategories = [names.Primary, names.Secondary];
+  // Calculate points mapped to SVG coordinates
+  // We add vertical padding so the chart doesn't clip the bottom edge
+  const paddingY = 50;
+  const usableHeight = chartHeight - paddingY * 2;
+
+  const pointsPrimary = data.map((d, i) => ({
+    x: (i / (data.length - 1)) * chartWidth,
+    y: chartHeight - paddingY - (d.Primary / yDomain[1]) * usableHeight,
+  }));
+  
+  const pointsSecondary = data.map((d, i) => ({
+    x: (i / (data.length - 1)) * chartWidth,
+    y: chartHeight - paddingY - (d.Secondary / yDomain[1]) * usableHeight,
+  }));
+
+  const dPrimary = smoothLine(pointsPrimary);
+  const dSecondary = smoothLine(pointsSecondary);
+
   const opacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
 
   if (!enabled) return null;
 
-  const chartSummary = isGrowth
-    ? "Growth trend chart showing revenue index and unique users rising over twelve weeks as you scroll."
-    : "Fraud rate chart showing primary fraud rate and residual risk declining over twelve weeks as you scroll.";
-
   return (
-    <>
-      <p className="sr-only">{chartSummary}</p>
-      <motion.div className={`fold-chart fold-chart--${mode}`} style={{ opacity }} aria-hidden>
+    <motion.div 
+      className={`fold-chart fold-chart--${mode}`} 
+      style={{ opacity }} 
+      aria-hidden
+    >
       <div className="fold-chart-ghosts">
         {ghosts.map((g) => (
           <GhostBubble key={g.id} metric={g} morph={morph} />
         ))}
       </div>
 
-      <LineChart
-        className="fold-chart-plot"
-        data={labeledData}
-        index="date"
-        categories={labeledCategories}
-        colors={colors}
-        showTooltip={false}
-        showYAxis={false}
-        showXAxis={false}
-        showFill={false}
-        animate={false}
-        yDomain={isGrowth ? [0, 240] : [0, 14]}
-        valueFormatter={isGrowth ? (n) => `${Math.round(n)}` : (n) => `${Number(n).toFixed(1)}%`}
-      />
+      <div className="absolute inset-0 w-full h-full pointer-events-none">
+        <svg 
+          className="w-full h-full overflow-visible" 
+          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+          preserveAspectRatio="none"
+          style={{
+            maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)"
+          }}
+        >
+          {/* СЛОЙ 1: «Штрих-код» (вертикальные тики) */}
+          <g className="opacity-10">
+            {Array.from({ length: 40 }).map((_, i) => {
+              const x = i * 30;
+              return (
+                <line
+                  key={i}
+                  x1={x}
+                  y1={350}
+                  x2={x}
+                  y2={370}
+                  stroke="var(--theme-accent)"
+                  strokeOpacity="0.3"
+                  strokeWidth="2"
+                />
+              );
+            })}
+          </g>
+
+          {/* СЛОЙ 2: Вторичная линия (Unique users / Residual risk) */}
+          <motion.path
+            d={dSecondary}
+            fill="none"
+            stroke="var(--theme-accent-secondary)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            style={{ 
+              filter: "drop-shadow(0px 4px 8px var(--theme-accent-secondary))",
+              WebkitFilter: "drop-shadow(0px 4px 8px var(--theme-accent-secondary))",
+              opacity: 0.6
+            }}
+          />
+
+          {/* СЛОЙ 3: Первичная линия (Revenue index / Fraud rate) */}
+          <motion.path
+            d={dPrimary}
+            fill="none"
+            stroke="var(--theme-accent)"
+            strokeWidth="4"
+            strokeLinecap="round"
+            style={{ 
+              filter: "drop-shadow(0px 8px 16px var(--theme-accent-dim))",
+              WebkitFilter: "drop-shadow(0px 8px 16px var(--theme-accent-dim))"
+            }}
+          />
+        </svg>
+      </div>
     </motion.div>
-    </>
   );
 }

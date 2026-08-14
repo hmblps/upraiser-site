@@ -1,9 +1,9 @@
 # UPRAISER — Solutions (`/solutions`)
 
 > **Status:** **SHIPPED** — sticky format lanes + 3D/CSS phone glass.  
-> Production: https://upraiser-site.vercel.app/solutions  
+> Production: https://upraiser.co.uk/solutions  
 > Full site: **[AI-FULL.md](./AI-FULL.md)** · **[HANDOFF.md](./HANDOFF.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
-> **Code tip:** `e5fb198` (site-wide) · Solutions glass pipeline unchanged in role
+> **Code tip:** `e951e9e` (brand aurora on page shell) · Solutions glass pipeline unchanged in role
 
 ---
 

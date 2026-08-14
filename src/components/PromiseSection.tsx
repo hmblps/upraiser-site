@@ -23,7 +23,7 @@ function PromiseClean() {
           <p className="section-lead">
             {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />.
           </p>
-          <p className="section-description max-w-2xl">{formatEventNames(content.description)}</p>
+          <p className="section-description max-w-2xl mt-4 mb-6">{formatEventNames(content.description)}</p>
         </div>
       </ModeContentTransition>
     </section>
@@ -40,7 +40,7 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
       remountKey={key}
       runway="anchor"
       ambient="bars"
-      className="accent-scroll-section--fold-pair"
+      className="accent-scroll-section--fold-pair -mb-[14px]"
       scrollHeroWord={content.scrollHeroWord}
       label={<SectionHeader label={content.label} title={content.title} animated={false} />}
     >
@@ -62,7 +62,7 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
               .
             </motion.span>
           </p>
-          <motion.p className="section-description relative z-[2] mt-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
+          <motion.p className="section-description relative z-[2] mt-10 mb-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
             {formatEventNames(content.description)}
           </motion.p>
         </>

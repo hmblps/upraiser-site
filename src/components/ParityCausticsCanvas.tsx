@@ -22,7 +22,11 @@ const VERT = /* glsl */ `
  * Loop unrolled: GLSL ES 1.0 (WebGL1) rejects `for (float i …)`.
  */
 const FRAG = /* glsl */ `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
   precision highp float;
+#else
+  precision mediump float;
+#endif
   varying vec2 vUv;
   uniform float uTime;
   uniform float uIntensity;

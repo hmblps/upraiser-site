@@ -78,7 +78,7 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
     openingRef.current = null;
     setActiveId(null);
     if (caseIdFromPath(pathname)) {
-      navigate("/cases", { replace: true });
+      navigate({ pathname: "/", hash: "cases" }, { replace: true });
     }
   }, [navigate, pathname]);
 

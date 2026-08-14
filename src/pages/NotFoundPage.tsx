@@ -11,7 +11,7 @@ export function NotFoundPage() {
           This page is not on the map
         </h1>
         <p className="copy mt-5 max-w-md text-muted">
-          The route may have moved. Head home, or open Solutions if You were looking for capabilities.
+          The route may have moved. Head home, or jump to The Routes on the pitch.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Magnetic>
@@ -25,10 +25,10 @@ export function NotFoundPage() {
           </Magnetic>
           <Magnetic strength={0.22}>
             <Link
-              to="/solutions"
+              to="/#routes"
               className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5 text-sm font-semibold hover:border-accent/35"
             >
-              Solutions
+              The Routes
             </Link>
           </Magnetic>
         </div>

@@ -6,8 +6,8 @@
 > Mobile / reduced = **`light-mountains-loop.mp4`** (not a flat CSS-only sky).  
 > Legacy scroll-scrub MP4 as the *desktop* hero is **superseded** — do not bring it back without an explicit ask.  
 > Full site: **[AI-FULL.md](./AI-FULL.md)** · **[HANDOFF.md](./HANDOFF.md)** · Solutions: **[SOLUTIONS.md](./SOLUTIONS.md)** · human: **[README.md](../README.md)** · assets: **[ASSETS.md](./ASSETS.md)**  
-> Live: https://upraiser-site.vercel.app/  
-> **Docs sync:** 11 August 2026 · code tip `e5fb198`.
+> Live: https://upraiser.co.uk/  
+> **Docs sync:** 14 August 2026 · code tip `e951e9e` (+ fold SVG polish on disk — see HANDOFF §22).
 
 ---
 

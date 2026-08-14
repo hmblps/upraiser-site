@@ -114,8 +114,8 @@ export function Contact() {
 
   const ctaRow = [
     { label: primaryCta.label, href: primaryCta.href },
-    { label: "See Cases", href: "/cases" },
-    { label: "Solutions", href: "/solutions" },
+    { label: "See Cases", href: "/#cases" },
+    { label: "The Routes", href: "/#routes" },
     { label: "Company", href: "/company" },
   ];
 

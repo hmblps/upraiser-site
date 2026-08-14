@@ -19,10 +19,7 @@ export const contactVerticalOptions = [
 ] as const;
 
 export const navLinks: NavLink[] = [
-  { label: "The Routes", href: "/solutions" },
-  { label: "The Gear", href: "/studio" },
   { label: "The Craft", href: "/craft" },
-  { label: "The Peaks", href: "/cases" },
   { label: "The Expedition", href: "/company" },
 ];
 
@@ -59,15 +56,15 @@ export const heroHighlightsByMode = {
 
 export const audienceByMode = {
   growth: {
-    label: "Teams who require campaign metrics to match the media invoice",
+    label: "Teams who must convert ROAS goals into real cash flow",
     title: "Who We Serve",
-    line1: "When Your MMP and media bills diverge, we rebuild Your data pipelines.",
-    line2Prefix: "Run on",
-    inlineWord: "PROOF",
-    scrollHeroWord: "PROOF",
+    line1: "When the market matures, hyper-growth requires a new unit economics model.",
+    line2Prefix: "Target",
+    inlineWord: "SCALE",
+    scrollHeroWord: "SCALE",
     cta: primaryCta.label,
     description:
-      "You are the user acquisition lead or marketing director who needs to scale active player bases without breaking unit economics. Your campaigns target deep in-app conversions, from level completions to first deposits. We buy media based on real player lifetime value, deploying on-demand Creator-Generated Content (CGC) that out-converts static banner ads. We scale only the routes that deliver real revenue.",
+      "You are the user acquisition lead or marketing director who needs to scale active player bases without breaking unit economics. Your campaigns target deep in-app conversions, from level completions to first deposits. We buy media based on real player lifetime value, deploying on-demand Creator-Generated Content (CGC) that out-converts static banner ads. We scale only the routes that deliver real revenue. We align every campaign with your exact financial targets, ensuring your growth strategy remains entirely in your control while we execute the heavy lifting.",
   },
   infrastructure: {
     label: "Teams who require campaign metrics to match the media invoice",
@@ -163,7 +160,7 @@ export const promiseByMode = {
     titleLead: "We bring ",
     accentWord: "CLARITY",
     description:
-      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean.",
+      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets aggressively without fear of hidden markups or invisible fraud.",
   },
   infrastructure: {
     label: "Raw logs Your team can audit on demand",
@@ -316,15 +313,13 @@ export const bridgeByMode = {
 
 export const footerLinks = {
   explore: [
-    { label: "The Routes", href: "/solutions" },
-    { label: "The Gear", href: "/studio" },
+    { label: "The Routes", href: "/#routes" },
+    { label: "The Peaks", href: "/#cases" },
     { label: "The Craft", href: "/craft" },
-    { label: "The Peaks", href: "/cases" },
     { label: "Request Pilot", href: "/contact" },
   ],
   company: [
     { label: "The Expedition", href: "/company" },
-    { label: "Clients", href: "/clients" },
     { label: "Careers inquiry", href: "/contact", contactIntent: "careers" },
     { label: "Contact", href: "/contact" },
   ] satisfies NavLink[],

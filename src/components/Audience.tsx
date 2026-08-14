@@ -23,7 +23,7 @@ function AudienceStatic() {
           <p className="section-lead">
             {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />
           </p>
-          <p className="section-description max-w-2xl">{formatEventNames(content.description)}</p>
+          <p className="section-description max-w-2xl mb-20">{formatEventNames(content.description)}</p>
         </div>
       </ModeContentTransition>
     </section>
@@ -61,7 +61,7 @@ function AudienceAnimated() {
               </motion.span>
             </span>
           </p>
-          <motion.p className="section-description mt-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
+          <motion.p className="section-description mt-6 mb-20 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
             {formatEventNames(content.description)}
           </motion.p>
         </>

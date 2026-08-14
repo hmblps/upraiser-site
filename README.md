@@ -4,18 +4,19 @@ SPA **UPRAISER Agency LLP** — Premium Traffic Infrastructure для mobile/web
 
 | | |
 |---|---|
-| **Production** | https://upraiser-site.vercel.app |
-| **Целевой домен** | https://upraiser.co.uk (DNS ещё не на Vercel) |
+| **Production** | https://upraiser.co.uk |
+| **Vercel alias** | https://upraiser-site.vercel.app |
 | **Stack** | React 19 · TypeScript · Vite 8 · Tailwind v4 · Framer Motion · Lenis · Recharts · R3F / Three · ogl |
 | **Copy** | `src/data/liveContent.ts` · кейсы: `src/data/cases.ts` |
 | **Deploy** | `npm run deploy` → Vercel **`upraiser-site-v2`** |
-| **Handoff для ИИ** | **[docs/HANDOFF.md](./docs/HANDOFF.md)** |
+| **Handoff для ИИ** | **[docs/AI-FULL.md](./docs/AI-FULL.md)** · **[docs/HANDOFF.md](./docs/HANDOFF.md)** |
 | **Solutions** | **[docs/SOLUTIONS.md](./docs/SOLUTIONS.md)** |
 | **Hero 3D** | **[docs/HERO.md](./docs/HERO.md)** |
 | **Assets** | **[docs/ASSETS.md](./docs/ASSETS.md)** |
 | **Docs index** | **[docs/README.md](./docs/README.md)** |
 
-**Последний production deploy:** 29 Jul 2026 · `e8ed2ef` — `/solutions` DPI/touch/transform harden; prior glass+MP4 `71ddab1`.  
+**Последний production deploy:** 14 Aug 2026 · `e951e9e` — brand aurora, Expedition, Routes assets.  
+**Disk WIP (Antigravity 14 Aug):** bespoke fold SVG charts, spacing/typography, home channels 2×2 hover-reveal — см. **[docs/AI-FULL.md](./docs/AI-FULL.md)** §3.  
 **Checkpoint:** Solutions sticky phone `c0572d8` · hero light Everest `95bcd27`.  
 **Git backups:** `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
 
@@ -53,8 +54,8 @@ git config --global user.name "hmblps"
 
 | Секция | Light (growth) | Dark (infrastructure) | Ambient |
 |--------|----------------|----------------------|---------|
-| `#audience` | SCALE | PROOF | Line chart / fraud radial |
-| `#promise` | RESULTS | CLARITY | Area mass chart |
+| `#audience` | **SCALE** | **PROOF** | SVG line chart / fraud radial + infra grid |
+| `#promise` | **CLARITY** | **PARITY** | `CommitmentChart` / `ParityWaterChart` + caustics |
 
 **Hero (desktop):** sticky Lenis runway + R3F Everest (`HeroTerrainCanvas` / `hero-terrain/*`).
 
@@ -69,7 +70,8 @@ Mobile / reduced motion: CSS sky only (no WebGL).
 
 **Тема:** header toggle — stay in place + `ModeContentTransition`; About/Company bridge may scroll home.
 
-**Header:** frosted glass · Klay-style menu rail.
+**Header:** frosted glass · Klay-style menu rail · aurora-aware on depth routes.  
+**Depth pages** (`/solutions`, `/contact`, `/company`, `/cases`): **Brand Aurora** фон (`BrandAurora.tsx`) + **GradientTraceBorder** на Lenovo / Contact.
 
 ---
 
@@ -134,7 +136,7 @@ Mobile / reduced motion: CSS sky only (no WebGL).
 **Тема:** `localStorage` `upraiser-theme` · anti-flash в `index.html`  
 **Light paper:** `#ffffff` (не cream). **Dark:** `#050504`.  
 **Favicon / logo:** `/favicon.png` · `/upraiser-logo.png`  
-**OG:** `og-image.png` (URL пока vercel.app)  
+**OG:** `og-image.png` — host on `upraiser.co.uk` when meta tags updated  
 **Акценты:** `src/lib/accent.ts`
 
 ---
@@ -153,6 +155,7 @@ Mobile / reduced motion: CSS sky only (no WebGL).
 | `components.css` | forms, bridge, UI |
 | `layout.css` | cases, channels |
 | `typography.css` | titles, rhythm |
+| `brand-aurora.css` | depth-page aurora shells |
 | `site-shell.css` | bands, spacing |
 | `surfaces.css` | cards, panels |
 | `ambience-responsive.css` | 1280–1440 |
@@ -177,7 +180,7 @@ Mobile / reduced motion: CSS sky only (no WebGL).
 
 | | |
 |---|---|
-| **Project** | `upraiser-site-v2` → `upraiser-site.vercel.app` |
+| **Project** | `upraiser-site-v2` → **upraiser.co.uk** |
 | **Team** | `alex-3152s-projects` |
 | **Repo** | `github.com/hmblps/upraiser-site` · `main` |
 
@@ -220,8 +223,8 @@ npm run generate:og
 
 Детали: **[docs/HANDOFF.md](./docs/HANDOFF.md)** §14 + §20–21.
 
-Theme/terrain swap и UI polish folds — shipped. Дальше: мёртвые pages/assets · Git auto-deploy · live copy · DNS.  
-**Docs:** hub в `docs/` (+ `SOLUTIONS.md`) — актуально на 29 Jul 2026.
+Theme/terrain swap и UI polish folds — shipped. Дальше: закоммитить Aug 14 disk WIP · мёртвые pages/assets · live copy.  
+**Docs:** hub в `docs/` — актуально на **14 Aug 2026** (`e951e9e` + §22 disk WIP).
 
 ---
 
@@ -229,9 +232,9 @@ Theme/terrain swap и UI polish folds — shipped. Дальше: мёртвые 
 
 - Финальные логотипы partners  
 - Живой copy вместо AI-черновика  
-- DNS `upraiser.co.uk` + fix `og:image`  
 - Smoke test contact → `info@upraiser.co.uk`  
 - Git → **upraiser-site-v2** auto-deploy  
+- Commit Aug 14 Antigravity fold polish (disk WIP)  
 
 ---
 

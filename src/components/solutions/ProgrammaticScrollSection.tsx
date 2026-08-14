@@ -40,6 +40,8 @@ function progressToIndex(progress: number, count: number): number {
 type ProgrammaticScrollSectionProps = {
   mode: SiteMode;
   laneSwitcher?: ReactNode;
+  /** Anchor id for in-page nav (home `#routes`). */
+  sectionId?: string;
   /** Defaults to App Growth formats. */
   formats?: readonly AdFormat[];
   headerLabel?: string;
@@ -54,6 +56,7 @@ type ProgrammaticScrollSectionProps = {
 export function ProgrammaticScrollSection({
   mode,
   laneSwitcher,
+  sectionId,
   formats = AD_FORMATS,
   headerLabel = "Lanes",
   headerTitle = "Every Format. One Supply Path.",
@@ -138,20 +141,23 @@ export function ProgrammaticScrollSection({
 
   if (isMobile || reduced) {
     return (
-      <MobileFormats
-        mode={mode}
-        laneSwitcher={laneSwitcher}
-        reduced={reduced}
-        formats={formats}
-        headerLabel={headerLabel}
-        headerTitle={headerTitle}
-        headerDescription={headerDescription}
-      />
+      <div id={sectionId} className="prog-scroll-outer-mobile">
+        <MobileFormats
+          mode={mode}
+          laneSwitcher={laneSwitcher}
+          reduced={reduced}
+          formats={formats}
+          headerLabel={headerLabel}
+          headerTitle={headerTitle}
+          headerDescription={headerDescription}
+        />
+      </div>
     );
   }
 
   return (
     <div
+      id={sectionId}
       ref={sectionRef}
       className="prog-scroll-outer"
       style={{ height: `calc(100dvh + ${totalVirtual}px)` }}

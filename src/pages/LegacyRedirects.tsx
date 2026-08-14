@@ -15,7 +15,7 @@ const PILLAR_TO_CHANNEL: Record<string, string> = {
   rewarded: "rewarded",
 };
 
-/** Legacy /expertise URLs → flat /solutions channel rail. */
+/** Legacy /expertise URLs → home Routes section. */
 export function RedirectExpertiseToSolutions() {
   const [params] = useSearchParams();
   const next = new URLSearchParams();
@@ -29,9 +29,9 @@ export function RedirectExpertiseToSolutions() {
   }
 
   const qs = next.toString();
-  return <Navigate to={qs ? `/solutions?${qs}#channels` : "/solutions#channels"} replace />;
+  return <Navigate to={qs ? `/?${qs}#routes` : "/#routes"} replace />;
 }
 
 export function RedirectMeasurementToExpertise() {
-  return <Navigate to="/solutions" replace />;
+  return <Navigate to="/#routes" replace />;
 }

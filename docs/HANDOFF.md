@@ -3,14 +3,13 @@
 > **Purpose:** give another AI (or engineer) complete context to continue — including a **refactor-ready** map of current truth vs debt.  
 > **Primary AI SoT (prefer on conflicts):** [`AI-FULL.md`](./AI-FULL.md)  
 > Human summary: [`README.md`](../README.md) · Solutions: [`SOLUTIONS.md`](./SOLUTIONS.md) · Hero 3D: [`HERO.md`](./HERO.md) · Assets: [`ASSETS.md`](./ASSETS.md) · Index: [`README.md`](./README.md).  
-> **Updated:** 11 August 2026  
+> **Updated:** 14 August 2026  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
-> **Production:** https://upraiser-site.vercel.app  
-> **Target domain:** https://upraiser.co.uk (SPA DNS cutover pending)  
+> **Production:** https://upraiser.co.uk (Vercel **`upraiser-site-v2`**)  
 > **Brand doctrine:** [`BRAND-ASCENT.md`](./BRAND-ASCENT.md)  
-> **HEAD:** `e5fb198` — Promise dark **PARITY** + Recharts step/barcode ambient in `FoldAreaMass`; copy Stop-Slop + Company/Cases polish from Aug 8–10.  
-> **Backups:** branch `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`  
-> **WIP (disk only — not committed, pending merge with other folder):** Promise dark water chart replaces barcode ambient — see § WIP Parity water below.
+> **HEAD (committed):** `e951e9e` — brand aurora, simpler Expedition, Routes glass assets restored.  
+> **WIP (disk, not committed):** Aug 14 Antigravity/Gemini polish — bespoke fold SVG charts, spacing/typography tokens, home channels 2×2 hover-reveal — see §22.  
+> **Backups:** branch `backup/2026-07-23-evening` · zip `~/Downloads/Upraiser-site-backup-2026-07-23-evening.zip`
 
 ---
 
@@ -53,7 +52,7 @@
 | Styles | Tailwind **v4** + `src/styles/*.css` via `index.css` |
 | Motion | Framer Motion **12** |
 | Scroll | Lenis desktop; **native** on mobile/touch |
-| Charts | Recharts (fold ambients) |
+| Charts | Bespoke SVG fold ambients (Framer scroll-morph); Recharts in deps, not used on home folds |
 | 3D hero | `@react-three/fiber` + `@react-three/drei` + `three` (desktop) |
 | Misc | `lucide-react`, `ogl` (SideRays), `react-router-dom` |
 | Lint | oxlint |
@@ -109,7 +108,7 @@ Mode-aware bodies: **`ModeContentTransition`**. Header: frosted glass.
 | `/studio` | **The Gear** | Tech kit: Fixed Line · Oxygen · Map (`GEAR_CONTENT`) | **Yes** (Growth scale vs Infra audit) |
 | `/craft` | **The Craft** | Full-spectrum: Creative Lab · Proprietary (`CRAFT_CONTENT`) | **Yes** |
 | `/clients` | — | Client roster | Soft |
-| `/company` | **The Expedition** | Leaders / story / Why Us | Soft |
+| `/company` | **The Expedition** | Ascent camps · lean FAQ · plain CTA (`AscentCamps`) | Soft + **BrandAurora** |
 | `/cases` · `/cases/:slug` | **The Peaks** | Archive + detail | Soft |
 | `/contact` | **Request Pilot** | Final push | No |
 | `/privacy` · `/terms` | Legal | Legal | No |
@@ -219,12 +218,12 @@ Killer folds (Audience / Promise) stay on **home**.
 
 ### Scroll folds
 
-`AccentScrollFold` · `Audience` · `PromiseSection` · `ModeChart` · `FoldAreaMass` · `FraudScrollChart`
+`AccentScrollFold` · `Audience` · `PromiseSection` · `ModeChart` · `FoldAreaMass` · `FraudScrollChart` · `InfrastructureGrid` · `CommitmentChart` · `ParityWaterChart` · `ParityCausticsCanvas`
 
 | Fold | Words (light / dark) | Ambient |
 |------|----------------------|---------|
-| Audience | PROOF / PROOF | `chart` / `fraud` |
-| Promise | CLARITY / **PARITY** | `FoldAreaMass` area (growth) · step/barcode area (infra) |
+| Audience | **SCALE** / **PROOF** | `FoldChart` (SVG lines) · `FraudScrollChart` + `InfrastructureGrid` |
+| Promise | **CLARITY** / **PARITY** | `CommitmentChart` (growth) · `ParityWaterChart` + caustics (infra) |
 
 Promise section titles: **Our Commitment**.
 
@@ -235,7 +234,7 @@ Promise section titles: **Our Commitment**.
 
 ### Shell / motion
 
-`Header` · `Footer` · `SmoothScroll` · `CustomCursor` · `ThemeToggle` · `motion/Reveal` · `Stagger` · `ModeContentTransition`
+`Header` · `Footer` · `SmoothScroll` · `CustomCursor` · `ThemeToggle` · `BrandAurora` · `GradientTraceBorder` · `motion/Reveal` · `Stagger` · `ModeContentTransition`
 
 ---
 
@@ -288,7 +287,7 @@ Layout: `styles/base.css`. Motion: `lib/motion.ts` (`SPRING`, `SPRING_SOFT`).
 
 | | |
 |---|---|
-| **URL** | https://upraiser-site.vercel.app |
+| **URL** | https://upraiser.co.uk (alias) · https://upraiser-site.vercel.app |
 | **Project** | **`upraiser-site-v2`** |
 | **Team** | `alex-3152s-projects` |
 | **GitHub** | `hmblps/upraiser-site` · `main` |
@@ -298,7 +297,7 @@ Layout: `styles/base.css`. Motion: `lib/motion.ts` (`SPRING`, `SPRING_SOFT`).
 npm run deploy
 ```
 
-**Code tip:** `e5fb198` (11 Aug 2026 sync) — Promise **PARITY** + step ambient; prior Solutions harden `e8ed2ef` / `71ddab1` still relevant for phone glass.
+**Code tip:** `e951e9e` (14 Aug 2026) — aurora + Expedition + Routes assets; disk WIP = fold SVG polish (§22). Prior: `e5fb198` PARITY water · `e8ed2ef` / `71ddab1` Solutions glass.
 
 ---
 
@@ -332,7 +331,7 @@ Prompt assumptions to **correct** before coding:
 ### Other product debt
 
 1. Git → Vercel auto-deploy for `upraiser-site-v2`  
-2. `og:image` host when `upraiser.co.uk` live  
+2. `og:image` absolute URL → `upraiser.co.uk` in meta tags (domain live; meta may still point at vercel.app)  
 3. Partner logos incomplete  
 4. Case overlap review (Thing Or Two clients)  
 5. ScrollBeams / halo / bird fine-tuning by taste  
@@ -386,6 +385,24 @@ R3F Everest fly · BrandHazeSky + ScrollBeams / NightStars · reject Rayleigh Sk
 - Format feed MP4s + stills under `public/channels/programmatic-*`  
 - DPI / touch / transform-only harden (`e8ed2ef`) — see [`SOLUTIONS.md`](./SOLUTIONS.md)  
 - Docs hub + `SOLUTIONS.md`
+
+### Aug 8–11 (`e5fb198` and prior)
+
+- Promise dark **PARITY** fold + `ParityWaterChart` / `ParityCausticsCanvas`  
+- Ghost bubble animation + IBM Plex Mono for fold metrics  
+- Copy Stop-Slop pass · Company / Cases polish
+
+### Aug 14 — committed (`e951e9e`)
+
+- **Brand Aurora** on Routes, Contact, Company, Cases (`BrandAurora.tsx`, `useBrandAuroraNav.ts`)  
+- **GradientTraceBorder** replaces BorderBeam (Lenovo strip, Contact, fields)  
+- **Expedition** simplified — `AscentCamps`, lean FAQ, less decorative chrome  
+- Restored Routes glass PNG/MP4 assets after merge regression  
+- Deploy → **upraiser.co.uk**
+
+### Aug 14 — disk WIP (Antigravity / Gemini, not committed)
+
+See **§22** — bespoke fold SVG charts, spacing/typography tokens, home channels 2×2 hover-reveal.
 
 ---
 
@@ -481,7 +498,7 @@ Use this as the backlog when the owner says “рефактор”.
 3. Dead-page + dead-asset cleanup  
 4. Content ownership pass (`liveContent` vs page data)  
 5. Optional: remaining `text-[0.65rem]` kicker sweep  
-6. DNS / OG / auto-deploy  
+6. OG meta + auto-deploy (DNS cutover **done** — `upraiser.co.uk` live)  
 7. Docs hub — done (§21)  
 
 ---
@@ -502,20 +519,25 @@ Root `AI_HANDOFF.md` / `CONTEXT.md` / `assets/README.md` are **stubs** that poin
 
 ---
 
-## WIP — Parity water chart (uncommitted, 11 Aug 2026 evening)
+## 22. Aug 14 fold polish (disk WIP — Antigravity / Gemini)
 
-**Do not commit yet** — keep as working-tree changes until this folder is merged with the other project copy.
+**Status:** working-tree changes; not committed. Safe to merge after visual QA on 768–1440.
 
-| File | Status | Role |
-|------|--------|------|
-| `src/components/ParityWaterChart.tsx` | **untracked** | Promise dark ambient — gold invoice / red log mirror bars |
-| `src/components/ParityCausticsCanvas.tsx` | **untracked** | OGL procedural caustics over the lake |
-| `src/components/FoldAreaMass.tsx` | **modified** | Infra mode → `ParityWaterChart` (not barcode/step Recharts) |
-| `src/styles/charts.css` | **modified** | `.parity-water*` layout, lake scanlines, ghost vertical mask |
+| File | Change |
+|------|--------|
+| `CommitmentChart.tsx` | **new** — Promise growth ambient (Bezier line + barcode ticks + ghosts) |
+| `FoldAreaMass.tsx` | Growth → `CommitmentChart`; dark → `ParityWaterChart`; removed outer ghost layer + Recharts areas |
+| `ModeChart.tsx` | Recharts `LineChart` → custom SVG Catmull-Rom paths + edge mask + drop shadows |
+| `InfrastructureGrid.tsx` | Curved→flat SVG path morph + ghost metrics (RAW LOGS, CLEANSED, …) |
+| `ParityWaterChart.tsx` | Lake: scanlines on data layer only; caustics above with `mix-blend-screen` |
+| `FraudScrollChart.tsx` | Ghost positions shifted right; arc drop-shadows |
+| `TrafficChannels.tsx` | Home 2×2 grid; hover-reveal description + CTA on desktop |
+| `Audience.tsx` · `PromiseSection.tsx` | Copy block margin tuning |
+| `liveContent.ts` | Audience growth → **SCALE**; promise clarity description extended |
+| `base.css` · `typography.css` | Section/card spacing up; headline weights down; `.copy` weight 300 |
+| `charts.css` · `accent-scroll.css` | Fold chart positioning; anchor min-heights; fold `100dvh` |
 
-**Intent:** calm lake metaphor (not raindrops). Ghosts float from chart band; **vertical** mask dissolves them before Promise body copy (do not clip left lane). Bars use Framer `scaleY` on fold **anchor** progress ~`0.4→0.9` (Promise has no sticky runway — late window). Full-bleed via `margin-left: -50vw` (no CSS `transform` on root — Framer opacity-safe).
-
-**Open polish:** confirm rise/fall while scrolling Promise slowly; tune ghost mask % vs body text if overlap returns.
+**Open polish:** scroll Promise slowly — confirm ghost mask vs body copy; tune `-mb-[14px]` fold pair if band gap regresses.
 
 ---
 

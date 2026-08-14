@@ -2,7 +2,7 @@
   margin-top: 0.75rem;
   font-family: var(--font-display);
   font-size: var(--text-title);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: var(--tracking-title);
   line-height: var(--leading-snug);
   text-transform: uppercase;
@@ -94,7 +94,7 @@
   margin-inline: auto;
   max-width: 16ch;
   font-size: var(--text-display);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: var(--tracking-display);
   line-height: 0.94;
   text-align: center;
@@ -145,7 +145,7 @@
 
 .stat-value {
   font-size: clamp(1.375rem, 2.5vw, 1.625rem);
-  font-weight: 700;
+  font-weight: 600;
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-title);
   font-variant-numeric: tabular-nums;
@@ -189,7 +189,7 @@
 .hero-stat-ghost__value {
   min-height: 1.05em;
   font-size: clamp(1.85rem, 3.25vw, 2.65rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -227,7 +227,7 @@
 
 .card-title {
   font-size: var(--text-panel);
-  font-weight: 700;
+  font-weight: 600;
   line-height: var(--leading-snug);
   text-transform: uppercase;
   letter-spacing: var(--tracking-card);
@@ -238,7 +238,7 @@
   text-transform: uppercase;
   letter-spacing: var(--tracking-kicker);
   font-size: var(--text-kicker);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .text-micro {
@@ -471,14 +471,15 @@ header nav .nav-link:focus-visible::after {
 .section-lead {
   max-width: 42rem;
   font-size: var(--text-lead);
-  font-weight: 700;
+  font-weight: 600;
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-title);
 }
 
 .copy {
   font-size: var(--text-body);
-  line-height: var(--leading-body);
+  font-weight: 300;
+  line-height: 1.6;
   color: var(--theme-muted-light);
 }
 
