@@ -1,7 +1,7 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Всё, что было разнесено по `AI-FULL`, `HANDOFF`, `SOLUTIONS`, `HERO`, `ASSETS`, `BRAND-ASCENT`, — собрано здесь.  
-> **Updated:** 14 August 2026 (night — forcing Vercel trigger)  
+> **Updated:** 17 August 2026 (backup and sync)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `**upraiser-site-v2`**  
 > **HEAD (committed):** `2e04d94` — Contact page layout fixes, form placeholders, charts polishing  
