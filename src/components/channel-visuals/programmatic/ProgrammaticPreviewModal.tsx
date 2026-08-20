@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Canvas } from "@react-three/fiber";
-import { NightStars } from "../../hero-terrain/NightStars";
+import { AmbientModalBackground } from "../../AmbientModalBackground";
 import type { SiteMode } from "../../../data/liveContent";
 import { cn } from "../../../lib/cn";
 import { useReducedMotion } from "../../../hooks/useReducedMotion";
@@ -62,30 +61,7 @@ export function ProgrammaticPreviewModal({
           <button type="button" className="cv-prog-modal__backdrop" aria-label="Close preview" onClick={onClose} />
 
           {/* Ambient Backgrounds behind the modal */}
-          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
-            {/* Dark Theme: Stars */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1, duration: 1.5 }} className="hidden dark:block absolute inset-0">
-              {typeof window !== "undefined" && (
-                <React.Suspense fallback={null}>
-                  <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }}>
-                    <NightStars />
-                  </Canvas>
-                </React.Suspense>
-              )}
-            </motion.div>
-
-            {/* Light Theme: Mountains */}
-            <div className="absolute inset-0 opacity-100 transition-opacity duration-1000 flex items-end justify-center pointer-events-none">
-              <video
-                src="/hero/light-mountains-modal.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="block dark:hidden w-full h-full object-cover object-center opacity-[0.35] contrast-[0.7] brightness-[1.15] sepia-[0.1] hue-rotate-[200deg] blur-[1px]"
-              />
-            </div>
-          </div>
+          <AmbientModalBackground />
 
           <motion.div
             role="dialog"

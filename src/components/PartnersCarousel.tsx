@@ -5,6 +5,7 @@ import { partnersForSet, partnerSetForRoute } from "../data/partners";
 import { clientBrands } from "../data/clients";
 
 import { SectionHeader } from "./SectionHeader";
+import { AmbientModalBackground } from "./AmbientModalBackground";
 
 type PartnersCarouselProps = {
   /** Compact strip for viewport chrome */
@@ -122,12 +123,13 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
         {modalOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8">
             <motion.div
-              className="absolute inset-0 bg-bg/90 backdrop-blur-sm"
+              className="absolute inset-0 bg-[color-mix(in_srgb,var(--theme-bg)_35%,rgba(0,0,0,0.72))] backdrop-blur-[10px]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setModalOpen(false)}
             />
+            <AmbientModalBackground />
             <motion.div
               className="relative w-full max-w-5xl rounded-3xl bg-bg-card border border-border/50 shadow-2xl p-8 sm:p-12 overflow-y-auto max-h-[90vh]"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}

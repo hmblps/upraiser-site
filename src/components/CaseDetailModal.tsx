@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Canvas } from "@react-three/fiber";
 import type { CaseStudy } from "../data/cases";
 import { CaseDetailArticle } from "./CaseDetailArticle";
-import { NightStars } from "./hero-terrain/NightStars";
+import { AmbientModalBackground } from "./AmbientModalBackground";
 import { SPRING, SPRING_SOFT } from "../lib/motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -62,29 +61,7 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             aria-label="Close case study"
             onClick={onClose}
           />
-          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1, duration: 1.5 }} className="hidden dark:block absolute inset-0">
-              {typeof window !== "undefined" && (
-                <React.Suspense fallback={null}>
-                  <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }}>
-                    <NightStars />
-                  </Canvas>
-                </React.Suspense>
-              )}
-            </motion.div>
-            
-            {/* Ambient Mountains behind the modal (Light Theme only) */}
-            <div className="absolute inset-0 opacity-100 transition-opacity duration-1000 flex items-end justify-center pointer-events-none z-0 overflow-hidden">
-              <video
-                src="/hero/light-mountains-modal.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="block dark:hidden w-full h-full object-cover object-center opacity-[0.35] contrast-[0.7] brightness-[1.15] sepia-[0.1] hue-rotate-[200deg] blur-[1px]"
-              />
-            </div>
-          </div>
+          <AmbientModalBackground />
 
           <motion.div
             role="dialog"
