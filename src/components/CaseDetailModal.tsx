@@ -62,14 +62,30 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             aria-label="Close case study"
             onClick={onClose}
           />
-          <div className="absolute inset-0 pointer-events-none hidden dark:block -z-10" aria-hidden="true">
+          <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
             {typeof window !== "undefined" && (
               <React.Suspense fallback={null}>
-                <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }}>
+                <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }} className="hidden dark:block">
                   <NightStars />
                 </Canvas>
               </React.Suspense>
             )}
+            
+            {/* Ambient Mountains behind the modal */}
+            <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen transition-opacity duration-1000 flex items-end justify-center pointer-events-none">
+              <img 
+                src="/hero/dark-mountain-fallback.png" 
+                alt="" 
+                className="hidden dark:block w-full h-full object-cover object-bottom max-w-[1200px]" 
+                draggable="false"
+              />
+              <img 
+                src="/hero/light-mountains-fallback.png" 
+                alt="" 
+                className="block dark:hidden w-full h-full object-cover object-bottom max-w-[1200px]" 
+                draggable="false"
+              />
+            </div>
           </div>
 
           <motion.div
