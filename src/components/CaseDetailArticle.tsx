@@ -15,10 +15,10 @@ const FOCUS_LABELS = {
 } as const;
 
 function ResultMetric({ value, label, active }: { value: string; label: string; active: boolean }) {
-  const display = useCountUp(value, active, 1600);
+  const ref = useCountUp(value, active, 1600);
   return (
     <div className="case-detail-result">
-      <p className="case-detail-result__value">{active ? display : value}</p>
+      <p className="case-detail-result__value" ref={ref as any}>{value}</p>
       <p className="case-detail-result__label">{label}</p>
     </div>
   );

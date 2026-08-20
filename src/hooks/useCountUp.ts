@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useReducedMotion } from "./useReducedMotion";
 
 type ParsedStat = {
@@ -38,14 +38,17 @@ function formatValue(value: number, decimals: number) {
 
 export function useCountUp(raw: string, active: boolean, duration = 1400) {
   const reduced = useReducedMotion();
-  const [display, setDisplay] = useState(raw);
+  const ref = useRef<HTMLParagraphElement | HTMLSpanElement | HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
     const parsed = parseStatValue(raw);
 
     if (!active || !parsed.animate || reduced) {
-      setDisplay(raw);
+      el.textContent = raw;
       return;
     }
 
@@ -55,7 +58,7 @@ export function useCountUp(raw: string, active: boolean, duration = 1400) {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - (1 - progress) ** 3;
       const current = parsed.end * eased;
-      setDisplay(`${parsed.prefix}${formatValue(current, parsed.decimals)}${parsed.suffix}`);
+      el.textContent = `${parsed.prefix}${formatValue(current, parsed.decimals)}${parsed.suffix}`;
 
       if (progress < 1) {
         frameRef.current = requestAnimationFrame(tick);
@@ -69,5 +72,5 @@ export function useCountUp(raw: string, active: boolean, duration = 1400) {
     };
   }, [active, duration, raw, reduced]);
 
-  return display;
+  return ref;
 }

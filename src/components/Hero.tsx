@@ -70,11 +70,11 @@ function HeroStatsDots({
 }
 
 function StatCard({ value, label, counted, accent }: { value: string; label: string; counted: boolean; accent?: boolean }) {
-  const display = useCountUp(value, counted);
+  const ref = useCountUp(value, counted);
 
   return (
     <article className={`hero-stat-ghost h-full ${accent ? 'is-accent' : ''}`}>
-      <div className="hero-stat-ghost__value">{display}</div>
+      <div className="hero-stat-ghost__value" ref={ref as any}>{value}</div>
       <p className="hero-stat-ghost__label">{label}</p>
     </article>
   );
