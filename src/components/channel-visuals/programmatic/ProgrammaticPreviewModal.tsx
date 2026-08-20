@@ -75,7 +75,7 @@ export function ProgrammaticPreviewModal({
             </div>
 
             {/* Light Theme: Mountains */}
-            <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 mix-blend-multiply transition-opacity duration-1000 flex items-end justify-center pointer-events-none">
+            <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-40 transition-opacity duration-1000 flex items-end justify-center pointer-events-none">
               <video
                 src="/hero/light-mountains-modal.mp4"
                 autoPlay
