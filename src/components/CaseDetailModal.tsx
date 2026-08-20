@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CaseStudy } from "../data/cases";
 import { CaseDetailArticle } from "./CaseDetailArticle";
-import { AmbientModalBackground } from "./AmbientModalBackground";
+import { GlobalModalTrigger } from "./GlobalModalTrigger";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type CaseDetailModalProps = {
@@ -60,7 +60,7 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             aria-label="Close case study"
             onClick={onClose}
           />
-          <AmbientModalBackground />
+          <GlobalModalTrigger />
 
           <motion.div
             role="dialog"

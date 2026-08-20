@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
+import { GlobalAmbientModalBackground } from "../components/GlobalAmbientModalBackground";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { SiteGrain } from "../components/SiteGrain";
 import { ScrollLink } from "../components/ScrollLink";
@@ -65,6 +66,7 @@ export function SiteLayout() {
         </ScrollLink>
         <SiteGrain />
         <DeferredCustomCursor />
+        <GlobalAmbientModalBackground />
         <Header />
         <div className={viewportRoute ? "viewport-route-frame" : undefined}>
           <Outlet />

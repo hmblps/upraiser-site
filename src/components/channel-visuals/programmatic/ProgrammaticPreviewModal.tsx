@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { AmbientModalBackground } from "../../AmbientModalBackground";
+import { GlobalModalTrigger } from "../../GlobalModalTrigger";
 import type { SiteMode } from "../../../data/liveContent";
 import { cn } from "../../../lib/cn";
 import { useReducedMotion } from "../../../hooks/useReducedMotion";
@@ -61,7 +61,7 @@ export function ProgrammaticPreviewModal({
           <button type="button" className="cv-prog-modal__backdrop" aria-label="Close preview" onClick={onClose} />
 
           {/* Ambient Backgrounds behind the modal */}
-          <AmbientModalBackground />
+          <GlobalModalTrigger />
 
           <motion.div
             role="dialog"
