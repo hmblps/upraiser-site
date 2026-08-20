@@ -120,11 +120,11 @@ export function Contact() {
   ];
 
   return (
-    <div className="depth-page depth-page--contact viewport-page !overflow-visible">
-      <div className="viewport-page__shell section-inner flex min-h-0 flex-col !overflow-visible">
-        <div className="viewport-page__panel relative min-h-0 flex-1 !overflow-visible pb-8 pt-3">
-          <div className="flex h-full min-h-0 w-full flex-col justify-center !overflow-visible">
-            <div className="strip-beam-wrap relative max-h-full min-h-0 w-full overflow-hidden rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl">
+    <div className="depth-page depth-page--contact min-h-[100dvh] overflow-y-auto flex flex-col w-full">
+      <div className="section-inner flex flex-col pt-[var(--nav-height)] pb-8 flex-1">
+        <div className="relative flex-1 pb-8 pt-3">
+          <div className="flex h-full w-full flex-col justify-center">
+            <div className="strip-beam-wrap relative w-full rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl flex-1 flex flex-col">
               <GradientTraceBorder
                 className="z-20"
                 duration={3.4}
@@ -132,8 +132,8 @@ export function Contact() {
                 colorFrom="var(--theme-accent-light)"
                 colorTo="var(--color-magenta)"
               />
-              <div className="relative z-[1] grid max-h-full min-h-0 overflow-hidden lg:grid-cols-[1fr_1.2fr]">
-                <div className="relative flex min-h-0 flex-col overflow-y-auto bg-bg-elevated custom-scrollbar card-pad">
+              <div className="relative z-[1] grid flex-1 lg:grid-cols-[1fr_1.2fr]">
+                <div className="relative flex flex-col bg-bg-elevated card-pad">
                   <p className="section-label">{contactPage.label}</p>
                   <h1 className="section-title section-title--compact mt-1.5">
                     {contactPage.titleLead}
@@ -165,7 +165,7 @@ export function Contact() {
                     <div>
                       <h2 className="contact-sidebar__title">Direct Communications</h2>
                       <p className="copy mt-2">
-                        Traders and Engineers Desk:{" "}
+                        Direct Operator Contact:{" "}
                         <a href="mailto:info@upraiser.co.uk" className="text-fg underline hover:text-accent">
                           info@upraiser.co.uk
                         </a>
@@ -194,7 +194,7 @@ export function Contact() {
                   </div>
                 </div>
 
-                <div className="flex min-h-0 flex-col overflow-y-auto custom-scrollbar card-pad">
+                <div className="flex flex-col card-pad">
                   {status === "success" ? (
                     <div
                       className="flex h-full min-h-0 flex-col items-center justify-center text-center"
@@ -227,7 +227,7 @@ export function Contact() {
                   ) : (
                     <form
                       onSubmit={handleSubmit}
-                      className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden"
+                      className="flex flex-1 flex-col gap-2"
                       noValidate
                       aria-busy={status === "loading"}
                     >

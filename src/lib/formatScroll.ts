@@ -1,5 +1,5 @@
 /** Virtual scroll runway per format card (desktop sticky section). */
-export const FORMAT_SCROLL_ITEM_HEIGHT = 2800;
+export const FORMAT_SCROLL_ITEM_HEIGHT = 1000;
 
 /** Map sticky progress 0→1 to active format index. */
 export function progressToFormatIndex(progress: number, count: number): number {

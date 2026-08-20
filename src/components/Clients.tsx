@@ -53,7 +53,7 @@ export function Clients() {
               {" · "}
               <ScrollLink href="/solutions" className="text-accent hover:text-accent/80 transition-colors">The Routes</ScrollLink>
               {" · "}
-              <ScrollLink href="/cases" className="text-accent hover:text-accent/80 transition-colors">The Peaks</ScrollLink>
+              <ScrollLink href="/#cases" className="text-accent hover:text-accent/80 transition-colors">The Peaks</ScrollLink>
             </p>
           </div>
         </div>

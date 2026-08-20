@@ -1318,13 +1318,13 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .partner-logo-slot--home {
-  height: 4rem;
+  height: 5rem;
   padding-inline: 1.75rem;
 }
 
 .partner-logo-slot--home .partner-logo {
-  height: calc(1.6rem * var(--logo-scale, 1));
-  max-height: 2.2rem;
+  height: calc(2rem * var(--logo-scale, 1));
+  max-height: 2.8rem;
 }
 
 @media (min-width: 640px) {
@@ -1339,24 +1339,11 @@ html.theme-light .depth-page--gear .gear-spec,
   }
 
   .partner-logo-slot--home .partner-logo {
-    height: calc(2.1rem * var(--logo-scale, 1));
-    max-height: 2.85rem;
+    height: calc(2.8rem * var(--logo-scale, 1));
+    max-height: 3.5rem;
   }
 }
 
-/* Disable hover effects for homepage clients to keep them purely monochromatic and non-interactive */
-.partners-strip--home .partner-logo-slot:hover .partner-logo,
-.partners-strip--home .partner-logo-slot:focus-within .partner-logo {
-  opacity: 0.5;
-  filter: brightness(0) invert(1);
-  transform: none;
-}
-
-[data-theme="light"] .partners-strip--home .partner-logo-slot:hover .partner-logo,
-[data-theme="light"] .partners-strip--home .partner-logo-slot:focus-within .partner-logo {
-  opacity: 0.34;
-  filter: brightness(0);
-}
 
 @media (min-width: 900px) {
   /* Nested channels strip shouldn't re-introduce a full section runway */

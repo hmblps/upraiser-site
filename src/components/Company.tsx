@@ -29,6 +29,32 @@ export function Company() {
           </p>
         </header>
 
+        <section className="trust-block max-w-3xl border-y border-border/30 py-8 mb-4">
+          <h2 className="text-micro font-medium uppercase tracking-caps text-muted">Registered Entity & Compliance</h2>
+          <div className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
+            <div>
+              <p className="card-kicker text-muted-light mb-1">HQ</p>
+              <p className="font-medium text-fg">Basecamp London</p>
+              <p className="text-sm text-muted mt-1 leading-snug">128 City Road<br/>London EC1V 2NX</p>
+            </div>
+            <div>
+              <p className="card-kicker text-muted-light mb-1">Data</p>
+              <p className="font-medium text-fg">ICO Registered</p>
+              <p className="text-sm text-muted mt-1 leading-snug">Ref: ZC000436<br/>GDPR Compliant</p>
+            </div>
+            <div>
+              <p className="card-kicker text-muted-light mb-1">Hardware</p>
+              <p className="font-medium text-fg">OEM Lenovo Partner</p>
+              <p className="text-sm text-muted mt-1 leading-snug">Direct Factory PAI<br/>& ROM Placements</p>
+            </div>
+            <div>
+              <p className="card-kicker text-muted-light mb-1">Entity</p>
+              <p className="font-medium text-fg">Upraiser Agency LLP</p>
+              <p className="text-sm text-muted mt-1 leading-snug">Reg: OC441712<br/>United Kingdom</p>
+            </div>
+          </div>
+        </section>
+
         <AscentCamps camps={aboutExpedition.camps} />
 
         <section className="ascent-faq mx-auto w-full max-w-3xl" aria-labelledby="ascent-faq-heading">

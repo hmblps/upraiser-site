@@ -11,8 +11,9 @@ export function LenovoPartnershipCopy({
 }: LenovoPartnershipCopyProps) {
   return (
     <div className={className}>
-      <p className={paragraphClassName}>{lenovoPartnership.descriptionIntro}</p>
-      <p className={paragraphClassName}>{lenovoPartnership.descriptionLead}</p>
+      <p className={paragraphClassName}>
+        {lenovoPartnership.descriptionIntro} {lenovoPartnership.descriptionLead}
+      </p>
     </div>
   );
 }

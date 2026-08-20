@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
 import type { CaseStudy } from "../data/cases";
 import { CaseDetailArticle } from "./CaseDetailArticle";
+import { NightStars } from "./hero-terrain/NightStars";
 import { SPRING, SPRING_SOFT } from "../lib/motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -60,6 +62,15 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             aria-label="Close case study"
             onClick={onClose}
           />
+          <div className="absolute inset-0 pointer-events-none hidden dark:block -z-10" aria-hidden="true">
+            {typeof window !== "undefined" && (
+              <React.Suspense fallback={null}>
+                <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }}>
+                  <NightStars />
+                </Canvas>
+              </React.Suspense>
+            )}
+          </div>
 
           <motion.div
             role="dialog"
@@ -71,6 +82,16 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={simpleMotion ? undefined : { opacity: 0, y: 24, scale: 0.97 }}
             transition={simpleMotion ? { duration: 0.15 } : SPRING}
+            onAnimationComplete={(definition) => {
+              // Fix for Windows: When animation finishes, clear the inline transform
+              // so the browser drops the GPU layer and restores ClearType text rendering.
+              if (definition && typeof definition === "object" && "opacity" in definition && definition.opacity === 1) {
+                const el = document.querySelector(".case-detail-modal__panel") as HTMLElement;
+                if (el) {
+                  el.style.transform = "none";
+                }
+              }
+            }}
           >
             <div className="case-detail-modal__toolbar">
               <p id={`case-modal-title-${item.id}`} className="sr-only">

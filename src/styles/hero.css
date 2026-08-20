@@ -317,15 +317,22 @@
   opacity: var(--hero-label-opacity, 0);
   transform: translate3d(0, calc(var(--hero-label-y, 28) * 1px), 0);
   will-change: transform, opacity;
+  /* Unified premium label color */
+  color: color-mix(in srgb, var(--theme-accent-secondary) 25%, var(--theme-fg) 75%);
 }
 
-/* Light: gold-on-white washes out over the wire — use red ink like the ghost stats */
+/* Light: same rule applies beautifully, overriding default */
 [data-theme="light"] .hero-fly-label {
-  color: var(--theme-accent-secondary);
+  color: color-mix(in srgb, var(--theme-accent-secondary) 25%, var(--theme-fg) 75%);
 }
 
 .hero-lede {
-  text-wrap: pretty;
+  /* Restrict width to create a compact 2-line block that doesn't shoot past the headline */
+  max-width: 38ch !important;
+  /* Balance lines so they are almost perfectly equal in length */
+  text-wrap: balance !important;
+  /* Optical alignment: pull left to match the heavy H1 W */
+  margin-left: -0.15em;
 }
 
 .hero-content {

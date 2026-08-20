@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 const INTERACTIVE_SELECTOR = 'a, button, input, textarea, select, label, [role="button"], [data-cursor="pointer"]';
@@ -26,19 +27,25 @@ function syncCursorClasses(
   el.classList.toggle("is-visible", visible);
 }
 
-/**
- * Imperative cursor — no React setState on the mousemove hot path
- * (elementFromPoint + re-renders were fighting Lenis / WebGL).
- */
+const SPRING_CONFIG = { stiffness: 400, damping: 30, mass: 0.5 };
+const RING_SPRING_CONFIG = { stiffness: 250, damping: 35, mass: 0.8 };
+
 export function CustomCursor() {
   const reduced = useReducedMotion();
   const [active, setActive] = useState(false);
+  
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const target = useRef({ x: -100, y: -100 });
-  const current = useRef({ x: -100, y: -100 });
-  const ring = useRef({ x: -100, y: -100 });
-  const frameRef = useRef(0);
+  
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+  
+  const dotX = useSpring(mouseX, SPRING_CONFIG);
+  const dotY = useSpring(mouseY, SPRING_CONFIG);
+  
+  const ringX = useSpring(mouseX, RING_SPRING_CONFIG);
+  const ringY = useSpring(mouseY, RING_SPRING_CONFIG);
+
   const hitTestUntil = useRef(0);
   const modeRef = useRef<CursorMode>("default");
   const hoveringRef = useRef(false);
@@ -64,18 +71,12 @@ export function CustomCursor() {
     };
 
     const snapTo = (x: number, y: number) => {
-      target.current.x = x;
-      target.current.y = y;
-      current.current.x = x;
-      current.current.y = y;
-      ring.current.x = x;
-      ring.current.y = y;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
+      mouseX.set(x);
+      mouseY.set(y);
+      dotX.jump(x);
+      dotY.jump(y);
+      ringX.jump(x);
+      ringY.jump(y);
     };
 
     const onMove = (event: MouseEvent) => {
@@ -87,13 +88,12 @@ export function CustomCursor() {
         paintClasses();
         snapTo(x, y);
       } else {
-        // Fast jumps (route change / tab return) — snap so the trail doesn't "lose" the pointer
-        const jump = Math.hypot(x - current.current.x, y - current.current.y);
+        const jump = Math.hypot(x - dotX.get(), y - dotY.get());
         if (jump > 140) {
           snapTo(x, y);
         } else {
-          target.current.x = x;
-          target.current.y = y;
+          mouseX.set(x);
+          mouseY.set(y);
         }
       }
 
@@ -132,31 +132,6 @@ export function CustomCursor() {
       }
     };
 
-    const animate = () => {
-      const tx = target.current.x;
-      const ty = target.current.y;
-
-      current.current.x += (tx - current.current.x) * 0.42;
-      current.current.y += (ty - current.current.y) * 0.42;
-      ring.current.x += (tx - ring.current.x) * 0.22;
-      ring.current.y += (ty - ring.current.y) * 0.22;
-
-      const dx = current.current.x;
-      const dy = current.current.y;
-      const rx = ring.current.x;
-      const ry = ring.current.y;
-
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
-      }
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-      }
-
-      frameRef.current = requestAnimationFrame(animate);
-    };
-
-    frameRef.current = requestAnimationFrame(animate);
     window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
@@ -165,21 +140,28 @@ export function CustomCursor() {
 
     return () => {
       document.body.classList.remove("custom-cursor-active");
-      cancelAnimationFrame(frameRef.current);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       document.documentElement.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [reduced]);
+  }, [reduced, dotX, dotY, mouseX, mouseY, ringX, ringY]);
 
   if (!active) return null;
 
   return (
     <div aria-hidden className="custom-cursor-root">
-      <div ref={ringRef} className="custom-cursor-ring" />
-      <div ref={dotRef} className="custom-cursor-dot" />
+      <motion.div 
+        ref={ringRef} 
+        className="custom-cursor-ring" 
+        style={{ x: ringX, y: ringY, z: 0, willChange: "transform" }} 
+      />
+      <motion.div 
+        ref={dotRef} 
+        className="custom-cursor-dot" 
+        style={{ x: dotX, y: dotY, z: 0, willChange: "transform" }} 
+      />
     </div>
   );
 }

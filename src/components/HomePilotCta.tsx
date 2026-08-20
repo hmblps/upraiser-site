@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll as useFramerScroll, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { bridgeByMode, primaryCta } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -21,16 +21,32 @@ export function HomePilotCta() {
   const reduced = useReducedMotion();
   const bridge = bridgeByMode[mode];
 
+  const { scrollYProgress } = useFramerScroll();
+  const parallaxY = useTransform(scrollYProgress, [0.8, 1], [150, -50]);
+
   const switchStory = () => {
     toggleTheme();
     navigate("/");
     window.setTimeout(() => scrollTo("hero"), 160);
   };
 
-  if (!dualStoryReady) {
-    return (
-      <section id="pilot" className="section-band section-band--dense">
-        <div className="section-inner">
+  return (
+    <section id="pilot" className="section-band section-band--dense relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center opacity-10 dark:opacity-5">
+        <motion.svg
+          style={{ y: reduced ? 0 : parallaxY }}
+          width="1200"
+          height="400"
+          viewBox="0 0 1200 400"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M0 400L250 150L450 300L750 50L950 250L1200 100V400H0Z" />
+        </motion.svg>
+      </div>
+
+      <div className="section-inner relative z-10">
+        {!dualStoryReady ? (
           <Reveal>
             <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
               <div className="max-w-xl">
@@ -54,35 +70,30 @@ export function HomePilotCta() {
               </Magnetic>
             </div>
           </Reveal>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section id="pilot" className="section-band section-band--dense">
-      <div className="section-inner">
-        <Reveal>
-          <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
-            <div className="max-w-xl">
-              <p className="section-label">Next step</p>
-              <h2 className="section-heading">Ready to be Upraised?</h2>
-              <p className="copy mt-3">
-                Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.
-              </p>
+        ) : (
+          <Reveal>
+            <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
+              <div className="max-w-xl">
+                <p className="section-label">Next step</p>
+                <h2 className="section-heading">Ready to be Upraised?</h2>
+                <p className="copy mt-3">
+                  Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.
+                </p>
+              </div>
+              <Magnetic>
+                <ScrollLink
+                  href={primaryCta.href}
+                  data-cursor="cta"
+                  className="btn-caps btn-caps--primary inline-block shrink-0 rounded-full px-7 py-3.5"
+                >
+                  {primaryCta.label}
+                </ScrollLink>
+              </Magnetic>
             </div>
-            <Magnetic>
-              <ScrollLink
-                href={primaryCta.href}
-                data-cursor="cta"
-                className="btn-caps btn-caps--primary inline-block shrink-0 rounded-full px-7 py-3.5"
-              >
-                {primaryCta.label}
-              </ScrollLink>
-            </Magnetic>
-          </div>
-        </Reveal>
+          </Reveal>
+        )}
       </div>
+
     </section>
   );
 }

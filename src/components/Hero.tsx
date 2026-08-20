@@ -69,11 +69,11 @@ function HeroStatsDots({
   );
 }
 
-function StatCard({ value, label, counted }: { value: string; label: string; counted: boolean }) {
+function StatCard({ value, label, counted, accent }: { value: string; label: string; counted: boolean; accent?: boolean }) {
   const display = useCountUp(value, counted);
 
   return (
-    <article className="hero-stat-ghost h-full">
+    <article className={`hero-stat-ghost h-full ${accent ? 'is-accent' : ''}`}>
       <div className="hero-stat-ghost__value">{display}</div>
       <p className="hero-stat-ghost__label">{label}</p>
     </article>
@@ -197,7 +197,7 @@ function HeroPinnedScene() {
                           className="hero-stats__cell w-[min(68vw,11.5rem)] shrink-0 snap-start md:w-auto"
                           style={{ pointerEvents: revealed ? undefined : "none" }}
                         >
-                          <StatCard value={item.value} label={item.label} counted={revealed} />
+                          <StatCard value={item.value} label={item.label} counted={revealed} accent={'accent' in item ? item.accent : false} />
                         </motion.div>
                       );
                     })}

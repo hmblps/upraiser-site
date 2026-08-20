@@ -47,7 +47,7 @@ export function CasesTeaser() {
         <Reveal delay={0.12} className="mt-8 flex justify-center">
           <Magnetic strength={0.22}>
             <Link
-              to="/cases"
+              to="/#cases"
               data-cursor="link"
               className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5"
             >

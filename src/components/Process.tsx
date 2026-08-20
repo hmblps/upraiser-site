@@ -91,9 +91,8 @@ export function Process() {
     <section
       ref={sectionRef}
       id="process"
-      className="section-band section-band--ambience section-band--dense relative overflow-hidden"
+      className="section-band section-band--dense relative overflow-hidden"
     >
-      <SectionAmbience tone="soft" />
       <div className="section-inner relative z-[1]">
         <SectionHeader animated={false} label={sectionsByMode.process.label} title={section.title} />
 
@@ -121,6 +120,11 @@ export function Process() {
           </Magnetic>
         </div>
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        [data-theme="light"] #process {
+          background-color: rgba(208, 221, 236, 0.4);
+        }
+      `}} />
     </section>
   );
 }

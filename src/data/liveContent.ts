@@ -34,8 +34,8 @@ export const heroFounded = "Founded 17 July 2017 based in London";
 
 /** Shared poetic H1 stays in Hero.tsx lede annotates by mode (ascent brand). */
 export const heroLedeByMode = {
-  growth: "We run global performance campaigns requiring absolute attribution proof. We manage Your media spend across direct OEM and programmatic exchanges.",
-  infrastructure: "We build transparent trading infrastructure delivering absolute attribution proof. We verify Your media spend through raw device logs and direct OEM integrations.",
+  growth: "We run global performance campaigns with absolute attribution proof.",
+  infrastructure: "We provide transparent infrastructure with absolute attribution proof.",
 } as const satisfies Record<SiteMode, string>;
 
 /** @deprecated use heroLedeByMode kept for any stray imports */
@@ -46,7 +46,7 @@ export const heroHighlightsByMode = {
     { value: "35+", label: "Active GEOs" },
     { value: "800M+", label: "OEM Device Reach" },
     { value: "48h", label: "SLA Setup" },
-    { value: "$150M+", label: "Spent Optimized" },
+    { value: "$75M+", label: "Media Spend Optimized", accent: true },
   ],
   infrastructure: [
     { value: "97.3%", label: "Fraud Blocked Pre-Bid" },
@@ -54,7 +54,7 @@ export const heroHighlightsByMode = {
     { value: "0.4ms", label: "p99 Bid Scoring" },
     { value: "180+", label: "Device Signals" },
   ],
-} satisfies Record<SiteMode, readonly { value: string; label: string }[]>;
+} satisfies Record<SiteMode, readonly { value: string; label: string; accent?: boolean }[]>;
 
 export const audienceByMode = {
   growth: {
@@ -66,7 +66,7 @@ export const audienceByMode = {
     scrollHeroWord: "SCALE",
     cta: primaryCta.label,
     description:
-      "You are the user acquisition lead or marketing director who needs to scale active player bases without breaking unit economics. Your campaigns target deep in-app conversions, from level completions to first deposits. We buy media based on real player lifetime value, deploying on-demand Creator-Generated Content (CGC) that out-converts static banner ads. We scale only the routes that deliver real revenue. We align every campaign with your exact financial targets, ensuring your growth strategy remains entirely in your control while we execute the heavy lifting.",
+      "You are the user acquisition lead or marketing director who needs to scale active player bases without breaking unit economics. Your campaigns target deep in-app conversions, from level completions to first deposits.\n\nWe buy media based on real player lifetime value, deploying on-demand Creator-Generated Content (CGC) that out-converts static banner ads. We scale only the routes that deliver real revenue.\n\nWe align every campaign with your exact financial targets, ensuring your growth strategy remains entirely in your control while we execute the heavy lifting.",
   },
   infrastructure: {
     label: "Teams who require campaign metrics to match the media invoice",
@@ -77,7 +77,7 @@ export const audienceByMode = {
     scrollHeroWord: "PROOF",
     cta: primaryCta.label,
     description:
-      "You are the Ad Ops manager, finance controller, or UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava. You require a direct supply path where every KPI event traces back to a raw device log. We leave opaque PDF reporting to traditional vendors. We build clean, verified supply lines so You can defend Your media spend in any financial review.",
+      "You are the Ad Ops manager, finance controller, or UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava.\n\nYou require a direct supply path where every KPI event traces back to a raw device log. We leave opaque PDF reporting to traditional vendors.\n\nWe build clean, verified supply lines so You can defend Your media spend in any financial review.",
   },
 } satisfies Record<SiteMode, {
   label: string;
@@ -339,9 +339,9 @@ export const lenovoPartnership = {
   title: "Lenovo PC HK LTD",
   stripLine: "Factory ROM and Google PAI delivering direct verified lanes.",
   descriptionIntro:
-    "Official Lenovo agency partner for brands and networks demanding procurement-grade OEM access securely alongside performance buying.",
+    "Official Lenovo agency partner. Procurement-grade OEM access for brands demanding pure altitude.",
   descriptionLead:
-    "Direct ROM and PAI lanes equipped with deep SDK trails mapping inventory and buying models strictly under Solutions OEM.",
+    "Bypass the noise. Direct ROM and PAI pipelines map Your inventory strictly under Lenovo Solutions OEM.",
 };
 
 export const aboutPage = {

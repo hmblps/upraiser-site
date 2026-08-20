@@ -1,7 +1,10 @@
 import { useState, useEffect, type CSSProperties } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { partnersForSet, partnerSetForRoute } from "../data/partners";
 import { clientBrands } from "../data/clients";
+
+import { SectionHeader } from "./SectionHeader";
 
 type PartnersCarouselProps = {
   /** Compact strip for viewport chrome */
@@ -14,9 +17,8 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   const [params] = useSearchParams();
   const setId = partnerSetForRoute(pathname, params.get("pillar"));
   const partners = partnersForSet(setId);
-  const [index, setIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(true);
   const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -24,66 +26,16 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (!modalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModalOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [modalOpen]);
+
   const itemsList = compact ? partners : clientBrands;
-  const visibleCount = width < 640 ? 3 : width < 1024 ? 4 : 6;
-  const extendedItems = [...itemsList, ...itemsList];
-
-  useEffect(() => {
-    if (itemsList.length === 0) return;
-
-    let timer: ReturnType<typeof setInterval>;
-    let started = false;
-
-    const startCarousel = () => {
-      if (started) return;
-      started = true;
-      
-      // If we are not in compact mode, we want the first slide to tick immediately on scale-ready
-      if (!compact) {
-        setIsTransitioning(true);
-        setIndex((prev) => prev + 1);
-      }
-      
-      timer = setInterval(() => {
-        setIsTransitioning(true);
-        setIndex((prev) => prev + 1);
-      }, 3500); // Step every 3.5s
-    };
-
-    // If we're on the compact strip (like in Footer or somewhere else)
-    // we don't necessarily have a hero to wait for.
-    if (compact) {
-      startCarousel();
-    } else {
-      if (typeof window !== "undefined" && (window as any).scaleReady) {
-        startCarousel();
-      } else {
-        window.addEventListener("scale-ready", startCarousel);
-        // Fallback in case event missed, but give Hero plenty of time to load (10s)
-        const fallback = setTimeout(startCarousel, 10000);
-
-        return () => {
-          window.removeEventListener("scale-ready", startCarousel);
-          clearTimeout(fallback);
-          if (timer) clearInterval(timer);
-        };
-      }
-    }
-
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [itemsList.length, compact]);
-
-  useEffect(() => {
-    if (index >= itemsList.length) {
-      const timeout = setTimeout(() => {
-        setIsTransitioning(false);
-        setIndex(0);
-      }, 500); // Match transition speed
-      return () => clearTimeout(timeout);
-    }
-  }, [index, itemsList.length]);
 
   if (itemsList.length === 0) return null;
 
@@ -109,58 +61,116 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
     );
   }
 
-  /* Home / footer runway — stepped sliding carousel like thingortwo.com */
+  /* Home / footer runway — continuous pure CSS marquee */
+  const marqueeItems = [...itemsList, ...itemsList];
+
   return (
-    <section
-      className="partners-strip partners-strip--home relative overflow-hidden bg-transparent"
-      aria-label="Trusted clients"
-    >
-      <div className="text-center mb-6 mt-8">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-fg-muted/40">
-          Our Clients
-        </span>
-      </div>
-
-      {/* Centered, boxed container so it does not stretch edge-to-edge */}
-      <div className="relative w-full max-w-[1100px] mx-auto px-6 overflow-hidden">
-        {/* Soft edge-fade gradients inside the box boundary */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-bg to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-bg to-transparent" />
-
-        <div
-          className="flex items-center"
-          style={{
-            width: `${(extendedItems.length / visibleCount) * 100}%`,
-            transform: `translateX(-${(index / extendedItems.length) * 100}%)`,
-            transition: isTransitioning ? "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)" : "none",
-          }}
-        >
-          {extendedItems.map((brand, idx) => (
-            <div
-              key={`${brand.slug}-${idx}`}
-              className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0"
-              style={{
-                width: `${100 / extendedItems.length}%`,
-                "--logo-scale": brand.scale ?? 1,
-              } as CSSProperties}
-            >
-              {brand.logo ? (
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="partner-logo"
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <span className="partner-logo-wordmark">
-                  {brand.name}
-                </span>
-              )}
-            </div>
-          ))}
+    <>
+      <section
+        className="partners-strip partners-strip--home relative overflow-hidden bg-transparent py-4"
+        aria-label="Trusted clients"
+      >
+        <div className="section-inner mb-6">
+          <SectionHeader label="Trusted by" title="Our Clients" animated={false} />
         </div>
-      </div>
-    </section>
+
+        <div className="section-inner">
+          <div 
+            className="relative w-full overflow-hidden cursor-pointer h-[100px] sm:h-[130px] flex items-center group"
+            onClick={() => setModalOpen(true)}
+          >
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 sm:w-32 bg-gradient-to-r from-bg to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 sm:w-32 bg-gradient-to-l from-bg to-transparent" />
+
+            <div className="partners-marquee flex w-max items-center h-full">
+              {marqueeItems.map((brand, idx) => (
+                <div
+                  key={`${brand.slug}-${idx}`}
+                  className="partner-logo-slot partner-logo-slot--home partner-logo-slot--interactive flex justify-center items-center flex-shrink-0 h-full px-12"
+                  style={{
+                    "--logo-scale": brand.scale ?? 1,
+                  } as CSSProperties}
+                >
+                  {brand.logo ? (
+                    <img
+                      src={brand.logo}
+                      alt={brand.name}
+                      className="partner-logo partner-logo-filter"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span className="partner-logo-wordmark partner-logo-filter">
+                      {brand.name}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <style dangerouslySetInnerHTML={{__html: `
+          .partner-logo-filter {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: filter 0.3s ease, opacity 0.3s ease;
+          }
+          @media (hover: hover) and (pointer: fine) {
+            .partner-logo-slot--interactive:hover .partner-logo-filter {
+              filter: grayscale(0%);
+              opacity: 1;
+            }
+          }
+        `}} />
+      </section>
+
+      <AnimatePresence>
+        {modalOpen && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8">
+            <motion.div
+              className="absolute inset-0 bg-bg/90 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setModalOpen(false)}
+            />
+            <motion.div
+              className="relative w-full max-w-5xl rounded-3xl bg-bg-card border border-border/50 shadow-2xl p-8 sm:p-12 overflow-y-auto max-h-[90vh]"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            >
+              <button 
+                onClick={() => setModalOpen(false)}
+                className="absolute top-6 right-6 p-2 text-fg-muted hover:text-fg transition-colors"
+                aria-label="Close modal"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+              
+              <h2 className="text-3xl font-bold mb-10 text-center tracking-tight">Our Clients</h2>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-12 items-center justify-items-center">
+                {clientBrands.map((brand) => (
+                  <div key={brand.slug} className="flex justify-center w-full" style={{ "--logo-scale": brand.scale ?? 1 } as CSSProperties}>
+                    {brand.logo ? (
+                      <img 
+                        src={brand.logo} 
+                        alt={brand.name} 
+                        className="max-w-[120px] max-h-[48px] w-auto object-contain opacity-90 hover:opacity-100 transition-opacity" 
+                      />
+                    ) : (
+                      <span className="font-bold text-lg text-fg/80">{brand.name}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

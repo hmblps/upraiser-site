@@ -22,7 +22,13 @@ export function UnderConstruction({
         <p className="section-label">{label}</p>
         <h1 className="section-title mt-3 max-w-xl">{title}</h1>
         <p className="section-description mt-4 max-w-lg">{description}</p>
-        <p className="mt-6 font-mono text-kicker text-accent">Under construction</p>
+        <div className="mt-8 flex items-center gap-3">
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
+          </span>
+          <p className="font-mono text-base font-medium tracking-wider uppercase text-accent">System Status: Online</p>
+        </div>
         <ScrollLink
           href={backHref}
           className="btn-caps btn-secondary mt-10 inline-flex min-h-[44px] items-center rounded-full px-7 py-3 touch-manipulation"

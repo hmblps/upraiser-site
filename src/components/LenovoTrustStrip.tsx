@@ -22,7 +22,7 @@ export function LenovoTrustStrip() {
             colorFrom="var(--theme-accent-light)"
             colorTo="var(--color-magenta)"
           />
-          <div className="relative z-[1] rail-strip__inner page-container flex flex-col items-start gap-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-5">
+          <div className="relative z-[1] rail-strip__inner page-container flex flex-col items-start gap-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-5 antialiased [transform:translateZ(0)]">
             <div className="flex items-center gap-4">
               <LenovoPartnershipLogo className="h-9 w-auto shrink-0 sm:h-10" />
               <div>
