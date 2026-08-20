@@ -149,7 +149,6 @@ body {
   background: var(--theme-bg);
   color: var(--theme-fg);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
   font-feature-settings: "ss01" on, "cv11" on;
   transition: background-color 0.2s ease, color 0.2s ease;
 }

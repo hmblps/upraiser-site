@@ -742,11 +742,6 @@
   border: 1px solid color-mix(in srgb, var(--theme-border) 80%, transparent);
   background: var(--theme-bg-elevated, var(--theme-bg-card));
   box-shadow: 0 24px 80px color-mix(in srgb, #000 28%, transparent);
-  
-  /* Fix for Windows Chrome/Edge: prevents text from becoming thin/blurry when Framer Motion leaves the element on a GPU layer */
-  -webkit-font-smoothing: subpixel-antialiased;
-  -moz-osx-font-smoothing: auto;
-  text-rendering: optimizeLegibility;
 }
 
 @media (max-width: 767px) {
@@ -860,7 +855,7 @@ body.custom-cursor-active label {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  z-index: 10001;
+  z-index: 99999;
 }
 
 .custom-cursor-dot,
