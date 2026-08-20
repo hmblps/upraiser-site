@@ -46,7 +46,7 @@ export function CustomCursor() {
   const ringX = useSpring(mouseX, RING_SPRING_CONFIG);
   const ringY = useSpring(mouseY, RING_SPRING_CONFIG);
 
-  const hitTestUntil = useRef(0);
+  
   const modeRef = useRef<CursorMode>("default");
   const hoveringRef = useRef(false);
   const clickingRef = useRef(false);
@@ -79,6 +79,18 @@ export function CustomCursor() {
       ringY.jump(y);
     };
 
+    
+    const onMouseOver = (event: MouseEvent) => {
+      const element = event.target as Element;
+      const nextMode = resolveCursorMode(element);
+      const nextHover = nextMode !== "default" || !!element?.closest(INTERACTIVE_SELECTOR);
+      if (nextMode !== modeRef.current || nextHover !== hoveringRef.current) {
+        modeRef.current = nextMode;
+        hoveringRef.current = nextHover;
+        paintClasses();
+      }
+    };
+    window.addEventListener("mouseover", onMouseOver, { passive: true });
     const onMove = (event: MouseEvent) => {
       const x = event.clientX;
       const y = event.clientY;
@@ -97,18 +109,7 @@ export function CustomCursor() {
         }
       }
 
-      const now = performance.now();
-      if (now < hitTestUntil.current) return;
-      hitTestUntil.current = now + 48;
-
-      const element = document.elementFromPoint(x, y);
-      const nextMode = resolveCursorMode(element);
-      const nextHover = nextMode !== "default" || !!element?.closest(INTERACTIVE_SELECTOR);
-      if (nextMode !== modeRef.current || nextHover !== hoveringRef.current) {
-        modeRef.current = nextMode;
-        hoveringRef.current = nextHover;
-        paintClasses();
-      }
+      
     };
 
     const onDown = () => {
@@ -140,6 +141,7 @@ export function CustomCursor() {
 
     return () => {
       document.body.classList.remove("custom-cursor-active");
+      window.removeEventListener("mouseover", onMouseOver);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
