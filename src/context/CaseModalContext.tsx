@@ -78,9 +78,11 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
     openingRef.current = null;
     setActiveId(null);
     if (caseIdFromPath(pathname)) {
-      navigate({ pathname: "/", hash: "cases" }, { replace: true });
+      // Use native history.replaceState instead of navigate() so ScrollToTop
+      // is NOT triggered — the user stays exactly where they scrolled.
+      window.history.replaceState(null, "", "/");
     }
-  }, [navigate, pathname]);
+  }, [pathname]);
 
   const value = useMemo(
     () => ({ openCase, closeCase, activeId }),

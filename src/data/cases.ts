@@ -59,14 +59,14 @@ export const caseStudies: CaseStudy[] = [
     ],
     trend: [22, 28, 34, 40, 46, 52, 58, 64, 70, 76, 82, 88],
     growthFocus: {
-      challenge: "Real-money sportsbook in a bonus-saturated US market. Scale without breaching 18+ or state geo rules.",
-      approach: "Whitelisted adult inventory, state-level targeting, and creative QA tied to FTD instead of install volume.",
+      challenge: "Real-money sportsbook in a bonus-saturated US market. Required strict MMP tracking and S2S postbacks without breaching 18+ or state geo rules.",
+      approach: "Whitelisted adult inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.",
       result: "800K installs, 50K FTDs, $25M+ revenue. Seven additional bets per bettor. $500+ revenue per FTD on average.",
     },
     optimizationFocus: {
-      challenge: "TikTok and Snapchat off-limits for 18+ gaming. Every placement needed a compliance receipt.",
-      approach: "Geo-compliant whitelists only. Daily placement audit before spend cleared your cap.",
-      result: "Zero disputed inventory at month-end. Compliance and UA shared one auditable log per state.",
+      challenge: "TikTok and Snapchat off-limits for 18+ gaming. Every placement needed a compliance receipt and clean event mapping.",
+      approach: "Geo-compliant whitelists only. Daily placement audit and SDK postback validation before spend cleared your cap.",
+      result: "Zero disputed inventory at month-end. MMP logs, server events, and UA data aligned into one auditable record per state.",
     },
   },
   {
@@ -152,13 +152,13 @@ export const caseStudies: CaseStudy[] = [
     ],
     trend: [35, 38, 40, 42, 44, 45, 46, 52, 60, 68, 75, 82],
     growthFocus: {
-      challenge: "Marketplace UA prioritizing Register and OrderPlaced over raw install CPI.",
-      approach: "Caps tied to OrderPlaced on com.shopee.ph and com.shopee.br. Funnel events in the bid.",
+      challenge: "Marketplace UA prioritizing Register and OrderPlaced over raw install CPI via granular MMP postbacks.",
+      approach: "Caps tied to OrderPlaced on com.shopee.ph and com.shopee.br. Funnel event latency minimized in the bid loop.",
       result: "PH: 250K+ installs, 22% register, 7.2% order rate. BR: 80K+ installs, 10.7% order rate.",
     },
     optimizationFocus: {
-      challenge: "750K+ conversions on PH required bot and hijacking mitigation to protect billing.",
-      approach: "Pre-bid filter on reject_bots, reject_install_hijacking, reject_ctit_anomalies.",
+      challenge: "750K+ conversions on PH required bot and hijacking mitigation via SDK checks to protect billing.",
+      approach: "Pre-bid filter on reject_bots, reject_install_hijacking, reject_ctit_anomalies against MMP logs.",
       result: "Bad installs cut before cap cleared. Defensible 0.08% CVR on high-volume PH traffic.",
     },
   },
@@ -184,19 +184,19 @@ export const caseStudies: CaseStudy[] = [
     trend: [20, 24, 28, 32, 38, 46, 55, 64, 72, 80, 88, 94],
     growthFocus: {
       challenge:
-        "Retail bank in Mexico needed to acquire users and cross-sell across its full product portfolio. Long-term MAU ambition required near-term proof on ROAS.",
+        "Retail bank in Mexico needed to acquire users and cross-sell across its full product portfolio. Long-term MAU ambition required near-term proof on ROAS via DSP logs.",
       approach:
-        "Segment-level creative via DSP. Spend concentrated on best-performing placements through in-house optimization.",
+        "Segment-level creative via programmatic DSPs. Spend dynamically concentrated on best-performing SSP placements through algorithmic bidding optimization.",
       result:
-        "Verified 200% ROAS by month six and 500% ROAS by month ten. Portfolio sales and awareness scaled independently of vanity MAU numbers.",
+        "Verified 200% ROAS by month six and 500% ROAS by month ten. Portfolio sales and awareness scaled independently of vanity MAU numbers based on server-side event pings.",
     },
     optimizationFocus: {
       challenge:
-        "Financial inclusion audiences span wide segments. Generic creatives burn reach and distort ROAS by cohort.",
+        "Financial inclusion audiences span wide segments. Generic creatives burn reach and distort ROAS by cohort unless mapped strictly in the MMP.",
       approach:
-        "Personalized promotion per segment. Placement-level ROAS gates before budget cleared each week.",
+        "Personalized promotion per segment. Placement-level ROAS gates verified via S2S postbacks before budget cleared each week.",
       result:
-        "Every creative asset ranked by verified ROAS. Finance traced spend to placement ID instead of blended averages.",
+        "Every creative asset ranked by verified ROAS. Finance traced spend to specific placement IDs and postback payloads instead of blended averages.",
     },
   },
   {
@@ -251,14 +251,14 @@ export const caseStudies: CaseStudy[] = [
     ],
     trend: [18, 20, 22, 24, 26, 28, 30, 32, 58, 68, 78, 85],
     growthFocus: {
-      challenge: "Android trading app in a crowded market needed FTDs over anonymous install volume.",
-      approach: "Lenovo Exchange OEM lanes. deposit_crm_ftd wired into the bid before caps cleared.",
-      result: "15K+ FTDs at $150+ average user value. Live in 1–2 days via factory-side distribution.",
+      challenge: "Android trading app in a crowded market needed FTDs over anonymous install volume mapped strictly via MMP.",
+      approach: "Lenovo Exchange OEM lanes. deposit_crm_ftd wired into the algorithmic bid via S2S postbacks before caps cleared.",
+      result: "15K+ FTDs at $150+ average user value. Live in 1–2 days via factory-side distribution and clean API handshakes.",
     },
     optimizationFocus: {
-      challenge: "OEM supply spans 120+ GEOs. Bad cohorts required filtering from open-exchange lanes.",
-      approach: "Model-level targeting. Event parity on deposit_crm_ftd and watch_amount_click pre-flight.",
-      result: "Maintained absolute alignment between Lenovo delivery and dashboard reporting at month-end.",
+      challenge: "OEM supply spans 120+ GEOs. Bad cohorts required algorithmic filtering from open-exchange lanes based on latency and CVR.",
+      approach: "Model-level targeting. Event parity on deposit_crm_ftd and watch_amount_click pre-flight verified through SDK audits.",
+      result: "Maintained absolute alignment between Lenovo delivery and dashboard reporting at month-end via deterministic tracking.",
     },
   },
   {

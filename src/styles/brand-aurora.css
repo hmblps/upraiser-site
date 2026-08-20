@@ -11,21 +11,35 @@
   /* Match Contact loudness */
   opacity: 0.3;
   mask-image: linear-gradient(
-    90deg,
-    #000 0%,
-    #000 40%,
-    rgba(0, 0, 0, 0.45) 60%,
-    rgba(0, 0, 0, 0.12) 78%,
-    transparent 100%
-  );
+      to bottom,
+      #000 55%,
+      rgba(0, 0, 0, 0.5) 78%,
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      #000 0%,
+      #000 40%,
+      rgba(0, 0, 0, 0.45) 60%,
+      rgba(0, 0, 0, 0.12) 78%,
+      transparent 100%
+    );
+  mask-composite: intersect;
   -webkit-mask-image: linear-gradient(
-    90deg,
-    #000 0%,
-    #000 40%,
-    rgba(0, 0, 0, 0.45) 60%,
-    rgba(0, 0, 0, 0.12) 78%,
-    transparent 100%
-  );
+      to bottom,
+      #000 55%,
+      rgba(0, 0, 0, 0.5) 78%,
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      #000 0%,
+      #000 40%,
+      rgba(0, 0, 0, 0.45) 60%,
+      rgba(0, 0, 0, 0.12) 78%,
+      transparent 100%
+    );
+  -webkit-mask-composite: source-in;
 }
 
 [data-theme="dark"] .brand-aurora--routes,

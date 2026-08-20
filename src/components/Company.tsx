@@ -4,17 +4,17 @@ import { COMPANY_CONTENT, ASCENT_PROTOCOLS } from "../data/innerPagesData";
 import { formatEventNames } from "../lib/formatEventNames";
 import { SPRING_SOFT } from "../lib/motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import { AscentCamps } from "./company/AscentCamps";
+import { TheOperatorsSpec } from "./company/TheOperatorsSpec";
 import { ScrollLink } from "./ScrollLink";
 
 /**
- * The Expedition (/company) — short intro + ascent camps visual + lean FAQ.
+ * The Expedition (/company) — short intro + operators spec + lean FAQ.
  */
 export function Company() {
   const { aboutExpedition } = COMPANY_CONTENT;
   const reduced = useReducedMotion();
   const [openNumber, setOpenNumber] = useState<string | null>(ASCENT_PROTOCOLS[0]?.protocolNumber ?? null);
-  const faq = ASCENT_PROTOCOLS.slice(0, 4);
+  const faq = ASCENT_PROTOCOLS;
 
   return (
     <div className="depth-page depth-page--company viewport-page">
@@ -55,7 +55,7 @@ export function Company() {
           </div>
         </section>
 
-        <AscentCamps camps={aboutExpedition.camps} />
+        <TheOperatorsSpec />
 
         <section className="ascent-faq mx-auto w-full max-w-3xl" aria-labelledby="ascent-faq-heading">
           <p className="section-label">Trail notes</p>

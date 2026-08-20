@@ -1,28 +1,23 @@
-import { motion, useScroll as useFramerScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { bridgeByMode, primaryCta } from "../data/liveContent";
+import { primaryCta } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScroll } from "../context/ScrollContext";
 import { useTheme } from "../context/ThemeContext";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { ScrollLink } from "./ScrollLink";
 import { Reveal } from "./motion/Reveal";
-import { useMode } from "./SectionHeader";
 
 /**
- * Closing runway: until both modes are seen, Request Pilot stays locked —
- * the primary action is switching to the other story.
+ * Closing runway — always shows both actions:
+ * • "Request Pilot" CTA
+ * • theme-switch hint ("See the other story") rendered beside it
  */
 export function HomePilotCta() {
-  const { mode } = useMode();
-  const { dualStoryReady, toggleTheme } = useTheme();
+  const { toggleTheme, theme } = useTheme();
   const { scrollTo } = useScroll();
   const navigate = useNavigate();
   const reduced = useReducedMotion();
-  const bridge = bridgeByMode[mode];
-
-  const { scrollYProgress } = useFramerScroll();
-  const parallaxY = useTransform(scrollYProgress, [0.8, 1], [150, -50]);
 
   const switchStory = () => {
     toggleTheme();
@@ -30,68 +25,48 @@ export function HomePilotCta() {
     window.setTimeout(() => scrollTo("hero"), 160);
   };
 
+  const switchLabel = theme === "light"
+    ? "See the Infrastructure story →"
+    : "See the Growth story →";
+
   return (
-    <section id="pilot" className="section-band section-band--dense relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center opacity-10 dark:opacity-5">
-        <motion.svg
-          style={{ y: reduced ? 0 : parallaxY }}
-          width="1200"
-          height="400"
-          viewBox="0 0 1200 400"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M0 400L250 150L450 300L750 50L950 250L1200 100V400H0Z" />
-        </motion.svg>
-      </div>
+    <section id="pilot" className="section-band section-band--dense relative overflow-hidden pilot-cta-section">
 
       <div className="section-inner relative z-10">
-        {!dualStoryReady ? (
-          <Reveal>
-            <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
-              <div className="max-w-xl">
-                <p className="section-label">{bridge.eyebrow}</p>
-                <h2 className="section-heading">{bridge.lead}</h2>
-                <p className="copy mt-3">{bridge.preview}</p>
-              </div>
-              <Magnetic>
-                <motion.button
-                  type="button"
-                  onClick={switchStory}
-                  data-cursor="cta"
-                  whileHover={reduced ? undefined : { scale: 1.03 }}
-                  whileTap={reduced ? undefined : { scale: 0.97 }}
-                  transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                  className="btn-caps btn-caps--primary inline-flex shrink-0 items-center gap-2 rounded-full px-7 py-3.5"
-                >
-                  {bridge.cta}
-                  <span aria-hidden>→</span>
-                </motion.button>
-              </Magnetic>
+        <Reveal>
+          <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
+            <div className="max-w-xl">
+              <p className="section-label">Next step</p>
+              <h2 className="section-heading">Ready to be Upraised?</h2>
+              <p className="copy mt-3">
+                Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.
+              </p>
             </div>
-          </Reveal>
-        ) : (
-          <Reveal>
-            <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
-              <div className="max-w-xl">
-                <p className="section-label">Next step</p>
-                <h2 className="section-heading">Ready to be Upraised?</h2>
-                <p className="copy mt-3">
-                  Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.
-                </p>
-              </div>
+
+            <div className="flex flex-col items-start sm:items-end gap-3 shrink-0">
               <Magnetic>
                 <ScrollLink
                   href={primaryCta.href}
                   data-cursor="cta"
-                  className="btn-caps btn-caps--primary inline-block shrink-0 rounded-full px-7 py-3.5"
+                  className="btn-caps btn-caps--primary inline-block rounded-full px-7 py-3.5"
                 >
                   {primaryCta.label}
                 </ScrollLink>
               </Magnetic>
+
+              {/* Theme switcher — always visible so mobile users can switch */}
+              <motion.button
+                type="button"
+                onClick={switchStory}
+                whileHover={reduced ? undefined : { x: 3 }}
+                transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                className="text-sm text-fg-muted hover:text-fg transition-colors cursor-pointer"
+              >
+                {switchLabel}
+              </motion.button>
             </div>
-          </Reveal>
-        )}
+          </div>
+        </Reveal>
       </div>
 
     </section>

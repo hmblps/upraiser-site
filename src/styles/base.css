@@ -275,7 +275,7 @@ header nav .nav-link:focus-visible::after {
 }
 
 .partners-marquee {
-  animation: partners-marquee 45s linear infinite;
+  animation: partners-marquee 120s linear infinite;
   will-change: transform;
 }
 
@@ -362,7 +362,7 @@ header nav .nav-link:focus-visible::after {
 
 @media (hover: hover) and (pointer: fine) {
   .clients-board__stage:hover .clients-board__track {
-    animation-play-state: paused;
+    animation-play-state: paused !important;
   }
 }
 
@@ -599,7 +599,7 @@ main [id] {
 @media (hover: hover) and (pointer: fine) {
   .partners-strip:has(.partner-logo-slot:hover) .partners-marquee,
   .partners-strip:has(.partner-logo-slot:focus-within) .partners-marquee {
-    animation-play-state: paused;
+    animation-play-state: paused !important;
   }
 
   .partner-logo-slot:hover .partner-logo,

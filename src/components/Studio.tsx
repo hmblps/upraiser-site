@@ -2,6 +2,7 @@ import { GEAR_CONTENT } from "../data/innerPagesData";
 import { ScrollLink } from "./ScrollLink";
 import { useMode } from "./SectionHeader";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
+import { StudioTerminalVisual } from "./StudioTerminalVisual";
 
 /**
  * The Gear (/studio) — tech stack as expedition equipment.
@@ -26,11 +27,7 @@ export function Studio() {
           
           {/* Sticky Visual Column */}
           <div className="lg:w-5/12 shrink-0 lg:sticky lg:top-32 hidden lg:block">
-            <div className="gear-spec__blueprint aspect-square relative" aria-hidden>
-              <span className="gear-spec__grid" />
-              <span className="gear-spec__crosshair gear-spec__crosshair--tl" />
-              <span className="gear-spec__crosshair gear-spec__crosshair--br" />
-            </div>
+            <StudioTerminalVisual />
             
             <div className="mt-8 pt-8 border-t border-border/20">
               <ScrollLink
@@ -56,11 +53,11 @@ export function Studio() {
               return (
                 <article key={tab.id} className="gear-spec flex flex-col">
                   {/* Mobile-only visual */}
-                  <div className="gear-spec__blueprint aspect-square relative mb-6 lg:hidden" aria-hidden>
-                    <span className="gear-spec__grid" />
-                    <span className="gear-spec__crosshair gear-spec__crosshair--tl" />
-                    <span className="gear-spec__crosshair gear-spec__crosshair--br" />
-                  </div>
+                  {tab.id === "fixed-line" && (
+                    <div className="mb-6 lg:hidden" aria-hidden>
+                      <StudioTerminalVisual />
+                    </div>
+                  )}
 
                   <div className="gear-spec__body">
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

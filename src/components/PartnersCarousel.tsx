@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { useState, useEffect, type CSSProperties } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,7 +21,6 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   const partners = partnersForSet(setId);
   const [modalOpen, setModalOpen] = useState(false);
 
-
   useEffect(() => {
     if (!modalOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -42,14 +42,16 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-bg to-transparent" />
         <div className="partners-marquee flex w-max items-center px-4">
           {items.map((partner, index) => (
-            <div
+            <button
               key={`${partner.slug}-${index}`}
-              className="partner-logo-slot partner-logo-slot--chrome"
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="partner-logo-slot partner-logo-slot--chrome cursor-pointer"
               style={{ "--logo-scale": partner.scale ?? 1 } as CSSProperties}
               aria-hidden={index >= partners.length}
             >
               <img src={partner.logo} alt="" className="partner-logo" loading="lazy" decoding="async" />
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -70,104 +72,110 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
         </div>
 
         <div className="section-inner">
-          <div 
-            className="relative w-full overflow-hidden cursor-pointer h-[100px] sm:h-[130px] flex items-center group"
-            onClick={() => setModalOpen(true)}
+          <div
+            className="relative w-full overflow-hidden h-[100px] sm:h-[130px] flex items-center"
           >
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 sm:w-32 bg-gradient-to-r from-bg to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 sm:w-32 bg-gradient-to-l from-bg to-transparent" />
 
+            {/* Pure CSS marquee — speed controlled in base.css (.partners-marquee { animation: partners-marquee 120s ... }) */}
             <div className="partners-marquee flex w-max items-center h-full">
               {marqueeItems.map((brand, idx) => (
-                <div
+                <button
+                  type="button"
                   key={`${brand.slug}-${idx}`}
-                  className="partner-logo-slot partner-logo-slot--home partner-logo-slot--interactive flex justify-center items-center flex-shrink-0 h-full px-12"
-                  style={{
-                    "--logo-scale": brand.scale ?? 1,
-                  } as CSSProperties}
+                  onClick={() => setModalOpen(true)}
+                  className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-pointer outline-none"
+                  style={{ "--logo-scale": brand.scale ?? 1 } as CSSProperties}
                 >
                   {brand.logo ? (
                     <img
                       src={brand.logo}
                       alt={brand.name}
-                      className="partner-logo partner-logo-filter"
+                      className="partner-logo pointer-events-none"
                       loading="lazy"
                       decoding="async"
                     />
                   ) : (
-                    <span className="partner-logo-wordmark partner-logo-filter">
+                    <span className="partner-logo-wordmark pointer-events-none">
                       {brand.name}
                     </span>
                   )}
-                </div>
+                </button>
               ))}
             </div>
           </div>
         </div>
-        <style dangerouslySetInnerHTML={{__html: `
-          .partner-logo-filter {
-            filter: grayscale(100%);
-            opacity: 0.6;
-            transition: filter 0.3s ease, opacity 0.3s ease;
-          }
-          @media (hover: hover) and (pointer: fine) {
-            .partner-logo-slot--interactive:hover .partner-logo-filter {
-              filter: grayscale(0%);
-              opacity: 1;
-            }
-          }
-        `}} />
       </section>
 
-      <AnimatePresence>
-        {modalOpen && (
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-8">
+      {/* Modal — rendered outside the section via portal so z-index stacking never clips it */}
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence>
+          {modalOpen && (
             <motion.div
-              className="absolute inset-0 bg-transparent"
+              key="clients-modal-overlay"
+              className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setModalOpen(false)}
-            />
-            <GlobalModalTrigger />
-            <motion.div
-              className="relative w-full max-w-5xl rounded-3xl bg-bg-card border border-border/50 shadow-2xl p-8 sm:p-12 overflow-y-auto max-h-[90vh]"
-              initial={{ opacity: 0, scale: 0.98, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98, y: 20 }}
-              transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
+              transition={{ duration: 0.25 }}
             >
-              <button 
+              {/* Dim backdrop — click to close */}
+              <div
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                 onClick={() => setModalOpen(false)}
-                className="absolute top-6 right-6 p-2 text-fg-muted hover:text-fg transition-colors"
-                aria-label="Close modal"
+              />
+
+              {/* Trigger global background video/stars */}
+              <GlobalModalTrigger />
+
+              {/* Modal card */}
+              <motion.div
+                className="relative z-10 w-full max-w-5xl rounded-[1.25rem] border border-border/80 shadow-[0_24px_80px_rgba(0,0,0,0.28)] p-8 sm:p-12 overflow-y-auto max-h-[90vh] backdrop-blur-[32px]"
+                style={{ background: "var(--theme-case-panel, var(--theme-bg-elevated))" }}
+                initial={{ opacity: 0, scale: 0.97, y: 24 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.97, y: 24 }}
+                transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
-              </button>
-              
-              <h2 className="text-3xl font-bold mb-10 text-center tracking-tight">Our Clients</h2>
-              
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-12 items-center justify-items-center">
-                {clientBrands.map((brand) => (
-                  <div key={brand.slug} className="flex justify-center w-full" style={{ "--logo-scale": brand.scale ?? 1 } as CSSProperties}>
-                    {brand.logo ? (
-                      <img 
-                        src={brand.logo} 
-                        alt={brand.name} 
-                        className="max-w-[120px] max-h-[48px] w-auto object-contain opacity-90 hover:opacity-100 transition-opacity" 
-                      />
-                    ) : (
-                      <span className="font-bold text-lg text-fg/80">{brand.name}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="absolute top-6 right-6 p-2 text-fg-muted hover:text-fg transition-colors"
+                  aria-label="Close"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+
+                <h2 className="text-3xl font-bold mb-10 text-center tracking-tight">Our Clients</h2>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-12 items-center justify-items-center">
+                  {clientBrands.map((brand) => (
+                    <div
+                      key={brand.slug}
+                      className="flex justify-center w-full"
+                      style={{ "--logo-scale": brand.scale ?? 1 } as CSSProperties}
+                    >
+                      {brand.logo ? (
+                        <img
+                          src={brand.logo}
+                          alt={brand.name}
+                          className="max-w-[120px] max-h-[48px] w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
+                        />
+                      ) : (
+                        <span className="font-bold text-lg text-fg/80">{brand.name}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 }

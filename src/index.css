@@ -63,7 +63,7 @@
   --theme-on-accent: #0a0a0a;
   --theme-hero-glow: #ffcc0014;
   --theme-input-bg: #0a0a0a;
-  --theme-case-panel: rgb(255 255 255 / 0.05);
+  --theme-case-panel: rgba(15, 14, 13, 0.65);
   --theme-grain-opacity: 0.045;
 
   --theme-card-hover-mid: #f3ba00;
@@ -103,7 +103,7 @@
   --theme-on-accent: #121212;
   --theme-hero-glow: #a8c8ff22;
   --theme-input-bg: #f8f9fb;
-  --theme-case-panel: #f8f9fb;
+  --theme-case-panel: rgba(235, 244, 255, 0.75);
   --theme-grain-opacity: 0.016;
 
   --theme-card-hover-mid: var(--logo-gold);

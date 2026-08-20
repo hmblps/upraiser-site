@@ -1,0 +1,30 @@
+.hero-stat-ghost__value {
+  min-height: 1.05em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: clamp(1.85rem, 3.25vw, 2.65rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  
+  /* Brand yellow base */
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* Iridescence / Light refraction reacting to --hero-fly scroll */
+  background-image: linear-gradient(
+    110deg,
+    var(--color-brand-yellow, #FFCC00) 0%,
+    var(--color-brand-yellow, #FFCC00) calc((var(--hero-fly) * 200%) - 20%),
+    #FFFFFF calc(var(--hero-fly) * 200%),
+    var(--color-brand-yellow, #FFCC00) calc((var(--hero-fly) * 200%) + 20%),
+    var(--color-brand-yellow, #FFCC00) 100%
+  );
+  
+  text-shadow: 0 2px 26px color-mix(in srgb, var(--color-brand-yellow, #FFCC00) 22%, transparent);
+}
+
+.hero-stat-ghost.is-accent .hero-stat-ghost__value {
+  /* Override no longer needed, everything is yellow now */
+}

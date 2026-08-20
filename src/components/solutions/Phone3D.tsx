@@ -464,7 +464,7 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
         <Canvas
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop="always"
+          frameloop={inView ? "always" : "demand"}
           gl={{
             antialias: true,
             alpha: true,

@@ -11,11 +11,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(
-    420px circle at var(--proximity-x) var(--proximity-y),
-    color-mix(in srgb, var(--theme-accent) 11%, transparent) 0%,
-    transparent 48%
-  );
+  background: radial-gradient(ellipse 80% 90% at 100% -10%, color-mix(in srgb, var(--case-accent, var(--theme-accent)) 18%, transparent), transparent 62%);
   opacity: 0;
   transition: opacity 0.32s ease;
   pointer-events: none;
@@ -37,20 +33,12 @@
 .case-brand-header__wash {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 80% 90% at 100% -10%, color-mix(in srgb, var(--case-accent, var(--theme-accent)) 18%, transparent), transparent 62%),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--case-surface, var(--theme-bg-card)) 42%, var(--theme-bg-card)) 0%,
-      color-mix(in srgb, var(--theme-bg-card) 96%, transparent) 100%
-    );
+  background: radial-gradient(ellipse 80% 90% at 100% -10%, color-mix(in srgb, var(--case-accent, var(--theme-accent)) 18%, transparent), transparent 62%);
   pointer-events: none;
 }
 
 [data-theme="light"] .case-brand-header__wash {
-  background:
-    radial-gradient(ellipse 75% 85% at 100% -15%, color-mix(in srgb, var(--case-accent, var(--theme-accent)) 12%, transparent), transparent 65%),
-    linear-gradient(180deg, color-mix(in srgb, var(--theme-bg-elevated) 88%, var(--theme-bg-card)) 0%, var(--theme-bg-card) 100%);
+  background: radial-gradient(ellipse 75% 85% at 100% -15%, color-mix(in srgb, var(--case-accent, var(--theme-accent)) 12%, transparent), transparent 65%);
 }
 
 .case-brand-header__content {
@@ -244,12 +232,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    320px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    color-mix(in srgb, var(--case-accent, var(--theme-accent)) 11%, transparent) 0%,
-    color-mix(in srgb, var(--case-surface, var(--theme-bg-card)) 3%, transparent) 60%,
-    transparent 100%
-  );
+  background: radial-gradient(ellipse 80% 90% at 100% -10%, color-mix(in srgb, var(--case-accent, var(--theme-accent)) 18%, transparent), transparent 62%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
@@ -740,7 +723,9 @@
   overflow: hidden;
   border-radius: 1.25rem;
   border: 1px solid color-mix(in srgb, var(--theme-border) 80%, transparent);
-  background: var(--theme-bg-elevated, var(--theme-bg-card));
+  background: var(--theme-case-panel, var(--theme-bg-elevated));
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
   box-shadow: 0 24px 80px color-mix(in srgb, #000 28%, transparent);
 }
 
@@ -773,7 +758,7 @@
   justify-content: flex-end;
   flex-shrink: 0;
   padding: 0.85rem 1rem 0.35rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--theme-border) 55%, transparent);
+  
 }
 
 .case-detail-modal__close {
@@ -786,6 +771,24 @@
 
 .case-detail-modal__close:hover {
   color: var(--theme-fg);
+}
+
+.case-detail-modal__body {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--theme-border) 50%, transparent) transparent;
+}
+.case-detail-modal__body::-webkit-scrollbar {
+  width: 5px;
+}
+.case-detail-modal__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.case-detail-modal__body::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--theme-muted) 30%, transparent);
+  border-radius: 10px;
+}
+.case-detail-modal__body::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--theme-muted) 50%, transparent);
 }
 
 .case-detail-modal__body {

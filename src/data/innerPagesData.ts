@@ -510,8 +510,8 @@ export type CraftTabId = "creative-lab" | "proprietary";
 
 export const CRAFT_CONTENT = {
   hero: {
-    badge: "The Craft",
-    h1: "The Craft: Where Logic Meets Art.",
+    badge: "Creative & Tech",
+    h1: "Creative & Tech: Where CGC Meets Engineering.",
   },
   byMode: {
     growth: {

@@ -1,0 +1,38 @@
+.hero-stat-ghost__value {
+  min-height: 1.05em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: clamp(1.85rem, 3.25vw, 2.65rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  
+  /* Make the text yellow by default, but transparent so background shows through */
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* Iridescent gradient: yellow -> white -> yellow */
+  background-image: linear-gradient(
+    110deg,
+    var(--color-brand-yellow, #FFCC00) 0%,
+    var(--color-brand-yellow, #FFCC00) 35%,
+    #FFFFFF 50%,
+    var(--color-brand-yellow, #FFCC00) 65%,
+    var(--color-brand-yellow, #FFCC00) 100%
+  );
+  
+  /* Stretch the background so the white highlight is a moving band */
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  
+  /* Link position to scroll progress */
+  background-position: calc(var(--hero-fly, 0) * 100%) center;
+  
+  /* Subtle glow */
+  filter: drop-shadow(0 2px 12px color-mix(in srgb, var(--color-brand-yellow, #FFCC00) 30%, transparent));
+}
+
+.hero-stat-ghost.is-accent .hero-stat-ghost__value {
+  /* Override no longer needed, everything is yellow now */
+}
