@@ -64,13 +64,15 @@ export function ProgrammaticPreviewModal({
           {/* Ambient Backgrounds behind the modal */}
           <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
             {/* Dark Theme: Stars */}
-            {typeof window !== "undefined" && (
-              <React.Suspense fallback={null}>
-                <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }} className="hidden dark:block">
-                  <NightStars />
-                </Canvas>
-              </React.Suspense>
-            )}
+            <div className="hidden dark:block absolute inset-0">
+              {typeof window !== "undefined" && (
+                <React.Suspense fallback={null}>
+                  <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }}>
+                    <NightStars />
+                  </Canvas>
+                </React.Suspense>
+              )}
+            </div>
 
             {/* Light Theme: Mountains */}
             <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 mix-blend-multiply transition-opacity duration-1000 flex items-end justify-center pointer-events-none">
