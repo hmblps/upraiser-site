@@ -203,8 +203,8 @@ export function FoldChart({ progress }: FoldChartProps) {
   const isGrowth = mode === "growth";
   const morph = useScrollMorph(progress, enabled, {
     start: 0.02,
-    span: theme === "dark" ? 0.88 : 0.78,
-    lerp: theme === "dark" ? 0.075 : 0.09,
+    span: 0.74,
+    lerp: 0.12,
   });
   
   const targets = useMemo(() => (isGrowth ? growthTargets() : fraudTargets()), [isGrowth]);
