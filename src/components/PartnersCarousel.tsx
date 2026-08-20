@@ -121,9 +121,9 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
 
       <AnimatePresence>
         {modalOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8">
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-8">
             <motion.div
-              className="absolute inset-0 bg-[color-mix(in_srgb,var(--theme-bg)_35%,rgba(0,0,0,0.72))] backdrop-blur-[10px]"
+              className="absolute inset-0 bg-transparent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

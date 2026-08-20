@@ -725,9 +725,9 @@
   margin: 0;
   padding: 0;
   cursor: pointer;
-  background: color-mix(in srgb, var(--theme-bg) 88%, #000 12%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .case-detail-modal__panel {
@@ -752,7 +752,7 @@
   }
 
   .case-detail-modal__backdrop {
-    background: var(--theme-bg);
+    background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
