@@ -4,7 +4,6 @@ import { processByMode, sectionsByMode } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScrollScene } from "../hooks/useScrollScene";
 import { clamp } from "../lib/clamp";
-import { SectionAmbience } from "./SectionAmbience";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { SPRING_SOFT } from "../lib/motion";

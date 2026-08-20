@@ -17,14 +17,8 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   const [params] = useSearchParams();
   const setId = partnerSetForRoute(pathname, params.get("pillar"));
   const partners = partnersForSet(setId);
-  const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     if (!modalOpen) return;
