@@ -56,7 +56,7 @@ export function ProgrammaticPreviewModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={reduced ? { duration: 0.15 } : MODAL_SPRING}
+          transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
         >
           <button type="button" className="cv-prog-modal__backdrop" aria-label="Close preview" onClick={onClose} />
 
@@ -68,10 +68,10 @@ export function ProgrammaticPreviewModal({
             aria-modal="true"
             aria-label={`${format.label} ad format preview`}
             className="cv-prog-modal__panel"
-            initial={reduced ? false : { opacity: 0, y: 28, scale: 0.94 }}
+            initial={reduced ? false : { opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? undefined : { opacity: 0, y: 18, scale: 0.96 }}
-            transition={reduced ? { duration: 0.15 } : MODAL_SPRING}
+            exit={reduced ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
+            transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
             data-lenis-prevent
           >
             <div className="cv-prog-modal__toolbar">

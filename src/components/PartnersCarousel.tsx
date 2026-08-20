@@ -132,9 +132,10 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
             <AmbientModalBackground />
             <motion.div
               className="relative w-full max-w-5xl rounded-3xl bg-bg-card border border-border/50 shadow-2xl p-8 sm:p-12 overflow-y-auto max-h-[90vh]"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.98, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              exit={{ opacity: 0, scale: 0.98, y: 20 }}
+              transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
             >
               <button 
                 onClick={() => setModalOpen(false)}

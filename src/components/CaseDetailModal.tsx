@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { CaseStudy } from "../data/cases";
 import { CaseDetailArticle } from "./CaseDetailArticle";
 import { AmbientModalBackground } from "./AmbientModalBackground";
-import { SPRING, SPRING_SOFT } from "../lib/motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type CaseDetailModalProps = {
@@ -53,7 +52,7 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={simpleMotion ? { duration: 0.15 } : SPRING_SOFT}
+          transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
         >
           <button
             type="button"
@@ -69,10 +68,10 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             aria-labelledby={`case-modal-title-${item.id}`}
             data-lenis-prevent
             className="case-detail-modal__panel"
-            initial={simpleMotion ? false : { opacity: 0, y: 36, scale: 0.96 }}
+            initial={simpleMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={simpleMotion ? undefined : { opacity: 0, y: 24, scale: 0.97 }}
-            transition={simpleMotion ? { duration: 0.15 } : SPRING}
+            exit={simpleMotion ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
+            transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
             onAnimationComplete={(definition) => {
               // Fix for Windows: When animation finishes, clear the inline transform
               // so the browser drops the GPU layer and restores ClearType text rendering.
