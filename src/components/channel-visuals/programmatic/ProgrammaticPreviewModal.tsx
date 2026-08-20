@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
+import { NightStars } from "../../hero-terrain/NightStars";
 import type { SiteMode } from "../../../data/liveContent";
 import { cn } from "../../../lib/cn";
 import { useReducedMotion } from "../../../hooks/useReducedMotion";
@@ -59,20 +61,26 @@ export function ProgrammaticPreviewModal({
         >
           <button type="button" className="cv-prog-modal__backdrop" aria-label="Close preview" onClick={onClose} />
 
-          {/* Ambient Mountains behind the modal */}
-          <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen transition-opacity duration-1000 flex items-end justify-center pointer-events-none z-0 overflow-hidden">
-            <img 
-              src="/hero/dark-mountain-fallback.png" 
-              alt="" 
-              className="hidden dark:block w-full h-full object-cover object-bottom max-w-[1200px]" 
-              draggable="false"
-            />
-            <img 
-              src="/hero/light-mountains-fallback.png" 
-              alt="" 
-              className="block dark:hidden w-full h-full object-cover object-bottom max-w-[1200px]" 
-              draggable="false"
-            />
+          {/* Ambient Backgrounds behind the modal */}
+          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+            {/* Dark Theme: Stars */}
+            {typeof window !== "undefined" && (
+              <React.Suspense fallback={null}>
+                <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }} className="hidden dark:block">
+                  <NightStars />
+                </Canvas>
+              </React.Suspense>
+            )}
+
+            {/* Light Theme: Mountains */}
+            <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 mix-blend-multiply transition-opacity duration-1000 flex items-end justify-center pointer-events-none">
+              <img 
+                src="/hero/light-mountains-fallback.png" 
+                alt="" 
+                className="block dark:hidden w-full h-full object-cover object-bottom max-w-[1200px]" 
+                draggable="false"
+              />
+            </div>
           </div>
 
           <motion.div
