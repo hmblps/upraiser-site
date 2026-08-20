@@ -15,8 +15,8 @@ export function NightStars() {
       const arr = new Float32Array(count * 3);
       for (let i = 0; i < count; i += 1) {
         const theta = (i * 2.399963229728653 + Math.random() * 0.35) % (Math.PI * 2);
-        const v = Math.random();
-        const cosPhi = Math.max(-0.35, 1 - Math.pow(v, skyBias) * 1.35);
+        // Distribute evenly over a full sphere (from 1 to -1)
+        const cosPhi = 1 - 2 * Math.random();
         const phi = Math.acos(cosPhi);
         const r = r0 + Math.random() * (r1 - r0);
         const i3 = i * 3;
@@ -34,10 +34,12 @@ export function NightStars() {
     };
   }, []);
 
-  useFrame(() => {
+  useFrame((state) => {
     const g = groupRef.current;
     if (!g) return;
     g.position.copy(camera.position);
+    g.rotation.y = state.clock.elapsedTime * 0.015; // Slow ambient rotation
+    g.rotation.x = Math.sin(state.clock.elapsedTime * 0.005) * 0.02; // Tiny wobble
   });
 
   return (

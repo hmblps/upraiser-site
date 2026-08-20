@@ -73,11 +73,13 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             
             {/* Ambient Mountains behind the modal (Light Theme only) */}
             <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 mix-blend-multiply transition-opacity duration-1000 flex items-end justify-center pointer-events-none z-0 overflow-hidden">
-              <img 
-                src="/hero/light-mountains-fallback.png" 
-                alt="" 
-                className="block dark:hidden w-full h-full object-cover object-bottom max-w-[1200px]" 
-                draggable="false"
+              <video
+                src="/hero/light-mountains-modal.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="block dark:hidden w-full h-full object-cover object-bottom max-w-[1200px]"
               />
             </div>
           </div>
