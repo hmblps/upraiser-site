@@ -11,7 +11,7 @@ export function NightStars() {
   const { camera } = useThree();
 
   const layers = useMemo(() => {
-    const make = (count: number, r0: number, r1: number, skyBias: number) => {
+    const make = (count: number, r0: number, r1: number) => {
       const arr = new Float32Array(count * 3);
       for (let i = 0; i < count; i += 1) {
         const theta = (i * 2.399963229728653 + Math.random() * 0.35) % (Math.PI * 2);
@@ -28,9 +28,9 @@ export function NightStars() {
     };
 
     return {
-      deep: make(4200, 380, 560, 0.92),
-      mid: make(2800, 300, 420, 0.85),
-      near: make(1200, 240, 340, 0.78),
+      deep: make(4200, 380, 560),
+      mid: make(2800, 300, 420),
+      near: make(1200, 240, 340),
     };
   }, []);
 

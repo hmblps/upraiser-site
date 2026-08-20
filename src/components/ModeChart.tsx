@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScrollMorph } from "../hooks/useScrollMorph";
 import { useMode } from "./SectionHeader";
@@ -196,7 +195,6 @@ type FoldChartProps = {
 
 export function FoldChart({ progress }: FoldChartProps) {
   const { mode } = useMode();
-  const { theme } = useTheme();
   const reduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
 
