@@ -60,7 +60,7 @@ export function ProgrammaticPreviewModal({
           <button type="button" className="cv-prog-modal__backdrop" aria-label="Close preview" onClick={onClose} />
 
           {/* Ambient Mountains behind the modal */}
-          <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen transition-opacity duration-1000 flex items-end justify-center pointer-events-none -z-10 overflow-hidden">
+          <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-20 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen transition-opacity duration-1000 flex items-end justify-center pointer-events-none z-0 overflow-hidden">
             <img 
               src="/hero/dark-mountain-fallback.png" 
               alt="" 

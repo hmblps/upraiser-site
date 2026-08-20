@@ -62,7 +62,7 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
             aria-label="Close case study"
             onClick={onClose}
           />
-          <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
+          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
             {typeof window !== "undefined" && (
               <React.Suspense fallback={null}>
                 <Canvas camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }} className="hidden dark:block">
