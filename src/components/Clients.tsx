@@ -1,6 +1,7 @@
 import { CLIENTS_CONTENT } from "../data/innerPagesData";
 import { clientBrands } from "../data/clients";
 import { ScrollLink } from "./ScrollLink";
+import { AutoScaledLogo } from "./AutoScaledLogo";
 
 /**
  * Clients — Saatchi-style proof board in a continuous vertical flow.
@@ -23,13 +24,11 @@ export function Clients() {
                 className="group flex h-24 lg:h-32 items-center justify-center rounded-xl border border-border/20 bg-bg-card/40 px-4 py-4 hover:border-accent/30 transition-colors"
               >
                 {brand.logo ? (
-                  <img
+                  <AutoScaledLogo
                     src={brand.logo}
                     alt={brand.name}
+                    baseScale={brand.scale}
                     className="max-h-12 max-w-full object-contain opacity-70 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
-                    style={{ transform: `scale(${brand.scale ?? 1})` }}
-                    loading="lazy"
-                    decoding="async"
                   />
                 ) : (
                   <span className="text-center text-caption text-fg/80">

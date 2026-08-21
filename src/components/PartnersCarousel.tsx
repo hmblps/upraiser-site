@@ -7,6 +7,7 @@ import { clientBrands } from "../data/clients";
 
 import { SectionHeader } from "./SectionHeader";
 import { GlobalModalTrigger } from "./GlobalModalTrigger";
+import { AutoScaledLogo } from "./AutoScaledLogo";
 
 type PartnersCarouselProps = {
   /** Compact strip for viewport chrome */
@@ -47,10 +48,9 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
               type="button"
               onClick={() => setModalOpen(true)}
               className="partner-logo-slot partner-logo-slot--chrome cursor-pointer"
-              style={{ "--logo-scale": partner.scale ?? 1 } as CSSProperties}
               aria-hidden={index >= partners.length}
             >
-              <img src={partner.logo} alt="" className="partner-logo" loading="lazy" decoding="async" />
+              <AutoScaledLogo src={partner.logo!} alt="" baseScale={partner.scale} className="partner-logo" scaleMethod="css-var" />
             </button>
           ))}
         </div>
@@ -86,15 +86,14 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                   key={`${brand.slug}-${idx}`}
                   onClick={() => setModalOpen(true)}
                   className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-pointer outline-none"
-                  style={{ "--logo-scale": brand.scale ?? 1 } as CSSProperties}
                 >
                   {brand.logo ? (
-                    <img
+                    <AutoScaledLogo
                       src={brand.logo}
                       alt={brand.name}
+                      baseScale={brand.scale}
                       className="partner-logo pointer-events-none"
-                      loading="lazy"
-                      decoding="async"
+                      scaleMethod="css-var"
                     />
                   ) : (
                     <span className="partner-logo-wordmark pointer-events-none">
@@ -156,12 +155,12 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                     <div
                       key={brand.slug}
                       className="flex justify-center w-full"
-                      style={{ "--logo-scale": brand.scale ?? 1 } as CSSProperties}
                     >
                       {brand.logo ? (
-                        <img
+                        <AutoScaledLogo
                           src={brand.logo}
                           alt={brand.name}
+                          baseScale={brand.scale}
                           className="max-w-[120px] max-h-[48px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
                         />
                       ) : (
