@@ -130,8 +130,8 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
 
               {/* Modal card */}
               <motion.div
-                className="relative z-10 w-full max-w-5xl rounded-[1.25rem] border border-border/80 shadow-[0_24px_80px_rgba(0,0,0,0.28)] p-8 sm:p-12 overflow-y-auto max-h-[90vh] "
-                style={{ background: "var(--theme-case-panel, var(--theme-bg-elevated))", backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)" }}
+                className="case-detail-modal__panel !w-full !max-w-5xl p-8 sm:p-12 overflow-y-auto mx-4"
+                
                 initial={{ opacity: 0, scale: 0.97, y: 24 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97, y: 24 }}

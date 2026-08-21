@@ -446,12 +446,10 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   }
 
 @media (hover: hover) and (pointer: fine) {
-    .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-back,
-}
-@media (hover: hover) and (pointer: fine) {
-    .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-face {
-      transform: none !important;
-    }
+  .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-back,
+  .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-face {
+    transform: none !important;
+  }
 }
 }
 
@@ -960,9 +958,9 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
 
 @media (hover: hover) and (pointer: fine) {
   .solutions-path-row:hover,
-}
-.solutions-path-row--active {
-  background: color-mix(in srgb, var(--theme-accent) 4%, transparent);
+  .solutions-path-row--active {
+    background: color-mix(in srgb, var(--theme-accent) 4%, transparent);
+  }
 }
 
 .solutions-path-row--active {
