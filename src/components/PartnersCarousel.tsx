@@ -121,7 +121,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
             >
               {/* Dim backdrop — click to close */}
               <div
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                className="absolute inset-0 bg-transparent"
                 onClick={() => setModalOpen(false)}
               />
 
