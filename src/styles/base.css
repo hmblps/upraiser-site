@@ -247,6 +247,11 @@ html.is-scrolling .route-aurora__sheet {
 [data-theme="light"] .bg-accent.text-on-accent {
   background-color: var(--theme-accent-secondary) !important;
   color: #ffffff !important;
+  box-shadow: 
+    0 6px 16px -4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
 
 @media (hover: hover) and (pointer: fine) {

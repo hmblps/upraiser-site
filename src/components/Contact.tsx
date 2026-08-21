@@ -120,11 +120,11 @@ export function Contact() {
   ];
 
   return (
-    <div className="depth-page depth-page--contact min-h-[100dvh] overflow-y-auto flex flex-col w-full">
+    <div className="depth-page depth-page--contact min-h-[100dvh] flex flex-col w-full">
       <div className="section-inner flex flex-col pt-[var(--nav-height)] pb-8 flex-1">
         <div className="relative flex-1 pb-8 pt-3">
-          <div className="flex h-full w-full flex-col justify-center">
-            <div className="strip-beam-wrap relative w-full rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl flex-1 flex flex-col">
+          <div className="flex w-full flex-col justify-center">
+            <div className="strip-beam-wrap relative w-full mb-12 lg:mb-24 rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl flex-1 flex flex-col">
               <GradientTraceBorder
                 className="z-20"
                 duration={3.4}
