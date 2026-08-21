@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { accentSectionLabel } from "../lib/accent";
 import { Reveal } from "./motion/Reveal";
@@ -24,7 +24,7 @@ export function useMode() {
   return { mode: modeFromTheme(theme) };
 }
 
-export function SectionHeader({
+export const SectionHeader = memo(function SectionHeader({
   label,
   title,
   description,
@@ -50,13 +50,13 @@ export function SectionHeader({
   ) : (
     <div className={classes}>{content}</div>
   );
-}
+});
 
 type SectionHeaderRowProps = {
   children: ReactNode;
   className?: string;
 };
 
-export function SectionHeaderRow({ children, className = "" }: SectionHeaderRowProps) {
+export const SectionHeaderRow = memo(function SectionHeaderRow({ children, className = "" }: SectionHeaderRowProps) {
   return <div className={`flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between ${className}`}>{children}</div>;
-}
+});

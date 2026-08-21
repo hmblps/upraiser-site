@@ -26,10 +26,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Only split leaf UI libs. Do NOT force three/recharts — that pulled shared
-          // runtime into those chunks and made the entry statically import ~1.3MB.
-          if (id.includes("node_modules/framer-motion")) return "framer-motion";
-          if (id.includes("node_modules/lenis")) return "lenis";
+          // Three.js + R3F ecosystem → dedicated chunk (loaded lazily by 3D components).
+          if (id.includes("node_modules/three")) return "vendor-three";
+          if (id.includes("node_modules/@react-three")) return "vendor-r3f";
+          // Motion + scroll → separate chunks so pages without animation don't pay the cost.
+          if (id.includes("node_modules/framer-motion")) return "vendor-motion";
+          if (id.includes("node_modules/lenis")) return "vendor-lenis";
         },
       },
     },

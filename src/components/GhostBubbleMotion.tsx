@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
+import { memo, type CSSProperties, type ReactNode } from "react";
+
 
 type GhostBubbleMotionProps = {
   left: string;
@@ -18,7 +19,7 @@ export function ghostRiseDistance(originY: number, scale = 1) {
 /**
  * Floating ghost metrics — CSS keyframes (Framer keyframe loops were freezing at opacity 0).
  */
-export function GhostBubbleMotion({
+export const GhostBubbleMotion = memo(function GhostBubbleMotion({
   left,
   originY,
   drift,
@@ -48,4 +49,4 @@ export function GhostBubbleMotion({
       </div>
     </div>
   );
-}
+});

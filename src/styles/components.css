@@ -11,8 +11,10 @@
   transition: background-color 0.2s ease;
 }
 
-.data-table tbody tr:hover {
-  background: color-mix(in srgb, var(--theme-accent) 4%, var(--theme-bg-card));
+@media (hover: hover) and (pointer: fine) {
+  .data-table tbody tr:hover {
+    background: color-mix(in srgb, var(--theme-accent) 4%, var(--theme-bg-card));
+  }
 }
 
 .data-table tbody td:first-child {
@@ -45,9 +47,11 @@
   transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
-.value-bento-tile:hover {
-  border-color: color-mix(in srgb, var(--theme-accent) 36%, var(--theme-border));
-  background: color-mix(in srgb, var(--theme-accent) 3.5%, transparent);
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile:hover {
+    border-color: color-mix(in srgb, var(--theme-accent) 36%, var(--theme-border));
+    background: color-mix(in srgb, var(--theme-accent) 3.5%, transparent);
+  }
 }
 
 .value-bento-tile--hero {
@@ -117,9 +121,11 @@
   height: 100%;
 }
 
-.value-bento-tile:hover .value-bento-glyph {
-  border-color: color-mix(in srgb, var(--theme-accent) 34%, var(--theme-border));
-  color: var(--theme-accent);
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile:hover .value-bento-glyph {
+    border-color: color-mix(in srgb, var(--theme-accent) 34%, var(--theme-border));
+    color: var(--theme-accent);
+  }
 }
 
 /* Light: idle stroke-draw on glyph SVG paths */
@@ -136,14 +142,16 @@
   }
 }
 
-[data-theme="light"] .value-bento-tile:not(:hover) .value-bento-glyph-animated svg :is(path, circle, line, polyline, rect) {
-  stroke-dasharray: 52 !important;
-  stroke-dashoffset: 52 !important;
-  animation: value-glyph-stroke-draw 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
-}
-
-[data-theme="light"] .value-bento-tile:hover .value-bento-glyph-animated svg :is(path, circle, line, polyline, rect) {
-  animation: none !important;
+@media (hover: hover) and (pointer: fine) {
+  [data-theme="light"] .value-bento-tile:not(:hover) .value-bento-glyph-animated svg :is(path, circle, line, polyline, rect) {
+    stroke-dasharray: 52 !important;
+    stroke-dashoffset: 52 !important;
+    animation: value-glyph-stroke-draw 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  }
+  
+  [data-theme="light"] .value-bento-tile:hover .value-bento-glyph-animated svg :is(path, circle, line, polyline, rect) {
+    animation: none !important;
+  }
 }
 
 /* Dark: soft pulse on glyph shell + icon */
@@ -184,14 +192,16 @@
   transform-origin: center;
 }
 
-[data-theme="dark"] .value-bento-tile:hover .value-bento-glyph {
-  animation: none;
-}
-
-[data-theme="dark"] .value-bento-tile:hover .value-bento-glyph-animated {
-  animation: none;
-  transform: none;
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  [data-theme="dark"] .value-bento-tile:hover .value-bento-glyph {
+    animation: none;
+  }
+  
+  [data-theme="dark"] .value-bento-tile:hover .value-bento-glyph-animated {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
 }
 
 .value-bento-tile--metric-a .value-bento-glyph,
@@ -304,18 +314,20 @@
   transform-origin: 44px 44px;
 }
 
-.value-bento-tile--metric:hover .value-bento-ring {
-  transform: rotate(-90deg) scale(1.07);
-}
-
-.value-bento-tile--metric:hover .live-ring .value-bento-ring-fill {
-  filter: brightness(1.12);
-  animation-duration: 1.4s;
-}
-
-.value-bento-tile--metric:hover .value-bento-ring-dot {
-  opacity: 1;
-  animation: value-ring-dot-orbit 1.6s linear infinite;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--metric:hover .value-bento-ring {
+    transform: rotate(-90deg) scale(1.07);
+  }
+  
+  .value-bento-tile--metric:hover .live-ring .value-bento-ring-fill {
+    filter: brightness(1.12);
+    animation-duration: 1.4s;
+  }
+  
+  .value-bento-tile--metric:hover .value-bento-ring-dot {
+    opacity: 1;
+    animation: value-ring-dot-orbit 1.6s linear infinite;
+  }
 }
 
 .value-bento-pulse {
@@ -375,13 +387,15 @@
   animation: value-bar-dance 1.35s ease-in-out infinite;
 }
 
-.value-bento-tile--hero:hover .value-bento-pulse-bars i {
-  filter: brightness(1.12);
-  animation-duration: 0.72s;
-}
-
-.value-bento-tile--hero:hover .value-bento-pulse-core {
-  animation-duration: 1.8s;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--hero:hover .value-bento-pulse-bars i {
+    filter: brightness(1.12);
+    animation-duration: 0.72s;
+  }
+  
+  .value-bento-tile--hero:hover .value-bento-pulse-core {
+    animation-duration: 1.8s;
+  }
 }
 
 .value-bento-tile--feature {
@@ -417,9 +431,11 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   background: hsla(0, 0%, 100%, 0.42);
 }
 
-.value-bento-tile--feature:hover .value-bento-icon {
-  opacity: 1;
-  transform: scale(1.06);
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--feature:hover .value-bento-icon {
+    opacity: 1;
+    transform: scale(1.06);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -429,10 +445,14 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
     transform: none !important;
   }
 
-  .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-back,
-  .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-face {
-    transform: none !important;
-  }
+@media (hover: hover) and (pointer: fine) {
+    .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-back,
+}
+@media (hover: hover) and (pointer: fine) {
+    .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-face {
+      transform: none !important;
+    }
+}
 }
 
 .value-bento-icon svg {
@@ -460,8 +480,10 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   animation: value-icon-check-pulse 1.4s ease-in-out infinite;
 }
 
-.value-bento-tile--feature:hover .value-bento-icon-check {
-  animation-duration: 1s;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--feature:hover .value-bento-icon-check {
+    animation-duration: 1s;
+  }
 }
 
 .value-bento-icon-bars {
@@ -477,9 +499,11 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   animation: value-bar-dance 1.6s ease-in-out infinite;
 }
 
-.value-bento-tile--feature:hover .value-bento-icon-bars i {
-  filter: brightness(1.12);
-  animation-duration: 0.85s;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--feature:hover .value-bento-icon-bars i {
+    filter: brightness(1.12);
+    animation-duration: 0.85s;
+  }
 }
 
 .value-bento-icon-scan {
@@ -495,12 +519,14 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   animation: value-icon-nudge 1.2s ease-in-out infinite;
 }
 
-.value-bento-tile--feature:hover .value-bento-icon-scan {
-  animation-duration: 0.9s;
-}
-
-.value-bento-tile--feature:hover .value-bento-icon-handle {
-  animation-duration: 0.75s;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--feature:hover .value-bento-icon-scan {
+    animation-duration: 0.9s;
+  }
+  
+  .value-bento-tile--feature:hover .value-bento-icon-handle {
+    animation-duration: 0.75s;
+  }
 }
 
 .value-bento-icon-orbit-a,
@@ -513,8 +539,10 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   transform-origin: 24px 24px;
 }
 
-.value-bento-tile--feature:hover .value-bento-icon--sync svg {
-  animation-duration: 1.4s;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--feature:hover .value-bento-icon--sync svg {
+    animation-duration: 1.4s;
+  }
 }
 
 .value-bento-icon-node {
@@ -522,8 +550,10 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   animation: value-icon-node-pulse 1.2s ease-in-out infinite;
 }
 
-.value-bento-tile--feature:hover .value-bento-icon-node {
-  animation-duration: 0.85s;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--feature:hover .value-bento-icon-node {
+    animation-duration: 0.85s;
+  }
 }
 
 .value-bento-icon-hand {
@@ -585,14 +615,16 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
     box-shadow 0.35s ease;
 }
 
-.value-bento-tile--brand:hover .value-bento-brand-mark {
-  border-color: color-mix(in srgb, var(--theme-accent) 55%, transparent);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--theme-accent) 28%, transparent);
-  transform: scale(1.08) rotate(-4deg);
-}
-
-.value-bento-tile--brand:hover .live-mark {
-  animation-duration: 1.6s;
+@media (hover: hover) and (pointer: fine) {
+  .value-bento-tile--brand:hover .value-bento-brand-mark {
+    border-color: color-mix(in srgb, var(--theme-accent) 55%, transparent);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--theme-accent) 28%, transparent);
+    transform: scale(1.08) rotate(-4deg);
+  }
+  
+  .value-bento-tile--brand:hover .live-mark {
+    animation-duration: 1.6s;
+  }
 }
 
 .live-ring .value-bento-ring-fill {
@@ -926,7 +958,9 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   }
 }
 
-.solutions-path-row:hover,
+@media (hover: hover) and (pointer: fine) {
+  .solutions-path-row:hover,
+}
 .solutions-path-row--active {
   background: color-mix(in srgb, var(--theme-accent) 4%, transparent);
 }

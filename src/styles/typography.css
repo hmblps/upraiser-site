@@ -338,10 +338,13 @@ header nav .nav-link {
   padding-block: 0.35rem;
 }
 
-header nav .nav-link:hover,
-header nav .nav-link:focus-visible {
-  color: var(--theme-fg);
+@media (hover: hover) and (pointer: fine) {
+  header nav .nav-link:hover,
+  header nav .nav-link:focus-visible {
+    color: var(--theme-fg);
+  }
 }
+
 
 header nav .nav-link::after {
   content: "";

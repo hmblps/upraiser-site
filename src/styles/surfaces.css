@@ -239,29 +239,32 @@
   z-index: 0;
 }
 
-.case-preview-card:hover::before {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .case-preview-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Custom border glow and shadows matching the brand colors */
+  .case-preview-card:hover {
+    transform: translateY(-4px) scale(1.012) !important;
+    border-color: color-mix(in srgb, var(--case-accent, var(--theme-accent)) 35%, var(--theme-border)) !important;
+    box-shadow:
+      0 0 24px -6px color-mix(in srgb, var(--case-accent, var(--theme-accent)) 16%, transparent),
+      0 12px 36px -12px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  [data-theme="light"] .case-preview-card:hover {
+    box-shadow:
+      0 0 24px -6px color-mix(in srgb, var(--case-accent, var(--theme-accent)) 12%, transparent),
+      0 12px 36px -12px rgba(0, 0, 0, 0.14) !important;
+  }
+
+  /* Sync app icon rotation with card hover */
+  .case-preview-card:hover .case-brand-icon {
+    transform: scale(1.06) rotate(-2.5deg);
+  }
 }
 
-/* Custom border glow and shadows matching the brand colors */
-.case-preview-card:hover {
-  transform: translateY(-4px) scale(1.012) !important;
-  border-color: color-mix(in srgb, var(--case-accent, var(--theme-accent)) 35%, var(--theme-border)) !important;
-  box-shadow: 
-    0 0 24px -6px color-mix(in srgb, var(--case-accent, var(--theme-accent)) 16%, transparent),
-    0 12px 36px -12px rgba(0, 0, 0, 0.45) !important;
-}
-
-[data-theme="light"] .case-preview-card:hover {
-  box-shadow: 
-    0 0 24px -6px color-mix(in srgb, var(--case-accent, var(--theme-accent)) 12%, transparent),
-    0 12px 36px -12px rgba(0, 0, 0, 0.14) !important;
-}
-
-/* Sync app icon rotation with card hover */
-.case-preview-card:hover .case-brand-icon {
-  transform: scale(1.06) rotate(-2.5deg);
-}
 
 /* btn-caps--primary sets display:inline-flex and beats Tailwind `hidden` */
 .cases-chrome-pilot {
@@ -508,27 +511,20 @@
   transition: color 0.2s ease;
 }
 
-.case-preview-card:hover .case-preview-card__cta {
-  color: var(--theme-accent);
+@media (hover: hover) and (pointer: fine) {
+  .case-preview-card:hover .case-preview-card__cta {
+    color: var(--theme-accent);
+  }
+
+  .case-preview-card:hover .case-preview-card__cta span[aria-hidden] {
+    transform: translateX(4px);
+  }
+
+  .case-preview-card:hover .case-teaser-metric {
+    color: var(--case-accent, var(--theme-accent-ink));
+  }
 }
 
-.case-preview-card__cta span[aria-hidden] {
-  display: inline-block;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.case-preview-card:hover .case-preview-card__cta span[aria-hidden] {
-  transform: translateX(4px);
-}
-
-/* Hero metric picks up the case brand accent on hover */
-.case-teaser-metric {
-  transition: color 0.3s ease;
-}
-
-.case-preview-card:hover .case-teaser-metric {
-  color: var(--case-accent, var(--theme-accent-ink));
-}
 
 .case-metric-cell--hero {
   margin-bottom: 0.85rem;
@@ -769,9 +765,12 @@
   transition: color 0.2s ease;
 }
 
-.case-detail-modal__close:hover {
-  color: var(--theme-fg);
+@media (hover: hover) and (pointer: fine) {
+  .case-detail-modal__close:hover {
+    color: var(--theme-fg);
+  }
 }
+
 
 .case-detail-modal__body {
   scrollbar-width: thin;

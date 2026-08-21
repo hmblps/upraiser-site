@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { footerLinks } from "../data/liveContent";
 import { ScrollLink } from "./ScrollLink";
 
-export function Footer() {
+export const Footer = memo(function Footer() {
   return (
     <footer className="bg-bg-elevated pb-8">
       <div className="section-inner pt-12">
@@ -103,4 +104,4 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});

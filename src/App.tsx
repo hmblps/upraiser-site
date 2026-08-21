@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
-import { HomePage } from "./pages/HomePage";
+const HomePage = lazy(() => import("./pages/HomePage").then((m) => ({ default: m.HomePage })));
+
 import {
   RedirectExpertiseToSolutions,
   RedirectMeasurementToExpertise,
