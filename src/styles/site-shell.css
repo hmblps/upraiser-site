@@ -90,9 +90,9 @@ main > section.section-band--strip {
 }
 
 [data-theme="light"] .cta-mountain-bg {
-  opacity: 0.8;
+  opacity: 0.85;
   mix-blend-mode: normal;
-  filter: contrast(1.1) grayscale(0.2) drop-shadow(0 -10px 40px color-mix(in srgb, var(--theme-accent-secondary) 30%, transparent));
+  filter: grayscale(1) contrast(1.4) brightness(1.1) drop-shadow(0 -15px 45px color-mix(in srgb, var(--theme-accent-secondary) 35%, transparent));
 }
 
 [data-theme="dark"] .cta-mountain-bg {
