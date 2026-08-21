@@ -43,12 +43,12 @@ export function HomePilotCta() {
               </p>
             </div>
 
-            <div className="flex flex-col items-start sm:items-end gap-3 shrink-0">
-              <Magnetic>
+            <div className="flex flex-col items-stretch gap-3 shrink-0 w-full sm:w-auto min-w-[240px]">
+              <Magnetic className="flex w-full">
                 <ScrollLink
                   href={primaryCta.href}
                   data-cursor="cta"
-                  className="btn-caps btn-caps--primary inline-block rounded-full px-7 py-3.5"
+                  className="btn-caps btn-caps--primary flex w-full justify-center rounded-full px-7 py-3.5"
                 >
                   {primaryCta.label}
                 </ScrollLink>
@@ -60,7 +60,7 @@ export function HomePilotCta() {
                 onClick={switchStory}
                 whileHover={reduced ? undefined : { scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                className="text-sm font-medium text-fg-muted hover:text-fg px-5 py-2 rounded-full border border-border/40 bg-fg/[0.02] hover:bg-fg/5 hover:border-border/80 transition-all cursor-pointer"
+                className="flex items-center justify-center w-full gap-2 text-sm font-medium text-fg-muted hover:text-fg px-5 py-2.5 rounded-full border border-border/40 bg-fg/[0.02] hover:bg-fg/5 hover:border-border/80 transition-all cursor-pointer"
               >
                 {switchLabel}
               </motion.button>
