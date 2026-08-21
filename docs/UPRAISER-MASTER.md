@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Всё, что было разнесено по `AI-FULL`, `HANDOFF`, `SOLUTIONS`, `HERO`, `ASSETS`, `BRAND-ASCENT`, — собрано здесь.  
-> **Updated:** 17 August 2026 (public repo, testing auto-deploy)  
+> **Updated:** 21 August 2026
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `**upraiser-site-v2`**  
-> **HEAD (committed):** `2e04d94` — Contact page layout fixes, form placeholders, charts polishing  
+> **HEAD (committed):** Latest UI/UX Polish — AutoScaledLogo, Modal Keyboard Nav, Optical Balancing
 > **Next:** Polish remaining trust gaps and mobile typography  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts`
 
