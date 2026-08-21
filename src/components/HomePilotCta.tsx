@@ -58,9 +58,9 @@ export function HomePilotCta() {
               <motion.button
                 type="button"
                 onClick={switchStory}
-                whileHover={reduced ? undefined : { x: 3 }}
+                whileHover={reduced ? undefined : { scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                className="text-sm text-fg-muted hover:text-fg transition-colors cursor-pointer"
+                className="text-sm font-medium text-fg-muted hover:text-fg px-5 py-2 rounded-full border border-border/40 bg-fg/[0.02] hover:bg-fg/5 hover:border-border/80 transition-all cursor-pointer"
               >
                 {switchLabel}
               </motion.button>
