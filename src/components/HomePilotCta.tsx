@@ -26,8 +26,8 @@ export function HomePilotCta() {
   };
 
   const switchLabel = theme === "light"
-    ? "See the Infrastructure story →"
-    : "See the Growth story →";
+    ? "Infrastructure story →"
+    : "Growth story →";
 
   return (
     <section id="pilot" className="section-band section-band--dense relative overflow-hidden pilot-cta-section">
