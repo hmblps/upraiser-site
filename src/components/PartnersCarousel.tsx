@@ -47,7 +47,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
               key={`${partner.slug}-${index}`}
               type="button"
               onClick={() => setModalOpen(true)}
-              className="partner-logo-slot partner-logo-slot--chrome cursor-pointer"
+              className="partner-logo-slot partner-logo-slot--chrome cursor-pointer focus:outline-none"
               aria-hidden={index >= partners.length}
             >
               <AutoScaledLogo src={partner.logo!} alt="" baseScale={partner.scale} className="partner-logo" scaleMethod="css-var" />
@@ -85,7 +85,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                   type="button"
                   key={`${brand.slug}-${idx}`}
                   onClick={() => setModalOpen(true)}
-                  className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-pointer outline-none"
+                  className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-pointer outline-none focus:outline-none"
                 >
                   {brand.logo ? (
                     <AutoScaledLogo
@@ -140,7 +140,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="absolute top-6 right-6 p-2 text-fg-muted hover:text-fg transition-colors"
+                  className="absolute top-6 right-6 p-2 text-fg-muted hover:text-fg transition-colors outline-none focus:outline-none"
                   aria-label="Close"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
