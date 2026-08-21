@@ -20,13 +20,13 @@ export function Clients() {
             {clientBrands.map((brand) => (
               <li
                 key={brand.slug}
-                className="flex h-24 lg:h-32 items-center justify-center rounded-xl border border-border/20 bg-bg-card/40 px-4 py-4 hover:border-accent/30 transition-colors"
+                className="group flex h-24 lg:h-32 items-center justify-center rounded-xl border border-border/20 bg-bg-card/40 px-4 py-4 hover:border-accent/30 transition-colors"
               >
                 {brand.logo ? (
                   <img
                     src={brand.logo}
                     alt={brand.name}
-                    className="max-h-12 max-w-full object-contain opacity-90"
+                    className="max-h-12 max-w-full object-contain opacity-70 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
                     style={{ transform: `scale(${brand.scale ?? 1})` }}
                     loading="lazy"
                     decoding="async"

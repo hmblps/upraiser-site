@@ -551,8 +551,8 @@ main [id] {
   max-height: 2.75rem;
   object-fit: contain;
   object-position: center;
-  opacity: 0.5;
-  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  filter: grayscale(100%) contrast(1.1) brightness(1.2);
   transition:
     opacity 0.3s ease,
     filter 0.3s ease,
@@ -586,8 +586,8 @@ main [id] {
 }
 
 [data-theme="light"] .partner-logo {
-  opacity: 0.34;
-  filter: brightness(0);
+  opacity: 0.75;
+  filter: grayscale(100%);
 }
 
 [data-theme="light"] .partner-logo-wordmark {
@@ -605,7 +605,7 @@ main [id] {
   .partner-logo-slot:hover .partner-logo,
   .partner-logo-slot:focus-within .partner-logo {
     opacity: 1;
-    filter: none;
+    filter: grayscale(0%);
     transform: scale(1.06);
   }
 
@@ -619,7 +619,7 @@ main [id] {
   [data-theme="light"] .partner-logo-slot:hover .partner-logo,
   [data-theme="light"] .partner-logo-slot:focus-within .partner-logo {
     opacity: 1;
-    filter: none;
+    filter: grayscale(0%);
   }
 }
 

@@ -162,7 +162,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                         <img
                           src={brand.logo}
                           alt={brand.name}
-                          className="max-w-[120px] max-h-[48px] w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
+                          className="max-w-[120px] max-h-[48px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
                         />
                       ) : (
                         <span className="font-bold text-lg text-fg/80">{brand.name}</span>
