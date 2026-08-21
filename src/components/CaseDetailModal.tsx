@@ -10,11 +10,12 @@ type CaseDetailModalProps = {
   item: CaseStudy | null;
   open: boolean;
   onClose: () => void;
+  onNavigate?: (direction: -1 | 1) => void;
   onExitComplete?: () => void;
 };
 
 /** Full case story in a spring modal — not inline on the archive page. */
-export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDetailModalProps) {
+export function CaseDetailModal({ item, open, onClose, onNavigate, onExitComplete }: CaseDetailModalProps) {
   const reduced = useReducedMotion();
   const visible = open && Boolean(item);
   const coarse =
@@ -30,6 +31,8 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
+      if (event.key === "ArrowLeft" && onNavigate) onNavigate(-1);
+      if (event.key === "ArrowRight" && onNavigate) onNavigate(1);
     };
 
     window.addEventListener("keydown", onKeyDown);
@@ -38,7 +41,13 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
       document.documentElement.classList.remove("case-modal-open");
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [visible, onClose]);
+  }, [visible, onClose, onNavigate]);
+
+  useEffect(() => {
+    // Reset scroll position when switching between cases
+    const bodyEl = document.querySelector(".case-detail-modal__body");
+    if (bodyEl) bodyEl.scrollTop = 0;
+  }, [item?.id]);
 
   if (typeof document === "undefined") return null;
 
@@ -46,7 +55,7 @@ export function CaseDetailModal({ item, open, onClose, onExitComplete }: CaseDet
     <AnimatePresence onExitComplete={onExitComplete}>
       {visible && item ? (
         <motion.div
-          key={item.id}
+          key="case-modal-wrapper"
           className="case-detail-modal"
           role="presentation"
           initial={{ opacity: 0 }}

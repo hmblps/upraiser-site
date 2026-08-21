@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useScroll } from "../context/ScrollContext";
 
@@ -6,8 +6,12 @@ import { useScroll } from "../context/ScrollContext";
 export function ScrollToTop() {
   const { pathname, hash } = useLocation();
   const { scrollTo, resetScroll } = useScroll();
+  const prevPathRef = useRef(pathname);
 
   useEffect(() => {
+    const prevPath = prevPathRef.current;
+    prevPathRef.current = pathname;
+
     if (hash) {
       const id = hash.replace(/^#/, "");
       if (!id) return;
@@ -25,6 +29,14 @@ export function ScrollToTop() {
 
       const frame = window.requestAnimationFrame(tryScroll);
       return () => window.cancelAnimationFrame(frame);
+    }
+
+    if (pathname.startsWith("/cases")) {
+      return;
+    }
+
+    if (prevPath.startsWith("/cases") && pathname === "/") {
+      return;
     }
 
     resetScroll();

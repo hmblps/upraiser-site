@@ -84,6 +84,19 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
     }
   }, [pathname]);
 
+  const navigateCase = useCallback(
+    (direction: -1 | 1) => {
+      if (!item) return;
+      import("../data/cases").then(({ caseStudies }) => {
+        const idx = caseStudies.findIndex((c) => c.id === item.id);
+        if (idx === -1) return;
+        const nextIdx = (idx + direction + caseStudies.length) % caseStudies.length;
+        openCase(caseStudies[nextIdx].id);
+      });
+    },
+    [item, openCase],
+  );
+
   const value = useMemo(
     () => ({ openCase, closeCase, activeId }),
     [openCase, closeCase, activeId],
@@ -98,6 +111,7 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
             item={panelItem}
             open={Boolean(item)}
             onClose={closeCase}
+            onNavigate={navigateCase}
             onExitComplete={() => setPanelItem(null)}
           />
         </Suspense>
