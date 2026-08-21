@@ -77,19 +77,11 @@ main > section.section-band--strip {
 
 
 /* Subtle mountain horizon for CTA */
-.pilot-cta-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
+.cta-mountain-bg {
   background-image: url('/images/cta-mountains-sharp.png');
   background-size: cover;
-  background-position: 40% bottom; /* slightly shifted to keep climbers visible between text and button */
+  background-position: 40% bottom;
   background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 0;
-  transform-origin: bottom center;
-  animation: cta-mountain-breathe 18s ease-in-out infinite alternate;
-  will-change: transform;
 }
 
 @keyframes cta-mountain-breathe {
@@ -97,12 +89,12 @@ main > section.section-band--strip {
   100% { transform: scale(1.04) translateZ(0); }
 }
 
-[data-theme=light] .pilot-cta-section::before {
+[data-theme="light"] .cta-mountain-bg {
   opacity: 0.25;
   mix-blend-mode: multiply;
 }
 
-[data-theme=dark] .pilot-cta-section::before {
+[data-theme="dark"] .cta-mountain-bg {
   display: none;
 }
 

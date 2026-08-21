@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { primaryCta } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useRef } from "react";
+import { motion, useScroll as useFramerScroll, useTransform } from "framer-motion";
 import { useScroll } from "../context/ScrollContext";
 import { useTheme } from "../context/ThemeContext";
 import { Magnetic } from "./motion-preview/Magnetic";
@@ -16,6 +18,13 @@ import { Reveal } from "./motion/Reveal";
 export function HomePilotCta() {
   const { toggleTheme, theme } = useTheme();
   const { scrollTo } = useScroll();
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useFramerScroll({
+    target: containerRef,
+    offset: ["start end", "end end"]
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["20%", "0%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
   const navigate = useNavigate();
   const reduced = useReducedMotion();
 
@@ -30,7 +39,12 @@ export function HomePilotCta() {
     : "Growth story →";
 
   return (
-    <section id="pilot" className="section-band section-band--dense relative overflow-hidden pilot-cta-section">
+    <section id="pilot" ref={containerRef} className="section-band section-band--dense relative overflow-hidden pilot-cta-section">
+      {/* Scroll-driven Parallax Mountain Background */}
+      <motion.div 
+        className="cta-mountain-bg absolute inset-0 z-0 pointer-events-none"
+        style={reduced ? {} : { y, scale, transformOrigin: "bottom center" }}
+      />
 
       <div className="section-inner relative z-10">
         <Reveal>
