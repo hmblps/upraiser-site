@@ -34,7 +34,7 @@ export function HomePilotCta() {
 
       <div className="section-inner relative z-10">
         <Reveal>
-          <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-10 sm:flex-row sm:items-end">
+          <div className="flex flex-col items-start justify-between gap-6 border-t border-border/70 pt-6 sm:flex-row sm:items-end">
             <div className="max-w-xl">
               <p className="section-label">Next step</p>
               <h2 className="section-heading">Ready to be Upraised?</h2>

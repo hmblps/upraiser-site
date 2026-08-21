@@ -64,16 +64,13 @@ main > section.section-band--strip {
 
 /* ── "Ready to be Upraised?" — sky gradient (mirrors hero light atmosphere) ── */
 [data-theme="light"] .pilot-cta-section {
-  background:
-    radial-gradient(ellipse 70% 42% at 58% 28%, rgba(168, 200, 255, 0.22), transparent 55%),
-    radial-gradient(ellipse 55% 36% at 62% 32%, rgba(255, 196, 140, 0.14), transparent 50%),
-    radial-gradient(ellipse 40% 28% at 64% 30%, rgba(196, 160, 255, 0.10), transparent 48%),
-    linear-gradient(180deg, #eaf1ff 0%, #f4f6f9 55%, #e8ecf2 100%);
+  background: linear-gradient(180deg, #eaf1ff 0%, #f4f6f9 55%, #e8ecf2 100%);
+  padding-block: clamp(3rem, 5vw, 4rem) !important;
 }
 
 [data-theme="dark"] .pilot-cta-section {
-  /* Dark mode: keep the brand-dark base, add a subtle sky-blue tint */
   background:
     radial-gradient(ellipse 60% 50% at 50% 0%, rgba(100, 150, 255, 0.06), transparent 60%),
     var(--theme-bg);
+  padding-block: clamp(3rem, 5vw, 4rem) !important;
 }
