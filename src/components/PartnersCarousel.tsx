@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { partnersForSet, partnerSetForRoute } from "../data/partners";

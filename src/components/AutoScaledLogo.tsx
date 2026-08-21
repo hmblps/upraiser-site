@@ -1,4 +1,5 @@
-import { useState, SyntheticEvent, CSSProperties } from 'react';
+import { useState } from 'react';
+import type { SyntheticEvent, CSSProperties } from 'react';
 
 type AutoScaledLogoProps = {
   src: string;
