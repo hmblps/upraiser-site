@@ -22,8 +22,8 @@ export function HomePilotCta() {
     target: containerRef,
     offset: ["start end", "end end"]
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["20%", "0%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], ["40%", "0%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.25, 1]);
   const navigate = useNavigate();
   const reduced = useReducedMotion();
 

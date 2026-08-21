@@ -80,7 +80,7 @@ main > section.section-band--strip {
 .cta-mountain-bg {
   background-image: url('/images/cta-mountains-sharp.png');
   background-size: cover;
-  background-position: 40% bottom;
+  background-position: center bottom;
   background-repeat: no-repeat;
 }
 
@@ -90,7 +90,7 @@ main > section.section-band--strip {
 }
 
 [data-theme="light"] .cta-mountain-bg {
-  opacity: 0.25;
+  opacity: 0.55;
   mix-blend-mode: multiply;
 }
 
