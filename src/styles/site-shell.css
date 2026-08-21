@@ -90,11 +90,25 @@ main > section.section-band--strip {
 }
 
 [data-theme="light"] .cta-mountain-bg {
-  opacity: 0.55;
-  mix-blend-mode: multiply;
+  opacity: 0.8;
+  mix-blend-mode: normal;
+  filter: contrast(1.1) grayscale(0.2) drop-shadow(0 -10px 40px color-mix(in srgb, var(--theme-accent-secondary) 30%, transparent));
 }
 
 [data-theme="dark"] .cta-mountain-bg {
   display: none;
 }
 
+
+
+/* Bottom fog/glow to ground the mountain */
+.pilot-cta-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+[data-theme=light] .pilot-cta-section::after {
+  background: linear-gradient(to top, color-mix(in srgb, var(--theme-accent-secondary) 4%, transparent) 0%, transparent 40%);
+}
