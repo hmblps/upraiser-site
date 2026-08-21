@@ -74,3 +74,30 @@ main > section.section-band--strip {
     var(--theme-bg);
   padding-block: clamp(3rem, 5vw, 4rem) !important;
 }
+
+
+/* Subtle mountain horizon for CTA */
+.pilot-cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/cta-mountains.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  pointer-events: none;
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 90%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 90%);
+}
+
+[data-theme=light] .pilot-cta-section::before {
+  opacity: 0.12;
+  mix-blend-mode: multiply;
+}
+
+[data-theme=dark] .pilot-cta-section::before {
+  opacity: 0.1;
+  mix-blend-mode: screen;
+  filter: grayscale(100%) invert(1);
+}
+
