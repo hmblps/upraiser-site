@@ -21,7 +21,7 @@ export const clientBrands: ClientBrand[] = [
   { name: "Vantage", slug: "vantage", logo: "/clients/vantage.png", scale: 1.05, vertical: "Fintech" },
   { name: "IQ Options", slug: "iq-options", logo: "/clients/iq-options.svg", scale: 1.8, vertical: "Fintech" },
   { name: "Binance", slug: "binance", logo: "/clients/binance.svg", scale: 1.05, vertical: "Fintech" },
-  { name: "Bybit", slug: "bybit", logo: "/clients/bybit.svg", scale: 0.75, vertical: "Fintech" },
+  { name: "Bybit", slug: "bybit", logo: "/clients/bybit.svg", scale: 0.65, vertical: "Fintech" },
   { name: "OKX", slug: "okx", logo: "/clients/okx.svg", scale: 1.8, vertical: "Fintech" },
   { name: "Fiverr", slug: "fiverr", logo: "/clients/fiverr.svg", scale: 2.0, vertical: "Marketplace" },
   { name: "Banco Azteca", slug: "banco-azteca", logo: "/clients/banco-azteca.png", scale: 1.1, vertical: "Fintech" },
