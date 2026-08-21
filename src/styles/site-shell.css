@@ -90,12 +90,10 @@ main > section.section-band--strip {
 }
 
 [data-theme="light"] .cta-mountain-bg {
-  opacity: 0.9;
+  opacity: 0.95;
   mix-blend-mode: normal;
-  /* Restored cool/icy blue base, added high contrast for chrome effect, and dual lighting (magenta + cyan) */
-  filter: grayscale(0.3) contrast(1.25) brightness(1.05) 
-          drop-shadow(0 -20px 35px color-mix(in srgb, var(--theme-accent-secondary) 45%, transparent))
-          drop-shadow(0 10px 20px color-mix(in srgb, #99ccff 60%, transparent));
+  /* CGI Render look: high-key exposure, stark contrast, desaturated shadows */
+  filter: brightness(1.3) contrast(1.5) grayscale(0.85);
 }
 
 [data-theme="dark"] .cta-mountain-bg {
