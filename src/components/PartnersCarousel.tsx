@@ -161,10 +161,10 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                           src={brand.logo}
                           alt={brand.name}
                           baseScale={brand.scale}
-                          className="max-w-[120px] max-h-[48px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                          className="max-w-[120px] max-h-[48px] w-auto object-contain"
                         />
                       ) : (
-                        <span className="font-bold text-lg text-fg/80">{brand.name}</span>
+                        <span className="font-bold text-lg text-fg">{brand.name}</span>
                       )}
                     </div>
                   ))}
