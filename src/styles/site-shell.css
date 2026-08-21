@@ -95,8 +95,6 @@ main > section.section-band--strip {
 }
 
 [data-theme=dark] .pilot-cta-section::before {
-  opacity: 0.15;
-  mix-blend-mode: screen;
-  filter: grayscale(100%) invert(1);
+  display: none;
 }
 
