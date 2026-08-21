@@ -16,11 +16,11 @@ export function ScrollToTop() {
       const tryScroll = () => {
         const el = document.getElementById(id);
         if (el) {
-          scrollTo(id);
+          window.setTimeout(() => scrollTo(id), 150);
           return;
         }
         attempts += 1;
-        if (attempts < 20) window.setTimeout(tryScroll, 50);
+        if (attempts < 30) window.setTimeout(tryScroll, 50);
       };
 
       const frame = window.requestAnimationFrame(tryScroll);

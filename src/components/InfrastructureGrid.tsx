@@ -1,3 +1,4 @@
+import { ChartGhostValue } from "./ChartGhostValue";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
 
@@ -63,7 +64,7 @@ export function InfrastructureGrid({ progress }: { progress: MotionValue<number>
             duration={m.duration} 
             delay={m.delay}
           >
-            <span className="fold-chart-ghost-value">{m.value}</span>
+            <ChartGhostValue value={m.value} />
             <span className="fold-chart-ghost-label">{m.label}</span>
           </GhostBubbleMotion>
         ))}

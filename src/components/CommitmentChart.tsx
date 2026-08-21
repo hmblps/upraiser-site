@@ -25,6 +25,8 @@ const PATH = "M 0 360 C 400 360, 600 260, 800 180 S 1000 100, 1200 80";
 const DRAW_IN  = 0.36;
 const DRAW_OUT = 0.88;
 
+import { ChartGhostValue } from './ChartGhostValue';
+
 export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ progress }) => {
   // Main line — draws exactly as text slides in
   const pathLength = useTransform(progress, [DRAW_IN, DRAW_OUT], [0, 1]);
@@ -139,7 +141,7 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
                 y:         useTransform(progress, [centre - half, centre + half], [12, 0]),
               }}
             >
-              <span className="fold-chart-ghost-value">{metric.value}</span>
+              <ChartGhostValue value={metric.value} />
               <span className="fold-chart-ghost-label mt-1">{metric.label}</span>
             </motion.div>
           );

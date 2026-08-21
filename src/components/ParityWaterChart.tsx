@@ -1,3 +1,4 @@
+import { ChartGhostValue } from "./ChartGhostValue";
 import { useEffect, useState } from "react";
 import {
   motion,
@@ -207,7 +208,7 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
             rise={g.rise}
             peakOpacity={0.78}
           >
-            <span className="fold-chart-ghost-value">{g.value(morph)}</span>
+            <ChartGhostValue value={g.value(morph)} />
             <span className="fold-chart-ghost-label">{g.label}</span>
           </GhostBubbleMotion>
         ))}

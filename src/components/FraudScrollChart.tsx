@@ -1,3 +1,4 @@
+import { ChartGhostValue } from "./ChartGhostValue";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
@@ -71,7 +72,7 @@ function FraudGhost({
   return (
     <div className="fraud-ghost-toned" style={{ "--fraud-ghost-tone": color } as CSSProperties}>
       <GhostBubbleMotion left={left} originY={originY} drift={drift} duration={duration} delay={delay}>
-        <span className="fold-chart-ghost-value">{value}</span>
+        <ChartGhostValue value={value} />
         <span className="fold-chart-ghost-label">{label}</span>
       </GhostBubbleMotion>
     </div>

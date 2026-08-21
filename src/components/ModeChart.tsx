@@ -1,3 +1,4 @@
+import { ChartGhostValue } from "./ChartGhostValue";
 import { useEffect, useMemo, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -163,7 +164,7 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: number }) 
       duration={metric.duration}
       delay={metric.delay}
     >
-      <span className="fold-chart-ghost-value">{metric.format(morph)}</span>
+      <ChartGhostValue value={metric.format(morph)} />
       <span className="fold-chart-ghost-label">{metric.label}</span>
     </GhostBubbleMotion>
   );
