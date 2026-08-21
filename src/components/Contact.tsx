@@ -116,7 +116,7 @@ export function Contact() {
     { label: "The Basecamp", href: "/" },
     { label: "See Cases", href: "/#cases" },
     { label: "The Routes", href: "/#routes" },
-    { label: "The Expedition", href: "/company" },
+    { label: "The Expedition", href: "/#promise" },
   ];
 
   return (

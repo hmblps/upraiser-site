@@ -84,7 +84,7 @@ export function HomePage() {
         
         {/* Replaced HomeRoutesSection with full Routes programmatic scroll */}
         <LazySection minHeight="100dvh">
-          <ProgrammaticScrollSection
+          <ProgrammaticScrollSection sectionId="routes"
             key={lane}
             mode={mode}
             laneSwitcher={
