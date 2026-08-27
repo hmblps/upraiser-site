@@ -43,20 +43,30 @@ export const MODEL_DARK = "/phones/orange.glb";
 const SHARED_ORIENT: [number, number, number] = [Math.PI / 2, 0, Math.PI];
 
 const SCREEN_VIDEO: Record<string, string> = {
-  banner: "/channels/programmatic-feed/formats/banner.mp4",
-  native: "/channels/programmatic-feed/formats/native.mp4",
+  // App Growth lane
+  banner:       "/channels/programmatic-feed/formats/banner.mp4",
+  native:       "/channels/programmatic-feed/formats/native.mp4",
   interstitial: "/channels/programmatic-feed/formats/interstitial.mp4",
-  rich: "/channels/programmatic-feed/formats/rich.mp4",
-  video: "/channels/programmatic-feed/formats/video.mp4",
+  rich:         "/channels/programmatic-feed/formats/rich.mp4",
+  video:        "/channels/programmatic-feed/formats/video.mp4",
+  // OEM lane — setup wizard, store featured, system notification
+  "pre-install": "/channels/oem/screens/pre-install.mp4",
+  "oem-store":   "/channels/oem/screens/oem-store.mp4",
+  "system-ui":   "/channels/oem/screens/system-ui.mp4",
 };
 
 /** Instant glass content until the format MP4 is ready (no blank, no Suspense swap). */
 const SCREEN_STILL: Record<string, string> = {
-  banner: "/channels/programmatic-refs/screens/banner.png",
-  native: "/channels/programmatic-refs/screens/native.png",
+  // App Growth lane
+  banner:       "/channels/programmatic-refs/screens/banner.png",
+  native:       "/channels/programmatic-refs/screens/native.png",
   interstitial: "/channels/programmatic-refs/screens/interstitial.png",
-  rich: "/channels/programmatic-refs/screens/rich-media.png",
-  video: "/channels/programmatic-refs/screens/video.png",
+  rich:         "/channels/programmatic-refs/screens/rich-media.png",
+  video:        "/channels/programmatic-refs/screens/video.png",
+  // OEM lane
+  "pre-install": "/channels/oem/screens/pre-install.png",
+  "oem-store":   "/channels/oem/screens/oem-store.png",
+  "system-ui":   "/channels/oem/screens/system-ui.png",
 };
 
 /** Stable URL list — must not be recreated each render (breaks useTexture/useLoader). */
@@ -85,8 +95,8 @@ export function preloadPhone3DAssets(mode: SiteMode = "growth") {
   }
 }
 
-const REST_Y = 0;
-const REST_X = 0;
+const REST_Y = 0.07;   // ~4° — subtle depth hint, phone stays face-forward
+const REST_X = -0.04;  // slight backward tilt for 3D feel
 
 type Phone3DProps = {
   mode: SiteMode;
@@ -298,46 +308,47 @@ function PhoneMesh({
 
   useFrame((state) => {
     if (!group.current) return;
-    
-    const t = state.clock.elapsedTime;
-    const floatRotX = Math.sin(t * 0.8) * 0.03;
-    const floatRotY = Math.cos(t * 0.6) * 0.04;
-    
-    const progress = entranceProgress ? Math.max(0, Math.min(1, entranceProgress.get())) : 1;
-    
-    let baseX, baseY, basePosZ, basePosY;
 
-    if (progress < 0.3) {
-      // Phase 1: Macro flyover (0% - 30% of entrance)
-      // Phone is lying flat, camera glides along the screen
-      const p1 = progress / 0.3; 
-      baseX = -Math.PI / 2 + 0.05; // Lying flat (90 degrees pitched back)
-      baseY = 0;
-      // Dolly move: slide along the phone's surface (Global Z)
-      basePosZ = 3.2 - (0.8 * p1); // From 3.2 (macro) to 2.4
-      basePosY = -0.8; // Pushed down so camera is looking along the glass
-    } else if (progress < 0.8) {
-      // Phase 2: Lift & Rotate (30% - 80%)
-      const p2 = (progress - 0.3) / 0.5;
-      // easeInOutCubic for a very premium, smooth acceleration and deceleration
-      const ease = p2 < 0.5 ? 4 * p2 * p2 * p2 : 1 - Math.pow(-2 * p2 + 2, 3) / 2;
-      
-      baseX = (-Math.PI / 2 + 0.05) + (rotX.get() - (-Math.PI / 2 + 0.05)) * ease;
-      baseY = rotY.get() * ease; // Bring in the interactive parallax
-      basePosZ = 2.4 - ((2.4 - 0.5) * ease); // Dolly zoom out back to 0.5 (closer = larger)
-      basePosY = -0.8 + (0.8 * ease); // Lift up to center
-    } else {
-      // Phase 3: Final lock / Settle (80% - 100%)
-      baseX = rotX.get();
-      baseY = rotY.get();
-      basePosZ = 0.5; // Sit slightly closer to camera than 0 so it feels larger
-      basePosY = 0;
-    }
-    
-    group.current.rotation.x = baseX + floatRotX;
-    group.current.rotation.y = baseY + floatRotY;
-    group.current.position.y = basePosY + Math.sin(t * 1.2) * 0.04;
-    group.current.position.z = basePosZ;
+    const t = state.clock.elapsedTime;
+    const p = entranceProgress ? Math.max(0, Math.min(1, entranceProgress.get())) : 1;
+
+    // --- easing helpers (no allocations each frame) ---
+    const easeOut3  = (x: number) => 1 - Math.pow(1 - x, 3);
+    const easeIO3   = (x: number) => x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
+    const rangeCl   = (v: number, a: number, b: number) => Math.max(0, Math.min(1, (v - a) / (b - a)));
+
+    // Map p through [inA, inB] → [outA, outB] with optional ease
+    const mr = (v: number, a: number, b: number, c: number, d: number, e = (x: number) => x) =>
+      c + (d - c) * e(rangeCl(v, a, b));
+
+    // Float amplitude: zero while phone is flying, fades in on settle (p 0.72→1.0)
+    // Float fades in as phone settles (p: 0.60 → 0.90)
+    const floatAmp  = mr(p, 0.60, 0.90, 0, 1, easeOut3);
+    const floatRotX = Math.sin(t * 0.8) * 0.03 * floatAmp;
+    const floatRotY = Math.cos(t * 0.6) * 0.04 * floatAmp;
+    const floatPosY = Math.sin(t * 1.2) * 0.04 * floatAmp;
+
+    // rotX — flat (−π/2) → interactive spring target
+    // Completes at p=0.72 so the phone is upright well before copy is read
+    const flatX   = -Math.PI / 2;
+    const liftT   = mr(p, 0.04, 0.72, 0, 1, easeIO3);
+    const baseRotX = flatX + (rotX.get() - flatX) * liftT;
+
+    // rotY — 0 → spring target + micro overshoot at p≈0.75
+    const rotateT   = mr(p, 0.14, 0.78, 0, 1, easeIO3);
+    const overshoot = Math.sin(rangeCl(p, 0.68, 0.92) * Math.PI) * 0.06;
+    const baseRotY  = rotY.get() * rotateT + overshoot;
+
+    // posZ — dolly from far (3.2) → settled (0.5)
+    const targetPosZ = mr(p, 0, 0.78, 3.2, 0.5, easeIO3);
+
+    // posY — slide up from off-bottom (−1.2) → centre (0)
+    const targetPosY = mr(p, 0.02, 0.65, -1.2, 0, easeOut3);
+
+    group.current.rotation.x = baseRotX + floatRotX;
+    group.current.rotation.y = baseRotY + floatRotY;
+    group.current.position.y = targetPosY + floatPosY;
+    group.current.position.z = targetPosZ;
 
     if (modeRef.current === "video") {
       videoTex.needsUpdate = true;

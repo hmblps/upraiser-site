@@ -16,61 +16,74 @@ type SlideTabsProps = {
   className?: string;
 };
 
+const SPRING = { type: "spring" as const, bounce: 0.15, duration: 0.5 };
+
 export function SlideTabs({ items, activeId, onChange, layoutId, className = "" }: SlideTabsProps) {
   const reduced = useReducedMotion();
 
   return (
-    <div className={cn("slide-tabs relative inline-flex items-center p-1 bg-bg-elevated/30 backdrop-blur-md rounded-full border border-border/40", className)}>
+    <motion.div
+      layout
+      className={cn(
+        "slide-tabs relative inline-flex items-center",
+        "bg-bg-elevated/70 backdrop-blur-xl",
+        "rounded-full border border-border/40 shadow-sm",
+        className,
+      )}
+      style={{ padding: "0.15rem", gap: "1px" }}
+      transition={SPRING}
+    >
       {items.map((item) => {
         const active = item.id === activeId;
-        const classes = cn(
-          "slide-tab relative inline-flex h-8 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-5 text-xs font-medium tracking-wide transition-colors z-10",
-          active
-            ? "slide-tab--active text-on-accent"
-            : "text-fg-muted [@media(hover:hover)_and_(pointer:fine)]:hover:text-fg",
+
+        const labelClasses = cn(
+          "relative z-10 inline-flex h-6 shrink-0 items-center justify-center",
+          "whitespace-nowrap px-3 text-[11px] font-bold tracking-wide uppercase",
+          "touch-action-manipulation select-none transition-colors",
+          active ? "text-on-accent" : "text-fg-muted",
         );
 
-        const highlight =
+        // Pill lives OUTSIDE the button (sibling), mirroring HeaderIsland's <li> pattern.
+        // This prevents inline-flex baseline from nudging the pill's layout position.
+        const pill =
           active && !reduced ? (
             <motion.span
               layoutId={layoutId}
-              className="slide-tab__pill absolute inset-0 rounded-full bg-accent shadow-sm"
-              transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
+              className="absolute inset-0 rounded-full bg-accent shadow-sm"
+              transition={SPRING}
+              style={{ zIndex: 0 }}
             />
           ) : active ? (
-            <span className="slide-tab__pill absolute inset-0 rounded-full bg-accent shadow-sm" aria-hidden />
+            <span className="absolute inset-0 rounded-full bg-accent shadow-sm" aria-hidden style={{ zIndex: 0 }} />
           ) : null;
 
         if (item.href) {
           return (
-            <motion.a 
-              key={item.id} 
-              href={item.href} 
-              className={classes}
-              whileTap={reduced ? undefined : { scale: 0.95 }}
-              transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-            >
-              {highlight}
-              <span className="relative z-20">{item.label}</span>
-            </motion.a>
+            <div key={item.id} className="relative">
+              {pill}
+              <a href={item.href} className={labelClasses}>
+                {item.label}
+              </a>
+            </div>
           );
         }
 
         return (
-          <motion.button
-            key={item.id}
-            type="button"
-            data-tab-id={item.id}
-            onClick={() => onChange(item.id)}
-            className={classes}
-            whileTap={reduced ? undefined : { scale: 0.95 }}
-            transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-          >
-            {highlight}
-            <span className="relative z-20">{item.label}</span>
-          </motion.button>
+          <div key={item.id} className="relative">
+            {pill}
+            <motion.button
+              type="button"
+              data-tab-id={item.id}
+              onClick={() => onChange(item.id)}
+              className={labelClasses}
+              whileTap={reduced ? undefined : { scale: 0.94 }}
+              transition={SPRING}
+            >
+              {item.label}
+            </motion.button>
+          </div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }

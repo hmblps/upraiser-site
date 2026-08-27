@@ -1,14 +1,22 @@
 import { AnimatePresence, motion } from "framer-motion";
-import type { ReactNode } from "react";
 import type { AdFormat } from "./ProgrammaticFormats";
 import type { SiteMode } from "../../data/liveContent";
 
 const SPRING = { type: "spring" as const, stiffness: 220, damping: 28, mass: 0.85 };
 
-const panel = {
-  hidden: { opacity: 0, y: 12 },
+// Scroll within a lane → vertical (content is a vertical list)
+const panelScroll = {
+  hidden: { opacity: 0, y: 14 },
   visible: { opacity: 1, y: 0, transition: SPRING },
-  exit: { opacity: 0, y: -8, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const } },
+  exit:    { opacity: 0, y: -10, transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const } },
+};
+
+// Tumbler / lane switch → horizontal (tabs are a horizontal paradigm;
+// matches the device carousel sliding direction)
+const panelLane = {
+  hidden: (dir: number) => ({ opacity: 0, x: dir * 28 }),
+  visible:              ({ opacity: 1, x: 0, transition: SPRING }),
+  exit:   (dir: number) => ({ opacity: 0, x: dir * -20, transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const } }),
 };
 
 type FormatCopyProps = {
@@ -17,7 +25,10 @@ type FormatCopyProps = {
   total: number;
   mode: SiteMode;
   reduced: boolean;
-  laneSwitcher?: ReactNode;
+  /** "scroll" = vertical slide (default); "lane" = horizontal slide matching the device carousel */
+  transitionDir?: "scroll" | "lane";
+  /** +1 = switching to a lane on the right, −1 = switching to a lane on the left */
+  laneDirection?: number;
   formats: readonly AdFormat[];
   onJump?: (index: number) => void;
 };
@@ -28,7 +39,8 @@ export function FormatCopy({
   total,
   mode,
   reduced,
-  laneSwitcher,
+  transitionDir = "scroll",
+  laneDirection = 1,
   formats,
   onJump,
 }: FormatCopyProps) {
@@ -36,13 +48,12 @@ export function FormatCopy({
 
   return (
     <div className="format-copy-wrap">
-      {laneSwitcher ? <div className="format-copy-wrap__switcher">{laneSwitcher}</div> : null}
-
-      <AnimatePresence mode="popLayout">
-          <motion.div
+      <AnimatePresence mode="popLayout" custom={laneDirection}>
+        <motion.div
           key={format.id + format.label}
           className="format-copy"
-          variants={reduced ? undefined : panel}
+          custom={laneDirection}
+          variants={reduced ? undefined : transitionDir === "lane" ? panelLane : panelScroll}
           initial={reduced ? false : "hidden"}
           animate="visible"
           exit={reduced ? undefined : "exit"}

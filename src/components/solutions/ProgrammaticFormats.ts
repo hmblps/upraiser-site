@@ -6,6 +6,13 @@ export type AdFormat = {
   points: readonly string[];
   /** All formats use the live full-feed UI; id maps to a section. */
   screen: { type: "live" };
+  /**
+   * Which 3D scene to show for this format.
+   * "phone"  (default) → Phone3D
+   * "tv"               → Tv3D (CTV Spot — big screen)
+   * "tablet"           → Tablet3D (CTV Video — second screen)
+   */
+  scene?: "phone" | "tv" | "tablet";
 };
 
 export const AD_FORMATS: AdFormat[] = [
@@ -79,7 +86,7 @@ export const AD_FORMATS: AdFormat[] = [
 /** OEM & CTV lane. Same scroll UX, different proof story. */
 export const OEM_CTV_FORMATS: AdFormat[] = [
   {
-    id: "banner",
+    id: "pre-install",
     label: "Pre-install",
     tagline: "On-device before the store",
     description:
@@ -90,9 +97,10 @@ export const OEM_CTV_FORMATS: AdFormat[] = [
       "Reconciliation file finance can read",
     ],
     screen: { type: "live" },
+    scene: "tablet",
   },
   {
-    id: "native",
+    id: "oem-store",
     label: "OEM Store",
     tagline: "Lenovo and partner storefronts",
     description:
@@ -103,9 +111,10 @@ export const OEM_CTV_FORMATS: AdFormat[] = [
       "MMP-aligned activation events",
     ],
     screen: { type: "live" },
+    scene: "tablet",
   },
   {
-    id: "interstitial",
+    id: "system-ui",
     label: "System UI",
     tagline: "OS-level moments that convert",
     description:
@@ -116,9 +125,10 @@ export const OEM_CTV_FORMATS: AdFormat[] = [
       "Brand-safe whitelist inventory",
     ],
     screen: { type: "live" },
+    scene: "tablet",
   },
   {
-    id: "rich",
+    id: "ctv-spot",
     label: "CTV Spot",
     tagline: "Living-room scale, measured",
     description:
@@ -129,9 +139,10 @@ export const OEM_CTV_FORMATS: AdFormat[] = [
       "Post-flight file for finance review",
     ],
     screen: { type: "live" },
+    scene: "tv",
   },
   {
-    id: "video",
+    id: "ctv-video",
     label: "CTV Video",
     tagline: "Long-form attention, short proof path",
     description:
@@ -142,5 +153,6 @@ export const OEM_CTV_FORMATS: AdFormat[] = [
       "One finance-readable reconciliation",
     ],
     screen: { type: "live" },
+    scene: "tv",
   },
 ];

@@ -383,16 +383,28 @@
   height: 0.24rem;
 }
 
-/* Right column — optically aligned near the top */
+/* Right column — vertically centred so it optically aligns with any device */
 .prog-scroll-copy-col {
+  position: relative; /* anchor for the pinned tumbler */
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   height: 100%;
   min-height: 0;
-  padding-top: 1rem;
   padding-inline-start: 0.25rem;
   touch-action: pan-y;
+}
+
+/* Tumbler (lane switcher) pinned absolutely so it never participates
+   in vertical-centering flex layout — prevents it from shifting when
+   the format text block changes height. */
+.prog-scroll-copy-tumbler {
+  position: absolute;
+  /* clamp keeps the tumbler visually above the vertically-centred text block
+     across all viewport heights without needing JS measurement */
+  top: clamp(4rem, calc(50% - 12rem), 11rem);
+  left: 0.25rem;
+  z-index: 2;
 }
 
 .format-copy-wrap {

@@ -16,7 +16,7 @@ type UseFormatScrollSectionOptions = {
 /**
  * Sticky Routes scroll — Lenis-aware progress via registerScrollListener + runwayProgress.
  */
-const INTRO_SCROLL_PX = 800; // Natural scroll padding for intro
+const INTRO_SCROLL_PX = 650; // Phone arrives before copy is fully read
 
 export function useFormatScrollSection(
   sectionRef: RefObject<HTMLElement | null>,
