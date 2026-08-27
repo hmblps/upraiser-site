@@ -305,14 +305,39 @@ function PhoneMesh({
     
     const progress = entranceProgress ? Math.max(0, Math.min(1, entranceProgress.get())) : 1;
     
-    // Lerp from lying down (-1.5x) to normal rotation based on scroll progress
-    const baseRotX = -1.5 + (rotX.get() - -1.5) * progress;
-    const baseRotY = 0.4 + (rotY.get() - 0.4) * progress;
-    const basePosY = -2.0 + (0 - -2.0) * progress;
+    let baseX, baseY, basePosZ, basePosY;
+
+    if (progress < 0.3) {
+      // Phase 1: Macro flyover (0% - 30% of entrance)
+      // Phone is lying flat, camera glides along the screen
+      const p1 = progress / 0.3; 
+      baseX = -Math.PI / 2 + 0.05; // Lying flat (90 degrees pitched back)
+      baseY = 0;
+      // Dolly move: slide along the phone's surface (Global Z)
+      basePosZ = 3.2 - (0.8 * p1); // From 3.2 (macro) to 2.4
+      basePosY = -0.8; // Pushed down so camera is looking along the glass
+    } else if (progress < 0.75) {
+      // Phase 2: Lift & Rotate (30% - 75%)
+      const p2 = (progress - 0.3) / 0.45;
+      // easeInOutCubic for a very premium, smooth acceleration and deceleration
+      const ease = p2 < 0.5 ? 4 * p2 * p2 * p2 : 1 - Math.pow(-2 * p2 + 2, 3) / 2;
+      
+      baseX = (-Math.PI / 2 + 0.05) + (rotX.get() - (-Math.PI / 2 + 0.05)) * ease;
+      baseY = rotY.get() * ease; // Bring in the interactive parallax
+      basePosZ = 2.4 - (2.4 * ease); // Dolly zoom out back to 0
+      basePosY = -0.8 + (0.8 * ease); // Lift up to center
+    } else {
+      // Phase 3: Final lock / Settle (75% - 100%)
+      baseX = rotX.get();
+      baseY = rotY.get();
+      basePosZ = 0;
+      basePosY = 0;
+    }
     
-    group.current.rotation.x = baseRotX + floatRotX;
-    group.current.rotation.y = baseRotY + floatRotY;
+    group.current.rotation.x = baseX + floatRotX;
+    group.current.rotation.y = baseY + floatRotY;
     group.current.position.y = basePosY + Math.sin(t * 1.2) * 0.04;
+    group.current.position.z = basePosZ;
 
     if (modeRef.current === "video") {
       videoTex.needsUpdate = true;
