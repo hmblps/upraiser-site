@@ -14,17 +14,22 @@ import "../../styles/programmatic-full-feed.css";
 
 const phone3DImport = () =>
   import("./Phone3D").then((m) => ({ default: m.Phone3D }));
+const macbook3DImport = () =>
+  import("../channel-visuals/Macbook3D").then((m) => ({ default: m.Macbook3D }));
 
 const Phone3D = lazy(phone3DImport);
+const Macbook3D = lazy(macbook3DImport);
 
 if (typeof window !== "undefined") {
   void phone3DImport();
+  void macbook3DImport();
 }
 
 const DESKTOP_MIN_WIDTH = 1024;
 
 export type ProgrammaticScrollSectionProps = {
   mode: SiteMode;
+  lane?: string;
   laneSwitcher?: ReactNode;
   sectionId?: string;
   formats?: readonly AdFormat[];
@@ -39,6 +44,7 @@ export type ProgrammaticScrollSectionProps = {
  */
 export function ProgrammaticScrollSection({
   mode,
+  lane = "app-growth",
   laneSwitcher,
   sectionId,
   formats = AD_FORMATS,
@@ -123,7 +129,11 @@ export function ProgrammaticScrollSection({
                     </div>
                   }
                 >
-                  <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
+                  {lane === "oem-ctv" ? (
+                    <Macbook3D mode={mode} className="prog-scroll-canvas" />
+                  ) : (
+                    <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
+                  )}
                 </CanvasErrorBoundary>
               </Suspense>
             </div>

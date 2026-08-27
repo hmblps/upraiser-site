@@ -38,7 +38,7 @@ export function FormatCopy({
     <div className="format-copy-wrap">
       {laneSwitcher ? <div className="format-copy-wrap__switcher">{laneSwitcher}</div> : null}
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
           <motion.div
           key={format.id + format.label}
           className="format-copy"
