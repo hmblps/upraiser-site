@@ -63,7 +63,7 @@ function MacbookMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={[0, 0, 0]} scale={0.16} position={[0, -0.5, 0]}>
+        <group rotation={[0, 0, 0]} scale={0.10} position={[0, -0.3, 0]}>
           <MacbookModel mode={mode} />
         </group>
       </Center>
@@ -94,11 +94,12 @@ function MacbookScene({
         <MacbookMesh
           rotX={rotX}
           rotY={rotY}
+          mode={isDark ? "infrastructure" : "growth"}
           onReady={onMeshReady}
         />
       </Suspense>
 
-      <ContactShadows position={[0, -1.8, 0]} opacity={0.35} scale={10} blur={2.6} far={4.2} />
+      <ContactShadows position={[0, -1.1, 0]} opacity={0.35} scale={6.5} blur={2.6} far={4.2} />
     </>
   );
 }
