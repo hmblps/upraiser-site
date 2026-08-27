@@ -20,7 +20,9 @@ export function ThemeToggle() {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       <motion.span
-        animate={{ rotate: isDark ? 180 : 0 }}
+        key={theme}
+        initial={reduced ? false : { opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={SPRING}
         className="inline-flex"
       >
