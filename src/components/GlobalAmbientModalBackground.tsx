@@ -29,7 +29,7 @@ export function GlobalAmbientModalBackground() {
       style={{ zIndex: 990 }}
       initial={{ opacity: 0 }}
       animate={{ opacity: isOpen ? 1 : 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.25 }}
     >
       {/* Dark Theme: NightStars Canvas */}
       <div className="hidden dark:block absolute inset-0">

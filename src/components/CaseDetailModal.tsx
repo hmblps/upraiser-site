@@ -61,7 +61,7 @@ export function CaseDetailModal({ item, open, onClose, onNavigate, onExitComplet
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
+          transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.25 }}
         >
           <button
             type="button"
@@ -80,7 +80,7 @@ export function CaseDetailModal({ item, open, onClose, onNavigate, onExitComplet
             initial={simpleMotion ? false : { opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={simpleMotion ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+            transition={{ type: "spring", bounce: 0.1, duration: 0.35 }}
             onAnimationComplete={(definition) => {
               // Fix for Windows: When animation finishes, clear the inline transform
               // so the browser drops the GPU layer and restores ClearType text rendering.
@@ -101,7 +101,7 @@ export function CaseDetailModal({ item, open, onClose, onNavigate, onExitComplet
                 onClick={onClose}
                 whileHover={simpleMotion ? undefined : { scale: 1.05 }}
                 whileTap={simpleMotion ? undefined : { scale: 0.9 }}
-                transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.3 }}
                 data-cursor="link"
                 className="case-detail-modal__close flex items-center gap-2"
               >
