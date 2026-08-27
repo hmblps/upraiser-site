@@ -69,11 +69,12 @@ function HeroStatsDots({
   );
 }
 
-function StatCard({ value, label, counted, accent }: { value: string; label: string; counted: boolean; accent?: boolean }) {
+function StatCard({ value, label, counted, accent, align = "center" }: { value: string; label: string; counted: boolean; accent?: boolean; align?: "left" | "center" | "right" }) {
   const ref = useCountUp(value, counted);
+  const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
 
   return (
-    <article className={`hero-stat-ghost h-full ${accent ? 'is-accent' : ''}`}>
+    <article className={`hero-stat-ghost flex flex-col justify-center h-full ${alignClass} ${accent ? 'is-accent' : ''}`}>
       <div className="hero-stat-ghost__value" ref={ref as any}>{value}</div>
       <p className="hero-stat-ghost__label">{label}</p>
     </article>
@@ -111,6 +112,7 @@ function HeroPinnedScene() {
       <div className="hero-fly-sticky relative flex flex-col overflow-hidden">
         <HeroAtmosphere />
 
+        {/* Hero copy — uses fly-rail padding (wide left) */}
         <div className="hero-content hero-content--fly-rail page-container relative z-10 w-full flex-1">
           <div className="hero-layout grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10 xl:gap-14">
             <motion.div
@@ -165,42 +167,60 @@ function HeroPinnedScene() {
 
               {isActive("highlights") ? <HeroHighlights /> : null}
             </motion.div>
+          </div>
+        </div>
 
-            <div className="hero-stats-wrap">
-              <p className="section-label hero-fly-label">UPRAISER · Charting the Ascent</p>
-              <div
-                ref={setStatsRef}
-                className="hero-stats overflow-x-auto px-0 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden"
-              >
+        {/* Stats — uses SAME page-container as Header, guaranteeing identical column alignment */}
+        <div className="page-container absolute bottom-0 left-0 right-0 z-10 pointer-events-none hidden lg:block"
+             style={{ marginBottom: "clamp(3rem, 7vh, 5.5rem)" }}>
+          <div className="w-full grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10 xl:gap-14">
+            <div className="hidden lg:block" />
+            <div className="hero-stats-wrap flex flex-col w-full pointer-events-auto">
+              <p className="section-label hero-fly-label text-left w-full block mb-6">UPRAISER · Charting the Ascent</p>
+              <div ref={setStatsRef} className="hero-stats overflow-visible px-0 pb-1">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={mode}
-                    className="hero-stats__track flex snap-x snap-mandatory gap-3 md:grid md:grid-cols-2 md:gap-3.5"
+                    className="hero-stats__track grid grid-cols-2 w-full"
                     initial={reduced ? false : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={reduced ? undefined : { opacity: 0 }}
-                    transition={HERO_SPRING}
+                    transition={{ duration: 0.2 }}
                   >
-                    {highlights.map((item, index) => {
-                      const revealed = !scrubCards || index < revealedCount;
-
-                      return (
-                        <motion.div
-                          key={item.label}
-                          initial={false}
-                          animate={
-                            revealed
-                              ? { opacity: 1, y: 0, scale: 1 }
-                              : { opacity: 0, y: 28, scale: 0.96 }
-                          }
-                          transition={SPRING_SOFT}
-                          className="hero-stats__cell w-[min(68vw,11.5rem)] shrink-0 snap-start md:w-auto"
-                          style={{ pointerEvents: revealed ? undefined : "none" }}
-                        >
-                          <StatCard value={item.value} label={item.label} counted={revealed} accent={'accent' in item ? item.accent : false} />
-                        </motion.div>
-                      );
-                    })}
+                    <div className="flex flex-col gap-10 items-start">
+                      {highlights.filter((_, i) => i % 2 === 0).map((item, i) => {
+                        const originalIndex = i * 2;
+                        const revealed = !scrubCards || originalIndex < revealedCount;
+                        return (
+                          <motion.div
+                            key={`${mode}-left-${i}`}
+                            initial={reduced ? false : { opacity: 0, y: 28, scale: 0.96 }}
+                            animate={reduced ? false : revealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.96 }}
+                            transition={SPRING_SOFT}
+                            style={{ pointerEvents: revealed ? undefined : "none" }}
+                          >
+                            <StatCard value={item.value} label={item.label} counted={revealed} accent={'accent' in item ? item.accent : false} align="left" />
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                    <div className="flex flex-col gap-10 items-end">
+                      {highlights.filter((_, i) => i % 2 !== 0).map((item, i) => {
+                        const originalIndex = i * 2 + 1;
+                        const revealed = !scrubCards || originalIndex < revealedCount;
+                        return (
+                          <motion.div
+                            key={`${mode}-right-${i}`}
+                            initial={reduced ? false : { opacity: 0, y: 28, scale: 0.96 }}
+                            animate={reduced ? false : revealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.96 }}
+                            transition={SPRING_SOFT}
+                            style={{ pointerEvents: revealed ? undefined : "none" }}
+                          >
+                            <StatCard value={item.value} label={item.label} counted={revealed} accent={'accent' in item ? item.accent : false} align="right" />
+                          </motion.div>
+                        );
+                      })}
+                    </div>
                   </motion.div>
                 </AnimatePresence>
               </div>

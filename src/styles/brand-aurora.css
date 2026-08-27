@@ -203,25 +203,7 @@ html[data-brand-aurora="1"] .depth-page--cases.viewport-page::before {
 }
 
 /* Navbar glass — aurora washes underneath on aurora pages */
-html[data-brand-aurora="1"] .site-header {
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--theme-bg) 42%, transparent) 0%,
-    color-mix(in srgb, var(--theme-bg) 12%, transparent) 70%,
-    transparent 100%
-  );
-  backdrop-filter: blur(10px) saturate(1.15);
-  -webkit-backdrop-filter: blur(10px) saturate(1.15);
-}
-
-html[data-theme="dark"][data-brand-aurora="1"] .site-header {
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--theme-bg) 55%, transparent) 0%,
-    color-mix(in srgb, var(--theme-bg) 18%, transparent) 72%,
-    transparent 100%
-  );
-}
+/* Removed site-header backgrounds and blur so they don't overlap scrolling text. The individual pills now handle their own glass effects. */
 
 /* Contact form — glass so aurora reads behind the card */
 html[data-brand-aurora="1"] .depth-page--contact .strip-beam-wrap {

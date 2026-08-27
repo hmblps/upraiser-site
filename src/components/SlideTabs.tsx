@@ -20,47 +20,55 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
   const reduced = useReducedMotion();
 
   return (
-    <div className={cn("slide-tabs relative flex gap-2", className)}>
+    <div className={cn("slide-tabs relative inline-flex items-center p-1 bg-bg-elevated/30 backdrop-blur-md rounded-full border border-border/40", className)}>
       {items.map((item) => {
         const active = item.id === activeId;
         const classes = cn(
-          "slide-tab relative inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-3.5 py-1.5 text-micro tracking-wide transition",
+          "slide-tab relative inline-flex h-8 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-5 text-xs font-medium tracking-wide transition-colors z-10",
           active
             ? "slide-tab--active text-on-accent"
-            : "border border-border text-muted-light [@media(hover:hover)_and_(pointer:fine)]:hover:border-fg/20 [@media(hover:hover)_and_(pointer:fine)]:hover:text-fg",
+            : "text-fg-muted [@media(hover:hover)_and_(pointer:fine)]:hover:text-fg",
         );
 
         const highlight =
           active && !reduced ? (
             <motion.span
               layoutId={layoutId}
-              className="slide-tab__pill absolute inset-0 rounded-full bg-accent"
-              transition={{ type: "spring", stiffness: 420, damping: 32 }}
+              className="slide-tab__pill absolute inset-0 rounded-full bg-accent shadow-sm"
+              transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
             />
           ) : active ? (
-            <span className="slide-tab__pill absolute inset-0 rounded-full bg-accent" aria-hidden />
+            <span className="slide-tab__pill absolute inset-0 rounded-full bg-accent shadow-sm" aria-hidden />
           ) : null;
 
         if (item.href) {
           return (
-            <a key={item.id} href={item.href} className={classes}>
+            <motion.a 
+              key={item.id} 
+              href={item.href} 
+              className={classes}
+              whileTap={reduced ? undefined : { scale: 0.95 }}
+              transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+            >
               {highlight}
-              <span className="relative z-10">{item.label}</span>
-            </a>
+              <span className="relative z-20">{item.label}</span>
+            </motion.a>
           );
         }
 
         return (
-          <button
+          <motion.button
             key={item.id}
             type="button"
             data-tab-id={item.id}
             onClick={() => onChange(item.id)}
             className={classes}
+            whileTap={reduced ? undefined : { scale: 0.95 }}
+            transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
           >
             {highlight}
-            <span className="relative z-10">{item.label}</span>
-          </button>
+            <span className="relative z-20">{item.label}</span>
+          </motion.button>
         );
       })}
     </div>

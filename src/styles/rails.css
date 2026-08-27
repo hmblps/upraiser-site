@@ -355,3 +355,16 @@
     background: var(--theme-accent-light);
   }
 }
+
+/* Dynamic Island Overrides */
+.island-locale-wrapper .locale-switcher__trigger {
+  height: 2rem !important;
+  min-height: 2rem !important;
+  border: none !important;
+  background: transparent !important;
+  padding-inline: 0.5rem !important;
+  font-size: 0.65rem !important;
+}
+.island-locale-wrapper .locale-switcher__trigger:hover {
+  background: color-mix(in srgb, var(--theme-bg-card) 60%, transparent) !important;
+}

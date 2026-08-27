@@ -64,7 +64,8 @@ main > section.section-band--strip {
 
 /* ── "Ready to be Upraised?" — sky gradient (mirrors hero light atmosphere) ── */
 [data-theme="light"] .pilot-cta-section {
-  background: linear-gradient(180deg, #eaf1ff 0%, #f4f6f9 55%, #e8ecf2 100%);
+  /* Pure white for the mountain sky, seamlessly transitioning into the footer's grey */
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 65%, var(--theme-bg-elevated) 100%);
   padding-block: clamp(3rem, 5vw, 4rem) !important;
 }
 
@@ -78,10 +79,13 @@ main > section.section-band--strip {
 
 /* Subtle mountain horizon for CTA */
 .cta-mountain-bg {
-  background-image: url('/images/cta-mountains-sharp.png');
-  background-size: cover;
-  background-position: center bottom;
+  background-image: url('/images/cta-mountains-v8.jpg');
+  /* Contain guarantees the mountain fits perfectly without cropping the top peak */
+  background-size: contain;
+  /* Slightly shifted left from the exact right edge */
+  background-position: calc(100% - 2vw) bottom;
   background-repeat: no-repeat;
+  z-index: 2 !important; /* Pulls image ABOVE the metallic gradient overlay */
 }
 
 @keyframes cta-mountain-breathe {
@@ -90,10 +94,10 @@ main > section.section-band--strip {
 }
 
 [data-theme="light"] .cta-mountain-bg {
-  opacity: 0.95;
-  mix-blend-mode: normal;
-  /* CGI Render look: high-key exposure, stark contrast, desaturated shadows */
-  filter: brightness(1.3) contrast(1.5) grayscale(0.85);
+  opacity: 1;
+  mix-blend-mode: multiply;
+  /* Blows out the slightly-grey JPEG sky to pure white so the rectangular рамка disappears */
+  filter: brightness(1.15) contrast(1.2);
 }
 
 [data-theme="dark"] .cta-mountain-bg {
@@ -110,6 +114,4 @@ main > section.section-band--strip {
   pointer-events: none;
   z-index: 1;
 }
-[data-theme=light] .pilot-cta-section::after {
-  background: linear-gradient(to top, color-mix(in srgb, var(--theme-accent-secondary) 4%, transparent) 0%, transparent 40%);
-}
+/* Removed light theme ::after overlay to keep it pure white */

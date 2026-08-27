@@ -213,33 +213,29 @@
   -webkit-background-clip: text;
   background-clip: text;
   
-  /* Dynamic gradient matching "YOUR RISE" */
+  /* Gold → Red: always ends red on the last character */
   background-image: linear-gradient(
     90deg,
     var(--theme-accent-light) 0%,
-    var(--theme-accent) 25%,
-    var(--theme-accent-secondary) 50%,
-    var(--theme-accent) 75%,
-    var(--theme-accent-light) 100%
+    var(--theme-accent) 30%,
+    var(--theme-accent-secondary) 70%,
+    var(--theme-accent-secondary) 100%
   );
   
-  /* 200% size ensures it aligns perfectly with the title's animation */
   background-size: 200% auto;
   background-repeat: no-repeat;
   background-position: calc(var(--hero-fly, 0) * 100%) center;
   
-  /* Red glow via drop-shadow */
-  filter: drop-shadow(0 2px 20px color-mix(in srgb, var(--theme-accent-secondary) 30%, transparent));
+  filter: drop-shadow(0 2px 20px color-mix(in srgb, var(--theme-accent-secondary) 35%, transparent));
 }
 
 [data-theme="light"] .hero-stat-ghost__value {
   background-image: linear-gradient(
     90deg, 
     var(--logo-gold) 0%, 
-    var(--logo-gold) 20%, 
-    var(--logo-red) 50%, 
-    var(--logo-gold) 80%,
-    var(--logo-gold) 100%
+    var(--logo-gold) 30%, 
+    var(--logo-red) 70%,
+    var(--logo-red) 100%
   );
 }
 
@@ -264,8 +260,7 @@
 }
 
 [data-theme="dark"] .hero-stat-ghost__value {
-  color: color-mix(in srgb, var(--theme-accent-secondary-light) 78%, var(--theme-fg) 16%);
-  text-shadow: 0 2px 30px color-mix(in srgb, var(--theme-accent-secondary-light) 30%, transparent);
+  filter: drop-shadow(0 2px 30px color-mix(in srgb, var(--theme-accent-secondary-light) 30%, transparent));
 }
 
 .spec-strip > div {

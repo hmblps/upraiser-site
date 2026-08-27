@@ -534,8 +534,10 @@
 
 @media (min-width: 1024px) {
   .hero-stats-wrap {
+    width: 100%;
     max-width: none;
     margin-inline-start: 0;
+    margin-inline-end: 0;
   }
 
   .hero-stats {

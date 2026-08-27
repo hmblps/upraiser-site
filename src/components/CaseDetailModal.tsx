@@ -77,10 +77,10 @@ export function CaseDetailModal({ item, open, onClose, onNavigate, onExitComplet
             aria-labelledby={`case-modal-title-${item.id}`}
             data-lenis-prevent
             className="case-detail-modal__panel"
-            initial={simpleMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
+            initial={simpleMotion ? false : { opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={simpleMotion ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
+            transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
             onAnimationComplete={(definition) => {
               // Fix for Windows: When animation finishes, clear the inline transform
               // so the browser drops the GPU layer and restores ClearType text rendering.
@@ -96,14 +96,17 @@ export function CaseDetailModal({ item, open, onClose, onNavigate, onExitComplet
               <p id={`case-modal-title-${item.id}`} className="sr-only">
                 {item.client} case study
               </p>
-              <button
+              <motion.button
                 type="button"
                 onClick={onClose}
+                whileHover={simpleMotion ? undefined : { scale: 1.05 }}
+                whileTap={simpleMotion ? undefined : { scale: 0.9 }}
+                transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
                 data-cursor="link"
-                className="case-detail-modal__close"
+                className="case-detail-modal__close flex items-center gap-2"
               >
                 Close <span aria-hidden>✕</span>
-              </button>
+              </motion.button>
             </div>
 
             <div className="case-detail-modal__body">

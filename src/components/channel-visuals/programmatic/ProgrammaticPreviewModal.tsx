@@ -68,17 +68,25 @@ export function ProgrammaticPreviewModal({
             aria-modal="true"
             aria-label={`${format.label} ad format preview`}
             className="cv-prog-modal__panel"
-            initial={reduced ? false : { opacity: 0, y: 20, scale: 0.98 }}
+            initial={reduced ? false : { opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduced ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
+            transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
             data-lenis-prevent
           >
             <div className="cv-prog-modal__toolbar">
               <p className="cv-prog-modal__title">{format.label}</p>
-              <button type="button" className="cv-prog-modal__close" onClick={onClose} aria-label="Close">
-                ×
-              </button>
+              <motion.button 
+                type="button" 
+                className="cv-prog-modal__close flex items-center justify-center rounded-full" 
+                onClick={onClose} 
+                aria-label="Close"
+                whileHover={reduced ? undefined : { scale: 1.1, backgroundColor: "var(--theme-bg-card)" }}
+                whileTap={reduced ? undefined : { scale: 0.9 }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+              >
+                ✕
+              </motion.button>
             </div>
 
             <div
