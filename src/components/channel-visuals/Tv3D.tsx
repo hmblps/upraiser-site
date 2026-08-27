@@ -68,13 +68,8 @@ function TvMesh({
           <group rotation={[0, -Math.PI / 2, 0]} scale={2.6} position={[0, -0.7, -0.5]}>
             <TvModel mode={mode} />
           </group>
-          <group position={[1.2, 0.6, 1.0]} scale={5.2}>
-            {/* Rotate around local Z to spin it like a steering wheel, keeping screen forward but flipping top/bottom */}
-            <group rotation={[0, 0, Math.PI]}>
-              <group rotation={[Math.PI / 2, 0, 0]}>
-                <TabletModel mode={mode} />
-              </group>
-            </group>
+          <group rotation={[Math.PI / 2, 0, 0]} scale={5.2} position={[1.2, 0.6, 1.0]}>
+            <TabletModel mode={mode} />
           </group>
         </group>
       </Center>
