@@ -81,9 +81,7 @@ export function HeaderIsland() {
           title="Switch content mode"
         >
           <motion.span
-            key={theme}
-            initial={{ opacity: 0, rotate: -40, scale: 0.7 }}
-            animate={{ opacity: 1, rotate: 0, scale: 1 }}
+            animate={{ rotate: isDark ? 0 : -180 }}
             transition={{ type: "spring", bounce: 0.3 }}
             className="inline-flex"
           >
