@@ -16,7 +16,7 @@ type UseFormatScrollSectionOptions = {
 /**
  * Sticky Routes scroll — Lenis-aware progress via registerScrollListener + runwayProgress.
  */
-const INTRO_SCROLL_PX = 1500; // Slow down the entrance animation while pinned
+const INTRO_SCROLL_PX = 800; // Natural scroll padding for intro
 
 export function useFormatScrollSection(
   sectionRef: RefObject<HTMLElement | null>,

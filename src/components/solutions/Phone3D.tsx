@@ -316,21 +316,21 @@ function PhoneMesh({
       // Dolly move: slide along the phone's surface (Global Z)
       basePosZ = 3.2 - (0.8 * p1); // From 3.2 (macro) to 2.4
       basePosY = -0.8; // Pushed down so camera is looking along the glass
-    } else if (progress < 0.75) {
-      // Phase 2: Lift & Rotate (30% - 75%)
-      const p2 = (progress - 0.3) / 0.45;
+    } else if (progress < 0.8) {
+      // Phase 2: Lift & Rotate (30% - 80%)
+      const p2 = (progress - 0.3) / 0.5;
       // easeInOutCubic for a very premium, smooth acceleration and deceleration
       const ease = p2 < 0.5 ? 4 * p2 * p2 * p2 : 1 - Math.pow(-2 * p2 + 2, 3) / 2;
       
       baseX = (-Math.PI / 2 + 0.05) + (rotX.get() - (-Math.PI / 2 + 0.05)) * ease;
       baseY = rotY.get() * ease; // Bring in the interactive parallax
-      basePosZ = 2.4 - (2.4 * ease); // Dolly zoom out back to 0
+      basePosZ = 2.4 - ((2.4 - 0.5) * ease); // Dolly zoom out back to 0.5 (closer = larger)
       basePosY = -0.8 + (0.8 * ease); // Lift up to center
     } else {
-      // Phase 3: Final lock / Settle (75% - 100%)
+      // Phase 3: Final lock / Settle (80% - 100%)
       baseX = rotX.get();
       baseY = rotY.get();
-      basePosZ = 0;
+      basePosZ = 0.5; // Sit slightly closer to camera than 0 so it feels larger
       basePosY = 0;
     }
     
