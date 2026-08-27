@@ -76,12 +76,17 @@ export function ChannelVisual({ channelId, mode, className }: ChannelVisualProps
             {useLiveProgrammatic ? (
               <ProgrammaticCarousel mode={mode} reduced={reduced} />
             ) : channelId === "oem" ? (
-              <div className="flex items-center justify-center w-full h-[500px]">
+              <div className="flex items-center justify-center w-full h-[500px] gap-6">
                 <div className="flex-1 max-w-[700px] h-full">
                   <Macbook3D mode={mode} />
                 </div>
-                {/* Space reserved for tablet as requested: вставим его 1 маубук... так же отсавь место для планшета */}
-                <div className="w-[300px] h-full pointer-events-none opacity-0 flex-shrink-0">Tablet Space</div>
+                
+                {/* Space reserved for tablet */}
+                <div className="w-[240px] h-full pointer-events-none opacity-0 flex-shrink-0 hidden lg:block">Tablet Space</div>
+
+                <div className="flex-shrink-0 z-10 hidden md:block">
+                  <ChannelVisualScene channelId={channelId} />
+                </div>
               </div>
             ) : useVideo && video ? (
               <ChannelVisualVideo webm={video.webm} mp4={video.mp4} channelId={channelId} />

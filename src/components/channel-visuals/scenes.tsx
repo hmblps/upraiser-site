@@ -65,7 +65,7 @@ function PerformanceScene() {
 
 const DEVICE_BY_CHANNEL: Record<SolutionsChannelId, DeviceKind | "ctv"> = {
   programmatic: "phone",
-  oem: "laptop",
+  oem: "phone",
   performance: "phone",
 };
 
