@@ -62,9 +62,9 @@ function TvMesh({
     group.current.position.y = Math.sin(t * 1.2) * 0.04;
 
     if (tabletParallax.current) {
-      // Add independent, exaggerated rotation for the tablet
-      tabletParallax.current.rotation.x = rotX.get() * 0.4;
-      tabletParallax.current.rotation.y = rotY.get() * 0.6;
+      // Add independent, exaggerated rotation for the tablet (kept subtle to prevent clipping)
+      tabletParallax.current.rotation.x = rotX.get() * 0.25;
+      tabletParallax.current.rotation.y = rotY.get() * 0.35;
     }
   });
 
@@ -76,7 +76,7 @@ function TvMesh({
             <TvModel mode={mode} />
           </group>
           <group ref={tabletParallax}>
-            <group position={[1.3, 0.6, 0.0]} rotation={[0, -0.15, 0.05]}>
+            <group position={[1.3, 0.6, 0.2]} rotation={[0, -0.15, 0.05]}>
               <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
                 <TabletModel mode={mode} />
               </group>
