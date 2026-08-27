@@ -184,6 +184,7 @@ function PhoneMesh({
   inView,
   rotX,
   rotY,
+  posY,
   onReady,
 }: {
   url: string;
@@ -191,6 +192,7 @@ function PhoneMesh({
   inView: boolean;
   rotX: { get: () => number };
   rotY: { get: () => number };
+  posY: { get: () => number };
   onReady?: () => void;
 }) {
   const { scene } = useGLTF(url, DRACO_PATH);
@@ -302,7 +304,7 @@ function PhoneMesh({
     
     group.current.rotation.x = rotX.get() + floatRotX;
     group.current.rotation.y = rotY.get() + floatRotY;
-    group.current.position.y = Math.sin(t * 1.2) * 0.04;
+    group.current.position.y = posY.get() + Math.sin(t * 1.2) * 0.04;
 
     if (modeRef.current === "video") {
       videoTex.needsUpdate = true;
@@ -326,6 +328,7 @@ function PhoneScene({
   inView,
   rotX,
   rotY,
+  posY,
   isDark,
   onMeshReady,
 }: {
@@ -334,6 +337,7 @@ function PhoneScene({
   inView: boolean;
   rotX: { get: () => number };
   rotY: { get: () => number };
+  posY: { get: () => number };
   isDark: boolean;
   onMeshReady?: () => void;
 }) {
@@ -353,6 +357,7 @@ function PhoneScene({
           inView={inView}
           rotX={rotX}
           rotY={rotY}
+          posY={posY}
           onReady={onMeshReady}
         />
       </Suspense>
@@ -373,14 +378,19 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
   const dragging = useRef(false);
   const last = useRef({ x: 0, y: 0 });
 
-  const rotY = useMotionValue(REST_Y);
-  const rotX = useMotionValue(REST_X);
-  const springY = useSpring(rotY, { stiffness: 260, damping: 30, mass: 0.7 });
-  const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
-
   const [isDragging, setIsDragging] = useState(false);
   const [inView, setInView] = useState(true);
   const [meshReady, setMeshReady] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
+
+  // Initialize in "lying down" state (pitched back -Math.PI / 2, twisted a bit, and lower)
+  const rotY = useMotionValue(0.4);
+  const rotX = useMotionValue(-1.5);
+  const posY = useMotionValue(-2.0);
+
+  const springY = useSpring(rotY, { stiffness: 120, damping: 25, mass: 0.8 });
+  const springX = useSpring(rotX, { stiffness: 120, damping: 25, mass: 0.8 });
+  const springPosY = useSpring(posY, { stiffness: 100, damping: 25, mass: 1.0 });
 
   const isDark = mode !== "growth";
   const url = isDark ? MODEL_DARK : MODEL_LIGHT;
@@ -408,8 +418,18 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
     return () => io.disconnect();
   }, []);
 
+  // Entrance animation trigger
+  useEffect(() => {
+    if (inView && meshReady && !hasEntered) {
+      setHasEntered(true);
+      rotX.set(REST_X);
+      rotY.set(REST_Y);
+      posY.set(0);
+    }
+  }, [inView, meshReady, hasEntered, rotX, rotY, posY]);
+
   const onPointerDown = (e: ReactPointerEvent) => {
-    if (reduced) return;
+    if (reduced || !hasEntered) return;
     dragging.current = true;
     setIsDragging(true);
     last.current = { x: e.clientX, y: e.clientY };
@@ -487,6 +507,7 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
             isDark={isDark}
             rotX={springX}
             rotY={springY}
+            posY={springPosY}
             onMeshReady={markMeshReady}
           />
         </Canvas>
