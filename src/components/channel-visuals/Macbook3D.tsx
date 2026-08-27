@@ -2,7 +2,6 @@ import {
   Suspense,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -12,11 +11,8 @@ import { Center, ContactShadows, Environment, useGLTF } from "@react-three/drei"
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
-  Color,
   SRGBColorSpace,
   type Group,
-  type Object3D,
-  type Mesh,
 } from "three";
 import type { SiteMode } from "../../data/liveContent";
 import { cn } from "../../lib/cn";
@@ -33,77 +29,22 @@ type Macbook3DProps = {
   className?: string;
 };
 
-function normalizeRoot(root: Object3D) {
-  root.position.set(0, 0, 0);
-  root.scale.set(1, 1, 1);
-  root.rotation.set(0, 0, 0);
-  root.quaternion.identity();
-  root.updateMatrix();
-  root.updateMatrixWorld(true);
-}
+import { Model as MacbookModel } from "./Macbook3DModel";
 
 function MacbookMesh({
   rotX,
   rotY,
-  isDark,
   onReady,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
-  isDark: boolean;
   onReady?: () => void;
 }) {
-  const { scene } = useGLTF(MODEL_PATH, DRACO_PATH);
-
   const group = useRef<Group>(null);
-  const rootRef = useRef<Object3D | null>(null);
-
-  const prepared = useMemo(() => {
-    const cloned = scene.clone(true);
-    normalizeRoot(cloned);
-    rootRef.current = cloned;
-
-    // Apply color inversion to the body
-    cloned.traverse((obj) => {
-      const mesh = obj as Mesh;
-      if (!mesh.isMesh) return;
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-
-      const apply = (mat: any) => {
-        if (!mat) return mat;
-        
-        // If material has no map, or if it's the main body (heuristics), change color.
-        // The user wants: dark theme -> light macbook, light theme -> dark (black) macbook.
-        // We tint non-textured materials.
-        if (mat.isMeshStandardMaterial && !mat.map) {
-          const newMat = mat.clone();
-          if (isDark) {
-            newMat.color = new Color("#d8dce0"); // Silver/Light
-          } else {
-            newMat.color = new Color("#1a1a1c"); // Midnight/Black
-          }
-          newMat.needsUpdate = true;
-          return newMat;
-        }
-        return mat;
-      };
-
-      if (Array.isArray(mesh.material)) {
-        mesh.material = mesh.material.map(apply);
-      } else if (mesh.material) {
-        mesh.material = apply(mesh.material);
-      }
-    });
-
-    return cloned;
-  }, [scene, isDark]);
 
   useEffect(() => {
-    if (rootRef.current) {
-      onReady?.();
-    }
-  }, [prepared, onReady]);
+    onReady?.();
+  }, [onReady]);
 
   useFrame((state) => {
     if (!group.current) return;
@@ -120,8 +61,8 @@ function MacbookMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={[0, -Math.PI / 2, 0]} scale={0.4} position={[0, 0, 0]}>
-          <primitive object={prepared} />
+        <group rotation={[0, -Math.PI / 2, 0]} scale={0.16} position={[0, -0.5, 0]}>
+          <MacbookModel />
         </group>
       </Center>
     </group>
@@ -149,7 +90,6 @@ function MacbookScene({
       <Suspense fallback={null}>
         <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.85} frames={1} />
         <MacbookMesh
-          isDark={isDark}
           rotX={rotX}
           rotY={rotY}
           onReady={onMeshReady}

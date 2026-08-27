@@ -420,7 +420,7 @@ type GLTFResult = GLTF & {
 }
 
 export function Model(props: ThreeElements['group']) {
-  const { nodes } = useGLTF('/macbook-draco.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/channels/oem/macbook-draco.glb') as unknown as GLTFResult
   return (
     <group {...props} dispose={null}>
       <group position={[-18.63, 0, 0]}>
