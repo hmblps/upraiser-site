@@ -270,8 +270,8 @@ export const COMPANY_CONTENT = {
   aboutExpedition: {
     hero: {
       label: "The Expedition",
-      title: "We helped shape the mobile advertising terrain.",
-      text: "Basecamp London, since 2017. Operators from systems, software, finance, and creative — one desk. You talk to the crew who wire the pipe and trade the budget.",
+      title: "We mapped the mobile advertising terrain.",
+      text: "Basecamp London, since 2017. Systems, software, finance, and creative operators work at one desk. You speak directly to the crew who wires Your pipes and trades Your budgets.",
     },
     /** Visual anchor — mountain ascent with camp stops (привалы). */
     camps: [

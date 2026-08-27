@@ -55,13 +55,15 @@ function HeroStatsDots({
   return (
     <div className="hero-stats-dots" role="tablist" aria-label="Hero metrics">
       {Array.from({ length: count }, (_, index) => (
-        <button
+        <motion.button
           key={index}
           type="button"
           role="tab"
           aria-selected={index === activeIndex}
           aria-label={`Metric ${index + 1}`}
           className={`hero-stats-dot${index === activeIndex ? " is-active" : ""}`}
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.9 }}
           onClick={() => scrollTo(index)}
         />
       ))}

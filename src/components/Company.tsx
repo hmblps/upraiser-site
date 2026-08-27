@@ -113,13 +113,15 @@ export function Company() {
           <p className="copy mt-2 max-w-xl">
             {aboutExpedition.cta.text}
           </p>
-          <ScrollLink
-            href="/contact"
-            data-cursor="cta"
-            className="btn-caps btn-caps--primary mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full px-7 py-3 touch-manipulation"
-          >
-            {aboutExpedition.cta.button}
-          </ScrollLink>
+          <motion.div whileTap={{ scale: 0.96 }} className="inline-block mt-5">
+            <ScrollLink
+              href="/contact"
+              data-cursor="cta"
+              className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center justify-center rounded-full px-7 py-3 touch-manipulation"
+            >
+              {aboutExpedition.cta.button}
+            </ScrollLink>
+          </motion.div>
         </section>
       </div>
     </div>

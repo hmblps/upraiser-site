@@ -388,11 +388,11 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                         <p className="stat-label text-muted">Best for</p>
                         <p className="copy mt-1">{panelChannel.bestFor}</p>
                       </motion.div>
-                      {isHome ? (
                         <motion.p variants={reduced ? undefined : panelItem} className="mt-5">
-                          <button
+                          <motion.button
                             type="button"
                             data-cursor="link"
+                            whileTap={{ scale: 0.96 }}
                             onClick={() => openOnSolutions(active.id)}
                             className="btn-caps btn-secondary inline-flex items-center rounded-full px-5 py-2.5"
                           >
@@ -400,7 +400,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                             <span aria-hidden className="ml-1.5">
                               →
                             </span>
-                          </button>
+                          </motion.button>
                         </motion.p>
                       ) : null}
                     </div>

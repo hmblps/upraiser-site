@@ -76,11 +76,12 @@ export function CaseDetailModal({ item, open, onClose, onNavigate, onExitComplet
             aria-modal="true"
             aria-labelledby={`case-modal-title-${item.id}`}
             data-lenis-prevent
+            layoutId={`case-card-${item.id}`}
             className="case-detail-modal__panel"
             initial={simpleMotion ? false : { opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={simpleMotion ? undefined : { opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ type: "spring", bounce: 0.1, duration: 0.35 }}
+            transition={{ type: "spring", bounce: 0.1, duration: 0.4 }}
             onAnimationComplete={(definition) => {
               // Fix for Windows: When animation finishes, clear the inline transform
               // so the browser drops the GPU layer and restores ClearType text rendering.

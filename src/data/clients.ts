@@ -36,7 +36,7 @@ export const clientBrands: ClientBrand[] = [
   { name: "GCash", slug: "gcash", logo: "/clients/gcash.svg", scale: 0.75, vertical: "Fintech" },
   { name: "Arvanix", slug: "arvanix", logo: "/clients/arvanix.png", vertical: "Other" },
   { name: "Moneycat", slug: "moneycat", logo: "/clients/moneycat.webp", vertical: "Fintech" },
-  { name: "NIRA", slug: "nira", logo: "/clients/nira.avif", vertical: "Fintech" },
+  { name: "NIRA", slug: "nira", logo: "/clients/nira.avif", scale: 0.65, vertical: "Fintech" },
   { name: "Platiza", slug: "platiza", logo: "/clients/platiza.png", vertical: "Fintech" },
   { name: "PureVPN", slug: "purevpn", logo: "/clients/purevpn.png", vertical: "Other" },
   { name: "Surfshark VPN", slug: "surfshark", logo: "/clients/surfshark.svg", scale: 1.1, vertical: "Other" },

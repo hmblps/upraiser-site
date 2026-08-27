@@ -113,6 +113,7 @@ export function CasePreviewCard({
       aria-label={`${item.client} case study. ${ctaLabel}`}
       aria-hidden={isReplica || undefined}
       tabIndex={isReplica ? -1 : 0}
+      layoutId={!isReplica ? `case-card-${item.id}` : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       onMouseMove={handleMouseMove}

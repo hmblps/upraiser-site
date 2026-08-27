@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { HeaderIsland } from "./HeaderIsland";
 import { ScrollLink } from "./ScrollLink";
 
@@ -10,13 +11,15 @@ export function Header() {
           <div className="flex items-center w-full gap-4">
             <HeaderIsland />
             
-            <ScrollLink
-              href="/"
-              className="header-brand flex items-center rounded-[var(--radius-sm)] transition-transform [@media(hover:hover)_and_(pointer:fine)]:hover:scale-105 shrink-0 ml-auto"
-              aria-label="UPRAISER — The Basecamp"
-            >
-              <img src="/upraiser-logo.png" alt="" className="h-7 w-7 object-contain" />
-            </ScrollLink>
+            <motion.div whileTap={{ scale: 0.92 }} whileHover={{ scale: 1.05 }} transition={{ type: "spring", bounce: 0.2, duration: 0.4 }} className="ml-auto">
+              <ScrollLink
+                href="/"
+                className="header-brand flex items-center shrink-0"
+                aria-label="UPRAISER — The Basecamp"
+              >
+                <img src="/upraiser-logo.png" alt="" className="h-7 w-7 object-contain" />
+              </ScrollLink>
+            </motion.div>
           </div>
         </div>
       </div>

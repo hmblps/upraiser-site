@@ -6,6 +6,7 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { cn } from "../../lib/cn";
 import { ProgrammaticCarousel } from "./ProgrammaticCarousel";
 import { ChannelVisualScene } from "./scenes";
+import { Macbook3D } from "./Macbook3D";
 
 const VISUAL_SPRING = { type: "spring" as const, stiffness: 280, damping: 26, mass: 0.85 };
 
@@ -74,6 +75,14 @@ export function ChannelVisual({ channelId, mode, className }: ChannelVisualProps
           <div className="cv-float__subject">
             {useLiveProgrammatic ? (
               <ProgrammaticCarousel mode={mode} reduced={reduced} />
+            ) : channelId === "oem" ? (
+              <div className="flex items-center justify-center w-full h-[500px]">
+                <div className="flex-1 max-w-[700px] h-full">
+                  <Macbook3D mode={mode} />
+                </div>
+                {/* Space reserved for tablet as requested: вставим его 1 маубук... так же отсавь место для планшета */}
+                <div className="w-[300px] h-full pointer-events-none opacity-0 flex-shrink-0">Tablet Space</div>
+              </div>
             ) : useVideo && video ? (
               <ChannelVisualVideo webm={video.webm} mp4={video.mp4} channelId={channelId} />
             ) : (

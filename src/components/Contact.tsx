@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { contactPage } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
@@ -349,14 +350,16 @@ export function Contact() {
                       </label>
 
                       <Magnetic className="mt-2 w-full shrink-0">
-                        <button
+                        <motion.button
                           type="submit"
                           disabled={status === "loading"}
+                          whileTap={status !== "loading" ? { scale: 0.96 } : undefined}
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                           data-cursor="cta"
                           className="btn-caps btn-caps--primary w-full rounded-full py-3 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {status === "loading" ? "Transmitting…" : contactPage.ctaLabel}
-                        </button>
+                        </motion.button>
                       </Magnetic>
                     </form>
                   )}

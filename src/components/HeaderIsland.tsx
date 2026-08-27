@@ -30,13 +30,20 @@ export function HeaderIsland() {
           {navLinks.map((link: NavLink) => {
             const active = navIsActive(pathname, link.href);
             return (
-                  <li key={link.href}>
+                  <li key={link.href} className="relative">
+                    {active && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute inset-0 bg-accent rounded-full shadow-sm"
+                        transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                      />
+                    )}
                     <ScrollLink
                       href={link.href}
                       contactIntent={link.contactIntent}
                       aria-current={active ? "page" : undefined}
-                      className={`inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap ${
-                        active ? "text-on-accent bg-accent shadow-sm" : "text-fg-muted hover:text-fg hover:bg-fg/5 font-semibold"
+                      className={`relative z-10 inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap ${
+                        active ? "text-on-accent" : "text-fg-muted hover:text-fg hover:bg-fg/5 font-semibold"
                       }`}
                     >
                       {link.label}
