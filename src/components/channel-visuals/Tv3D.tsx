@@ -71,12 +71,12 @@ function TvMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={[0.15, 0, 0]} position={[-0.15, 0, 0]}>
+        <group rotation={[0.15, 0, 0]} position={[-0.3, 0, 0]}>
           <group rotation={[0, -Math.PI / 2, 0]} scale={2.6} position={[0, -0.7, -0.5]}>
             <TvModel mode={mode} />
           </group>
           <group ref={tabletParallax}>
-            <group position={[0.7, 0.6, 0.0]} rotation={[0, -0.15, 0.05]}>
+            <group position={[1.3, 0.6, 0.0]} rotation={[0, -0.15, 0.05]}>
               <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
                 <TabletModel mode={mode} />
               </group>
