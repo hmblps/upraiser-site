@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import { useMotionValue } from "framer-motion";
 import { useScroll } from "../context/ScrollContext";
 import {
   FORMAT_SCROLL_ITEM_HEIGHT,
@@ -22,6 +23,7 @@ export function useFormatScrollSection(
 ) {
   const { scrollToY, registerScrollListener } = useScroll();
   const [activeIndex, setActiveIndex] = useState(0);
+  const entranceProgress = useMotionValue(0);
   const lastIndexRef = useRef(0);
 
   useEffect(() => {
@@ -39,6 +41,11 @@ export function useFormatScrollSection(
       if (!section) return;
 
       const rect = section.getBoundingClientRect();
+      
+      // Entrance progress: 0 when top hits bottom of screen, 1 when top hits top of screen
+      const rawEntrance = 1 - (rect.top / window.innerHeight);
+      entranceProgress.set(Math.max(0, Math.min(1, rawEntrance)));
+
       const progress = runwayProgress(rect.top, section.offsetHeight, window.innerHeight);
       const next = progressToFormatIndex(progress, formatCount);
       if (next !== lastIndexRef.current) {
@@ -61,7 +68,7 @@ export function useFormatScrollSection(
       window.removeEventListener("resize", schedule);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [enabled, formatCount, registerScrollListener, sectionRef]);
+  }, [enabled, formatCount, registerScrollListener, sectionRef, entranceProgress]);
 
   const jumpTo = useCallback(
     (idx: number) => {
@@ -78,5 +85,5 @@ export function useFormatScrollSection(
 
   const totalVirtual = formatCount * FORMAT_SCROLL_ITEM_HEIGHT;
 
-  return { activeIndex, jumpTo, totalVirtual };
+  return { activeIndex, jumpTo, totalVirtual, entranceProgress };
 }
