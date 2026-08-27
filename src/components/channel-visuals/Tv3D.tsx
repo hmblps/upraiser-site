@@ -30,6 +30,7 @@ type Tv3DProps = {
 };
 
 import { Model as TvModel } from "./Tv3DModel";
+import { Model as TabletModel } from "./Tablet3DModel";
 
 function TvMesh({
   rotX,
@@ -63,8 +64,13 @@ function TvMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={[0, 0, 0]} scale={0.15} position={[0, -0.3, 0]}>
-          <TvModel mode={mode} />
+        <group>
+          <group rotation={[0, 0, 0]} scale={0.12} position={[0, 0, -1]}>
+            <TvModel mode={mode} />
+          </group>
+          <group rotation={[Math.PI / 2 + 0.1, -0.2, 0]} scale={2.2} position={[1.2, -0.8, 1.0]}>
+            <TabletModel mode={mode} />
+          </group>
         </group>
       </Center>
     </group>

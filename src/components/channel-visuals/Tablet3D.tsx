@@ -63,7 +63,7 @@ function TabletMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={[0, 0, 0]} scale={0.3} position={[0, -0.3, 0]}>
+        <group rotation={[Math.PI / 2, 0, 0]} scale={2.5} position={[0, -0.3, 0]}>
           <TabletModel mode={mode} />
         </group>
       </Center>
