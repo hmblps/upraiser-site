@@ -65,10 +65,10 @@ function TvMesh({
     <group ref={group}>
       <Center>
         <group>
-          <group rotation={[0, 0, 0]} scale={0.08} position={[-0.2, 0, -1]}>
+          <group rotation={[0, 0, 0]} scale={2.8} position={[0, 0.4, -0.2]}>
             <TvModel mode={mode} />
           </group>
-          <group rotation={[Math.PI / 2 + 0.1, -0.2, 0]} scale={5} position={[0.6, -0.6, 1.0]}>
+          <group rotation={[Math.PI / 2, 0, 0]} scale={2.8} position={[0, -0.6, 0.6]}>
             <TabletModel mode={mode} />
           </group>
         </group>
