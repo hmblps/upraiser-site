@@ -21,8 +21,8 @@ import { DRACO_PATH } from "../../lib/heroModel";
 
 const MODEL_PATH = "/channels/oem/macbook-draco.glb";
 
-const REST_Y = 0.45;
-const REST_X = 0.15;
+const REST_Y = 0.05;
+const REST_X = 0.05;
 
 type Macbook3DProps = {
   mode: SiteMode;
@@ -63,7 +63,7 @@ function MacbookMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={[0, -Math.PI / 2, 0]} scale={0.16} position={[0, -0.5, 0]}>
+        <group rotation={[0, 0, 0]} scale={0.16} position={[0, -0.5, 0]}>
           <MacbookModel mode={mode} />
         </group>
       </Center>
