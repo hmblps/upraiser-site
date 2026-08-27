@@ -49,7 +49,7 @@ export function GlobalAmbientModalBackground() {
           muted
           playsInline
           preload="auto"
-          className="block dark:hidden w-full h-full object-cover object-center opacity-[0.6] contrast-[0.8] brightness-[1.1] sepia-[0.05] hue-rotate-[200deg] blur-[2px]"
+          className="block dark:hidden w-full h-full object-cover object-center opacity-[0.75] contrast-[0.85] brightness-[1.05] sepia-[0.05] hue-rotate-[200deg]"
         />
       </div>
     </motion.div>,

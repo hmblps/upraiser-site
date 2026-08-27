@@ -51,7 +51,7 @@ export function AmbientModalBackground() {
             loop
             muted
             playsInline
-            className="block dark:hidden w-full h-full object-cover object-center opacity-[0.35] contrast-[0.7] brightness-[1.15] sepia-[0.1] hue-rotate-[200deg] blur-[1px]"
+            className="block dark:hidden w-full h-full object-cover object-center opacity-[0.75] contrast-[0.85] brightness-[1.05] sepia-[0.1] hue-rotate-[200deg]"
           />
         )}
       </div>
