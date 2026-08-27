@@ -419,11 +419,16 @@ type GLTFResult = GLTF & {
   materials: {}
 }
 
-export function Model(props: ThreeElements['group']) {
+import type { SiteMode } from "../../data/liveContent";
+
+export function Model(props: ThreeElements['group'] & { mode?: SiteMode }) {
   const { nodes } = useGLTF('/channels/oem/macbook-draco.glb') as unknown as GLTFResult
+  const isDark = props.mode !== "growth";
+
   return (
     <group {...props} dispose={null}>
-      <group position={[-18.63, 0, 0]}>
+      {!isDark && (
+        <group position={[0, 0, 0]}>
         <group position={[0, 1.09, -10.34]} rotation={[-1.885, 0, 0]}>
           <group position={[0, 0.23, 10.7]}>
             <mesh geometry={nodes.mesh_116.geometry} material={nodes.mesh_116.material} />
@@ -639,7 +644,9 @@ export function Model(props: ThreeElements['group']) {
         <mesh geometry={nodes.mesh_127.geometry} material={nodes.mesh_127.material} position={[-7.7, 1.32, -11.034]} />
         <mesh geometry={nodes.mesh_128.geometry} material={nodes.mesh_128.material} position={[7.7, 1.32, -11.034]} />
       </group>
-      <group position={[18.63, 0, 0]}>
+      )}
+      {isDark && (
+        <group position={[0, 0, 0]}>
         <group position={[0, 1.09, -10.34]} rotation={[-1.885, 0, 0]}>
           <group position={[0, 0.23, 10.7]}>
             <mesh geometry={nodes.mesh_245.geometry} material={nodes.mesh_245.material} />
@@ -855,6 +862,7 @@ export function Model(props: ThreeElements['group']) {
         <mesh geometry={nodes.mesh_256.geometry} material={nodes.mesh_256.material} position={[-7.7, 1.32, -11.034]} />
         <mesh geometry={nodes.mesh_257.geometry} material={nodes.mesh_257.material} position={[7.7, 1.32, -11.034]} />
       </group>
+      )}
     </group>
   )
 }

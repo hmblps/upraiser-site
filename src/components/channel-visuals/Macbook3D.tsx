@@ -34,10 +34,12 @@ import { Model as MacbookModel } from "./Macbook3DModel";
 function MacbookMesh({
   rotX,
   rotY,
+  mode,
   onReady,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
+  mode: SiteMode;
   onReady?: () => void;
 }) {
   const group = useRef<Group>(null);
@@ -62,7 +64,7 @@ function MacbookMesh({
     <group ref={group}>
       <Center>
         <group rotation={[0, -Math.PI / 2, 0]} scale={0.16} position={[0, -0.5, 0]}>
-          <MacbookModel />
+          <MacbookModel mode={mode} />
         </group>
       </Center>
     </group>
