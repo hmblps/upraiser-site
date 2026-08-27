@@ -15,21 +15,15 @@ import "../../styles/programmatic-full-feed.css";
 const Phone3D = lazy(() =>
   import("./Phone3D").then((m) => ({ default: m.Phone3D })),
 );
-const Tablet3D = lazy(() =>
-  import("../channel-visuals/Tablet3D").then((m) => ({ default: m.Tablet3D })),
-);
 
 const phone3DImport = () =>
   import("./Phone3D").then((m) => ({ default: m.Phone3D }));
-const tablet3DImport = () =>
-  import("../channel-visuals/Tablet3D").then((m) => ({ default: m.Tablet3D }));
 const tv3DImport = () =>
   import("../channel-visuals/Tv3D").then((m) => ({ default: m.Tv3D }));
 const Tv3D = lazy(tv3DImport);
 
 if (typeof window !== "undefined") {
   void phone3DImport();
-  void tablet3DImport();
   void tv3DImport();
 }
 
@@ -138,11 +132,7 @@ export function ProgrammaticScrollSection({
                   }
                 >
                   {lane === "oem-ctv" ? (
-                    format.id === "rich" || format.id === "video" ? (
-                      <Tv3D mode={mode} className="prog-scroll-canvas" />
-                    ) : (
-                      <Tablet3D mode={mode} className="prog-scroll-canvas" />
-                    )
+                    <Tv3D mode={mode} className="prog-scroll-canvas" />
                   ) : (
                     <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
                   )}
