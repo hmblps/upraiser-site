@@ -44,6 +44,7 @@ function TvMesh({
   onReady?: () => void;
 }) {
   const group = useRef<Group>(null);
+  const tabletParallax = useRef<Group>(null);
 
   useEffect(() => {
     onReady?.();
@@ -59,6 +60,12 @@ function TvMesh({
     group.current.rotation.x = rotX.get() + floatRotX;
     group.current.rotation.y = rotY.get() + floatRotY;
     group.current.position.y = Math.sin(t * 1.2) * 0.04;
+
+    if (tabletParallax.current) {
+      // Add independent, exaggerated rotation for the tablet
+      tabletParallax.current.rotation.x = rotX.get() * 0.4;
+      tabletParallax.current.rotation.y = rotY.get() * 0.6;
+    }
   });
 
   return (
@@ -68,9 +75,11 @@ function TvMesh({
           <group rotation={[0, -Math.PI / 2, 0]} scale={2.6} position={[0, -0.7, -0.5]}>
             <TvModel mode={mode} />
           </group>
-          <group position={[1.3, 0.6, 0.5]} rotation={[0, -0.15, 0.05]}>
-            <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
-              <TabletModel mode={mode} />
+          <group ref={tabletParallax}>
+            <group position={[1.1, 0.6, 0.5]} rotation={[0, -0.15, 0.05]}>
+              <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
+                <TabletModel mode={mode} />
+              </group>
             </group>
           </group>
         </group>
