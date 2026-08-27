@@ -16,7 +16,6 @@ import {
   SRGBColorSpace,
   type Group,
   type Object3D,
-  type MeshStandardMaterial,
   type Mesh,
 } from "three";
 import type { SiteMode } from "../../data/liveContent";
@@ -44,13 +43,11 @@ function normalizeRoot(root: Object3D) {
 }
 
 function MacbookMesh({
-  inView,
   rotX,
   rotY,
   isDark,
   onReady,
 }: {
-  inView: boolean;
   rotX: { get: () => number };
   rotY: { get: () => number };
   isDark: boolean;
@@ -132,13 +129,11 @@ function MacbookMesh({
 }
 
 function MacbookScene({
-  inView,
   rotX,
   rotY,
   isDark,
   onMeshReady,
 }: {
-  inView: boolean;
   rotX: { get: () => number };
   rotY: { get: () => number };
   isDark: boolean;
@@ -154,7 +149,6 @@ function MacbookScene({
       <Suspense fallback={null}>
         <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.85} frames={1} />
         <MacbookMesh
-          inView={inView}
           isDark={isDark}
           rotX={rotX}
           rotY={rotY}
@@ -264,7 +258,6 @@ export function Macbook3D({ mode, className }: Macbook3DProps) {
           }}
         >
           <MacbookScene
-            inView={inView}
             isDark={isDark}
             rotX={springX}
             rotY={springY}

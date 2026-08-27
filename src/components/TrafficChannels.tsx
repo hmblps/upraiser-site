@@ -388,6 +388,7 @@ export function TrafficChannels({ variant = "full", channelIds, excludeId }: Tra
                         <p className="stat-label text-muted">Best for</p>
                         <p className="copy mt-1">{panelChannel.bestFor}</p>
                       </motion.div>
+                      {isHome ? (
                         <motion.p variants={reduced ? undefined : panelItem} className="mt-5">
                           <motion.button
                             type="button"

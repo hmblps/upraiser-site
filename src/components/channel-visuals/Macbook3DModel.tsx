@@ -4,9 +4,10 @@ Command: npx gltfjsx@6.5.3 public/channels/oem/macbook-draco.glb -o src/componen
 */
 
 import * as THREE from 'three'
-import React from 'react'
+// Removed React import
 import { useGLTF } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
+import type { GLTF } from 'three-stdlib'
+import type { ThreeElements } from '@react-three/fiber'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -416,11 +417,10 @@ type GLTFResult = GLTF & {
     mesh_257: THREE.Mesh
   }
   materials: {}
-  animations: GLTFAction[]
 }
 
-export function Model(props: JSX.IntrinsicElements['group']) {
-  const { nodes, materials } = useGLTF('/macbook-draco.glb') as GLTFResult
+export function Model(props: ThreeElements['group']) {
+  const { nodes } = useGLTF('/macbook-draco.glb') as unknown as GLTFResult
   return (
     <group {...props} dispose={null}>
       <group position={[-18.63, 0, 0]}>

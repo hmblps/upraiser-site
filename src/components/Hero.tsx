@@ -201,7 +201,7 @@ function HeroPinnedScene() {
                             transition={SPRING_SOFT}
                             style={{ pointerEvents: revealed ? undefined : "none" }}
                           >
-                            <StatCard value={item.value} label={item.label} counted={revealed} accent={'accent' in item ? item.accent : false} align="left" />
+                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="left" />
                           </motion.div>
                         );
                       })}
@@ -218,7 +218,7 @@ function HeroPinnedScene() {
                             transition={SPRING_SOFT}
                             style={{ pointerEvents: revealed ? undefined : "none" }}
                           >
-                            <StatCard value={item.value} label={item.label} counted={revealed} accent={'accent' in item ? item.accent : false} align="right" />
+                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="right" />
                           </motion.div>
                         );
                       })}
