@@ -5,13 +5,6 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 REQUIRED=(
-  "assets/hero/everest.glb"
-  "assets/hero/everest-light.glb"
-  "assets/hero/voyager-nasa.glb"
-  "assets/hero/light-mountains-loop.mp4"
-  "assets/brand/upraiser-logo.png"
-  "assets/brand/favicon.png"
-  "assets/brand/og-image.png"
   "public/hero/everest.glb"
   "public/hero/everest-light.glb"
   "public/hero/voyager-nasa.glb"

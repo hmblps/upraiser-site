@@ -1,4 +1,5 @@
 import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
+import { motion } from "framer-motion";
 import type { CaseStudy } from "../data/cases";
 import { useCaseModal } from "../context/CaseModalContext";
 import { CaseBrandHeader } from "./CaseBrandHeader";
@@ -102,7 +103,7 @@ export function CasePreviewCard({
   };
 
   return (
-    <article
+    <motion.article
       role="button"
       data-cursor="link"
       data-case-card
@@ -115,6 +116,9 @@ export function CasePreviewCard({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       onMouseMove={handleMouseMove}
+      whileHover={{ scale: 0.99 }}
+      whileTap={{ scale: 0.96 }}
+      transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
       className={[
         "case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition hover:border-accent/30",
         isCarousel ? "case-preview-card--carousel" : "h-full",
@@ -168,6 +172,6 @@ export function CasePreviewCard({
           {ctaLabel} <span aria-hidden>→</span>
         </span>
       </div>
-    </article>
+    </motion.article>
   );
 }

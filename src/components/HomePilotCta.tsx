@@ -58,13 +58,20 @@ export function HomePilotCta() {
 
             <div className="flex flex-col items-stretch sm:flex-row gap-4 w-full sm:w-auto">
               <Magnetic className="flex w-full sm:w-auto">
-                <ScrollLink
-                  href={primaryCta.href}
-                  data-cursor="cta"
-                  className="btn-caps btn-caps--primary flex w-full justify-center rounded-full px-8 py-3.5"
+                <motion.div
+                  className="w-full"
+                  whileHover={reduced ? undefined : { scale: 1.02 }}
+                  whileTap={reduced ? undefined : { scale: 0.95 }}
+                  transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
                 >
-                  {primaryCta.label}
-                </ScrollLink>
+                  <ScrollLink
+                    href={primaryCta.href}
+                    data-cursor="cta"
+                    className="btn-caps btn-caps--primary flex w-full justify-center rounded-full px-8 py-3.5"
+                  >
+                    {primaryCta.label}
+                  </ScrollLink>
+                </motion.div>
               </Magnetic>
 
               {/* Theme switcher */}

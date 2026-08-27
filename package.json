@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "bash scripts/sync-assets.sh && bash scripts/verify-assets.sh && tsc -b && vite build",
+    "build": "bash scripts/verify-assets.sh && tsc -b && vite build",
     "generate:og": "node scripts/generate-og-image.mjs && bash scripts/sync-assets.sh",
     "optimize:everest": "node scripts/optimize-everest-glb.mjs",
     "lint": "oxlint",

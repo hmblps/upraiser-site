@@ -63,9 +63,12 @@ export function HeaderIsland() {
         <div className="w-[1px] h-2.5 bg-border/50 shrink-0 mx-0.5" />
 
         {/* Theme Toggle */}
-        <button
+        <motion.button
           type="button"
           onClick={toggleTheme}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
           className="flex items-center justify-center w-6 h-6 rounded-full text-fg-muted hover:text-accent hover:bg-accent/10 transition-colors shrink-0"
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           title="Switch content mode"
@@ -79,7 +82,7 @@ export function HeaderIsland() {
           >
             {isDark ? <Sun className="w-3 h-3" strokeWidth={2.5} /> : <Moon className="w-3 h-3" strokeWidth={2.5} />}
           </motion.span>
-        </button>
+        </motion.button>
       </div>
     </motion.div>
   );
