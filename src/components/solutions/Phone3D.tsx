@@ -85,8 +85,8 @@ export function preloadPhone3DAssets(mode: SiteMode = "growth") {
   }
 }
 
-const REST_Y = 0.32;
-const REST_X = -0.06;
+const REST_Y = 0;
+const REST_X = 0;
 
 type Phone3DProps = {
   mode: SiteMode;

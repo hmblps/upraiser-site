@@ -6,7 +6,6 @@ import {
   formatScrollTargetY,
   progressToFormatIndex,
 } from "../lib/formatScroll";
-import { runwayProgress } from "../lib/scrollScene";
 
 type UseFormatScrollSectionOptions = {
   enabled: boolean;
@@ -17,6 +16,8 @@ type UseFormatScrollSectionOptions = {
 /**
  * Sticky Routes scroll — Lenis-aware progress via registerScrollListener + runwayProgress.
  */
+const INTRO_SCROLL_PX = 1500; // Slow down the entrance animation while pinned
+
 export function useFormatScrollSection(
   sectionRef: RefObject<HTMLElement | null>,
   { enabled, formatCount, reduced }: UseFormatScrollSectionOptions,
@@ -42,12 +43,23 @@ export function useFormatScrollSection(
 
       const rect = section.getBoundingClientRect();
       
-      // Entrance progress: 0 when top hits bottom of screen, 1 when top hits top of screen
-      const rawEntrance = 1 - (rect.top / window.innerHeight);
+      // Entrance progress covers both the scroll into view (innerHeight) + pinned intro (INTRO_SCROLL_PX)
+      const scrolledInPx = window.innerHeight - rect.top;
+      const totalIntroPx = window.innerHeight + INTRO_SCROLL_PX;
+      const rawEntrance = scrolledInPx / totalIntroPx;
       entranceProgress.set(Math.max(0, Math.min(1, rawEntrance)));
 
-      const progress = runwayProgress(rect.top, section.offsetHeight, window.innerHeight);
-      const next = progressToFormatIndex(progress, formatCount);
+      // Content progress starts ONLY AFTER the intro scroll is finished
+      const totalPinnedScroll = section.offsetHeight - window.innerHeight;
+      const contentScrollable = totalPinnedScroll - INTRO_SCROLL_PX;
+      const contentScrollPx = -rect.top - INTRO_SCROLL_PX;
+      
+      let contentP = 0;
+      if (contentScrollable > 0 && contentScrollPx > 0) {
+        contentP = Math.min(1, contentScrollPx / contentScrollable);
+      }
+      
+      const next = progressToFormatIndex(contentP, formatCount);
       if (next !== lastIndexRef.current) {
         lastIndexRef.current = next;
         setActiveIndex(next);
@@ -75,7 +87,13 @@ export function useFormatScrollSection(
       const section = sectionRef.current;
       if (!section) return;
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-      const target = formatScrollTargetY(sectionTop, section.offsetHeight, idx, formatCount);
+      
+      // Target for formats must account for the intro offset!
+      // jumpTo currently uses formatScrollTargetY which might not know about INTRO_SCROLL_PX
+      // We will offset it manually
+      const contentTarget = formatScrollTargetY(sectionTop, section.offsetHeight - INTRO_SCROLL_PX, idx, formatCount);
+      const target = contentTarget + INTRO_SCROLL_PX;
+      
       lastIndexRef.current = idx;
       setActiveIndex(idx);
       scrollToY(target, { immediate: reduced });
@@ -83,7 +101,7 @@ export function useFormatScrollSection(
     [formatCount, reduced, scrollToY, sectionRef],
   );
 
-  const totalVirtual = formatCount * FORMAT_SCROLL_ITEM_HEIGHT;
+  const totalVirtual = (formatCount * FORMAT_SCROLL_ITEM_HEIGHT) + INTRO_SCROLL_PX;
 
   return { activeIndex, jumpTo, totalVirtual, entranceProgress };
 }
