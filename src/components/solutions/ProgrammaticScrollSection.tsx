@@ -12,17 +12,21 @@ import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobi
 import "../../styles/programmatic-scroll-section.css";
 import "../../styles/programmatic-full-feed.css";
 
+const Phone3D = lazy(() =>
+  import("./Phone3D").then((m) => ({ default: m.Phone3D })),
+);
+const Tablet3D = lazy(() =>
+  import("../channel-visuals/Tablet3D").then((m) => ({ default: m.Tablet3D })),
+);
+
 const phone3DImport = () =>
   import("./Phone3D").then((m) => ({ default: m.Phone3D }));
-const macbook3DImport = () =>
-  import("../channel-visuals/Macbook3D").then((m) => ({ default: m.Macbook3D }));
-
-const Phone3D = lazy(phone3DImport);
-const Macbook3D = lazy(macbook3DImport);
+const tablet3DImport = () =>
+  import("../channel-visuals/Tablet3D").then((m) => ({ default: m.Tablet3D }));
 
 if (typeof window !== "undefined") {
   void phone3DImport();
-  void macbook3DImport();
+  void tablet3DImport();
 }
 
 const DESKTOP_MIN_WIDTH = 1024;
@@ -130,7 +134,7 @@ export function ProgrammaticScrollSection({
                   }
                 >
                   {lane === "oem-ctv" ? (
-                    <Macbook3D mode={mode} className="prog-scroll-canvas" />
+                    <Tablet3D mode={mode} className="prog-scroll-canvas" />
                   ) : (
                     <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
                   )}

@@ -6,7 +6,7 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { cn } from "../../lib/cn";
 import { ProgrammaticCarousel } from "./ProgrammaticCarousel";
 import { ChannelVisualScene } from "./scenes";
-import { Macbook3D } from "./Macbook3D";
+import { Tablet3D } from "./Tablet3D";
 
 const VISUAL_SPRING = { type: "spring" as const, stiffness: 280, damping: 26, mass: 0.85 };
 
@@ -78,7 +78,7 @@ export function ChannelVisual({ channelId, mode, className }: ChannelVisualProps
             ) : channelId === "oem" ? (
               <div className="flex items-center justify-center w-full h-[500px] gap-6">
                 <div className="flex-1 max-w-[700px] h-full">
-                  <Macbook3D mode={mode} />
+                  <Tablet3D mode={mode} />
                 </div>
                 
                 {/* Space reserved for tablet */}
