@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { useFormatScrollSection } from "../../hooks/useFormatScrollSection";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import type { SiteMode } from "../../data/liveContent";
@@ -54,7 +54,7 @@ function DeviceCarousel3({
   mode: SiteMode;
   formatId: string;
   scene?: "phone" | "tablet" | "tv";
-  entranceProgress: number;
+  entranceProgress: MotionValue<number>;
   className?: string;
 }) {
   const targetPhase = scene === "tablet" ? 1 : scene === "tv" ? 2 : 0;
