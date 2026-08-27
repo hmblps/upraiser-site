@@ -28,7 +28,7 @@ import type { SiteMode } from "../../data/liveContent";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH } from "../../lib/heroModel";
-
+import type { MotionValue } from "framer-motion";
 
 import "../../styles/phone-css-3d.css";
 
@@ -91,6 +91,7 @@ const REST_X = -0.06;
 type Phone3DProps = {
   mode: SiteMode;
   formatId: string;
+  entranceProgress?: MotionValue<number>;
   className?: string;
 };
 
@@ -184,7 +185,7 @@ function PhoneMesh({
   inView,
   rotX,
   rotY,
-  posY,
+  entranceProgress,
   onReady,
 }: {
   url: string;
@@ -192,7 +193,7 @@ function PhoneMesh({
   inView: boolean;
   rotX: { get: () => number };
   rotY: { get: () => number };
-  posY: { get: () => number };
+  entranceProgress?: MotionValue<number>;
   onReady?: () => void;
 }) {
   const { scene } = useGLTF(url, DRACO_PATH);
@@ -302,9 +303,16 @@ function PhoneMesh({
     const floatRotX = Math.sin(t * 0.8) * 0.03;
     const floatRotY = Math.cos(t * 0.6) * 0.04;
     
-    group.current.rotation.x = rotX.get() + floatRotX;
-    group.current.rotation.y = rotY.get() + floatRotY;
-    group.current.position.y = posY.get() + Math.sin(t * 1.2) * 0.04;
+    const progress = entranceProgress ? Math.max(0, Math.min(1, entranceProgress.get())) : 1;
+    
+    // Lerp from lying down (-1.5x) to normal rotation based on scroll progress
+    const baseRotX = -1.5 + (rotX.get() - -1.5) * progress;
+    const baseRotY = 0.4 + (rotY.get() - 0.4) * progress;
+    const basePosY = -2.0 + (0 - -2.0) * progress;
+    
+    group.current.rotation.x = baseRotX + floatRotX;
+    group.current.rotation.y = baseRotY + floatRotY;
+    group.current.position.y = basePosY + Math.sin(t * 1.2) * 0.04;
 
     if (modeRef.current === "video") {
       videoTex.needsUpdate = true;
@@ -328,7 +336,7 @@ function PhoneScene({
   inView,
   rotX,
   rotY,
-  posY,
+  entranceProgress,
   isDark,
   onMeshReady,
 }: {
@@ -337,7 +345,7 @@ function PhoneScene({
   inView: boolean;
   rotX: { get: () => number };
   rotY: { get: () => number };
-  posY: { get: () => number };
+  entranceProgress?: MotionValue<number>;
   isDark: boolean;
   onMeshReady?: () => void;
 }) {
@@ -357,7 +365,7 @@ function PhoneScene({
           inView={inView}
           rotX={rotX}
           rotY={rotY}
-          posY={posY}
+          entranceProgress={entranceProgress}
           onReady={onMeshReady}
         />
       </Suspense>
@@ -372,25 +380,20 @@ function PhoneScene({
  * Glass: still PNG instantly → format MP4 on the same materials (no remount flash).
  * Live HTML feed stays on CssPhone (mobile); desktop uses baked MP4 of those scenes.
  */
-export function Phone3D({ mode, formatId, className }: Phone3DProps) {
+export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const last = useRef({ x: 0, y: 0 });
 
+  const rotY = useMotionValue(REST_Y);
+  const rotX = useMotionValue(REST_X);
+  const springY = useSpring(rotY, { stiffness: 260, damping: 30, mass: 0.7 });
+  const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
+
   const [isDragging, setIsDragging] = useState(false);
   const [inView, setInView] = useState(true);
   const [meshReady, setMeshReady] = useState(false);
-  const [hasEntered, setHasEntered] = useState(false);
-
-  // Initialize in "lying down" state (pitched back -Math.PI / 2, twisted a bit, and lower)
-  const rotY = useMotionValue(0.4);
-  const rotX = useMotionValue(-1.5);
-  const posY = useMotionValue(-2.0);
-
-  const springY = useSpring(rotY, { stiffness: 120, damping: 25, mass: 0.8 });
-  const springX = useSpring(rotX, { stiffness: 120, damping: 25, mass: 0.8 });
-  const springPosY = useSpring(posY, { stiffness: 100, damping: 25, mass: 1.0 });
 
   const isDark = mode !== "growth";
   const url = isDark ? MODEL_DARK : MODEL_LIGHT;
@@ -418,18 +421,8 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
     return () => io.disconnect();
   }, []);
 
-  // Entrance animation trigger
-  useEffect(() => {
-    if (inView && meshReady && !hasEntered) {
-      setHasEntered(true);
-      rotX.set(REST_X);
-      rotY.set(REST_Y);
-      posY.set(0);
-    }
-  }, [inView, meshReady, hasEntered, rotX, rotY, posY]);
-
   const onPointerDown = (e: ReactPointerEvent) => {
-    if (reduced || !hasEntered) return;
+    if (reduced) return;
     dragging.current = true;
     setIsDragging(true);
     last.current = { x: e.clientX, y: e.clientY };
@@ -507,7 +500,7 @@ export function Phone3D({ mode, formatId, className }: Phone3DProps) {
             isDark={isDark}
             rotX={springX}
             rotY={springY}
-            posY={springPosY}
+            entranceProgress={entranceProgress}
             onMeshReady={markMeshReady}
           />
         </Canvas>

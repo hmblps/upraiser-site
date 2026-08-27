@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { useScroll } from "framer-motion";
 import { useFormatScrollSection } from "../../hooks/useFormatScrollSection";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import type { SiteMode } from "../../data/liveContent";
@@ -59,6 +60,12 @@ export function ProgrammaticScrollSection({
   const [isMobile, setIsMobile] = useState(false);
 
   const desktopEnabled = !isMobile && !reduced;
+
+  // Track the entrance of the section (from bottom of screen to sticky position at top)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start start"],
+  });
 
   const { activeIndex, jumpTo, totalVirtual } = useFormatScrollSection(sectionRef, {
     enabled: desktopEnabled,
@@ -134,7 +141,7 @@ export function ProgrammaticScrollSection({
                   {lane === "oem-ctv" ? (
                     <Tv3D mode={mode} className="prog-scroll-canvas" />
                   ) : (
-                    <Phone3D mode={mode} formatId={format.id} className="prog-scroll-canvas" />
+                    <Phone3D mode={mode} formatId={format.id} entranceProgress={scrollYProgress} className="prog-scroll-canvas" />
                   )}
                 </CanvasErrorBoundary>
               </Suspense>
