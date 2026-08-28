@@ -1,5 +1,7 @@
+import { useState } from "react";
 import type { SiteMode } from "../../data/liveContent";
 import { ProgrammaticFullFeed } from "../channel-visuals/programmatic/ProgrammaticFullFeed";
+import { InterstitialVideo } from "./InterstitialVideo";
 
 type CssPhoneProps = {
   mode: SiteMode;
@@ -25,10 +27,47 @@ export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
           <span className="prog-css-phone__lens" />
         </div>
         <div className="prog-css-phone__screen">
-          <ProgrammaticFullFeed activeFormatId={formatId} />
+          {formatId === "rich" ? (
+            <iframe
+              src="/rich-media-ad.html"
+              title="Rich Media Ad"
+              allow="autoplay; encrypted-media"
+              className="prog-css-phone__live-ad"
+            />
+          ) : formatId === "video" ? (
+            <VideoInterstitialScreen />
+          ) : (
+            <ProgrammaticFullFeed activeFormatId={formatId} />
+          )}
         </div>
         <span className="prog-css-phone__home-glow" aria-hidden />
       </div>
     </div>
+  );
+}
+
+function VideoInterstitialScreen() {
+  const [closed, setClosed] = useState(false);
+
+  if (closed) {
+    return <div className="prog-css-phone__ad-closed">Ad closed</div>;
+  }
+
+  return (
+    <>
+      <InterstitialVideo className="prog-css-phone__live-video" />
+      <button
+        type="button"
+        className="prog-css-phone__ad-close"
+        aria-label="Close ad"
+        onClick={() => setClosed(true)}
+      >
+        <span aria-hidden>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M1.2 1.2l9.6 9.6M10.8 1.2L1.2 10.8" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </span>
+      </button>
+    </>
   );
 }
