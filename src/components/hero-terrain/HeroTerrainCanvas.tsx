@@ -25,7 +25,7 @@ function ThemeGlSync({ theme }: { theme: ThemeMode }) {
     gl.toneMappingExposure = isLight ? 1.0 : 1;
     gl.outputColorSpace = SRGBColorSpace;
     gl.setClearColor(isLight ? 0xffffff : 0x050504, 1);
-    gl.setPixelRatio(Math.min(window.devicePixelRatio, isLight ? 1.75 : 1));
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, isLight ? 1.5 : 1));
   }, [gl, isLight]);
 
   return null;
@@ -118,7 +118,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
       {/* One Canvas for both themes — remounting was the dirty/late mountain flash. */}
       <Canvas
         className="hero-terrain-canvas"
-        dpr={isLight ? [1, 1.75] : 1}
+        dpr={isLight ? [1, 1.5] : 1}
         frameloop={inView ? "always" : "never"}
         gl={{
           antialias: true,
