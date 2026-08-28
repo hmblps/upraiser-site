@@ -23,11 +23,13 @@ export function Scene({
   scrollRef,
   path,
   onModelReady,
+  voyager = false,
 }: {
   theme: ThemeMode;
   scrollRef: MutableRefObject<ScrollState>;
   path: AscentPath;
   onModelReady: () => void;
+  voyager?: boolean;
 }) {
   const isLight = theme === "light";
   const [readyTheme, setReadyTheme] = useState<ThemeMode | null>(null);
@@ -53,7 +55,7 @@ export function Scene({
         <SceneReady key={theme} onReady={handleReady} />
       </Suspense>
       {isLight ? <AscentBird /> : null}
-      {!isLight && terrainReady ? (
+      {!isLight && terrainReady && voyager ? (
         <Suspense fallback={null}>
           <FloatingVoyager />
         </Suspense>

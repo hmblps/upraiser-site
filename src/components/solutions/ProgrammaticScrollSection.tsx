@@ -9,6 +9,7 @@ import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
 import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobile";
+import { warmStage } from "../../lib/scrollPreload";
 
 import "../../styles/programmatic-scroll-section.css";
 import "../../styles/programmatic-full-feed.css";
@@ -51,9 +52,21 @@ function DeviceCarousel3({
   // Slightly springy — feels alive without bouncing content off-screen
   const phase = useSpring(phaseRaw, { stiffness: 340, damping: 32, mass: 0.6 });
 
+  const [armed, setArmed] = useState(() => new Set([targetPhase]));
+
   useEffect(() => {
     phaseRaw.set(targetPhase);
   }, [targetPhase, phaseRaw]);
+
+  useEffect(() => {
+    setArmed((prev) => {
+      const next = new Set(prev);
+      next.add(targetPhase);
+      return next;
+    });
+    const t = window.setTimeout(() => setArmed(new Set([targetPhase])), 720);
+    return () => window.clearTimeout(t);
+  }, [targetPhase]);
 
   // ── Signed distance from each slot (negative = left, positive = right) ────
   const phoneDist  = useTransform(phase, (p) => Math.abs(0 - p));
@@ -87,6 +100,7 @@ function DeviceCarousel3({
         }}
       >
         <div style={{ width: "62%", height: "100%", position: "relative" }}>
+          {armed.has(0) ? (
           <Suspense fallback={<div className={className} />}>
             <CanvasErrorBoundary fallback={<div className={className} />}>
               <Phone3D
@@ -97,6 +111,7 @@ function DeviceCarousel3({
               />
             </CanvasErrorBoundary>
           </Suspense>
+          ) : null}
         </div>
       </motion.div>
 
@@ -111,11 +126,13 @@ function DeviceCarousel3({
         }}
       >
         <div style={{ width: "85%", height: "100%", position: "relative" }}>
+          {armed.has(1) ? (
           <Suspense fallback={<div className={className} />}>
             <CanvasErrorBoundary fallback={<div className={className} />}>
               <Tablet3D mode={mode} formatId={formatId} className={className} />
             </CanvasErrorBoundary>
           </Suspense>
+          ) : null}
         </div>
       </motion.div>
 
@@ -129,9 +146,11 @@ function DeviceCarousel3({
         }}
       >
         <Suspense fallback={null}>
+          {armed.has(2) ? (
           <CanvasErrorBoundary fallback={null}>
             <Tv3D mode={mode} className={className} />
           </CanvasErrorBoundary>
+          ) : null}
         </Suspense>
       </motion.div>
     </div>
@@ -204,14 +223,20 @@ export function ProgrammaticScrollSection({
     return () => mq.removeEventListener("change", sync);
   }, []);
 
+  const format = formats[activeIndex] ?? formats[0]!;
+
   useEffect(() => {
     if (!desktopEnabled) return;
-    void import("./Phone3D").then((m) => {
-      m.preloadPhone3DAssets(mode);
-    });
-  }, [desktopEnabled, mode]);
+    const scene = format.scene ?? "phone";
+    if (scene === "tablet") warmStage("routes-tablet");
+    else if (scene === "tv") warmStage("routes-tv");
+    else warmStage("routes");
 
-  const format = formats[activeIndex] ?? formats[0]!;
+    const ahead = formats[Math.min(activeIndex + 1, formats.length - 1)];
+    const aheadScene = ahead?.scene ?? "phone";
+    if (aheadScene === "tablet") warmStage("routes-tablet");
+    if (aheadScene === "tv") warmStage("routes-tv");
+  }, [desktopEnabled, format, activeIndex, formats]);
 
   if (!desktopEnabled) {
     return (

@@ -1,21 +1,16 @@
-export const routePreloaders: Record<string, () => void> = {
-  "/": () => {
-    void import("../components/solutions/Phone3D").then((m) => {
-      m.preloadPhone3DAssets("growth");
-      m.preloadPhone3DAssets("infrastructure");
-    });
-  },
-  "/expedition": () => {
-    void import("../pages/ExpeditionPage");
-  },
-  "/craft": () => {
-    void import("../pages/CraftPage");
-  },
-};
+import { warmFromHref } from "./scrollPreload";
 
 export function preloadRoute(href: string) {
+  warmFromHref(href);
+
   const base = href.split("?")[0]?.split("#")[0];
-  if (base && routePreloaders[base]) {
-    routePreloaders[base]();
+  if (!base || base === "/") return;
+
+  if (base === "/expedition") {
+    void import("../pages/ExpeditionPage");
+    return;
+  }
+  if (base === "/craft") {
+    void import("../pages/CraftPage");
   }
 }

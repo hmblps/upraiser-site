@@ -11,6 +11,7 @@
     "optimize:everest": "node scripts/optimize-everest-glb.mjs",
     "optimize:everest-light": "node scripts/optimize-everest-light-glb.mjs",
     "optimize:tv": "node scripts/optimize-tv-glb.mjs",
+    "bake:everest-curve": "node scripts/bake-everest-curve.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
     "deploy": "bash scripts/deploy-vercel.sh"

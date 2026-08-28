@@ -245,6 +245,7 @@ export function Tv3D({ mode, className }: Tv3DProps) {
             alpha: true,
             premultipliedAlpha: false,
             powerPreference: "high-performance",
+            stencil: false,
           }}
           camera={{ position: [0, 0.2, 5.5], fov: 34, near: 0.1, far: 100 }}
           style={{ background: "transparent" }}

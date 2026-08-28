@@ -79,6 +79,8 @@
 
 .section-lazy-slot {
   width: 100%;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 40dvh;
 }
 
 .hero-title {

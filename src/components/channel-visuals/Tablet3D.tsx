@@ -290,6 +290,7 @@ export function Tablet3D({ mode, formatId, className }: Tablet3DProps) {
             alpha: true,
             premultipliedAlpha: false,
             powerPreference: "high-performance",
+            stencil: false,
           }}
           camera={{ position: [0, 0.2, 3.8], fov: 30, near: 0.1, far: 80 }}
           style={{ background: "transparent" }}

@@ -80,20 +80,8 @@ const STILL_URLS = FORMAT_IDS.map((id) => SCREEN_STILL[id]);
  */
 export function preloadPhone3DAssets(mode: SiteMode = "growth") {
   const primary = mode === "growth" ? MODEL_LIGHT : MODEL_DARK;
-  const secondary = mode === "growth" ? MODEL_DARK : MODEL_LIGHT;
   void useGLTF.preload(primary, DRACO_PATH);
   void useTexture.preload([SCREEN_STILL.banner!]);
-
-  const warmRest = () => {
-    void useGLTF.preload(secondary, DRACO_PATH);
-    void useTexture.preload(STILL_URLS);
-  };
-
-  if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(warmRest, { timeout: 2200 });
-  } else {
-    window.setTimeout(warmRest, 900);
-  }
 }
 
 const REST_Y = 0.07;   // ~4° — subtle depth hint, phone stays face-forward
@@ -766,6 +754,7 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
             alpha: true,
             premultipliedAlpha: false,
             powerPreference: "high-performance",
+            stencil: false,
           }}
           camera={{ position: [0, -0.08, 3.78], fov: 28, near: 0.05, far: 80 }}
           style={{ background: "transparent" }}

@@ -4,7 +4,8 @@ import { useGLTF } from "@react-three/drei";
 import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, VOYAGER_URL } from "../../lib/heroModel";
+import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "../../lib/heroModel";
+import { markHeroReady } from "../../lib/scrollPreload";
 import { Scene } from "./Scene";
 import { HERO_ASCENT_DEFAULTS, type ScrollState, type ThemeMode } from "./shared";
 
@@ -39,11 +40,17 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   const path = HERO_ASCENT_DEFAULTS;
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
+  const [voyagerOk, setVoyagerOk] = useState(false);
   const handleModelReady = useCallback(() => setModelReady(true), []);
 
   useEffect(() => {
     setModelReady(false);
+    setVoyagerOk(false);
   }, [theme]);
+
+  useEffect(() => {
+    if (modelReady) markHeroReady();
+  }, [modelReady]);
 
   useEffect(() => {
     if (reduced) return;
@@ -62,7 +69,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
     return () => window.removeEventListener("pointermove", onMove);
   }, [reduced, inView]);
 
-  // Active theme GLB only. Alternate + 13MB Voyager wait until the mountain is on screen.
+  // Active theme GLB only. Alternate theme waits until the mountain is on screen.
   useEffect(() => {
     if (reduced) return;
     const active = theme === "light" ? MODEL_URL_LIGHT : MODEL_URL;
@@ -72,13 +79,17 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   useEffect(() => {
     if (reduced || !modelReady) return;
     const alternate = theme === "light" ? MODEL_URL : MODEL_URL_LIGHT;
-    const warmRest = () => {
+    const t = window.setTimeout(() => {
       void useGLTF.preload(alternate, DRACO_PATH);
-      if (theme !== "light") void useGLTF.preload(`${VOYAGER_URL}?v=tex6`);
-    };
-    const t = window.setTimeout(warmRest, 8000);
+    }, 8000);
     return () => window.clearTimeout(t);
   }, [reduced, theme, modelReady]);
+
+  useEffect(() => {
+    if (!modelReady || !inView || theme === "light") return;
+    const t = window.setTimeout(() => setVoyagerOk(true), 2800);
+    return () => window.clearTimeout(t);
+  }, [modelReady, inView, theme]);
 
   useEffect(() => {
     if (reduced) return;
@@ -117,8 +128,9 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
           depth: true,
         }}
         camera={{ position: [cx, cy, cz], fov: path.startFov, near: 0.5, far: 900 }}
-        style={{ width: "100%", height: "100%", display: "block", background: isLight ? "#ffffff" : "#050504" }}
-        onCreated={({ gl }) => {
+        style={{ width: "100%", height: "100%", display: "block", background: isLight ? "#ffffff" : "#050504", pointerEvents: "none" }}
+        onCreated={({ gl, events }) => {
+          events.disconnect?.();
           gl.toneMapping = ACESFilmicToneMapping;
           gl.toneMappingExposure = isLight ? 1.0 : 1;
           gl.outputColorSpace = SRGBColorSpace;
@@ -127,7 +139,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
         }}
       >
         <ThemeGlSync theme={theme} />
-        <Scene theme={theme} scrollRef={scrollRef} path={path} onModelReady={handleModelReady} />
+        <Scene theme={theme} scrollRef={scrollRef} path={path} onModelReady={handleModelReady} voyager={voyagerOk} />
       </Canvas>
     </div>
   );

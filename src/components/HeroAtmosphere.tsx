@@ -3,6 +3,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { preloadHeroTerrain } from "../lib/heroBoot";
+import { markHeroReady } from "../lib/scrollPreload";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 import { HeroTerrainCanvas } from "./hero-terrain/HeroTerrainCanvas";
 
@@ -88,6 +89,10 @@ export function HeroAtmosphere() {
   const reduced = useReducedMotion();
   const desktop = useDesktopHero();
   const use3d = desktop && !reduced;
+
+  useEffect(() => {
+    if (!use3d) markHeroReady();
+  }, [use3d]);
 
   useEffect(() => {
     if (!use3d) return;

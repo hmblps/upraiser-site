@@ -4,9 +4,11 @@ import { Hero } from "../components/Hero";
 import { LazySection } from "../layouts/SiteLayout";
 import { SectionNav } from "../components/SectionNav";
 import { HomePilotCta } from "../components/HomePilotCta";
-import { PartnersCarousel } from "../components/PartnersCarousel";
 import { useRoutesLane } from "../hooks/useRoutesLane";
 
+const PartnersCarousel = lazy(() =>
+  import("../components/PartnersCarousel").then((m) => ({ default: m.PartnersCarousel })),
+);
 const Audience = lazy(() => import("../components/Audience").then((m) => ({ default: m.Audience })));
 const Process = lazy(() => import("../components/Process").then((m) => ({ default: m.Process })));
 const CaseStudies = lazy(() =>
@@ -36,18 +38,17 @@ export function HomePage() {
         >
           <Hero />
         </div>
-        <LazySection minHeight="8rem">
+        <LazySection minHeight="8rem" gate="hero">
           <PartnersCarousel />
         </LazySection>
-        <LazySection minHeight="70dvh">
+        <LazySection id="audience" minHeight="70dvh" warm="mid" gate="hero">
           <Audience />
         </LazySection>
-        <LazySection minHeight="52dvh">
+        <LazySection id="process" minHeight="52dvh" warm="mid" gate="hero">
           <Process />
         </LazySection>
         
-        {/* Replaced HomeRoutesSection with full Routes programmatic scroll */}
-        <LazySection minHeight="100dvh">
+        <LazySection id="routes" minHeight="100dvh" warm="routes" gate="hero">
           <ProgrammaticScrollSection sectionId="routes"
             lane={lane}
             mode={mode}
@@ -65,18 +66,16 @@ export function HomePage() {
           />
         </LazySection>
 
-        {/* Full CaseStudies implementation on Home without variant="home" */}
-        <LazySection minHeight="56dvh">
+        <LazySection id="cases" minHeight="56dvh" warm="cases">
           <CaseStudies />
         </LazySection>
         
-        {/* Render Modals like Case Details over Home Page */}
         <Outlet />
 
-        <LazySection minHeight="70dvh">
+        <LazySection id="promise" minHeight="70dvh" warm="promise" gate="hero">
           <PromiseSection />
         </LazySection>
-        <LazySection minHeight="28dvh">
+        <LazySection id="pilot" minHeight="28dvh">
           <HomePilotCta />
         </LazySection>
       </main>

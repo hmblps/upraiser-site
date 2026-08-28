@@ -10,6 +10,12 @@ import { useApplePreview } from "../hooks/useApplePreview";
 import { useViewportRoute } from "../hooks/useViewportRoute";
 import { CaseModalProvider } from "../context/CaseModalContext";
 import { useModalBackground } from "../lib/modalBackgroundState";
+import {
+  isHeroReady,
+  warmStage,
+  whenHeroReady,
+  type PreloadStage,
+} from "../lib/scrollPreload";
 
 const ApplePreviewPanel = lazy(() =>
   import("../components/apple-preview/ApplePreviewPanel").then((m) => ({ default: m.ApplePreviewPanel })),
@@ -47,13 +53,7 @@ function DeferredCustomCursor() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(() => setReady(true), { timeout: 900 });
-      return () => window.cancelIdleCallback(id);
-    }
-
-    const id = window.setTimeout(() => setReady(true), 400);
-    return () => window.clearTimeout(id);
+    return whenHeroReady(() => setReady(true));
   }, []);
 
   if (!ready) return null;
@@ -65,29 +65,78 @@ function DeferredCustomCursor() {
   );
 }
 
-/** Render children only when the slot nears the viewport — keeps hero GLB/WebGL uncontested. */
-export function LazySection({ children, minHeight = "28dvh" }: { children: ReactNode; minHeight?: string }) {
+/**
+ * Two-phase slot: warm JS/GLB as the block approaches, mount when it is close.
+ * `gate="hero"` waits for Everest so Routes 3D cannot steal the first paint.
+ */
+export function LazySection({
+  children,
+  minHeight = "28dvh",
+  id,
+  warm,
+  gate,
+  warmMargin = "90% 0px",
+  showMargin = "30% 0px",
+}: {
+  children: ReactNode;
+  minHeight?: string;
+  id?: string;
+  warm?: PreloadStage;
+  gate?: "hero";
+  warmMargin?: string;
+  showMargin?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
+  const [heroOk, setHeroOk] = useState(() => gate !== "hero" || isHeroReady());
+  const warmedRef = useRef(false);
+
+  useEffect(() => {
+    if (gate !== "hero" || heroOk) return;
+    return whenHeroReady(() => setHeroOk(true));
+  }, [gate, heroOk]);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const io = new IntersectionObserver(
+
+    const kickWarm = () => {
+      if (warmedRef.current) return;
+      warmedRef.current = true;
+      if (warm) warmStage(warm);
+    };
+
+    const warmIo = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        setShow(true);
-        io.disconnect();
+        kickWarm();
+        warmIo.disconnect();
       },
-      { rootMargin: "30% 0px", threshold: 0 },
+      { rootMargin: warmMargin, threshold: 0 },
     );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+    const showIo = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        kickWarm();
+        setShow(true);
+        showIo.disconnect();
+        warmIo.disconnect();
+      },
+      { rootMargin: showMargin, threshold: 0 },
+    );
+    warmIo.observe(el);
+    showIo.observe(el);
+    return () => {
+      warmIo.disconnect();
+      showIo.disconnect();
+    };
+  }, [warm, warmMargin, showMargin]);
+
+  const mounted = show && heroOk;
 
   return (
-    <div ref={ref}>
-      {show ? (
+    <div ref={ref} id={mounted ? undefined : id}>
+      {mounted ? (
         <Suspense fallback={<div className="section-lazy-slot" style={{ minHeight }} aria-hidden />}>
           {children}
         </Suspense>
@@ -118,7 +167,7 @@ export function SiteLayout() {
           {viewportRoute ? <ViewportChrome /> : null}
         </div>
         {!viewportRoute ? (
-          <LazySection minHeight="20vh">
+          <LazySection minHeight="20dvh">
             <Footer />
           </LazySection>
         ) : null}

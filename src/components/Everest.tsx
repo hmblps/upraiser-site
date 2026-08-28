@@ -52,6 +52,8 @@ function stripMaps(mat: MeshStandardMaterial) {
   mat.needsUpdate = true;
 }
 
+function skipRaycast() {}
+
 export function Everest({
   theme = "light",
   castShadow = false,
@@ -74,9 +76,10 @@ export function Everest({
     [nodes],
   );
 
-  // One-time CPU bend: drop each vertex by d²/(2R) from the terrain centre —
-  // globe curvature, edges sink below the horizon instead of ending in a cliff.
+  // Dark GLB is pre-bent (scripts/bake-everest-curve.mjs). Light still bends at runtime
+  // so photogrammetry tangents stay exact without inflating the 11MB file.
   useMemo(() => {
+    if (!isLight) return;
     const box = new Box3();
     for (const node of geos) {
       node.geometry.computeBoundingBox();
@@ -209,17 +212,19 @@ export function Everest({
             material={fill}
             castShadow={castShadow}
             receiveShadow={receiveShadow}
+            raycast={skipRaycast}
           />
         ))}
         {wire
           ? geos.map((node, i) => (
-              <mesh
-                key={`wire-${i}`}
-                geometry={node.geometry}
-                material={wire}
-                castShadow={false}
-                receiveShadow={false}
-              />
+                <mesh
+                  key={`wire-${i}`}
+                  geometry={node.geometry}
+                  material={wire}
+                  castShadow={false}
+                  receiveShadow={false}
+                  raycast={skipRaycast}
+                />
             ))
           : null}
       </Center>
