@@ -7,6 +7,7 @@ import { CssPhone } from "./CssPhone";
 
 export type ProgrammaticScrollSectionMobileProps = {
   mode: SiteMode;
+  lane?: string;
   laneSwitcher?: ReactNode;
   formats: readonly AdFormat[];
   headerLabel: string;
@@ -17,6 +18,7 @@ export type ProgrammaticScrollSectionMobileProps = {
 /** Mobile / reduced-motion Routes — stacked cards + bottom phone dock. */
 export function ProgrammaticScrollSectionMobile({
   mode,
+  lane = "app-growth",
   laneSwitcher,
   formats,
   headerLabel,
@@ -29,11 +31,28 @@ export function ProgrammaticScrollSectionMobile({
   const sectionRef = useRef<HTMLElement | null>(null);
   const dockRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
+  const indexByLaneRef = useRef<Record<string, number>>({});
+  const laneRef = useRef(lane);
+  const ignoreObserverRef = useRef(false);
   const format = formats[activeIndex] ?? formats[0]!;
 
+  if (laneRef.current !== lane) {
+    indexByLaneRef.current[laneRef.current] = activeIndex;
+    const restore = Math.min(indexByLaneRef.current[lane] ?? 0, Math.max(0, formats.length - 1));
+    laneRef.current = lane;
+    setActiveIndex(restore);
+    ignoreObserverRef.current = true;
+  }
+
   useEffect(() => {
-    setActiveIndex(0);
-  }, [formats]);
+    if (!ignoreObserverRef.current) return;
+    const restore = Math.min(indexByLaneRef.current[lane] ?? 0, Math.max(0, formats.length - 1));
+    cardRefs.current[restore]?.scrollIntoView({ behavior: "auto", block: "start" });
+    const t = window.setTimeout(() => {
+      ignoreObserverRef.current = false;
+    }, 160);
+    return () => window.clearTimeout(t);
+  }, [lane, formats.length]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -74,6 +93,7 @@ export function ProgrammaticScrollSectionMobile({
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (!visible) return;
+        if (ignoreObserverRef.current) return;
         const idx = Number((visible.target as HTMLElement).dataset.index);
         if (!Number.isNaN(idx)) setActiveIndex(idx);
       },

@@ -149,7 +149,9 @@
   body.custom-cursor-active input,
   body.custom-cursor-active textarea,
   body.custom-cursor-active select,
-  body.custom-cursor-active label {
+  body.custom-cursor-active label,
+  body.custom-cursor-active iframe,
+  body.custom-cursor-active video {
     cursor: auto !important;
   }
 

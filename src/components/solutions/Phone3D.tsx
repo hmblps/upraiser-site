@@ -585,7 +585,7 @@ function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" |
             >
               <iframe
                 src="/rich-media-ad.html"
-                style={{ width: AD_W, height: AD_H, border: "none", display: "block" }}
+                style={{ width: AD_W, height: AD_H, border: "none", display: "block", cursor: "none" }}
                 allow="autoplay; encrypted-media"
                 title="Rich Media Ad"
               />

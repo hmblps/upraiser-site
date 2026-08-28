@@ -55,7 +55,8 @@ export function AutoScaledLogo({
     setIsAppIcon(square);
   };
 
-  const finalScale = baseScale * autoScale;
+  // Pull extreme brand.scale values toward one optical size (0.65–2.3 → ~0.88–1.18).
+  const finalScale = Math.min(1.18, Math.max(0.88, baseScale * autoScale));
 
   const style: CSSProperties = scaleMethod === "css-var"
     ? { "--logo-scale": finalScale, borderRadius: isAppIcon ? "22.5%" : undefined } as CSSProperties
@@ -68,6 +69,7 @@ export function AutoScaledLogo({
       className={className}
       onLoad={handleLoad}
       style={style}
+      draggable={false}
       loading="lazy"
       decoding="async"
     />

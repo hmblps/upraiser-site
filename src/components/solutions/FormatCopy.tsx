@@ -8,7 +8,7 @@ const SPRING = { type: "spring" as const, stiffness: 220, damping: 28, mass: 0.8
 const panelScroll = {
   hidden: { opacity: 0, y: 14 },
   visible: { opacity: 1, y: 0, transition: SPRING },
-  exit:    { opacity: 0, y: -10, transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const } },
+  exit:    { opacity: 0, y: 8, transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
 // Tumbler / lane switch → horizontal (tabs are a horizontal paradigm;

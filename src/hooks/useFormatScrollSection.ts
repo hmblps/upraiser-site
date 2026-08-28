@@ -11,6 +11,8 @@ type UseFormatScrollSectionOptions = {
   enabled: boolean;
   formatCount: number;
   reduced: boolean;
+  /** App Growth vs OEM — each lane keeps its own format index. */
+  lane?: string;
 };
 
 /**
@@ -20,17 +22,26 @@ const INTRO_SCROLL_PX = 650; // Phone arrives before copy is fully read
 
 export function useFormatScrollSection(
   sectionRef: RefObject<HTMLElement | null>,
-  { enabled, formatCount, reduced }: UseFormatScrollSectionOptions,
+  { enabled, formatCount, reduced, lane = "app-growth" }: UseFormatScrollSectionOptions,
 ) {
   const { scrollToY, registerScrollListener } = useScroll();
   const [activeIndex, setActiveIndex] = useState(0);
   const entranceProgress = useMotionValue(0);
   const lastIndexRef = useRef(0);
+  const indexByLaneRef = useRef<Record<string, number>>({});
+  const laneRef = useRef(lane);
+  const ignoreSyncRef = useRef(false);
+  const pendingJumpRef = useRef<number | null>(null);
+  const ignoreTimerRef = useRef(0);
 
-  useEffect(() => {
-    lastIndexRef.current = 0;
-    setActiveIndex(0);
-  }, [formatCount]);
+  if (laneRef.current !== lane) {
+    indexByLaneRef.current[laneRef.current] = lastIndexRef.current;
+    const restore = Math.min(indexByLaneRef.current[lane] ?? 0, Math.max(0, formatCount - 1));
+    laneRef.current = lane;
+    lastIndexRef.current = restore;
+    pendingJumpRef.current = restore;
+    setActiveIndex(restore);
+  }
 
   useEffect(() => {
     if (!enabled) return;
@@ -60,9 +71,14 @@ export function useFormatScrollSection(
       }
       
       const next = progressToFormatIndex(contentP, formatCount);
+      if (ignoreSyncRef.current) {
+        if (next === lastIndexRef.current) ignoreSyncRef.current = false;
+        else return;
+      }
       if (next !== lastIndexRef.current) {
         lastIndexRef.current = next;
         setActiveIndex(next);
+        indexByLaneRef.current[laneRef.current] = next;
       }
     };
 
@@ -83,23 +99,44 @@ export function useFormatScrollSection(
   }, [enabled, formatCount, registerScrollListener, sectionRef, entranceProgress]);
 
   const jumpTo = useCallback(
-    (idx: number) => {
+    (idx: number, opts?: { immediate?: boolean }) => {
       const section = sectionRef.current;
       if (!section) return;
+      const clamped = Math.min(Math.max(0, idx), Math.max(0, formatCount - 1));
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-      
-      // Target for formats must account for the intro offset!
-      // jumpTo currently uses formatScrollTargetY which might not know about INTRO_SCROLL_PX
-      // We will offset it manually
-      const contentTarget = formatScrollTargetY(sectionTop, section.offsetHeight - INTRO_SCROLL_PX, idx, formatCount);
+      const contentTarget = formatScrollTargetY(
+        sectionTop,
+        section.offsetHeight - INTRO_SCROLL_PX,
+        clamped,
+        formatCount,
+      );
       const target = contentTarget + INTRO_SCROLL_PX;
-      
-      lastIndexRef.current = idx;
-      setActiveIndex(idx);
-      scrollToY(target, { immediate: reduced });
+      const immediate = opts?.immediate ?? reduced;
+
+      lastIndexRef.current = clamped;
+      setActiveIndex(clamped);
+      indexByLaneRef.current[laneRef.current] = clamped;
+
+      if (immediate) {
+        ignoreSyncRef.current = true;
+        window.clearTimeout(ignoreTimerRef.current);
+        ignoreTimerRef.current = window.setTimeout(() => {
+          ignoreSyncRef.current = false;
+        }, 280);
+      }
+
+      scrollToY(target, { immediate });
     },
     [formatCount, reduced, scrollToY, sectionRef],
   );
+
+  useEffect(() => {
+    const pending = pendingJumpRef.current;
+    if (pending === null) return;
+    pendingJumpRef.current = null;
+    if (!enabled) return;
+    jumpTo(pending, { immediate: true });
+  }, [lane, enabled, jumpTo]);
 
   const totalVirtual = (formatCount * FORMAT_SCROLL_ITEM_HEIGHT) + INTRO_SCROLL_PX;
 

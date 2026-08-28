@@ -220,6 +220,10 @@
 .hero-stage--fly {
   --hero-lenovo-opacity: 0;
   --hero-lenovo-y: 108;
+  --hero-lenovo-dock-h: 6.75rem;
+  /* Air between stat labels and the Lenovo dock — rem-min so Windows 125% / short
+     laptops cannot collapse 7vh below the dock height (stats used to sit under it). */
+  --hero-stats-lenovo-gap: clamp(4.5rem, 8vh, 6rem);
 }
 
 .lenovo-hero-dock {
@@ -455,11 +459,19 @@
   }
 }
 
+.hero-stats-rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--hero-lenovo-dock-h) + var(--hero-stats-lenovo-gap));
+  z-index: 10;
+  pointer-events: none;
+}
+
 .hero-stats-wrap {
   align-self: end;
-  margin-top: auto;
-  /* Lift the 2×2 off the Lenovo dock */
-  margin-bottom: clamp(3rem, 7vh, 5.5rem);
+  margin-top: 0;
+  margin-bottom: 0;
   width: 100%;
 }
 
@@ -654,4 +666,21 @@
 
 .sparkline-area.is-drawn {
   opacity: 1;
+}
+
+/* Desktop stats rail — must sit above the Lenovo dock, not under it.
+   Dock height is measured (--hero-lenovo-dock-h); gap is rem-clamped so
+   Windows 125% / short laptops keep the same air as a tall Mac. */
+.hero-stats-rail.page-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--hero-lenovo-dock-h, 6.75rem) + var(--hero-stats-lenovo-gap, 4.5rem));
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero-stats-rail .hero-stats-wrap {
+  margin-top: 0;
+  margin-bottom: 0;
 }

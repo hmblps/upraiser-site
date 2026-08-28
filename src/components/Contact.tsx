@@ -121,11 +121,9 @@ export function Contact() {
   ];
 
   return (
-    <div className="depth-page depth-page--contact min-h-[100dvh] flex flex-col w-full">
-      <div className="section-inner flex flex-col pt-[var(--nav-height)] pb-8 flex-1">
-        <div className="relative flex-1 pb-8 pt-3">
-          <div className="flex w-full flex-col justify-center">
-            <div className="strip-beam-wrap relative w-full mb-12 lg:mb-24 rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl flex-1 flex flex-col">
+    <div className="depth-page depth-page--contact viewport-page">
+      <div className="section-inner contact-page-shell">
+            <div className="strip-beam-wrap contact-briefing-card relative w-full rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl">
               <GradientTraceBorder
                 className="z-20"
                 duration={3.4}
@@ -133,8 +131,8 @@ export function Contact() {
                 colorFrom="var(--theme-accent-light)"
                 colorTo="var(--color-magenta)"
               />
-              <div className="relative z-[1] grid flex-1 lg:grid-cols-[1fr_1.2fr]">
-                <div className="relative flex flex-col bg-bg-elevated card-pad">
+              <div className="contact-briefing-grid relative z-[1]">
+                <div className="contact-briefing-copy relative flex flex-col bg-bg-elevated">
                   <p className="section-label">{contactPage.label}</p>
                   <h1 className="section-title section-title--compact mt-1.5">
                     {contactPage.titleLead}
@@ -154,7 +152,7 @@ export function Contact() {
                     ))}
                   </div>
 
-                  <div className="contact-sidebar mt-8 space-y-6 border-t border-border pt-6">
+                  <div className="contact-sidebar">
                     <div>
                       <h2 className="contact-sidebar__title">Basecamp London</h2>
                       <address className="copy mt-2 space-y-1 not-italic">
@@ -195,7 +193,7 @@ export function Contact() {
                   </div>
                 </div>
 
-                <div className="flex flex-col card-pad">
+                <div className="contact-briefing-form flex min-h-0 flex-col">
                   {status === "success" ? (
                     <div
                       className="flex h-full min-h-0 flex-col items-center justify-center text-center"
@@ -366,8 +364,6 @@ export function Contact() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
       </div>
     </div>
   );

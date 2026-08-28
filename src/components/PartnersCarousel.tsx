@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { partnersForSet, partnerSetForRoute } from "../data/partners";
@@ -8,6 +8,7 @@ import { clientBrands } from "../data/clients";
 import { SectionHeader } from "./SectionHeader";
 import { GlobalModalTrigger } from "./GlobalModalTrigger";
 import { AutoScaledLogo } from "./AutoScaledLogo";
+import { useMarqueePointerDrag } from "../hooks/useMarqueePointerDrag";
 
 type PartnersCarouselProps = {
   /** Compact strip for viewport chrome */
@@ -32,22 +33,23 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   }, [modalOpen]);
 
   const itemsList = compact ? partners : clientBrands;
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  useMarqueePointerDrag(marqueeRef);
 
   if (itemsList.length === 0) return null;
 
   if (compact) {
     const items = [...partners, ...partners];
     return (
-      <div className="partners-strip partners-strip--chrome relative overflow-hidden" aria-label="Integrations">
+      <div className="partners-strip partners-strip--chrome partners-marquee-viewport relative overflow-hidden" aria-label="Integrations">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-bg to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-bg to-transparent" />
-        <div className="partners-marquee flex w-max items-center px-4">
+        <div ref={marqueeRef} className="partners-marquee flex w-max items-center px-4">
           {items.map((partner, index) => (
             <button
               key={`${partner.slug}-${index}`}
               type="button"
-              onClick={() => setModalOpen(true)}
-              className="partner-logo-slot partner-logo-slot--chrome cursor-pointer focus:outline-none"
+              className="partner-logo-slot partner-logo-slot--chrome cursor-grab focus:outline-none"
               aria-hidden={index >= partners.length}
             >
               <AutoScaledLogo src={partner.logo!} alt="" baseScale={partner.scale} className="partner-logo" scaleMethod="css-var" />
@@ -72,20 +74,18 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
         </div>
 
         <div className="section-inner">
-          <div
-            className="relative w-full overflow-hidden h-[100px] sm:h-[130px] flex items-center"
-          >
+          <div className="partners-marquee-viewport relative w-full overflow-hidden h-[100px] sm:h-[130px] flex items-center">
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 sm:w-32 bg-gradient-to-r from-bg to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 sm:w-32 bg-gradient-to-l from-bg to-transparent" />
 
-            {/* Pure CSS marquee — speed controlled in base.css (.partners-marquee { animation: partners-marquee 120s ... }) */}
-            <div className="partners-marquee flex w-max items-center h-full">
+            <div ref={marqueeRef} className="partners-marquee flex w-max items-center h-full">
               {marqueeItems.map((brand, idx) => (
                 <button
                   type="button"
                   key={`${brand.slug}-${idx}`}
                   onClick={() => setModalOpen(true)}
-                  className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-pointer outline-none focus:outline-none"
+                  className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-grab outline-none focus:outline-none"
+                  data-brand={brand.slug}
                 >
                   {brand.logo ? (
                     <AutoScaledLogo

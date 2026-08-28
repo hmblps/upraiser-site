@@ -565,7 +565,7 @@ header nav .nav-link:focus-visible::after {
 
 .copy {
   font-size: var(--text-body);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
   color: var(--theme-muted-light);
 }

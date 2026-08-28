@@ -8,7 +8,6 @@ export function HomeRoutesSection() {
 
   return (
     <ProgrammaticScrollSection
-      key={lane}
       sectionId="routes"
       mode={mode}
       laneSwitcher={

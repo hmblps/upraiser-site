@@ -804,8 +804,20 @@
   }
 }
 
-.case-detail-brand {
-  margin-top: 0;
+.case-detail-modal__body .copy {
+  /* Story body — not the pale muted-light used on Mac-smooth gray. */
+  color: color-mix(in srgb, var(--theme-fg) 76%, var(--theme-muted));
+}
+
+/* ClearType paints light gray thinner than macOS antialiased; pull copy toward ink. */
+html[data-os="windows"] .case-detail-modal__body .copy {
+  color: color-mix(in srgb, var(--theme-fg) 90%, var(--theme-muted));
+}
+
+html[data-os="windows"] .case-detail-modal__panel {
+  background: var(--theme-bg-elevated);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .case-detail-result__value {
@@ -849,7 +861,9 @@ body.custom-cursor-active button,
 body.custom-cursor-active input,
 body.custom-cursor-active textarea,
 body.custom-cursor-active select,
-body.custom-cursor-active label {
+body.custom-cursor-active label,
+body.custom-cursor-active iframe,
+body.custom-cursor-active video {
   cursor: none !important;
 }
 

@@ -37,9 +37,18 @@ body {
   background: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+  font-feature-settings: "ss01" on, "cv11" on;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+html[data-os="windows"] body {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
 a {

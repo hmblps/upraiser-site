@@ -775,6 +775,76 @@ html.viewport-route body {
   position: relative;
 }
 
+/* Contact briefing — fill the locked viewport, never nest another 100dvh.
+   Short Windows (125% DPI) clips rem padding + min-h-100dvh; pad with dvh instead. */
+.contact-page-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-top: clamp(0.5rem, 1.4dvh, 1rem);
+  padding-bottom: clamp(0.5rem, 1.4dvh, 0.85rem);
+}
+
+.contact-briefing-card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.contact-briefing-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .contact-briefing-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+}
+
+.contact-briefing-copy,
+.contact-briefing-form {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: clamp(0.85rem, 2dvh, 2rem) clamp(1rem, 2.2vw, 2.5rem);
+}
+
+.contact-briefing-copy .contact-sidebar {
+  margin-top: clamp(0.75rem, 2dvh, 1.75rem);
+  padding-top: clamp(0.75rem, 1.8dvh, 1.5rem);
+  border-top: 1px solid var(--theme-border);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.8dvh, 1.5rem);
+}
+
+.contact-briefing-form form {
+  flex: 1;
+  min-height: 0;
+}
+
+.contact-briefing-form textarea.contact-field {
+  min-height: clamp(4.25rem, 12dvh, 8rem);
+}
+
+@media (max-height: 800px) {
+  .contact-briefing-copy .section-title--compact {
+    font-size: clamp(1.35rem, 4.5dvh, 2rem);
+  }
+
+  .contact-briefing-form .btn-caps {
+    padding-block: 0.65rem;
+  }
+}
+
 /* Proactiv / Codeforge ambience — brand orange, not purple */
 .viewport-page::before {
   content: "";
@@ -1327,6 +1397,11 @@ html.theme-light .depth-page--gear .gear-spec,
   max-height: 2.8rem;
 }
 
+.partner-logo-slot--home[data-brand="iq-options"] .partner-logo {
+  height: 2.45rem;
+  max-height: 2.6rem;
+}
+
 @media (min-width: 640px) {
   .partners-strip--home {
     padding-top: 2.5rem;
@@ -1341,6 +1416,12 @@ html.theme-light .depth-page--gear .gear-spec,
   .partner-logo-slot--home .partner-logo {
     height: calc(2.8rem * var(--logo-scale, 1));
     max-height: 3.5rem;
+  }
+
+  /* IQ Option SVG is a padded wordmark — keep it optically with the other marks. */
+  .partner-logo-slot--home[data-brand="iq-options"] .partner-logo {
+    height: 3.15rem;
+    max-height: 3.35rem;
   }
 }
 

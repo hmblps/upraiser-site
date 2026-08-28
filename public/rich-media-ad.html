@@ -7,6 +7,7 @@
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html,body{width:320px;height:630px;overflow:hidden;background:#0b1220;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  html.no-native-cursor,html.no-native-cursor *{cursor:none!important}
 
   /* ─── Outer layout ─── */
   .ad{position:relative;width:320px;height:630px;display:flex;flex-direction:column;overflow:hidden}
@@ -25,14 +26,6 @@
   .sub-cover-tl{position:absolute;top:0;left:0;width:140px;height:50px;
     background:linear-gradient(135deg,rgba(11,18,32,.82) 50%,transparent 100%);
     pointer-events:none;z-index:3}
-  /* Vidout-style top controls bar */
-  .vid-topbar{position:absolute;top:0;left:0;right:0;height:32px;
-    background:linear-gradient(rgba(0,0,0,.45),transparent);
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 10px;pointer-events:none;z-index:4}
-  .vid-topbar-icon{width:20px;height:20px;background:rgba(255,255,255,.15);
-    border-radius:4px;display:flex;align-items:center;justify-content:center;
-    font-size:11px;color:rgba(255,255,255,.7)}
   /* Vidout-style play bar */
   .vid-controls{position:absolute;bottom:0;left:0;right:0;height:48px;
     background:linear-gradient(transparent,rgba(0,0,0,.55));
@@ -164,11 +157,6 @@
     <video class="ad-video" id="adVideo" autoplay muted playsinline loop preload="auto">
       <source src="/ing-ad-15s.mp4" type="video/mp4">
     </video>
-    <!-- Top bar (expand icon, vidout badge) -->
-    <div class="vid-topbar">
-      <div class="vid-topbar-icon">⤢</div>
-      <div class="vid-topbar-icon" style="background:rgba(255,102,0,.7);font-size:9px;padding:0 5px;border-radius:3px;color:#fff;font-weight:700">▶</div>
-    </div>
     <div class="sub-cover-tl"></div>
     <!-- Subtitle cover -->
     <div class="sub-cover"></div>
@@ -278,6 +266,47 @@ video.addEventListener('timeupdate', function() {
 video.addEventListener('play', updatePlayIcon);
 video.addEventListener('pause', updatePlayIcon);
 video.play().catch(function(){});
+
+// Same-origin: hide native cursor when the site custom cursor is on,
+// and forward pointer coords so it can follow into this iframe.
+(function bridgeCursor() {
+  function parentWantsCustomCursor() {
+    try { return parent.document.body.classList.contains('custom-cursor-active'); }
+    catch (e) { return false; }
+  }
+  function syncNativeCursor() {
+    document.documentElement.classList.toggle('no-native-cursor', parentWantsCustomCursor());
+  }
+  syncNativeCursor();
+  try {
+    new MutationObserver(syncNativeCursor).observe(parent.document.body, {
+      attributes: true, attributeFilter: ['class']
+    });
+  } catch (e) {}
+
+  function hitMode(el) {
+    if (!el || !el.closest) return 'default';
+    if (el.closest('.cta-btn, .machine-btn')) return 'cta';
+    if (el.closest('button, .shredder-wrap, .vid-progress, a')) return 'link';
+    return 'default';
+  }
+  function send(e, clicking) {
+    if (!parentWantsCustomCursor()) return;
+    var mode = hitMode(e.target);
+    parent.postMessage({
+      source: 'upraiser-ad',
+      type: 'cursor',
+      clientX: e.clientX,
+      clientY: e.clientY,
+      hovering: mode !== 'default',
+      mode: mode,
+      clicking: clicking
+    }, location.origin);
+  }
+  document.addEventListener('pointermove', function (e) { send(e); }, { passive: true });
+  document.addEventListener('pointerdown', function (e) { send(e, true); });
+  document.addEventListener('pointerup', function (e) { send(e, false); });
+})();
 
 // ─── Shredder animation ───
 var shredding = false;

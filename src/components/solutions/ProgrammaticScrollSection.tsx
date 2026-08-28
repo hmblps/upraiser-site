@@ -183,6 +183,7 @@ export function ProgrammaticScrollSection({
     enabled: desktopEnabled,
     formatCount: formats.length,
     reduced,
+    lane,
   });
 
   // Track lane changes to drive the correct text transition direction
@@ -228,6 +229,7 @@ export function ProgrammaticScrollSection({
       <div id={sectionId} className="prog-scroll-outer-mobile">
         <ProgrammaticScrollSectionMobile
           mode={mode}
+          lane={lane}
           laneSwitcher={laneSwitcher}
           formats={formats}
           headerLabel={headerLabel}
@@ -269,25 +271,25 @@ export function ProgrammaticScrollSection({
             </div>
 
             <div className="prog-scroll-copy-col">
-              {/* Tumbler pinned at top — outside FormatCopy's flex so it never
-                  shifts when content height changes */}
-              {laneSwitcher && (
-                <div className="prog-scroll-copy-tumbler">
-                  {laneSwitcher}
-                </div>
-              )}
+              <div className="prog-scroll-copy-stack">
+                {laneSwitcher && (
+                  <div className="prog-scroll-copy-tumbler">
+                    {laneSwitcher}
+                  </div>
+                )}
 
-              <FormatCopy
-                format={format}
-                index={activeIndex}
-                total={formats.length}
-                mode={mode}
-                reduced={false}
-                transitionDir={textTransition.dir}
-                laneDirection={textTransition.laneDir}
-                formats={formats}
-                onJump={jumpTo}
-              />
+                <FormatCopy
+                  format={format}
+                  index={activeIndex}
+                  total={formats.length}
+                  mode={mode}
+                  reduced={false}
+                  transitionDir={textTransition.dir}
+                  laneDirection={textTransition.laneDir}
+                  formats={formats}
+                  onJump={jumpTo}
+                />
+              </div>
             </div>
           </div>
         </div>

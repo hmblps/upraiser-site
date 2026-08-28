@@ -149,8 +149,18 @@ body {
   background: var(--theme-bg);
   color: var(--theme-fg);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
   font-feature-settings: "ss01" on, "cv11" on;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* DirectWrite synthesizes missing Inter weights; diagonals (A/V/W) blob.
+   Use real faces only, and let Windows ClearType paint instead of grayscale. */
+html[data-os="windows"] body {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
 /* Unified horizontal page rail — prefer over ad-hoc px-* gutters where possible */
@@ -282,6 +292,24 @@ header nav .nav-link:focus-visible::after {
 .partners-marquee {
   animation: partners-marquee 120s linear infinite;
   will-change: transform;
+}
+
+.partners-marquee-viewport {
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.partners-marquee-viewport.is-marquee-dragging,
+.partners-marquee-viewport.is-marquee-dragging * {
+  cursor: grabbing;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .partners-marquee-viewport.is-marquee-dragging .partner-logo,
+  .partners-marquee-viewport.is-marquee-dragging .partner-logo-wordmark {
+    transform: none;
+  }
 }
 
 @keyframes clients-marquee-left {
@@ -546,7 +574,8 @@ main [id] {
   width: fit-content;
   padding-inline: 0.875rem;
   overflow: visible;
-  cursor: default;
+  cursor: grab;
+  user-select: none;
 }
 
 .partner-logo {
@@ -600,13 +629,8 @@ main [id] {
   opacity: 0.85;
 }
 
-/* Pause the reel when any mark is hovered; color only that mark. */
+/* Color the hovered mark — do not pause the reel (hover/focus used to freeze it). */
 @media (hover: hover) and (pointer: fine) {
-  .partners-strip:has(.partner-logo-slot:hover) .partners-marquee,
-  .partners-strip:has(.partner-logo-slot:focus-within) .partners-marquee {
-    animation-play-state: paused !important;
-  }
-
   .partner-logo-slot:hover .partner-logo,
   .partner-logo-slot:focus-within .partner-logo {
     opacity: 1;

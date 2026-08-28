@@ -79,7 +79,22 @@ export function CustomCursor() {
       ringY.jump(y);
     };
 
-    
+    const applyPoint = (x: number, y: number) => {
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        paintClasses();
+        snapTo(x, y);
+        return;
+      }
+      const jump = Math.hypot(x - dotX.get(), y - dotY.get());
+      if (jump > 140) {
+        snapTo(x, y);
+      } else {
+        mouseX.set(x);
+        mouseY.set(y);
+      }
+    };
+
     const onMouseOver = (event: MouseEvent) => {
       const element = event.target as Element;
       const nextMode = resolveCursorMode(element);
@@ -92,24 +107,46 @@ export function CustomCursor() {
     };
     window.addEventListener("mouseover", onMouseOver, { passive: true });
     const onMove = (event: MouseEvent) => {
-      const x = event.clientX;
-      const y = event.clientY;
+      applyPoint(event.clientX, event.clientY);
+    };
 
-      if (!visibleRef.current) {
-        visibleRef.current = true;
+    const onAdCursor = (event: MessageEvent) => {
+      const data = event.data as {
+        source?: string;
+        type?: string;
+        clientX?: number;
+        clientY?: number;
+        hovering?: boolean;
+        mode?: CursorMode;
+        clicking?: boolean;
+      } | null;
+      if (event.origin !== window.location.origin) return;
+      if (!data || data.source !== "upraiser-ad" || data.type !== "cursor") return;
+      if (typeof data.clientX !== "number" || typeof data.clientY !== "number") return;
+
+      const iframe = [...document.querySelectorAll("iframe")].find(
+        (frame) => frame.contentWindow === event.source,
+      );
+      if (!iframe) return;
+
+      const rect = iframe.getBoundingClientRect();
+      const iw = iframe.contentWindow?.innerWidth || rect.width || 1;
+      const ih = iframe.contentWindow?.innerHeight || rect.height || 1;
+      applyPoint(rect.left + (data.clientX / iw) * rect.width, rect.top + (data.clientY / ih) * rect.height);
+
+      const nextMode = data.mode === "cta" || data.mode === "link" || data.mode === "card" ? data.mode : "default";
+      const nextHover = Boolean(data.hovering);
+      const nextClick = data.clicking === true;
+      if (
+        nextMode !== modeRef.current ||
+        nextHover !== hoveringRef.current ||
+        (data.clicking !== undefined && nextClick !== clickingRef.current)
+      ) {
+        modeRef.current = nextMode;
+        hoveringRef.current = nextHover;
+        if (data.clicking !== undefined) clickingRef.current = nextClick;
         paintClasses();
-        snapTo(x, y);
-      } else {
-        const jump = Math.hypot(x - dotX.get(), y - dotY.get());
-        if (jump > 140) {
-          snapTo(x, y);
-        } else {
-          mouseX.set(x);
-          mouseY.set(y);
-        }
       }
-
-      
     };
 
     const onDown = () => {
@@ -136,6 +173,7 @@ export function CustomCursor() {
     window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
+    window.addEventListener("message", onAdCursor);
     document.documentElement.addEventListener("mouseleave", onLeave);
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -145,6 +183,7 @@ export function CustomCursor() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("message", onAdCursor);
       document.documentElement.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
     };

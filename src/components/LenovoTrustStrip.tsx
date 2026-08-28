@@ -2,14 +2,39 @@ import { lenovoPartnership } from "../data/liveContent";
 import { GradientTraceBorder } from "./GradientTraceBorder";
 import { LenovoPartnershipCopy } from "./LenovoPartnershipCopy";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
+import { useEffect, useRef } from "react";
 
 /**
  * Lenovo partnership — flush dock on the sticky hero bottom edge.
  * Reveal is driven by HeroFly CSS vars (--hero-lenovo-*), not whileInView.
  */
 export function LenovoTrustStrip() {
+  const dockRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const dock = dockRef.current;
+    if (!dock) return;
+
+    const publish = () => {
+      const stage = dock.closest(".hero-stage--fly") as HTMLElement | null;
+      if (!stage) return;
+      const h = Math.ceil(dock.getBoundingClientRect().height);
+      if (h > 0) stage.style.setProperty("--hero-lenovo-dock-h", `${h}px`);
+    };
+
+    publish();
+    const ro = new ResizeObserver(publish);
+    ro.observe(dock);
+    window.addEventListener("resize", publish, { passive: true });
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", publish);
+    };
+  }, []);
+
   return (
     <aside
+      ref={dockRef}
       id="partnership"
       className="lenovo-hero-dock"
       aria-label="Lenovo partnership"
