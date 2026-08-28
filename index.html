@@ -34,7 +34,7 @@
             l.href = href;
             l.as = as;
             l.crossOrigin = "anonymous";
-            l.setAttribute("fetchpriority", "high");
+            l.setAttribute("fetchpriority", "low"); // Changed from high to low so HTML/JS loads first
             document.head.appendChild(l);
           }
           preload(glb, "fetch");
