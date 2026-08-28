@@ -76,11 +76,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
       void useGLTF.preload(alternate, DRACO_PATH);
       if (theme !== "light") void useGLTF.preload(`${VOYAGER_URL}?v=tex6`);
     };
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(warmRest, { timeout: 5000 });
-      return () => window.cancelIdleCallback(id);
-    }
-    const t = window.setTimeout(warmRest, 2400);
+    const t = window.setTimeout(warmRest, 8000);
     return () => window.clearTimeout(t);
   }, [reduced, theme, modelReady]);
 

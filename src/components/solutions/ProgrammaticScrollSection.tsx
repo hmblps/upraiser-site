@@ -13,22 +13,11 @@ import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobi
 import "../../styles/programmatic-scroll-section.css";
 import "../../styles/programmatic-full-feed.css";
 
-const Phone3D = lazy(() =>
-  import("./Phone3D").then((m) => ({ default: m.Phone3D })),
+const Phone3D = lazy(() => import("./Phone3D").then((m) => ({ default: m.Phone3D })));
+const Tablet3D = lazy(() =>
+  import("../channel-visuals/Tablet3D").then((m) => ({ default: m.Tablet3D })),
 );
-
-const phone3DImport   = () => import("./Phone3D").then((m) => ({ default: m.Phone3D }));
-const tv3DImport      = () => import("../channel-visuals/Tv3D").then((m) => ({ default: m.Tv3D }));
-const tablet3DImport  = () => import("../channel-visuals/Tablet3D").then((m) => ({ default: m.Tablet3D }));
-
-const Tv3D     = lazy(tv3DImport);
-const Tablet3D = lazy(tablet3DImport);
-
-if (typeof window !== "undefined") {
-  void phone3DImport();
-  void tv3DImport();
-  void tablet3DImport();
-}
+const Tv3D = lazy(() => import("../channel-visuals/Tv3D").then((m) => ({ default: m.Tv3D })));
 
 const DESKTOP_MIN_WIDTH = 1024;
 

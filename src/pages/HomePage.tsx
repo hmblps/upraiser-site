@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy } from "react";
 import { Outlet } from "react-router-dom";
 import { Hero } from "../components/Hero";
 import { LazySection } from "../layouts/SiteLayout";
@@ -24,43 +24,7 @@ const RoutesLaneSwitcher = lazy(() =>
   import("../components/RoutesLaneSwitcher").then((m) => ({ default: m.RoutesLaneSwitcher }))
 );
 
-function usePreloadHome() {
-  useEffect(() => {
-    const runNear = () => {
-      void import("../components/Audience");
-    };
-    const runMid = () => {
-      void import("../components/Process");
-      void import("../components/solutions/ProgrammaticScrollSection");
-      void import("../components/RoutesLaneSwitcher");
-      void import("../components/CaseStudies");
-    };
-    const runFar = () => {
-      void import("../components/PromiseSection");
-    };
-    if (typeof window.requestIdleCallback === "function") {
-      const nearId = window.requestIdleCallback(runNear, { timeout: 1000 });
-      const midId = window.requestIdleCallback(runMid, { timeout: 5500 });
-      const farId = window.requestIdleCallback(runFar, { timeout: 8000 });
-      return () => {
-        window.cancelIdleCallback(nearId);
-        window.cancelIdleCallback(midId);
-        window.cancelIdleCallback(farId);
-      };
-    }
-    const nearT = window.setTimeout(runNear, 300);
-    const midT = window.setTimeout(runMid, 2800);
-    const farT = window.setTimeout(runFar, 4200);
-    return () => {
-      window.clearTimeout(nearT);
-      window.clearTimeout(midT);
-      window.clearTimeout(farT);
-    };
-  }, []);
-}
-
 export function HomePage() {
-  usePreloadHome();
   const { mode, lane, setLane, formats, headerLabel, headerTitle, headerDescription } = useRoutesLane();
 
   return (

@@ -1,18 +1,10 @@
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { preloadHeroTerrain } from "../lib/heroBoot";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
-
-const loadHeroTerrain = () =>
-  import("./hero-terrain/HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas }));
-
-const HeroTerrainCanvas = lazy(loadHeroTerrain);
-
-if (typeof window !== "undefined" && window.matchMedia(DESKTOP_HERO_QUERY).matches) {
-  void loadHeroTerrain();
-}
+import { HeroTerrainCanvas } from "./hero-terrain/HeroTerrainCanvas";
 
 const MOUNTAINS_MP4 = "/hero/light-mountains-loop.mp4";
 const MOUNTAINS_POSTER_LIGHT = "/hero/light-mountains-fallback.png";
@@ -97,8 +89,6 @@ export function HeroAtmosphere() {
   const desktop = useDesktopHero();
   const use3d = desktop && !reduced;
 
-  if (use3d) void loadHeroTerrain();
-
   useEffect(() => {
     if (!use3d) return;
     preloadHeroTerrain(theme);
@@ -112,9 +102,7 @@ export function HeroAtmosphere() {
       <div className="hero-atmosphere__sky hero-terrain-shell">
         {use3d ? (
           <CanvasErrorBoundary>
-            <Suspense fallback={null}>
-              <HeroTerrainCanvas className="hero-terrain-root" />
-            </Suspense>
+            <HeroTerrainCanvas className="hero-terrain-root" />
           </CanvasErrorBoundary>
         ) : null}
         {!desktop ? <HeroMountainsMobile isLight={isLight} reduced={reduced} /> : null}

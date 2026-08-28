@@ -98,10 +98,9 @@ export function Everest({
         pos.setY(i, pos.getY(i) - (dx * dx + dz * dz) / (2 * rLocal));
       }
       pos.needsUpdate = true;
-      // Normals must follow the planet bend — otherwise lighting reads as a flat blob.
       geo.computeVertexNormals();
-      // Normal maps need fresh tangents after the CPU bend.
-      if (geo.attributes.uv && geo.index) {
+      // Dark wire has no normal maps — tangents are wasted CPU before the first frame.
+      if (isLight && geo.attributes.uv && geo.index) {
         try {
           geo.computeTangents();
         } catch {
@@ -111,7 +110,7 @@ export function Everest({
       geo.computeBoundingBox();
       geo.computeBoundingSphere();
     }
-  }, [geos, scale]);
+  }, [geos, scale, isLight]);
 
   // Dark only — light theme uses photo maps without brand wire overlay.
   const wire = useMemo(() => {

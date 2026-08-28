@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
 import { SmoothScroll } from "../components/SmoothScroll";
@@ -65,11 +65,36 @@ function DeferredCustomCursor() {
   );
 }
 
-export function LazySection({ children, minHeight = "28vh" }: { children: ReactNode; minHeight?: string }) {
+/** Render children only when the slot nears the viewport — keeps hero GLB/WebGL uncontested. */
+export function LazySection({ children, minHeight = "28dvh" }: { children: ReactNode; minHeight?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setShow(true);
+        io.disconnect();
+      },
+      { rootMargin: "30% 0px", threshold: 0 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <Suspense fallback={<div className="section-lazy-slot" style={{ minHeight }} aria-hidden />}>
-      {children}
-    </Suspense>
+    <div ref={ref}>
+      {show ? (
+        <Suspense fallback={<div className="section-lazy-slot" style={{ minHeight }} aria-hidden />}>
+          {children}
+        </Suspense>
+      ) : (
+        <div className="section-lazy-slot" style={{ minHeight }} aria-hidden />
+      )}
+    </div>
   );
 }
 
