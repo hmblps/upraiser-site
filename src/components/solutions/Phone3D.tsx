@@ -9,7 +9,7 @@ import {
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Center, ContactShadows, Environment, useGLTF, useTexture } from "@react-three/drei";
-import { useMotionValue, useSpring } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
   ClampToEdgeWrapping,
@@ -412,9 +412,145 @@ function PhoneScene({
 }
 
 /**
+ * CSS phone frame with live Vidout rich-media iframe inside.
+ * Shown only when formatId === "rich".
+ */
+function RichMediaPhone({ mode }: { mode: SiteMode }) {
+  const isDark = mode !== "growth";
+  const screenRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.82);
+
+  // Scale iframe to phone screen width. Ad is 320×480 natively.
+  // Phone screen container fills the rest with dark background.
+  useEffect(() => {
+    const el = screenRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      if (w > 0) setScale(w / 320);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const phoneGrad = isDark
+    ? "linear-gradient(155deg, #f0a06a, #c96f3a 42%, #9a5228)"
+    : "linear-gradient(155deg, #5a7498 0%, #2a4060 34%, #152238 68%, #0c1524 100%)";
+  const phoneShadow = isDark
+    ? "22px 30px 50px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,220,160,0.35), inset 0 -1px 0 rgba(0,0,0,0.45)"
+    : "22px 30px 50px rgba(0,0,0,0.28), inset 0 1px 0 rgba(210,230,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.45)";
+
+  return (
+    <motion.div
+      key="rich-phone"
+      className="rich-media-phone-bob"
+      initial={{ opacity: 0, scale: 0.94, y: 24 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.94, y: -16 }}
+      transition={{ type: "spring", stiffness: 280, damping: 28 }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 2,
+        pointerEvents: "all",
+      }}
+    >
+      {/* Phone body */}
+      <div
+        style={{
+          width: "clamp(180px, min(38vw, 17rem), 240px)",
+          aspectRatio: "430 / 879",
+          background: phoneGrad,
+          borderRadius: "clamp(1.55rem, 2.6vw, 2.2rem)",
+          padding: "clamp(0.14rem, 0.4vw, 0.22rem)",
+          boxShadow: phoneShadow,
+          position: "relative",
+          transform: "perspective(1100px) rotateY(5deg) rotateX(-3deg)",
+          transformOrigin: "center center",
+          flexShrink: 0,
+        }}
+      >
+        {/* Screen glass */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            borderRadius: "clamp(1.3rem, 2.3vw, 1.95rem)",
+            overflow: "hidden",
+            background: "#0a0a0a",
+            border: "2px solid rgba(0,0,0,0.84)",
+          }}
+        >
+          {/* Dynamic Island */}
+          <div
+            style={{
+              position: "absolute",
+              top: "clamp(0.45rem, 1.2vw, 0.65rem)",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "clamp(2.2rem, 20%, 3.1rem)",
+              height: "clamp(0.5rem, 1.4vw, 0.7rem)",
+              borderRadius: "999px",
+              background: "#0a0a0a",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Ad container — ResizeObserver measures this for scale */}
+          <div
+            ref={screenRef}
+            style={{
+              position: "absolute",
+              inset: 0,
+              overflow: "hidden",
+              background: "#0a0a0a",
+            }}
+          >
+              <iframe
+                  src="/rich-media-ad.html"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "320px",
+                    height: "480px",
+                    border: "none",
+                    transformOrigin: "top left",
+                    transform: `scale(${scale})`,
+                    display: "block",
+                  }}
+                  allow="autoplay"
+                  title="Rich Media Ad"
+                />
+          </div>
+
+          {/* Glass glare */}
+          <div
+            style={{
+              pointerEvents: "none",
+              position: "absolute",
+              inset: 0,
+              zIndex: 4,
+              background:
+                "linear-gradient(125deg, rgba(255,255,255,0.16) 0%, transparent 26%, transparent 72%, rgba(255,255,255,0.05) 100%)",
+              mixBlendMode: "soft-light",
+            }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/**
  * 3D iPhone chassis.
  * Glass: still PNG instantly → format MP4 on the same materials (no remount flash).
- * Live HTML feed stays on CssPhone (mobile); desktop uses baked MP4 of those scenes.
+ * For "rich" format: CSS phone frame with live Vidout HTML ad iframe.
  */
 export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3DProps) {
   const reduced = useReducedMotion();
@@ -487,6 +623,8 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
     rotX.set(REST_X + (rotX.get() - REST_X) * 0.35);
   };
 
+  const isRichMedia = formatId === "rich";
+
   return (
     <div
       ref={stageRef}
@@ -495,10 +633,10 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
         isDark ? "phone-glb-stage--tint" : "phone-glb-stage--deepblue",
         className,
       )}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
+      onPointerDown={isRichMedia ? undefined : onPointerDown}
+      onPointerMove={isRichMedia ? undefined : onPointerMove}
+      onPointerUp={isRichMedia ? undefined : endDrag}
+      onPointerCancel={isRichMedia ? undefined : endDrag}
       role="img"
       aria-label="Interactive phone mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
@@ -507,13 +645,18 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
       <span className="phone-css-light phone-css-light--rim" aria-hidden />
       <span className="phone-css-light phone-css-light--floor" aria-hidden />
 
-      {/* 2D Fallback removed as requested by user. */}
-
-      <div className={cn("phone-glb-canvas-wrap transition-opacity duration-700 ease-out", meshReady ? "opacity-100" : "opacity-0")}>
+      {/* 3D canvas — always mounted (keep WebGL context), hidden behind rich-media */}
+      <div
+        className={cn(
+          "phone-glb-canvas-wrap transition-opacity duration-700 ease-out",
+          meshReady && !isRichMedia ? "opacity-100" : "opacity-0",
+        )}
+        style={{ pointerEvents: isRichMedia ? "none" : "auto" }}
+      >
         <Canvas
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={inView ? "always" : "demand"}
+          frameloop={inView && !isRichMedia ? "always" : "demand"}
           gl={{
             antialias: true,
             alpha: true,
@@ -532,7 +675,7 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
           <PhoneScene
             url={url}
             formatId={formatId}
-            inView={inView}
+            inView={inView && !isRichMedia}
             isDark={isDark}
             rotX={springX}
             rotY={springY}
@@ -541,6 +684,11 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
           />
         </Canvas>
       </div>
+
+      {/* Live HTML ad — only for "rich" format */}
+      <AnimatePresence>
+        {isRichMedia && <RichMediaPhone mode={mode} />}
+      </AnimatePresence>
     </div>
   );
 }
