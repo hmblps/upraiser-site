@@ -1,12 +1,13 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Всё, что было разнесено по `AI-FULL`, `HANDOFF`, `SOLUTIONS`, `HERO`, `ASSETS`, `BRAND-ASCENT`, — собрано здесь.  
-> **Updated:** 21 August 2026
+> **Updated:** 28 August 2026  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
-> **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `**upraiser-site-v2`**  
-> **HEAD (committed):** Latest UI/UX Polish — AutoScaledLogo, Modal Keyboard Nav, Optical Balancing
-> **Next:** Polish remaining trust gaps and mobile typography  
-> **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts`
+> **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
+> **HEAD (committed):** `2e8d466` — 3D device carousel (Phone · Tablet · TV), TV runtime centering, leg removal, tumbler pin, asset auto-restore  
+> **Next:** Routes copy pass, screen videos for OEM formats, mobile polish  
+> **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts`  
+> **Routes full spec:** [`docs/ROUTES.md`](./ROUTES.md)
 
 ---
 
@@ -287,47 +288,60 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 
 ---
 
-## 10. The Routes — sticky phone (`#routes`)
+## 10. The Routes — sticky device carousel (`#routes`)
 
-**Primary:** `HomeRoutesSection.tsx` на `/`.  
-**Legacy:** `SolutionsPage.tsx`; `/solutions` → `/#routes`.
+**Headline:** *Every Format. One Supply Path.*  
+**Primary:** `HomeRoutesSection.tsx` on `/`.  
+**Legacy:** `SolutionsPage.tsx`; `/solutions` → `/#routes`.  
+**Full spec:** [`docs/ROUTES.md`](./ROUTES.md)
 
 ### Lanes
 
+| Lane | Formats | 3D device |
+| --- | --- | --- |
+| **App Growth** | 5 programmatic (AD_FORMATS) | Phone (iPhone GLB) |
+| **OEM & CTV** | 3 OEM → Tablet + 2 CTV → TV (OEM_CTV_FORMATS) | Tablet / TV |
 
-| Lane       | Source                                   |
-| ---------- | ---------------------------------------- |
-| App Growth | `AD_FORMATS` in `ProgrammaticFormats.ts` |
-| OEM & CTV  | `OEM_CTV_FORMATS`                        |
+Native scroll (`useFormatScrollSection`) drives active format index.  
+Desktop: `DeviceCarousel3` — spatial 3-device slide carousel (Phone · Tablet · TV).  
+Mobile: stacked cards + `CssPhone` + live HTML feed.
 
+### 3D carousel (`DeviceCarousel3`)
 
-Native scroll drives active format. Desktop: R3F iPhone GLB. Mobile: stacked cards + `CssPhone` + live HTML feed.
+Each format has a `scene?: "phone" | "tablet" | "tv"` key in `ProgrammaticFormats.ts`.  
+Spring (`stiffness: 340, damping: 32`) drives phase 0→1→2. Devices slide via `x: (slot − phase) × 100%` + opacity fade.  
+**No CSS scale / blur on WebGL canvas** — causes bilinear snap artifact.
 
-### Key files
+| Device | GLB | Key files |
+| --- | --- | --- |
+| Phone | `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark) | `Phone3D.tsx` |
+| Tablet | `/channels/oem/tablet.glb` | `Tablet3D.tsx` |
+| TV | `/channels/oem/tv.glb` (29 MB newtv — no legs) | `Tv3D.tsx` |
 
+**Drag limits (all 3 devices):** Y ±0.45 rad · X ±0.15 rad · spring 260/30/0.7.
 
-| Path                                            | Role                    |
-| ----------------------------------------------- | ----------------------- |
-| `home/HomeRoutesSection.tsx`                    | Home embed              |
-| `solutions/ProgrammaticScrollSection.tsx`       | Desktop sticky runway   |
-| `solutions/ProgrammaticScrollSectionMobile.tsx` | Mobile / reduced motion |
-| `hooks/useFormatScrollSection.ts`               | Lenis-aware progress    |
-| `hooks/useRoutesLane.ts`                        | Lane state + copy       |
-| `RoutesLaneSwitcher.tsx`                        | App Growth / OEM tabs   |
-| `lib/formatScroll.ts`                           | Runway height helpers   |
-| `solutions/Phone3D.tsx`                         | GLB · still PNG → MP4   |
-| `programmatic-scroll-section.css`               | Sticky layout           |
+### Tumbler (lane switcher)
 
+`SlideTabs.tsx` — Dynamic Island style (`backdrop-blur-xl rounded-full`).  
+**Pinned absolutely** via `.prog-scroll-copy-tumbler { position: absolute; top: clamp(4rem, calc(50% - 12rem), 11rem) }` — outside `FormatCopy` / `AnimatePresence`. Never shifts when format text height changes.
+
+### Text transitions
+
+- Scroll within lane → vertical slide (exit ↑ / enter ↓)
+- Lane switch → horizontal slide matching device carousel direction
 
 ### Glass pipeline
 
-1. **Still:** `public/channels/programmatic-refs/screens/{banner,native,interstitial,rich-media,video}.png`
-2. **Video:** `public/channels/programmatic-feed/formats/*.mp4` — same screen materials (no Suspense remount).
-3. **Live HTML:** `ProgrammaticFullFeed` on `CssPhone` (mobile).
+1. **Still:** `public/channels/programmatic-refs/screens/*.png` (App Growth) · `public/channels/oem/screens/*.png` (OEM)
+2. **Video:** `public/channels/programmatic-feed/formats/*.mp4` · `public/channels/oem/screens/*.mp4` — promoted on `readyState >= HAVE_CURRENT_DATA`, no Suspense remount.
 
-**Chassis GLBs:** `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark).
+### Do not
 
-**Do not:** GSAP ScrollTrigger; Suspense Still↔Video remount (white flash).
+- GSAP / ScrollTrigger on Routes
+- Suspense Still↔Video remount (white flash)
+- CSS `scale` / `filter:blur` on WebGL canvas wrappers
+- `ContactShadows` on Tablet3D / Tv3D (white oval artifact)
+- Plain `number` where `MotionValue<number>` expected (`entranceProgress`)
 
 ---
 
