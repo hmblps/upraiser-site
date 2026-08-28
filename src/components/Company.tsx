@@ -67,12 +67,15 @@ export function Company() {
               const isOpen = openNumber === item.protocolNumber;
               return (
                 <li key={item.protocolNumber}>
-                  <button
+                  <motion.button
                     type="button"
                     aria-expanded={isOpen}
                     data-cursor="link"
                     className="flex min-h-[44px] w-full select-none items-start justify-between gap-4 py-5 text-left touch-manipulation"
                     onClick={() => setOpenNumber(isOpen ? null : item.protocolNumber)}
+                    whileHover={reduced ? undefined : { scale: 1.01 }}
+                    whileTap={reduced ? undefined : { scale: 0.98 }}
+                    transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
                   >
                     <span className="flex-1 copy font-medium text-fg">
                       {item.question}
@@ -85,7 +88,7 @@ export function Company() {
                     >
                       +
                     </motion.span>
-                  </button>
+                  </motion.button>
                   <AnimatePresence initial={false}>
                     {isOpen ? (
                       <motion.div

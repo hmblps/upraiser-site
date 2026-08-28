@@ -32,7 +32,13 @@ export function HeaderIsland() {
           {navLinks.map((link: NavLink) => {
             const active = navIsActive(pathname, link.href);
             return (
-                  <li key={link.href} className="relative">
+                  <motion.li 
+                    key={link.href} 
+                    className="relative"
+                    whileHover={reduced ? undefined : { scale: 1.05 }}
+                    whileTap={reduced ? undefined : { scale: 0.95 }}
+                    transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
+                  >
                     {active && (
                       <motion.div
                         layoutId="activeNav"
@@ -53,7 +59,7 @@ export function HeaderIsland() {
                         <span className="ml-1 text-[8px] uppercase tracking-wider opacity-60">Soon</span>
                       )}
                     </ScrollLink>
-                  </li>
+                  </motion.li>
             );
           })}
         </ul>

@@ -39,3 +39,19 @@ export const viewportOnce = {
   margin: "0px 0px -10% 0px" as const,
   amount: 0.2 as const,
 };
+
+/** 
+ * Emil Kowalski micro-interactions 
+ * Spread these onto interactive motion.button / motion.a elements
+ */
+export const microBounce = {
+  whileHover: { scale: 1.03 },
+  whileTap: { scale: 0.95 },
+  transition: SPRING,
+};
+
+export const cardBounce = {
+  whileHover: { scale: 1.01 },
+  whileTap: { scale: 0.98 },
+  transition: SPRING_SOFT,
+};
