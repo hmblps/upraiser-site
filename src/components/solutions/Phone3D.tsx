@@ -419,8 +419,10 @@ function PhoneScene({
  * Native ad dimensions. The Vidout VIDBAN creative is always 320×480.
  * We scale it proportionally to fit phone screen width and center vertically.
  */
+// Phone screen dimensions: width drives scale; height matches full ad layout
+// so the button (y≈613) and shredder animation are reachable.
 const AD_W = 320;
-const AD_H = 480;
+const AD_H = 844;
 
 function RichMediaPhone({ mode }: { mode: SiteMode }) {
   const isDark = mode !== "growth";
@@ -462,7 +464,6 @@ function RichMediaPhone({ mode }: { mode: SiteMode }) {
         justifyContent: "center",
         zIndex: 2,
         pointerEvents: "all",
-        cursor: "default",   // override grab cursor from parent
       }}
     >
       {/* Phone body */}
@@ -492,7 +493,7 @@ function RichMediaPhone({ mode }: { mode: SiteMode }) {
             background: "#000",
             border: "2px solid rgba(0,0,0,0.84)",
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "center",
           }}
         >
@@ -641,7 +642,7 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
         isDark ? "phone-glb-stage--tint" : "phone-glb-stage--deepblue",
         className,
       )}
-      style={isRichMedia ? { cursor: "default" } : undefined}
+      style={isRichMedia ? { cursor: "auto" } : undefined}
       onPointerDown={isRichMedia ? undefined : onPointerDown}
       onPointerMove={isRichMedia ? undefined : onPointerMove}
       onPointerUp={isRichMedia ? undefined : endDrag}
