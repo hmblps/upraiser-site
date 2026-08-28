@@ -419,10 +419,9 @@ function PhoneScene({
  * Native ad dimensions. The Vidout VIDBAN creative is always 320×480.
  * We scale it proportionally to fit phone screen width and center vertically.
  */
-// Phone screen dimensions: width drives scale; height matches full ad layout
-// so the button (y≈613) and shredder animation are reachable.
+// Ad is 320×630: video (37%) + ING panel (63%) — fits phone screen at scale ~0.67
 const AD_W = 320;
-const AD_H = 844;
+const AD_H = 630;
 
 function RichMediaPhone({ mode }: { mode: SiteMode }) {
   const isDark = mode !== "growth";
