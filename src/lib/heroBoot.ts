@@ -30,7 +30,8 @@ export function preloadFetch(
 /** Network-only: GLB + Draco before R3F parses. Safe to call more than once. */
 export function preloadHeroTerrain(theme: "light" | "dark") {
   if (!isDesktopHeroViewport()) return;
-  preloadFetch(heroModelUrl(theme), "fetch", "high");
-  preloadFetch(`${DRACO_PATH}draco_decoder.wasm`, "fetch", "high");
-  preloadFetch(`${DRACO_PATH}draco_wasm_wrapper.js`, "script", "high");
+  // Use low priority so the 11MB model doesn't starve the network for critical JS/CSS chunks!
+  preloadFetch(heroModelUrl(theme), "fetch", "low");
+  preloadFetch(`${DRACO_PATH}draco_decoder.wasm`, "fetch", "low");
+  preloadFetch(`${DRACO_PATH}draco_wasm_wrapper.js`, "script", "low");
 }

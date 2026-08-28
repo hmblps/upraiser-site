@@ -112,7 +112,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   return (
     <div
       ref={shellRef}
-      className={className}
+      className={`${className ?? ""} hero-terrain-fade${modelReady ? " is-ready" : ""}`}
       aria-hidden
     >
       {/* One Canvas for both themes — remounting was the dirty/late mountain flash. */}

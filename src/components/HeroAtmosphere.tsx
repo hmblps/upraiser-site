@@ -89,6 +89,7 @@ export function HeroAtmosphere() {
   const reduced = useReducedMotion();
   const desktop = useDesktopHero();
   const use3d = desktop && !reduced;
+  const [boot3d, setBoot3d] = useState(false);
 
   useEffect(() => {
     if (!use3d) markHeroReady();
@@ -97,6 +98,23 @@ export function HeroAtmosphere() {
   useEffect(() => {
     if (!use3d) return;
     preloadHeroTerrain(theme);
+    
+    // Defer the extremely heavy WebGL context creation and GLTF parsing
+    // to give the browser time to paint the HTML/CSS hero first.
+    let id: number;
+    let t: number;
+    const boot = () => setBoot3d(true);
+    
+    if (typeof window.requestIdleCallback === "function") {
+      id = window.requestIdleCallback(boot, { timeout: 900 });
+    } else {
+      t = window.setTimeout(boot, 150);
+    }
+    
+    return () => {
+      if (id !== undefined) window.cancelIdleCallback(id);
+      if (t !== undefined) window.clearTimeout(t);
+    };
   }, [use3d, theme]);
 
   return (
@@ -105,7 +123,7 @@ export function HeroAtmosphere() {
       aria-hidden
     >
       <div className="hero-atmosphere__sky hero-terrain-shell">
-        {use3d ? (
+        {use3d && boot3d ? (
           <CanvasErrorBoundary>
             <HeroTerrainCanvas className="hero-terrain-root" />
           </CanvasErrorBoundary>

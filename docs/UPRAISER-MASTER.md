@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 28 August 2026  
+> **Updated:** 28 August 2026 (evening)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** (this commit) — hero boot without posters, TV Draco 8.7 MB, dead-code cleanup  
+> **HEAD:** `7484527` — scroll-synced preload, baked dark Everest curve, TV Draco 8.7 MB  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 
@@ -36,6 +36,7 @@
 22. [Quick reference — где менять X](#22-quick-reference--где-менять-x)
 23. [Windows + dark-theme ops](#23-windows--dark-theme-ops)
 24. [Cross-platform prompt](#24-cross-platform-prompt)
+25. [Antigravity handoff](#25-antigravity-handoff)
 
 ---
 
@@ -47,7 +48,8 @@
 4. **Motion** — Framer Motion `type: "spring"`; уважай `prefers-reduced-motion`.
 5. **Hover** — только в `@media (hover: hover) and (pointer: fine)`.
 6. UPRAISER = **agency / traffic operator**, не antifraud SaaS.
-7. **Документация** — только этот файл. Скиллы агентов (`.agents/skills`, `.claude/skills`) не трогать.
+7. **Документация** — только этот файл. Скиллы агентов (`.agents/skills`, `.claude/skills`) не трогать и **не коммитить** дампы.
+8. **Продолжение в другом агенте** — читай §25, потом §9 / §10 / §17. Не поднимай удалённые `docs/*.md`.
 
 ---
 
@@ -174,17 +176,17 @@ UPRAISER = **expedition brand**: poetic ascent (Zero-like atmosphere) + operator
 `HomePage.tsx`:
 
 ```
-#hero (3D fly)
-→ PartnersCarousel
-→ #audience (killer fold)
-→ Process
-→ #routes (HomeRoutesSection — sticky phone)
-→ #cases (CaseStudies variant="home")
-→ #promise (killer fold)
-→ #pilot (HomePilotCta)
+#hero (3D fly, eager)
+→ PartnersCarousel          LazySection gate=hero
+→ #audience                 LazySection warm=mid gate=hero
+→ #process                  LazySection warm=mid gate=hero
+→ #routes                   ProgrammaticScrollSection · warm=routes gate=hero
+→ #cases                    CaseStudies · warm=cases
+→ #promise                  killer fold · warm=promise gate=hero
+→ #pilot                    HomePilotCta
 ```
 
-Lazy + idle preload: Audience → Process/Routes/Cases → Promise.
+`LazySection` is two-phase IntersectionObserver (warm ~90% viewport, show ~30%). `gate="hero"` waits for `markHeroReady()` so Routes 3D cannot steal the first paint.
 
 Killer folds (Audience / Promise) — **только на home**.
 
@@ -216,18 +218,16 @@ Mode-aware bodies: `**ModeContentTransition**`.
 
 ## 8. Header, footer, CTAs
 
-### Header (disk WIP)
+### Header (live)
 
+| File | Role |
+| --- | --- |
+| `Header.tsx` | Fixed bar · `HeaderIsland` left · logo right |
+| `HeaderIsland.tsx` | Craft · Basecamp · Expedition + locale + theme tumbler |
+| `rails.css` | Grid `1fr \| auto \| 1fr` |
 
-| File            | Role                                            |
-| --------------- | ----------------------------------------------- |
-| `Header.tsx`    | Logo · HeaderNav · LocaleSwitcher · ThemeToggle |
-| `HeaderNav.tsx` | Centered 3-link nav                             |
-| `rails.css`     | Grid `1fr | auto | 1fr`                         |
-
-
-**Nav:** The Craft · The Basecamp · The Expedition — по центру.  
-Справа: locale + theme. **Нет** hamburger · **нет** Request Pilot.
+**Nav:** The Craft · The Basecamp · The Expedition.  
+Справа в острове: locale + theme. **Нет** hamburger · **нет** Request Pilot. `HeaderNav.tsx` / `ThemeToggle.tsx` удалены.
 
 ### Footer explore
 
@@ -259,20 +259,23 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 | Theme     | Terrain                                         | FX                                                                                                      |
 | --------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | **Light** | Photo `everest-light.glb` (~11MB) · white paper | `BrandHazeSky` · `ScrollBeams` · `AscentHalo` · `AscentBird` (procedural silhouette) · `StudioRimLight` |
-| **Dark**  | Wire `everest.glb` (~1MB)                       | `NightStars` · no halo/bird/beams                                                                       |
+| **Dark**  | Wire `everest.glb` (~1.0 MB Draco, **planet curve baked**) | `NightStars` · `FloatingVoyager` after ~2.8s if hero still in view |
 
 
 ### Key files
 
 
-| File                 | Role                                       |
-| -------------------- | ------------------------------------------ |
-| `Hero.tsx`           | Sticky stage, H1, stats, `HeroFlyProvider` |
-| `HeroAtmosphere.tsx` | CSS sky + mobile MP4; idle-lazy canvas     |
-| `hero-terrain/*`     | R3F scene graph                            |
-| `Everest.tsx`        | Theme-switched GLB                         |
-| `HeroFlyContext.tsx` | Runway → `progressRef`                     |
-| `lib/heroModel.ts`   | URLs + Draco                               |
+| File | Role |
+| --- | --- |
+| `Hero.tsx` | Sticky stage, H1, stats, `HeroFlyProvider` |
+| `HeroAtmosphere.tsx` | CSS sky + mobile MP4; **eager** `HeroTerrainCanvas` on desktop ≥900px |
+| `lib/heroBoot.ts` | `index.html` + `main.tsx` preload of theme GLB + Draco wasm |
+| `lib/heroDesktop.ts` | `DESKTOP_HERO_QUERY = "(min-width: 900px)"` |
+| `lib/scrollPreload.ts` | Scroll-synced warm: hero owns network until `markHeroReady` |
+| `hero-terrain/*` | R3F scene graph · Voyager gated |
+| `Everest.tsx` | Theme-switched GLB; dark skips runtime vertex bend |
+| `HeroFlyContext.tsx` | Runway → `progressRef` |
+| `lib/heroModel.ts` | URLs + Draco |
 
 
 ### Art locks (не ломать)
@@ -283,10 +286,21 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 4. **Bird** = procedural silhouette, не flappy GLB.
 5. **Theme switch:** single Canvas + `ThemeGlSync` — **не** `key={theme}` remount.
 6. **No GSAP** / drei `useScroll` for hero.
+7. **No desktop posters** — owner rejected stills; mountain must boot itself.
+8. **Do not** import Phone/Tablet/TV GLBs (or `ProgrammaticScrollSection`) until `markHeroReady` + the section is approaching.
+9. Dark `everest.glb` extras `planetCurved: true`. After `npm run optimize:everest` run `npm run bake:everest-curve`. Do **not** bake `everest-light.glb` (inflates ~2 MB).
+
+### Boot (desktop)
+
+1. Inline `index.html` script: theme + `preload` everest GLB + Draco (`fetchpriority=high`).
+2. `main.tsx` → `preloadHeroTerrain(theme)`.
+3. Eager Home + eager `HeroTerrainCanvas` (three/r3f in the modulepreload graph).
+4. Canvas: `frameloop="never"` when offscreen; `events.disconnect()`; no raycast on terrain.
+5. Voyager 13 MB only after mountain ready **and** ~2.8s still in view.
 
 ### Mobile
 
-`HeroAtmosphere` → `light-mountains-loop.mp4` + posters. No WebGL.
+`HeroAtmosphere` → `light-mountains-loop.mp4` + posters. No WebGL. `markHeroReady()` fires immediately so below-fold can warm.
 
 ---
 
@@ -294,8 +308,8 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 
 **Headline:** *Every Format. One Supply Path.*  
 **Anchor:** `/#routes` · **Label in nav/footer:** *The Routes*  
-**Primary:** `HomeRoutesSection.tsx` on `/`.  
-**Legacy:** `SolutionsPage.tsx`; `/solutions` → `/#routes`.  
+**Primary:** `ProgrammaticScrollSection` lazy on `HomePage` behind `LazySection gate="hero"`.  
+**Legacy:** `/solutions` → `/#routes` (`App.tsx`). `HomeRoutesSection.tsx` **deleted**.  
 **Copy SOT:** `src/components/solutions/ProgrammaticFormats.ts`  
 **Wiring SOT:** `src/components/solutions/ProgrammaticScrollSection.tsx`
 
@@ -369,6 +383,8 @@ Switching lanes slides the device carousel and cross-fades format copy with a **
 Each format carries `scene?: "phone" | "tablet" | "tv"` in `ProgrammaticFormats.ts` (default `"phone"`).  
 A Framer Motion spring (`stiffness: 340, damping: 32, mass: 0.6`) drives `phase` 0→1→2.  
 Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade. No `scale` or `filter:blur` on WebGL canvas (causes bilinear→native pixel snap artifact).
+
+**Mount policy:** only the **active** slot (plus the outgoing slot for ~720ms during the spring). App Growth = phone canvas only. Tablet/TV GLBs warm on the **next** format (`warmStage("routes-tablet"|"routes-tv")`), not at parse.
 
 | Device | Width in col | Camera | GLB |
 | --- | --- | --- | --- |
@@ -520,6 +536,8 @@ Trigger: `< 1024px` or `prefers-reduced-motion`. No WebGL — `CssPhone` + live 
 6. Plain `number` where `MotionValue<number>` expected (`entranceProgress`)
 7. Hide `Layer 06` on TV — it is the front face after π-Y flip
 8. Softening format bullets — must be infrastructure-grade (measurement trails, fraud screens, reconciliation files)
+9. Eager `void import(Tv3D|Phone3D|Tablet3D)` at `ProgrammaticScrollSection` module eval — races Everest
+10. `LazySection` that only wraps `Suspense` without IntersectionObserver — mounts Routes 3D on first paint
 
 ---
 
@@ -595,15 +613,21 @@ Fold layout (`charts.css`): chart anchored `left: 52–54%`, `width: 46vw` — c
 
 ## 14. Shipped polish log
 
-### 28 Aug 2026 (hero boot + TV + cleanup)
+### 28 Aug 2026 evening (`60478fe` → `3e11fb5` → `7484527`) — **live on prod**
 
 | Area | Change |
 | --- | --- |
-| Hero | No desktop posters; eager Home; `heroBoot.ts` preloads theme GLB + Draco; canvas boots immediately on desktop |
-| TV | `tv.glb` 28 MB → 8.7 MB (weld + simplify 0.4 + Draco); `Tv3D` uses `DRACO_PATH` |
-| Bytes | Deleted unused `macbook.glb` (42 MB) and dead TSX (SiteMenu, ThemeToggle, HeaderNav, stub sections) |
-| CSS | `font-weight: 650` → `600`; LazySection `vh` → `dvh`; hover gated on island/pilot/locale |
-| Docs | Single SoT `docs/UPRAISER-MASTER.md`; extra project md removed |
+| Hero | No desktop posters; eager Home + eager terrain canvas; `heroBoot.ts` + `index.html` preload GLB/Draco |
+| Race | `LazySection` is two-phase (warm ~90% / show ~30%) + `gate="hero"`; Routes 3D cannot start until `markHeroReady` |
+| Preload | `src/lib/scrollPreload.ts`: hero → mid → routes phone → tablet → tv → cases → promise |
+| Devices | `DeviceCarousel3` mounts only the active (+720ms outgoing) WebGL canvas |
+| TV | `tv.glb` 28 MB → **8.7 MB** Draco; `Tv3D` uses `DRACO_PATH`; source `assets/channels/oem/tv.src.glb` (gitignored) |
+| Everest | Dark mesh planet-curve **baked** (`npm run bake:everest-curve`); runtime vertex loop skipped on dark |
+| Bytes | Deleted unused `macbook.glb` (42 MB) + dead TSX (`SiteMenu`, `ThemeToggle`, `HeaderNav`, stub sections) |
+| CSS | `font-weight: 650` → `600`; `vh` → `dvh`; hover gated on island/pilot/locale |
+| Docs | Single SoT this file; extra project md + `specs/001-load-speed-refactor` removed |
+
+Verified on Vercel: boot = 1 canvas + `everest.glb` only; Routes Banner = phone canvas, no `tv.glb` until CTV.
 
 ### 28 Aug 2026 (`1d85882` → `8e0dd82`)
 
@@ -632,25 +656,20 @@ HeaderNav 3-link island; format sticky scroll; home cases `wheel: false`; contac
 
 ```
 src/
-├── App.tsx                         ← routes
-├── pages/
-│   ├── HomePage.tsx                ← pitch
-│   ├── CraftPage.tsx               ← stub
-│   ├── CompanyPage.tsx
-│   ├── ContactPage.tsx
-│   └── SolutionsPage.tsx           ← legacy
+├── App.tsx                         ← routes (eager HomePage)
+├── main.tsx                        ← preloadHeroTerrain
+├── pages/HomePage.tsx              ← pitch + LazySection gates
+├── pages/CraftPage.tsx · ContactPage.tsx · ExpeditionPage.tsx
 ├── components/
-│   ├── Header.tsx · HeaderNav.tsx
-│   ├── home/HomeRoutesSection.tsx
-│   ├── CaseStudies.tsx
-│   ├── HomePilotCta.tsx
-│   ├── solutions/ProgrammaticScrollSection*.tsx
-│   └── hero-terrain/*
-├── hooks/
-│   ├── useFormatScrollSection.ts
-│   ├── useRoutesLane.ts
-│   ├── useHorizontalPointerScroll.ts
-│   └── useMarqueePointerDrag.ts
+│   ├── Header.tsx · HeaderIsland.tsx
+│   ├── Hero.tsx · HeroAtmosphere.tsx
+│   ├── hero-terrain/* · Everest.tsx
+│   ├── CaseStudies.tsx · HomePilotCta.tsx
+│   └── solutions/ProgrammaticScrollSection*.tsx
+├── lib/
+│   ├── heroBoot.ts · heroDesktop.ts · heroModel.ts
+│   └── scrollPreload.ts            ← warmStage / markHeroReady
+├── hooks/useFormatScrollSection.ts · useRoutesLane.ts
 ├── data/liveContent.ts             ← copy + nav SOT
 └── context/CaseModalContext.tsx
 ```
@@ -702,8 +721,9 @@ Master: `**assets/**` → `scripts/sync-assets.sh` → `**public/**`.
 ```bash
 bash scripts/sync-assets.sh
 bash scripts/verify-assets.sh
-npm run optimize:everest
+npm run optimize:everest && npm run bake:everest-curve
 npm run optimize:everest-light
+npm run optimize:tv
 npm run generate:og
 ```
 
@@ -727,6 +747,8 @@ npm run generate:og
 4. `npm run deploy` → `scripts/deploy-vercel.sh` (local `tsc`+vite, then `vercel deploy --prebuilt --prod`)
 
 GitHub auto-deploy **не** канон — прод идёт с локального prebuilt, чтобы GLB/media не потерялись.
+
+**Verify:** Cursor/sandbox DNS for apex `upraiser.co.uk` may hit a non-Vercel IP (wrong TLS). Confirm the unique `*.vercel.app` URL from `npm run deploy`, then alias. Owner browser on real DNS is the source of truth for the apex.
 
 **Blockers:** missing GLBs/og-image · stripped `package.json` deps · unverified git author email · `tsc` errors (union types on `PartnersCarousel`).
 
@@ -766,6 +788,9 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 7. Stripping `three` / R3F / router from `package.json`.
 8. Generic slop: innovative, seamless, game-changer.
 9. `:hover` без fine-pointer media query.
+10. Гонка Routes 3D / `tv.glb` с первым кадром Everest.
+11. Пересборка dark `everest.glb` без `bake:everest-curve`.
+12. Коммит `.agents/skills` дампов или `public/timesst.mp4`.
 
 **Sacred copy:**
 
@@ -778,26 +803,18 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 
 ## 20. Refactor backlog
 
-### Safe to quarantine
+### Already done (do not resurrect)
 
-
-| Item                | Why                     |
-| ------------------- | ----------------------- |
-| `SiteMenu.tsx`      | Hamburger removed       |
-| `CasesPage.tsx`     | `/cases` redirects home |
-| `SolutionsPage.tsx` | `/solutions` redirects  |
-| Root `measure_*.js` | Debug scratch           |
-
+`SiteMenu.tsx` · `ThemeToggle.tsx` · `HeaderNav.tsx` · `HomeRoutesSection.tsx` · `public/channels/oem/macbook.glb` · extra project markdown / `specs/001-*`.
 
 ### Consolidate (optional)
 
-
-| Item                                                   | Why                  |
-| ------------------------------------------------------ | -------------------- |
-| `LegacyRedirects` vs inline `Navigate`                 | One redirect table   |
-| `innerPagesData` vs `liveContent` overlap              | Single content owner |
-| Split `programmatic-scroll-section.css` (~1000+ lines) | Maintainability      |
-
+| Item | Why |
+| --- | --- |
+| `LegacyRedirects` vs inline `Navigate` | One redirect table |
+| `innerPagesData` vs `liveContent` overlap | Single content owner |
+| Split `programmatic-scroll-section.css` (~1000+ lines) | Maintainability |
+| Phone3D module `useGLTF.preload(MODEL_LIGHT)` always + active chassis | Can fetch both phone GLBs on Routes |
 
 ### Do not regress
 
@@ -808,21 +825,26 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 - Home Cases vertical scroll pass-through
 - White light paper + photo mountain + silhouette bird
 - Legacy redirects until SEO cutover
+- Scroll-synced preload (`gate="hero"`, no parse-time TV import)
+- Dark Everest baked curve
 
 ### Perf (do not regress)
 
 - Scroll subscribers: prefer `useScroll` / `useTransform`, not a global `scrollY` React context that re-renders the tree every pixel.
-- Pause `useFrame` / set `frameloop="demand"` when a 3D canvas is offscreen or a modal is closed.
+- Pause `useFrame` / set `frameloop="never"` when a 3D canvas is offscreen.
 - Animate `transform` / `opacity`, never `width` / `height` / `padding` / `margin`.
 - `backdrop-filter` is expensive on mobile — Windows case modal already drops it.
+- One WebGL context on hero boot; Routes devices mount on demand.
 
 ### Open product debt
 
 1. OEM / CTV live screen videos still deferred
 2. Git → Vercel auto-deploy (intentionally off; see §17)
-3. `og:image` absolute URL → `upraiser.co.uk` in meta
-4. Partner / client marks: remaining dark PNGs (e.g. Betking) may still sit quiet on charcoal
-5. Live copy pass / Routes OEM screens
+3. Merge three Routes canvases into one (quality/smoothness risk — only with owner yes)
+4. `everest-light.glb` still ~11 MB (do not Draco-curve-bake; inflates)
+5. Partner / client marks: remaining dark PNGs (e.g. Betking) may still sit quiet on charcoal
+6. Live copy pass / Routes OEM screens
+7. Optional: Playable/Carousel tiles only if desk has SKUs (InMobi-adjacent, parked §18)
 
 ---
 
@@ -837,6 +859,7 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 - [ ] `#cases` vertical scroll passes through on home
 - [ ] `/cases/:slug` opens modal; close → `/#cases`
 - [ ] Request Pilot only on `#pilot` + `/contact`
+- [ ] Desktop ≥900px: Everest canvas on first paint; no `tv.glb` in Network until OEM/CTV
 - [ ] Mobile: no WebGL hero
 - [ ] Deploy **upraiser-site-v2** · alias `upraiser.co.uk`
 - [ ] `package.json` lists three, R3F, router
@@ -851,7 +874,8 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 | Hero copy / stats     | `Hero.tsx`, `liveContent.ts`                       |
 | Hero 3D / camera / FX | `hero-terrain/*`, `Everest.tsx`                    |
 | Nav / footer IA       | `liveContent.ts` `navLinks`, `footerLinks`         |
-| Routes / formats      | `HomeRoutesSection.tsx`, `components/solutions/*`  |
+| Routes / formats      | `ProgrammaticFormats.ts`, `ProgrammaticScrollSection.tsx` |
+| Preload / hero boot   | `lib/scrollPreload.ts`, `lib/heroBoot.ts`, `HeroAtmosphere.tsx` |
 | Cases carousel        | `CaseStudies.tsx`, `useHorizontalPointerScroll.ts` |
 | Section copy          | `liveContent.ts` `*ByMode`                         |
 | Home order            | `HomePage.tsx`                                     |
@@ -892,4 +916,52 @@ Paste into Agent when writing or rewriting UI:
 
 ---
 
-*End of master document. При изменении IA, hero, Routes glass, Windows quirks или deploy — обновляй **этот** файл. Других проектных md нет.*
+## 25. Antigravity handoff
+
+Open this repo in Antigravity on the same disk (`Downloads/НОВЫЙ САЙТ UPRAISER`). **Read this file first** — there is no second project md. Then §4 (brand), §9 (hero boot), §10 (Routes devices), §17 (deploy), §19 (sacred). Copy lives in `src/data/liveContent.ts`.
+
+### Where we left off (28 Aug 2026 evening)
+
+Production HEAD **`7484527`** is aliased to [https://upraiser.co.uk](https://upraiser.co.uk). Mountains were slow because Routes mounted **three** WebGL canvases + `tv.glb` on first Home paint. That race is closed:
+
+- Desktop ≥900px: eager Everest canvas, no posters, no veil.
+- `scrollPreload.ts` + `LazySection gate="hero"`: Routes JS/GLB wait for `markHeroReady`.
+- `DeviceCarousel3` mounts **one** device canvas (plus ~720ms outgoing during the spring).
+- Dark `everest.glb` planet curve is **baked**; do not re-Draco without `npm run bake:everest-curve`.
+- `tv.glb` is 8.7 MB Draco. Source: gitignored `assets/channels/oem/tv.src.glb`.
+
+Boot Network should show **one** canvas and `everest.glb` only. At Routes Banner: phone canvas, no `tv.glb` until CTV.
+
+This MASTER update may be **uncommitted**. Commit/push only if the owner asks — Antigravity on the same folder already sees disk.
+
+### Do first in a new session
+
+1. `git log -1 --oneline` — expect `7484527` on prod; local may have extra MASTER edits.
+2. `npm run dev` → `http://localhost:5173/`
+3. Desktop dark: mountain on first paint; DevTools Network — no `tv.glb` / `tablet.glb` until you scroll OEM/CTV.
+4. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`.
+
+### Next work (needs owner yes)
+
+Parked, not started:
+
+1. OEM / CTV **live screen videos** (TimesST is local-only `public/timesst.mp4`)
+2. Merge three Routes canvases into one (quality risk)
+3. FAQ height / case modal `layoutId` keyboard
+4. Recompress `everest-light.glb` (~11 MB) — **do not** bake the light curve
+5. Dual phone GLB fetch on Routes (`MODEL_LIGHT` preload + infra chassis) — observed, not asked
+6. InMobi-adjacent Playable/Carousel tiles — parked §18
+
+Do **not** start a new “load-speed refactor spec folder”. Keep notes in this file.
+
+### Sacred (do not break)
+
+Everest **one** canvas · Routes still→MP4 glass · dual theme Growth ↔ Infrastructure · Inter · white light paper · Request Pilot only on `#pilot` + `/contact` · Framer `type: "spring"` · `.cursorrules` hover/dvh/44px.
+
+### Deploy if the owner asks
+
+rsync backup → commit **site only** → `git push origin HEAD` → `npm run deploy` (`upraiser-site-v2`). GitHub auto-deploy is not canonical.
+
+---
+
+*End of master document. При изменении IA, hero, Routes glass, Windows quirks, preload или deploy — обновляй **этот** файл. Других проектных md нет.*

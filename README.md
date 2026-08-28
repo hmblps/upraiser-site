@@ -2,7 +2,8 @@
 
 SPA **UPRAISER Agency LLP** — Premium Traffic Infrastructure. London since **17 July 2017**.
 
-**Вся документация — один файл:** **[docs/UPRAISER-MASTER.md](./docs/UPRAISER-MASTER.md)**
+**Вся документация — один файл:** **[docs/UPRAISER-MASTER.md](./docs/UPRAISER-MASTER.md)**  
+Продолжение в другом агенте / Antigravity: читай **§25**, затем §9 / §10 / §17.
 
 | | |
 |---|---|
