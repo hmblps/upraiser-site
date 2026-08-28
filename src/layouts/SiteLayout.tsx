@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
-import { GlobalAmbientModalBackground } from "../components/GlobalAmbientModalBackground";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { SiteGrain } from "../components/SiteGrain";
 import { ScrollLink } from "../components/ScrollLink";
@@ -10,6 +9,7 @@ import { ViewportChrome } from "../components/ViewportChrome";
 import { useApplePreview } from "../hooks/useApplePreview";
 import { useViewportRoute } from "../hooks/useViewportRoute";
 import { CaseModalProvider } from "../context/CaseModalContext";
+import { useModalBackground } from "../lib/modalBackgroundState";
 
 const ApplePreviewPanel = lazy(() =>
   import("../components/apple-preview/ApplePreviewPanel").then((m) => ({ default: m.ApplePreviewPanel })),
@@ -19,9 +19,29 @@ const CustomCursor = lazy(() =>
   import("../components/CustomCursor").then((m) => ({ default: m.CustomCursor })),
 );
 
-
-
 const Footer = lazy(() => import("../components/Footer").then((m) => ({ default: m.Footer })));
+const GlobalAmbientModalBackground = lazy(() =>
+  import("../components/GlobalAmbientModalBackground").then((m) => ({
+    default: m.GlobalAmbientModalBackground,
+  })),
+);
+
+function DeferredModalAmbient() {
+  const isOpen = useModalBackground((s) => s.isOpen);
+  const [armed, setArmed] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) setArmed(true);
+  }, [isOpen]);
+
+  if (!armed) return null;
+
+  return (
+    <Suspense fallback={null}>
+      <GlobalAmbientModalBackground />
+    </Suspense>
+  );
+}
 
 function DeferredCustomCursor() {
   const [ready, setReady] = useState(false);
@@ -66,7 +86,7 @@ export function SiteLayout() {
         </ScrollLink>
         <SiteGrain />
         <DeferredCustomCursor />
-        <GlobalAmbientModalBackground />
+        <DeferredModalAmbient />
         <Header />
         <div className={viewportRoute ? "viewport-route-frame" : undefined}>
           <Outlet />

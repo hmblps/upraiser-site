@@ -17,7 +17,7 @@ export default defineConfig({
         // Never preload 3D / chart vendors from the entry HTML — they ride with lazy owners.
         if (filename.includes("index")) {
           return deps.filter(
-            (dep) => !/(?:three|recharts|HeroTerrain|ModeChart|FoldArea|Everest)/i.test(dep),
+            (dep) => !/(?:recharts|ModeChart|FoldArea)/i.test(dep),
           );
         }
         return deps;

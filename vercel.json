@@ -4,5 +4,10 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
-  "rewrites": [{ "source": "/((?!privacy|terms).*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/((?!.*\\.(?:js|css|map|png|jpe?g|gif|svg|webp|avif|woff2?|glb|gltf|wasm|mp4|webm|ico|json|html)).*)",
+      "destination": "/index.html"
+    }
+  ]
 }

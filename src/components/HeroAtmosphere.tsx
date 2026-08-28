@@ -2,12 +2,17 @@ import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
-import { MODEL_URL, MODEL_URL_LIGHT, VOYAGER_URL } from "../lib/heroModel";
+import { preloadHeroTerrain } from "../lib/heroBoot";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 
-const HeroTerrainCanvas = lazy(() =>
-  import("./HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas })),
-);
+const loadHeroTerrain = () =>
+  import("./hero-terrain/HeroTerrainCanvas").then((m) => ({ default: m.HeroTerrainCanvas }));
+
+const HeroTerrainCanvas = lazy(loadHeroTerrain);
+
+if (typeof window !== "undefined" && window.matchMedia(DESKTOP_HERO_QUERY).matches) {
+  void loadHeroTerrain();
+}
 
 const MOUNTAINS_MP4 = "/hero/light-mountains-loop.mp4";
 const MOUNTAINS_POSTER_LIGHT = "/hero/light-mountains-fallback.png";
@@ -29,17 +34,7 @@ function useDesktopHero() {
   return ok;
 }
 
-function prefetchHeroGlb(href: string) {
-  const link = document.createElement("link");
-  link.rel = "prefetch";
-  link.href = href;
-  link.as = "fetch";
-  link.crossOrigin = "anonymous";
-  document.head.appendChild(link);
-  return link;
-}
-
-/** Original mountains loop — mobile / reduced-motion atmosphere (desktop keeps WebGL). */
+/** Mobile / reduced-motion atmosphere. Desktop is WebGL Everest, no poster. */
 function HeroMountainsMobile({ isLight, reduced }: { isLight: boolean; reduced: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const poster = isLight ? MOUNTAINS_POSTER_LIGHT : MOUNTAINS_POSTER_DARK;
@@ -94,68 +89,20 @@ function HeroMountainsMobile({ isLight, reduced }: { isLight: boolean; reduced: 
   );
 }
 
-/**
- * CSS sky paints immediately; WebGL mounts after idle on desktop.
- * Mobile reuses the original mountains loop instead of a flat sky.
- */
+/** CSS sky immediately; WebGL canvas mounts on the first desktop paint. */
 export function HeroAtmosphere() {
   const { theme } = useTheme();
   const isLight = theme === "light";
   const reduced = useReducedMotion();
   const desktop = useDesktopHero();
   const use3d = desktop && !reduced;
-  const [canvasReady, setCanvasReady] = useState(false);
+
+  if (use3d) void loadHeroTerrain();
 
   useEffect(() => {
-    if (!use3d) {
-      setCanvasReady(false);
-      return;
-    }
-
-    let cancelled = false;
-    const boot = () => {
-      if (cancelled) return;
-      setCanvasReady(true);
-    };
-
-    const activeHref = isLight ? MODEL_URL_LIGHT : MODEL_URL;
-    const alternateHref = isLight ? MODEL_URL : MODEL_URL_LIGHT;
-    const links: HTMLLinkElement[] = [prefetchHeroGlb(activeHref)];
-    let altIdleId: number | undefined;
-    let altTimer: number | undefined;
-
-    const prefetchAlternate = () => {
-      if (cancelled) return;
-      links.push(prefetchHeroGlb(alternateHref));
-      if (!isLight) links.push(prefetchHeroGlb(`${VOYAGER_URL}?v=tex6`));
-    };
-
-    if (typeof window.requestIdleCallback === "function") {
-      altIdleId = window.requestIdleCallback(prefetchAlternate, { timeout: 2800 });
-    } else {
-      altTimer = window.setTimeout(prefetchAlternate, 1600);
-    }
-
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(boot, { timeout: 900 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(id);
-        if (altIdleId !== undefined) window.cancelIdleCallback(altIdleId);
-        if (altTimer !== undefined) window.clearTimeout(altTimer);
-        links.forEach((link) => link.remove());
-      };
-    }
-
-    const t = window.setTimeout(boot, 120);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(t);
-      if (altIdleId !== undefined) window.cancelIdleCallback(altIdleId);
-      if (altTimer !== undefined) window.clearTimeout(altTimer);
-      links.forEach((link) => link.remove());
-    };
-  }, [use3d, isLight]);
+    if (!use3d) return;
+    preloadHeroTerrain(theme);
+  }, [use3d, theme]);
 
   return (
     <div
@@ -163,7 +110,7 @@ export function HeroAtmosphere() {
       aria-hidden
     >
       <div className="hero-atmosphere__sky hero-terrain-shell">
-        {use3d && canvasReady ? (
+        {use3d ? (
           <CanvasErrorBoundary>
             <Suspense fallback={null}>
               <HeroTerrainCanvas className="hero-terrain-root" />

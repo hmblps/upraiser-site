@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { useGLTF } from '@react-three/drei'
+import { DRACO_PATH } from '../../lib/heroModel'
 import type { GLTF } from 'three-stdlib'
 import type { ThreeElements } from '@react-three/fiber'
 import type { SiteMode } from "../../data/liveContent";
@@ -68,4 +69,4 @@ export function Model(props: ThreeElements['group'] & { mode?: SiteMode }) {
   )
 }
 
-useGLTF.preload('/channels/oem/tablet.glb')
+useGLTF.preload('/channels/oem/tablet.glb', DRACO_PATH)

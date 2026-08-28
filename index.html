@@ -25,6 +25,22 @@
           if (document.documentElement) document.documentElement.scrollTop = 0;
           if (document.body) document.body.scrollTop = 0;
         }
+        // Desktop WebGL Everest — start GLB + Draco before React/idle work.
+        if (!mobile) {
+          var glb = t === "light" ? "/hero/everest-light.glb" : "/hero/everest.glb";
+          function preload(href, as) {
+            var l = document.createElement("link");
+            l.rel = "preload";
+            l.href = href;
+            l.as = as;
+            l.crossOrigin = "anonymous";
+            l.setAttribute("fetchpriority", "high");
+            document.head.appendChild(l);
+          }
+          preload(glb, "fetch");
+          preload("/draco/gltf/draco_wasm_wrapper.js", "script");
+          preload("/draco/gltf/draco_decoder.wasm", "fetch");
+        }
       })();
     </script>
     <link rel="icon" href="/favicon.png" type="image/png" sizes="192x192" />

@@ -6,6 +6,7 @@ Command: npx gltfjsx@6.5.3 public/channels/oem/macbook-draco.glb -o src/componen
 import * as THREE from 'three'
 // Removed React import
 import { useGLTF } from '@react-three/drei'
+import { DRACO_PATH } from '../../lib/heroModel'
 import type { GLTF } from 'three-stdlib'
 import type { ThreeElements } from '@react-three/fiber'
 
@@ -867,4 +868,4 @@ export function Model(props: ThreeElements['group'] & { mode?: SiteMode }) {
   )
 }
 
-useGLTF.preload('/macbook-draco.glb')
+useGLTF.preload('/channels/oem/macbook-draco.glb', DRACO_PATH)

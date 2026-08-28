@@ -81,7 +81,7 @@ export function HomePilotCta() {
                 whileHover={reduced ? undefined : { scale: 1.02 }}
                 whileTap={reduced ? undefined : { scale: 0.95 }}
                 transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-                className="flex items-center justify-center w-full sm:w-auto gap-2 text-sm font-medium text-fg-muted hover:text-fg px-6 py-2.5 rounded-full border border-border/40 bg-fg/[0.02] hover:bg-fg/5 hover:border-border/80 transition-all cursor-pointer"
+                className="pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-sm font-medium text-fg-muted px-6 py-2.5 rounded-full border border-border/40 bg-fg/[0.02] cursor-pointer"
               >
                 {switchLabel}
               </motion.button>

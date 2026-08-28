@@ -292,17 +292,6 @@
   }
 }
 
-/* 3D scene veils until GLB ready — fast out on theme swap, softer in */
-.hero-terrain-fade {
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.hero-terrain-fade.is-ready {
-  opacity: 1;
-  transition: opacity 0.85s ease;
-}
-
 /* Headline glued to the sticky viewport — micro-float with the flight (vars from HeroFlyContext). */
 .hero-title--fly {
   transform: translate3d(0, calc(var(--hero-title-y, 0) * 1vh), 0)

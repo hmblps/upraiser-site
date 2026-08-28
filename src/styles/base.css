@@ -708,8 +708,15 @@ main [id] {
   }
 }
 
-.carousel-fade {
-  position: relative;
+.clients-modal-close {
+  touch-action: manipulation;
+  user-select: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .clients-modal-close:hover {
+    color: var(--theme-fg);
+  }
 }
 
 /* Soft edge hint only — keep side cards readable */

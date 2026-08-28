@@ -40,8 +40,8 @@ function usePreloadHome() {
     };
     if (typeof window.requestIdleCallback === "function") {
       const nearId = window.requestIdleCallback(runNear, { timeout: 1000 });
-      const midId = window.requestIdleCallback(runMid, { timeout: 2400 });
-      const farId = window.requestIdleCallback(runFar, { timeout: 4000 });
+      const midId = window.requestIdleCallback(runMid, { timeout: 5500 });
+      const farId = window.requestIdleCallback(runFar, { timeout: 8000 });
       return () => {
         window.cancelIdleCallback(nearId);
         window.cancelIdleCallback(midId);
@@ -49,8 +49,8 @@ function usePreloadHome() {
       };
     }
     const nearT = window.setTimeout(runNear, 300);
-    const midT = window.setTimeout(runMid, 1200);
-    const farT = window.setTimeout(runFar, 2200);
+    const midT = window.setTimeout(runMid, 2800);
+    const farT = window.setTimeout(runFar, 4200);
     return () => {
       window.clearTimeout(nearT);
       window.clearTimeout(midT);
@@ -75,10 +75,10 @@ export function HomePage() {
         <LazySection minHeight="8rem">
           <PartnersCarousel />
         </LazySection>
-        <LazySection minHeight="70vh">
+        <LazySection minHeight="70dvh">
           <Audience />
         </LazySection>
-        <LazySection minHeight="52vh">
+        <LazySection minHeight="52dvh">
           <Process />
         </LazySection>
         
@@ -102,17 +102,17 @@ export function HomePage() {
         </LazySection>
 
         {/* Full CaseStudies implementation on Home without variant="home" */}
-        <LazySection minHeight="56vh">
+        <LazySection minHeight="56dvh">
           <CaseStudies />
         </LazySection>
         
         {/* Render Modals like Case Details over Home Page */}
         <Outlet />
 
-        <LazySection minHeight="70vh">
+        <LazySection minHeight="70dvh">
           <PromiseSection />
         </LazySection>
-        <LazySection minHeight="28vh">
+        <LazySection minHeight="28dvh">
           <HomePilotCta />
         </LazySection>
       </main>

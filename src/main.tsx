@@ -4,6 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
+import { preloadHeroTerrain } from "./lib/heroBoot.ts";
+
+if (typeof document !== "undefined") {
+  const theme = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+  preloadHeroTerrain(theme);
+}
 
 // Tall sticky hero — prevent browser restoring mid-ascent on refresh.
 if (typeof history !== "undefined" && "scrollRestoration" in history) {

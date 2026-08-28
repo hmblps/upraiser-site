@@ -1,4 +1,4 @@
-import { Suspense, useEffect, type MutableRefObject } from "react";
+import { Suspense, useCallback, useEffect, useState, type MutableRefObject } from "react";
 import { Everest } from "../Everest";
 import { Atmosphere, HorizonGlow, SunRig } from "./Atmosphere";
 import { AscentBird } from "./AscentBird";
@@ -30,6 +30,13 @@ export function Scene({
   onModelReady: () => void;
 }) {
   const isLight = theme === "light";
+  const [readyTheme, setReadyTheme] = useState<ThemeMode | null>(null);
+  const terrainReady = readyTheme === theme;
+
+  const handleReady = useCallback(() => {
+    setReadyTheme(theme);
+    onModelReady();
+  }, [theme, onModelReady]);
 
   return (
     <>
@@ -43,10 +50,10 @@ export function Scene({
       {isLight ? <BrandHazeSky /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={false} receiveShadow={false} />
-        <SceneReady key={theme} onReady={onModelReady} />
+        <SceneReady key={theme} onReady={handleReady} />
       </Suspense>
       {isLight ? <AscentBird /> : null}
-      {!isLight ? (
+      {!isLight && terrainReady ? (
         <Suspense fallback={null}>
           <FloatingVoyager />
         </Suspense>

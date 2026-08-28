@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { HeaderIsland } from "./HeaderIsland";
 import { ScrollLink } from "./ScrollLink";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 export function Header() {
+  const reduced = useReducedMotion();
+
   return (
     <header className="site-header fixed inset-x-0 top-0 z-[100] isolate pointer-events-none">
       <div className="page-container flex items-center h-[var(--site-header-bar)] w-full pointer-events-auto mt-2">
@@ -11,7 +14,12 @@ export function Header() {
           <div className="flex items-center w-full gap-4">
             <HeaderIsland />
             
-            <motion.div whileTap={{ scale: 0.92 }} whileHover={{ scale: 1.05 }} transition={{ type: "spring", bounce: 0.2, duration: 0.4 }} className="ml-auto">
+            <motion.div
+              whileTap={reduced ? undefined : { scale: 0.92 }}
+              whileHover={reduced ? undefined : { scale: 1.05 }}
+              transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+              className="ml-auto"
+            >
               <ScrollLink
                 href="/"
                 className="header-brand flex items-center shrink-0"

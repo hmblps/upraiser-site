@@ -142,7 +142,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="absolute top-6 right-6 p-2 text-fg-muted hover:text-fg transition-colors outline-none focus:outline-none"
+                  className="clients-modal-close absolute top-6 right-6 inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-2 text-fg-muted transition-colors"
                   aria-label="Close"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">

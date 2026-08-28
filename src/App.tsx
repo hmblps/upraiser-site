@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
-const HomePage = lazy(() => import("./pages/HomePage").then((m) => ({ default: m.HomePage })));
+import { HomePage } from "./pages/HomePage";
 
 import {
   RedirectExpertiseToSolutions,
@@ -66,7 +66,6 @@ export default function App() {
           <Route path="resources" element={<Navigate to="/expedition" replace />} />
           <Route path="resources/*" element={<Navigate to="/expedition" replace />} />
 
-          <Route path="contact" element={<RedirectHomeHash hash="pilot" />} />
           <Route path="privacy" element={<PrivacyPage />} />
           <Route path="terms" element={<TermsPage />} />
           <Route path="*" element={<NotFoundPage />} />

@@ -41,7 +41,6 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   const [modelReady, setModelReady] = useState(false);
   const handleModelReady = useCallback(() => setModelReady(true), []);
 
-  // Veil until the *target* theme terrain reports ready (SceneReady remounts per theme).
   useEffect(() => {
     setModelReady(false);
   }, [theme]);
@@ -63,26 +62,27 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
     return () => window.removeEventListener("pointermove", onMove);
   }, [reduced, inView]);
 
-  // Active theme first; alternate (+ Voyager on dark) after idle — preserves toggle warmth
-  // without forcing the unused 11MB light GLB onto every cold dark visit.
+  // Active theme GLB only. Alternate + 13MB Voyager wait until the mountain is on screen.
   useEffect(() => {
     if (reduced) return;
     const active = theme === "light" ? MODEL_URL_LIGHT : MODEL_URL;
-    const alternate = theme === "light" ? MODEL_URL : MODEL_URL_LIGHT;
     void useGLTF.preload(active, DRACO_PATH);
+  }, [reduced, theme]);
 
+  useEffect(() => {
+    if (reduced || !modelReady) return;
+    const alternate = theme === "light" ? MODEL_URL : MODEL_URL_LIGHT;
     const warmRest = () => {
       void useGLTF.preload(alternate, DRACO_PATH);
       if (theme !== "light") void useGLTF.preload(`${VOYAGER_URL}?v=tex6`);
     };
-
     if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(warmRest, { timeout: 2800 });
+      const id = window.requestIdleCallback(warmRest, { timeout: 5000 });
       return () => window.cancelIdleCallback(id);
     }
-    const t = window.setTimeout(warmRest, 1600);
+    const t = window.setTimeout(warmRest, 2400);
     return () => window.clearTimeout(t);
-  }, [reduced, theme]);
+  }, [reduced, theme, modelReady]);
 
   useEffect(() => {
     if (reduced) return;
@@ -105,7 +105,7 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   return (
     <div
       ref={shellRef}
-      className={`${className ?? ""} hero-terrain-fade${modelReady ? " is-ready" : ""}`}
+      className={className}
       aria-hidden
     >
       {/* One Canvas for both themes — remounting was the dirty/late mountain flash. */}

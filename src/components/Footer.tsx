@@ -4,7 +4,7 @@ import { ScrollLink } from "./ScrollLink";
 
 export const Footer = memo(function Footer() {
   return (
-    <footer className="bg-bg-elevated pb-8">
+    <footer className="bg-bg-elevated pb-[max(2rem,env(safe-area-inset-bottom))]">
       <div className="section-inner pt-12">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div>
@@ -95,7 +95,7 @@ export const Footer = memo(function Footer() {
           </p>
           <div className="flex gap-6">
             {footerLinks.legal.map((link) => (
-              <a key={link.label} href={link.href} className="link-caps text-muted-light transition-colors hover:text-fg">
+              <a key={link.label} href={link.href} className="footer-link link-caps">
                 {link.label}
               </a>
             ))}

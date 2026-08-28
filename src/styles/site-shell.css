@@ -114,4 +114,14 @@ main > section.section-band--strip {
   pointer-events: none;
   z-index: 1;
 }
-/* Removed light theme ::after overlay to keep it pure white */
+.pilot-story-switch {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pilot-story-switch:hover {
+    color: var(--theme-fg);
+    background: color-mix(in srgb, var(--theme-fg) 5%, transparent);
+    border-color: color-mix(in srgb, var(--theme-border) 80%, transparent);
+  }
+}

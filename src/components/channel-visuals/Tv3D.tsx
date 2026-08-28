@@ -18,6 +18,7 @@ import {
   type Object3D,
 } from "three";
 import type { SiteMode } from "../../data/liveContent";
+import { DRACO_PATH } from "../../lib/heroModel";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
@@ -92,7 +93,7 @@ function TvMesh({
   onReady?: () => void;
 }) {
   const outerRef = useRef<Group>(null);
-  const { scene } = useGLTF(MODEL_PATH);
+  const { scene } = useGLTF(MODEL_PATH, DRACO_PATH);
 
   // Compute transform once, synchronously after the GLTF scene is available.
   // Using useState with an initialiser that runs once avoids any timing issues.
@@ -266,4 +267,4 @@ export function Tv3D({ mode, className }: Tv3DProps) {
   );
 }
 
-useGLTF.preload(MODEL_PATH);
+useGLTF.preload(MODEL_PATH, DRACO_PATH);

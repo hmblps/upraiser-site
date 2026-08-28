@@ -19,16 +19,3 @@ export function preloadRoute(href: string) {
     routePreloaders[base]();
   }
 }
-
-// Automatically warm up assets during browser idle time
-if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
-  window.requestIdleCallback(() => {
-    preloadRoute("/");
-    preloadRoute("/expedition");
-  });
-} else if (typeof window !== "undefined") {
-  window.setTimeout(() => {
-    preloadRoute("/");
-    preloadRoute("/expedition");
-  }, 1000);
-}

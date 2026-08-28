@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMode } from "../components/SectionHeader";
-import type { SiteMode } from "../data/liveContent";
 import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/ProgrammaticFormats";
 
 export type RoutesLaneId = "app-growth" | "oem-ctv";
@@ -10,25 +9,10 @@ export const ROUTES_LANE_TABS = [
   { id: "oem-ctv", label: "OEM & CTV" },
 ] as const;
 
-function preloadPhoneGlb(mode: SiteMode) {
-  const href = mode === "growth" ? "/phones/deep-blue.glb" : "/phones/orange.glb";
-  const link = document.createElement("link");
-  link.rel = "preload";
-  link.as = "fetch";
-  link.href = href;
-  link.crossOrigin = "anonymous";
-  document.head.appendChild(link);
-  return () => {
-    link.remove();
-  };
-}
-
 /** Shared lane state + copy for home Routes and legacy Solutions page. */
 export function useRoutesLane() {
   const { mode } = useMode();
   const [lane, setLane] = useState<RoutesLaneId>("app-growth");
-
-  useEffect(() => preloadPhoneGlb(mode), [mode]);
 
   const formats = lane === "app-growth" ? AD_FORMATS : OEM_CTV_FORMATS;
 

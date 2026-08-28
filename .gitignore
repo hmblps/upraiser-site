@@ -47,6 +47,7 @@ assets/brand/.og-hero-frame.jpg
 # Heavy Sketchfab sources (optimize into everest*.glb; do not ship)
 assets/hero/*.src.glb
 assets/hero/snowy-mountain-v2.src.glb
+assets/channels/oem/*.src.glb
 _local_drafts/
 .cursor/
 .hermes/

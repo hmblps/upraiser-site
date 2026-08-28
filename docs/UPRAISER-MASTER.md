@@ -1,12 +1,12 @@
 # UPRAISER — Master Documentation (single file)
 
-> **Единый документ** для человека и ИИ. Всё, что было разнесено по `AI-FULL`, `HANDOFF`, `SOLUTIONS`, `HERO`, `ASSETS`, `BRAND-ASCENT`, — собрано здесь.  
+> **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
 > **Updated:** 28 August 2026  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD (committed):** `2e8d466` — 3D device carousel (Phone · Tablet · TV), TV runtime centering, leg removal, tumbler pin, asset auto-restore  
-> **Next:** Routes copy pass, screen videos for OEM formats, mobile polish  
-> **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts`
+> **HEAD:** (this commit) — hero boot without posters, TV Draco 8.7 MB, dead-code cleanup  
+> **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
+> **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 
 ---
 
@@ -25,15 +25,17 @@
 11. [The Peaks — carousel (`#cases`)](#11-the-peaks--carousel-cases)
 12. [Scroll folds (killer moments)](#12-scroll-folds-killer-moments)
 13. [Scroll Scene System](#13-scroll-scene-system)
-14. [Aug 14 polish (fold charts, typography)](#14-aug-14-polish-fold-charts-typography)
+14. [Shipped polish log](#14-shipped-polish-log)
 15. [Репозиторий — ключевые файлы](#15-репозиторий--ключевые-файлы)
 16. [Assets и media](#16-assets-и-media)
-17. [Deploy](#17-deploy)
+17. [Deploy, backup, commit](#17-deploy-backup-commit)
 18. [Marketing audit (advisory)](#18-marketing-audit-advisory)
 19. [Не делать / sacred copy](#19-не-делать--sacred-copy)
 20. [Refactor backlog](#20-refactor-backlog)
 21. [Sanity checklist](#21-sanity-checklist)
 22. [Quick reference — где менять X](#22-quick-reference--где-менять-x)
+23. [Windows + dark-theme ops](#23-windows--dark-theme-ops)
+24. [Cross-platform prompt](#24-cross-platform-prompt)
 
 ---
 
@@ -45,6 +47,7 @@
 4. **Motion** — Framer Motion `type: "spring"`; уважай `prefers-reduced-motion`.
 5. **Hover** — только в `@media (hover: hover) and (pointer: fine)`.
 6. UPRAISER = **agency / traffic operator**, не antifraud SaaS.
+7. **Документация** — только этот файл. Скиллы агентов (`.agents/skills`, `.claude/skills`) не трогать.
 
 ---
 
@@ -371,7 +374,7 @@ Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade. No `scale` 
 | --- | --- | --- | --- |
 | Phone | 62% | Phone3D default | `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark) |
 | Tablet | 85% | fov 30, z=3.8 | `/channels/oem/tablet.glb` |
-| TV | 100% | fov 34, z=5.5 | `/channels/oem/tv.glb` (29 MB, no legs) |
+| TV | 100% | fov 34, z=5.5 | `/channels/oem/tv.glb` (8.7 MB Draco, no legs) |
 
 **Drag limits (all 3 devices, unified):** Y ±0.45 rad · X ±0.15 rad · sensitivity dx×0.006 / dy×0.004 · spring 260/30/0.7 · release snaps 35% toward REST.
 
@@ -501,7 +504,7 @@ Trigger: `< 1024px` or `prefers-reduced-motion`. No WebGL — `CssPhone` + live 
 | `public/phones/deep-blue.glb` | iPhone GLB — light / growth |
 | `public/phones/orange.glb` | iPhone GLB — dark / infra |
 | `public/channels/oem/tablet.glb` | iPad GLB |
-| `public/channels/oem/tv.glb` | TV GLB (29 MB, newtv, no legs) |
+| `public/channels/oem/tv.glb` | TV GLB (8.7 MB Draco; source `assets/channels/oem/tv.src.glb`) |
 | `public/channels/programmatic-feed/formats/*.mp4` | App Growth screen videos |
 | `public/channels/oem/screens/*.mp4` | OEM / CTV screen videos |
 
@@ -590,41 +593,38 @@ Fold layout (`charts.css`): chart anchored `left: 52–54%`, `width: 46vw` — c
 
 ---
 
-## 14. Aug 14 polish (fold charts, typography)
+## 14. Shipped polish log
 
-### Committed (`e17776c`)
+### 28 Aug 2026 (hero boot + TV + cleanup)
 
+| Area | Change |
+| --- | --- |
+| Hero | No desktop posters; eager Home; `heroBoot.ts` preloads theme GLB + Draco; canvas boots immediately on desktop |
+| TV | `tv.glb` 28 MB → 8.7 MB (weld + simplify 0.4 + Draco); `Tv3D` uses `DRACO_PATH` |
+| Bytes | Deleted unused `macbook.glb` (42 MB) and dead TSX (SiteMenu, ThemeToggle, HeaderNav, stub sections) |
+| CSS | `font-weight: 650` → `600`; LazySection `vh` → `dvh`; hover gated on island/pilot/locale |
+| Docs | Single SoT `docs/UPRAISER-MASTER.md`; extra project md removed |
 
-| Area        | Change                                                                                           |
-| ----------- | ------------------------------------------------------------------------------------------------ |
-| Fold charts | Recharts → bespoke SVG: `CommitmentChart`, `ModeChart`, `InfrastructureGrid`, `ParityWaterChart` |
-| Typography  | Headline weights down; `.copy` weight 300; section spacing up                                    |
-| IA          | Routes + Peaks на home; slim nav; legacy redirects                                               |
-| PROOF chart | Radial positioned `left: 54%`                                                                    |
+### 28 Aug 2026 (`1d85882` → `8e0dd82`)
 
+| Area | Change |
+| --- | --- |
+| Type | Inter 400/600/700/800; `.copy { font-weight: 400 }`; `html[data-os="windows"]` skips fake-light |
+| Hero | Stats rail sits above Lenovo dock via `--hero-stats-lenovo-gap` |
+| Contact | Viewport-route fill; no nested `100dvh`; Windows 125% DPI no longer clips the form |
+| Case modal | Body copy 76% fg (Mac); **90% fg + solid panel, no blur** on Windows |
+| Clients tape | Pointer-drag scrubs CSS marquee; hover does not pause |
+| Dark logos | Invert **only** black SVGs (OKX, TikTok, Liobank, Bybit) — never app-icon PNGs |
+| Promise chart | Alpha WebGL caustics; Windows 8px scan overlay; no mix-blend fog |
+| Ritual | rsync backup → commit site only → push → `npm run deploy` |
 
-### Basecamp commit (evening — after `e17776c`)
+### Aug 14 (`e17776c`)
 
+Fold charts became bespoke SVG; Routes + Peaks on home; slim nav; typography tightened.
 
-| Area          | Change                                                            |
-| ------------- | ----------------------------------------------------------------- |
-| Header        | `HeaderNav.tsx` — centered 3-link nav, no hamburger               |
-| Routes scroll | `useFormatScrollSection`, `formatScroll.ts`, mobile section split |
-| Cases scroll  | `cases-carousel--page-embed`, `wheel: false` on home              |
-| Craft         | `UnderConstruction` at `/craft`                                   |
-| Process CTA   | → `/#pilot`                                                       |
-| Docs          | `UPRAISER-MASTER.md` single-file SoT                              |
+### Later (`2e04d94` and Basecamp)
 
-### Contact page & Charts polish (Night — commit `2e04d94`)
-
-| Area          | Change                                                            |
-| ------------- | ----------------------------------------------------------------- |
-| Contact Form  | Removed duplicate `ViewportChrome` header; fixed layout overlap   |
-| Contact Form  | Removed placeholders (`Select Type...`) and set default valid opt |
-| Charts        | Fixed `CommitmentChart` pulse ring dot (border-radius: 50%)       |
-| Charts        | Increased `fold-area` padding-bottom to 35% to prevent clipping   |
-| Router        | Fixed ContactPage crash by removing invalid `useScrollToHash`     |
-| Viewport      | Added `padding-top: var(--site-header-height)` to avoid header    |
+HeaderNav 3-link island; format sticky scroll; home cases `wheel: false`; contact viewport chrome; Craft stub.
 
 ---
 
@@ -649,7 +649,8 @@ src/
 ├── hooks/
 │   ├── useFormatScrollSection.ts
 │   ├── useRoutesLane.ts
-│   └── useHorizontalPointerScroll.ts
+│   ├── useHorizontalPointerScroll.ts
+│   └── useMarqueePointerDrag.ts
 ├── data/liveContent.ts             ← copy + nav SOT
 └── context/CaseModalContext.tsx
 ```
@@ -664,6 +665,7 @@ src/
 | `useFormatScrollSection`                     | Routes sticky (Lenis-aware)     |
 | `useRoutesLane`                              | lane tabs + copy                |
 | `useHorizontalPointerScroll`                 | Cases carousel                  |
+| `useMarqueePointerDrag`                      | Clients tape click-drag scrub   |
 | `useReducedMotion` / `usePreferNativeScroll` | a11y                            |
 | `useBrandAuroraNav`                          | depth-page aurora               |
 
@@ -689,9 +691,13 @@ Master: `**assets/**` → `scripts/sync-assets.sh` → `**public/**`.
 | `assets/maps/world-dots-*.svg`   | `/maps/*`                 | Yes — Company map |
 
 
-**Also in `public/`:** Draco WASM · case logos · partner marks · phone GLBs · `channels/programmatic-`* (Routes glass).
+**Also in `public/`:** Draco WASM · `public/clients/*` · partner marks · phone GLBs · `channels/programmatic-*` (Routes glass).
 
-**Not shipped:** `assets/hero/*.src.glb` (gitignored) · `ascent-bird.glb` (unused) · `videos/solutions-pilot/` (local HyperFrames) · root `measure_*.js` scratch scripts.
+**Local backup (outside git):** `~/Downloads/upraiser-assets-backup/`  
+`rsync -a public/{hero,channels,phones,draco,clients,maps,images} ~/Downloads/upraiser-assets-backup/`  
+`scripts/restore-assets.sh` fills missing files on `npm run dev`.
+
+**Not shipped / not committed:** `assets/hero/*.src.glb` · `public/timesst.mp4` · `.agents/skills/*` · `.claude/skills/*` · root `measure_*.js`.
 
 ```bash
 bash scripts/sync-assets.sh
@@ -703,8 +709,7 @@ npm run generate:og
 
 ---
 
-## 17. Deploy
-
+## 17. Deploy, backup, commit
 
 |             |                                                  |
 | ----------- | ------------------------------------------------ |
@@ -714,12 +719,16 @@ npm run generate:og
 | **Repo**    | `github.com/hmblps/upraiser-site` · `main`       |
 | **Author**  | `alex@upraiser.co.uk`                            |
 
+**Ритуал (только по просьбе владельца):**
 
-```bash
-npm run deploy
-```
+1. Backup: rsync `public/{hero,channels,phones,draco,clients,maps,images}` → `~/Downloads/upraiser-assets-backup/`
+2. Commit **site only** (не skills, не `timesst.mp4`)
+3. `git push origin HEAD`
+4. `npm run deploy` → `scripts/deploy-vercel.sh` (local `tsc`+vite, then `vercel deploy --prebuilt --prod`)
 
-**Blockers:** missing GLBs/og-image · stripped package.json deps · unverified git author email.
+GitHub auto-deploy **не** канон — прод идёт с локального prebuilt, чтобы GLB/media не потерялись.
+
+**Blockers:** missing GLBs/og-image · stripped `package.json` deps · unverified git author email · `tsc` errors (union types on `PartnersCarousel`).
 
 ---
 
@@ -741,6 +750,8 @@ npm run deploy
 
 
 **Out of scope:** replace H1 · generic CTAs · restore Request Pilot to header.
+
+**Parked (needs owner yes):** Expedition as “Operators Spec” (no headshots) · case-modal technical payload (MMP / events) · testimonials only if real quotes exist · no fake awards · FAQ accordion · vertical routing · ROAS calculator. Do not ship without approval.
 
 ---
 
@@ -798,13 +809,20 @@ npm run deploy
 - White light paper + photo mountain + silhouette bird
 - Legacy redirects until SEO cutover
 
+### Perf (do not regress)
+
+- Scroll subscribers: prefer `useScroll` / `useTransform`, not a global `scrollY` React context that re-renders the tree every pixel.
+- Pause `useFrame` / set `frameloop="demand"` when a 3D canvas is offscreen or a modal is closed.
+- Animate `transform` / `opacity`, never `width` / `height` / `padding` / `margin`.
+- `backdrop-filter` is expensive on mobile — Windows case modal already drops it.
+
 ### Open product debt
 
-1. Commit disk WIP when owner asks
-2. Git → Vercel auto-deploy
+1. OEM / CTV live screen videos still deferred
+2. Git → Vercel auto-deploy (intentionally off; see §17)
 3. `og:image` absolute URL → `upraiser.co.uk` in meta
-4. Partner logos incomplete
-5. Live copy pass
+4. Partner / client marks: remaining dark PNGs (e.g. Betking) may still sit quiet on charcoal
+5. Live copy pass / Routes OEM screens
 
 ---
 
@@ -839,10 +857,39 @@ npm run deploy
 | Home order            | `HomePage.tsx`                                     |
 | Theme colors          | `index.css`                                        |
 | Routes / redirects    | `App.tsx`                                          |
-| Deploy                | `scripts/deploy-vercel.sh`                         |
-| Assets                | `scripts/sync-assets.sh`, `assets/`                |
+| Clients tape / logos  | `clients.ts`, `PartnersCarousel.tsx`, `base.css` `.partner-logo` |
+| Promise / parity chart| `ParityWaterChart.tsx`, `ParityCausticsCanvas.tsx`, `charts.css` |
+| Case modal copy       | `surfaces.css` `.case-detail-modal__body .copy`                  |
+| Windows type / OS     | `index.html` `dataset.os`, `base.css` `html[data-os="windows"]`  |
+| Deploy                | `scripts/deploy-vercel.sh`                                       |
+| Assets                | `scripts/sync-assets.sh`, `assets/`                              |
 
 
 ---
 
-*End of master document. При изменении IA, hero, Routes glass или deploy — обновляй этот файл.*
+## 23. Windows + dark-theme ops
+
+`index.html` sets `html[data-os="windows"]` from UA.
+
+| Surface | Mac | Windows |
+| --- | --- | --- |
+| Body copy | `-webkit-font-smoothing: antialiased` | ClearType (`smoothing: auto`); real Inter 400 — no fake-light |
+| Case modal `.copy` | 76% `--theme-fg` + glass panel | 90% fg + solid `--theme-bg-elevated`, **no** `backdrop-filter` |
+| Parity water | 3px CSS mask scanlines + `mix-blend: screen` | 8px overlay scan; caustics **alpha** canvas; `mix-blend: normal` |
+| Client logos | grayscale | same, plus invert on `ink: "black"` (OKX, TikTok, Liobank, Bybit) |
+
+Contact `/contact` is a **viewport-route**: `html.viewport-route { overflow: hidden }`. Do not nest another `min-h-[100dvh]` inside the padded frame.
+
+Do **not** globally invert `.partner-logo` — filled app icons become white rounded squares.
+
+---
+
+## 24. Cross-platform prompt
+
+Paste into Agent when writing or rewriting UI:
+
+> Соблюдай `.cursorrules`: `100dvh`, `env(safe-area-inset-*)`, `@media (hover: hover) and (pointer: fine)`, `touch-action: manipulation`, 44×44 touch targets, `:focus-visible`, `overscroll-behavior: contain` on modals. Framer `type: "spring"`. Dual theme Growth ↔ Infrastructure. Copy SOT `liveContent.ts` / `innerPagesData.ts`. Brand: §4 of this file. Don’t break Everest hero or Routes still→MP4 glass.
+
+---
+
+*End of master document. При изменении IA, hero, Routes glass, Windows quirks или deploy — обновляй **этот** файл. Других проектных md нет.*

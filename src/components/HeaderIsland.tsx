@@ -5,6 +5,7 @@ import { navLinks, type NavLink } from "../data/liveContent";
 import { ScrollLink } from "./ScrollLink";
 import { useTheme } from "../context/ThemeContext";
 import { LocaleSwitcher } from "./LocaleSwitcher";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 function navIsActive(pathname: string, href: string) {
   if (href === "/") {
@@ -17,6 +18,7 @@ export function HeaderIsland() {
   const { pathname } = useLocation();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
+  const reduced = useReducedMotion();
 
   return (
     <motion.div 
@@ -42,8 +44,8 @@ export function HeaderIsland() {
                       href={link.href}
                       contactIntent={link.contactIntent}
                       aria-current={active ? "page" : undefined}
-                      className={`relative z-10 inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap ${
-                        active ? "text-on-accent" : "text-fg-muted hover:text-fg hover:bg-fg/5 font-semibold"
+                      className={`island-nav-link relative z-10 inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap ${
+                        active ? "text-on-accent" : "text-fg-muted font-semibold"
                       }`}
                     >
                       {link.label}
@@ -73,18 +75,18 @@ export function HeaderIsland() {
         <motion.button
           type="button"
           onClick={toggleTheme}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={reduced ? undefined : { scale: 1.05 }}
+          whileTap={reduced ? undefined : { scale: 0.9 }}
           transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-          className="flex items-center justify-center w-6 h-6 rounded-full text-fg-muted hover:text-accent hover:bg-accent/10 transition-colors shrink-0"
+          className="island-theme-btn flex items-center justify-center w-6 h-6 rounded-full text-fg-muted transition-colors shrink-0"
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           title="Switch content mode"
         >
           <motion.span
             key={theme}
-            initial={{ opacity: 0, scale: 0.5 }}
+            initial={reduced ? false : { opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", bounce: 0.3 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.35 }}
             className="inline-flex"
           >
             {isDark ? <Sun className="w-3 h-3" strokeWidth={2.5} /> : <Moon className="w-3 h-3" strokeWidth={2.5} />}

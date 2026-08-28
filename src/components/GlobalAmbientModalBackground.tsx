@@ -33,11 +33,13 @@ export function GlobalAmbientModalBackground() {
     >
       {/* Dark Theme: NightStars Canvas */}
       <div className="hidden dark:block absolute inset-0">
-        <React.Suspense fallback={null}>
-          <Canvas frameloop={isOpen ? "always" : "demand"} camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }} style={{ pointerEvents: "none" }}>
-            <NightStars />
-          </Canvas>
-        </React.Suspense>
+        {isOpen ? (
+          <React.Suspense fallback={null}>
+            <Canvas frameloop="always" camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }} style={{ pointerEvents: "none" }}>
+              <NightStars />
+            </Canvas>
+          </React.Suspense>
+        ) : null}
       </div>
       
       {/* Light Theme: Clean Mountain Video with filters */}
@@ -48,7 +50,7 @@ export function GlobalAmbientModalBackground() {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="none"
           className="block dark:hidden w-full h-full object-cover object-center opacity-[0.75] contrast-[0.85] brightness-[1.05] sepia-[0.05] hue-rotate-[200deg]"
         />
       </div>
