@@ -4,6 +4,8 @@ export type ClientBrand = {
   /** Local asset when available; otherwise typographic wordmark. */
   logo?: string;
   scale?: number;
+  /** Pure-black marks that vanish on charcoal without invert. */
+  ink?: "black";
   vertical?: "iGaming" | "Gaming" | "Fintech" | "Marketplace" | "E-commerce" | "Social" | "Other";
 };
 
@@ -21,15 +23,15 @@ export const clientBrands: ClientBrand[] = [
   { name: "Vantage", slug: "vantage", logo: "/clients/vantage.png", scale: 1.05, vertical: "Fintech" },
   { name: "IQ Options", slug: "iq-options", logo: "/clients/iq-options.svg", scale: 1.2, vertical: "Fintech" },
   { name: "Binance", slug: "binance", logo: "/clients/binance.svg", scale: 1.05, vertical: "Fintech" },
-  { name: "Bybit", slug: "bybit", logo: "/clients/bybit.svg", scale: 0.65, vertical: "Fintech" },
-  { name: "OKX", slug: "okx", logo: "/clients/okx.svg", scale: 1.8, vertical: "Fintech" },
+  { name: "Bybit", slug: "bybit", logo: "/clients/bybit.svg", scale: 0.65, ink: "black", vertical: "Fintech" },
+  { name: "OKX", slug: "okx", logo: "/clients/okx.svg", scale: 1.15, ink: "black", vertical: "Fintech" },
   { name: "Fiverr", slug: "fiverr", logo: "/clients/fiverr.svg", scale: 2.0, vertical: "Marketplace" },
   { name: "Banco Azteca", slug: "banco-azteca", logo: "/clients/banco-azteca.png", scale: 1.1, vertical: "Fintech" },
   { name: "Banki.ru", slug: "banki-ru", logo: "/clients/banki-ru.png", scale: 1.3, vertical: "Fintech" },
-  { name: "Liobank", slug: "liobank", logo: "/clients/liobank.svg", scale: 0.7, vertical: "Fintech" },
+  { name: "Liobank", slug: "liobank", logo: "/clients/liobank.svg", scale: 0.7, ink: "black", vertical: "Fintech" },
   { name: "MBS", slug: "mbs", logo: "/clients/mbs.png", scale: 0.7, vertical: "Other" },
   { name: "Snoop", slug: "snoop", logo: "/clients/snoop.png", scale: 1.05, vertical: "Fintech" },
-  { name: "TikTok", slug: "tiktok", logo: "/clients/tiktok.svg", scale: 1.15, vertical: "Social" },
+  { name: "TikTok", slug: "tiktok", logo: "/clients/tiktok.svg", scale: 1.15, ink: "black", vertical: "Social" },
   { name: "Azar", slug: "azar", logo: "/clients/azar.png", scale: 1.05, vertical: "Social" },
   { name: "SolPrestado", slug: "solprestado", logo: "/clients/solprestado.jpg", vertical: "Fintech" },
   { name: "Rapiplata", slug: "rapiplata", logo: "/clients/rapiplata.png", vertical: "Fintech" },

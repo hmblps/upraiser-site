@@ -1397,7 +1397,8 @@ html.theme-light .depth-page--gear .gear-spec,
   max-height: 2.8rem;
 }
 
-.partner-logo-slot--home[data-brand="iq-options"] .partner-logo {
+.partner-logo-slot--home[data-brand="iq-options"] .partner-logo,
+.partner-logo-slot--home[data-brand="okx"] .partner-logo {
   height: 2.45rem;
   max-height: 2.6rem;
 }
@@ -1418,8 +1419,8 @@ html.theme-light .depth-page--gear .gear-spec,
     max-height: 3.5rem;
   }
 
-  /* IQ Option SVG is a padded wordmark — keep it optically with the other marks. */
-  .partner-logo-slot--home[data-brand="iq-options"] .partner-logo {
+  .partner-logo-slot--home[data-brand="iq-options"] .partner-logo,
+  .partner-logo-slot--home[data-brand="okx"] .partner-logo {
     height: 3.15rem;
     max-height: 3.35rem;
   }

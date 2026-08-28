@@ -629,6 +629,36 @@ main [id] {
   opacity: 0.85;
 }
 
+/* Black wordmarks: invert by default (charcoal), restore on light paper.
+   Do not invert filled app-icon PNGs — they become white squares. */
+.partner-logo-slot[data-brand="okx"] .partner-logo,
+.partner-logo-slot[data-brand="tiktok"] .partner-logo,
+.partner-logo-slot[data-brand="liobank"] .partner-logo,
+.partner-logo-slot[data-brand="bybit"] .partner-logo,
+.partner-logo[data-logo-ink="black"],
+.clients-modal-item[data-brand="okx"] .clients-modal-logo,
+.clients-modal-item[data-brand="tiktok"] .clients-modal-logo,
+.clients-modal-item[data-brand="liobank"] .clients-modal-logo,
+.clients-modal-item[data-brand="bybit"] .clients-modal-logo,
+.clients-modal-logo[data-logo-ink="black"] {
+  filter: grayscale(100%) invert(1);
+  opacity: 0.82;
+}
+
+[data-theme="light"] .partner-logo-slot[data-brand="okx"] .partner-logo,
+[data-theme="light"] .partner-logo-slot[data-brand="tiktok"] .partner-logo,
+[data-theme="light"] .partner-logo-slot[data-brand="liobank"] .partner-logo,
+[data-theme="light"] .partner-logo-slot[data-brand="bybit"] .partner-logo,
+[data-theme="light"] .partner-logo[data-logo-ink="black"],
+[data-theme="light"] .clients-modal-item[data-brand="okx"] .clients-modal-logo,
+[data-theme="light"] .clients-modal-item[data-brand="tiktok"] .clients-modal-logo,
+[data-theme="light"] .clients-modal-item[data-brand="liobank"] .clients-modal-logo,
+[data-theme="light"] .clients-modal-item[data-brand="bybit"] .clients-modal-logo,
+[data-theme="light"] .clients-modal-logo[data-logo-ink="black"] {
+  filter: grayscale(100%);
+  opacity: 0.75;
+}
+
 /* Color the hovered mark — do not pause the reel (hover/focus used to freeze it). */
 @media (hover: hover) and (pointer: fine) {
   .partner-logo-slot:hover .partner-logo,
@@ -636,6 +666,32 @@ main [id] {
     opacity: 1;
     filter: grayscale(0%);
     transform: scale(1.06);
+  }
+
+  .partner-logo-slot[data-brand="okx"]:hover .partner-logo,
+  .partner-logo-slot[data-brand="okx"]:focus-within .partner-logo,
+  .partner-logo-slot[data-brand="tiktok"]:hover .partner-logo,
+  .partner-logo-slot[data-brand="tiktok"]:focus-within .partner-logo,
+  .partner-logo-slot[data-brand="liobank"]:hover .partner-logo,
+  .partner-logo-slot[data-brand="liobank"]:focus-within .partner-logo,
+  .partner-logo-slot[data-brand="bybit"]:hover .partner-logo,
+  .partner-logo-slot[data-brand="bybit"]:focus-within .partner-logo,
+  .partner-logo-slot:hover .partner-logo[data-logo-ink="black"],
+  .partner-logo-slot:focus-within .partner-logo[data-logo-ink="black"] {
+    filter: invert(1);
+  }
+
+  [data-theme="light"] .partner-logo-slot[data-brand="okx"]:hover .partner-logo,
+  [data-theme="light"] .partner-logo-slot[data-brand="okx"]:focus-within .partner-logo,
+  [data-theme="light"] .partner-logo-slot[data-brand="tiktok"]:hover .partner-logo,
+  [data-theme="light"] .partner-logo-slot[data-brand="tiktok"]:focus-within .partner-logo,
+  [data-theme="light"] .partner-logo-slot[data-brand="liobank"]:hover .partner-logo,
+  [data-theme="light"] .partner-logo-slot[data-brand="liobank"]:focus-within .partner-logo,
+  [data-theme="light"] .partner-logo-slot[data-brand="bybit"]:hover .partner-logo,
+  [data-theme="light"] .partner-logo-slot[data-brand="bybit"]:focus-within .partner-logo,
+  [data-theme="light"] .partner-logo-slot:hover .partner-logo[data-logo-ink="black"],
+  [data-theme="light"] .partner-logo-slot:focus-within .partner-logo[data-logo-ink="black"] {
+    filter: grayscale(0%);
   }
 
   .partner-logo-slot:hover .partner-logo-wordmark,

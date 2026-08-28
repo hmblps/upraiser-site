@@ -150,24 +150,8 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
 
             <div className="parity-water__meniscus" />
 
-            {/* 1. ГЛАВНЫЙ КОНТЕЙНЕР ОЗЕРА */}
-            {/* Он отвечает ТОЛЬКО за плавное затухание всего блока в темноту */}
-            <div 
-              className="parity-water__lake"
-              style={{
-                maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)'
-              }}
-            >
-              {/* 2. СЛОЙ ДАННЫХ (Красные бары) */}
-              {/* Полосатая нарезка (сканлайны) применяется ТОЛЬКО к этому слою! */}
-              <div 
-                className="absolute inset-0 z-0"
-                style={{
-                  maskImage: 'repeating-linear-gradient(to bottom, black 0px, black 3px, transparent 3px, transparent 5px)',
-                  WebkitMaskImage: 'repeating-linear-gradient(to bottom, black 0px, black 3px, transparent 3px, transparent 5px)'
-                }}
-              >
+            <div className="parity-water__lake">
+              <div className="parity-water__lake-scan">
                 <div className="parity-water__lake-tint" />
                 <div className="parity-water__cols parity-water__cols--logs">
                   {CHANNELS.map((ch) => (
@@ -184,12 +168,7 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
                   ))}
                 </div>
               </div>
-
-              {/* 3. СЛОЙ СВЕТА (OGL Caustics) */}
-              {/* Он лежит ПОВЕРХ нарезанных баров, не режется полосками, имеет mix-blend-screen */}
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-screen opacity-60">
-                <ParityCausticsCanvas progress={progress} />
-              </div>
+              <ParityCausticsCanvas progress={progress} />
             </div>
           </div>
         </div>

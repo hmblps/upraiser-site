@@ -102,11 +102,21 @@
 }
 
 [data-theme="dark"] .fold-chart-ghost-value {
-  color: color-mix(in srgb, var(--theme-accent) 52%, var(--theme-fg) 26%);
+  color: color-mix(in srgb, var(--theme-accent) 68%, var(--theme-fg) 32%);
 }
 
 [data-theme="dark"] .fold-chart-ghost-label {
-  color: color-mix(in srgb, var(--theme-accent-light) 34%, var(--theme-muted) 38%);
+  color: color-mix(in srgb, var(--theme-accent-light) 48%, var(--theme-fg) 52%);
+}
+
+html[data-os="windows"][data-theme="dark"] .fold-chart-ghost-value,
+html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-value {
+  color: color-mix(in srgb, var(--theme-accent) 78%, var(--theme-fg) 22%);
+}
+
+html[data-os="windows"][data-theme="dark"] .fold-chart-ghost-label,
+html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
+  color: color-mix(in srgb, var(--theme-accent-light) 62%, var(--theme-fg) 38%);
 }
 
 [data-theme="light"] .fold-chart-ghost-value {
@@ -548,9 +558,9 @@
   height: 50%;
   width: 100%;
   overflow: hidden;
-  /* Softer depth fade — keep red bars readable longer */
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 48%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0%, black 48%, transparent 100%);
+  isolation: isolate;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 100%);
 }
 
 /* Scanline slice — bars only (caustic web stays continuous on top) */
@@ -558,26 +568,65 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  -webkit-mask-image:
-    linear-gradient(to bottom, black 0%, black 48%, transparent 100%),
-    repeating-linear-gradient(
-      to bottom,
-      black 0px,
-      black 3px,
-      transparent 3px,
-      transparent 5px
-    );
-  mask-image:
-    linear-gradient(to bottom, black 0%, black 48%, transparent 100%),
-    repeating-linear-gradient(
-      to bottom,
-      black 0px,
-      black 3px,
-      transparent 3px,
-      transparent 5px
-    );
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
+  -webkit-mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0px,
+    #000 3px,
+    transparent 3px,
+    transparent 5px
+  );
+  mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0px,
+    #000 3px,
+    transparent 3px,
+    transparent 5px
+  );
+}
+
+.parity-water__caustics {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.72;
+}
+
+.parity-water__caustics-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Windows: 8px scan period survives 125/150% DPI; overlay instead of subpixel mask.
+   Opaque WebGL + mix-blend often composites as a black fog on DirectX. */
+html[data-os="windows"] .parity-water__lake-scan {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+html[data-os="windows"] .parity-water__lake-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 4px,
+    rgb(5 5 4 / 0.72) 4px 8px
+  );
+}
+
+html[data-os="windows"] .parity-water__caustics {
+  mix-blend-mode: normal;
+  opacity: 0.55;
+}
+
+html[data-os="windows"] .parity-water__lake {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
 }
 
 .parity-water__lake-tint {
@@ -664,22 +713,6 @@
     transparent 100%
   );
   box-shadow: 0 10px 20px -5px rgba(255, 47, 171, 0.3);
-}
-
-/* Procedural OGL caustic web over scanlined bars */
-.parity-water__caustics {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  mix-blend-mode: color-dodge;
-  opacity: 0.6;
-}
-
-.parity-water__caustics-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 
 .parity-water__plot::before,

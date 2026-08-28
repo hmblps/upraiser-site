@@ -120,7 +120,7 @@
 
 
 
-@import "./styles/base.css";
+@import "./styles/base.css"; /* black-ink logos: invert only, not app icons */
 @import "./styles/cross-platform.css";
 @import "./styles/accent-scroll.css";
 @import "./styles/typography.css";
@@ -130,7 +130,7 @@
 @import "./styles/surfaces.css";
 @import "./styles/components.css";
 @import "./styles/depth-pages.css";
-@import "./styles/charts.css";
+@import "./styles/charts.css"; /* windows parity water: alpha caustics, 8px scan */
 @import "./styles/scroll-scene.css";
 @import "./styles/layout.css";
 @import "./styles/ambience-responsive.css";

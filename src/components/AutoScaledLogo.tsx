@@ -11,6 +11,7 @@ type AutoScaledLogoProps = {
    * "css-var" sets --logo-scale (best for CSS animations relying on height).
    */
   scaleMethod?: "transform" | "css-var";
+  ink?: "black";
 };
 
 /**
@@ -22,7 +23,8 @@ export function AutoScaledLogo({
   alt,
   baseScale = 1,
   className = "",
-  scaleMethod = "transform"
+  scaleMethod = "transform",
+  ink,
 }: AutoScaledLogoProps) {
   const [autoScale, setAutoScale] = useState(1);
   const [isAppIcon, setIsAppIcon] = useState(false);
@@ -67,6 +69,7 @@ export function AutoScaledLogo({
       src={src}
       alt={alt}
       className={className}
+      data-logo-ink={ink}
       onLoad={handleLoad}
       style={style}
       draggable={false}

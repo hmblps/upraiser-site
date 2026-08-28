@@ -60,7 +60,7 @@ const FRAG = /* glsl */ `
     newp.y += 0.2 * cos(3.0 * p.x + time + 0.3);
     p = newp;
 
-    // Sharp neon filaments on pure black
+    // Premultiplied alpha — Windows often drops mix-blend on an opaque canvas.
     float caustics = pow(abs(sin(p.x + p.y)), 4.0) * 2.5;
     caustics += 0.35 * pow(abs(sin(p.x * 1.7 - p.y)), 5.0) * 2.0;
     caustics *= uIntensity;
@@ -69,7 +69,8 @@ const FRAG = /* glsl */ `
     caustics *= smoothstep(1.0, 0.1, vUv.y);
     caustics = clamp(caustics, 0.0, 1.0);
 
-    gl_FragColor = vec4(vec3(caustics), 1.0);
+    vec3 col = mix(vec3(1.0, 0.12, 0.28), vec3(1.0, 0.86, 0.28), caustics);
+    gl_FragColor = vec4(col, caustics);
   }
 `;
 
@@ -100,14 +101,18 @@ export function ParityCausticsCanvas({ progress }: ParityCausticsCanvasProps) {
 
     const renderer = new Renderer({
       canvas,
-      dpr: Math.min(1.5, window.devicePixelRatio || 1),
+      dpr: Math.min(2, window.devicePixelRatio || 1),
       alpha: true,
       antialias: false,
       depth: false,
       powerPreference: "low-power",
     });
     const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 1);
+    if (!gl) {
+      console.warn("[ParityCaustics] no WebGL context");
+      return;
+    }
+    gl.clearColor(0, 0, 0, 0);
 
     const geometry = new Triangle(gl);
     let program: Program;
@@ -120,7 +125,7 @@ export function ParityCausticsCanvas({ progress }: ParityCausticsCanvasProps) {
           uIntensity: { value: 1.0 },
           uResolution: { value: new Vec2(1, 1) },
         },
-        transparent: false,
+        transparent: true,
         depthTest: false,
         depthWrite: false,
       });
@@ -142,6 +147,8 @@ export function ParityCausticsCanvas({ progress }: ParityCausticsCanvasProps) {
       const h = wrap.clientHeight;
       if (w < 2 || h < 2) return;
       renderer.setSize(w, h);
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
       program.uniforms.uResolution.value.set(w, h);
       if (!ready) {
         ready = true;

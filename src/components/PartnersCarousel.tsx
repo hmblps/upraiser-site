@@ -86,12 +86,14 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                   onClick={() => setModalOpen(true)}
                   className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-grab outline-none focus:outline-none"
                   data-brand={brand.slug}
+                  {...(brand.ink ? { "data-logo-ink": brand.ink } : {})}
                 >
                   {brand.logo ? (
                     <AutoScaledLogo
                       src={brand.logo}
                       alt={brand.name}
                       baseScale={brand.scale}
+                      ink={brand.ink}
                       className="partner-logo pointer-events-none"
                       scaleMethod="css-var"
                     />
@@ -154,14 +156,16 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                   {clientBrands.map((brand) => (
                     <div
                       key={brand.slug}
-                      className="flex justify-center w-full"
+                      className="clients-modal-item flex justify-center w-full"
+                      data-brand={brand.slug}
                     >
                       {brand.logo ? (
                         <AutoScaledLogo
                           src={brand.logo}
                           alt={brand.name}
                           baseScale={brand.scale}
-                          className="max-w-[120px] max-h-[48px] w-auto object-contain"
+                          ink={brand.ink}
+                          className="clients-modal-logo max-w-[120px] max-h-[48px] w-auto object-contain"
                         />
                       ) : (
                         <span className="font-bold text-lg text-fg">{brand.name}</span>
