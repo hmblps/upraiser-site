@@ -415,19 +415,26 @@ function PhoneScene({
  * CSS phone frame with live Vidout rich-media iframe inside.
  * Shown only when formatId === "rich".
  */
+/**
+ * Native ad dimensions. The Vidout VIDBAN creative is always 320×480.
+ * We scale it proportionally to fit phone screen width and center vertically.
+ */
+const AD_W = 320;
+const AD_H = 480;
+
 function RichMediaPhone({ mode }: { mode: SiteMode }) {
   const isDark = mode !== "growth";
-  const screenRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.82);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [adScale, setAdScale] = useState(0.64);
 
-  // Scale iframe to phone screen width. Ad is 320×480 natively.
-  // Phone screen container fills the rest with dark background.
+  // Fit ad proportionally inside screen — no stretch, no crop.
+  // Measures screen-glass div width and computes scale by width.
   useEffect(() => {
-    const el = screenRef.current;
+    const el = wrapRef.current;
     if (!el) return;
     const ro = new ResizeObserver(([entry]) => {
-      const w = entry.contentRect.width;
-      if (w > 0) setScale(w / 320);
+      const { width } = entry.contentRect;
+      if (width > 0) setAdScale(Math.min(1, width / AD_W));
     });
     ro.observe(el);
     return () => ro.disconnect();
@@ -443,7 +450,6 @@ function RichMediaPhone({ mode }: { mode: SiteMode }) {
   return (
     <motion.div
       key="rich-phone"
-      className="rich-media-phone-bob"
       initial={{ opacity: 0, scale: 0.94, y: 24 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.94, y: -16 }}
@@ -456,6 +462,7 @@ function RichMediaPhone({ mode }: { mode: SiteMode }) {
         justifyContent: "center",
         zIndex: 2,
         pointerEvents: "all",
+        cursor: "default",   // override grab cursor from parent
       }}
     >
       {/* Phone body */}
@@ -473,16 +480,20 @@ function RichMediaPhone({ mode }: { mode: SiteMode }) {
           flexShrink: 0,
         }}
       >
-        {/* Screen glass */}
+        {/* Screen glass — black bg, centered ad */}
         <div
+          ref={wrapRef}
           style={{
             position: "relative",
             width: "100%",
             height: "100%",
             borderRadius: "clamp(1.3rem, 2.3vw, 1.95rem)",
             overflow: "hidden",
-            background: "#0a0a0a",
+            background: "#000",
             border: "2px solid rgba(0,0,0,0.84)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           {/* Dynamic Island */}
@@ -495,38 +506,35 @@ function RichMediaPhone({ mode }: { mode: SiteMode }) {
               width: "clamp(2.2rem, 20%, 3.1rem)",
               height: "clamp(0.5rem, 1.4vw, 0.7rem)",
               borderRadius: "999px",
-              background: "#0a0a0a",
+              background: "#000",
               zIndex: 3,
               pointerEvents: "none",
             }}
           />
 
-          {/* Ad container — ResizeObserver measures this for scale */}
+          {/* Ad — scaled proportionally, centered on black */}
           <div
-            ref={screenRef}
             style={{
-              position: "absolute",
-              inset: 0,
+              width: AD_W,
+              height: AD_H,
+              flexShrink: 0,
+              transformOrigin: "center center",
+              transform: `scale(${adScale})`,
               overflow: "hidden",
-              background: "#0a0a0a",
+              borderRadius: 8,
             }}
           >
-              <iframe
-                  src="/rich-media-ad.html"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "320px",
-                    height: "480px",
-                    border: "none",
-                    transformOrigin: "top left",
-                    transform: `scale(${scale})`,
-                    display: "block",
-                  }}
-                  allow="autoplay"
-                  title="Rich Media Ad"
-                />
+            <iframe
+              src="/rich-media-ad.html"
+              style={{
+                width: AD_W,
+                height: AD_H,
+                border: "none",
+                display: "block",
+              }}
+              allow="autoplay; encrypted-media"
+              title="Rich Media Ad"
+            />
           </div>
 
           {/* Glass glare */}
@@ -537,7 +545,7 @@ function RichMediaPhone({ mode }: { mode: SiteMode }) {
               inset: 0,
               zIndex: 4,
               background:
-                "linear-gradient(125deg, rgba(255,255,255,0.16) 0%, transparent 26%, transparent 72%, rgba(255,255,255,0.05) 100%)",
+                "linear-gradient(125deg, rgba(255,255,255,0.14) 0%, transparent 28%, transparent 74%, rgba(255,255,255,0.04) 100%)",
               mixBlendMode: "soft-light",
             }}
           />
@@ -633,6 +641,7 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
         isDark ? "phone-glb-stage--tint" : "phone-glb-stage--deepblue",
         className,
       )}
+      style={isRichMedia ? { cursor: "default" } : undefined}
       onPointerDown={isRichMedia ? undefined : onPointerDown}
       onPointerMove={isRichMedia ? undefined : onPointerMove}
       onPointerUp={isRichMedia ? undefined : endDrag}
