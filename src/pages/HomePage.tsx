@@ -48,7 +48,7 @@ export function HomePage() {
           <Process />
         </LazySection>
         
-        <LazySection id="routes" minHeight="100dvh" warm="routes" gate="hero">
+        <LazySection id="routes" minHeight="100dvh" warm="routes" gate="hero" warmMargin="300% 0px">
           <ProgrammaticScrollSection sectionId="routes"
             lane={lane}
             mode={mode}

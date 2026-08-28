@@ -33,10 +33,14 @@ const REST_X = 0.01;
 // scene.updateMatrixWorld(true) propagates transforms down to every mesh, which
 // lets Box3.setFromObject read correct world-space vertex positions.
 //
-// Target: TV height fills ~57 % of the visible area — leaves room so the TV
-// doesn't clip the canvas edges when rotated ±0.45 rad (the drag limit).
-// At camera z=5.5, fov=34°: visible_h ≈ 3.35 u  →  0.57·3.35 = 1.91 u.
-const TARGET_HEIGHT = 1.91;
+// Target: TV height fills ~57 % of the visible area on desktop.
+// On narrow screens (mobile/portrait), we must scale down so the 16:9 TV width fits.
+function getTargetHeight() {
+  if (typeof window === "undefined") return 1.91;
+  const aspect = window.innerWidth / window.innerHeight;
+  // If aspect is less than ~1.2 (narrow window), scale down the height to fit width
+  return Math.min(1.91, 1.7 * aspect);
+}
 
 function computeTransform(scene: Object3D): {
   scale: number;
@@ -49,7 +53,7 @@ function computeTransform(scene: Object3D): {
 
   if (box.isEmpty()) {
     // Fallback from accessor analysis (FBX +180°X + Sketchfab −90°X net = +90°X)
-    return { scale: 0.022, cx: 99.25, cy: -69.52, cz: -2.13 };
+    return { scale: 0.022 * (getTargetHeight() / 1.91), cx: 99.25, cy: -69.52, cz: -2.13 };
   }
 
   const size = new Vector3();
@@ -57,7 +61,7 @@ function computeTransform(scene: Object3D): {
   box.getSize(size);
   box.getCenter(center);
 
-  const scale = TARGET_HEIGHT / Math.max(size.y, 0.001);
+  const scale = getTargetHeight() / Math.max(size.y, 0.001);
   return { scale, cx: center.x, cy: center.y, cz: center.z };
 }
 
