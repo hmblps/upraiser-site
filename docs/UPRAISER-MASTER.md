@@ -6,8 +6,7 @@
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
 > **HEAD (committed):** `2e8d466` — 3D device carousel (Phone · Tablet · TV), TV runtime centering, leg removal, tumbler pin, asset auto-restore  
 > **Next:** Routes copy pass, screen videos for OEM formats, mobile polish  
-> **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts`  
-> **Routes full spec:** [`docs/ROUTES.md`](./ROUTES.md)
+> **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts`
 
 ---
 
@@ -22,7 +21,7 @@
 7. [Dual theme = dual narrative](#7-dual-theme--dual-narrative)
 8. [Header, footer, CTAs](#8-header-footer-ctas)
 9. [Hero 3D (Everest fly)](#9-hero-3d-everest-fly)
-10. [The Routes — sticky phone (`#routes`)](#10-the-routes--sticky-phone-routes)
+10. [The Routes — Every Format. One Supply Path. (`#routes`)](#10-the-routes--every-format-one-supply-path-routes)
 11. [The Peaks — carousel (`#cases`)](#11-the-peaks--carousel-cases)
 12. [Scroll folds (killer moments)](#12-scroll-folds-killer-moments)
 13. [Scroll Scene System](#13-scroll-scene-system)
@@ -288,60 +287,250 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 
 ---
 
-## 10. The Routes — sticky device carousel (`#routes`)
+## 10. The Routes — Every Format. One Supply Path. (`#routes`)
 
 **Headline:** *Every Format. One Supply Path.*  
+**Anchor:** `/#routes` · **Label in nav/footer:** *The Routes*  
 **Primary:** `HomeRoutesSection.tsx` on `/`.  
 **Legacy:** `SolutionsPage.tsx`; `/solutions` → `/#routes`.  
-**Full spec:** [`docs/ROUTES.md`](./ROUTES.md)
+**Copy SOT:** `src/components/solutions/ProgrammaticFormats.ts`  
+**Wiring SOT:** `src/components/solutions/ProgrammaticScrollSection.tsx`
 
-### Lanes
+### Purpose
 
-| Lane | Formats | 3D device |
-| --- | --- | --- |
-| **App Growth** | 5 programmatic (AD_FORMATS) | Phone (iPhone GLB) |
-| **OEM & CTV** | 3 OEM → Tablet + 2 CTV → TV (OEM_CTV_FORMATS) | Tablet / TV |
+The Routes is the central **product proof** section of the Basecamp. Its job: show every ad format UPRAISER buys with an interactive 3D device mockup + live copy, so an advertiser sees exactly what they're buying and how it's measured — without a PDF or a sales call.
 
-Native scroll (`useFormatScrollSection`) drives active format index.  
+**Tone:** Operator proof. Not a feature list. Each format has a tagline, one-sentence operator description, and three infrastructure-grade bullet points (measurement trail, fraud screen, reconciliation file).
+
+### Two Lanes
+
+| Lane | ID | 3D device | Formats | Source |
+| --- | --- | --- | --- | --- |
+| **App Growth** | `app-growth` | Phone (iPhone GLB) | 5 programmatic | `AD_FORMATS` |
+| **OEM & CTV** | `oem-ctv` | Tablet (OEM) + TV (CTV) | 3 OEM + 2 CTV | `OEM_CTV_FORMATS` |
+
+Native scroll (`useFormatScrollSection`) drives the active format index.  
 Desktop: `DeviceCarousel3` — spatial 3-device slide carousel (Phone · Tablet · TV).  
 Mobile: stacked cards + `CssPhone` + live HTML feed.
 
-### 3D carousel (`DeviceCarousel3`)
+Switching lanes slides the device carousel and cross-fades format copy with a **horizontal** slide animation matching the carousel direction.
 
-Each format has a `scene?: "phone" | "tablet" | "tv"` key in `ProgrammaticFormats.ts`.  
-Spring (`stiffness: 340, damping: 32`) drives phase 0→1→2. Devices slide via `x: (slot − phase) × 100%` + opacity fade.  
-**No CSS scale / blur on WebGL canvas** — causes bilinear snap artifact.
+---
 
-| Device | GLB | Key files |
+### Lane 1 — App Growth (all formats on Phone)
+
+| # | ID | Label | Tagline |
+| --- | --- | --- | --- |
+| 1 | `banner` | Banner | Scale inside 100K+ apps |
+| 2 | `native` | Native | Intent-matched, not interruptive |
+| 3 | `interstitial` | Interstitial | Full-screen impact at natural breaks |
+| 4 | `rich` | Rich Media | Interactive formats that earn attention |
+| 5 | `video` | Video | Rewarded and skippable |
+
+**Banner** — In-app banners on behavioral signals. Supply: 100K+ app graph · Fraud: pre-bid screen · Caps wired to MMP events: FTD, reg, subscription.
+
+**Native** — Feed-integrated, session-depth targeted. Units matched to app design · Session-depth and engagement-peak targeting · CPC/CPM with MMP conversion attribution.
+
+**Interstitial** — Full-screen at natural breaks (level load, article end, checkout). Natural-break timing · Placement quality scored before bid · Device-level frequency caps.
+
+**Rich Media** — Expandable and playable units; 3–5× engagement vs standard display. Expandable, animated, and playable units · Whitelist-only, MRAID-compliant supply.
+
+**Video** — Rewarded and skippable under one bid strategy. Rewarded: opt-in, near-100% completion · Skippable pre-roll with quality controls · Shared MMP attribution across both types.
+
+---
+
+### Lane 2 — OEM & CTV
+
+| # | ID | Label | Tagline | Device | scene key |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `pre-install` | Pre-install | On-device before the store | Tablet | `"tablet"` |
+| 2 | `oem-store` | OEM Store | Lenovo and partner storefronts | Tablet | `"tablet"` |
+| 3 | `system-ui` | System UI | OS-level moments that convert | Tablet | `"tablet"` |
+| 4 | `ctv-spot` | CTV Spot | Living-room scale, measured | TV | `"tv"` |
+| 5 | `ctv-video` | CTV Video | Long-form attention, short proof path | TV | `"tv"` |
+
+**Pre-install** *(Tablet)* — OEM at unboxing / first boot. Factory/first-boot placement inventory · Install and activation postback trails · Reconciliation file finance can read.
+
+**OEM Store** *(Tablet)* — Featured slots inside Lenovo + partner OEM stores. Partner storefront featured slots · Pre-bid filtration on every clear · MMP-aligned activation events.
+
+**System UI** *(Tablet)* — OS-level surfaces at natural device moments (setup complete, update done). Natural OS transition timing · Device-level frequency control · Brand-safe whitelist inventory.
+
+**CTV Spot** *(TV)* — Connected TV spots with household reach. Premium CTV publisher whitelist · Household reach with frequency caps · Post-flight file for finance review.
+
+**CTV Video** *(TV)* — Long-form CTV bought to the same outcome stack as OEM. Completion and viewability controls · Shared outcome taxonomy with OEM · One finance-readable reconciliation file.
+
+---
+
+### 3D Device Carousel (`DeviceCarousel3`)
+
+Each format carries `scene?: "phone" | "tablet" | "tv"` in `ProgrammaticFormats.ts` (default `"phone"`).  
+A Framer Motion spring (`stiffness: 340, damping: 32, mass: 0.6`) drives `phase` 0→1→2.  
+Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade. No `scale` or `filter:blur` on WebGL canvas (causes bilinear→native pixel snap artifact).
+
+| Device | Width in col | Camera | GLB |
+| --- | --- | --- | --- |
+| Phone | 62% | Phone3D default | `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark) |
+| Tablet | 85% | fov 30, z=3.8 | `/channels/oem/tablet.glb` |
+| TV | 100% | fov 34, z=5.5 | `/channels/oem/tv.glb` (29 MB, no legs) |
+
+**Drag limits (all 3 devices, unified):** Y ±0.45 rad · X ±0.15 rad · sensitivity dx×0.006 / dy×0.004 · spring 260/30/0.7 · release snaps 35% toward REST.
+
+---
+
+### Phone3D
+
+File: `src/components/solutions/Phone3D.tsx`
+
+**Entrance (scroll-driven, 3 phases):** macro flyover → lift & rotate → lock face-forward (`REST_Y 0.07`, `REST_X −0.04` rad, ~4° depth hint).
+
+**Screen glass:** Still PNG (`programmatic-refs/screens/{format}.png`) → Video MP4 (`programmatic-feed/formats/{format}.mp4`) promoted on `readyState >= HAVE_CURRENT_DATA`. No Suspense remount (white flash).
+
+---
+
+### Tablet3D
+
+File: `src/components/channel-visuals/Tablet3D.tsx`  
+Model: iPad GLB, `drei/Center` auto-centering, `rotation={[Math.PI/2, 0, 0]} scale={6.8}`.  
+Screen: material named `"glass"` → `VideoTexture` via `traverse()`.  
+No `ContactShadows` (white oval artifact on transparent canvas).
+
+---
+
+### Tv3D
+
+File: `src/components/channel-visuals/Tv3D.tsx`  
+Model: custom `newtv.glb` (Sketchfab / FBX export, centimeter scale).
+
+**Transform chain** — GLTF applies two rotations before Three.js world space:
+```
+Sketchfab_model  rotation: −90°X
+  FBX node       rotation: +180°X
+    RootNode ← meshes (screen faces −Z in Three.js)
+```
+Corrected with `rotation={[0, Math.PI, 0]}` on the scale group (screen now faces +Z / camera).
+
+**Runtime centering** — computed synchronously in `useState` initializer (before first render):
+```ts
+scene.updateMatrixWorld(true);
+const box = new Box3().setFromObject(scene, true);
+const scale = TARGET_HEIGHT / size.y;   // TARGET_HEIGHT = 1.91
+position = [−center.x, −center.y, −center.z];
+```
+Fallback if box empty: `{ scale: 0.022, cx: 99.25, cy: −69.52, cz: −2.13 }`.
+
+**Leg removal** — `Layer 03` (Object_22, ~14K verts, stand) and `Layer 05` (corner nub) hidden via `scene.traverse()` + `obj.visible = false` in `useEffect`. Identified because their bounding Y extends ~7% below TV body minimum.
+
+**Lighting boosted** (TV panels have ~4% albedo): ambient 2.2 · key directional 3.0 · fill 0.8 · spot 1.5 · env city 1.3 (growth); slightly lower for infra.
+
+Do not hide `Layer 06` — it is the back panel face (needed after π-Y flip to show front).
+
+---
+
+### Sticky Scroll Runway
+
+Hook: `useFormatScrollSection.ts`
+
+| Constant | Value | Purpose |
 | --- | --- | --- |
-| Phone | `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark) | `Phone3D.tsx` |
-| Tablet | `/channels/oem/tablet.glb` | `Tablet3D.tsx` |
-| TV | `/channels/oem/tv.glb` (29 MB newtv — no legs) | `Tv3D.tsx` |
+| `SCROLL_PX_PER_FORMAT` | 650 | Scroll pixels per format step |
+| `INTRO_SCROLL_PX` | 650 | Extra runway for phone entrance |
 
-**Drag limits (all 3 devices):** Y ±0.45 rad · X ±0.15 rad · spring 260/30/0.7.
+`entranceProgress` is a `MotionValue<number>` — passed to `DeviceCarousel3` and `FormatCopy`. **Do not pass plain `number`** (TS2322).
 
-### Tumbler (lane switcher)
+---
 
-`SlideTabs.tsx` — Dynamic Island style (`backdrop-blur-xl rounded-full`).  
-**Pinned absolutely** via `.prog-scroll-copy-tumbler { position: absolute; top: clamp(4rem, calc(50% - 12rem), 11rem) }` — outside `FormatCopy` / `AnimatePresence`. Never shifts when format text height changes.
+### Format Copy & Transitions (`FormatCopy.tsx`)
 
-### Text transitions
+| Trigger | Animation |
+| --- | --- |
+| Scroll within lane | Vertical — exit ↑, enter ↓ · spring 220/28/0.85 |
+| Lane switch | Horizontal — matches device slide direction |
 
-- Scroll within lane → vertical slide (exit ↑ / enter ↓)
-- Lane switch → horizontal slide matching device carousel direction
+---
+
+### Tumbler / Lane Switcher (`SlideTabs.tsx`)
+
+Style: Dynamic Island — `bg-bg-elevated/70 backdrop-blur-xl rounded-full border border-border/40 shadow-sm`.  
+Pill (`motion.span layoutId`) is a **sibling** of the button (not a child) — prevents `inline-flex` baseline from nudging position.  
+Spring: `{ type: "spring", bounce: 0.15, duration: 0.5 }`.
+
+**Pinned absolutely** — rendered outside `FormatCopy` / `AnimatePresence` in `.prog-scroll-copy-col`:
+```css
+.prog-scroll-copy-tumbler {
+  position: absolute;
+  top: clamp(4rem, calc(50% - 12rem), 11rem);
+  left: 0.25rem;
+}
+```
+Never shifts when format text height changes.
+
+---
 
 ### Glass pipeline
 
-1. **Still:** `public/channels/programmatic-refs/screens/*.png` (App Growth) · `public/channels/oem/screens/*.png` (OEM)
-2. **Video:** `public/channels/programmatic-feed/formats/*.mp4` · `public/channels/oem/screens/*.mp4` — promoted on `readyState >= HAVE_CURRENT_DATA`, no Suspense remount.
+1. **Still (App Growth):** `public/channels/programmatic-refs/screens/{format}.png`
+2. **Video (App Growth):** `public/channels/programmatic-feed/formats/{format}.mp4`
+3. **Still (OEM):** `public/channels/oem/screens/{format}.png`
+4. **Video (OEM):** `public/channels/oem/screens/{format}.mp4`
 
-### Do not
+Promoted on `readyState >= HAVE_CURRENT_DATA`. No Suspense remount (white flash).
 
-- GSAP / ScrollTrigger on Routes
-- Suspense Still↔Video remount (white flash)
-- CSS `scale` / `filter:blur` on WebGL canvas wrappers
-- `ContactShadows` on Tablet3D / Tv3D (white oval artifact)
-- Plain `number` where `MotionValue<number>` expected (`entranceProgress`)
+---
+
+### Mobile (`ProgrammaticScrollSectionMobile.tsx`)
+
+Trigger: `< 1024px` or `prefers-reduced-motion`. No WebGL — `CssPhone` + live HTML feed. Stacked format cards. Lane switcher in fixed bottom dock (`.prog-mobile-sticky`). No sticky scroll runway; native scroll.
+
+---
+
+### Key Files — Routes
+
+| File | Role |
+| --- | --- |
+| `solutions/ProgrammaticFormats.ts` | **Copy SOT** — all format definitions, scene keys |
+| `solutions/ProgrammaticScrollSection.tsx` | Desktop sticky section + `DeviceCarousel3` |
+| `solutions/ProgrammaticScrollSectionMobile.tsx` | Mobile section |
+| `solutions/Phone3D.tsx` | iPhone 3D scene |
+| `channel-visuals/Tablet3D.tsx` | iPad 3D scene |
+| `channel-visuals/Tv3D.tsx` | TV 3D scene (runtime-centered) |
+| `solutions/FormatCopy.tsx` | Animated format text block |
+| `SlideTabs.tsx` | Dynamic Island lane switcher |
+| `hooks/useFormatScrollSection.ts` | Sticky scroll + format progress |
+| `hooks/useRoutesLane.ts` | Lane state + copy resolver |
+| `styles/programmatic-scroll-section.css` | Sticky layout, all variants |
+| `public/phones/deep-blue.glb` | iPhone GLB — light / growth |
+| `public/phones/orange.glb` | iPhone GLB — dark / infra |
+| `public/channels/oem/tablet.glb` | iPad GLB |
+| `public/channels/oem/tv.glb` | TV GLB (29 MB, newtv, no legs) |
+| `public/channels/programmatic-feed/formats/*.mp4` | App Growth screen videos |
+| `public/channels/oem/screens/*.mp4` | OEM / CTV screen videos |
+
+---
+
+### Do not (Routes)
+
+1. GSAP / ScrollTrigger on Routes — hook is Lenis-native
+2. Suspense remount between Still ↔ Video glass — white flash
+3. CSS `scale` or `filter:blur` on WebGL canvas wrappers — bilinear snap
+4. `ContactShadows` on Tablet3D / Tv3D — white oval artifact
+5. `key={theme}` remount on Canvas — kills WebGL context
+6. Plain `number` where `MotionValue<number>` expected (`entranceProgress`)
+7. Hide `Layer 06` on TV — it is the front face after π-Y flip
+8. Softening format bullets — must be infrastructure-grade (measurement trails, fraud screens, reconciliation files)
+
+---
+
+### Routes Sanity Checklist
+
+- [ ] Both lanes load without blank glass
+- [ ] Phone entrance completes before first format activates
+- [ ] App Growth → OEM: device slides left, text slides left
+- [ ] OEM → App Growth: device slides right, text slides right
+- [ ] pre-install / oem-store / system-ui → Tablet visible
+- [ ] ctv-spot / ctv-video → TV visible, screen facing camera, no legs
+- [ ] Tumbler pill never jumps between format switches
+- [ ] Mobile: no WebGL, CSS phone visible, lane switcher in bottom dock
+- [ ] `npm run build` passes — no TS errors on MotionValue / unused imports
 
 ---
 
