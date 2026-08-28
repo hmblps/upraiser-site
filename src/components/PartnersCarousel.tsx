@@ -86,14 +86,14 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                   onClick={() => setModalOpen(true)}
                   className="partner-logo-slot partner-logo-slot--home flex justify-center items-center flex-shrink-0 h-full px-12 cursor-grab outline-none focus:outline-none"
                   data-brand={brand.slug}
-                  {...(brand.ink ? { "data-logo-ink": brand.ink } : {})}
+                  {...("ink" in brand && brand.ink ? { "data-logo-ink": brand.ink } : {})}
                 >
                   {brand.logo ? (
                     <AutoScaledLogo
                       src={brand.logo}
                       alt={brand.name}
                       baseScale={brand.scale}
-                      ink={brand.ink}
+                      ink={"ink" in brand ? brand.ink : undefined}
                       className="partner-logo pointer-events-none"
                       scaleMethod="css-var"
                     />
