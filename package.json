@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "bash scripts/restore-assets.sh",
     "dev": "vite",
     "build": "bash scripts/verify-assets.sh && tsc -b && vite build",
     "generate:og": "node scripts/generate-og-image.mjs && bash scripts/sync-assets.sh",
