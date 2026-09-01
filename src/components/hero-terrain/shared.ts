@@ -131,22 +131,22 @@ export const EXPEDITION_CLIMB = {
 };
 
 export const EXPEDITION_ASCENT: AscentPath = {
-  // Start low and very far back (deep in the fog)
-  startPos: [0, 15, 280],
+  // Start high enough to see the base, far back
+  startPos: [0, 40, 240],
   // Midpoint: ascending vertically, slightly moving in
-  midPos: [0, 90, 240],
-  // End: High altitude, far from textures, majestic wide shot
-  endPos: [0, 170, 190],
+  midPos: [0, 95, 180],
+  // End: Very high altitude, cinematic wide shot
+  endPos: [0, 160, 100],
   
-  // Always looking towards the peaks
-  startLook: [0, 100, 0],
-  midLook: [0, 120, -20],
-  endLook: [0, 130, -60],
+  // Look targets
+  startLook: [0, 40, 0],
+  midLook: [0, 60, -30],
+  endLook: [0, 60, -60],
   
   // Tighter FOV for cinematic compression (makes mountains look bigger)
   startFov: 45,
-  midFov: 38,
-  endFov: 32,
+  midFov: 40,
+  endFov: 35,
   bankMax: 0.05,
 };
 

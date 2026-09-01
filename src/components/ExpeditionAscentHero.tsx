@@ -105,10 +105,10 @@ function AscentHeroAnimated() {
     return lerp(18, -22, t) + "dvh";
   });
 
-  // ── Fog: starts thick (0.9), clears as we rise (stretches to 75% of scroll) ─
+  // ── Fog: starts somewhat thick (0.8), clears as we rise (stretches to 60%) ─
   const fogOpacity = useTransform(progress, (p) => {
-    // Clears between 10%–75%
-    return 1 - smoothstep(p, 0.1, 0.75);
+    // Clears completely by 60%
+    return lerp(0.85, 0, smoothstep(p, 0.05, 0.6));
   });
 
   // ── Dark veil fades slightly so mountain is crisper ─────────────────────────
@@ -144,8 +144,9 @@ function AscentHeroAnimated() {
       {/* Sticky viewport frame */}
       <div className="ascent-hero__pin">
 
-        {/* Background — poster + optional 3D canvas, moves up as we scroll */}
+        {/* Background — poster + optional 3D canvas */}
         <div className="ascent-hero__bg">
+          {/* Static poster moves up via CSS */}
           <motion.div className="ascent-hero__sky" style={{ y: skyY }}>
             <img
               className="ascent-hero__poster"
@@ -154,6 +155,10 @@ function AscentHeroAnimated() {
               decoding="async"
               fetchPriority="high"
             />
+          </motion.div>
+
+          {/* 3D Canvas sits static in DOM, movement is handled internally by WebGL camera */}
+          <div className="ascent-hero__canvas-wrapper" style={{ position: "absolute", inset: 0 }}>
             {desktop && boot3d ? (
               <CanvasErrorBoundary>
                 <HeroFlyProgressBridge progressRef={flyRef}>
@@ -165,7 +170,7 @@ function AscentHeroAnimated() {
                 </HeroFlyProgressBridge>
               </CanvasErrorBoundary>
             ) : null}
-          </motion.div>
+          </div>
 
           {/* Fog layer — thick at base, clears toward summit */}
           <motion.div
