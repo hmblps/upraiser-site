@@ -108,17 +108,17 @@ export function idle01(t: number, phase = 0) {
 
 export const EXPEDITION_FOG = {
   light: {
-    color: "#b0c0d8", // gloomier blizzard grey-blue
-    nearStart: 15, farStart: 160, // super thick blizzard at start
-    nearEnd: 220, farEnd: 700,    // clears up significantly mid-climb
-    nearFinale: 350, farFinale: 900, // crystal clear at the summit
+    color: "#7e90a8", // Darker, moodier blue-grey to prevent "blowout" (засвет)
+    nearStart: 20, farStart: 140, // Thick fog at start
+    nearEnd: 120, farEnd: 380,    // Keeps map edges hidden during ascent
+    nearFinale: 180, farFinale: 450, // Clears up just enough for the peak, but hides borders
   },
   dark: {
     color: "#050504",
     nearStart: 88, farStart: 240,
     nearEnd: 140, farEnd: 410,
-    nearFinale: 62, farFinale: 235,
-  }
+    nearFinale: 80, farFinale: 320,
+  },
 };
 
 export const EXPEDITION_CLIMB = {
@@ -131,22 +131,22 @@ export const EXPEDITION_CLIMB = {
 };
 
 export const EXPEDITION_ASCENT: AscentPath = {
-  // 1. Deep Trench: Start low in the valley, looking up at the peaks
-  startPos: [100, 15, 380],
-  startLook: [0, 80, 50],
-  startFov: 60, // Wide angle to feel the scale of the valley
+  // 1. Start safely inside the map (z=280 instead of 380)
+  startPos: [60, 25, 280],
+  startLook: [0, 60, 40],
+  startFov: 55,
 
-  // 2. The Ridge Skim: Fly aggressively close to the left ridge
-  midPos: [-80, 130, 100],
-  midLook: [20, 150, -50],
+  // 2. Skim the ridge but stay lower to keep the horizon masked by mountains
+  midPos: [-50, 100, 110],
+  midLook: [10, 120, -20],
   midFov: 45,
 
-  // 3. The Summit Orbit: Break above the clouds, soaring over the main peak
-  endPos: [40, 320, -120],
-  endLook: [-40, 240, -250],
-  endFov: 32, // Strong zoom compression for massive background mountains
+  // 3. Orbit the peak but don't fly into the stratosphere (y=160 instead of 320)
+  endPos: [15, 175, -50],
+  endLook: [-20, 140, -180],
+  endFov: 35,
 
-  bankMax: 0.35, // Very aggressive drone-like banking during the ridge skim
+  bankMax: 0.28, // Still aggressive, but slightly smoother
 };
 
 export function climbProgress(t: number) {
