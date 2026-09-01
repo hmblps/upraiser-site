@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLayoutEffect, useRef, useState, type RefObject } from "react";
 import { motion, useMotionValueEvent, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ASCENT_PROTOCOLS, COMPANY_CONTENT } from "../data/innerPagesData";
@@ -321,7 +322,18 @@ function CrewAnimated() {
   const flyRef = useRef(0);
   useMotionValueEvent(progress, "change", (p) => {
     flyRef.current = p;
+    // Fade out global blizzard as we ascend above clouds
+    // Start fading at p=0.1, fully gone by p=0.5
+    const snowOpacity = 1 - Math.min(1, Math.max(0, (p - 0.1) / 0.4));
+    document.documentElement.style.setProperty("--global-snow-opacity", snowOpacity.toString());
   });
+  
+  // Cleanup snow opacity on unmount
+  useEffect(() => {
+    return () => {
+      document.documentElement.style.removeProperty("--global-snow-opacity");
+    };
+  }, []);
 
   return (
     <section

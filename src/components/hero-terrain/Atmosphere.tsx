@@ -95,8 +95,8 @@ export function HorizonGlow({ theme }: { theme: ThemeMode }) {
 }
 
 const SUNRISE = {
-  keyDawn: new Color("#ffd4a0"),
-  keyNoon: new Color("#ffe4bc"),
+  keyDawn: new Color("#8fa6c4"), // Gloomy, blizzard grey-blue
+  keyNoon: new Color("#ffe4bc"), // Bright warm sun
 } as const;
 
 export function SunRig({ theme }: { theme: ThemeMode }) {
@@ -124,7 +124,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
 
     if (keyLightRef.current) {
       keyLightRef.current.position.set(x, y, z);
-      keyLightRef.current.intensity = MathUtils.lerp(1.85, 2.15, rise);
+      keyLightRef.current.intensity = MathUtils.lerp(0.1, 2.5, rise); // Starts very gloomy, rises to bright sun
       keyLightRef.current.color.lerpColors(SUNRISE.keyDawn, SUNRISE.keyNoon, rise);
       keyLightRef.current.shadow.camera.updateMatrixWorld();
     }

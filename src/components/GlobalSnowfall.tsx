@@ -157,6 +157,8 @@ export function GlobalSnowfall() {
         inset: 0,
         zIndex: 40,
         pointerEvents: "none",
+        opacity: "var(--global-snow-opacity, 1)",
+        transition: "opacity 0.2s ease-out",
         maskImage: "linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)",
       }}

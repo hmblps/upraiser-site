@@ -108,10 +108,10 @@ export function idle01(t: number, phase = 0) {
 
 export const EXPEDITION_FOG = {
   light: {
-    color: "#d0ddec",
-    nearStart: 130, farStart: 420,
-    nearEnd: 160, farEnd: 520,
-    nearFinale: 90, farFinale: 320,
+    color: "#b0c0d8", // gloomier blizzard grey-blue
+    nearStart: 15, farStart: 160, // super thick blizzard at start
+    nearEnd: 220, farEnd: 700,    // clears up significantly mid-climb
+    nearFinale: 350, farFinale: 900, // crystal clear at the summit
   },
   dark: {
     color: "#050504",
