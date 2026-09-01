@@ -1,8 +1,8 @@
-import { ChartGhostValue } from "./ChartGhostValue";
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { motion, useTransform, type MotionValue } from "framer-motion";
+import { useEffect, useMemo, useRef, useState,  } from "react";
+import { motion, useTransform, type MotionValue, useMotionValue } from "framer-motion";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { clamp } from "../lib/clamp";
 
 const VB = 420;
 const CX = 128;
@@ -28,8 +28,6 @@ const fraudGhostLayout = [
   { left: "92%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
 ] as const;
 
-import { clamp } from "../lib/clamp";
-
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = (angleDeg * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
@@ -38,96 +36,75 @@ function polar(cx: number, cy: number, r: number, angleDeg: number) {
 function arcPath(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
   const start = polar(cx, cy, r, startDeg);
   const end = polar(cx, cy, r, endDeg);
-  let sweep = endDeg - startDeg;
-  if (sweep < 0) sweep += 360;
-  const large = sweep > 180 ? 1 : 0;
+  const large = endDeg - startDeg <= 180 ? "0" : "1";
   return `M ${start.x} ${start.y} A ${r} ${r} 0 ${large} 1 ${end.x} ${end.y}`;
 }
 
-function formatLiveDate(date: Date) {
-  const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" }).format(date);
-  const year = new Intl.DateTimeFormat("en-GB", { year: "numeric" }).format(date);
-  return { day, year };
+function formatLiveDate(d: Date) {
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-function FraudGhost({
-  value,
-  label,
-  color,
-  left,
-  originY,
-  drift,
-  duration,
-  delay,
-}: {
-  value: string;
-  label: string;
-  color: string;
-  left: string;
-  originY: number;
-  drift: number;
-  duration: number;
-  delay: number;
+function FraudGhost({ 
+  index, 
+  morph 
+}: { 
+  index: number; 
+  morph: MotionValue<number>;
 }) {
-  return (
-    <div className="fraud-ghost-toned" style={{ "--fraud-ghost-tone": color } as CSSProperties}>
-      <GhostBubbleMotion left={left} originY={originY} drift={drift} duration={duration} delay={delay}>
-        <ChartGhostValue value={value} />
-        <span className="fold-chart-ghost-label">{label}</span>
-      </GhostBubbleMotion>
-    </div>
-  );
-}
+  const seg = segments[index]!;
+  const layout = fraudGhostLayout[index]!;
+  const containerRef = useRef<HTMLSpanElement>(null);
 
-function FraudArc({
-  progress,
-  segment,
-  index,
-  radius,
-}: {
-  progress: MotionValue<number>;
-  segment: (typeof segments)[number];
-  index: number;
-  radius: number;
-}) {
-  const track = arcPath(CX, CY, radius, START_ANGLE, END_ANGLE);
-  const start = 0.1 + index * 0.08;
-  const end = Math.min(start + 0.42, 0.88);
-  const pathLength = useTransform(progress, [start, end], [0, segment.value / 100]);
+  // Zero-cost text update matching ModeChart
+  useEffect(() => {
+    const updateDOM = (v: number) => {
+      if (!containerRef.current) return;
+      const val = (seg.value * v).toFixed(1) + "%";
+      const match = val.match(/^(\D*)(\d+(?:\.\d+)?)(\D*)$/);
+      if (!match) {
+        containerRef.current.textContent = val;
+        return;
+      }
+      const [, prefix, num, suffix] = match;
+      let html = "";
+      if (prefix) html += `<span class="font-sans font-semibold tracking-normal text-[0.7em] mr-[0.1em] opacity-80">${prefix}</span>`;
+      html += num;
+      if (suffix) html += `<span class="font-sans font-semibold tracking-normal text-[0.7em] ml-[0.05em] opacity-80">${suffix}</span>`;
+      containerRef.current.innerHTML = html;
+    };
+    const unsub = morph.on("change", updateDOM);
+    updateDOM(morph.get());
+    return unsub;
+  }, [morph, seg]);
 
   return (
-    <g>
-      <path
-        d={track}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={STROKE}
-        strokeLinecap="round"
-        className="fraud-radial-chart__track"
-      />
-      <motion.path
-        d={track}
-        fill="none"
-        stroke={segment.color}
-        strokeWidth={STROKE}
-        strokeLinecap="round"
-        className="fraud-radial-chart__arc"
-        style={{ 
-          pathLength, 
-          color: segment.color,
-          filter: `drop-shadow(0px 8px 16px ${segment.color})`,
-          WebkitFilter: `drop-shadow(0px 8px 16px ${segment.color})`
-        }}
-      />
-    </g>
+    <GhostBubbleMotion
+      left={layout.left}
+      originY={layout.originY}
+      drift={layout.drift}
+      duration={layout.duration}
+      delay={layout.delay}
+      peakOpacity={0.9}
+      rise={100 + index * 15}
+    >
+      <div className="flex items-center gap-1.5 mb-1.5">
+        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: seg.color }} />
+        <span className="font-sans font-medium text-[0.6em] tracking-wider text-muted-light uppercase">
+          {seg.label}
+        </span>
+      </div>
+      <span className="fold-chart-ghost-value text-accent-secondary drop-shadow-md">
+        <span ref={containerRef}></span>
+      </span>
+    </GhostBubbleMotion>
   );
 }
 
 export function FraudScrollChart({ progress }: { progress: MotionValue<number> }) {
   const reduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
-  const [morph, setMorph] = useState(0);
   const liveDate = useMemo(() => formatLiveDate(new Date()), []);
+  const morph = useMotionValue(0);
 
   const chartOpacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
   const dateOpacity = useTransform(progress, [0.18, 0.36], [0, 1]);
@@ -140,78 +117,85 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
 
+  // Zero-cost interpolator loop
   useEffect(() => {
     if (!enabled) return;
     let raf = 0;
     const unsub = progress.on("change", (value) => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        setMorph(clamp((value - 0.02) / 0.78, 0, 1));
+        const p = clamp((value - 0.02) / 0.74, 0, 1);
+        morph.set(Math.round(p * 200) / 200);
       });
     });
     return () => {
       unsub();
       cancelAnimationFrame(raf);
     };
-  }, [enabled, progress]);
+  }, [enabled, progress, morph]);
 
   if (!enabled) return null;
 
   return (
-    <>
-      <p className="sr-only">
-        Fraud traffic breakdown: fake installs 47%, device farms 35%, AI layer 10%, bots 8%. Values animate as you
-        scroll.
-      </p>
-      <motion.div className="fraud-radial-chart" style={reduced ? { opacity: 0.75 } : { opacity: chartOpacity }} aria-hidden>
-      <div className="fraud-radial-chart__ghosts fold-chart-ghosts">
-        {segments.map((segment, index) => {
-          const layout = fraudGhostLayout[index]!;
-          const pct = Math.round(segment.value * morph);
-          return (
-            <FraudGhost
-              key={segment.label}
-              value={`${pct}%`}
-              label={segment.label}
-              color={segment.color}
-              left={layout.left}
-              originY={layout.originY}
-              drift={layout.drift}
-              duration={layout.duration}
-              delay={layout.delay}
-            />
-          );
-        })}
+    <motion.div className="fold-chart" style={{ opacity: chartOpacity }} aria-hidden>
+      
+      {/* Live Date Anchor */}
+      <motion.div 
+        className="absolute top-10 right-[42%] flex flex-col items-end gap-1.5 text-right z-10"
+        style={{ opacity: dateOpacity }}
+      >
+        <span className="font-sans font-medium text-[0.65rem] tracking-widest text-accent-secondary uppercase flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent-secondary animate-pulse" />
+          Live Audit
+        </span>
+        <span className="font-mono text-[0.8rem] text-muted-light tracking-wide">{liveDate}</span>
+      </motion.div>
+
+      {/* Zero-cost Ghost Updates */}
+      <div className="fold-chart-ghosts pointer-events-none">
+        {segments.map((_, i) => (
+          <FraudGhost key={i} index={i} morph={morph} />
+        ))}
       </div>
 
-      <div className="fraud-radial-chart__plot">
-        <div className="fraud-radial-chart__frame">
-          <svg className="fraud-radial-chart__svg" viewBox={`0 0 ${VB} ${VB}`} preserveAspectRatio="xMidYMid meet">
-            <g transform={`translate(${VB} 0) scale(-1 1)`}>
-              {segments.map((segment, index) => (
-                <FraudArc
-                  key={segment.label}
-                  progress={progress}
-                  segment={segment}
-                  index={index}
-                  radius={radii[index]!}
-                />
-              ))}
-            </g>
-
-            <motion.g style={{ opacity: dateOpacity }}>
-              <circle cx={CENTER_X} cy={CY} r={38} className="fraud-radial-chart__date-ring-svg" />
-              <text x={CENTER_X} y={CY - 2} textAnchor="middle" className="fraud-radial-chart__date-day-svg">
-                {liveDate.day}
-              </text>
-              <text x={CENTER_X} y={CY + 14} textAnchor="middle" className="fraud-radial-chart__date-year-svg">
-                {liveDate.year}
-              </text>
-            </motion.g>
-          </svg>
-        </div>
+      <div className="absolute inset-0 w-full h-full pointer-events-none">
+        <svg 
+          className="w-full h-full overflow-visible" 
+          viewBox={`0 0 ${VB} ${VB}`}
+          preserveAspectRatio="none"
+        >
+          <g transform={`translate(${CENTER_X}, ${CY})`}>
+            {radii.map((r, i) => {
+              const seg = segments[i]!;
+              const sweep = (seg.value / 100) * (END_ANGLE - START_ANGLE);
+              
+              // Map morph to dynamic path string
+              const dPath = useTransform(morph, (m) => arcPath(0, 0, r, START_ANGLE, START_ANGLE + sweep * m));
+              
+              return (
+                <g key={i}>
+                  <path
+                    d={arcPath(0, 0, r, START_ANGLE, END_ANGLE)}
+                    fill="none"
+                    stroke={seg.color}
+                    strokeWidth={STROKE}
+                    strokeOpacity="0.12"
+                    strokeLinecap="round"
+                  />
+                  <motion.path
+                    d={dPath}
+                    fill="none"
+                    stroke={seg.color}
+                    strokeWidth={STROKE}
+                    strokeLinecap="round"
+                    style={{ filter: `drop-shadow(0 0 8px ${seg.color}66)` }}
+                  />
+                </g>
+              );
+            })}
+          </g>
+        </svg>
       </div>
     </motion.div>
-    </>
   );
 }

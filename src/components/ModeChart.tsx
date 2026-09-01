@@ -1,5 +1,4 @@
-import { ChartGhostValue } from "./ChartGhostValue";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScrollMorph } from "../hooks/useScrollMorph";
@@ -14,7 +13,6 @@ function lerp(a: number, b: number, t: number) {
 
 type SeriesKey = "Primary" | "Secondary";
 
-// We use `any` here for simplicity to replace the old LineChartDatum requirement
 function growthTargets() {
   const primary = [42, 48, 55, 68, 79, 92, 108, 124, 141, 162, 188, 214];
   const secondary = [28, 31, 36, 40, 44, 49, 53, 58, 64, 71, 78, 86];
@@ -60,102 +58,49 @@ type GhostMetric = {
 };
 
 const GROWTH_GHOSTS: GhostMetric[] = [
-  {
-    id: "users",
-    label: "Users",
-    left: "10%",
-    originY: 74,
-    drift: 16,
-    duration: 7.2,
-    delay: 0,
-    format: (t) => `${lerp(8.4, 31.2, t).toFixed(1)}k`,
-  },
-  {
-    id: "impressions",
-    label: "Impressions",
-    left: "28%",
-    originY: 80,
-    drift: -12,
-    duration: 7.8,
-    delay: 1.1,
-    format: (t) => `${lerp(1.8, 9.4, t).toFixed(1)}M`,
-  },
-  {
-    id: "roi",
-    label: "ROI",
-    left: "48%",
-    originY: 70,
-    drift: 14,
-    duration: 8.1,
-    delay: 2.0,
-    format: (t) => `${lerp(0.9, 2.7, t).toFixed(1)}x`,
-  },
-  {
-    id: "ltv",
-    label: "LTV",
-    left: "66%",
-    originY: 76,
-    drift: -10,
-    duration: 6.6,
-    delay: 2.8,
-    format: (t) => `$${lerp(22, 54, t).toFixed(0)}`,
-  },
-  {
-    id: "revenue",
-    label: "Revenue",
-    left: "84%",
-    originY: 82,
-    drift: 11,
-    duration: 7.8,
-    delay: 0.7,
-    format: (t) => `$${lerp(18.6, 74.3, t).toFixed(1)}k`,
-  },
+  { id: "g1", label: "Q3 Run Rate", left: "28%", originY: 62, drift: 24, duration: 6, delay: 0, format: (t) => `$${(lerp(2.1, 14.4, t)).toFixed(1)}M` },
+  { id: "g2", label: "LTV / CAC", left: "45%", originY: 34, drift: -18, duration: 8, delay: 1.5, format: (t) => `${(lerp(1.2, 3.8, t)).toFixed(1)}x` },
+  { id: "g3", label: "Gross Margin", left: "62%", originY: 48, drift: 20, duration: 7, delay: 0.8, format: (t) => `${Math.round(lerp(24, 78, t))}%` },
+  { id: "g4", label: "Active Users", left: "75%", originY: 22, drift: -22, duration: 6.5, delay: 2, format: (t) => `${(lerp(12, 145, t)).toFixed(0)}K` },
 ];
 
 const FRAUD_GHOSTS: GhostMetric[] = [
-  {
-    id: "fraud",
-    label: "Fraud rate",
-    left: "16%",
-    originY: 74,
-    drift: 14,
-    duration: 7.4,
-    delay: 0.2,
-    format: (t) => `${lerp(9.8, 1.2, t).toFixed(1)}%`,
-  },
-  {
-    id: "blocked",
-    label: "Blocked",
-    left: "38%",
-    originY: 80,
-    drift: -12,
-    duration: 8,
-    delay: 1.6,
-    format: (t) => `${lerp(91.2, 97.1, t).toFixed(1)}%`,
-  },
-  {
-    id: "clean",
-    label: "Clean traffic",
-    left: "62%",
-    originY: 68,
-    drift: 10,
-    duration: 6.8,
-    delay: 2.8,
-    format: (t) => `${Math.round(lerp(82, 96, t))}%`,
-  },
-  {
-    id: "risk",
-    label: "Residual risk",
-    left: "82%",
-    originY: 84,
-    drift: -16,
-    duration: 7.6,
-    delay: 1,
-    format: (t) => `${lerp(4.8, 0.7, t).toFixed(1)}%`,
-  },
+  { id: "f1", label: "Bot Traffic", left: "32%", originY: 28, drift: 20, duration: 6.5, delay: 0, format: (t) => `${(lerp(48, 2, t)).toFixed(1)}%` },
+  { id: "f2", label: "Chargebacks", left: "48%", originY: 42, drift: -16, duration: 7.5, delay: 1.2, format: (t) => `$${(lerp(120, 14, t)).toFixed(0)}K` },
+  { id: "f3", label: "Spam Signups", left: "66%", originY: 25, drift: 22, duration: 8, delay: 0.5, format: (t) => `${Math.round(lerp(8500, 120, t))}` },
 ];
 
-function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: number }) {
+function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: MotionValue<number> }) {
+  const containerRef = useRef<HTMLSpanElement>(null);
+  
+  useEffect(() => {
+    const updateDOM = (v: number) => {
+      if (!containerRef.current) return;
+      const strVal = metric.format(v);
+      const match = strVal.match(/^(\D*)(\d+(?:\.\d+)?)(\D*)$/);
+      
+      if (!match) {
+        containerRef.current.textContent = strVal;
+        return;
+      }
+      const [, prefix, num, suffix] = match;
+      
+      let html = "";
+      if (prefix) html += `<span class="font-sans font-semibold tracking-normal text-[0.7em] mr-[0.1em] opacity-80">${prefix}</span>`;
+      html += num;
+      if (suffix) html += `<span class="font-sans font-semibold tracking-normal text-[0.7em] ml-[0.05em] opacity-80">${suffix}</span>`;
+      
+      containerRef.current.innerHTML = html;
+    };
+    
+    const unsub = morph.on("change", updateDOM);
+    updateDOM(morph.get());
+    return unsub;
+  }, [morph, metric]);
+
+  
+  
+
   return (
     <GhostBubbleMotion
       left={metric.left}
@@ -164,7 +109,9 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: number }) 
       duration={metric.duration}
       delay={metric.delay}
     >
-      <ChartGhostValue value={metric.format(morph)} />
+      <span className="fold-chart-ghost-value">
+        <span ref={containerRef}></span>
+      </span>
       <span className="fold-chart-ghost-label">{metric.label}</span>
     </GhostBubbleMotion>
   );
@@ -177,14 +124,11 @@ function smoothLine(points: { x: number; y: number }[]): string {
     const p0 = points[i === 0 ? 0 : i - 1];
     const p1 = points[i];
     const p2 = points[i + 1];
-    const p3 = points[i + 2 < points.length ? i + 2 : i + 1];
-
-    // Catmull-Rom to Bezier conversion
-    const cp1x = p1.x + (p2.x - p0.x) / 6;
-    const cp1y = p1.y + (p2.y - p0.y) / 6;
-    const cp2x = p2.x - (p3.x - p1.x) / 6;
-    const cp2y = p2.y - (p3.y - p1.y) / 6;
-
+    const p3 = points[i + 2] || p2;
+    const cp1x = p1.x + (p2.x - p0.x) * 0.15;
+    const cp1y = p1.y + (p2.y - p0.y) * 0.15;
+    const cp2x = p2.x - (p3.x - p1.x) * 0.15;
+    const cp2y = p2.y - (p3.y - p1.y) * 0.15;
     path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
   }
   return path;
@@ -217,32 +161,28 @@ export function FoldChart({ progress }: FoldChartProps) {
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
 
-  const data = useMemo(
-    () => morphSeries(targets, morph, isGrowth ? "growth" : "fraud"),
-    [targets, morph, isGrowth],
-  );
-
   const yDomain = isGrowth ? [0, 240] : [0, 14];
   const chartHeight = 400;
   const chartWidth = 1200;
-
-  // Calculate points mapped to SVG coordinates
-  // We add vertical padding so the chart doesn't clip the bottom edge
   const paddingY = 50;
   const usableHeight = chartHeight - paddingY * 2;
 
-  const pointsPrimary = data.map((d, i) => ({
-    x: (i / (data.length - 1)) * chartWidth,
-    y: chartHeight - paddingY - (d.Primary / yDomain[1]) * usableHeight,
-  }));
-  
-  const pointsSecondary = data.map((d, i) => ({
-    x: (i / (data.length - 1)) * chartWidth,
-    y: chartHeight - paddingY - (d.Secondary / yDomain[1]) * usableHeight,
-  }));
+  // Zero-cost SVG morphing via framer-motion useTransform
+  const dPrimary = useTransform(morph, (m) => {
+    const data = morphSeries(targets, m, isGrowth ? "growth" : "fraud");
+    return smoothLine(data.map((d, i) => ({
+      x: (i / (data.length - 1)) * chartWidth,
+      y: chartHeight - paddingY - (d.Primary / yDomain[1]) * usableHeight,
+    })));
+  });
 
-  const dPrimary = smoothLine(pointsPrimary);
-  const dSecondary = smoothLine(pointsSecondary);
+  const dSecondary = useTransform(morph, (m) => {
+    const data = morphSeries(targets, m, isGrowth ? "growth" : "fraud");
+    return smoothLine(data.map((d, i) => ({
+      x: (i / (data.length - 1)) * chartWidth,
+      y: chartHeight - paddingY - (d.Secondary / yDomain[1]) * usableHeight,
+    })));
+  });
 
   const opacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
 
@@ -270,10 +210,9 @@ export function FoldChart({ progress }: FoldChartProps) {
             WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)"
           }}
         >
-          {/* СЛОЙ 1: «Штрих-код» (вертикальные тики) */}
-          <g className="opacity-10">
-            {Array.from({ length: 40 }).map((_, i) => {
-              const x = i * 30;
+          <g transform={`translate(0, 0)`}>
+            {targets.map((_, i) => {
+              const x = (i / (targets.length - 1)) * chartWidth;
               return (
                 <line
                   key={i}
@@ -289,31 +228,23 @@ export function FoldChart({ progress }: FoldChartProps) {
             })}
           </g>
 
-          {/* СЛОЙ 2: Вторичная линия (Unique users / Residual risk) */}
           <motion.path
             d={dSecondary}
             fill="none"
             stroke="var(--theme-accent-secondary)"
             strokeWidth="3"
+            strokeOpacity="0.8"
             strokeLinecap="round"
-            style={{ 
-              filter: "drop-shadow(0px 4px 8px var(--theme-accent-secondary))",
-              WebkitFilter: "drop-shadow(0px 4px 8px var(--theme-accent-secondary))",
-              opacity: 0.6
-            }}
+            style={{ filter: "drop-shadow(0 4px 12px var(--theme-accent-dim))" }}
           />
 
-          {/* СЛОЙ 3: Первичная линия (Revenue index / Fraud rate) */}
           <motion.path
             d={dPrimary}
             fill="none"
             stroke="var(--theme-accent)"
-            strokeWidth="4"
+            strokeWidth="5"
             strokeLinecap="round"
-            style={{ 
-              filter: "drop-shadow(0px 8px 16px var(--theme-accent-dim))",
-              WebkitFilter: "drop-shadow(0px 8px 16px var(--theme-accent-dim))"
-            }}
+            style={{ filter: "drop-shadow(0 4px 16px var(--theme-accent-dim))" }}
           />
         </svg>
       </div>
