@@ -22,11 +22,6 @@ export const pageMetaByPath: Record<string, PageMetaRecord> = {
     description: "Creative lab and proprietary pipelines for UPRAISER traffic infrastructure. Workshop opening soon.",
     robots: "noindex, follow",
   },
-  "/expedition": {
-    title: "The Expedition | UPRAISER",
-    description:
-      "UPRAISER Agency LLP — London operators since 2017. Systems engineers, economists, and conversion creatives on one desk.",
-  },
   "/contact": {
     title: "Request Pilot | UPRAISER",
     description:

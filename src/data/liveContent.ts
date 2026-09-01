@@ -22,7 +22,7 @@ export const contactVerticalOptions = [
 export const navLinks: NavLink[] = [
   { label: "Creative & Tech", href: "/craft", underConstruction: true },
   { label: "The Basecamp", href: "/" },
-  { label: "The Expedition", href: "/expedition" },
+  
 ];
 
 export const primaryCta = {
@@ -319,10 +319,10 @@ export const footerLinks = {
     { label: "The Routes", href: "/#routes" },
     { label: "The Peaks", href: "/#cases" },
     { label: "The Craft", href: "/craft" },
-    { label: "The Expedition", href: "/expedition" },
+    
   ],
   company: [
-    { label: "The Expedition", href: "/expedition" },
+    
     { label: "Careers inquiry", href: "/contact", contactIntent: "careers" },
   ] satisfies NavLink[],
   social: [{ label: "LinkedIn", href: "https://www.linkedin.com/company/upraiser/" }],

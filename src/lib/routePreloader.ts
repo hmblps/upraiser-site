@@ -6,10 +6,7 @@ export function preloadRoute(href: string) {
   const base = href.split("?")[0]?.split("#")[0];
   if (!base || base === "/") return;
 
-  if (base === "/expedition") {
-    void import("../pages/ExpeditionPage");
-    return;
-  }
+  
   if (base === "/craft") {
     void import("../pages/CraftPage");
   }

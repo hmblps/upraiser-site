@@ -9,9 +9,8 @@ import {
 } from "./pages/LegacyRedirects";
 
 const CraftPage = lazy(() => import("./pages/CraftPage").then((m) => ({ default: m.CraftPage })));
-const ExpeditionPage = lazy(() =>
-  import("./pages/ExpeditionPage").then((m) => ({ default: m.ExpeditionPage })),
-);
+
+const RouteDetailPage = lazy(() => import("./pages/RouteDetailPage").then((m) => ({ default: m.RouteDetailPage })));
 const CaseDetailPage = lazy(() =>
   import("./pages/CaseDetailPage").then((m) => ({ default: m.CaseDetailPage })),
 );
@@ -50,16 +49,16 @@ export default function App() {
           {/* Home now includes Cases (Peaks) and Routes natively */}
           <Route path="/" element={<HomePage />}>
             <Route path="cases/:slug" element={<CaseDetailPage />} />
+            <Route path="route/:slug" element={<RouteDetailPage />} />
           </Route>
 
           <Route path="craft" element={<CraftPage />} />
-          <Route path="expedition" element={<ExpeditionPage />} />
-          <Route path="contact/sent" element={<ThankYouPage />} />
+                    <Route path="contact/sent" element={<ThankYouPage />} />
           <Route path="contact" element={<ContactPage />} />
 
           {/* Retired IA → home sections or redirects */}
           <Route path="rigging" element={<Navigate to="/craft" replace />} />
-          <Route path="company" element={<Navigate to="/expedition" replace />} />
+          <Route path="company" element={<Navigate to="/" replace />} />
           <Route path="solutions" element={<RedirectHomeHash hash="routes" />} />
           <Route path="studio" element={<RedirectHomeHash hash="routes" />} />
           <Route path="cases" element={<RedirectHomeHash hash="cases" />} />
@@ -71,10 +70,10 @@ export default function App() {
           <Route path="measurement" element={<RedirectMeasurementToExpertise />} />
           <Route path="technology" element={<RedirectMeasurementToExpertise />} />
           <Route path="partners" element={<RedirectHomeHash hash="routes" />} />
-          <Route path="about" element={<Navigate to="/expedition" replace />} />
-          <Route path="how-we-work" element={<Navigate to="/expedition" replace />} />
-          <Route path="resources" element={<Navigate to="/expedition" replace />} />
-          <Route path="resources/*" element={<Navigate to="/expedition" replace />} />
+          <Route path="about" element={<Navigate to="/" replace />} />
+          <Route path="how-we-work" element={<Navigate to="/" replace />} />
+          <Route path="resources" element={<Navigate to="/" replace />} />
+          <Route path="resources/*" element={<Navigate to="/" replace />} />
 
           <Route path="privacy" element={<PrivacyPage />} />
           <Route path="terms" element={<TermsPage />} />

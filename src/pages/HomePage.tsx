@@ -4,7 +4,6 @@ import { Hero } from "../components/Hero";
 import { LazySection } from "../layouts/SiteLayout";
 import { SectionNav } from "../components/SectionNav";
 import { HomePilotCta } from "../components/HomePilotCta";
-import { useRoutesLane } from "../hooks/useRoutesLane";
 
 const PartnersCarousel = lazy(() =>
   import("../components/PartnersCarousel").then((m) => ({ default: m.PartnersCarousel })),
@@ -19,16 +18,12 @@ const PromiseSection = lazy(() =>
 );
 
 // New Routes implementation directly on Home
-const ProgrammaticScrollSection = lazy(() => 
-  import("../components/solutions/ProgrammaticScrollSection").then((m) => ({ default: m.ProgrammaticScrollSection }))
-);
-const RoutesLaneSwitcher = lazy(() => 
-  import("../components/RoutesLaneSwitcher").then((m) => ({ default: m.RoutesLaneSwitcher }))
-);
+import { RoutesPreviewSection } from "../components/solutions/RoutesPreviewSection";
+import { AboutUsSection } from "../components/AboutUsSection";
+
 
 export function HomePage() {
-  const { mode, lane, setLane, formats, headerLabel, headerTitle, headerDescription } = useRoutesLane();
-
+  
   return (
     <>
       <main className="site-main">
@@ -48,23 +43,7 @@ export function HomePage() {
           <Process />
         </LazySection>
         
-        <LazySection id="routes" minHeight="100dvh" warm="routes" gate="hero" warmMargin="300% 0px">
-          <ProgrammaticScrollSection sectionId="routes"
-            lane={lane}
-            mode={mode}
-            laneSwitcher={
-              <RoutesLaneSwitcher
-                lane={lane}
-                onLaneChange={setLane}
-                layoutId="home-solutions-lane-pill"
-              />
-            }
-            formats={formats}
-            headerLabel={headerLabel}
-            headerTitle={headerTitle}
-            headerDescription={headerDescription}
-          />
-        </LazySection>
+        <RoutesPreviewSection />
 
         <LazySection id="cases" minHeight="56dvh" warm="cases">
           <CaseStudies />
@@ -75,6 +54,7 @@ export function HomePage() {
         <LazySection id="promise" minHeight="70dvh" warm="promise" gate="hero">
           <PromiseSection />
         </LazySection>
+        <AboutUsSection />
         <LazySection id="pilot" minHeight="28dvh">
           <HomePilotCta />
         </LazySection>
