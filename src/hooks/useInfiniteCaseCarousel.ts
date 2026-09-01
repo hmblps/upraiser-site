@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { animate } from "framer-motion";
-import { SPRING_SOFT } from "../lib/motion";
 
 /** Three sets: start in the middle so right (and left) scroll can wrap forever. */
 export const CASE_CAROUSEL_COPIES = 3;
@@ -109,9 +108,13 @@ export function useInfiniteCaseCarousel(ref: RefObject<HTMLElement | null>, { it
     const cardWidth = card?.offsetWidth ?? 420;
     const gap = 20;
 
-    el.scrollBy({
-      left: direction === "left" ? -(cardWidth + gap) : cardWidth + gap,
-      behavior: "smooth",
+    const delta = direction === "left" ? -(cardWidth + gap) : cardWidth + gap;
+    animate(el.scrollLeft, el.scrollLeft + delta, {
+      type: "spring",
+      stiffness: 150,
+      damping: 25,
+      mass: 0.8,
+      onUpdate: (v) => { el.scrollLeft = v; },
     });
   };
 
@@ -125,7 +128,14 @@ export function useInfiniteCaseCarousel(ref: RefObject<HTMLElement | null>, { it
     );
     if (card) {
       const left = card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2;
-      el.scrollTo({ left: Math.max(setWidth, left), behavior: "smooth" });
+      const target = Math.max(setWidth, left);
+      animate(el.scrollLeft, target, {
+        type: "spring",
+        stiffness: 150,
+        damping: 25,
+        mass: 0.8,
+        onUpdate: (v) => { el.scrollLeft = v; },
+      });
       return;
     }
 

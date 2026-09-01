@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { contactPage } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
@@ -201,14 +201,20 @@ export function Contact() {
                       noValidate
                       aria-busy={status === "loading"}
                     >
-                      {status === "error" && submitError ? (
-                        <div
-                          className="text-caption shrink-0 rounded-xl border border-magenta/30 bg-magenta/5 px-3 py-2 text-magenta-light"
-                          role="alert"
-                        >
-                          {submitError}
-                        </div>
-                      ) : null}
+                      <AnimatePresence>
+                        {status === "error" && submitError ? (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0, scale: 0.95 }}
+                            animate={{ height: "auto", opacity: 1, scale: 1 }}
+                            exit={{ height: 0, opacity: 0, scale: 0.95 }}
+                            transition={{ type: "spring", bounce: 0.1, duration: 0.4 }}
+                            className="text-caption shrink-0 overflow-hidden rounded-xl border border-magenta/30 bg-magenta/5 px-3 py-2 text-magenta-light"
+                            role="alert"
+                          >
+                            {submitError}
+                          </motion.div>
+                        ) : null}
+                      </AnimatePresence>
 
                       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <ContactFormField label="Name & Title *" id="name" error={errors.name} disabled={status === "loading"}>

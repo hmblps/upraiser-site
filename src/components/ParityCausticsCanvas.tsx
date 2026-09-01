@@ -86,7 +86,7 @@ export function ParityCausticsCanvas({ progress, reduced }: ParityCausticsCanvas
   useEffect(() => {
     const wrap = wrapRef.current;
     const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
+    if (!wrap || !canvas || reduced) return;
 
     let disposed = false;
     let visible = false;
@@ -100,13 +100,16 @@ export function ParityCausticsCanvas({ progress, reduced }: ParityCausticsCanvas
     canvas.height = 1;
     canvas.style.opacity = "0";
 
+    // On Windows, Intel GPUs with mediump floats and high DPR produce shimmer artifacts.
+    // Cap DPR to 1.0 on Windows for a clean, stable render.
+    const isWindows = navigator.userAgent.toLowerCase().includes("win");
     const renderer = new Renderer({
       canvas,
-      dpr: Math.min(2, window.devicePixelRatio || 1),
+      dpr: isWindows ? 1.0 : Math.min(1.5, window.devicePixelRatio || 1),
       alpha: true,
       antialias: false,
       depth: false,
-      powerPreference: "low-power",
+      powerPreference: isWindows ? "default" : "low-power",
     });
     const gl = renderer.gl;
     if (!gl) {
@@ -193,7 +196,9 @@ export function ParityCausticsCanvas({ progress, reduced }: ParityCausticsCanvas
       }
 
       scrollBoost += (0 - scrollBoost) * 0.04;
-      const speed = 0.55 + scrollBoost * 0.9;
+      // Windows with Intel GPUs renders the caustics more intensely — tone it down.
+      const platformMult = isWindows ? 0.5 : 1.0;
+      const speed = (0.55 + scrollBoost * 0.9) * platformMult;
       program.uniforms.uTime.value = ((now - start) / 1000) * speed;
       try {
         renderer.render({ scene: mesh });

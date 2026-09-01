@@ -1,4 +1,5 @@
 import { cloneElement, useEffect, useRef, useState, type ReactElement, type HTMLAttributes } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { GradientTraceBorder } from "./GradientTraceBorder";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -61,11 +62,21 @@ export function ContactFormField({ label, id, error, disabled, expand, children 
             : {}),
         } as Record<string, unknown>)}
       </div>
-      {error ? (
-        <p id={`${id}-error`} className="text-caption mt-1 flex-none text-magenta-light" role="alert">
-          {error}
-        </p>
-      ) : null}
+      <AnimatePresence>
+        {error ? (
+          <motion.p
+            id={`${id}-error`}
+            role="alert"
+            initial={{ height: 0, opacity: 0, marginTop: 0 }}
+            animate={{ height: "auto", opacity: 1, marginTop: "0.25rem" }}
+            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+            className="text-caption flex-none text-magenta-light overflow-hidden"
+          >
+            {error}
+          </motion.p>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
