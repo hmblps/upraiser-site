@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
-import { preloadHeroTerrain } from "../lib/heroBoot";
+import { whenHeroTerrainBytes } from "../lib/heroBoot";
 import { markHeroReady } from "../lib/scrollPreload";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 import { HeroTerrainCanvas } from "./hero-terrain/HeroTerrainCanvas";
@@ -97,23 +97,19 @@ export function HeroAtmosphere() {
 
   useEffect(() => {
     if (!use3d) return;
-    preloadHeroTerrain(theme);
-    
-    // Defer the extremely heavy WebGL context creation and GLTF parsing
-    // to give the browser time to paint the HTML/CSS hero first.
-    let id: number;
-    let t: number;
-    const boot = () => setBoot3d(true);
-    
-    if (typeof window.requestIdleCallback === "function") {
-      id = window.requestIdleCallback(boot, { timeout: 900 });
-    } else {
-      t = window.setTimeout(boot, 150);
-    }
-    
+    let cancelled = false;
+    const boot = () => {
+      if (!cancelled) setBoot3d(true);
+    };
+    const force = window.setTimeout(boot, 8000);
+    void whenHeroTerrainBytes(theme).finally(() => {
+      window.clearTimeout(force);
+      if (cancelled) return;
+      requestAnimationFrame(boot);
+    });
     return () => {
-      if (id !== undefined) window.cancelIdleCallback(id);
-      if (t !== undefined) window.clearTimeout(t);
+      cancelled = true;
+      window.clearTimeout(force);
     };
   }, [use3d, theme]);
 

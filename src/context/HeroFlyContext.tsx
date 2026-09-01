@@ -133,3 +133,15 @@ export function useHeroFly() {
 export function useHeroFlyOptional() {
   return useContext(HeroFlyContext);
 }
+
+/** Drive the existing Everest camera from any 0→1 ref (Expedition fold, tests). */
+export function HeroFlyProgressBridge({
+  progressRef,
+  children,
+}: {
+  progressRef: MutableRefObject<number>;
+  children: ReactNode;
+}) {
+  const value = useMemo(() => ({ revealedCount: 0, progressRef }), [progressRef]);
+  return <HeroFlyContext.Provider value={value}>{children}</HeroFlyContext.Provider>;
+}

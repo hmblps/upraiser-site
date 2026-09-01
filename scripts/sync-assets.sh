@@ -23,10 +23,19 @@ copy "assets/hero/voyager-nasa.glb" "public/hero/voyager-nasa.glb"
 
 # Mobile hero atmosphere — original mountains loop (desktop keeps WebGL Everest).
 copy "assets/hero/light-mountains-loop.mp4" "public/hero/light-mountains-loop.mp4"
+copy "assets/hero/snow/snow_02_diff_2k.webp" "public/hero/snow/snow_02_diff_2k.webp"
+copy "assets/hero/snow/snow_02_nor_gl_2k.webp" "public/hero/snow/snow_02_nor_gl_2k.webp"
+copy "assets/hero/snow/snow_02_rough_2k.webp" "public/hero/snow/snow_02_rough_2k.webp"
 
 # Brand / legal / maps
 copy "assets/brand/upraiser-logo.png" "public/upraiser-logo.png"
 copy "assets/brand/favicon.png" "public/favicon.png"
+copy "assets/brand/favicon-16x16.png" "public/favicon-16x16.png"
+copy "assets/brand/favicon-32x32.png" "public/favicon-32x32.png"
+copy "assets/brand/apple-touch-icon.png" "public/apple-touch-icon.png"
+if [[ -f "assets/brand/favicon.ico" ]]; then
+  copy "assets/brand/favicon.ico" "public/favicon.ico"
+fi
 copy "assets/brand/og-image.png" "public/og-image.png"
 copy "assets/maps/world-dots-dark.svg" "public/maps/world-dots-dark.svg"
 copy "assets/maps/world-dots-light.svg" "public/maps/world-dots-light.svg"

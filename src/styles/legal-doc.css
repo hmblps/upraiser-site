@@ -1,0 +1,105 @@
+/* SPA legal documents — theme tokens, not the standalone public/legal/legal.css reset. */
+
+.legal-doc {
+  max-width: 48rem;
+}
+
+.legal-doc h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.legal-doc .legal-meta {
+  margin: 0 0 2rem;
+  font-size: 0.875rem;
+  color: var(--theme-muted);
+}
+
+.legal-doc h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--theme-accent);
+}
+
+.legal-doc h3 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--theme-fg);
+}
+
+.legal-doc p,
+.legal-doc li {
+  color: var(--theme-muted-light);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.legal-doc p + p {
+  margin-top: 0.85rem;
+}
+
+.legal-doc ul {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+}
+
+.legal-doc li + li {
+  margin-top: 0.35rem;
+}
+
+.legal-doc a {
+  color: var(--theme-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.legal-doc table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.legal-doc th,
+.legal-doc td {
+  border: 1px solid var(--theme-border);
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal-doc th {
+  color: var(--theme-fg);
+  background: var(--theme-bg-elevated);
+}
+
+.legal-doc td {
+  color: var(--theme-muted-light);
+}
+
+.legal-doc code {
+  font-size: 0.875em;
+  color: var(--theme-fg);
+}
+
+.legal-doc .legal-note {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 0.75rem;
+  background: var(--theme-bg-elevated);
+  font-size: 0.875rem;
+  color: var(--theme-muted);
+}
+
+html[data-os="windows"] .legal-doc p,
+html[data-os="windows"] .legal-doc li,
+html[data-os="windows"] .legal-doc td {
+  -webkit-font-smoothing: auto;
+}

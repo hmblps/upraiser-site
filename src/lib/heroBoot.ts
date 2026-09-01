@@ -1,5 +1,5 @@
 import { DESKTOP_HERO_QUERY } from "./heroDesktop";
-import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "./heroModel";
+import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "./heroModel";
 
 const preloaded = new Set<string>();
 
@@ -30,8 +30,19 @@ export function preloadFetch(
 /** Network-only: GLB + Draco before R3F parses. Safe to call more than once. */
 export function preloadHeroTerrain(theme: "light" | "dark") {
   if (!isDesktopHeroViewport()) return;
-  // Use low priority so the 11MB model doesn't starve the network for critical JS/CSS chunks!
-  preloadFetch(heroModelUrl(theme), "fetch", "low");
-  preloadFetch(`${DRACO_PATH}draco_decoder.wasm`, "fetch", "low");
-  preloadFetch(`${DRACO_PATH}draco_wasm_wrapper.js`, "script", "low");
+  preloadFetch(heroModelUrl(theme), "fetch", "high");
+  preloadFetch(`${DRACO_PATH}draco_decoder.wasm`, "fetch", "high");
+  preloadFetch(`${DRACO_PATH}draco_wasm_wrapper.js`, "script", "high");
+  if (theme === "light") {
+    preloadFetch(SNOW_COLOR_URL, "fetch", "low");
+    preloadFetch(SNOW_NORMAL_URL, "fetch", "low");
+    preloadFetch(SNOW_ROUGH_URL, "fetch", "low");
+  }
+}
+
+/** Resolves when the active GLB bytes are in cache (parse still happens in R3F). */
+export function whenHeroTerrainBytes(theme: "light" | "dark") {
+  preloadHeroTerrain(theme);
+  if (typeof fetch === "undefined") return Promise.resolve();
+  return fetch(heroModelUrl(theme), { credentials: "same-origin" }).then(() => undefined);
 }

@@ -4,6 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import type { Mesh, Object3D } from "three";
 import { AdditiveBlending, CircleGeometry, MathUtils, ShaderMaterial, Vector3 } from "three";
 import { useHeroFlyOptional } from "../../context/HeroFlyContext";
+import { heroCapture } from "../../lib/heroCapture";
 import { TRACK_FOLLOW, easeOutCubic, idle01, readProgress, IDLE_BREATHE } from "./shared";
 
 /**
@@ -18,7 +19,7 @@ import { TRACK_FOLLOW, easeOutCubic, idle01, readProgress, IDLE_BREATHE } from "
 const HALO_ANGLE = (22 * Math.PI) / 180;
 const RING_UV = 0.54;
 /** Fixed camera distance — optical infinity for a billboard sky effect. */
-const HALO_CAM_DIST = 160;
+const HALO_CAM_DIST = 260;
 
 function makeIceHaloMaterial() {
   return new ShaderMaterial({
@@ -123,6 +124,7 @@ export function AscentHalo() {
   const progressSmooth = useRef(0);
   const sunAim = useMemo(() => new Vector3(), []);
   const sunDir = useMemo(() => new Vector3(), []);
+  const captureLocal = useRef<Vector3 | null>(null);
 
   const material = useMemo(() => makeIceHaloMaterial(), []);
   const geometry = useMemo(() => new CircleGeometry(1, 96), []);
@@ -136,11 +138,15 @@ export function AscentHalo() {
   );
 
   useFrame((state, delta) => {
-    progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
+    const snap = heroCapture.snap;
+    const desired = readProgress(heroFly);
+    progressSmooth.current = snap
+      ? desired
+      : MathUtils.damp(progressSmooth.current, desired, TRACK_FOLLOW, delta);
     const climb = easeOutCubic(progressSmooth.current);
-    const t = state.clock.elapsedTime;
-    const idle = idle01(t);
-    const idleSigned = Math.sin(t * IDLE_BREATHE);
+    const t = snap ? 0 : state.clock.elapsedTime;
+    const idle = snap ? 0.5 : idle01(t);
+    const idleSigned = snap ? 0 : Math.sin(t * IDLE_BREATHE);
 
     // Soft sun aim in world — drifts with climb, but placement is camera-relative.
     sunAim.set(
@@ -149,12 +155,25 @@ export function AscentHalo() {
       MathUtils.lerp(-40, -70, climb),
     );
 
-    sunDir.copy(sunAim).sub(camera.position).normalize();
-
     const group = groupRef.current;
     if (group) {
-      // Lock to camera ray → always in sky of the current shot (parallax with view).
-      group.position.copy(camera.position).addScaledVector(sunDir, HALO_CAM_DIST);
+      if (snap) {
+        // Screen-stable: bake opening sun into camera space and keep it there.
+        // World-point sunAim + bank was the left/right dance on the storyboard.
+        camera.updateMatrixWorld();
+        if (!captureLocal.current) {
+          sunDir.copy(sunAim).sub(camera.position).normalize();
+          captureLocal.current = new Vector3()
+            .copy(camera.position)
+            .addScaledVector(sunDir, HALO_CAM_DIST);
+          camera.worldToLocal(captureLocal.current);
+        }
+        group.position.copy(captureLocal.current).applyMatrix4(camera.matrixWorld);
+      } else {
+        captureLocal.current = null;
+        sunDir.copy(sunAim).sub(camera.position).normalize();
+        group.position.copy(camera.position).addScaledVector(sunDir, HALO_CAM_DIST);
+      }
     }
 
     const mesh = meshRef.current;

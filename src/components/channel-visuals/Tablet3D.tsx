@@ -160,7 +160,7 @@ function TabletMesh({
       <Center>
         {/* iPad — slightly tilted for depth */}
         <group rotation={[0.08, 0, 0]}>
-          <group rotation={[Math.PI / 2, 0, 0]} scale={6.8}>
+          <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
             <TabletModel mode={mode} />
           </group>
         </group>

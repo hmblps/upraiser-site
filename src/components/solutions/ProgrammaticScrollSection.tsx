@@ -148,7 +148,7 @@ function DeviceCarousel3({
         <Suspense fallback={null}>
           {armed.has(2) ? (
           <CanvasErrorBoundary fallback={null}>
-            <Tv3D mode={mode} className={className} />
+            <Tv3D mode={mode} formatId={formatId} className={className} />
           </CanvasErrorBoundary>
           ) : null}
         </Suspense>

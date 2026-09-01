@@ -11,6 +11,7 @@ import {
   Vector3,
 } from "three";
 import { useHeroFlyOptional } from "../../context/HeroFlyContext";
+import { heroCapture } from "../../lib/heroCapture";
 import { easeInOutCubic, easeOutCubic, idle01, readProgress } from "./shared";
 
 /**
@@ -109,6 +110,7 @@ export function AscentBird() {
   const side = useMemo(() => new Vector3(), []);
   const up = useMemo(() => new Vector3(0, 1, 0), []);
   const offset = useMemo(() => new Vector3(), []);
+  const captureLocal = useRef<Vector3 | null>(null);
 
   const { texture, ctx, size } = useMemo(() => makeSoarTexture(), []);
   const geometry = useMemo(() => new PlaneGeometry(1, 1), []);
@@ -137,14 +139,18 @@ export function AscentBird() {
   );
 
   useFrame((state, delta) => {
-    progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), BIRD_FOLLOW, delta);
+    const snap = heroCapture.snap;
+    const desired = readProgress(heroFly);
+    progressSmooth.current = snap
+      ? desired
+      : MathUtils.damp(progressSmooth.current, desired, BIRD_FOLLOW, delta);
     const climb = easeOutCubic(progressSmooth.current);
     const alpha = envelope(climb);
     // Ease the path itself — linger mid-arc, no bullet exit.
     const u = easeInOutCubic(glideU(climb));
-    const t = state.clock.elapsedTime;
-    const idle = idle01(t, 1.2);
-    const flap = wingFlap(t);
+    const t = snap ? 0 : state.clock.elapsedTime;
+    const idle = snap ? 0.5 : idle01(t, 1.2);
+    const flap = snap ? 0 : wingFlap(t);
 
     // Repaint silhouette only when the wing pose actually changed.
     if (ctx && Math.abs(flap - lastFlap.current) > 0.012) {
@@ -153,33 +159,54 @@ export function AscentBird() {
       texture.needsUpdate = true;
     }
 
-    const idleSigned = Math.sin(t * 0.22);
+    const idleSigned = snap ? 0 : Math.sin(t * 0.22);
     sunAim.set(
       MathUtils.lerp(48, 28, climb) + idleSigned * 2.5,
       MathUtils.lerp(62, 88, climb) + idleSigned * 1.2,
       MathUtils.lerp(-40, -70, climb),
     );
-    sunDir.copy(sunAim).sub(camera.position).normalize();
-    side.crossVectors(sunDir, up);
-    if (side.lengthSq() < 1e-8) side.set(1, 0, 0);
-    else side.normalize();
-
     const ringR = BIRD_CAM_DIST * Math.tan((22 * Math.PI) / 180);
     // Shorter travel + double damp = drifts, doesn't shoot.
     const acrossTarget = MathUtils.lerp(-0.42, 0.28, u);
     const liftTarget = MathUtils.lerp(-0.34, -0.16, u) + (idle - 0.5) * 0.03 + flap * 0.015;
-    acrossSmooth.current = MathUtils.damp(acrossSmooth.current, acrossTarget, 1.2, delta);
-    liftSmooth.current = MathUtils.damp(liftSmooth.current, liftTarget, 1.4, delta);
-
-    offset
-      .copy(sunDir)
-      .multiplyScalar(BIRD_CAM_DIST)
-      .addScaledVector(side, acrossSmooth.current * ringR)
-      .addScaledVector(up, liftSmooth.current * ringR);
+    if (snap) {
+      acrossSmooth.current = acrossTarget;
+      liftSmooth.current = liftTarget;
+    } else {
+      acrossSmooth.current = MathUtils.damp(acrossSmooth.current, acrossTarget, 1.2, delta);
+      liftSmooth.current = MathUtils.damp(liftSmooth.current, liftTarget, 1.4, delta);
+    }
 
     const group = groupRef.current;
     if (group) {
-      group.position.copy(camera.position).add(offset);
+      if (snap) {
+        camera.updateMatrixWorld();
+        if (!captureLocal.current) {
+          sunDir.copy(sunAim).sub(camera.position).normalize();
+          captureLocal.current = new Vector3()
+            .copy(camera.position)
+            .addScaledVector(sunDir, BIRD_CAM_DIST);
+          camera.worldToLocal(captureLocal.current);
+        }
+        offset.set(
+          captureLocal.current.x + acrossSmooth.current * ringR,
+          captureLocal.current.y + liftSmooth.current * ringR,
+          captureLocal.current.z,
+        );
+        group.position.copy(offset).applyMatrix4(camera.matrixWorld);
+      } else {
+        captureLocal.current = null;
+        sunDir.copy(sunAim).sub(camera.position).normalize();
+        side.crossVectors(sunDir, up);
+        if (side.lengthSq() < 1e-8) side.set(1, 0, 0);
+        else side.normalize();
+        offset
+          .copy(sunDir)
+          .multiplyScalar(BIRD_CAM_DIST)
+          .addScaledVector(side, acrossSmooth.current * ringR)
+          .addScaledVector(up, liftSmooth.current * ringR);
+        group.position.copy(camera.position).add(offset);
+      }
       group.visible = alpha > 0.01;
     }
 

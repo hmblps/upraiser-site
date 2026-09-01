@@ -36,6 +36,16 @@ export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
             />
           ) : formatId === "video" ? (
             <VideoInterstitialScreen />
+          ) : formatId === "ctv-spot" || formatId === "ctv-video" ? (
+            <video
+              src="/channels/oem/screens/ctv-spot.mp4"
+              muted
+              loop
+              playsInline
+              autoPlay
+              poster="/channels/oem/screens/ctv-spot.png"
+              className="prog-css-phone__live-ad"
+            />
           ) : (
             <ProgrammaticFullFeed activeFormatId={formatId} />
           )}

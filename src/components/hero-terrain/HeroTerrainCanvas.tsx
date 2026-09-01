@@ -1,18 +1,30 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
-import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
+import { useGLTF, useTexture } from "@react-three/drei";
+import { motion } from "framer-motion";
+import { ACESFilmicToneMapping, PCFSoftShadowMap, SRGBColorSpace } from "three";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "../../lib/heroModel";
+import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "../../lib/heroModel";
 import { markHeroReady } from "../../lib/scrollPreload";
+import { CaptureDriver } from "./CaptureDriver";
 import { Scene } from "./Scene";
-import { HERO_ASCENT_DEFAULTS, type ScrollState, type ThemeMode } from "./shared";
+import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode } from "./shared";
 
-export { HERO_ASCENT_DEFAULTS } from "./shared";
+export { HERO_ASCENT_DEFAULTS, EXPEDITION_ASCENT } from "./shared";
 
 type HeroTerrainCanvasProps = {
   className?: string;
+  path?: AscentPath;
+  /** Expedition reuses the mesh with a different shot — skip Voyager / bird / home-ready. */
+  variant?: "home" | "expedition";
+  capture?: {
+    shot: "home" | "expedition";
+    theme: "dark" | "light";
+    frames: number;
+    onStatus: (line: string) => void;
+    onDone: () => void;
+  };
 };
 
 /** Keep one WebGL context across themes — swap clear / exposure without remount. */
@@ -22,22 +34,27 @@ function ThemeGlSync({ theme }: { theme: ThemeMode }) {
 
   useEffect(() => {
     gl.toneMapping = ACESFilmicToneMapping;
-    gl.toneMappingExposure = isLight ? 1.0 : 1;
+    gl.toneMappingExposure = 1;
     gl.outputColorSpace = SRGBColorSpace;
     gl.setClearColor(isLight ? 0xffffff : 0x050504, 1);
-    gl.setPixelRatio(Math.min(window.devicePixelRatio, isLight ? 1.5 : 1));
   }, [gl, isLight]);
 
   return null;
 }
 
 /** Brand-warm Everest — dark wire / light photo maps + drone ascent. */
-export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
+export function HeroTerrainCanvas({
+  className,
+  path = HERO_ASCENT_DEFAULTS,
+  variant = "home",
+  capture,
+}: HeroTerrainCanvasProps) {
   const { theme } = useTheme();
   const reduced = useReducedMotion();
   const scrollRef = useRef<ScrollState>({ pointerX: 0, pointerY: 0 });
   const shellRef = useRef<HTMLDivElement>(null);
-  const path = HERO_ASCENT_DEFAULTS;
+  const lite = variant === "expedition";
+  const capturing = Boolean(capture);
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
   const [voyagerOk, setVoyagerOk] = useState(false);
@@ -49,10 +66,11 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   }, [theme]);
 
   useEffect(() => {
-    if (modelReady) markHeroReady();
-  }, [modelReady]);
+    if (modelReady && !lite) markHeroReady();
+  }, [modelReady, lite]);
 
   useEffect(() => {
+    if (capturing) return;
     if (reduced) return;
     const fine = window.matchMedia("(pointer: fine)").matches;
     if (!fine) return;
@@ -67,13 +85,16 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
 
     window.addEventListener("pointermove", onMove, { passive: true });
     return () => window.removeEventListener("pointermove", onMove);
-  }, [reduced, inView]);
+  }, [reduced, inView, capturing]);
 
   // Active theme GLB only. Alternate theme waits until the mountain is on screen.
   useEffect(() => {
     if (reduced) return;
     const active = theme === "light" ? MODEL_URL_LIGHT : MODEL_URL;
     void useGLTF.preload(active, DRACO_PATH);
+    if (theme === "light") {
+      void useTexture.preload([SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL]);
+    }
   }, [reduced, theme]);
 
   useEffect(() => {
@@ -86,10 +107,10 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
   }, [reduced, theme, modelReady]);
 
   useEffect(() => {
-    if (!modelReady || !inView || theme === "light") return;
+    if (capturing || lite || !modelReady || !inView || theme === "light") return;
     const t = window.setTimeout(() => setVoyagerOk(true), 2800);
     return () => window.clearTimeout(t);
-  }, [modelReady, inView, theme]);
+  }, [lite, modelReady, inView, theme, capturing]);
 
   useEffect(() => {
     if (reduced) return;
@@ -104,25 +125,34 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
     return () => io.disconnect();
   }, [reduced]);
 
-  if (reduced) return null;
+  if (reduced && !capturing) return null;
 
   const [cx, cy, cz] = path.startPos;
   const isLight = theme === "light";
 
   return (
-    <div
+    <motion.div
       ref={shellRef}
       className={`${className ?? ""} hero-terrain-fade${modelReady ? " is-ready" : ""}`}
+      initial={false}
+      animate={{ opacity: modelReady ? 1 : 0 }}
+      transition={
+        capturing
+          ? { duration: 0 }
+          : { type: "spring", stiffness: 70, damping: 24, mass: 0.9 }
+      }
       aria-hidden
     >
       {/* One Canvas for both themes — remounting was the dirty/late mountain flash. */}
       <Canvas
         className="hero-terrain-canvas"
-        dpr={isLight ? [1, 1.5] : 1}
-        frameloop={inView ? "always" : "never"}
+        shadows
+        dpr={capturing ? 1 : [1, 2]}
+        frameloop={capturing || inView ? "always" : "never"}
         gl={{
           antialias: true,
           alpha: false,
+          preserveDrawingBuffer: capturing,
           powerPreference: "high-performance",
           stencil: false,
           depth: true,
@@ -132,15 +162,25 @@ export function HeroTerrainCanvas({ className }: HeroTerrainCanvasProps) {
         onCreated={({ gl, events }) => {
           events.disconnect?.();
           gl.toneMapping = ACESFilmicToneMapping;
-          gl.toneMappingExposure = isLight ? 1.0 : 1;
+          gl.toneMappingExposure = 1;
           gl.outputColorSpace = SRGBColorSpace;
+          gl.shadowMap.enabled = true;
+          gl.shadowMap.type = PCFSoftShadowMap;
           if (isLight) gl.setClearColor(0xffffff, 1);
           else gl.setClearColor(0x050504, 1);
         }}
       >
         <ThemeGlSync theme={theme} />
-        <Scene theme={theme} scrollRef={scrollRef} path={path} onModelReady={handleModelReady} voyager={voyagerOk} />
+        <Scene
+          theme={theme}
+          scrollRef={scrollRef}
+          path={path}
+          onModelReady={handleModelReady}
+          voyager={voyagerOk && !capturing}
+          lite={lite}
+        />
+        {capture ? <CaptureDriver job={capture} modelReady={modelReady} /> : null}
       </Canvas>
-    </div>
+    </motion.div>
   );
 }

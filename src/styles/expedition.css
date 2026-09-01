@@ -1,0 +1,294 @@
+.expedition-fold {
+  position: relative;
+  background: transparent;
+  padding-block: 0;
+}
+
+.expedition-fold.accent-scroll-section--lite {
+  min-height: auto;
+}
+
+@media (min-width: 768px) {
+  .expedition-fold.scroll-scene--fold {
+    min-height: 680vh;
+  }
+}
+
+.expedition-fold__pin {
+  position: sticky;
+  top: 0;
+  isolation: isolate;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.expedition-fold--static .expedition-fold__pin {
+  position: relative;
+  overflow: visible;
+}
+
+.expedition-fold--static .expedition-sky {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+}
+
+.expedition-fold--static .expedition-fold__stage {
+  margin-top: -100dvh;
+  min-height: auto;
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
+}
+
+.expedition-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.expedition-sky__canvas,
+.expedition-sky .hero-terrain-root,
+.expedition-sky .hero-terrain-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.expedition-sky__poster {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 48%;
+}
+
+.expedition-sky.is-dark .expedition-sky__poster {
+  filter: contrast(1.08) saturate(0.82) brightness(0.7);
+}
+
+.expedition-sky.is-light .expedition-sky__poster {
+  filter: contrast(1.04) saturate(0.78) brightness(1.06);
+}
+
+.expedition-sky__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.expedition-sky.is-dark .expedition-sky__veil {
+  background:
+    linear-gradient(90deg, rgba(5, 5, 4, 0.58) 0%, rgba(5, 5, 4, 0.18) 42%, rgba(5, 5, 4, 0.08) 100%),
+    linear-gradient(180deg, rgba(5, 5, 4, 0.28) 0%, transparent 24%, transparent 62%, rgba(5, 5, 4, 0.4) 100%);
+}
+
+.expedition-sky.is-light .expedition-sky__veil {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.32) 48%, rgba(255, 255, 255, 0.12) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, transparent 28%, rgba(255, 255, 255, 0.28) 100%);
+}
+
+.expedition-sky__settle {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--theme-bg);
+  pointer-events: none;
+}
+
+.expedition-fold__stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  padding-top: calc(var(--site-header-height) + env(safe-area-inset-top, 0px));
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+}
+
+.expedition-fold__copy {
+  position: relative;
+  z-index: 2;
+  max-width: 38rem;
+  padding-top: clamp(0.5rem, 2vh, 1.5rem);
+}
+
+.expedition-fold__float {
+  z-index: 4;
+}
+
+.expedition-fold .accent-scroll-hero-word {
+  filter: drop-shadow(0 8px 28px color-mix(in srgb, var(--theme-bg) 55%, transparent));
+}
+
+.expedition-crew-measure {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.expedition-crew-inline--ghost {
+  visibility: hidden;
+}
+
+.expedition-fold__dock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding-top: 1.5rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  max-height: calc(100dvh - var(--site-header-height) - 4.5rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.expedition-fold--flight .expedition-fold__dock {
+  padding-top: 0.75rem;
+}
+
+.expedition-beat {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  max-width: 36rem;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.expedition-beat__title {
+  margin: 0;
+  font-size: clamp(1.65rem, 3.4vw, 2.55rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.expedition-fold--flight .expedition-beat--dock {
+  max-width: none;
+}
+
+.expedition-beat--static {
+  position: relative;
+  bottom: auto;
+  max-width: 38rem;
+  padding-bottom: 0;
+}
+
+.expedition-notes {
+  display: grid;
+  gap: 1rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .expedition-notes {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.expedition-notes__q {
+  margin: 0;
+  font-size: var(--text-body);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.expedition-fold--flight .expedition-crew-grid {
+  margin-top: 1rem;
+}
+
+.expedition-fold--flight .expedition-crew-card {
+  padding-top: 0.85rem;
+}
+
+.expedition-crew-heading {
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 4.25rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.expedition-crew-dock-word {
+  color: transparent;
+  display: inline-block;
+}
+
+.expedition-crew-grid {
+  display: grid;
+  gap: 0;
+  margin-top: 1.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--theme-border) 80%, transparent);
+}
+
+@media (min-width: 768px) {
+  .expedition-crew-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.expedition-crew-card {
+  padding: 1.15rem 0 0.25rem;
+  border-top: 3px solid color-mix(in srgb, var(--theme-border) 88%, transparent);
+}
+
+@media (min-width: 768px) {
+  .expedition-crew-card {
+    padding: 1.25rem 1.25rem 0.5rem 0;
+    border-top: 3px solid color-mix(in srgb, var(--theme-border) 88%, transparent);
+  }
+
+  .expedition-crew-card + .expedition-crew-card {
+    padding-left: 1.25rem;
+    border-left: 1px solid color-mix(in srgb, var(--theme-border) 70%, transparent);
+  }
+}
+
+.expedition-crew-card__role {
+  font-size: var(--text-kicker);
+  font-weight: 600;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--theme-accent);
+}
+
+.expedition-facts {
+  display: grid;
+  gap: 1.25rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .expedition-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.expedition-paper {
+  position: relative;
+  z-index: 1;
+  background-color: var(--theme-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expedition-sky__canvas {
+    display: none;
+  }
+}

@@ -1404,6 +1404,10 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-accent) 8%, transparent);
 }
 
+.contact-field-wrap--invalid .contact-field {
+  border-color: color-mix(in srgb, var(--theme-accent-secondary) 45%, var(--theme-border));
+}
+
 .contact-field-wrap--invalid:focus-within:not(.contact-field-wrap--beam) .contact-field {
   border-color: color-mix(in srgb, var(--theme-accent-secondary) 38%, var(--theme-border));
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-accent-secondary) 10%, transparent);

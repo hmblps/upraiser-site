@@ -111,11 +111,18 @@ function HeroPinnedScene() {
 
   return (
     <section className="hero-stage hero-stage--terrain hero-stage--fly relative">
-      <div className="hero-fly-sticky relative flex flex-col overflow-hidden">
-        <HeroAtmosphere />
+      {/* 1. Terrain Layer (z-index: 0) - Goes under GlobalSnowfall */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="hero-fly-sticky relative flex flex-col overflow-hidden">
+          <HeroAtmosphere />
+        </div>
+      </div>
 
-        {/* Hero copy — uses fly-rail padding (wide left) */}
-        <div className="hero-content hero-content--fly-rail page-container relative z-10 w-full flex-1">
+      {/* 2. UI Layer (z-index: 50) - Goes over GlobalSnowfall */}
+      <div className="absolute inset-0 z-[50] pointer-events-none">
+        <div className="hero-fly-sticky relative flex flex-col overflow-hidden">
+          {/* Hero copy — uses fly-rail padding (wide left) */}
+          <div className="hero-content hero-content--fly-rail page-container relative z-10 w-full flex-1">
           <div className="hero-layout grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10 xl:gap-14">
             <motion.div
               className="hero-copy"
@@ -231,7 +238,10 @@ function HeroPinnedScene() {
         </div>
 
         {/* Flush to sticky bottom — same frame as the mountain, not a post-hero gap */}
-        <LenovoTrustStrip />
+        <div className="pointer-events-auto">
+          <LenovoTrustStrip />
+        </div>
+      </div>
       </div>
     </section>
   );

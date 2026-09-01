@@ -8,7 +8,7 @@ const VIEWPORT_PREFIXES = [
 ] as const;
 
 export function isViewportPath(pathname: string) {
-  if (pathname === "/") return false;
+  if (pathname === "/" || pathname === "/contact/sent") return false;
   return VIEWPORT_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
   );

@@ -23,9 +23,17 @@ const PrivacyPage = lazy(() =>
 );
 const TermsPage = lazy(() => import("./pages/LegalPages").then((m) => ({ default: m.TermsPage })));
 const ContactPage = lazy(() => import("./pages/ContactPage").then((m) => ({ default: m.ContactPage })));
+const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((m) => ({ default: m.ThankYouPage })));
+const HeroCapturePage = lazy(() =>
+  import("./pages/HeroCapturePage").then((m) => ({ default: m.HeroCapturePage })),
+);
 
 function RouteFallback() {
-  return <div className="section-lazy-slot min-h-[40dvh]" aria-hidden />;
+  return (
+    <div className="section-lazy-slot flex min-h-[40dvh] items-center justify-center" role="status" aria-live="polite">
+      <span className="sr-only">Loading</span>
+    </div>
+  );
 }
 
 /** Legacy depth pages → home anchors (Routes + Peaks live on `/`). */
@@ -37,6 +45,7 @@ export default function App() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <Routes>
+        {import.meta.env.DEV ? <Route path="dev/hero-capture" element={<HeroCapturePage />} /> : null}
         <Route element={<SiteLayout />}>
           {/* Home now includes Cases (Peaks) and Routes natively */}
           <Route path="/" element={<HomePage />}>
@@ -45,6 +54,7 @@ export default function App() {
 
           <Route path="craft" element={<CraftPage />} />
           <Route path="expedition" element={<ExpeditionPage />} />
+          <Route path="contact/sent" element={<ThankYouPage />} />
           <Route path="contact" element={<ContactPage />} />
 
           {/* Retired IA → home sections or redirects */}

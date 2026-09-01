@@ -22,6 +22,7 @@ Integrations Logos/
 .tmp-*
 .tmp-*/
 videos/
+captures/
 
 # Hero local backup (optional; use assets/hero/ as source of truth)
 public/hero/_original/

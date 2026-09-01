@@ -10,38 +10,38 @@
   display: block;
 }
 
-main > section.section-band:nth-of-type(odd) {
+.site-main > div:nth-of-type(odd) .section-band {
   background-color: var(--theme-bg);
 }
 
-main > section.section-band:nth-of-type(even) {
+.site-main > div:nth-of-type(even) .section-band {
   background-color: var(--theme-bg-elevated);
 }
 
-main > section.section-band {
+.section-band {
   padding-block: var(--section-y);
 }
 
 /* Intentional density — breaks mechanical odd/even sameness */
-main > section.section-band--quiet {
+.section-band--quiet {
   padding-block: var(--section-y);
 }
 
-main > section.section-band--dense {
+.section-band--dense {
   padding-block: var(--section-y-dense);
 }
 
-main > section.section-band--statement {
+.section-band--statement {
   padding-block: var(--section-y-statement);
   background-color: var(--theme-bg);
 }
 
-main > section.section-band--strip {
+.section-band--strip {
   padding-block: calc(var(--section-y-dense) * 0.85);
 }
 
 @media (min-width: 1024px) {
-  main > section#contact.section-band {
+  #contact.section-band {
     padding-block: calc(var(--section-y) + 1rem);
   }
 }

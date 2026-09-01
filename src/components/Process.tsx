@@ -90,7 +90,7 @@ export function Process() {
     <section
       ref={sectionRef}
       id="process"
-      className="section-band section-band--dense relative overflow-hidden"
+      className="section-band relative overflow-hidden"
     >
       <div className="section-inner relative z-[1]">
         <SectionHeader animated={false} label={sectionsByMode.process.label} title={section.title} />

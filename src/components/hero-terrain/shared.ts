@@ -52,7 +52,20 @@ export const HERO_ASCENT_DEFAULTS = {
   bankMax: -0.08,
 } as const;
 
-export type AscentPath = typeof HERO_ASCENT_DEFAULTS;
+
+export type AscentPath = {
+  startPos: [number, number, number];
+  midPos: [number, number, number];
+  endPos: [number, number, number];
+  startLook: [number, number, number];
+  midLook: [number, number, number];
+  endLook: [number, number, number];
+  startFov: number;
+  midFov: number;
+  endFov: number;
+  bankMax: number;
+};
+
 export type ThemeMode = "light" | "dark";
 export type ScrollState = { pointerX: number; pointerY: number };
 
@@ -91,4 +104,45 @@ export function readProgress(heroFly: { progressRef: MutableRefObject<number> } 
 
 export function idle01(t: number, phase = 0) {
   return 0.5 + 0.5 * Math.sin(t * IDLE_BREATHE + phase);
+}
+
+export const EXPEDITION_FOG = {
+  light: {
+    color: "#d0ddec",
+    nearStart: 130, farStart: 420,
+    nearEnd: 160, farEnd: 520,
+    nearFinale: 90, farFinale: 320,
+  },
+  dark: {
+    color: "#050504",
+    nearStart: 88, farStart: 240,
+    nearEnd: 140, farEnd: 410,
+    nearFinale: 62, farFinale: 235,
+  }
+};
+
+export const EXPEDITION_CLIMB = {
+  poses: [
+    { pos: [-4, 12, 188], look: [18, 28, -28], fov: 46 },
+    { pos: [-2, 38, 140], look: [14, 10, -40], fov: 40 },
+    { pos: [-10, 72, 122], look: [12, 16, -68], fov: 34 }
+  ],
+  bankMax: -0.08,
+};
+
+export const EXPEDITION_ASCENT = {
+  startPos: [-4, 16, 230] as [number, number, number],
+  midPos: [-2, 38, 140] as [number, number, number],
+  endPos: [-10, 72, 122] as [number, number, number],
+  startLook: [18, 28, -28] as [number, number, number],
+  midLook: [14, 10, -40] as [number, number, number],
+  endLook: [12, 16, -68] as [number, number, number],
+  startFov: 60 as number,
+  midFov: 40 as number,
+  endFov: 34 as number,
+  bankMax: 0.1 as number,
+};
+
+export function climbProgress(t: number) {
+  return easeInOutCubic(t);
 }

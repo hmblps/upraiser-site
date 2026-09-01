@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { contactPage } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
@@ -19,11 +19,11 @@ type FormState = {
   attachment: File | null;
 };
 
-type FormErrors = Partial<FormState> & {
+type FormErrors = Partial<Record<keyof FormState, string>> & {
   privacyAccepted?: string;
 };
 
-type SubmitStatus = "idle" | "loading" | "success" | "error";
+type SubmitStatus = "idle" | "loading" | "error";
 
 const initialForm: FormState = {
   name: "",
@@ -40,6 +40,7 @@ const initialForm: FormState = {
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
 
 export function Contact() {
+  const navigate = useNavigate();
   const [form, setForm] = useState<FormState>(initialForm);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [status, setStatus] = useState<SubmitStatus>("idle");
@@ -99,9 +100,9 @@ export function Contact() {
       const data = (await response.json()) as { success?: boolean; message?: string };
 
       if (response.ok && data.success) {
-        setStatus("success");
         setForm(initialForm);
         setPrivacyAccepted(false);
+        navigate("/contact/sent", { replace: true });
         return;
       }
 
@@ -194,36 +195,6 @@ export function Contact() {
                 </div>
 
                 <div className="contact-briefing-form flex min-h-0 flex-col">
-                  {status === "success" ? (
-                    <div
-                      className="flex h-full min-h-0 flex-col items-center justify-center text-center"
-                      role="status"
-                      aria-live="polite"
-                    >
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
-                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <h3 className="section-heading section-heading--sm mt-4">Brief Transmitted</h3>
-                      <p className="copy mt-2 max-w-sm">
-                        Our systems engineers have received Your parameters. We will review Your App ID logs and respond
-                        via secure email within 24 hours.
-                      </p>
-                      <button
-                        type="button"
-                        className="link-caps mt-5 text-accent hover:underline"
-                        onClick={() => {
-                          setStatus("idle");
-                          setForm(initialForm);
-                          setPrivacyAccepted(false);
-                          setSubmitError(null);
-                        }}
-                      >
-                        Send another brief
-                      </button>
-                    </div>
-                  ) : (
                     <form
                       onSubmit={handleSubmit}
                       className="flex flex-1 flex-col gap-2"
@@ -304,7 +275,8 @@ export function Contact() {
                         <textarea maxLength={250} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
                       </ContactFormField>
 
-                      <div className="mt-0.5 flex items-center gap-2">
+                      <div className="mt-0.5 flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
                         <input
                           type="file"
                           id="attachment"
@@ -314,10 +286,15 @@ export function Contact() {
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file && file.size > 5 * 1024 * 1024) {
-                              alert("File size must be less than 5MB");
+                              setErrors((prev) => ({ ...prev, attachment: "File must be under 5 MB" }));
                               e.target.value = "";
                               return;
                             }
+                            setErrors((prev) => {
+                              const next = { ...prev };
+                              delete next.attachment;
+                              return next;
+                            });
                             setForm({ ...form, attachment: file || null });
                           }}
                         />
@@ -328,6 +305,12 @@ export function Contact() {
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                           {form.attachment ? form.attachment.name : "Attach brief (.pdf, .jpg, .png) | max 5MB"}
                         </label>
+                        </div>
+                        {errors.attachment ? (
+                          <p className="text-caption text-magenta-light" role="alert">
+                            {errors.attachment}
+                          </p>
+                        ) : null}
                       </div>
 
                       <label className="text-caption mt-1 flex shrink-0 items-start gap-2 text-muted">
@@ -360,7 +343,6 @@ export function Contact() {
                         </motion.button>
                       </Magnetic>
                     </form>
-                  )}
                 </div>
               </div>
             </div>

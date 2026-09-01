@@ -9,6 +9,7 @@ import { ViewportChrome } from "../components/ViewportChrome";
 import { useApplePreview } from "../hooks/useApplePreview";
 import { useViewportRoute } from "../hooks/useViewportRoute";
 import { CaseModalProvider } from "../context/CaseModalContext";
+import { GlobalSnowfall } from "../components/GlobalSnowfall";
 import { useModalBackground } from "../lib/modalBackgroundState";
 import {
   isHeroReady,
@@ -166,6 +167,7 @@ export function SiteLayout() {
           <Outlet />
           {viewportRoute ? <ViewportChrome /> : null}
         </div>
+        <GlobalSnowfall />
         {!viewportRoute ? (
           <LazySection minHeight="20dvh">
             <Footer />

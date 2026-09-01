@@ -3,7 +3,7 @@
 }
 
 #hero {
-  isolation: isolate;
+  /* isolation removed to allow two sticky containers to layer correctly */
 }
 
 .cases-carousel-picker {

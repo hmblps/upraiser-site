@@ -8,6 +8,7 @@
 
 .prog-scroll-sticky {
   position: sticky;
+  z-index: 50;
   /* Stick to viewport top so aurora can wash under the fixed header */
   top: 0;
   height: 100dvh;

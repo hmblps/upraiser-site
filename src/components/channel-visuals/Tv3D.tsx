@@ -2,6 +2,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -12,10 +13,14 @@ import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
   Box3,
+  LinearFilter,
   SRGBColorSpace,
+  TextureLoader,
   Vector3,
+  VideoTexture,
   type Group,
   type Object3D,
+  type Texture,
 } from "three";
 import type { SiteMode } from "../../data/liveContent";
 import { DRACO_PATH } from "../../lib/heroModel";
@@ -23,9 +28,17 @@ import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 const MODEL_PATH = "/channels/oem/tv.glb";
+const TV_SCREEN_VIDEO = "/channels/oem/screens/ctv-spot.mp4";
+const TV_SCREEN_STILL = "/channels/oem/screens/ctv-spot.png";
 
 const REST_Y = 0.05;
 const REST_X = 0.01;
+
+/** Screen plane in the already-scaled face-forward space (TV height ≈ 1.91). */
+const SCREEN_W = 2.72;
+const SCREEN_H = 1.53;
+const SCREEN_Z = 0.11;
+const SCREEN_Y = 0.05;
 
 // ─── Compute model centre + scale BEFORE the scene is parented ────────────────
 // We call this once after useGLTF resolves. At that point the scene is a
@@ -36,10 +49,10 @@ const REST_X = 0.01;
 // Target: TV height fills ~57 % of the visible area on desktop.
 // On narrow screens (mobile/portrait), we must scale down so the 16:9 TV width fits.
 function getTargetHeight() {
-  if (typeof window === "undefined") return 1.91;
+  if (typeof window === "undefined") return 1.7;
   const aspect = window.innerWidth / window.innerHeight;
   // If aspect is less than ~1.2 (narrow window), scale down the height to fit width
-  return Math.min(1.91, 1.7 * aspect);
+  return Math.min(1.7, 1.5 * aspect);
 }
 
 function computeTransform(scene: Object3D): {
@@ -53,7 +66,7 @@ function computeTransform(scene: Object3D): {
 
   if (box.isEmpty()) {
     // Fallback from accessor analysis (FBX +180°X + Sketchfab −90°X net = +90°X)
-    return { scale: 0.022 * (getTargetHeight() / 1.91), cx: 99.25, cy: -69.52, cz: -2.13 };
+    return { scale: 0.022 * (getTargetHeight() / 1.7), cx: 99.25, cy: -69.52, cz: -2.13 };
   }
 
   const size = new Vector3();
@@ -67,8 +80,13 @@ function computeTransform(scene: Object3D): {
 
 type Tv3DProps = {
   mode: SiteMode;
+  formatId?: string;
   className?: string;
 };
+
+function hasCtvScreen(formatId?: string) {
+  return formatId === "ctv-spot" || formatId === "ctv-video";
+}
 
 // ─── Inner scene (runs inside <Canvas>) ──────────────────────────────────────
 
@@ -90,20 +108,41 @@ const HIDDEN_NODE_NAMES = new Set([
 function TvMesh({
   rotX,
   rotY,
+  formatId,
+  inView,
   onReady,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
+  formatId?: string;
+  inView: boolean;
   onReady?: () => void;
 }) {
   const outerRef = useRef<Group>(null);
   const { scene } = useGLTF(MODEL_PATH, DRACO_PATH);
+  const showScreen = hasCtvScreen(formatId);
+  const modeRef = useRef<"still" | "video">("still");
+  const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
-  // Compute transform once, synchronously after the GLTF scene is available.
-  // Using useState with an initialiser that runs once avoids any timing issues.
   const [xf] = useState(() => computeTransform(scene));
 
-  // Hide the stand / leg node and call onReady once after mount.
+  const { video, videoTex } = useMemo(() => {
+    const v = document.createElement("video");
+    v.muted = true;
+    v.defaultMuted = true;
+    v.loop = true;
+    v.playsInline = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("muted", "true");
+    v.preload = "auto";
+    const t = new VideoTexture(v);
+    t.colorSpace = SRGBColorSpace;
+    t.minFilter = LinearFilter;
+    t.magFilter = LinearFilter;
+    t.generateMipmaps = false;
+    return { video: v, videoTex: t };
+  }, []);
+
   useEffect(() => {
     scene.traverse((obj) => {
       if (HIDDEN_NODE_NAMES.has(obj.name)) {
@@ -113,25 +152,83 @@ function TvMesh({
     onReady?.();
   }, [scene, onReady]);
 
+  useEffect(() => {
+    if (!showScreen) {
+      setScreenMap(null);
+      video.pause();
+      return;
+    }
+    let cancelled = false;
+    const loader = new TextureLoader();
+    loader.load(TV_SCREEN_STILL, (tex) => {
+      if (cancelled) {
+        tex.dispose();
+        return;
+      }
+      tex.colorSpace = SRGBColorSpace;
+      tex.minFilter = LinearFilter;
+      tex.magFilter = LinearFilter;
+      tex.needsUpdate = true;
+      modeRef.current = "still";
+      setScreenMap(tex);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [showScreen, video]);
+
+  useEffect(() => {
+    if (!showScreen || !inView) {
+      video.pause();
+      return;
+    }
+
+    let promoted = false;
+    const promote = () => {
+      if (promoted || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+      promoted = true;
+      modeRef.current = "video";
+      setScreenMap(videoTex);
+      void video.play().catch(() => {
+        modeRef.current = "still";
+      });
+    };
+
+    video.src = TV_SCREEN_VIDEO;
+    video.addEventListener("loadeddata", promote);
+    video.addEventListener("canplay", promote);
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
+    else video.load();
+
+    return () => {
+      video.removeEventListener("loadeddata", promote);
+      video.removeEventListener("canplay", promote);
+      video.pause();
+    };
+  }, [showScreen, inView, video, videoTex]);
+
   useFrame((state) => {
     if (!outerRef.current) return;
     const t = state.clock.elapsedTime;
     outerRef.current.rotation.x = rotX.get() + Math.sin(t * 0.8) * 0.02;
     outerRef.current.rotation.y = rotY.get() + Math.cos(t * 0.6) * 0.03;
     outerRef.current.position.y = Math.sin(t * 1.2) * 0.03;
+    if (modeRef.current === "video") videoTex.needsUpdate = true;
   });
 
   return (
-    // Outer group: carries floating animation + drag rotation.
-    // rotation[1] = π flips TV to face-forward (screen faces +Z / toward camera).
     <group ref={outerRef} rotation={[0.06, 0, 0]}>
-      {/* Scale + face-forward flip */}
       <group scale={xf.scale} rotation={[0, Math.PI, 0]}>
-        {/* Centering: negate the computed world-space centre */}
         <group position={[-xf.cx, -xf.cy, -xf.cz]}>
           <primitive object={scene} dispose={null} />
         </group>
       </group>
+      {showScreen && screenMap ? (
+        <mesh position={[0, SCREEN_Y, SCREEN_Z]} renderOrder={2}>
+          <planeGeometry args={[SCREEN_W, SCREEN_H]} />
+          <meshBasicMaterial map={screenMap} toneMapped={false} />
+        </mesh>
+      ) : null}
     </group>
   );
 }
@@ -140,16 +237,19 @@ function TvScene({
   rotX,
   rotY,
   isDark,
+  formatId,
+  inView,
   onMeshReady,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
   isDark: boolean;
+  formatId?: string;
+  inView: boolean;
   onMeshReady?: () => void;
 }) {
   return (
     <>
-      {/* Boost ambient + direct light — the TV materials are very dark (albedo ~4 %) */}
       <ambientLight intensity={isDark ? 1.8 : 2.2} />
       <directionalLight position={[3, 4, 4]} intensity={isDark ? 2.5 : 3.0} />
       <directionalLight position={[-3, 2, -1]} intensity={0.8} color={isDark ? "#ffb070" : "#cce0ff"} />
@@ -157,7 +257,7 @@ function TvScene({
 
       <Suspense fallback={null}>
         <Environment preset="city" environmentIntensity={isDark ? 1.0 : 1.3} frames={1} />
-        <TvMesh rotX={rotX} rotY={rotY} onReady={onMeshReady} />
+        <TvMesh rotX={rotX} rotY={rotY} formatId={formatId} inView={inView} onReady={onMeshReady} />
       </Suspense>
     </>
   );
@@ -165,7 +265,7 @@ function TvScene({
 
 // ─── Public component ─────────────────────────────────────────────────────────
 
-export function Tv3D({ mode, className }: Tv3DProps) {
+export function Tv3D({ mode, formatId, className }: Tv3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -262,6 +362,8 @@ export function Tv3D({ mode, className }: Tv3DProps) {
         >
           <TvScene
             isDark={isDark}
+            formatId={formatId}
+            inView={inView}
             rotX={springX}
             rotY={springY}
             onMeshReady={markMeshReady}

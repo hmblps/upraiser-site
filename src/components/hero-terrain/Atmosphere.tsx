@@ -3,17 +3,21 @@ import { useFrame, useThree } from "@react-three/fiber";
 import type { DirectionalLight, Fog, Object3D, PointLight } from "three";
 import { Color, MathUtils } from "three";
 import { useHeroFlyOptional } from "../../context/HeroFlyContext";
-import { FOG, TRACK_FOLLOW, easeOutCubic, readProgress, type ThemeMode } from "./shared";
+import { FOG, EXPEDITION_FOG, TRACK_FOLLOW, easeOutCubic, readProgress, type ThemeMode } from "./shared";
+import { heroCapture } from "../../lib/heroCapture";
 
-export function Atmosphere({ theme }: { theme: ThemeMode }) {
+export function Atmosphere({ theme, fogProfile = "home" }: { theme: ThemeMode; fogProfile?: "home" | "expedition" }) {
   const isLight = theme === "light";
-  const fog = isLight ? FOG.light : FOG.dark;
+  const table = fogProfile === "expedition" ? EXPEDITION_FOG : FOG;
+  const fog = isLight ? table.light : table.dark;
   const heroFly = useHeroFlyOptional();
   const progressSmooth = useRef(0);
   const { scene } = useThree();
 
   useFrame((_, delta) => {
-    progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
+    progressSmooth.current = heroCapture.snap
+      ? readProgress(heroFly)
+      : MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
     const p = progressSmooth.current;
     const open = easeOutCubic(p);
     const finale = MathUtils.smoothstep(p, 0.8, 1);
@@ -26,24 +30,37 @@ export function Atmosphere({ theme }: { theme: ThemeMode }) {
   return (
     <>
       <fog attach="fog" args={[fog.color, fog.nearStart, fog.farStart]} />
-      {/* Light: keep fill low so photo maps + key/rim can sculpt volume (was washing to clay). */}
-      <ambientLight intensity={isLight ? 0.22 : 0.26} />
+      <ambientLight color={isLight ? "#eef4ff" : "#ffffff"} intensity={isLight ? 0.1 : 0.26} />
       <hemisphereLight
         args={[
-          isLight ? "#f4f7fb" : "#241d11",
-          isLight ? "#c8d0dc" : "#0a0805",
-          isLight ? 0.26 : 0.3,
+          isLight ? "#eef4ff" : "#241d11",
+          isLight ? "#6e7a8c" : "#0a0805",
+          isLight ? 0.14 : 0.3,
         ]}
       />
-      {isLight ? (
-        <>
-          {/* Raking Light — strong side angle to highlight normal map details */}
-          <directionalLight color="#f2f6ff" intensity={1.5} position={[-80, 20, 60]} />
-          {/* Fill light to soften harsh shadows */}
-          <directionalLight color="#dce8ff" intensity={0.4} position={[48, 28, 42]} />
-        </>
-      ) : null}
+      {isLight ? <LightRimBounce /> : null}
     </>
+  );
+}
+
+/** Ice-blue rim from behind-left — grazes ridges, does not fill the key side. */
+function LightRimBounce() {
+  const lightRef = useRef<DirectionalLight>(null);
+  const targetRef = useRef<Object3D>(null);
+
+  useLayoutEffect(() => {
+    const light = lightRef.current;
+    const target = targetRef.current;
+    if (!light || !target) return;
+    light.target = target;
+    light.target.updateMatrixWorld();
+  }, []);
+
+  return (
+    <group>
+      <object3D ref={targetRef} position={[-4, 18, -8]} />
+      <directionalLight ref={lightRef} color="#a5bce6" intensity={0.65} position={[-80, 20, -60]} />
+    </group>
   );
 }
 
@@ -59,27 +76,27 @@ export function HorizonGlow({ theme }: { theme: ThemeMode }) {
     progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
     const elev = isLight ? easeOutCubic(progressSmooth.current) : 0.5;
     if (rimRef.current) {
-      rimRef.current.intensity = MathUtils.lerp(isLight ? 0.55 : 0.08, isLight ? 0.85 : 0.14, elev);
+      rimRef.current.intensity = MathUtils.lerp(isLight ? 0.1 : 0.08, isLight ? 0.18 : 0.14, elev);
     }
     if (glowRef.current) {
-      glowRef.current.intensity = MathUtils.lerp(0.35, 0.55, elev);
+      glowRef.current.intensity = MathUtils.lerp(0.12, 0.2, elev);
     }
   });
 
   return (
     <group>
       {/* Soft backlight — enough rim, not a wash on photo albedo */}
-      <directionalLight ref={rimRef} color={accent} intensity={isLight ? 0.6 : 0.35} position={[8, 36, -90]} />
+      <directionalLight ref={rimRef} color={accent} intensity={isLight ? 0.22 : 0.35} position={[8, 36, -90]} />
       {isLight ? (
-        <pointLight ref={glowRef} color="#ffe2b8" intensity={0.4} distance={140} decay={2} position={[0, 22, -48]} />
+        <pointLight ref={glowRef} color="#ffe2b8" intensity={0.16} distance={140} decay={2} position={[0, 22, -48]} />
       ) : null}
     </group>
   );
 }
 
 const SUNRISE = {
-  keyDawn: new Color("#ffe0b8"),
-  keyNoon: new Color("#eef4ff"),
+  keyDawn: new Color("#ffd4a0"),
+  keyNoon: new Color("#ffe4bc"),
 } as const;
 
 export function SunRig({ theme }: { theme: ThemeMode }) {
@@ -101,14 +118,15 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
     if (!isLight) return;
     progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
     const rise = easeOutCubic(progressSmooth.current);
-    const x = MathUtils.lerp(42, 58, rise);
-    const y = MathUtils.lerp(28, 64, rise);
-    const z = -52;
+    const x = MathUtils.lerp(80, 88, rise);
+    const y = MathUtils.lerp(40, 48, rise);
+    const z = MathUtils.lerp(-40, -52, rise);
 
     if (keyLightRef.current) {
       keyLightRef.current.position.set(x, y, z);
-      keyLightRef.current.intensity = MathUtils.lerp(1.35, 1.75, rise);
+      keyLightRef.current.intensity = MathUtils.lerp(1.85, 2.15, rise);
       keyLightRef.current.color.lerpColors(SUNRISE.keyDawn, SUNRISE.keyNoon, rise);
+      keyLightRef.current.shadow.camera.updateMatrixWorld();
     }
     if (targetRef.current) {
       targetRef.current.position.set(0, 14, 0);
@@ -128,7 +146,22 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
   return (
     <group>
       <object3D ref={targetRef} position={[0, 14, 0]} />
-      <directionalLight ref={keyLightRef} color="#eef4ff" intensity={1.4} position={[42, 28, -52]} />
+      <directionalLight
+        ref={keyLightRef}
+        color="#ffd4a0"
+        intensity={1.9}
+        position={[80, 40, -40]}
+        castShadow
+        shadow-mapSize={[4096, 4096]}
+        shadow-bias={-0.0004}
+        shadow-normalBias={0.18}
+        shadow-camera-near={1}
+        shadow-camera-far={520}
+        shadow-camera-left={-220}
+        shadow-camera-right={220}
+        shadow-camera-top={180}
+        shadow-camera-bottom={-180}
+      />
     </group>
   );
 }

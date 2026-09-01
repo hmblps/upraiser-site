@@ -347,7 +347,7 @@ function PhoneMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={SHARED_ORIENT} scale={8.5} position={[0, -0.6, 0]}>
+        <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
         </group>
       </Center>
@@ -459,7 +459,7 @@ function AdCloseButton({ onClick }: { onClick?: () => void }) {
  * CSS chassis for formats that need real HTML (rich iframe, video interstitial).
  * Drop-shadow lives on the untransformed wrapper so perspective cannot square the shadow.
  */
-function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" | "video" }) {
+function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" }) {
   const isDark = mode !== "growth";
   const wrapRef = useRef<HTMLDivElement>(null);
   const [adScale, setAdScale] = useState(0.64);
@@ -511,10 +511,11 @@ function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" |
       {/* Shadow on this untransformed box so perspective cannot square it */}
       <div
         style={{
-          width: "clamp(180px, min(38vw, 17rem), 240px)",
+          height: "clamp(340px, 56dvh, 520px)",
           aspectRatio: "430 / 879",
           flexShrink: 0,
-          borderRadius: "clamp(1.55rem, 2.6vw, 2.2rem)",
+          borderRadius: "clamp(1.55rem, 2.6vh, 2.2rem)",
+          transform: "translateY(2dvh)"
         }}
       >
       <div
@@ -779,7 +780,7 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
       </div>
 
       <AnimatePresence>
-        {isCssFormat && <CssFormatPhone mode={mode} formatId={formatId as "rich" | "video"} />}
+        {isCssFormat && <CssFormatPhone mode={mode} formatId={formatId as "rich"} />}
       </AnimatePresence>
     </div>
   );

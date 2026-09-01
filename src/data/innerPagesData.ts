@@ -273,6 +273,16 @@ export const COMPANY_CONTENT = {
       title: "We mapped the mobile advertising terrain.",
       text: "Basecamp London, since 2017. Systems, software, finance, and creative operators work at one desk. You speak directly to the crew who wires Your pipes and trades Your budgets.",
     },
+    /** Inverted fold: inline CREW lifts out of the column and docks as Operators. */
+    crewFold: {
+      label: "The Expedition",
+      lead: "Basecamp London, since 2017.",
+      before: "Systems, software, finance, and creative operators work at one desk. You speak directly to the ",
+      word: "CREW",
+      after: " who wires Your pipes and trades Your budgets.",
+      operatorsLabel: "The Operators",
+      operatorsLead: "No account-manager layer. You work with the operators who built the gear and trade the budgets.",
+    },
     /** Visual anchor — mountain ascent with camp stops (привалы). */
     camps: [
       {

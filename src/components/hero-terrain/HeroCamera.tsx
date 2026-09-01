@@ -15,6 +15,7 @@ import {
   type AscentPath,
   type ScrollState,
 } from "./shared";
+import { heroCapture } from "../../lib/heroCapture";
 
 export function HeroCamera({
   scrollRef,
@@ -32,19 +33,18 @@ export function HeroCamera({
   const sway = useRef({ x: 0, y: 0 });
 
   useFrame((state, delta) => {
-    const raw = (progressSmooth.current = MathUtils.damp(
-      progressSmooth.current,
-      readProgress(heroFly),
-      TRACK_FOLLOW,
-      delta,
-    ));
+    const desired = readProgress(heroFly);
+    const snap = heroCapture.snap;
+    const raw = snap
+      ? (progressSmooth.current = desired)
+      : (progressSmooth.current = MathUtils.damp(progressSmooth.current, desired, TRACK_FOLLOW, delta));
 
-    const t = state.clock.elapsedTime;
-    const driftX = Math.sin(t * 0.21) * 1.7 + Math.sin(t * 0.47 + 1.3) * 0.5;
-    const driftY = Math.sin(t * 0.16 + 0.8) * 1.0;
-    const driftZ = Math.cos(t * 0.12 + 2.1) * 1.3;
-    const lookDriftX = Math.sin(t * 0.18 + 2.6) * 1.1;
-    const lookDriftY = Math.sin(t * 0.24 + 0.4) * 0.6;
+    const t = snap ? 0 : state.clock.elapsedTime;
+    const driftX = snap ? 0 : Math.sin(t * 0.21) * 1.7 + Math.sin(t * 0.47 + 1.3) * 0.5;
+    const driftY = snap ? 0 : Math.sin(t * 0.16 + 0.8) * 1.0;
+    const driftZ = snap ? 0 : Math.cos(t * 0.12 + 2.1) * 1.3;
+    const lookDriftX = snap ? 0 : Math.sin(t * 0.18 + 2.6) * 1.1;
+    const lookDriftY = snap ? 0 : Math.sin(t * 0.24 + 0.4) * 0.6;
 
     const tPos = easeOutCubic(raw);
     const tLook = easeInOutCubic(raw);
@@ -57,6 +57,19 @@ export function HeroCamera({
       (1 - tFov) * (1 - tFov) * path.startFov +
       2 * (1 - tFov) * tFov * path.midFov +
       tFov * tFov * path.endFov;
+
+    if (snap) {
+      camera.position.copy(targetPos.current);
+      look.current.copy(targetLook.current);
+      camera.lookAt(look.current);
+      camera.rotateZ(Math.sin(raw * Math.PI) * path.bankMax);
+      camera.updateMatrixWorld();
+      if (camera instanceof PerspectiveCamera) {
+        camera.fov = fovTarget;
+        camera.updateProjectionMatrix();
+      }
+      return;
+    }
 
     sway.current.x = MathUtils.damp(sway.current.x, scrollRef.current.pointerX, POINTER_FOLLOW, delta);
     sway.current.y = MathUtils.damp(sway.current.y, scrollRef.current.pointerY, POINTER_FOLLOW, delta);
@@ -82,7 +95,7 @@ export function HeroCamera({
       camera.fov = MathUtils.lerp(camera.fov, fovTarget, camAlpha);
       camera.updateProjectionMatrix();
     }
-  });
+  }, -1);
 
   return null;
 }

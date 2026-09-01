@@ -4,6 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import type { SpotLight as ThreeSpotLight } from "three";
 import { MathUtils, Vector3 } from "three";
 import { useHeroFlyOptional } from "../../context/HeroFlyContext";
+import { heroCapture } from "../../lib/heroCapture";
 import { TRACK_FOLLOW, easeInOutCubic, idle01, readProgress } from "./shared";
 
 /**
@@ -21,14 +22,18 @@ export function ScrollBeams() {
   const up = useRef(new Vector3());
 
   useFrame((state, delta) => {
-    progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
+    const snap = heroCapture.snap;
+    const desired = readProgress(heroFly);
+    progressSmooth.current = snap
+      ? desired
+      : MathUtils.damp(progressSmooth.current, desired, TRACK_FOLLOW, delta);
     const p = progressSmooth.current;
     const climb = easeInOutCubic(p);
     const climbB = easeInOutCubic(MathUtils.clamp(p * 1.08 - 0.06, 0, 1));
-    const t = state.clock.elapsedTime;
-    const idle = idle01(t);
-    const idleB = idle01(t, 1.15);
-    const flutter = Math.sin(t * 0.55) * 0.5 + Math.sin(t * 0.21 + 1.1) * 0.5;
+    const t = snap ? 0 : state.clock.elapsedTime;
+    const idle = snap ? 0.5 : idle01(t);
+    const idleB = snap ? 0.5 : idle01(t, 1.15);
+    const flutter = snap ? 0 : Math.sin(t * 0.55) * 0.5 + Math.sin(t * 0.21 + 1.1) * 0.5;
 
     camera.getWorldDirection(fwd.current);
     up.current.set(0, 1, 0);
@@ -48,7 +53,7 @@ export function ScrollBeams() {
         MathUtils.lerp(55, -70, climb),
       );
       a.target.updateMatrixWorld();
-      a.intensity = MathUtils.lerp(3.2, 5.4, climb) * (0.78 + 0.28 * idle);
+      a.intensity = MathUtils.lerp(0.45, 0.75, climb) * (0.78 + 0.28 * idle);
       a.angle = 0.3 + idle * 0.05;
     }
 
@@ -65,7 +70,7 @@ export function ScrollBeams() {
         MathUtils.lerp(40, -55, climbB),
       );
       b.target.updateMatrixWorld();
-      b.intensity = MathUtils.lerp(2.0, 3.6, climbB) * (0.8 + 0.26 * idleB);
+      b.intensity = MathUtils.lerp(0.28, 0.5, climbB) * (0.8 + 0.26 * idleB);
       b.angle = 0.26 + idleB * 0.045;
     }
   });

@@ -6,7 +6,7 @@ import { Environment, Lightformer } from "@react-three/drei";
  */
 export function StudioRimLight() {
   return (
-    <Environment resolution={512} frames={1} background={false} environmentIntensity={1.05}>
+    <Environment resolution={512} frames={1} background={false} environmentIntensity={0.55}>
       <Lightformer
         form="rect"
         intensity={3.8}
@@ -14,6 +14,14 @@ export function StudioRimLight() {
         scale={[28, 2.8, 1]}
         position={[72, 78, -18]}
         target={[6, 22, -12]}
+      />
+      <Lightformer
+        form="ring"
+        intensity={2.6}
+        color="#d7e6ff"
+        scale={48}
+        position={[0, 92, -8]}
+        target={[0, 18, -6]}
       />
       <Lightformer
         form="ring"
@@ -25,11 +33,11 @@ export function StudioRimLight() {
       />
       <Lightformer
         form="rect"
-        intensity={1.15}
+        intensity={0.7}
         color="#c8d8f5"
-        scale={[40, 22, 1]}
-        position={[-62, 24, 56]}
-        target={[0, 12, 0]}
+        scale={[36, 18, 1]}
+        position={[-70, 22, -56]}
+        target={[0, 16, -8]}
       />
       <Lightformer
         form="rect"

@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 28 August 2026 (evening)  
+> **Updated:** 31 August 2026  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** `7484527` — scroll-synced preload, baked dark Everest curve, TV Draco 8.7 MB  
+> **HEAD:** `7484527` prod · local WIP — pre-launch checklist (meta, legal SPA, thank-you, favicons)  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 
@@ -37,6 +37,7 @@
 23. [Windows + dark-theme ops](#23-windows--dark-theme-ops)
 24. [Cross-platform prompt](#24-cross-platform-prompt)
 25. [Antigravity handoff](#25-antigravity-handoff)
+26. [Pre-launch checklist](#26-pre-launch-checklist)
 
 ---
 
@@ -876,6 +877,8 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 | Nav / footer IA       | `liveContent.ts` `navLinks`, `footerLinks`         |
 | Routes / formats      | `ProgrammaticFormats.ts`, `ProgrammaticScrollSection.tsx` |
 | Preload / hero boot   | `lib/scrollPreload.ts`, `lib/heroBoot.ts`, `HeroAtmosphere.tsx` |
+| Page titles / SEO     | `src/data/pageMeta.ts`, `PageMeta.tsx`, `index.html` |
+| Legal copy            | `public/privacy/index.html`, `public/terms/index.html` |
 | Cases carousel        | `CaseStudies.tsx`, `useHorizontalPointerScroll.ts` |
 | Section copy          | `liveContent.ts` `*ByMode`                         |
 | Home order            | `HomePage.tsx`                                     |
@@ -961,6 +964,35 @@ Everest **one** canvas · Routes still→MP4 glass · dual theme Growth ↔ Infr
 ### Deploy if the owner asks
 
 rsync backup → commit **site only** → `git push origin HEAD` → `npm run deploy` (`upraiser-site-v2`). GitHub auto-deploy is not canonical.
+
+---
+
+## 26. Pre-launch checklist
+
+Status as of 31 Aug 2026. Conversion items that would put **Request Pilot** in the hero or a sticky mobile bar are **not** shipped — sacred §8 / §19.
+
+| # | Item | Status |
+| --- | --- | --- |
+| 1 | Custom 404 | **Done** — `NotFoundPage`, Home + Routes. SPA HTTP status stays 200 (Vite). `noindex` via PageMeta. |
+| 2 | CTA above the fold | **Intentional skip** — H1 + stats + Lenovo strip. Request Pilot only at `#pilot` and `/contact`. |
+| 3 | Title per page | **Done** — `PageMeta` + `src/data/pageMeta.ts` |
+| 4 | Description per page | **Done** — same |
+| 5 | Open Graph image | **Done** — `/og-image.png` 1200×630. Was missing locally; restored from git into `assets/brand/` + `public/`. |
+| 6 | Favicon set | **Done** — ico, 16, 32, 180 apple, 192, `site.webmanifest` |
+| 7 | robots.txt | **Done** — Allow `/`, Disallow `/contact/sent`, Sitemap |
+| 8 | sitemap.xml | **Done** — `/`, `/expedition`, `/contact`, `/privacy`, `/terms`. Craft stub is `noindex` (not listed). |
+| 9 | Alt text | **Done** — named logos have alt; in-ad mockups use empty alt (decorative). Header mark is decorative (`aria-label` on the link). |
+| 10 | Mobile breakpoints | **Done** — existing `900px` hero / Routes mobile stack / 44px targets |
+| 11 | Sticky mobile CTA | **Intentional skip** — would put Request Pilot on every scroll. Mobile Routes already has a format dock. |
+| 12 | Loading states | **Partial** — contact `Transmitting…`, route `sr-only` Loading, LazySection slots. No skeleton zoo on home (would race Everest). |
+| 13 | Form errors | **Done** — field `aria-invalid` + captions; submit alert; file-size error (no `alert()`). |
+| 14 | Thank-you page | **Done** — `/contact/sent` after Web3Forms success |
+| 15 | Privacy Policy | **Done** — full UK GDPR notice at `/privacy` (SPA wraps `public/privacy/index.html`) |
+| 16 | Terms of Service | **Done** — `/terms` |
+| 17 | Cookie banner | **N/A** — policy: no analytics/marketing cookies; only `localStorage` theme. Do **not** add a banner until analytics ships. |
+| 18 | Analytics | **N/A / parked** — same. Owner yes + privacy update + consent banner required before GA/Metrika. |
+| 19 | Real contact address | **Done** — 128 City Road, EC1V 2NX · `info@upraiser.co.uk` · JSON-LD · footer · contact |
+| 20 | Compressed images | **Done** — raster logos/CTA jpgs already <100 KB. GLBs are Draco, not photos. |
 
 ---
 

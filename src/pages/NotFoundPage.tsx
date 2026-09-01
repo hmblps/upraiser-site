@@ -16,7 +16,7 @@ export function NotFoundPage() {
             <Link
               to="/"
               data-cursor="cta"
-              className="btn-caps btn-caps--primary inline-block rounded-full px-7 py-3.5"
+              className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
             >
               Home
             </Link>
@@ -24,7 +24,7 @@ export function NotFoundPage() {
           <Magnetic strength={0.22}>
             <Link
               to="/#routes"
-              className="btn-caps btn-secondary inline-block rounded-full px-7 py-3.5"
+              className="btn-caps btn-secondary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
             >
               The Routes
             </Link>

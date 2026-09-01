@@ -34,7 +34,7 @@ export function HomePage() {
       <main className="site-main">
         <div
           id="hero"
-          className="relative z-[35] flex min-h-[100dvh] flex-col overflow-visible"
+          className="relative flex min-h-[100dvh] flex-col overflow-visible"
         >
           <Hero />
         </div>

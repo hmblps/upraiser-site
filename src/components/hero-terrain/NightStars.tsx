@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import type { Object3D } from "three";
+import { heroCapture } from "../../lib/heroCapture";
 
 /**
  * Camera-centered star dome. Counts trimmed ~35% vs original — still dense,
@@ -38,8 +39,9 @@ export function NightStars() {
     const g = groupRef.current;
     if (!g) return;
     g.position.copy(camera.position);
-    g.rotation.y = state.clock.elapsedTime * 0.015; // Slow ambient rotation
-    g.rotation.x = Math.sin(state.clock.elapsedTime * 0.005) * 0.02; // Tiny wobble
+    if (heroCapture.snap) return;
+    g.rotation.y = state.clock.elapsedTime * 0.015;
+    g.rotation.x = Math.sin(state.clock.elapsedTime * 0.005) * 0.02;
   });
 
   return (

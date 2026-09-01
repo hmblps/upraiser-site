@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+Disallow: /contact/sent
+
 Sitemap: https://upraiser.co.uk/sitemap.xml
+Host: https://upraiser.co.uk

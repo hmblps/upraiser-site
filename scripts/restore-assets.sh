@@ -22,12 +22,13 @@ for folder in hero channels phones draco clients maps images; do
   src="$BACKUP/$folder/"
   dst="$PUBLIC/$folder/"
   if [ ! -d "$src" ]; then continue; fi
-  # Only sync if the destination is missing files (rsync --ignore-existing is fast)
-  missing=$(rsync -a --ignore-existing --dry-run "$src" "$dst" 2>/dev/null | grep -c '^>' || true)
-  if [ "$missing" -gt 0 ]; then
-    echo "🔄  Restoring public/$folder/ ($missing files missing)…"
-    rsync -a --ignore-existing "$src" "$dst"
-    RESTORED=$((RESTORED + missing))
+  mkdir -p "$dst"
+  # Copy only files that are missing at dest. Do not dry-run — rsync -n without
+  # --info=NAME produced empty output, so this script used to skip a wiped public/.
+  copied=$(rsync -a --ignore-existing --out-format='%n' "$src" "$dst" | grep -cve '/$' || true)
+  if [ "$copied" -gt 0 ]; then
+    echo "🔄  Restoring public/$folder/ ($copied files missing)…"
+    RESTORED=$((RESTORED + copied))
   fi
 done
 
