@@ -11,9 +11,9 @@
   overflow: hidden;
 }
 
-/* Animated version: 3× runway gives scroll room */
+/* Animated version: 8× runway gives a very long, majestic 10+ second scroll */
 .ascent-hero--animated {
-  height: 320dvh;
+  height: 800dvh;
 }
 
 /* Sticky pin — the actual visible viewport frame */

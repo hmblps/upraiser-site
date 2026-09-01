@@ -98,31 +98,31 @@ function AscentHeroAnimated() {
     return lerp(18, -22, t) + "dvh";
   });
 
-  // ── Fog: starts thick (0.9), clears as we rise ───────────────────────────────
+  // ── Fog: starts thick (0.9), clears as we rise (stretches to 75% of scroll) ─
   const fogOpacity = useTransform(progress, (p) => {
-    // Clears between 10%–60%
-    return 1 - smoothstep(p, 0.1, 0.65);
+    // Clears between 10%–75%
+    return 1 - smoothstep(p, 0.1, 0.75);
   });
 
   // ── Dark veil fades slightly so mountain is crisper ─────────────────────────
   const veilOpacity = useTransform(progress, (p) => {
     const base = isLight ? 0.55 : 0.72;
     const min = isLight ? 0.15 : 0.38;
-    return lerp(base, min, smoothstep(p, 0.1, 0.7));
+    return lerp(base, min, smoothstep(p, 0.15, 0.8));
   });
 
-  // ── Headline enters from bottom ──────────────────────────────────────────────
-  const headlineOpacity = useTransform(progress, (p) => smoothstep(p, 0.3, 0.55));
+  // ── Headline enters gradually and stays ─────────────────────────────────────
+  const headlineOpacity = useTransform(progress, (p) => smoothstep(p, 0.4, 0.65));
   const headlineY = useTransform(progress, (p) => {
-    const t = smoothstep(p, 0.3, 0.58);
-    return lerp(40, 0, t) + "px";
+    const t = smoothstep(p, 0.4, 0.68);
+    return lerp(50, 0, t) + "px";
   });
 
   // ── Sub copy enters slightly later ──────────────────────────────────────────
-  const subOpacity = useTransform(progress, (p) => smoothstep(p, 0.45, 0.65));
+  const subOpacity = useTransform(progress, (p) => smoothstep(p, 0.5, 0.7));
   const subY = useTransform(progress, (p) => {
-    const t = smoothstep(p, 0.45, 0.68);
-    return lerp(28, 0, t) + "px";
+    const t = smoothstep(p, 0.5, 0.75);
+    return lerp(35, 0, t) + "px";
   });
 
   // ── Scroll hint fades out early ──────────────────────────────────────────────
