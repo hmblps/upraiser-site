@@ -176,7 +176,7 @@
 
 @media (min-width: 768px) {
   .expedition-fold.scroll-scene--fold {
-    min-height: 680vh;
+    min-height: 950vh;
   }
 }
 

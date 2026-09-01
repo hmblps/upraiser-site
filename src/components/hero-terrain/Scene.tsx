@@ -6,7 +6,6 @@ import { AscentBird } from "./AscentBird";
 import { AscentHalo } from "./AscentHalo";
 import { AscentRoute } from "./AscentRoute";
 import { BrandHazeSky } from "./BrandHazeSky";
-import { ExpeditionCamera } from "./ExpeditionCamera";
 import { FloatingVoyager } from "./FloatingVoyager";
 import { HeroCamera } from "./HeroCamera";
 import { NightStars } from "./NightStars";
