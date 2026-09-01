@@ -1,0 +1,66 @@
+/*
+ * ANDY KOWALSKI: ELITE PERFORMANCE & TYPOGRAPHY PROTOCOLS
+ * ────────────────────────────────────────────────────────
+ * 1. Rendering: Zero-cost abstractions, strict containment.
+ * 2. Typography: Pixel-perfect, anti-aliased, no fake synthesis.
+ * 3. UX: 44px touch targets minimum, hover states locked to pointer:fine.
+ */
+
+/* ── TYPOGRAPHY & RENDERING BASE ── */
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none; /* No fake bold/italic */
+}
+
+/* Windows specifically brutalizes light text on dark backgrounds. Kill fake-light. */
+html[data-os="windows"] {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+/* ── CSS CONTAINMENT & MEMORY ── 
+ * Prevents browser from calculating layout/paint for off-screen heavy sections.
+ */
+.section-band,
+.accent-scroll-section,
+.cv-prog-modal {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+/* ── TOUCH TARGETS ── 
+ * Brutal enforcement of 44x44px minimal touch area.
+ */
+@media (pointer: coarse) {
+  button, 
+  a, 
+  [role="button"],
+  .nav-link,
+  .footer-link {
+    min-height: 44px;
+    /* We don't enforce min-width to avoid breaking inline links, 
+       but we ensure padding gives enough horizontal area where possible */
+  }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── BACKDROP FILTER OPTIMIZATION ── 
+ * Force hardware acceleration on glassmorphism to prevent layout thrashing
+ */
+.apple-preview-panel,
+.site-header,
+.clients-modal-overlay {
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU layer */
+}
