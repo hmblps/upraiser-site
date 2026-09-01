@@ -1,3 +1,169 @@
+/* ─── Expedition Ascent Hero (Mont-Fort style scroll-ascent) ─────────────── */
+
+.ascent-hero {
+  position: relative;
+  background: var(--theme-bg);
+}
+
+/* Static version: single viewport-height frame */
+.ascent-hero--static {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Animated version: 3× runway gives scroll room */
+.ascent-hero--animated {
+  height: 320dvh;
+}
+
+/* Sticky pin — the actual visible viewport frame */
+.ascent-hero__pin {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Background container — clips the moving sky */
+.ascent-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* The sky element that physically moves up during scroll */
+.ascent-hero__sky {
+  position: absolute;
+  /* Start taller than viewport so upward travel has room */
+  inset: -30dvh 0 -30dvh 0;
+  will-change: transform;
+}
+
+.ascent-hero__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 60%; /* start showing lower slopes */
+}
+
+.ascent-hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Thick fog at base — white cloud bank that clears as camera ascends */
+.ascent-hero__fog {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 140% 55% at 50% 100%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.72) 35%, transparent 65%),
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.88) 100%);
+}
+
+[data-theme="dark"] .ascent-hero__fog {
+  background:
+    radial-gradient(ellipse 140% 55% at 50% 100%, rgba(5,5,4,0.9) 0%, rgba(5,5,4,0.65) 38%, transparent 68%),
+    linear-gradient(180deg, transparent 0%, rgba(5,5,4,0.12) 45%, rgba(5,5,4,0.82) 100%);
+}
+
+.ascent-hero__fog--static {
+  opacity: 0.55;
+}
+
+/* Atmospheric colour veil */
+.ascent-hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ascent-hero__veil--light {
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.22) 50%, transparent 100%),
+    linear-gradient(180deg, rgba(255,255,255,0.28) 0%, transparent 30%, transparent 65%, rgba(255,255,255,0.18) 100%);
+}
+
+.ascent-hero__veil--dark {
+  background:
+    linear-gradient(90deg, rgba(5,5,4,0.55) 0%, rgba(5,5,4,0.2) 50%, transparent 100%),
+    linear-gradient(180deg, rgba(5,5,4,0.22) 0%, transparent 30%, transparent 65%, rgba(5,5,4,0.38) 100%);
+}
+
+/* Typography layer */
+.ascent-hero__content {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: calc(var(--site-header-height) + 1rem);
+  padding-bottom: clamp(3.5rem, 8dvh, 6rem);
+  pointer-events: none;
+}
+
+.ascent-hero__label {
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.ascent-hero__headline {
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: var(--theme-text);
+}
+
+[data-theme="light"] .ascent-hero__headline {
+  color: #0e1a2b;
+}
+
+.ascent-hero__sub {
+  margin-top: clamp(0.85rem, 1.8dvh, 1.5rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  color: var(--theme-text-muted, rgba(255,255,255,0.65));
+  letter-spacing: 0.02em;
+}
+
+[data-theme="light"] .ascent-hero__sub {
+  color: rgba(14, 26, 43, 0.6);
+}
+
+/* Scroll hint arrow */
+.ascent-hero__hint {
+  position: absolute;
+  bottom: clamp(1.5rem, 3dvh, 2.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  color: var(--theme-text);
+  opacity: 0.5;
+}
+
+[data-theme="light"] .ascent-hero__hint {
+  color: #0e1a2b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ascent-hero__sky {
+    will-change: auto;
+  }
+}
+
+/* ─── Expedition Fold (existing) ─────────────────────────────────────────── */
+
 .expedition-fold {
   position: relative;
   background: transparent;
