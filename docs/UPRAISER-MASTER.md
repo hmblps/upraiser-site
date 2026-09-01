@@ -931,6 +931,8 @@ We completely removed the `/expedition` separate page to vastly improve WebGL pe
 - **The Expedition / About Us**: Moved directly onto the homepage right before the final CTA.
 - **The Channels (`/channels`)**: The heavy `ProgrammaticScrollSection` (with Phone3D, Tablet3D, Tv3D) was offloaded to a dedicated page to prevent WebGL context crashing on initial load. This page is accessed via the CTA on the homepage.
 - **Header Navigation**: Contains only "The Agency" (Home) and "Creative Studio" (`/craft`). "The Channels" is hidden from the header to drive user flow through the homepage storytelling.
+- **Performance & Lazy Loading**: We removed the `LazySection` wrappers from the homepage sections (`Audience`, `Process`, `CaseStudies`, `PromiseSection`). Since the heavy 3D canvases were moved off the homepage, these sections are now lightweight enough to be mounted immediately using a single top-level `<React.Suspense>`. This fixes intersection observer bugs and ensures scroll charts (like the SCALE chart) mount reliably without relying on the `heroOk` gate.
+
 
 ### Where we left off (28 Aug 2026 evening)
 
