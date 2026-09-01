@@ -136,7 +136,7 @@ export function LazySection({
   const mounted = show && heroOk;
 
   return (
-    <div ref={ref} id={mounted ? undefined : id}>
+    <div ref={ref} id={mounted ? undefined : id} style={mounted ? undefined : { minHeight }}>
       {mounted ? (
         <Suspense fallback={<div className="section-lazy-slot" style={{ minHeight }} aria-hidden />}>
           {children}
