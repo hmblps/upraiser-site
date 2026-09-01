@@ -133,7 +133,7 @@ export function LazySection({
     };
   }, [warm, warmMargin, showMargin]);
 
-  const mounted = show && heroOk;
+  const mounted = show && heroOk; console.log("LazySection", id, "show:", show, "heroOk:", heroOk, "mounted:", mounted);
 
   return (
     <div ref={ref} id={mounted ? undefined : id} style={mounted ? undefined : { minHeight }}>

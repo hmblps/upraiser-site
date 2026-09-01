@@ -1,7 +1,7 @@
+import React from "react";
 import { lazy } from "react";
 import { Outlet } from "react-router-dom";
 import { Hero } from "../components/Hero";
-import { LazySection } from "../layouts/SiteLayout";
 import { SectionNav } from "../components/SectionNav";
 import { HomePilotCta } from "../components/HomePilotCta";
 
@@ -25,6 +25,7 @@ import { AboutUsSection } from "../components/AboutUsSection";
 export function HomePage() {
   
   return (
+    <React.Suspense fallback={<div style={{ minHeight: "50vh" }} />}>
     <>
       <main className="site-main">
         <div
@@ -33,33 +34,22 @@ export function HomePage() {
         >
           <Hero />
         </div>
-        <LazySection minHeight="8rem" gate="hero">
-          <PartnersCarousel />
-        </LazySection>
-        <LazySection id="audience" minHeight="70dvh" warm="mid" gate="hero">
-          <Audience />
-        </LazySection>
-        <LazySection id="process" minHeight="52dvh" warm="mid" gate="hero">
-          <Process />
-        </LazySection>
+        <PartnersCarousel />
+        <div id="audience"><Audience /></div>
+        <div id="process"><Process /></div>
         
         <ChannelsCtaSection />
 
-        <LazySection id="cases" minHeight="56dvh" warm="cases">
-          <CaseStudies />
-        </LazySection>
+        <div id="cases"><CaseStudies /></div>
         
         <Outlet />
 
-        <LazySection id="promise" minHeight="70dvh" warm="promise" gate="hero">
-          <PromiseSection />
-        </LazySection>
+        <div id="promise"><PromiseSection /></div>
         <AboutUsSection />
-        <LazySection id="pilot" minHeight="28dvh">
-          <HomePilotCta />
-        </LazySection>
+        <div id="pilot"><HomePilotCta /></div>
       </main>
       <SectionNav />
     </>
+    </React.Suspense>
   );
 }
