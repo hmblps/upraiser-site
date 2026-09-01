@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import { EASE_OUT } from "../../lib/motion";
+import { SPRING_SOFT } from "../../lib/motion";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { ScrollLink } from "../ScrollLink";
 
-/** Section jumpers only — no metrics (hero stats) or header nav duplicates */
 const HIGHLIGHT_CHIPS = [
   { label: "Promise", href: "#promise" },
   { label: "Process", href: "#process" },
@@ -16,9 +15,9 @@ export function HeroHighlights() {
 
   return (
     <motion.div
-      initial={reduced ? false : { opacity: 0, y: 12 }}
+      initial={reduced ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.68, ease: EASE_OUT }}
+      transition={{ ...SPRING_SOFT, delay: 0.2 }}
       className="mt-10 border-t border-border/60 pt-8"
     >
       <p className="mb-3 text-kicker text-muted">
@@ -29,7 +28,7 @@ export function HeroHighlights() {
           <ScrollLink
             key={chip.label}
             href={chip.href}
-            className="hero-highlight-chip shrink-0 rounded-full border border-border bg-bg-card/60 px-4 py-2 text-kicker text-muted-light transition hover:border-accent/35 hover:bg-bg-card hover:text-fg"
+            className="hero-highlight-chip shrink-0 rounded-full border border-border bg-bg-card/60 px-4 py-2 text-kicker text-muted-light transition-colors"
           >
             {chip.label}
           </ScrollLink>

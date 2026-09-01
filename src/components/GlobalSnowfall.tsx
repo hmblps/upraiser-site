@@ -1,7 +1,8 @@
 import { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { InstancedMesh, MeshBasicMaterial, AdditiveBlending, NormalBlending } from "three";
+import { InstancedMesh, MeshBasicMaterial, AdditiveBlending, NormalBlending, PlaneGeometry } from "three";
 import { useScroll } from "../context/ScrollContext";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 function useIsLightTheme() {
   const [isLight, setIsLight] = useState(() => {
@@ -25,6 +26,8 @@ function SnowParticles({ isLight }: { isLight: boolean }) {
   const count = 5500;
   const meshRef = useRef<InstancedMesh>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
+  const geometryRef = useRef<PlaneGeometry>(null);
+  const reducedMotion = useReducedMotion();
 
   const { positions, phases, scales } = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -51,27 +54,35 @@ function SnowParticles({ isLight }: { isLight: boolean }) {
 
   useEffect(() => {
     return registerScrollListener((scrollY) => {
+      if (reducedMotion) return;
       const delta = scrollY - prevScrollY.current;
       scrollVelocity.current = delta;
       prevScrollY.current = scrollY;
     });
-  }, [registerScrollListener]);
+  }, [registerScrollListener, reducedMotion]);
+
+  // Memory Management: Strict cleanup of WebGL buffers
+  useEffect(() => {
+    return () => {
+      if (geometryRef.current) geometryRef.current.dispose();
+      if (materialRef.current) materialRef.current.dispose();
+    };
+  }, []);
 
   useFrame((state, delta) => {
+    if (reducedMotion) return; // Zero-cost when user requests no motion
     uniforms.uTime.value = state.clock.elapsedTime;
     scrollVelocity.current *= 0.92;
     uniforms.uScrollDelta.value += scrollVelocity.current * delta * 1.0;
   });
 
-  // Light theme: dark blue-grey flakes with NormalBlending so they're visible on white
-  // Dark theme: white flakes with AdditiveBlending for glow
   const snowColor = isLight ? "#7a8fa8" : "#ffffff";
   const snowOpacity = isLight ? 0.55 : 0.65;
   const snowBlending = isLight ? NormalBlending : AdditiveBlending;
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]} frustumCulled={false}>
-      <planeGeometry args={[0.08, 0.08]}>
+      <planeGeometry ref={geometryRef} args={[0.08, 0.08]}>
         <instancedBufferAttribute attach="attributes-offset" args={[positions, 3]} />
         <instancedBufferAttribute attach="attributes-phase" args={[phases, 1]} />
         <instancedBufferAttribute attach="attributes-pscale" args={[scales, 1]} />
@@ -145,8 +156,8 @@ function SnowParticles({ isLight }: { isLight: boolean }) {
 
 export function GlobalSnowfall() {
   const isLight = useIsLightTheme();
+  const reducedMotion = useReducedMotion();
 
-  // Snow is a light-theme-only effect
   if (!isLight) return null;
 
   return (
@@ -166,8 +177,9 @@ export function GlobalSnowfall() {
     >
       <Canvas
         camera={{ fov: 45, position: [0, 0, 0], near: 0.1, far: 300 }}
-        gl={{ alpha: true, antialias: false }}
+        gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         dpr={[1, 1.5]}
+        frameloop={reducedMotion ? "never" : "always"}
         style={{ pointerEvents: "none" }}
       >
         <SnowParticles isLight={isLight} />

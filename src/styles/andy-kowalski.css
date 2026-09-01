@@ -64,3 +64,12 @@ html[data-os="windows"] {
   will-change: transform;
   transform: translateZ(0); /* Force GPU layer */
 }
+
+/* Safe hovers */
+@media (hover: hover) and (pointer: fine) {
+  .hero-highlight-chip:hover {
+    border-color: color-mix(in srgb, var(--theme-accent) 35%, transparent);
+    background-color: var(--theme-bg-card);
+    color: var(--theme-fg);
+  }
+}
