@@ -923,6 +923,15 @@ Paste into Agent when writing or rewriting UI:
 
 Open this repo in Antigravity on the same disk (`Downloads/НОВЫЙ САЙТ UPRAISER`). **Read this file first** — there is no second project md. Then §4 (brand), §9 (hero boot), §10 (Routes devices), §17 (deploy), §19 (sacred). Copy lives in `src/data/liveContent.ts`.
 
+
+### Sept 2026 Architecture Update
+
+We completely removed the `/expedition` separate page to vastly improve WebGL performance and UX on the site.
+- **Home (The Agency)**: Still retains the heavy `HeroAtmosphere` (Everest 3D) at the top. The inline heavy `ProgrammaticScrollSection` was replaced with a lightweight CSS-only `ChannelsCtaSection` (featuring sleek glassmorphic device UI cards in CSS).
+- **The Expedition / About Us**: Moved directly onto the homepage right before the final CTA.
+- **The Channels (`/channels`)**: The heavy `ProgrammaticScrollSection` (with Phone3D, Tablet3D, Tv3D) was offloaded to a dedicated page to prevent WebGL context crashing on initial load. This page is accessed via the CTA on the homepage.
+- **Header Navigation**: Contains only "The Agency" (Home) and "Creative Studio" (`/craft`). "The Channels" is hidden from the header to drive user flow through the homepage storytelling.
+
 ### Where we left off (28 Aug 2026 evening)
 
 Production HEAD **`7484527`** is aliased to [https://upraiser.co.uk](https://upraiser.co.uk). Mountains were slow because Routes mounted **three** WebGL canvases + `tv.glb` on first Home paint. That race is closed:
