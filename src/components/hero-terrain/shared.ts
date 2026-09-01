@@ -130,17 +130,24 @@ export const EXPEDITION_CLIMB = {
   bankMax: -0.08,
 };
 
-export const EXPEDITION_ASCENT = {
-  startPos: [-4, 16, 230] as [number, number, number],
-  midPos: [-2, 38, 140] as [number, number, number],
-  endPos: [-10, 72, 122] as [number, number, number],
-  startLook: [18, 28, -28] as [number, number, number],
-  midLook: [14, 10, -40] as [number, number, number],
-  endLook: [12, 16, -68] as [number, number, number],
-  startFov: 60 as number,
-  midFov: 40 as number,
-  endFov: 34 as number,
-  bankMax: 0.1 as number,
+export const EXPEDITION_ASCENT: AscentPath = {
+  // Start low and very far back (deep in the fog)
+  startPos: [0, 15, 280],
+  // Midpoint: ascending vertically, slightly moving in
+  midPos: [0, 90, 240],
+  // End: High altitude, far from textures, majestic wide shot
+  endPos: [0, 170, 190],
+  
+  // Always looking towards the peaks
+  startLook: [0, 100, 0],
+  midLook: [0, 120, -20],
+  endLook: [0, 130, -60],
+  
+  // Tighter FOV for cinematic compression (makes mountains look bigger)
+  startFov: 45,
+  midFov: 38,
+  endFov: 32,
+  bankMax: 0.05,
 };
 
 export function climbProgress(t: number) {
