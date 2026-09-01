@@ -131,23 +131,24 @@ export const EXPEDITION_CLIMB = {
 };
 
 export const EXPEDITION_ASCENT: AscentPath = {
-  // Start high enough, but shifted to the right for a sweeping start
-  startPos: [30, 45, 260],
-  // Midpoint: ascending vertically, panning across to the left
-  midPos: [-25, 95, 180],
-  // End: Very high altitude, panning back towards center, cinematic wide shot
-  endPos: [15, 175, 100],
+  // Faster perceived speed requires covering more distance
+  // Start lower, further back, and wider to the right
+  startPos: [50, 20, 340],
+  // Swing aggressively across the valley to the left
+  midPos: [-45, 120, 160],
+  // Fly high over the peak and deep inwards
+  endPos: [25, 260, -10],
   
-  // Look targets track the central peak area
-  startLook: [0, 45, 0],
-  midLook: [0, 65, -20],
-  endLook: [-10, 80, -50],
+  // Look targets looking up and tracking the peaks
+  startLook: [0, 70, -20],
+  midLook: [0, 100, -50],
+  endLook: [-15, 140, -100],
   
-  // Tighter FOV for cinematic compression (makes mountains look bigger)
-  startFov: 48,
+  // Dynamic FOV pull
+  startFov: 50,
   midFov: 42,
-  endFov: 35, // slowly zooming in
-  bankMax: 0.12, // more banking (camera tilt) during the sweeping turns
+  endFov: 30, // strong zoom compression at the end
+  bankMax: 0.22, // aggressive tilt in corners
 };
 
 export function climbProgress(t: number) {

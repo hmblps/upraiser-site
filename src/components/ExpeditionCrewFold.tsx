@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState, type RefObject } from "react";
-import { motion, useMotionValueEvent, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValueEvent, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ASCENT_PROTOCOLS, COMPANY_CONTENT } from "../data/innerPagesData";
 import { accentScrollHeroWordClass } from "../lib/accent";
 import { clamp, smoothstep } from "../lib/clamp";
@@ -28,23 +28,6 @@ function windowOpacity(p: number, enter0: number, enter1: number, leave0: number
 }
 
 
-function useBeatX(progress: MotionValue<number>, enter0: number, enter1: number, leave0: number, leave1: number, direction: 'left' | 'right') {
-  return useTransform(progress, (p) => {
-    if (p < enter0) return direction === 'left' ? -60 : 60;
-    if (p > leave1) return direction === 'left' ? -60 : 60;
-    if (p >= enter0 && p <= enter1) {
-       const t = smoothstep(p, enter0, enter1);
-       const start = direction === 'left' ? -60 : 60;
-       return lerp(start, 0, t);
-    }
-    if (p >= leave0 && p <= leave1) {
-       const t = smoothstep(p, leave0, leave1);
-       const end = direction === 'left' ? -60 : 60;
-       return lerp(0, end, t);
-    }
-    return 0;
-  });
-}
 
 function useBeatOpacity(progress: MotionValue<number>, enter0: number, enter1: number, leave0: number, leave1: number) {
   return useTransform(progress, (p) => windowOpacity(p, enter0, enter1, leave0, leave1));
@@ -221,7 +204,51 @@ function CrewStatic() {
   );
 }
 
+
+function AnimatedCampBlock({ 
+  progress, 
+  camp, 
+  enter, 
+  leave, 
+  direction 
+}: { 
+  progress: MotionValue<number>; 
+  camp: { altitude: string; title: string; text: string; };
+  enter: [number, number];
+  leave: [number, number];
+  direction: 'left' | 'right';
+}) {
+  // Spring physics for Emil Kowalski butteriness
+  const smoothP = useSpring(progress, { stiffness: 60, damping: 18, mass: 0.8 });
+  
+  const opacity = useTransform(smoothP, [enter[0], enter[1], leave[0], leave[1]], [0, 1, 1, 0]);
+  
+  const xOffset = direction === 'left' ? -100 : 100;
+  const x = useTransform(smoothP, [enter[0], enter[1], leave[0], leave[1]], [xOffset, 0, 0, -xOffset]);
+  
+  // Slight float up
+  const y = useTransform(smoothP, [enter[0], enter[1], leave[0], leave[1]], [40, 0, 0, -40]);
+  
+  // Dimensional scale
+  const scale = useTransform(smoothP, [enter[0], enter[1], leave[0], leave[1]], [0.92, 1, 1, 0.92]);
+  
+  // Apple-like blur reveal
+  const filter = useTransform(smoothP, [enter[0], enter[1], leave[0], leave[1]], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
+
+  const alignmentClass = direction === 'right' ? 'ml-auto text-left md:text-right right-0 left-auto' : '';
+
+  return (
+    <motion.div 
+      className={`expedition-beat ${alignmentClass}`} 
+      style={{ opacity, x, y, scale, filter }}
+    >
+      <CampCard altitude={camp.altitude} title={camp.title} text={camp.text} />
+    </motion.div>
+  );
+}
+
 function CrewAnimated() {
+
   const { mode } = useMode();
   const { crewFold, camps, cta } = COMPANY_CONTENT.aboutExpedition;
   const { facts } = COMPANY_CONTENT;
@@ -243,21 +270,24 @@ function CrewAnimated() {
   const lift0 = 0.08, lift1 = 0.16;
   const settle0 = 0.74, settle1 = 0.82;
 
-  const x = useTransform(progress, (p) => {
+  // Apply spring to CREW float animation as well
+  const floatP = useSpring(progress, { stiffness: 60, damping: 20, mass: 0.8 });
+  
+  const x = useTransform(floatP, (p) => {
     if (!points) return 0;
     const lift = smoothstep(p, lift0, lift1);
     const settle = smoothstep(p, settle0, settle1);
     const fromX = lerp(points.inline.x, points.giant.x, lift);
     return lerp(fromX, points.dock.x, settle) - points.inline.x;
   });
-  const y = useTransform(progress, (p) => {
+  const y = useTransform(floatP, (p) => {
     if (!points) return 0;
     const lift = smoothstep(p, lift0, lift1);
     const settle = smoothstep(p, settle0, settle1);
     const fromY = lerp(points.inline.y, points.giant.y, lift);
     return lerp(fromY, points.dock.y, settle) - points.inline.y;
   });
-  const scale = useTransform(progress, (p) => {
+  const scale = useTransform(floatP, (p) => {
     if (!points) return 0.2;
     const lift = smoothstep(p, lift0, lift1);
     const settle = smoothstep(p, settle0, settle1);
@@ -265,24 +295,19 @@ function CrewAnimated() {
     return lerp(grown, points.dockScale, settle);
   });
   
-  const copyOpacity = useTransform(progress, (p) => 1 - smoothstep(p, 0.08, 0.12));
-  const floatOpacity = useTransform(progress, (p) => 1 - smoothstep(p, 0.94, 0.98));
   
-  const baseCampOpacity = useBeatOpacity(progress, 0.14, 0.18, 0.26, 0.30);
-  const baseCampX = useBeatX(progress, 0.14, 0.18, 0.26, 0.30, 'left');
+  // The camps will be rendered using AnimatedCampBlock so we don't need these hooks
+  const smoothP = useSpring(progress, { stiffness: 60, damping: 18, mass: 0.8 });
+  const copyOpacity = useTransform(smoothP, (p) => 1 - smoothstep(p, 0.08, 0.12));
+  const floatOpacity = useTransform(smoothP, (p) => 1 - smoothstep(p, 0.94, 0.98));
+
   
-  const campIOpacity = useBeatOpacity(progress, 0.30, 0.34, 0.42, 0.46);
-  const campIX = useBeatX(progress, 0.30, 0.34, 0.42, 0.46, 'right');
   
-  const campIIOpacity = useBeatOpacity(progress, 0.46, 0.50, 0.58, 0.62);
-  const campIIX = useBeatX(progress, 0.46, 0.50, 0.58, 0.62, 'left');
+
   
-  const summitOpacity = useBeatOpacity(progress, 0.62, 0.66, 0.74, 0.78);
-  const summitX = useBeatX(progress, 0.62, 0.66, 0.74, 0.78, 'right');
-  
-  const dockOpacity = useBeatOpacity(progress, 0.76, 0.80, 0.86, 0.88);
-  const notesOpacity = useBeatOpacity(progress, 0.84, 0.88, 0.93, 0.95);
-  const deskOpacity = useBeatOpacity(progress, 0.93, 0.96, 1.1, 1.2);
+  const dockOpacity = useBeatOpacity(smoothP, 0.76, 0.80, 0.86, 0.88);
+  const notesOpacity = useBeatOpacity(smoothP, 0.84, 0.88, 0.93, 0.95);
+  const deskOpacity = useBeatOpacity(smoothP, 0.93, 0.96, 1.1, 1.2);
   
   const deskPointer = useTransform(progress, (p) => (p >= 0.91 ? "auto" : "none"));
   const settle = useTransform(progress, (p) => 0.04 + smoothstep(p, 0.9, 1) * 0.16);
@@ -345,27 +370,19 @@ function CrewAnimated() {
           ) : null}
 
           {baseCamp ? (
-            <motion.div className="expedition-beat" style={{ opacity: baseCampOpacity, x: baseCampX }}>
-              <CampCard altitude={baseCamp.altitude} title={baseCamp.title} text={baseCamp.text} />
-            </motion.div>
+            <AnimatedCampBlock progress={progress} camp={baseCamp} enter={[0.14, 0.18]} leave={[0.26, 0.30]} direction="left" />
           ) : null}
 
           {campI ? (
-            <motion.div className="expedition-beat text-right" style={{ opacity: campIOpacity, x: campIX, marginLeft: 'auto', right: 0, left: 'auto' }}>
-              <CampCard altitude={campI.altitude} title={campI.title} text={campI.text} />
-            </motion.div>
+            <AnimatedCampBlock progress={progress} camp={campI} enter={[0.30, 0.34]} leave={[0.42, 0.46]} direction="right" />
           ) : null}
 
           {campII ? (
-            <motion.div className="expedition-beat" style={{ opacity: campIIOpacity, x: campIIX }}>
-              <CampCard altitude={campII.altitude} title={campII.title} text={campII.text} />
-            </motion.div>
+            <AnimatedCampBlock progress={progress} camp={campII} enter={[0.46, 0.50]} leave={[0.58, 0.62]} direction="left" />
           ) : null}
           
           {summit ? (
-            <motion.div className="expedition-beat text-right" style={{ opacity: summitOpacity, x: summitX, marginLeft: 'auto', right: 0, left: 'auto' }}>
-              <CampCard altitude={summit.altitude} title={summit.title} text={summit.text} />
-            </motion.div>
+            <AnimatedCampBlock progress={progress} camp={summit} enter={[0.62, 0.66]} leave={[0.74, 0.78]} direction="right" />
           ) : null}
 
           <div className="expedition-fold__dock">
