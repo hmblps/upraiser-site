@@ -18,7 +18,7 @@ const PromiseSection = lazy(() =>
 );
 
 // New Routes implementation directly on Home
-import { RoutesPreviewSection } from "../components/solutions/RoutesPreviewSection";
+import { ChannelsCtaSection } from "../components/solutions/ChannelsCtaSection";
 import { AboutUsSection } from "../components/AboutUsSection";
 
 
@@ -43,7 +43,7 @@ export function HomePage() {
           <Process />
         </LazySection>
         
-        <RoutesPreviewSection />
+        <ChannelsCtaSection />
 
         <LazySection id="cases" minHeight="56dvh" warm="cases">
           <CaseStudies />

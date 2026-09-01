@@ -20,9 +20,9 @@ export const contactVerticalOptions = [
 ] as const;
 
 export const navLinks: NavLink[] = [
-  { label: "Creative & Tech", href: "/craft", underConstruction: true },
-  { label: "The Basecamp", href: "/" },
-  
+  { label: "The Agency", href: "/" },
+  { label: "The Channels", href: "/channels" },
+  { label: "Creative Studio", href: "/craft", underConstruction: true },
 ];
 
 export const primaryCta = {

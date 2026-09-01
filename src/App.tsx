@@ -10,7 +10,7 @@ import {
 
 const CraftPage = lazy(() => import("./pages/CraftPage").then((m) => ({ default: m.CraftPage })));
 
-const RouteDetailPage = lazy(() => import("./pages/RouteDetailPage").then((m) => ({ default: m.RouteDetailPage })));
+const ChannelsPage = lazy(() => import("./pages/ChannelsPage").then((m) => ({ default: m.ChannelsPage })));
 const CaseDetailPage = lazy(() =>
   import("./pages/CaseDetailPage").then((m) => ({ default: m.CaseDetailPage })),
 );
@@ -49,7 +49,7 @@ export default function App() {
           {/* Home now includes Cases (Peaks) and Routes natively */}
           <Route path="/" element={<HomePage />}>
             <Route path="cases/:slug" element={<CaseDetailPage />} />
-            <Route path="route/:slug" element={<RouteDetailPage />} />
+            <Route path="channels" element={<ChannelsPage />} />
           </Route>
 
           <Route path="craft" element={<CraftPage />} />
