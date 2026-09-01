@@ -16,7 +16,7 @@ export function BrandHazeSky() {
       new ShaderMaterial({
         side: BackSide,
         depthWrite: false,
-        fog: false,
+        fog: true,
         uniforms: {
           uZenith: { value: new Color("#ffffff") },
           uMid: { value: new Color("#f0f3f7") },
@@ -25,14 +25,18 @@ export function BrandHazeSky() {
           uSunDir: { value: new Vector3(0.55, 0.48, -0.4).normalize() },
         },
         vertexShader: /* glsl */ `
+          #include <fog_pars_vertex>
           varying vec3 vWorldPos;
           void main() {
             vec4 world = modelMatrix * vec4(position, 1.0);
             vWorldPos = world.xyz;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            #include <fog_vertex>
           }
         `,
         fragmentShader: /* glsl */ `
+          #include <fog_pars_fragment>
           uniform vec3 uZenith;
           uniform vec3 uMid;
           uniform vec3 uHorizon;
@@ -55,6 +59,7 @@ export function BrandHazeSky() {
             col += prism * (sun * 0.32 + halo * 0.12);
             col = mix(col, uZenith, 0.05);
             gl_FragColor = vec4(col, 1.0);
+            #include <fog_fragment>
           }
         `,
       }),

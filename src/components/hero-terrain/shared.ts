@@ -108,10 +108,10 @@ export function idle01(t: number, phase = 0) {
 
 export const EXPEDITION_FOG = {
   light: {
-    color: "#7e90a8", // Darker, moodier blue-grey to prevent "blowout" (засвет)
-    nearStart: 20, farStart: 140, // Thick fog at start
-    nearEnd: 120, farEnd: 380,    // Keeps map edges hidden during ascent
-    nearFinale: 180, farFinale: 450, // Clears up just enough for the peak, but hides borders
+    color: "#7e90a8", // Darker, moodier blue-grey to prevent "blowout"
+    nearStart: 80, farStart: 500, // Keep 3D volume visible! Do not flatten to 2D cutout.
+    nearEnd: 150, farEnd: 600,    // Keeps map edges hidden during ascent
+    nearFinale: 200, farFinale: 750, // Clears up just enough for the peak
   },
   dark: {
     color: "#050504",

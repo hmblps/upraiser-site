@@ -124,7 +124,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
 
     if (keyLightRef.current) {
       keyLightRef.current.position.set(x, y, z);
-      keyLightRef.current.intensity = MathUtils.lerp(0.1, 2.5, rise); // Starts very gloomy, rises to bright sun
+      keyLightRef.current.intensity = MathUtils.lerp(1.2, 2.5, rise); // Keep enough directional light so mountain has 3D volume
       keyLightRef.current.color.lerpColors(SUNRISE.keyDawn, SUNRISE.keyNoon, rise);
       keyLightRef.current.shadow.camera.updateMatrixWorld();
     }
