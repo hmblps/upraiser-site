@@ -12,6 +12,7 @@ import { NightStars } from "./NightStars";
 import { ScrollBeams } from "./ScrollBeams";
 import { StudioRimLight } from "./StudioRimLight";
 import { MistSheets } from "./MistSheets";
+import { SeaOfClouds } from "./SeaOfClouds";
 import type { AscentPath, ScrollState, ThemeMode } from "./shared";
 
 /** Hide the canvas until the mountain has compiled — not merely parsed. */
@@ -81,9 +82,19 @@ export function Scene({
       {isLight ? <BrandHazeSky /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
+        {lite ? (
+          <group>
+            <group position={[400, -2, 0]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
+            <group position={[-400, -2, 0]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
+            <group position={[0, -2, 400]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
+            <group position={[0, -2, -400]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
+          </group>
+        ) : null}
+
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}
       </Suspense>
+      {isLight ? <SeaOfClouds theme={theme} lite={lite} /> : null}
       {isLight ? <MistSheets lite={lite} /> : null}
       {isLight && !lite ? <AscentBird /> : null}
       {!lite && !isLight && terrainReady && voyager ? (
