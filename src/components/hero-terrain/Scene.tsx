@@ -78,7 +78,7 @@ export function Scene({
       {isLight && !lite ? <ScrollBeams /> : null}
       {isLight ? <StudioRimLight /> : null}
       {isLight && !lite ? <AscentHalo /> : null}
-      {lite ? <ExpeditionCamera scrollRef={scrollRef} /> : <HeroCamera scrollRef={scrollRef} path={path} />}
+      <HeroCamera scrollRef={scrollRef} path={path} />
       {isLight ? <BrandHazeSky /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />

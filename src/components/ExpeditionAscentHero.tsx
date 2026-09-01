@@ -1,11 +1,12 @@
 import { useRef } from "react";
-import { motion, useTransform } from "framer-motion";
+import { motion, useTransform, useMotionValueEvent } from "framer-motion";
 import { useSectionScrollProgress } from "../hooks/useSectionScrollProgress";
 import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 import { HeroTerrainCanvas, EXPEDITION_ASCENT } from "./hero-terrain/HeroTerrainCanvas";
+import { HeroFlyProgressBridge } from "../context/HeroFlyContext";
 import { whenHeroTerrainBytes } from "../lib/heroBoot";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { useState, useEffect } from "react";
@@ -90,6 +91,12 @@ function AscentHeroAnimated() {
   }, [desktop, theme]);
 
   const progress = useSectionScrollProgress(sectionRef, "ascent-hero");
+  
+  // Bridge framer-motion progress to a ref for the WebGL canvas to read per-frame
+  const flyRef = useRef(0);
+  useMotionValueEvent(progress, "change", (p) => {
+    flyRef.current = p;
+  });
 
   // ── Sky parallax: poster moves upward as we scroll ──────────────────────────
   // At p=0: sky at +18dvh (we see the base), at p=1: sky at -22dvh (we see the summit)
@@ -149,11 +156,13 @@ function AscentHeroAnimated() {
             />
             {desktop && boot3d ? (
               <CanvasErrorBoundary>
-                <HeroTerrainCanvas
-                  className="ascent-hero__canvas"
-                  path={EXPEDITION_ASCENT}
-                  variant="expedition"
-                />
+                <HeroFlyProgressBridge progressRef={flyRef}>
+                  <HeroTerrainCanvas
+                    className="ascent-hero__canvas"
+                    path={EXPEDITION_ASCENT}
+                    variant="expedition"
+                  />
+                </HeroFlyProgressBridge>
               </CanvasErrorBoundary>
             ) : null}
           </motion.div>
