@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { NightStars } from "./hero-terrain/NightStars";
 import { useModalBackground } from "../lib/modalBackgroundState";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 export function GlobalAmbientModalBackground() {
   const isOpen = useModalBackground((s) => s.isOpen);
+  const reduced = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -33,13 +35,11 @@ export function GlobalAmbientModalBackground() {
     >
       {/* Dark Theme: NightStars Canvas */}
       <div className="hidden dark:block absolute inset-0">
-        {isOpen ? (
-          <React.Suspense fallback={null}>
-            <Canvas frameloop="always" camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true }} style={{ pointerEvents: "none" }}>
-              <NightStars />
+        <React.Suspense fallback={null}>
+            <Canvas frameloop={isOpen && !reduced ? "always" : "never"} camera={{ position: [0, 0, 0], fov: 60 }} gl={{ alpha: true, powerPreference: "low-power" }} style={{ pointerEvents: "none" }}>
+              {(!reduced) && <NightStars />}
             </Canvas>
           </React.Suspense>
-        ) : null}
       </div>
       
       {/* Light Theme: Clean Mountain Video with filters */}

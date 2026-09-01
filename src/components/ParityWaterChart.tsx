@@ -168,7 +168,7 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
                   ))}
                 </div>
               </div>
-              <ParityCausticsCanvas progress={progress} />
+              <ParityCausticsCanvas progress={progress} reduced={reduced} />
             </div>
           </div>
         </div>

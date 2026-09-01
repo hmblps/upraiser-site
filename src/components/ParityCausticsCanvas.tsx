@@ -5,6 +5,7 @@ import type { MotionValue } from "framer-motion";
 type ParityCausticsCanvasProps = {
   /** Scroll progress of the Promise fold — slightly speeds the drift while moving */
   progress?: MotionValue<number>;
+  reduced?: boolean;
 };
 
 const VERT = /* glsl */ `
@@ -78,7 +79,7 @@ const FRAG = /* glsl */ `
  * Tiny OGL fullscreen-triangle caustics for the Parity lake.
  * Pauses offscreen; DPR capped; blends via CSS color-dodge over scanlined bars.
  */
-export function ParityCausticsCanvas({ progress }: ParityCausticsCanvasProps) {
+export function ParityCausticsCanvas({ progress, reduced }: ParityCausticsCanvasProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

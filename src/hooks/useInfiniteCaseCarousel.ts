@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { animate } from "framer-motion";
+import { SPRING_SOFT } from "../lib/motion";
 
 /** Three sets: start in the middle so right (and left) scroll can wrap forever. */
 export const CASE_CAROUSEL_COPIES = 3;
