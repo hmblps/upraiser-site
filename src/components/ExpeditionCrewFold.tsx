@@ -249,6 +249,7 @@ function AnimatedCampBlock({
 }
 
 function CrewAnimated() {
+  const DEBUG_HIDE_TYPO = true;
 
   const { mode } = useMode();
   const { crewFold, camps, cta } = COMPANY_CONTENT.aboutExpedition;
@@ -344,7 +345,11 @@ function CrewAnimated() {
         <HeroFlyProgressBridge progressRef={flyRef}>
           <ExpeditionEverestSky veil={veil} settle={settle} />
         </HeroFlyProgressBridge>
-        <div ref={stageRef} className="expedition-fold__stage section-inner relative">
+        <div 
+          ref={stageRef} 
+          className="expedition-fold__stage section-inner relative"
+          style={{ opacity: DEBUG_HIDE_TYPO ? 0 : 1, pointerEvents: DEBUG_HIDE_TYPO ? 'none' : 'auto' }}
+        >
           <span ref={heroMeasureRef} className={`accent-scroll-hero-word ${wordClass} expedition-crew-measure`} aria-hidden>
             {crewFold.word}
           </span>
@@ -462,6 +467,7 @@ function CrewAnimated() {
 }
 
 export function ExpeditionCrewFold() {
+
   const runway = useScrollRunwayEnabled();
   if (!runway) return <CrewStatic />;
   return <CrewAnimated />;

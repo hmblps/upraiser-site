@@ -131,24 +131,22 @@ export const EXPEDITION_CLIMB = {
 };
 
 export const EXPEDITION_ASCENT: AscentPath = {
-  // Faster perceived speed requires covering more distance
-  // Start lower, further back, and wider to the right
-  startPos: [50, 20, 340],
-  // Swing aggressively across the valley to the left
-  midPos: [-45, 120, 160],
-  // Fly high over the peak and deep inwards
-  endPos: [25, 260, -10],
-  
-  // Look targets looking up and tracking the peaks
-  startLook: [0, 70, -20],
-  midLook: [0, 100, -50],
-  endLook: [-15, 140, -100],
-  
-  // Dynamic FOV pull
-  startFov: 50,
-  midFov: 42,
-  endFov: 30, // strong zoom compression at the end
-  bankMax: 0.22, // aggressive tilt in corners
+  // 1. Deep Trench: Start low in the valley, looking up at the peaks
+  startPos: [100, 15, 380],
+  startLook: [0, 80, 50],
+  startFov: 60, // Wide angle to feel the scale of the valley
+
+  // 2. The Ridge Skim: Fly aggressively close to the left ridge
+  midPos: [-80, 130, 100],
+  midLook: [20, 150, -50],
+  midFov: 45,
+
+  // 3. The Summit Orbit: Break above the clouds, soaring over the main peak
+  endPos: [40, 320, -120],
+  endLook: [-40, 240, -250],
+  endFov: 32, // Strong zoom compression for massive background mountains
+
+  bankMax: 0.35, // Very aggressive drone-like banking during the ridge skim
 };
 
 export function climbProgress(t: number) {
