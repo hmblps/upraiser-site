@@ -35,18 +35,18 @@ export function HomePage() {
           <Hero />
         </div>
         <PartnersCarousel />
-        <div id="audience"><Audience /></div>
-        <div id="process"><Process /></div>
+        <Audience />
+        <Process />
         
         <ChannelsCtaSection />
 
-        <div id="cases"><CaseStudies /></div>
+        <CaseStudies />
         
         <Outlet />
 
-        <div id="promise"><PromiseSection /></div>
+        <PromiseSection />
         <AboutUsSection />
-        <div id="pilot"><HomePilotCta /></div>
+        <HomePilotCta />
       </main>
       <SectionNav />
     </>
