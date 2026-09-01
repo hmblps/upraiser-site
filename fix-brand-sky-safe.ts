@@ -1,4 +1,7 @@
-import { useEffect, useMemo, useRef } from "react";
+import fs from "fs";
+let content = fs.readFileSync("src/components/hero-terrain/BrandHazeSky.tsx", "utf-8");
+
+content = `import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import type { Object3D } from "three";
 import { BackSide, Color, ShaderMaterial, SphereGeometry, Vector3 } from "three";
@@ -25,15 +28,15 @@ export function BrandHazeSky({ lite = false }: { lite?: boolean }) {
           uLite: { value: lite ? 1.0 : 0.0 },
           uFogColor: { value: fogColor },
         },
-        vertexShader: `
+        vertexShader: \`
           varying vec3 vWorldPos;
           void main() {
             vec4 world = modelMatrix * vec4(position, 1.0);
             vWorldPos = world.xyz;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }
-        `,
-        fragmentShader: `
+        \`,
+        fragmentShader: \`
           uniform vec3 uZenith;
           uniform vec3 uMid;
           uniform vec3 uHorizon;
@@ -60,7 +63,7 @@ export function BrandHazeSky({ lite = false }: { lite?: boolean }) {
             // If in expedition mode, just output the fog color to seamlessly blend with the blizzard!
             gl_FragColor = vec4(mix(col, uFogColor, uLite), 1.0);
           }
-        `,
+        \`,
       }),
     [lite, fogColor],
   );
@@ -87,3 +90,6 @@ export function BrandHazeSky({ lite = false }: { lite?: boolean }) {
     </mesh>
   );
 }
+`;
+
+fs.writeFileSync("src/components/hero-terrain/BrandHazeSky.tsx", content);

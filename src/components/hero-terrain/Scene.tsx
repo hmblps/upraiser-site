@@ -79,17 +79,10 @@ export function Scene({
       {isLight ? <StudioRimLight /> : null}
       {isLight && !lite ? <AscentHalo /> : null}
       <HeroCamera scrollRef={scrollRef} path={path} />
-      {isLight ? <BrandHazeSky /> : <NightStars />}
+      {isLight ? <BrandHazeSky lite={lite} /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
-        {lite ? (
-          <group>
-            <group position={[400, -2, 0]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
-            <group position={[-400, -2, 0]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
-            <group position={[0, -2, 400]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
-            <group position={[0, -2, -400]}><Everest theme={theme} castShadow={false} receiveShadow={false} /></group>
-          </group>
-        ) : null}
+        
 
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}
