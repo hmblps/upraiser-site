@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useMemo,
   useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
@@ -85,9 +86,10 @@ function TabletMesh({
   const group = useRef<Group>(null);
   const modeRef = useRef<"still" | "video">("still");
 
-  const { video, videoTex } = (() => {
+  const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
     v.muted = true;
+    v.defaultMuted = true;
     v.loop = true;
     v.playsInline = true;
     v.setAttribute("playsinline", "");
@@ -95,7 +97,17 @@ function TabletMesh({
     const t = new VideoTexture(v);
     t.colorSpace = SRGBColorSpace;
     return { video: v, videoTex: t };
-  })();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      videoTex.dispose();
+      video.pause();
+      video.src = "";
+      video.removeAttribute("src");
+      video.load();
+    };
+  }, [video, videoTex]);
 
   useEffect(() => {
     onReady?.();
@@ -282,9 +294,9 @@ export function Tablet3D({ mode, formatId, className }: Tablet3DProps) {
           meshReady ? "opacity-100" : "opacity-0",
         )}
       >
-        <Canvas
+        <Canvas className="tablet-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={inView ? "always" : "demand"}
+          frameloop={(!inView || reduced) ? "never" : "always"}
           gl={{
             antialias: true,
             alpha: true,

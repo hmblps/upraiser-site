@@ -25,6 +25,8 @@ html[data-os="windows"] {
  */
 .section-band,
 .accent-scroll-section,
+.prog-scroll-outer,
+.prog-scroll-outer-mobile,
 .cv-prog-modal {
   content-visibility: auto;
   contain-intrinsic-size: auto 800px;
@@ -72,4 +74,15 @@ html[data-os="windows"] {
     background-color: var(--theme-bg-card);
     color: var(--theme-fg);
   }
+}
+
+/* 3D Canvas Interactivity 
+ * Prevents page scroll when interacting with 3D models.
+ */
+.phone-glb-canvas,
+.tablet-glb-canvas,
+.tv-glb-canvas {
+  touch-action: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }

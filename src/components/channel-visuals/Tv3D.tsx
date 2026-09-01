@@ -88,7 +88,7 @@ function hasCtvScreen(formatId?: string) {
   return formatId === "ctv-spot" || formatId === "ctv-video";
 }
 
-// ─── Inner scene (runs inside <Canvas>) ──────────────────────────────────────
+// ─── Inner scene (runs inside <Canvas className="tv-glb-canvas">) ──────────────────────────────────────
 
 // Node names to hide in the TV model — stand / leg geometry.
 //
@@ -170,7 +170,10 @@ function TvMesh({
       tex.magFilter = LinearFilter;
       tex.needsUpdate = true;
       modeRef.current = "still";
-      setScreenMap(tex);
+      setScreenMap((prev) => {
+        if (prev && prev !== videoTex) prev.dispose();
+        return tex;
+      });
     });
     return () => {
       cancelled = true;
@@ -188,7 +191,10 @@ function TvMesh({
       if (promoted || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
       promoted = true;
       modeRef.current = "video";
-      setScreenMap(videoTex);
+      setScreenMap((prev) => {
+        if (prev && prev !== videoTex) prev.dispose();
+        return videoTex;
+      });
       void video.play().catch(() => {
         modeRef.current = "still";
       });
@@ -341,9 +347,9 @@ export function Tv3D({ mode, formatId, className }: Tv3DProps) {
           meshReady ? "opacity-100" : "opacity-0",
         )}
       >
-        <Canvas
+        <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={inView ? "always" : "demand"}
+          frameloop={(!inView || reduced) ? "never" : "always"}
           gl={{
             antialias: true,
             alpha: true,

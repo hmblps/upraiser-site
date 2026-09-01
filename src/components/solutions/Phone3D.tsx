@@ -749,7 +749,7 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
         <Canvas
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={inView && !isCssFormat ? "always" : "demand"}
+          frameloop={(!inView || reduced || isCssFormat) ? "never" : "always"}
           gl={{
             antialias: true,
             alpha: true,
