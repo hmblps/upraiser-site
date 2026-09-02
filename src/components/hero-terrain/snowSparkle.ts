@@ -135,8 +135,11 @@ export function applySnowSparkle(
         float originalLuma = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
         float slopeSnow = smoothstep(0.54, 0.74, nUp);
         float altitude = smoothstep(-18.0, 36.0, wp.y);
+        // Сдвигаем порог luma: теперь только самые глубокие тени текстуры (<0.3) 
+        // пробивают снег и показывают скалу. Средние тона (0.3-0.5, тени облаков) 
+        // засыпаются чистым снегом, убирая эффект грязных пятен.
         float snowMask = mix(0.12, 1.0, slopeSnow)
-          * mix(0.28, 1.0, smoothstep(0.16, 0.52, originalLuma))
+          * mix(0.28, 1.0, smoothstep(0.12, 0.32, originalLuma))
           * mix(0.82, 1.08, altitude);
         snowMask = saturate(snowMask);
         float rockMask = saturate(1.0 - snowMask) * smoothstep(0.80, 0.46, nUp);
@@ -191,9 +194,12 @@ export function applySnowSparkle(
         // ВОЗВРАЩАЕМ ГЛУБОКИЕ ТЕНИ ПОВЕРХ ТЕКСТУРЫ
         // Уходим от грязных серых теней к холодным синеватым ледяным теням, 
         // имитирующим рассеянный свет неба (Rayleigh scattering)
-        float snowShadow = smoothstep(0.0, 0.45, originalLuma);
-        snowShadow = pow(snowShadow, 1.8); 
-        vec3 icyShadowColor = vec3(0.55, 0.65, 0.85) * pureSnowColor;
+        // Делаем тени текстуры менее "неоново-синими" и более нейтральными,
+        // чтобы они не выглядели как цветные кляксы. Сжимаем радиус, чтобы
+        // красились только самые глубокие расщелины.
+        float snowShadow = smoothstep(0.0, 0.35, originalLuma);
+        snowShadow = pow(snowShadow, 2.2); 
+        vec3 icyShadowColor = vec3(0.72, 0.78, 0.88) * pureSnowColor;
         occludedSnow = mix(icyShadowColor, occludedSnow, snowShadow);
         
         // Применяем снег жестко, перекрывая базу
