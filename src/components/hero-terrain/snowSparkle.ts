@@ -133,15 +133,22 @@ export function applySnowSparkle(
         float dist = length(cameraPosition - wp);
         float close = 1.0 - smoothstep(28.0, 160.0, dist);
         float originalLuma = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
-        float slopeSnow = smoothstep(0.54, 0.74, nUp);
+        float slopeSnow = smoothstep(0.45, 0.75, nUp);
         float altitude = smoothstep(-18.0, 36.0, wp.y);
-        // Сдвигаем порог luma еще жестче: теперь только самые глубокие тени текстуры (<0.2) 
-        // пробивают снег и показывают скалу. Заставляем снег перекрывать более светлые 
-        // участки "грязи" и запеченные облака.
-        float snowMask = mix(0.12, 1.0, slopeSnow)
-          * mix(0.28, 1.0, smoothstep(0.05, 0.20, originalLuma))
-          * mix(0.82, 1.08, altitude);
-        snowMask = saturate(snowMask);
+        
+        // 1. Вычисляем цвет скалы (0.0 = темная трещина, 1.0 = светлый снег)
+        float lumaMask = smoothstep(0.10, 0.35, originalLuma);
+
+        // 2. ФИКС: Смешиваем. Если склон пологий (slopeSnow ~ 1.0), он ПРИНУДИТЕЛЬНО 
+        // становится снегом, игнорируя темные облачные тени из lumaMask.
+        // Темная текстура сможет проступить только на отвесных скалах.
+        float baseSnowMask = mix(lumaMask, 1.0, slopeSnow);
+
+        // 3. Применяем высотность (на пике снега больше)
+        float snowMask = baseSnowMask * mix(0.82, 1.08, altitude);
+
+        // Защита от пересвета
+        snowMask = clamp(snowMask, 0.0, 1.0);
         float rockMask = saturate(1.0 - snowMask) * smoothstep(0.80, 0.46, nUp);
 
         // Noise-perturbed Triplanar: ломаем геометрические швы на стыке осей
@@ -202,10 +209,14 @@ export function applySnowSparkle(
         // Уходим от грязных серых теней к холодным синеватым ледяным теням, 
         // имитирующим рассеянный свет неба (Rayleigh scattering)
         // Делаем тени текстуры менее "неоново-синими" и более нейтральными.
-        // Зажимаем радиус вместе со snowMask (до 0.20), чтобы не красить
-        // грязные полутона текстуры.
         float snowShadow = smoothstep(0.0, 0.20, originalLuma);
         snowShadow = pow(snowShadow, 2.2); 
+        
+        // ФИКС: Отменяем фейковую тень на пологих склонах!
+        // Если это плоский снег (slopeSnow ~ 1.0), тень от текстуры не применяется, 
+        // работает только физическое солнце.
+        snowShadow = mix(snowShadow, 1.0, slopeSnow);
+        
         vec3 icyShadowColor = vec3(0.72, 0.78, 0.88) * pureSnowColor;
         occludedSnow = mix(icyShadowColor, occludedSnow, snowShadow);
         
