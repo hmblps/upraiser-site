@@ -165,7 +165,8 @@ export function applySnowSparkle(
         vec2 sugarUv = wp.xz * sugarScale + wn.xy * 8.0 + vec2(wp.y * 0.35, wp.y * 0.51);
         float snowGrain = sparkleHash(sugarUv);
         float snowGrainFine = sparkleHash(wp.xz * 36.0 + wn.xy * 14.0 + vec2(wp.y * 0.9, wp.z * 0.4));
-        vec3 pureSnowColor = vec3(1.1, 1.1, 1.15) * mix(0.85, 1.0, snowGrain);
+        // Физически корректное альбедо снега (максимум ~0.9). Значения > 1.0 выжигали света.
+        vec3 pureSnowColor = vec3(0.85, 0.88, 0.92) * mix(0.85, 1.0, snowGrain);
         vec3 shadowSnowColor = vec3(0.72, 0.80, 0.88);
         // 1. Уточняем маску снега по уклону (slope = wn.y)
         // Смягчаем маску снегопада, убивая вертикальные полосы от геометрии
@@ -259,7 +260,7 @@ export function applySnowSparkle(
         
         // Возвращаем снегу ледяную корку (glint). Вместо плоского матового 0.95
         // используем более низкий roughness + шум, чтобы солнце могло рисовать жесткие блики.
-        float iceRoughness = mix(0.45, 0.75, snowGrainFine);
+        float iceRoughness = mix(0.55, 0.85, snowGrainFine);
         roughnessFactor = mix(roughnessFactor, iceRoughness, strictSnowMask);
         
         float glitter = 0.0; // Фикс для компилятора
