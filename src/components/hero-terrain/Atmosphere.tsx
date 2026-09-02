@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import type { DirectionalLight, Fog, Object3D, PointLight } from "three";
+import type { DirectionalLight, Object3D, PointLight } from "three";
 import { Color, MathUtils } from "three";
 import { useHeroFlyOptional } from "../../context/HeroFlyContext";
 import { FOG, EXPEDITION_FOG, TRACK_FOLLOW, easeOutCubic, readProgress, type ThemeMode } from "./shared";
@@ -21,21 +21,26 @@ export function Atmosphere({ theme, fogProfile = "home" }: { theme: ThemeMode; f
     const p = progressSmooth.current;
     const open = easeOutCubic(p);
     const finale = MathUtils.smoothstep(p, 0.8, 1);
-    const f = scene.fog as Fog | null;
+    const f = scene.fog;
     if (!f) return;
-    f.near = MathUtils.lerp(MathUtils.lerp(fog.nearStart, fog.nearEnd, open), fog.nearFinale, finale);
-    f.far = MathUtils.lerp(MathUtils.lerp(fog.farStart, fog.farEnd, open), fog.farFinale, finale);
+    // For FogExp2, we interpolate density instead of near/far
+    const densityStart = 0.005;
+    const densityEnd = 0.002;
+    const densityFinale = 0.003;
+    if ('density' in f) {
+      f.density = MathUtils.lerp(MathUtils.lerp(densityStart, densityEnd, open), densityFinale, finale);
+    }
   });
 
   return (
     <>
-      <fog attach="fog" args={[fog.color, fog.nearStart, fog.farStart]} />
-      <ambientLight color={isLight ? "#eef4ff" : "#ffffff"} intensity={isLight ? 0.1 : 0.26} />
+      <fogExp2 attach="fog" args={[fog.color, 0.005]} />
+      <ambientLight color={isLight ? "#eef4ff" : "#ffffff"} intensity={isLight ? 0.02 : 0.05} />
       <hemisphereLight
         args={[
           isLight ? "#eef4ff" : "#241d11",
-          isLight ? "#6e7a8c" : "#0a0805",
-          isLight ? 0.14 : 0.3,
+          isLight ? "#ffffff" : "#322716",
+          isLight ? 0.15 : 0.25,
         ]}
       />
       {isLight ? <LightRimBounce /> : null}

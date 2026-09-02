@@ -168,8 +168,15 @@ export function applySnowSparkle(
         vec2 sugarUv = wp.xz * sugarScale + wn.xy * 8.0 + vec2(wp.y * 0.35, wp.y * 0.51);
         float snowGrain = sparkleHash(sugarUv);
         float snowGrainFine = sparkleHash(wp.xz * 36.0 + wn.xy * 14.0 + vec2(wp.y * 0.9, wp.z * 0.4));
-        // Физически корректное альбедо снега (максимум ~0.9). Значения > 1.0 выжигали света.
+        // Вычисляем угол Френеля для эффекта Subsurface Scattering (просвечивание по краям)
+        vec3 worldView = normalize(cameraPosition - wp);
+        float ndotv = max(dot(worldView, wn), 0.0);
+        float fresnelGlow = pow(1.0 - ndotv, 3.0);
+        
+        // Физически корректное альбедо снега + кинематографичное свечение на гранях (SSS)
         vec3 pureSnowColor = vec3(0.85, 0.88, 0.92) * mix(0.85, 1.0, snowGrain);
+        pureSnowColor += fresnelGlow * 0.25; // Добавляем объем по краям
+        
         vec3 shadowSnowColor = vec3(0.72, 0.80, 0.88);
         // 1. Уточняем маску снега по уклону (slope = wn.y)
         // Смягчаем маску снегопада, убивая вертикальные полосы от геометрии
@@ -271,8 +278,6 @@ export function applySnowSparkle(
         
         float glitter = 0.0; // Фикс для компилятора
 
-        vec3 worldView = normalize(cameraPosition - wp);
-        float ndotv = max(dot(worldView, wn), 0.0);
         float rawFresnel = 1.0 - ndotv;
         float fresnel = pow(rawFresnel, 2.0) * smoothstep(0.0, 0.15, ndotv);
         
