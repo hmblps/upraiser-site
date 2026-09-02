@@ -6,7 +6,7 @@ import { ScrollLink } from "../ScrollLink";
 const HIGHLIGHT_CHIPS = [
   { label: "Promise", href: "#promise" },
   { label: "Process", href: "#process" },
-  { label: "Channels", href: "#channels" },
+  { label: "Channels", href: "#routes" },
   { label: "About", href: "/company" },
 ] as const;
 
