@@ -136,15 +136,22 @@ export function applySnowSparkle(
         float slopeSnow = smoothstep(0.45, 0.75, nUp);
         float altitude = smoothstep(-18.0, 36.0, wp.y);
         
-        // 1. Вычисляем цвет скалы (0.0 = темная трещина, 1.0 = светлый снег)
+        // 1. Вычисляем базовый уклон и Luma-маску
         float lumaMask = smoothstep(0.10, 0.35, originalLuma);
+        
+        // 2. Генерируем макро-шум ветра (используем triFbm для бесшовного 3D шума)
+        // Масштаб 0.02 дает крупные пятна эрозии
+        float windNoise = triFbm(wp, wn, 0.02);
+        
+        // 3. Рваная маска снега: ветер сдувает снег с некоторых пологих участков
+        // mix(0.5, 1.0, windNoise) означает, что местами плотность снега упадет до 50%
+        float erodedSlope = slopeSnow * mix(0.5, 1.0, windNoise);
+        
+        // 4. Собираем финальную базу, где максимальная плотность тоже дробится ветром
+        float maxSnowOpacity = mix(0.75, 0.95, windNoise); 
+        float baseSnowMask = mix(lumaMask, maxSnowOpacity, erodedSlope);
 
-        // 2. ФИКС: Смешиваем. На пологих склонах мы не заливаем снег глухим 100% слоем.
-        // Мы ставим предел 0.85, чтобы 15% оригинальной текстуры скалы (микро-рельеф) 
-        // всегда проглядывало сквозь наст, возвращая горе объем.
-        float baseSnowMask = mix(lumaMask, 0.85, slopeSnow);
-
-        // 3. Применяем высотность (на пике снега больше)
+        // 5. Применяем высотность (на пике снега больше)
         float snowMask = baseSnowMask * mix(0.82, 1.08, altitude);
 
         // Защита от пересвета

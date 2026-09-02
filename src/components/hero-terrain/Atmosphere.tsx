@@ -123,10 +123,12 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
     if (!isLight) return;
     progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
     const rise = easeOutCubic(progressSmooth.current);
-    const x = MathUtils.lerp(80, 88, rise);
-    // ВОЗВРАЩАЕМ скользящий свет: опускаем солнце обратно, чтобы подчеркнуть рельеф
-    const y = MathUtils.lerp(42, 50, rise); 
-    const z = MathUtils.lerp(-40, -52, rise);
+    // РЕЗКИЙ БОКОВОЙ СВЕТ (Raking Light)
+    // Сдвигаем солнце сильно вбок и опускаем почти к горизонту.
+    // Это заставит свет скользить по плоским склонам, проявляя микро-рельеф из карты нормалей.
+    const x = MathUtils.lerp(45, 25, rise);
+    const y = MathUtils.lerp(18, 6, rise); 
+    const z = MathUtils.lerp(30, 10, rise);
 
     if (keyLightRef.current) {
       keyLightRef.current.position.set(x, y, z);
@@ -157,7 +159,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
         ref={keyLightRef}
         color="#ffd4a0"
         intensity={2.8}
-        position={[80, 42, -40]}
+        position={[45, 18, 30]} // Начальная позиция сходится с lerp
         castShadow
         shadow-mapSize={[4096, 4096]}
         shadow-bias={-0.0001}
