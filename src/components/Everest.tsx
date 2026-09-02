@@ -148,13 +148,13 @@ function LightSnowMeshes({
       color: new Color("#ffffff"),
       metalness: 0,
       roughness: 0.85, // Подняли базу для большей матовости скал и глубокого снега
-      envMapIntensity: 0.85,
+      envMapIntensity: 0.3, // Убили "пасмурность" (было 0.85), чтобы тени провалились в глубину
       clearcoat: 0.0, // Полностью выключаем глянцевый слой
       sheen: 0.0, // Отключаем шелковый блеск
       ior: 1.31,
       specularIntensity: 0.5, // Снижаем общую силу блика
     });
-    mat.normalScale = new Vector2(1, 1);
+    mat.normalScale = new Vector2(2.0, 2.0); // Разгоняем нормали для колючего микро-рельефа
     sharpenMap(mat.map);
     sharpenMap(mat.normalMap);
     sharpenMap(mat.roughnessMap);

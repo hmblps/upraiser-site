@@ -130,7 +130,8 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
 
     if (keyLightRef.current) {
       keyLightRef.current.position.set(x, y, z);
-      keyLightRef.current.intensity = MathUtils.lerp(1.2, 2.5, rise); // Keep enough directional light so mountain has 3D volume
+      // Мощно компенсируем потерю заполняющего света: бьем солнцем, чтобы снег звенел
+      keyLightRef.current.intensity = MathUtils.lerp(1.8, 3.6, rise); 
       keyLightRef.current.color.lerpColors(SUNRISE.keyDawn, SUNRISE.keyNoon, rise);
       keyLightRef.current.shadow.camera.updateMatrixWorld();
     }
@@ -155,7 +156,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
       <directionalLight
         ref={keyLightRef}
         color="#ffd4a0"
-        intensity={1.9}
+        intensity={2.8}
         position={[80, 42, -40]}
         castShadow
         shadow-mapSize={[4096, 4096]}
