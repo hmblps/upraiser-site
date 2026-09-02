@@ -22,10 +22,10 @@ import { ChannelsCtaSection } from "../components/solutions/ChannelsCtaSection";
 import { AboutUsSection } from "../components/AboutUsSection";
 
 
+const SECTION_FALLBACK = <div style={{ minHeight: "12rem" }} />;
+
 export function HomePage() {
-  
   return (
-    <React.Suspense fallback={<div style={{ minHeight: "50vh" }} />}>
     <>
       <main className="site-main">
         <div
@@ -34,22 +34,35 @@ export function HomePage() {
         >
           <Hero />
         </div>
-        <PartnersCarousel />
-        <Audience />
-        <Process />
-        
+
+        <React.Suspense fallback={SECTION_FALLBACK}>
+          <PartnersCarousel />
+        </React.Suspense>
+
+        <React.Suspense fallback={SECTION_FALLBACK}>
+          <Audience />
+        </React.Suspense>
+
+        <React.Suspense fallback={SECTION_FALLBACK}>
+          <Process />
+        </React.Suspense>
+
         <ChannelsCtaSection />
 
-        <CaseStudies />
-        
+        <React.Suspense fallback={SECTION_FALLBACK}>
+          <CaseStudies />
+        </React.Suspense>
+
         <Outlet />
 
-        <PromiseSection />
+        <React.Suspense fallback={SECTION_FALLBACK}>
+          <PromiseSection />
+        </React.Suspense>
+
         <AboutUsSection />
         <HomePilotCta />
       </main>
       <SectionNav />
     </>
-    </React.Suspense>
   );
 }
