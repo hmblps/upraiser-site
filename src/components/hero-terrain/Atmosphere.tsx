@@ -124,9 +124,8 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
     progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
     const rise = easeOutCubic(progressSmooth.current);
     const x = MathUtils.lerp(80, 88, rise);
-    // Поднимаем солнце выше, чтобы свет падал под более прямым углом
-    // и не цеплялся за микро-неровности пологого склона (terminator problem)
-    const y = MathUtils.lerp(65, 75, rise); 
+    // ВОЗВРАЩАЕМ скользящий свет: опускаем солнце обратно, чтобы подчеркнуть рельеф
+    const y = MathUtils.lerp(42, 50, rise); 
     const z = MathUtils.lerp(-40, -52, rise);
 
     if (keyLightRef.current) {
@@ -157,11 +156,11 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
         ref={keyLightRef}
         color="#ffd4a0"
         intensity={1.9}
-        position={[80, 65, -40]}
+        position={[80, 42, -40]}
         castShadow
         shadow-mapSize={[4096, 4096]}
-        shadow-bias={-0.0001} // Твикаем bias чтобы избежать самозатенения полигонов
-        shadow-normalBias={0.04}
+        shadow-bias={-0.0001}
+        shadow-normalBias={0.07} // Увеличиваем нормаль-биас, чтобы тени не цеплялись за себя при низком солнце
         shadow-camera-near={1}
         shadow-camera-far={520}
         shadow-camera-left={-220}
