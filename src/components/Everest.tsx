@@ -147,15 +147,12 @@ function LightSnowMeshes({
       aoMap: src.aoMap,
       color: new Color("#ffffff"),
       metalness: 0,
-      roughness: 0.7,
+      roughness: 0.85, // Подняли базу для большей матовости скал и глубокого снега
       envMapIntensity: 0.85,
-      clearcoat: 0.32,
-      clearcoatRoughness: 0.22,
+      clearcoat: 0.0, // Полностью выключаем глянцевый слой
+      sheen: 0.0, // Отключаем шелковый блеск
       ior: 1.31,
-      specularIntensity: 0.8,
-      sheen: 0.22,
-      sheenColor: new Color("#eef3fa"),
-      sheenRoughness: 0.7,
+      specularIntensity: 0.5, // Снижаем общую силу блика
     });
     mat.normalScale = new Vector2(1, 1);
     sharpenMap(mat.map);

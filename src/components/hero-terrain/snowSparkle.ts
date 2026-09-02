@@ -283,15 +283,7 @@ export function applySnowSparkle(
       )
       .replace(
         "#include <lights_physical_fragment>",
-        `#include <lights_physical_fragment>
-        // Вырубаем Sheen и Clearcoat полностью для нашей горы, иначе она выглядит как глянцевый пластик
-        #ifdef USE_SHEEN
-        material.sheenColor = vec3(0.0);
-        material.sheenRoughness = 1.0;
-        #endif
-        #ifdef USE_CLEARCOAT
-        material.clearcoat = 0.0;
-        #endif`,
+        `#include <lights_physical_fragment>`
       );
   };
 }
