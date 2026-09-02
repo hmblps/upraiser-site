@@ -154,7 +154,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
         castShadow
         shadow-mapSize={[4096, 4096]}
         shadow-bias={-0.0004}
-        shadow-normalBias={0.18}
+        shadow-normalBias={0.04}
         shadow-camera-near={1}
         shadow-camera-far={520}
         shadow-camera-left={-220}

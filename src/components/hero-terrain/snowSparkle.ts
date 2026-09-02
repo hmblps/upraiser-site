@@ -187,12 +187,13 @@ export function applySnowSparkle(
         
         ${splatBody}
         
-        // ВОЗВРАЩАЕМ ГЛУБОКИЕ ТЕНИ ПОВЕРХ ТЕКСТУРЫ (Критично!)
-        // Умножаем на наш глубокий snowShadow (pow), чтобы складки и трещины 
-        // в сугробах гарантированно прорезали белизну, возвращая объем.
+        // ВОЗВРАЩАЕМ ГЛУБОКИЕ ТЕНИ ПОВЕРХ ТЕКСТУРЫ
+        // Уходим от грязных серых теней к холодным синеватым ледяным теням, 
+        // имитирующим рассеянный свет неба (Rayleigh scattering)
         float snowShadow = smoothstep(0.0, 0.45, originalLuma);
-        snowShadow = pow(snowShadow, 2.2); 
-        occludedSnow *= mix(0.4, 1.0, snowShadow);
+        snowShadow = pow(snowShadow, 1.8); 
+        vec3 icyShadowColor = vec3(0.55, 0.65, 0.85) * pureSnowColor;
+        occludedSnow = mix(icyShadowColor, occludedSnow, snowShadow);
         
         // Применяем снег жестко, перекрывая базу
         diffuseColor.rgb = mix(diffuseColor.rgb, occludedSnow, strictSnowMask);
@@ -256,8 +257,10 @@ export function applySnowSparkle(
         vec3 baseRock = mix(diffuseColor.rgb, sharpRockColor, steepRockMask);
         diffuseColor.rgb = mix(baseRock, occludedSnow, strictSnowMask);
         
-        // Делаем снег физически матовым (высокий roughness), чтобы он не бликовал как металл
-        roughnessFactor = mix(roughnessFactor, 0.95, strictSnowMask);
+        // Возвращаем снегу ледяную корку (glint). Вместо плоского матового 0.95
+        // используем более низкий roughness + шум, чтобы солнце могло рисовать жесткие блики.
+        float iceRoughness = mix(0.45, 0.75, snowGrainFine);
+        roughnessFactor = mix(roughnessFactor, iceRoughness, strictSnowMask);
         
         float glitter = 0.0; // Фикс для компилятора
 
