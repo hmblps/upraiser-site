@@ -146,7 +146,6 @@ html[data-brand-aurora="1"] .depth-page--cases.viewport-page::before {
   background-position: 50% 50%, 50% 50%;
   filter: blur(18px);
   opacity: 0.7;
-  will-change: background-position;
   animation: route-aurora-drift 72s linear infinite;
 }
 

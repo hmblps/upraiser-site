@@ -139,9 +139,16 @@ export function useInfiniteCaseCarousel(ref: RefObject<HTMLElement | null>, { it
       return;
     }
 
-    el.querySelector<HTMLElement>(
-      `[data-case-copy="0"][data-case-index="${index}"]`,
-    )?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    const target = el.querySelector<HTMLElement>(`[data-case-copy="0"][data-case-index="${index}"]`);
+    if (target) {
+      animate(el.scrollLeft, target.offsetLeft - el.clientWidth / 2 + target.clientWidth / 2, {
+        type: "spring",
+        stiffness: 150,
+        damping: 25,
+        mass: 0.8,
+        onUpdate: (v) => { el.scrollLeft = v; },
+      });
+    }
   };
 
   return { activeIndex, scrollByCard, scrollToIndex };

@@ -4,11 +4,10 @@ import type { SiteMode } from "../../data/liveContent";
 
 const SPRING = { type: "spring" as const, stiffness: 220, damping: 28, mass: 0.85 };
 
-// Scroll within a lane → vertical (content is a vertical list)
 const panelScroll = {
   hidden: { opacity: 0, y: 14 },
   visible: { opacity: 1, y: 0, transition: SPRING },
-  exit:    { opacity: 0, y: 8, transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const } },
+  exit:    { opacity: 0, y: 8, transition: { type: "spring", bounce: 0, duration: 0.25 } },
 };
 
 // Tumbler / lane switch → horizontal (tabs are a horizontal paradigm;
@@ -16,7 +15,7 @@ const panelScroll = {
 const panelLane = {
   hidden: (dir: number) => ({ opacity: 0, x: dir * 28 }),
   visible:              ({ opacity: 1, x: 0, transition: SPRING }),
-  exit:   (dir: number) => ({ opacity: 0, x: dir * -20, transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const } }),
+  exit:   (dir: number) => ({ opacity: 0, x: dir * -20, transition: { type: "spring", bounce: 0, duration: 0.25 } }),
 };
 
 type FormatCopyProps = {

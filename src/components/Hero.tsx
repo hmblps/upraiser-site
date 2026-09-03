@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, animate } from "framer-motion";
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { useCarouselActiveIndex } from "../hooks/useCarouselActiveIndex";
 import { useCountUp } from "../hooks/useCountUp";
@@ -49,7 +49,14 @@ function HeroStatsDots({
     if (!container) return;
     const cell = container.querySelectorAll(".hero-stats__cell")[index] as HTMLElement | undefined;
     if (!cell) return;
-    container.scrollTo({ left: cell.offsetLeft - container.offsetLeft, behavior: "smooth" });
+    animate(container.scrollLeft, cell.offsetLeft - container.offsetLeft, {
+      type: "spring",
+      bounce: 0,
+      duration: 0.5,
+      onUpdate: (v) => {
+        container.scrollLeft = v;
+      }
+    });
   };
 
   return (
