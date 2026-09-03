@@ -120,9 +120,9 @@ function SnowSplatBinder({ mat }: { mat: MeshPhysicalMaterial }) {
       rockNormal: rockNormal,
       debrisColor: debrisColor,
       debrisNormal: debrisNormal
-    }, theme === "light");
+    });
     mat.needsUpdate = true;
-  }, [mat, snowColor, snowNormal, snowRough, rockColor, rockNormal, debrisColor, debrisNormal, theme]);
+  }, [mat, snowColor, snowNormal, snowRough, rockColor, rockNormal, debrisColor, debrisNormal]);
 
   return null;
 }
@@ -165,9 +165,9 @@ function LightSnowMeshes({
     mat.opacity = 1;
     mat.depthWrite = true;
     mat.depthTest = true;
-    applySnowSparkle(mat, undefined, theme === "light");
+    applySnowSparkle(mat);
     return mat;
-  }, [src, theme]);
+  }, [src]);
 
   useEffect(
     () => () => {

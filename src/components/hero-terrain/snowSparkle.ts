@@ -17,12 +17,11 @@ export type SnowSplatMaps = {
 export function applySnowSparkle(
   mat: MeshStandardMaterial | MeshPhysicalMaterial,
   maps?: SnowSplatMaps,
-  isLight: boolean = true
 ) {
   const uSparkle = { value: 1 };
 
   mat.userData.uSparkle = uSparkle;
-  mat.customProgramCacheKey = () => (maps ? "everest-snow-poly-v25" : "everest-snow-montfort-v24") + (isLight ? "-light" : "-dark");
+  mat.customProgramCacheKey = () => (maps ? "everest-snow-poly-v25" : "everest-snow-montfort-v24");
   mat.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms) => {
     shader.uniforms.uSparkle = uSparkle;
     if (maps) {
@@ -303,31 +302,7 @@ export function applySnowSparkle(
         float mist = fresnel * altitude * (0.28 + 0.5 * strictSnowMask);
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.97, 0.98, 1.0), mist * 0.14);
         float silhouette = smoothstep(0.58, 0.98, rawFresnel) * mix(0.55, 1.0, smoothstep(190.0, 270.0, dist));
-        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.97, 0.985, 1.0), silhouette * 0.38);
-        
-        ${!isLight ? `
-        // === HI-TECH DARK THEME OVERRIDE ===
-        // 1. Превращаем скалы в полированный черный обсидиан/стекло
-        diffuseColor.rgb *= 0.15; // Сильно затемняем базу
-        roughnessFactor = mix(roughnessFactor, 0.2, steepRockMask); // Делаем скалы блестящими
-        metalnessFactor = 0.5;
-
-        // 2. Кибер-топография (Неоновые контуры)
-        // Рисуем линии уровня (высота) и сетку координат
-        float gridY = smoothstep(0.92, 1.0, fract(wp.y * 1.2));
-        float gridX = smoothstep(0.98, 1.0, fract(wp.x * 0.15));
-        float gridZ = smoothstep(0.98, 1.0, fract(wp.z * 0.15));
-        float net = max(gridY, max(gridX, gridZ));
-        
-        // 3. Снег превращается в цифровую эрозию
-        vec3 neonColor = vec3(0.0, 0.7, 1.0); // Кибер-синий
-        // Проявляем сетку только там, где был бы снег (на пиках и пологих участках)
-        float cyberGlow = net * strictSnowMask * mix(0.2, 1.0, altitude);
-        
-        // Заливаем неоном
-        diffuseColor.rgb = mix(diffuseColor.rgb, neonColor, cyberGlow);
-        ` : ""}
-        `,
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.97, 0.985, 1.0), silhouette * 0.38);`,
       )
       .replace(
         "#include <lights_physical_fragment>",
