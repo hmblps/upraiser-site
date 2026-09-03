@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getCaseById, type CaseStudy } from "../data/cases";
+import { getCaseById, caseStudies, type CaseStudy } from "../data/cases";
 
 const CaseDetailModal = lazy(() =>
   import("../components/CaseDetailModal").then((m) => ({ default: m.CaseDetailModal })),
@@ -87,12 +87,10 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
   const navigateCase = useCallback(
     (direction: -1 | 1) => {
       if (!item) return;
-      import("../data/cases").then(({ caseStudies }) => {
-        const idx = caseStudies.findIndex((c) => c.id === item.id);
-        if (idx === -1) return;
-        const nextIdx = (idx + direction + caseStudies.length) % caseStudies.length;
-        openCase(caseStudies[nextIdx].id);
-      });
+      const idx = caseStudies.findIndex((c) => c.id === item.id);
+      if (idx === -1) return;
+      const nextIdx = (idx + direction + caseStudies.length) % caseStudies.length;
+      openCase(caseStudies[nextIdx].id);
     },
     [item, openCase],
   );
