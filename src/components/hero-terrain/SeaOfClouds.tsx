@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import { DoubleSide, ShaderMaterial,   } from "three";
+import { DoubleSide, ShaderMaterial, UniformsUtils, UniformsLib } from "three";
 import { heroCapture } from "../../lib/heroCapture";
 import { useHeroFlyOptional } from "../../context/HeroFlyContext";
 import { readProgress } from "./shared";
@@ -13,12 +13,14 @@ function makeSeaMaterial(theme: string) {
     depthTest: true,
     fog: true,
     side: DoubleSide,
-    uniforms: {
-      uTime: { value: 0 },
-      uColor: { value: isLight ? [0.96, 0.975, 0.995] : [0.05, 0.05, 0.05] },
-      uOpacity: { value: 0.95 },
-      // ThreeJS fog uniforms are automatically injected if fog: true
-    },
+    uniforms: UniformsUtils.merge([
+      UniformsLib.fog,
+      {
+        uTime: { value: 0 },
+        uColor: { value: isLight ? [0.96, 0.975, 0.995] : [0.05, 0.05, 0.05] },
+        uOpacity: { value: 0.95 },
+      }
+    ]),
     vertexShader: `
       #include <fog_pars_vertex>
       varying vec2 vUv;
