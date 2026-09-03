@@ -100,6 +100,32 @@ function FraudGhost({
   );
 }
 
+function FraudArc({ r, seg, morph }: { r: number; seg: typeof segments[0]; morph: MotionValue<number> }) {
+  const sweep = (seg.value / 100) * (END_ANGLE - START_ANGLE);
+  const dPath = useTransform(morph, (m) => arcPath(0, 0, r, START_ANGLE, START_ANGLE + sweep * m));
+  
+  return (
+    <g>
+      <path
+        d={arcPath(0, 0, r, START_ANGLE, END_ANGLE)}
+        fill="none"
+        stroke={seg.color}
+        strokeWidth={STROKE}
+        strokeOpacity="0.12"
+        strokeLinecap="round"
+      />
+      <motion.path
+        d={dPath}
+        fill="none"
+        stroke={seg.color}
+        strokeWidth={STROKE}
+        strokeLinecap="round"
+        style={{ filter: `drop-shadow(0 0 8px ${seg.color}66)` }}
+      />
+    </g>
+  );
+}
+
 export function FraudScrollChart({ progress }: { progress: MotionValue<number> }) {
   const reduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
@@ -165,34 +191,9 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
           preserveAspectRatio="none"
         >
           <g transform={`translate(${CENTER_X}, ${CY})`}>
-            {radii.map((r, i) => {
-              const seg = segments[i]!;
-              const sweep = (seg.value / 100) * (END_ANGLE - START_ANGLE);
-              
-              // Map morph to dynamic path string
-              const dPath = useTransform(morph, (m) => arcPath(0, 0, r, START_ANGLE, START_ANGLE + sweep * m));
-              
-              return (
-                <g key={i}>
-                  <path
-                    d={arcPath(0, 0, r, START_ANGLE, END_ANGLE)}
-                    fill="none"
-                    stroke={seg.color}
-                    strokeWidth={STROKE}
-                    strokeOpacity="0.12"
-                    strokeLinecap="round"
-                  />
-                  <motion.path
-                    d={dPath}
-                    fill="none"
-                    stroke={seg.color}
-                    strokeWidth={STROKE}
-                    strokeLinecap="round"
-                    style={{ filter: `drop-shadow(0 0 8px ${seg.color}66)` }}
-                  />
-                </g>
-              );
-            })}
+            {radii.map((r, i) => (
+              <FraudArc key={i} r={r} seg={segments[i]!} morph={morph} />
+            ))}
           </g>
         </svg>
       </div>
