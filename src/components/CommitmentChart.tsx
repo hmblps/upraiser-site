@@ -35,7 +35,7 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
   const trackOpacity = useTransform(progress, [DRAW_IN, DRAW_IN + 0.1], [0, 0.35]);
 
   // Ticks: fade in with body copy
-  const tickOpacity = useTransform(progress, [0.64, 0.76], [0, 0.1]);
+  const tickOpacity = useTransform(progress, [0.64, 0.76], [0, 1]);
 
   // Pulse dot: appears mid-way through draw
   const dotOpacity = useTransform(progress, [0.56, 0.68], [0, 1]);
@@ -60,16 +60,21 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
 
         {/* Tick-code — synced to body-copy appearance */}
         <motion.g style={{ opacity: tickOpacity }}>
-          {Array.from({ length: 40 }).map((_, i) => (
-            <line
-              key={i}
-              x1={i * 30} y1={350}
-              x2={i * 30} y2={370}
-              stroke="var(--theme-accent)"
-              strokeOpacity="0.4"
-              strokeWidth="2"
-            />
-          ))}
+          {Array.from({ length: 12 }).map((_, i) => {
+            const x = (i / 11) * 1200;
+            return (
+              <line
+                key={i}
+                x1={x}
+                y1={350}
+                x2={x}
+                y2={370}
+                stroke="var(--theme-accent)"
+                strokeOpacity="0.3"
+                strokeWidth="2"
+              />
+            );
+          })}
         </motion.g>
 
         {/* Grey track — appears with first text line */}

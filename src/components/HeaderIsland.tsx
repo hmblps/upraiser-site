@@ -69,14 +69,6 @@ export function HeaderIsland() {
         {/* Divider */}
         <div className="w-[1px] h-2.5 bg-border/50 shrink-0 mx-0.5" />
 
-        {/* Locale */}
-        <div className="island-locale-wrapper shrink-0 scale-90">
-          <LocaleSwitcher />
-        </div>
-
-        {/* Divider */}
-        <div className="w-[1px] h-2.5 bg-border/50 shrink-0 mx-0.5" />
-
         {/* Theme Toggle */}
         <motion.button
           type="button"
@@ -99,6 +91,14 @@ export function HeaderIsland() {
           </motion.span>
           <span>{isDark ? 'The Infrastructure' : 'The Growth'}</span>
         </motion.button>
+
+        {/* Divider */}
+        <div className="w-[1px] h-2.5 bg-border/50 shrink-0 mx-0.5" />
+
+        {/* Locale */}
+        <div className="island-locale-wrapper shrink-0 scale-90">
+          <LocaleSwitcher />
+        </div>
       </div>
     </motion.div>
   );

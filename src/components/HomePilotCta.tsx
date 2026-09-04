@@ -24,8 +24,8 @@ export function HomePilotCta() {
   });
   
   const smoothProgress = useSpring(scrollYProgress, { 
-    stiffness: 60, 
-    damping: 20, 
+    stiffness: 30, 
+    damping: 25, 
     restDelta: 0.001 
   });
   

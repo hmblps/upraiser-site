@@ -163,18 +163,20 @@ function InteractiveVisuals() {
         <div className="w-1/3 h-1.5 bg-border/50 mx-auto rounded-full mb-1 shrink-0" />
         
         {/* Feed Items */}
-        {[1, 2, 3, 4].map((_, i) => (
-          <div key={i} className={`w-full p-2.5 rounded-xl border border-border/30 flex flex-col gap-2 ${i === 0 ? 'bg-accent/10 border-accent/20' : 'bg-border/10'}`}>
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-accent/40 shrink-0" />
-              <div className="flex-1 space-y-1">
-                 <div className="w-3/4 h-1.5 bg-text/60 rounded-full" />
-                 <div className="w-1/2 h-1.5 bg-text-muted/40 rounded-full" />
+        <div className="flex-1 flex flex-col gap-2 overflow-hidden">
+          {[1, 2, 3, 4, 5].map((_, i) => (
+            <div key={i} className={`w-full p-2.5 rounded-xl border border-border/30 flex flex-col gap-2 shrink-0 ${i === 0 ? 'bg-accent/10 border-accent/20' : 'bg-border/10'}`}>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-accent/40 shrink-0" />
+                <div className="flex-1 space-y-1">
+                   <div className="w-3/4 h-1.5 bg-text/60 rounded-full" />
+                   <div className="w-1/2 h-1.5 bg-text-muted/40 rounded-full" />
+                </div>
               </div>
+              {i === 0 && <div className="w-full h-12 bg-accent/20 rounded-lg mt-1 border border-accent/10" />}
             </div>
-            {i === 0 && <div className="w-full h-12 bg-accent/20 rounded-lg mt-1 border border-accent/10" />}
-          </div>
-        ))}
+          ))}
+        </div>
       </motion.div>
     </div>
   );
