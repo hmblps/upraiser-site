@@ -3,6 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { ACESFilmicToneMapping, PCFSoftShadowMap, SRGBColorSpace } from "three";
+import { Compass } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "../../lib/heroModel";
@@ -127,12 +128,14 @@ export function HeroTerrainCanvas({
       {/* Loading overlay while shaders compile (crucial for mobile) */}
       {!modelReady && !capturing ? (
         <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none transition-opacity duration-1000">
-          <div className="flex flex-col items-center gap-3 opacity-60">
-            <svg className="animate-spin h-6 w-6 text-fg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3"></circle>
-              <path className="opacity-80" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span className="text-micro font-medium uppercase tracking-widest text-fg">Initializing Engine</span>
+          <div className="flex flex-col items-center gap-4 opacity-60">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+            >
+              <Compass className="h-6 w-6 text-fg opacity-80" strokeWidth={1.5} />
+            </motion.div>
+            <span className="text-micro font-medium uppercase tracking-[0.25em] text-fg animate-pulse">Rendering Terrain</span>
           </div>
         </div>
       ) : null}
