@@ -219,8 +219,7 @@
   background-image: linear-gradient(
     225deg,
     var(--theme-accent-light) 0%,
-    var(--theme-accent) 30%,
-    var(--theme-accent-secondary) 70%,
+    var(--theme-accent) 75%,
     var(--theme-accent-secondary) 100%
   );
   
@@ -235,8 +234,7 @@
   background-image: linear-gradient(
     135deg, 
     var(--logo-gold) 0%, 
-    var(--logo-gold) 30%, 
-    var(--logo-red) 70%,
+    var(--logo-gold) 75%, 
     var(--logo-red) 100%
   );
 }
