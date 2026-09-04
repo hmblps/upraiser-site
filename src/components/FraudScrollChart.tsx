@@ -100,7 +100,7 @@ function FraudGhost({
   );
 }
 
-function FraudArc({ r, seg, morph }: { r: number; seg: typeof segments[0]; morph: MotionValue<number> }) {
+function FraudArc({ r, seg, morph }: { r: number; seg: (typeof segments)[number]; morph: MotionValue<number> }) {
   const sweep = (seg.value / 100) * (END_ANGLE - START_ANGLE);
   const dPath = useTransform(morph, (m) => arcPath(0, 0, r, START_ANGLE, START_ANGLE + sweep * m));
   
@@ -184,18 +184,20 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
         ))}
       </div>
 
-      <div className="absolute inset-0 w-full h-full pointer-events-none">
-        <svg 
-          className="w-full h-full overflow-visible" 
-          viewBox={`0 0 ${VB} ${VB}`}
-          preserveAspectRatio="none"
-        >
-          <g transform={`translate(${CENTER_X}, ${CY})`}>
-            {radii.map((r, i) => (
-              <FraudArc key={i} r={r} seg={segments[i]!} morph={morph} />
-            ))}
-          </g>
-        </svg>
+      <div className="fraud-radial-chart__plot pointer-events-none">
+        <div className="fraud-radial-chart__frame">
+          <svg 
+            className="fraud-radial-chart__svg" 
+            viewBox={`0 0 ${VB} ${VB}`}
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <g transform={`translate(${CENTER_X}, ${CY})`}>
+              {radii.map((r, i) => (
+                <FraudArc key={i} r={r} seg={segments[i]!} morph={morph} />
+              ))}
+            </g>
+          </svg>
+        </div>
       </div>
     </motion.div>
   );

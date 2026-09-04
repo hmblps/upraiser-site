@@ -7,7 +7,7 @@ const SPRING = { type: "spring" as const, stiffness: 220, damping: 28, mass: 0.8
 const panelScroll = {
   hidden: { opacity: 0, y: 14 },
   visible: { opacity: 1, y: 0, transition: SPRING },
-  exit:    { opacity: 0, y: 8, transition: { type: "spring", bounce: 0, duration: 0.25 } },
+  exit:    { opacity: 0, y: 8, transition: { type: "spring" as const, bounce: 0, duration: 0.25 } },
 };
 
 // Tumbler / lane switch → horizontal (tabs are a horizontal paradigm;
@@ -15,7 +15,7 @@ const panelScroll = {
 const panelLane = {
   hidden: (dir: number) => ({ opacity: 0, x: dir * 28 }),
   visible:              ({ opacity: 1, x: 0, transition: SPRING }),
-  exit:   (dir: number) => ({ opacity: 0, x: dir * -20, transition: { type: "spring", bounce: 0, duration: 0.25 } }),
+  exit:   (dir: number) => ({ opacity: 0, x: dir * -20, transition: { type: "spring" as const, bounce: 0, duration: 0.25 } }),
 };
 
 type FormatCopyProps = {
