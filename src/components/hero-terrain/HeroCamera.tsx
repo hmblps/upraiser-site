@@ -53,10 +53,17 @@ export function HeroCamera({
     sampleArc(tPos, path.startPos, path.midPos, path.endPos, targetPos.current);
     sampleArc(tLook, path.startLook, path.midLook, path.endLook, targetLook.current);
 
-    const fovTarget =
+    let fovTarget =
       (1 - tFov) * (1 - tFov) * path.startFov +
       2 * (1 - tFov) * tFov * path.midFov +
       tFov * tFov * path.endFov;
+
+    const aspect = state.viewport.aspect || state.size.width / state.size.height;
+    if (aspect < 1) {
+      // Widen the field of view on portrait screens so the mountain doesn't get cropped
+      const fovMult = MathUtils.clamp(1.1 / aspect, 1, 1.8);
+      fovTarget *= fovMult;
+    }
 
     if (snap) {
       camera.position.copy(targetPos.current);

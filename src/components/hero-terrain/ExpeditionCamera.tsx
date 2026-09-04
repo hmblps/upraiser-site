@@ -69,6 +69,13 @@ export function ExpeditionCamera({
       }
     }
 
+    const aspect = state.viewport.aspect || state.size.width / state.size.height;
+    let fovMult = 1;
+    if (aspect < 1) {
+      fovMult = MathUtils.clamp(1.1 / aspect, 1, 1.8);
+    }
+    const targetFov = fovAt(raw) * fovMult;
+
     if (snap) {
       camera.position.copy(targetPos.current);
       look.current.copy(targetLook.current);
@@ -76,7 +83,7 @@ export function ExpeditionCamera({
       camera.rotateZ(Math.sin(raw * Math.PI) * EXPEDITION_CLIMB.bankMax);
       camera.updateMatrixWorld();
       if (camera instanceof PerspectiveCamera) {
-        camera.fov = fovAt(raw);
+        camera.fov = targetFov;
         camera.updateProjectionMatrix();
       }
       return;
@@ -108,7 +115,7 @@ export function ExpeditionCamera({
     camera.rotateZ(traverse * EXPEDITION_CLIMB.bankMax + sway.current.x * 0.02);
 
     if (camera instanceof PerspectiveCamera) {
-      camera.fov = MathUtils.lerp(camera.fov, fovAt(raw), camAlpha);
+      camera.fov = MathUtils.lerp(camera.fov, targetFov, camAlpha);
       camera.updateProjectionMatrix();
     }
   }, -1);
