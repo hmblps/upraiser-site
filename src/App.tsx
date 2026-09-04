@@ -49,8 +49,10 @@ export default function App() {
           {/* Home now includes Cases (Peaks) and Routes natively */}
           <Route path="/" element={<HomePage />}>
             <Route path="cases/:slug" element={<CaseDetailPage />} />
-            <Route path="channels" element={<ChannelsPage />} />
           </Route>
+          
+          {/* Standalone channels/routes page */}
+          <Route path="channels" element={<ChannelsPage />} />
 
           <Route path="craft" element={<CraftPage />} />
                     <Route path="contact/sent" element={<ThankYouPage />} />
