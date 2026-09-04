@@ -187,7 +187,7 @@ function HeroPinnedScene() {
         </div>
 
         {/* Stats — uses SAME page-container as Header, guaranteeing identical column alignment */}
-        <div className="hero-stats-rail page-container hidden lg:block">
+        <div className="hero-stats-rail page-container mt-8 lg:mt-0">
           <div className="w-full grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10 xl:gap-14">
             <div className="hidden lg:block" />
             <div className="hero-stats-wrap flex flex-col w-full pointer-events-auto">

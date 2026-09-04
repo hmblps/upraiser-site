@@ -1,10 +1,13 @@
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
+import { useRef } from "react";
 import { promiseByMode, type SiteMode } from "../data/liveContent";
 import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { formatEventNames } from "../lib/formatEventNames";
+import { CommitmentChart } from "./CommitmentChart";
+import { ParityWaterChart } from "./ParityWaterChart";
 
 function GrowthWordInline({ word }: { word: string }) {
   return <span className="growth-word-inline">{word}</span>;
@@ -13,6 +16,13 @@ function GrowthWordInline({ word }: { word: string }) {
 function PromiseClean() {
   const { mode } = useMode();
   const content = promiseByMode[mode];
+  const isParityDark = mode === "infrastructure";
+  const ref = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 90%", "center 50%"],
+  });
 
   return (
     <section id="promise" className="section-band section-band--quiet">
@@ -24,6 +34,10 @@ function PromiseClean() {
             {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />.
           </p>
           <p className="section-description max-w-2xl mt-4 mb-6">{formatEventNames(content.description)}</p>
+        </div>
+        
+        <div ref={ref} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 rounded-xl overflow-hidden border border-border/30 bg-bg-card shadow-sm">
+           {isParityDark ? <ParityWaterChart progress={scrollYProgress} /> : <CommitmentChart progress={scrollYProgress} />}
         </div>
       </ModeContentTransition>
     </section>
