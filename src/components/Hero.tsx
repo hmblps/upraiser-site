@@ -202,7 +202,7 @@ function HeroPinnedScene() {
                     exit={reduced ? undefined : { opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex flex-col gap-10 items-start">
+                    <div className="flex flex-col gap-6 lg:gap-10 items-start">
                       {highlights.filter((_, i) => i % 2 === 0).map((item, i) => {
                         const originalIndex = i * 2;
                         const revealed = !scrubCards || originalIndex < revealedCount;
@@ -219,7 +219,7 @@ function HeroPinnedScene() {
                         );
                       })}
                     </div>
-                    <div className="flex flex-col gap-10 items-end">
+                    <div className="flex flex-col gap-6 lg:gap-10 items-end">
                       {highlights.filter((_, i) => i % 2 !== 0).map((item, i) => {
                         const originalIndex = i * 2 + 1;
                         const revealed = !scrubCards || originalIndex < revealedCount;

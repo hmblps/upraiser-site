@@ -24,9 +24,9 @@ body {
   --hero-content-gap: clamp(0.35rem, 1.2vh, 0.85rem);
   --scroll-sticky-top: calc(var(--site-header-height) + 1.25rem);
   --scroll-margin-section: calc(var(--site-header-height) + 1.5rem);
-  --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --page-gutter: clamp(1rem, 4vw, 2.5rem);
   /** Hero + header — left inset inside the hero square (right rail stays on --page-gutter) */
-  --hero-rail-left: clamp(1.75rem, 5vw, 3rem);
+  --hero-rail-left: clamp(1.25rem, 4vw, 3rem);
   --content-max: 80rem; /* aligns with prior max-w-7xl rail */
   --content-max-narrow: 40rem;
   --content-max-copy: 36rem;
@@ -60,13 +60,13 @@ body {
   --text-caption: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
   --text-body: clamp(0.875rem, 0.82rem + 0.28vw, 0.9375rem);
   --text-body-lg: clamp(0.9375rem, 0.88rem + 0.35vw, 1.0625rem);
-  --text-lead: clamp(1.15rem, 1rem + 0.7vw, 1.5rem);
-  /** Sticky / viewport page H1 — denser than home section titles */
-  --text-title-compact: clamp(1.35rem, 2.4vw, 2.1rem);
-  --text-title: clamp(1.75rem, 3.2vw, 2.35rem);
+  --text-lead: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem);
+  /* Used for small kicker caps */
+  --text-title-compact: clamp(1.2rem, 2vw, 1.8rem);
+  --text-title: clamp(1.5rem, 2.8vw, 2.15rem);
   /** Format / feature names inside product panels (Solutions copy col) */
   --text-feature: clamp(1.75rem, 3.2vw, 2.65rem);
-  --text-display: clamp(2.15rem, 5.4vw, 4.1rem);
+  --text-display: clamp(1.85rem, 5.4vw, 4.1rem);
   --leading-tight: 1.1;
   --leading-snug: 1.2;
   --leading-body: 1.55;

@@ -428,8 +428,8 @@
   }
 
   .hero-title--hero {
-    font-size: clamp(2.15rem, 9.5vw, 3.1rem);
-    line-height: 0.94;
+    font-size: clamp(1.85rem, 8vw, 2.75rem);
+    line-height: 1;
   }
 
   .hero-title--hero > .block {
