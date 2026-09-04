@@ -548,7 +548,8 @@
 
 [data-theme="dark"] #hero,
 [data-theme="light"] #hero {
-  border-bottom-color: color-mix(in srgb, var(--theme-border) 28%, transparent);
+  border-bottom-width: 0 !important;
+  border-bottom-color: transparent !important;
 }
 
 #audience.section-band {

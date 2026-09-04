@@ -76,7 +76,7 @@ export function BrandHazeSky({ lite = false }: { lite?: boolean }) {
     [lite, fogColor],
   );
 
-  const geometry = useMemo(() => new SphereGeometry(720, 24, 16), []);
+  const geometry = useMemo(() => new SphereGeometry(720, 64, 64), []);
 
   useEffect(
     () => () => {
