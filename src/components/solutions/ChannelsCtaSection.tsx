@@ -1,7 +1,35 @@
 import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, animate, useMotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, animate, useMotionValue, useMotionTemplate } from "framer-motion";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import type { MotionValue } from "framer-motion";
+
+function ChartBar({ h, i, scrollYProgress }: { h: number, i: number, scrollYProgress: MotionValue<number> }) {
+  const yOffset = useTransform(scrollYProgress, [0.3 + i * 0.05, 1], [100, 100 - h]);
+  return (
+    <motion.div 
+      className="flex-1 bg-accent rounded-sm shadow-[0_0_8px_var(--theme-accent)] origin-bottom" 
+      style={{ 
+        height: "100%",
+        y: useMotionTemplate`${yOffset}%`,
+        opacity: 0.4 + (h/100)*0.6 
+      }} 
+    />
+  );
+}
+
+function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionValue<number> }) {
+  const heightStr = useTransform(scrollYProgress, [0, 1], ["0%", h + "%"]);
+  return (
+    <motion.div 
+      className="w-full bg-accent rounded-t-sm" 
+      style={{ 
+        height: heightStr,
+        opacity: h / 100 
+      }} 
+    />
+  );
+}
 
 function InteractiveVisuals() {
   const ref = useRef<HTMLDivElement>(null);
@@ -73,14 +101,7 @@ function InteractiveVisuals() {
           {/* Synthetic Data Wave at bottom */}
           <div className="absolute bottom-0 left-0 w-full flex items-end justify-between px-4 gap-1 opacity-40 mix-blend-overlay">
             {wave.map((h, i) => (
-              <motion.div 
-                key={i} 
-                className="w-full bg-accent rounded-t-sm" 
-                style={{ 
-                  height: useTransform(scrollYProgress, [0, 1], [0, h + '%']),
-                  opacity: h / 100 
-                }} 
-              />
+              <WaveBar key={i} h={h} scrollYProgress={scrollYProgress} />
             ))}
           </div>
         </div>
@@ -115,20 +136,9 @@ function InteractiveVisuals() {
 
         {/* Chart tied to scroll */}
         <div className="flex-1 w-full bg-accent/5 rounded-xl border border-accent/10 flex items-end p-2 gap-1.5 mt-auto overflow-hidden">
-          {bars.map((h, i) => {
-            const yOffset = useTransform(scrollYProgress, [0.3 + i * 0.05, 1], [100, 100 - h]);
-            return (
-              <motion.div 
-                key={i} 
-                className="flex-1 bg-accent rounded-sm shadow-[0_0_8px_var(--theme-accent)] origin-bottom" 
-                style={{ 
-                  height: "100%",
-                  y: useMotionTemplate`${yOffset}%`,
-                  opacity: 0.4 + (h/100)*0.6 
-                }} 
-              />
-            );
-          })}
+          {bars.map((h, i) => (
+             <ChartBar key={i} h={h} i={i} scrollYProgress={scrollYProgress} />
+          ))}
         </div>
       </motion.div>
 
