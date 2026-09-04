@@ -82,21 +82,22 @@ export function HeaderIsland() {
           type="button"
           onClick={toggleTheme}
           whileHover={reduced ? undefined : { scale: 1.05 }}
-          whileTap={reduced ? undefined : { scale: 0.9 }}
-          transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-          className="island-theme-btn flex items-center justify-center w-6 h-6 rounded-full text-fg-muted transition-colors shrink-0"
+          whileTap={reduced ? undefined : { scale: 0.95 }}
+          transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
+          className="island-nav-link relative z-10 inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap text-fg-muted hover:text-fg font-semibold cursor-pointer"
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           title="Switch content mode"
         >
           <motion.span
             key={theme}
-            initial={reduced ? false : { opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "spring", bounce: 0, duration: 0.35 }}
-            className="inline-flex"
+            initial={reduced ? false : { opacity: 0, scale: 0.92, rotate: -45 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+            className="inline-flex text-accent"
           >
-            {isDark ? <Sun className="w-3 h-3" strokeWidth={2.5} /> : <Moon className="w-3 h-3" strokeWidth={2.5} />}
+            {isDark ? <Sun className="w-3.5 h-3.5" strokeWidth={2.5} /> : <Moon className="w-3.5 h-3.5" strokeWidth={2.5} />}
           </motion.span>
+          <span>{isDark ? 'The Infrastructure' : 'The Growth'}</span>
         </motion.button>
       </div>
     </motion.div>

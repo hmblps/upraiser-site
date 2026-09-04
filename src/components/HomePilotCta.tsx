@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { primaryCta } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useRef } from "react";
-import { motion, useScroll as useFramerScroll, useTransform } from "framer-motion";
+import { motion, useScroll as useFramerScroll, useTransform, useSpring } from "framer-motion";
 import { useScroll } from "../context/ScrollContext";
 import { useTheme } from "../context/ThemeContext";
 import { Magnetic } from "./motion-preview/Magnetic";
@@ -22,8 +22,16 @@ export function HomePilotCta() {
     target: containerRef,
     offset: ["start end", "end end"]
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["40%", "0%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.25, 1]);
+  
+  const smoothProgress = useSpring(scrollYProgress, { 
+    stiffness: 60, 
+    damping: 20, 
+    restDelta: 0.001 
+  });
+  
+  const y = useTransform(smoothProgress, [0, 1], ["40%", "0%"]);
+  const scale = useTransform(smoothProgress, [0, 1], [1.25, 1]);
+  
   const navigate = useNavigate();
   const reduced = useReducedMotion();
 

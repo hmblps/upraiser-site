@@ -82,19 +82,25 @@ function InteractiveVisuals() {
         
         {/* Logo Watermark / Data Area */}
         <div className="relative flex-1 bg-border/10 rounded-xl border border-border/20 flex flex-col p-3 overflow-hidden">
-          {/* Skeleton UI for Center Card to make it less empty */}
+          
           <div className="flex gap-3 h-full z-10 relative">
             <div className="w-1/3 h-full bg-border/20 rounded-lg flex flex-col justify-end p-2 gap-2">
-              <div className="w-full h-2 bg-text-muted/20 rounded-full" />
+              <div className="w-full h-12 bg-accent/10 rounded-md border border-accent/20 mb-auto" />
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-full h-2 bg-text-muted/20 rounded-full" />
+              ))}
               <div className="w-2/3 h-2 bg-text-muted/20 rounded-full" />
             </div>
             <div className="flex-1 flex flex-col gap-3">
-              <div className="flex-1 bg-border/10 rounded-lg flex items-center justify-center">
-                 <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
-                   <div className="w-2 h-2 rounded-full bg-accent" />
+              <div className="flex-1 bg-border/10 rounded-lg flex items-center justify-center relative overflow-hidden">
+                 <div className="absolute inset-0 opacity-[0.03] dark:opacity-10 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 4px, var(--theme-accent) 4px, var(--theme-accent) 5px)' }} />
+                 <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center relative z-10">
+                   <div className="w-3 h-3 rounded-full bg-accent" />
                  </div>
               </div>
-              <div className="h-1/4 bg-border/10 rounded-lg" />
+              <div className="h-1/4 bg-border/10 rounded-lg flex items-center px-2">
+                <div className="w-1/2 h-1.5 bg-accent/40 rounded-full" />
+              </div>
             </div>
           </div>
           
@@ -135,7 +141,8 @@ function InteractiveVisuals() {
         </div>
 
         {/* Chart tied to scroll */}
-        <div className="flex-1 w-full bg-accent/5 rounded-xl border border-accent/10 flex items-end p-2 gap-1.5 mt-auto overflow-hidden">
+        <div className="relative flex-1 w-full bg-accent/5 rounded-xl border border-accent/10 flex items-end p-2 gap-1.5 mt-auto overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.04] dark:opacity-10 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 4px, var(--theme-accent) 4px, var(--theme-accent) 5px)' }} />
           {bars.map((h, i) => (
              <ChartBar key={i} h={h} i={i} scrollYProgress={scrollYProgress} />
           ))}
@@ -156,7 +163,7 @@ function InteractiveVisuals() {
         <div className="w-1/3 h-1.5 bg-border/50 mx-auto rounded-full mb-1 shrink-0" />
         
         {/* Feed Items */}
-        {[1, 2, 3].map((_, i) => (
+        {[1, 2, 3, 4].map((_, i) => (
           <div key={i} className={`w-full p-2.5 rounded-xl border border-border/30 flex flex-col gap-2 ${i === 0 ? 'bg-accent/10 border-accent/20' : 'bg-border/10'}`}>
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-accent/40 shrink-0" />
