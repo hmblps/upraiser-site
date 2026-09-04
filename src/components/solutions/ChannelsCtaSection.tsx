@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, animate, useMotionValue, useMotionTemplate } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import type { MotionValue } from "framer-motion";
 
