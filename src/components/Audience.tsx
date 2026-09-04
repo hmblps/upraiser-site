@@ -36,7 +36,7 @@ function AudienceStatic() {
           <p className="section-description max-w-2xl whitespace-pre-wrap">{formatEventNames(content.description)}</p>
         </div>
 
-        <div ref={ref} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 rounded-xl overflow-hidden border border-border/30 bg-bg-card shadow-sm">
+        <div ref={ref} className="relative w-full h-[350px] mt-8 pointer-events-none">
            {isFraud ? <FraudScrollChart progress={scrollYProgress} /> : <FoldChart progress={scrollYProgress} />}
         </div>
       </ModeContentTransition>

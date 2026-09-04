@@ -186,7 +186,7 @@ export function FoldChart({ progress }: FoldChartProps) {
 
   const opacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
 
-  if (!enabled) return null;
+
 
   return (
     <motion.div 

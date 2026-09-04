@@ -116,7 +116,7 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
 
-  if (!enabled) return null;
+
 
   return (
     <motion.div

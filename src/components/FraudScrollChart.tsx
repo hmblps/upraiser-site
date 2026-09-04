@@ -160,7 +160,7 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
     };
   }, [enabled, progress, morph]);
 
-  if (!enabled) return null;
+
 
   return (
     <motion.div className="fraud-radial-chart" style={{ opacity: chartOpacity }} aria-hidden>
