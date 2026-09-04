@@ -21,7 +21,7 @@ function PromiseClean() {
   
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 90%", "center 50%"],
+    offset: ["start 85%", "end 35%"],
   });
 
   return (
@@ -36,7 +36,7 @@ function PromiseClean() {
           <p className="section-description max-w-2xl mt-4 mb-6">{formatEventNames(content.description)}</p>
         </div>
         
-        <div ref={ref} className="relative w-full aspect-[16/9] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
+        <div ref={ref} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
            {isParityDark ? <ParityWaterChart progress={scrollYProgress} /> : <CommitmentChart progress={scrollYProgress} />}
         </div>
       </ModeContentTransition>
