@@ -502,13 +502,8 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
   .parity-water {
     display: block;
     position: absolute;
-    /* Full-bleed via margin — no transform (Framer opacity-safe) */
-    left: 50%;
-    top: 0;
-    bottom: 0;
+    inset: 0;
     z-index: 0;
-    width: 100vw;
-    margin-left: -50vw;
     pointer-events: none;
   }
 }
