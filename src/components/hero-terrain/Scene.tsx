@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useLayoutEffect, useState, type MutableRefObject } from "react";
+import { Suspense, useCallback, useLayoutEffect, type MutableRefObject } from "react";
 import { useThree } from "@react-three/fiber";
 import { Everest } from "../Everest";
 import { Atmosphere, HorizonGlow, SunRig } from "./Atmosphere";
@@ -62,13 +62,9 @@ export function Scene({
   lite?: boolean;
 }) {
   const isLight = theme === "light";
-  const [readyTheme, setReadyTheme] = useState<ThemeMode | null>(null);
-  const terrainReady = readyTheme === theme;
-
   const handleReady = useCallback(() => {
-    setReadyTheme(theme);
     onModelReady();
-  }, [theme, onModelReady]);
+  }, [onModelReady]);
 
   return (
     <>
@@ -82,7 +78,7 @@ export function Scene({
       {isLight ? <BrandHazeSky lite={lite} /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
-        
+        {!lite && !isLight && voyager ? <FloatingVoyager /> : null}
 
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}
@@ -90,11 +86,6 @@ export function Scene({
       {isLight ? <SeaOfClouds theme={theme} lite={lite} /> : null}
       {isLight ? <MistSheets lite={lite} /> : null}
       {isLight && !lite ? <AscentBird /> : null}
-      {!lite && !isLight && terrainReady && voyager ? (
-        <Suspense fallback={null}>
-          <FloatingVoyager />
-        </Suspense>
-      ) : null}
     </>
   );
 }

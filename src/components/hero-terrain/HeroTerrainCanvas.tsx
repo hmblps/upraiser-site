@@ -57,12 +57,10 @@ export function HeroTerrainCanvas({
   const capturing = Boolean(capture);
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
-  const [voyagerOk, setVoyagerOk] = useState(false);
   const handleModelReady = useCallback(() => setModelReady(true), []);
 
   useEffect(() => {
     setModelReady(false);
-    setVoyagerOk(false);
   }, [theme]);
 
   useEffect(() => {
@@ -105,12 +103,6 @@ export function HeroTerrainCanvas({
     }, 8000);
     return () => window.clearTimeout(t);
   }, [reduced, theme, modelReady]);
-
-  useEffect(() => {
-    if (capturing || lite || !modelReady || !inView || theme === "light") return;
-    const t = window.setTimeout(() => setVoyagerOk(true), 2800);
-    return () => window.clearTimeout(t);
-  }, [lite, modelReady, inView, theme, capturing]);
 
   useEffect(() => {
     if (reduced) return;
@@ -176,7 +168,7 @@ export function HeroTerrainCanvas({
           scrollRef={scrollRef}
           path={path}
           onModelReady={handleModelReady}
-          voyager={voyagerOk && !capturing}
+          voyager={!capturing}
           lite={lite}
         />
         {capture ? <CaptureDriver job={capture} modelReady={modelReady} /> : null}
