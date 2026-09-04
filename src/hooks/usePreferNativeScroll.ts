@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 /** Touch / narrow viewports — native scroll instead of Lenis (lighter, scroll blocks stay in sync). */
-const NATIVE_SCROLL_QUERY = "(max-width: 1023px), (pointer: coarse)";
+const NATIVE_SCROLL_QUERY = "(max-width: 0px)";
 
 export function usePreferNativeScroll() {
   const [nativeScroll, setNativeScroll] = useState(() =>

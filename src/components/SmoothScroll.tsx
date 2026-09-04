@@ -157,13 +157,18 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       };
     }
 
+    const isMobile = window.matchMedia("(max-width: 1023px), (pointer: coarse)").matches;
+
     const lenis = new Lenis({
       // Lower lerp and wheelMultiplier to gently cap scroll velocity for better asset preloading,
       // while keeping the feeling natural and smooth (no forced heavy dragging).
       lerp: 0.09,
       smoothWheel: true,
       wheelMultiplier: 0.85,
-      touchMultiplier: 1,
+      // On mobile, the user requested it to be "10x slower" so we drastically reduce the multiplier
+      touchMultiplier: isMobile ? 0.15 : 1,
+      syncTouch: isMobile ? true : false,
+      syncTouchLerp: 0.05,
       allowNestedScroll: true,
     });
 
