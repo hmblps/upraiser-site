@@ -84,27 +84,6 @@ function makeSeaMaterial(theme: string) {
 }
 
 export function SeaOfClouds({ theme, lite = false }: { theme: "light" | "dark"; lite?: boolean }) {
-  const material = useMemo(() => makeSeaMaterial(theme), [theme]);
-  const heroFly = useHeroFlyOptional();
-
-  useEffect(() => {
-    return () => {
-      material.dispose();
-    };
-  }, [material]);
-
-  useFrame((state) => {
-    material.uniforms.uTime.value = heroCapture.snap ? 0 : state.clock.elapsedTime;
-    if (lite && heroFly) {
-      const p = readProgress(heroFly);
-      const fade = 1.0 - Math.min(1.0, Math.max(0.0, (p - 0.5) / 0.3));
-      material.uniforms.uOpacity.value = 0.95 * fade;
-    }
-  });
-
-  return (
-    <mesh material={material} position={[0, 45, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[1400, 1400, 1, 1]} />
-    </mesh>
-  );
+  // Disabling SeaOfClouds entirely as it causes the horizontal line artifact
+  return null;
 }
