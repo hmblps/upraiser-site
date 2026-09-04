@@ -34,7 +34,7 @@ export function HeaderIsland() {
             return (
                   <motion.li 
                     key={link.href} 
-                    className="relative"
+                    className={`relative ${link.underConstruction ? 'hidden md:block' : ''}`}
                     whileHover={reduced ? undefined : { scale: 1.05 }}
                     whileTap={reduced ? undefined : { scale: 0.95 }}
                     transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
