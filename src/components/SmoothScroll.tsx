@@ -158,10 +158,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      // Single pacing knob — dual duration+lerp made wheel vs trackpad feel torn.
-      lerp: 0.12,
+      // Lower lerp and wheelMultiplier to gently cap scroll velocity for better asset preloading,
+      // while keeping the feeling natural and smooth (no forced heavy dragging).
+      lerp: 0.09,
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 0.85,
       touchMultiplier: 1,
       allowNestedScroll: true,
     });
