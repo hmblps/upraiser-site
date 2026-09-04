@@ -163,7 +163,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       lerp: 0.09,
       smoothWheel: true,
       wheelMultiplier: 0.85,
-      touchMultiplier: 1,
+      syncTouch: true,
+      syncTouchLerp: 0.08,
+      touchMultiplier: 0.9,
       allowNestedScroll: true,
     });
 

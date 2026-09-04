@@ -1,10 +1,13 @@
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
+import { useRef } from "react";
 import { audienceByMode } from "../data/liveContent";
 import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { formatEventNames } from "../lib/formatEventNames";
+import { FoldChart } from "./ModeChart";
+import { FraudScrollChart } from "./FraudScrollChart";
 
 function GrowthWordInline({ word }: { word: string }) {
   return <span className="growth-word-inline">{word}</span>;
@@ -13,6 +16,13 @@ function GrowthWordInline({ word }: { word: string }) {
 function AudienceStatic() {
   const { mode } = useMode();
   const content = audienceByMode[mode];
+  const isFraud = mode === "infrastructure";
+  const ref = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 90%", "center 50%"],
+  });
 
   return (
     <section id="audience" className="section-band section-band--quiet">
@@ -23,7 +33,11 @@ function AudienceStatic() {
           <p className="section-lead">
             {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />
           </p>
-          <p className="section-description max-w-2xl mb-20 whitespace-pre-wrap">{formatEventNames(content.description)}</p>
+          <p className="section-description max-w-2xl whitespace-pre-wrap">{formatEventNames(content.description)}</p>
+        </div>
+
+        <div ref={ref} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 rounded-xl overflow-hidden border border-border/30 bg-bg-card shadow-sm">
+           {isFraud ? <FraudScrollChart progress={scrollYProgress} /> : <FoldChart progress={scrollYProgress} />}
         </div>
       </ModeContentTransition>
     </section>
