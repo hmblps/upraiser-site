@@ -215,11 +215,12 @@
   -webkit-background-clip: text;
   background-clip: text;
   
-  /* Gold → Red: always ends red on the last character */
+  /* Gold → Red: ends red on the last character */
   background-image: linear-gradient(
     225deg,
     var(--theme-accent-light) 0%,
-    var(--theme-accent) 75%,
+    var(--theme-accent) 45%,
+    var(--theme-accent-secondary) 85%,
     var(--theme-accent-secondary) 100%
   );
   
@@ -234,7 +235,8 @@
   background-image: linear-gradient(
     135deg, 
     var(--logo-gold) 0%, 
-    var(--logo-gold) 75%, 
+    var(--logo-gold) 45%, 
+    var(--logo-red) 85%,
     var(--logo-red) 100%
   );
 }
