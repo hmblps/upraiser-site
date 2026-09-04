@@ -163,7 +163,7 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
   if (!enabled) return null;
 
   return (
-    <motion.div className="fold-chart" style={{ opacity: chartOpacity }} aria-hidden>
+    <motion.div className="fraud-radial-chart" style={{ opacity: chartOpacity }} aria-hidden>
       
       {/* Live Date Anchor */}
       <motion.div 
@@ -178,7 +178,7 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
       </motion.div>
 
       {/* Zero-cost Ghost Updates */}
-      <div className="fold-chart-ghosts pointer-events-none">
+      <div className="fraud-radial-chart__ghosts fold-chart-ghosts pointer-events-none">
         {segments.map((_, i) => (
           <FraudGhost key={i} index={i} morph={morph} />
         ))}
