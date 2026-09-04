@@ -127,15 +127,15 @@ export function HeroTerrainCanvas({
     <>
       {/* Loading overlay while shaders compile (crucial for mobile) */}
       {!modelReady && !capturing ? (
-        <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none transition-opacity duration-1000">
-          <div className="flex flex-col items-center gap-4 opacity-60">
+        <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none transition-opacity duration-1000 backdrop-blur-xl bg-bg/20">
+          <div className="flex flex-col items-center gap-6 opacity-70">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
             >
-              <Compass className="h-6 w-6 text-fg opacity-80" strokeWidth={1.5} />
+              <Compass className="h-12 w-12 text-fg opacity-90" strokeWidth={1} />
             </motion.div>
-            <span className="text-micro font-medium uppercase tracking-[0.25em] text-fg animate-pulse">Rendering Terrain</span>
+            <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg animate-pulse">Rendering Terrain</span>
           </div>
         </div>
       ) : null}

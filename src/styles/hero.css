@@ -188,6 +188,14 @@
     min-height: 300vh;
   }
 
+  @media (max-width: 899px) {
+    .hero-stage--fly {
+      /* Much faster scroll-through on mobile */
+      height: 150vh;
+      min-height: 150vh;
+    }
+  }
+
   .hero-fly-sticky {
     position: sticky;
     top: 0;
