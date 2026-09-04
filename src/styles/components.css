@@ -1377,24 +1377,35 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
 }
 
 /* Contact form — soft beam focus (matches theme bridge popup) */
+/* Wrapper owns the physical border and background now to avoid overflow clipping artifacts on corners */
+.contact-field-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 80%, var(--theme-fg) 8%);
+  background: var(--theme-input-bg);
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+/* The actual input is transparent and fills the wrapper */
 .contact-field-wrap .contact-field {
   appearance: none;
   -webkit-appearance: none;
-  position: relative;
-  z-index: 1;
+  flex: 1;
   display: block;
   width: 100%;
-  border: 1px solid color-mix(in srgb, var(--theme-border) 80%, var(--theme-fg) 8%);
-  border-radius: 0.75rem;
-  background: var(--theme-input-bg);
+  border: none;
+  border-radius: 0;
+  background: transparent;
   padding: 0.5rem 0.875rem;
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--theme-fg);
   outline: none;
-  transition:
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
 }
 
 select.contact-field {
@@ -1405,20 +1416,20 @@ select.contact-field {
   padding-right: 2rem;
 }
 
-.contact-field-wrap--beam .contact-field {
+.contact-field-wrap--beam {
   border-color: transparent;
 }
 
-.contact-field-wrap:focus-within:not(.contact-field-wrap--beam) .contact-field {
+.contact-field-wrap:focus-within:not(.contact-field-wrap--beam) {
   border-color: color-mix(in srgb, var(--theme-accent) 26%, var(--theme-border));
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-accent) 8%, transparent);
 }
 
-.contact-field-wrap--invalid .contact-field {
+.contact-field-wrap--invalid {
   border-color: color-mix(in srgb, var(--theme-accent-secondary) 45%, var(--theme-border));
 }
 
-.contact-field-wrap--invalid:focus-within:not(.contact-field-wrap--beam) .contact-field {
+.contact-field-wrap--invalid:focus-within:not(.contact-field-wrap--beam) {
   border-color: color-mix(in srgb, var(--theme-accent-secondary) 38%, var(--theme-border));
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-accent-secondary) 10%, transparent);
 }
@@ -1452,7 +1463,7 @@ textarea.contact-field {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .contact-field-wrap:focus-within .contact-field {
+  .contact-field-wrap:focus-within {
     border-color: color-mix(in srgb, var(--theme-accent) 30%, var(--theme-border));
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-accent) 12%, transparent);
   }
