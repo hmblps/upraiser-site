@@ -91,11 +91,6 @@ function makeIceHaloMaterial() {
         vec3 dogCol = haloSpectrum(dogHue) * dogs * 2.15;
         dogCol += vec3(1.0, 0.95, 0.88) * dogs * 0.18;
 
-        float parhelic = exp(-p.y * p.y / 0.0009)
-          * smoothstep(0.14, 0.48, abs(p.x))
-          * smoothstep(1.02, 0.58, abs(p.x));
-        vec3 parCol = vec3(0.95, 0.97, 1.0) * parhelic * 0.2;
-
         float arcY = uRingR + 0.055;
         float arc = exp(-pow(r - (arcY + 0.03 * (1.0 - p.y * p.y)), 2.0) / 0.0014)
           * smoothstep(0.08, 0.55, p.y)
@@ -103,9 +98,9 @@ function makeIceHaloMaterial() {
         float arcT = clamp((r - (arcY - 0.02)) / 0.05, 0.0, 1.0);
         vec3 arcCol = haloSpectrum(arcT) * arc * 1.35;
 
-        vec3 col = sunCol + ringCol + dogCol + parCol + arcCol;
+        vec3 col = sunCol + ringCol + dogCol + arcCol;
         float a = clamp(
-          max(max(core + corona * 0.5 + airGlow, ringMask), max(dogs, max(parhelic, arc))) * uOpacity,
+          max(max(core + corona * 0.5 + airGlow, ringMask), max(dogs, arc)) * uOpacity,
           0.0,
           1.0
         );
