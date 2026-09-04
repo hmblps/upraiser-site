@@ -63,6 +63,11 @@ function makeSeaMaterial(theme: string) {
         float d = distance(vUv, vec2(0.5));
         float edgeFade = smoothstep(0.5, 0.1, d);
 
+        // Fade out completely when the camera flies exactly through the plane
+        // to prevent the razor-thin, sharp plane-edge artifact.
+        float distToCameraY = abs(cameraPosition.y - vWorldPosition.y);
+        float verticalFade = smoothstep(1.5, 6.0, distToCameraY);
+
         vec2 uvScaled = vWorldPosition.xz * 0.003;
         float n = fbm(uvScaled + vec2(uTime * 0.015, uTime * 0.01));
         float n2 = fbm(uvScaled * 2.0 - vec2(uTime * 0.02, 0.0));
@@ -70,7 +75,7 @@ function makeSeaMaterial(theme: string) {
         
         float cloudAlpha = smoothstep(0.2, 0.8, finalNoise);
 
-        gl_FragColor = vec4(uColor, cloudAlpha * edgeFade * uOpacity);
+        gl_FragColor = vec4(uColor, cloudAlpha * edgeFade * verticalFade * uOpacity);
         
         #include <fog_fragment>
       }
