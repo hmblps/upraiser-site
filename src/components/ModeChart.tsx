@@ -204,7 +204,6 @@ export function FoldChart({ progress }: FoldChartProps) {
         <svg 
           className="w-full h-full overflow-visible" 
           viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-          preserveAspectRatio="none"
           style={{
             maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
             WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)"

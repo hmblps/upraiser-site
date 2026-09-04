@@ -45,7 +45,6 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
       <svg
         className="w-full h-full overflow-visible"
         viewBox="0 0 1200 400"
-        preserveAspectRatio="none"
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
           WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',

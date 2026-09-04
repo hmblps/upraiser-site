@@ -4,6 +4,7 @@ import { useGLTF, useTexture } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { ACESFilmicToneMapping, PCFSoftShadowMap, SRGBColorSpace } from "three";
 import { Compass } from "lucide-react";
+import { createPortal } from "react-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "../../lib/heroModel";
@@ -126,8 +127,8 @@ export function HeroTerrainCanvas({
   return (
     <>
       {/* Loading overlay while shaders compile (crucial for mobile) */}
-      {!modelReady && !capturing ? (
-        <div className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none transition-opacity duration-1000 backdrop-blur-xl bg-bg/20">
+      {!modelReady && !capturing && typeof document !== "undefined" ? createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none transition-opacity duration-1000 backdrop-blur-xl bg-bg/20">
           <div className="flex flex-col items-center gap-6 opacity-70">
             <motion.div
               animate={{ rotate: 360 }}
@@ -137,7 +138,8 @@ export function HeroTerrainCanvas({
             </motion.div>
             <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg animate-pulse">Rendering Terrain</span>
           </div>
-        </div>
+        </div>,
+        document.body
       ) : null}
 
       <motion.div
