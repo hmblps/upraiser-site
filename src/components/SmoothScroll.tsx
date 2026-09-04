@@ -164,8 +164,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       lerp: 0.09,
       smoothWheel: true,
       wheelMultiplier: 0.85,
-      // Standard touch scroll speed for the whole site
-      touchMultiplier: 1,
+      // Standard touch scroll speed for the whole site (slightly limited as requested)
+      touchMultiplier: 0.85,
       syncTouch: false,
       allowNestedScroll: true,
     });
