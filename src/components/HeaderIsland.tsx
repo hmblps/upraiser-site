@@ -22,7 +22,7 @@ export function HeaderIsland() {
 
   return (
     <motion.div 
-      layout
+      layout="size"
       className="flex items-center bg-bg-elevated/70 backdrop-blur-xl rounded-full border border-border/40 overflow-visible shadow-sm"
       style={{ padding: "0.15rem" }}
       transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
