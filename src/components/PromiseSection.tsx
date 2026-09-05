@@ -25,7 +25,7 @@ function PromiseClean() {
   });
 
   return (
-    <section id="promise" className="section-band section-band--quiet">
+    <section ref={ref} id="promise" className="section-band section-band--quiet min-h-screen">
       <ModeContentTransition mode={mode} className="section-inner">
         <SectionHeader label={content.label} title={content.title} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-5">
@@ -36,7 +36,7 @@ function PromiseClean() {
           <p className="section-description max-w-2xl mt-4 mb-6">{formatEventNames(content.description)}</p>
         </div>
         
-        <div ref={ref} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
            {isParityDark ? <ParityWaterChart progress={scrollYProgress} /> : <CommitmentChart progress={scrollYProgress} />}
         </div>
       </ModeContentTransition>

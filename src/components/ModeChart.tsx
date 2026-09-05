@@ -155,7 +155,7 @@ export function FoldChart({ progress }: FoldChartProps) {
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
-    const sync = () => setEnabled(mq.matches && !reduced);
+    const sync = () => setEnabled(!reduced);
     sync();
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);

@@ -1,0 +1,37 @@
+--- src/components/FraudScrollChart.tsx
++++ src/components/FraudScrollChart.tsx
+@@ -21,10 +21,17 @@
+ const radii = [168, 138, 108, 78];
+ 
+ const fraudGhostLayout = [
+-  { left: "48%", originY: 79, drift: 16, duration: 7.2, delay: 0 },
+-  { left: "63%", originY: 85, drift: -12, duration: 7.8, delay: 1.1 },
+-  { left: "78%", originY: 75, drift: 14, duration: 8.1, delay: 2.0 },
+-  { left: "92%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
++  { left: "48%", mobileLeft: "30%", originY: 79, drift: 16, duration: 7.2, delay: 0 },
++  { left: "63%", mobileLeft: "48%", originY: 85, drift: -12, duration: 7.8, delay: 1.1 },
++  { left: "78%", mobileLeft: "66%", originY: 75, drift: 14, duration: 8.1, delay: 2.0 },
++  { left: "92%", mobileLeft: "84%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
+ ] as const;
+ 
+ function polar(cx: number, cy: number, r: number, angleDeg: number) {
+@@ -73,6 +80,9 @@
+ function FraudGhost({ index, morph }: { index: number; morph: MotionValue<number> }) {
+   const seg = segments[index]!;
+   const layout = fraudGhostLayout[index]!;
+   const containerRef = useRef<HTMLSpanElement>(null);
++  
++  const isDesktop = typeof window !== 'undefined' ? window.matchMedia("(min-width: 768px)").matches : true;
++  const finalLeft = isDesktop ? layout.left : layout.mobileLeft;
+ 
+   useEffect(() => {
+     let raf = 0;
+@@ -82,7 +92,7 @@
+ 
+   return (
+     <GhostBubbleMotion
+-      left={layout.left}
++      left={finalLeft}
+       originY={layout.originY}
+       drift={layout.drift}
+       duration={layout.duration}

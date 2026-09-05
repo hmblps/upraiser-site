@@ -25,7 +25,7 @@ function AudienceStatic() {
   });
 
   return (
-    <section id="audience" className="section-band section-band--quiet">
+    <section ref={ref} id="audience" className="section-band section-band--quiet min-h-screen">
       <ModeContentTransition mode={mode} className="section-inner">
         <SectionHeader label={content.label} title={content.title} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-5">
@@ -36,7 +36,7 @@ function AudienceStatic() {
           <p className="section-description max-w-2xl whitespace-pre-wrap">{formatEventNames(content.description)}</p>
         </div>
 
-        <div ref={ref} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
            {isFraud ? <FraudScrollChart progress={scrollYProgress} /> : <FoldChart progress={scrollYProgress} />}
         </div>
       </ModeContentTransition>
