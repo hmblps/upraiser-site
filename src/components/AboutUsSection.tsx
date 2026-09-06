@@ -2,13 +2,61 @@
 export function AboutUsSection() {
   return (
     <section className="section-band border-t border-border/30 relative overflow-hidden">
-      {/* Topographic / contour decoration */}
-      <div className="absolute top-0 right-0 w-full max-w-3xl opacity-[0.05] pointer-events-none translate-x-1/3 -translate-y-1/4">
-        <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M541.0,400.0 Q534.5,477.6 479.7,538.1 Q400.0,568.8 325.9,528.3 Q263.2,479.0 248.6,400.0 Q270.9,325.5 329.0,277.0 Q400.0,237.7 475.6,269.0 Q533.8,322.7 543.4,400.0 Z" stroke="currentColor" strokeWidth="6" strokeDasharray="10 20" />
-          <path d="M635.2,400.0 Q636.2,497.8 589.6,589.6 Q507.2,658.9 400.0,666.0 Q301.3,638.3 221.0,579.0 Q153.8,502.0 156.1,400.0 Q146.1,294.8 235.9,235.9 Q298.0,153.8 400.0,132.1 Q499.2,160.5 584.0,216.0 Q653.4,295.0 648.6,400.0 Z" stroke="currentColor" strokeWidth="6" />
-          <path d="M767.8,400.0 Q727.9,506.5 699.3,617.5 Q611.4,691.0 501.9,713.7 Q400.0,777.2 295.8,720.7 Q175.1,709.6 124.3,600.3 Q29.2,520.5 54.0,400.0 Q73.7,294.0 110.0,189.3 Q188.3,108.6 296.6,81.6 Q400.0,19.3 500.1,92.0 Q609.0,112.3 687.6,191.1 Q751.8,285.7 776.1,400.0 Z" stroke="currentColor" strokeWidth="6" strokeDasharray="20 40" />
-          <circle cx="400" cy="400" r="10" fill="currentColor"/>
+      {/* Schematic Ascent Decoration */}
+      <div className="absolute top-0 right-0 w-full max-w-4xl opacity-[0.12] pointer-events-none translate-x-[20%] -translate-y-[10%]">
+        <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" className="font-mono text-[11px] uppercase tracking-widest font-semibold">
+          {/* Mountain Ridges (Subtle Background) */}
+          <path d="M150,850 L350,550 L480,250 L500,150 L650,400 L850,750" stroke="currentColor" strokeWidth="2" strokeDasharray="4 8" opacity="0.4" />
+          <path d="M500,150 L550,300 L750,550 L950,850" stroke="currentColor" strokeWidth="2" strokeDasharray="4 8" opacity="0.4" />
+          <path d="M350,550 L200,700 L50,850" stroke="currentColor" strokeWidth="2" strokeDasharray="4 8" opacity="0.4" />
+
+          {/* Climbing Routes (Solid Lines) */}
+          {/* Route 1: Far Left (North Ridge) */}
+          <path d="M250,850 Q280,600 330,470 T460,310 L500,150" stroke="currentColor" strokeWidth="3" />
+          
+          {/* Route 2: Center Left (North Face) */}
+          <path d="M380,850 Q410,550 450,430 T500,150" stroke="currentColor" strokeWidth="3" />
+
+          {/* Route 3: Center Right (West Ridge) */}
+          <path d="M600,850 Q580,600 540,450 T500,150" stroke="currentColor" strokeWidth="3" />
+
+          {/* Route 4: Far Right (South-West Face) */}
+          <path d="M800,850 Q750,550 650,400 T500,150" stroke="currentColor" strokeWidth="3" />
+
+          {/* Connectors / Traverses */}
+          <path d="M330,470 Q390,450 450,430" stroke="currentColor" strokeWidth="2.5" strokeDasharray="6 6" />
+          <path d="M540,450 Q580,410 650,400" stroke="currentColor" strokeWidth="2.5" strokeDasharray="6 6" />
+
+          {/* Nodes & Labels */}
+          <g className="text-current">
+            <circle cx="500" cy="150" r="10" fill="currentColor"/>
+            <text x="500" y="120" textAnchor="middle" className="text-[14px]">THE SUMMIT</text>
+            <text x="500" y="135" textAnchor="middle" opacity="0.6" className="text-[10px]">8,848M</text>
+
+            <circle cx="330" cy="470" r="7" fill="currentColor"/>
+            <text x="315" y="474" textAnchor="end">NORTH RIDGE</text>
+            
+            <circle cx="280" cy="620" r="7" fill="currentColor"/>
+            <text x="265" y="624" textAnchor="end">NORTH COL</text>
+
+            <circle cx="450" cy="430" r="7" fill="currentColor"/>
+            <text x="435" y="434" textAnchor="end">NORTH FACE</text>
+
+            <circle cx="540" cy="450" r="7" fill="currentColor"/>
+            <text x="555" y="454" textAnchor="start">WEST RIDGE</text>
+
+            <circle cx="650" cy="400" r="7" fill="currentColor"/>
+            <text x="665" y="404" textAnchor="start">SOUTH COL</text>
+
+            <circle cx="705" cy="565" r="7" fill="currentColor"/>
+            <text x="720" y="569" textAnchor="start">ICE FIELD (6100M)</text>
+
+            <circle cx="250" cy="850" r="8" fill="currentColor"/>
+            <text x="250" y="875" textAnchor="middle">RONGBUK GLACIER</text>
+
+            <circle cx="600" cy="850" r="8" fill="currentColor"/>
+            <text x="600" y="875" textAnchor="middle">KHUMBU GLACIER</text>
+          </g>
         </svg>
       </div>
 
