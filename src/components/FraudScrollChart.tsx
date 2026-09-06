@@ -22,10 +22,10 @@ const segments = [
 const radii = [168, 138, 108, 78];
 
 const fraudGhostLayout = [
-  { left: "48%", mobileLeft: "30%", originY: 79, drift: 16, duration: 7.2, delay: 0 },
-  { left: "63%", mobileLeft: "48%", originY: 85, drift: -12, duration: 7.8, delay: 1.1 },
-  { left: "78%", mobileLeft: "66%", originY: 75, drift: 14, duration: 8.1, delay: 2.0 },
-  { left: "92%", mobileLeft: "84%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
+  { left: "48%", mobileLeft: "35%", originY: 79, drift: 16, duration: 7.2, delay: 0 },
+  { left: "63%", mobileLeft: "45%", originY: 85, drift: -12, duration: 7.8, delay: 1.1 },
+  { left: "78%", mobileLeft: "55%", originY: 75, drift: 14, duration: 8.1, delay: 2.0 },
+  { left: "92%", mobileLeft: "65%", originY: 81, drift: -10, duration: 6.6, delay: 2.8 },
 ] as const;
 
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
@@ -178,7 +178,7 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
       
       {/* Live Date Anchor */}
       <motion.div 
-        className="absolute top-10 right-[10%] md:right-[42%] flex flex-col items-end gap-1.5 text-right z-10"
+        className="absolute top-0 left-0 right-0 md:left-auto md:top-10 md:right-[42%] flex flex-col items-center md:items-end gap-1.5 text-center md:text-right z-10"
         style={{ opacity: dateOpacity }}
       >
         <span className="font-sans font-medium text-[0.65rem] tracking-widest text-accent-secondary uppercase flex items-center gap-2">

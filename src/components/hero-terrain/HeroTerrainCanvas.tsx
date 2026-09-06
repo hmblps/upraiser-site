@@ -129,12 +129,18 @@ export function HeroTerrainCanvas({
       {/* Loading overlay while shaders compile (crucial for mobile) */}
       {!modelReady && !capturing && typeof document !== "undefined" ? createPortal(
         <div className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none transition-opacity duration-1000 backdrop-blur-xl bg-bg/20">
-          <div className="flex flex-col items-center gap-6 opacity-70">
+          <div className="flex flex flex-col items-center gap-3">
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.8 }}
+              className="relative flex items-center justify-center w-16 h-16 rounded-full border border-border/30 bg-bg-elevated/40 backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.2)]"
             >
-              <Compass className="h-12 w-12 text-fg opacity-90 animate-spin" strokeWidth={1} style={{ animationDuration: "3s" }} />
+              <div className="absolute top-1 text-[8px] font-mono font-bold text-fg/60 tracking-tighter">N</div>
+              <div className="absolute right-1 text-[8px] font-mono font-bold text-fg/60 tracking-tighter">E</div>
+              <div className="absolute bottom-1 text-[8px] font-mono font-bold text-fg/60 tracking-tighter">S</div>
+              <div className="absolute left-1 text-[8px] font-mono font-bold text-fg/60 tracking-tighter">W</div>
+              <Compass className="h-7 w-7 text-accent animate-spin" strokeWidth={1.5} style={{ animationDuration: "4s", animationTimingFunction: "linear" }} />
             </motion.div>
             <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg animate-pulse">Rendering Terrain</span>
           </div>

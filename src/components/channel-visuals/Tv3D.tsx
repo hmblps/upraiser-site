@@ -35,8 +35,8 @@ const REST_Y = 0.05;
 const REST_X = 0.01;
 
 /** Screen plane in the already-scaled face-forward space (TV height ≈ 1.91). */
-const SCREEN_W = 2.72;
-const SCREEN_H = 1.53;
+const SCREEN_W = 2.85;
+const SCREEN_H = 1.60;
 const SCREEN_Z = 0.11;
 const SCREEN_Y = 0.05;
 
