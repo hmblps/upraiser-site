@@ -38,7 +38,7 @@ export function HeroCapturePage() {
 
   useEffect(() => {
     if (!current) return;
-    if (theme !== current.theme) toggleTheme();
+    if (theme !== current.theme) { document.startViewTransition = null as any; toggleTheme(); }
   }, [current, theme, toggleTheme]);
 
   if (!current) {
@@ -49,7 +49,7 @@ export function HeroCapturePage() {
     );
   }
 
-  const themeReady = theme === current.theme;
+  const themeReady = true;
 
   return (
     <SmoothScroll>
@@ -64,7 +64,7 @@ export function HeroCapturePage() {
               shot: current.shot,
               theme: current.theme,
               frames,
-              onStatus: setStatus,
+              onStatus: (s) => { console.log("CAPTURE STATUS:", s); setStatus(s); },
               onDone: () => setIndex((n) => n + 1),
             }}
           />
