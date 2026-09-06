@@ -10,12 +10,22 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
   const rafRef = useRef<number>(0);
   const targetTime = useRef<number>(0);
 
-  // Force a re-render to ensure the source changes fully
-  const [videoSrc, setVideoSrc] = useState(`/hero/${variant}-${theme}-scrub.mp4`);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= 899 : false
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 899);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const variantSuffix = isMobile ? `${variant}-mobile` : variant;
+  const [videoSrc, setVideoSrc] = useState(`/hero/${variantSuffix}-${theme}-scrub.mp4`);
   
   useEffect(() => {
-    setVideoSrc(`/hero/${variant}-${theme}-scrub.mp4`);
-  }, [variant, theme]);
+    setVideoSrc(`/hero/${variantSuffix}-${theme}-scrub.mp4`);
+  }, [variantSuffix, theme]);
 
   // Kickstart iOS video engine and paint first frame
   useEffect(() => {

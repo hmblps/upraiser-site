@@ -191,8 +191,8 @@
   @media (max-width: 899px) {
     .hero-stage--fly {
       /* Much faster scroll-through on mobile */
-      height: 150vh;
-      min-height: 150vh;
+      height: 300vh;
+      min-height: 300vh;
     }
   }
 

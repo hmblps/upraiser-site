@@ -61,7 +61,7 @@ export function HeroCapturePage() {
             variant={current.shot}
             path={current.shot === "expedition" ? EXPEDITION_ASCENT : undefined}
             capture={{
-              shot: current.shot,
+              shot: (params.get("mobile") === "1" ? current.shot + "-mobile" : current.shot) as any,
               theme: current.theme,
               frames,
               onStatus: (s) => { console.log("CAPTURE STATUS:", s); setStatus(s); },
