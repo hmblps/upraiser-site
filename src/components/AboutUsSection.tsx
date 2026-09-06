@@ -3,7 +3,7 @@ export function AboutUsSection() {
   return (
     <section className="section-band border-t border-border/30 relative overflow-hidden">
       {/* Schematic Ascent Decoration (Realistic Trace) */}
-      <div className="absolute top-0 right-0 w-full max-w-5xl opacity-[0.15] pointer-events-none translate-x-[15%] -translate-y-[5%]">
+      <div className="absolute top-0 left-0 w-full max-w-5xl opacity-[0.15] pointer-events-none -translate-x-[10%] -translate-y-[5%]">
         <svg viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" className="font-sans uppercase font-semibold">
           
           <style>
