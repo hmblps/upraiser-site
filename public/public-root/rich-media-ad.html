@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ING Rich Media</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:320px;height:630px;overflow:hidden;background:#0b1220;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+
+  /* ─── Outer layout ─── */
+  .ad{position:relative;width:320px;height:630px;display:flex;flex-direction:column;overflow:hidden}
+
+  /* ─── Video slot (≈ 37% of height) ─── */
+  .video-wrap{
+    position:relative;width:100%;height:234px;background:#0b1220;
+    flex-shrink:0;overflow:hidden;
+  }
+  .ad-video{width:100%;height:100%;object-fit:cover;display:block}
+  /* Cover bottom caption subtitles */
+  .sub-cover{position:absolute;bottom:0;left:0;right:0;height:58px;
+    background:linear-gradient(transparent 0%,rgba(11,18,32,.95) 50%,#0b1220 100%);
+    pointer-events:none;z-index:3}
+  /* Cover top-left Turkish text overlay area */
+  .sub-cover-tl{position:absolute;top:0;left:0;width:140px;height:50px;
+    background:linear-gradient(135deg,rgba(11,18,32,.82) 50%,transparent 100%);
+    pointer-events:none;z-index:3}
+  /* Vidout-style top controls bar */
+  .vid-topbar{position:absolute;top:0;left:0;right:0;height:32px;
+    background:linear-gradient(rgba(0,0,0,.45),transparent);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 10px;pointer-events:none;z-index:4}
+  .vid-topbar-icon{width:20px;height:20px;background:rgba(255,255,255,.15);
+    border-radius:4px;display:flex;align-items:center;justify-content:center;
+    font-size:11px;color:rgba(255,255,255,.7)}
+  /* Vidout-style play bar */
+  .vid-controls{position:absolute;bottom:0;left:0;right:0;height:48px;
+    background:linear-gradient(transparent,rgba(0,0,0,.55));
+    display:flex;align-items:center;padding:0 10px;gap:8px;z-index:5}
+  .play-btn{width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .play-btn svg{width:18px;height:18px;fill:rgba(255,255,255,.9)}
+  .vid-time{font-size:11px;color:rgba(255,255,255,.75);flex-shrink:0;width:28px;font-variant-numeric:tabular-nums}
+  .vid-progress{flex:1;height:3px;background:rgba(255,255,255,.25);border-radius:2px;position:relative;cursor:pointer}
+  .vid-filled{height:100%;width:0%;background:#fff;border-radius:2px;transition:width .2s linear}
+  .mute-btn{width:24px;height:24px;flex-shrink:0;background:rgba(0,0,0,.45);border:none;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:11px;color:#fff;padding:0}
+  .fullscreen-btn{width:22px;height:22px;flex-shrink:0;opacity:.7;cursor:pointer;font-size:13px;color:#fff;display:flex;align-items:center;justify-content:center}
+
+  /* ─── ING brand panel (≈ 63%) ─── */
+  .brand-panel{
+    flex:1;background:#f7f2e9;position:relative;
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:flex-start;padding:16px 18px 70px;overflow:hidden;
+  }
+  .headline{font-size:21px;font-weight:800;color:#e85500;text-align:center;line-height:1.2;margin-bottom:10px;z-index:2}
+
+  /* ─── Shredder visual (photo-style CSS replica) ─── */
+  .shredder-wrap{position:relative;width:220px;height:200px;cursor:pointer;flex-shrink:0;z-index:2}
+
+  /* Background scene */
+  .scene-bg{position:absolute;inset:0;border-radius:8px;
+    background:linear-gradient(155deg,#e8e0d4,#d5ccc0);
+    display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+  /* Decorative plant silhouette */
+  .plant{position:absolute;right:-10px;top:20px;font-size:52px;opacity:.35;pointer-events:none;user-select:none;transform:scaleX(-1)}
+  .plant2{position:absolute;left:-12px;top:30px;font-size:36px;opacity:.25;pointer-events:none;user-select:none}
+
+  /* Shredder machine */
+  .machine{
+    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+    width:142px;height:156px;
+  }
+  .machine-body{
+    position:absolute;bottom:22px;width:100%;height:120px;
+    background:linear-gradient(160deg,#ff8040 0%,#ff5500 40%,#d94400 100%);
+    border-radius:14px 14px 10px 10px;
+    box-shadow:0 8px 24px rgba(150,40,0,.35),0 2px 0 rgba(255,150,80,.2) inset,
+               0 -2px 0 rgba(0,0,0,.2) inset;
+  }
+  /* Slot at top */
+  .machine-slot{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    width:104px;height:12px;background:#111;border-radius:3px;
+    box-shadow:0 2px 6px rgba(0,0,0,.8) inset;
+  }
+  /* Slot prongs */
+  .slot-prong{position:absolute;top:-1px;width:2px;height:16px;background:#333;border-radius:1px}
+  /* Orange press button */
+  .machine-btn{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-46%);
+    width:72px;height:72px;border-radius:50%;
+    background:radial-gradient(circle at 36% 30%,#ffcc80,#ff7200 42%,#cc4400);
+    box-shadow:0 6px 18px rgba(0,0,0,.45),0 1px 0 rgba(255,200,120,.4) inset;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .12s,box-shadow .12s;
+  }
+  .machine-btn:hover{transform:translate(-50%,-46%) scale(1.05)}
+  .machine-btn:active{transform:translate(-50%,-46%) scale(0.92);box-shadow:0 3px 10px rgba(0,0,0,.5)}
+  .btn-label{font-size:12px;font-weight:900;color:#fff;letter-spacing:.3px;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+  /* Legs */
+  .machine-legs{position:absolute;bottom:0;width:100%;display:flex;justify-content:space-around;padding:0 24px}
+  .leg{width:16px;height:25px;background:linear-gradient(180deg,#cc4400,#992200);border-radius:0 0 6px 6px}
+  /* ING wordmark on machine front — below the button */
+  .machine-brand{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+    font-size:11px;font-weight:900;color:rgba(255,255,255,.55);letter-spacing:1.5px;pointer-events:none;user-select:none;white-space:nowrap}
+
+  /* Shred output strips */
+  .shred-strips{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+    display:flex;gap:2px;width:0;overflow:hidden;transition:width .3s .25s}
+  .strip{height:32px;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#f0f0f0,#d8d8d8)}
+
+  /* Papers layer */
+  .papers{position:absolute;inset:0;pointer-events:none;z-index:20;overflow:visible}
+  .paper{position:absolute;width:36px;height:46px;background:#fff;border-radius:2px;
+    box-shadow:0 3px 8px rgba(0,0,0,.22);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;opacity:0;pointer-events:none;
+    gap:3px;padding:4px;overflow:hidden}
+  .paper-val{font-size:12px;font-weight:900;color:#e85500}
+  .paper-label{font-size:7px;font-weight:600;color:#888;text-align:center;line-height:1.2}
+  .paper-line{width:80%;height:1.5px;background:#eee;border-radius:1px}
+
+  @keyframes flyPaper{
+    0%{opacity:1;transform:rotate(var(--r0))}
+    80%{opacity:.9}
+    100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--r1)) scale(.4)}
+  }
+  @keyframes btnPulse{
+    0%,100%{box-shadow:0 6px 18px rgba(0,0,0,.45),0 1px 0 rgba(255,200,120,.4) inset}
+    50%{box-shadow:0 6px 28px rgba(255,100,0,.55),0 1px 0 rgba(255,200,120,.4) inset}
+  }
+  .machine-btn.idle{animation:btnPulse 2.8s ease-in-out infinite}
+
+  /* ─── ING lion badge ─── */
+  .ing-badge{
+    position:absolute;bottom:72px;left:50%;transform:translateX(-50%);
+    font-size:12px;color:#cc6600;font-weight:700;opacity:.6;user-select:none;white-space:nowrap;
+  }
+
+  /* ─── Bottom bar ─── */
+  .bottom-bar{
+    position:absolute;bottom:0;left:0;right:0;height:62px;
+    background:rgba(255,255,255,.97);backdrop-filter:blur(10px);
+    border-top:1px solid rgba(0,0,0,.09);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;z-index:30;gap:12px;
+  }
+  .disclaimer{font-size:9px;color:#555;line-height:1.4;max-width:185px}
+  .cta-btn{
+    flex-shrink:0;height:38px;padding:0 20px;
+    background:#ff5500;color:#fff;border:none;border-radius:999px;
+    font-size:13px;font-weight:800;cursor:pointer;
+    transition:background .18s,transform .1s;white-space:nowrap;touch-action:manipulation;
+  }
+  .cta-btn:hover{background:#e04400}
+  .cta-btn:active{transform:scale(.94)}
+</style>
+</head>
+<body>
+<div class="ad">
+
+  <!-- ═══ VIDEO ═══ -->
+  <div class="video-wrap">
+    <video class="ad-video" id="adVideo" autoplay muted playsinline loop preload="auto">
+      <source src="/ing-ad-15s.mp4" type="video/mp4">
+    </video>
+    <!-- Top bar (expand icon, vidout badge) -->
+    <div class="vid-topbar">
+      <div class="vid-topbar-icon">⤢</div>
+      <div class="vid-topbar-icon" style="background:rgba(255,102,0,.7);font-size:9px;padding:0 5px;border-radius:3px;color:#fff;font-weight:700">▶</div>
+    </div>
+    <div class="sub-cover-tl"></div>
+    <!-- Subtitle cover -->
+    <div class="sub-cover"></div>
+    <!-- Video controls -->
+    <div class="vid-controls">
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">
+        <svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <span class="vid-time" id="vidTime">0:00</span>
+      <div class="vid-progress" onclick="seekVideo(event)">
+        <div class="vid-filled" id="vidFill"></div>
+      </div>
+      <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔇</button>
+      <div class="fullscreen-btn">⛶</div>
+    </div>
+  </div>
+
+  <!-- ═══ ING BRAND PANEL ═══ -->
+  <div class="brand-panel">
+    <div class="headline">Switch to ING.<br>Zero fees, forever.</div>
+
+    <!-- Shredder scene -->
+    <div class="shredder-wrap" onclick="triggerShredder()" id="shredderWrap">
+      <div class="scene-bg">
+        <span class="plant">🌿</span>
+        <span class="plant2">🌱</span>
+      </div>
+
+      <div class="machine" id="machine">
+        <div class="machine-body">
+          <div class="machine-slot">
+            <div class="slot-prong" style="left:18px"></div>
+            <div class="slot-prong" style="left:34px"></div>
+            <div class="slot-prong" style="left:50px"></div>
+            <div class="slot-prong" style="left:66px"></div>
+            <div class="slot-prong" style="left:82px"></div>
+          </div>
+          <div class="machine-btn idle" id="machineBtn">
+            <span class="btn-label">ING</span>
+          </div>
+          <div class="machine-brand">I N G</div>
+        </div>
+        <div class="machine-legs">
+          <div class="leg"></div>
+          <div class="leg"></div>
+        </div>
+        <!-- Paper strips coming out -->
+        <div class="shred-strips" id="shredStrips">
+          <div class="strip" style="width:7px"></div><div class="strip" style="width:7px"></div>
+          <div class="strip" style="width:7px"></div><div class="strip" style="width:7px"></div>
+          <div class="strip" style="width:7px"></div><div class="strip" style="width:7px"></div>
+          <div class="strip" style="width:7px"></div><div class="strip" style="width:7px"></div>
+          <div class="strip" style="width:7px"></div><div class="strip" style="width:7px"></div>
+        </div>
+      </div>
+
+      <!-- Flying papers layer -->
+      <div class="papers" id="papersEl"></div>
+    </div>
+
+    <div class="ing-badge">ING 🦁 &nbsp;·&nbsp; zerofee.ing</div>
+  </div>
+
+  <!-- ═══ BOTTOM BAR ═══ -->
+  <div class="bottom-bar">
+    <div class="disclaimer">No wire fees, no transfer charges,<br>no annual card fee. Not one.*</div>
+    <button class="cta-btn" onclick="triggerShredder()">Open ING</button>
+  </div>
+</div>
+
+<script>
+var video = document.getElementById('adVideo');
+var playBtn = document.getElementById('playBtn');
+var playIcon = document.getElementById('playIcon');
+var vidTime = document.getElementById('vidTime');
+var vidFill = document.getElementById('vidFill');
+var muteBtn = document.getElementById('muteBtn');
+
+// ─── Video controls ───
+function togglePlay() {
+  if (video.paused) { video.play(); }
+  else { video.pause(); }
+  updatePlayIcon();
+}
+function updatePlayIcon() {
+  playIcon.innerHTML = video.paused
+    ? '<path d="M8 5v14l11-7z"/>'
+    : '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+}
+function toggleMute() {
+  video.muted = !video.muted;
+  muteBtn.textContent = video.muted ? '🔇' : '🔊';
+}
+function seekVideo(e) {
+  var bar = e.currentTarget;
+  var ratio = e.offsetX / bar.clientWidth;
+  video.currentTime = video.duration * ratio;
+}
+function fmt(s) {
+  s = Math.floor(s||0);
+  return Math.floor(s/60)+':'+(s%60<10?'0':'')+(s%60);
+}
+video.addEventListener('timeupdate', function() {
+  vidTime.textContent = fmt(video.currentTime);
+  if (video.duration) vidFill.style.width = (video.currentTime/video.duration*100)+'%';
+});
+video.addEventListener('play', updatePlayIcon);
+video.addEventListener('pause', updatePlayIcon);
+video.play().catch(function(){});
+
+// ─── Shredder animation ───
+var shredding = false;
+var machineBtn = document.getElementById('machineBtn');
+var machine = document.getElementById('machine');
+var shredStrips = document.getElementById('shredStrips');
+var papersEl = document.getElementById('papersEl');
+var shredderWrap = document.getElementById('shredderWrap');
+
+function triggerShredder() {
+  if (shredding) return;
+  shredding = true;
+  machineBtn.classList.remove('idle');
+  machineBtn.style.animation = 'none';
+
+  // Shake machine
+  var mb = machine.querySelector('.machine-body');
+  var angles = [-.025, .02, -.018, .015, -.01, .008, 0];
+  angles.forEach(function(a, i) {
+    setTimeout(function(){ mb.style.transform = 'rotate('+a+'rad)'; }, i * 75);
+  });
+
+  // Launch paper slips
+  var slots = ['Annual\nFee','Wire\nFee','Card Fee','Transfer','ATM Fee','FX Fee','Late Fee','SMS'];
+  var wrapRect = shredderWrap.getBoundingClientRect();
+  var slotEl = machine.querySelector('.machine-slot');
+  var slotRect = slotEl.getBoundingClientRect();
+  // Target relative to shredderWrap
+  var targetX = slotRect.left + slotRect.width/2 - wrapRect.left;
+  var targetY = slotRect.top + slotRect.height/2 - wrapRect.top;
+
+  for (var i = 0; i < 10; i++) {
+    (function(idx) {
+      setTimeout(function() {
+        var p = document.createElement('div');
+        p.className = 'paper';
+        var label = slots[idx % slots.length];
+        p.innerHTML =
+          '<div class="paper-line"></div>' +
+          '<div class="paper-val">€0</div>' +
+          '<div class="paper-label">'+label+'</div>' +
+          '<div class="paper-line"></div>';
+
+        // Start: spread across the lower part of the scene
+        var startX = 8 + Math.random() * (wrapRect.width - 52);
+        var startY = 100 + Math.random() * 90;
+        var tx = (targetX - startX - 18) + 'px';
+        var ty = (targetY - startY - 23) + 'px';
+        var r0 = (Math.random()*28 - 14) + 'deg';
+        var r1 = (Math.random()*360 - 180) + 'deg';
+
+        p.style.left = startX + 'px';
+        p.style.top = startY + 'px';
+        p.style.setProperty('--tx', tx);
+        p.style.setProperty('--ty', ty);
+        p.style.setProperty('--r0', r0);
+        p.style.setProperty('--r1', r1);
+        p.style.animation = 'flyPaper '+(0.75+Math.random()*0.4)+'s ease-in forwards';
+
+        papersEl.appendChild(p);
+        setTimeout(function(){ if(p.parentNode) p.remove(); }, 1500);
+      }, idx * 65);
+    })(i);
+  }
+
+  // Show shredded output
+  setTimeout(function() { shredStrips.style.width = '82px'; }, 380);
+
+  // Reset
+  setTimeout(function() {
+    shredding = false;
+    shredStrips.style.width = '0';
+    machine.querySelector('.machine-body').style.transform = '';
+    machineBtn.classList.add('idle');
+  }, 2800);
+}
+</script>
+</body>
+</html>
