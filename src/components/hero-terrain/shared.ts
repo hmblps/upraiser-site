@@ -1,5 +1,6 @@
 import type { MutableRefObject } from "react";
-import { MathUtils, Vector3 } from "three";
+import { MathUtils, type Vector3 } from "three";
+import { heroCapture } from "../../lib/heroCapture";
 
 export const POINTER_FOLLOW = 3.2;
 export const TRACK_FOLLOW = 5.4;
@@ -99,6 +100,9 @@ export function sampleArc(
 }
 
 export function readProgress(heroFly: { progressRef: MutableRefObject<number> } | null | undefined) {
+  if (heroCapture.snap) {
+    return heroCapture.progress;
+  }
   return MathUtils.clamp(heroFly?.progressRef.current ?? 0, 0, 1);
 }
 
