@@ -22,10 +22,10 @@ const segments = [
 const radii = [168, 138, 108, 78];
 
 const fraudGhostLayout = [
-  { left: "48%", mobileLeft: "15%", originY: 79, mobileOriginY: 89, drift: 16, duration: 7.2, delay: 0 },
-  { left: "63%", mobileLeft: "40%", originY: 85, mobileOriginY: 95, drift: -12, duration: 7.8, delay: 1.1 },
-  { left: "78%", mobileLeft: "65%", originY: 75, mobileOriginY: 85, drift: 14, duration: 8.1, delay: 2.0 },
-  { left: "92%", mobileLeft: "85%", originY: 81, mobileOriginY: 91, drift: -10, duration: 6.6, delay: 2.8 },
+  { left: "15%", mobileLeft: "15%", originY: 79, mobileOriginY: 89, drift: 16, duration: 7.2, delay: 0 },
+  { left: "35%", mobileLeft: "35%", originY: 85, mobileOriginY: 95, drift: -12, duration: 7.8, delay: 1.1 },
+  { left: "55%", mobileLeft: "55%", originY: 75, mobileOriginY: 85, drift: 14, duration: 8.1, delay: 2.0 },
+  { left: "75%", mobileLeft: "75%", originY: 81, mobileOriginY: 91, drift: -10, duration: 6.6, delay: 2.8 },
 ] as const;
 
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
