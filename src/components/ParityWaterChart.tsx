@@ -7,7 +7,6 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
-import { ParityCausticsCanvas } from "./ParityCausticsCanvas";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type ParityWaterChartProps = {
@@ -168,7 +167,6 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
                   ))}
                 </div>
               </div>
-              <ParityCausticsCanvas progress={progress} reduced={reduced} />
             </div>
           </div>
         </div>

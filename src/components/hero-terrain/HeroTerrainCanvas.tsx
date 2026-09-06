@@ -134,7 +134,7 @@ export function HeroTerrainCanvas({
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
             >
-              <Compass className="h-12 w-12 text-fg opacity-90" strokeWidth={1} />
+              <Compass className="h-12 w-12 text-fg opacity-90 animate-spin" strokeWidth={1} style={{ animationDuration: "3s" }} />
             </motion.div>
             <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg animate-pulse">Rendering Terrain</span>
           </div>
