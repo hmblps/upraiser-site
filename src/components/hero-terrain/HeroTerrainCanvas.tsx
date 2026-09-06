@@ -13,7 +13,6 @@ import { markHeroReady } from "../../lib/scrollPreload";
 import { CaptureDriver } from "./CaptureDriver";
 import { HeroVideoFallback } from "./HeroVideoFallback";
 import { Scene } from "./Scene";
-import { ObjSceneExporter } from "./ObjSceneExporter";
 import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode } from "./shared";
 
 export { HERO_ASCENT_DEFAULTS, EXPEDITION_ASCENT } from "./shared";
@@ -189,7 +188,6 @@ export function HeroTerrainCanvas({
         }}
       >
         <ThemeGlSync theme={theme} />
-        <ObjSceneExporter />
         <Scene
           theme={theme}
           scrollRef={scrollRef}
