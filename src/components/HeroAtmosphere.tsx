@@ -1,15 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useWeakHardware } from "../hooks/useWeakHardware";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { whenHeroTerrainBytes } from "../lib/heroBoot";
 import { markHeroReady } from "../lib/scrollPreload";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 import { HeroTerrainCanvas } from "./hero-terrain/HeroTerrainCanvas";
-
-const MOUNTAINS_MP4 = "/hero/light-mountains-loop.mp4";
-const MOUNTAINS_POSTER_LIGHT = "/hero/light-mountains-fallback.png";
-const MOUNTAINS_POSTER_DARK = "/hero/dark-mountain-fallback.png";
+import { HeroVideoFallback } from "./hero-terrain/HeroVideoFallback";
 
 function useDesktopHero() {
   const [ok, setOk] = useState(() =>
@@ -27,68 +25,14 @@ function useDesktopHero() {
   return ok;
 }
 
-/** Mobile / reduced-motion atmosphere. Desktop is WebGL Everest, no poster. */
-function HeroMountainsMobile({ isLight, reduced }: { isLight: boolean; reduced: boolean }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const poster = isLight ? MOUNTAINS_POSTER_LIGHT : MOUNTAINS_POSTER_DARK;
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reduced) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          video.play().catch(() => {});
-          return;
-        }
-        video.pause();
-      },
-      { threshold: 0.12 },
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, [reduced]);
-
-  return (
-    <div
-      className={`hero-mountains-layer hero-mountains-layer--mobile${isLight ? " is-light" : " is-dark"}`}
-    >
-      <img
-        className="hero-mountains-poster"
-        src={poster}
-        alt=""
-        decoding="async"
-        fetchPriority="low"
-      />
-      {reduced ? null : (
-        <video
-          ref={videoRef}
-          className="hero-mountains-video is-active"
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={poster}
-          tabIndex={-1}
-        >
-          <source src={MOUNTAINS_MP4} type="video/mp4" />
-        </video>
-      )}
-      <div className="hero-mountains-scrim" />
-      <div className="hero-bottom-fade-bridge" />
-    </div>
-  );
-}
-
-/** CSS sky immediately; WebGL canvas mounts on the first desktop paint. */
 export function HeroAtmosphere() {
   const { theme } = useTheme();
   const isLight = theme === "light";
   const reduced = useReducedMotion();
   const desktop = useDesktopHero();
-  const use3d = desktop && !reduced;
+  const weak = useWeakHardware();
+  
+  const use3d = desktop && !reduced && !weak;
   const [boot3d, setBoot3d] = useState(false);
 
   useEffect(() => {
@@ -124,7 +68,14 @@ export function HeroAtmosphere() {
             <HeroTerrainCanvas className="hero-terrain-root" />
           </CanvasErrorBoundary>
         ) : null}
-        {!desktop ? <HeroMountainsMobile isLight={isLight} reduced={reduced} /> : null}
+        
+        {!use3d ? (
+          <div className="hero-mountains-layer hero-mountains-layer--mobile is-active">
+            <HeroVideoFallback variant="home" />
+            <div className="hero-mountains-scrim" />
+            <div className="hero-bottom-fade-bridge" />
+          </div>
+        ) : null}
       </div>
     </div>
   );
