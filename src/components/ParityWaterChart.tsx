@@ -1,8 +1,6 @@
-import { ChartGhostValue } from "./ChartGhostValue";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   motion,
-  useMotionValueEvent,
   useTransform,
   type MotionValue,
 } from "framer-motion";
@@ -152,20 +150,10 @@ function barPct(spend: number) {
  */
 export function ParityWaterChart({ progress }: ParityWaterChartProps) {
   const reduced = useReducedMotion();
-  const [enabled, setEnabled] = useState(false);
-
   // Promise uses anchor progress: when chart+copy are on screen, progress is already mid/late.
   // Grow across that visible window so scroll down raises bars and scroll up shrinks them.
   const barScale = useTransform(progress, [0.4, 0.55, 0.72, 0.9], [0.05, 0.35, 0.7, 1]);
   const opacity = useTransform(progress, [0.28, 0.4, 0.58, 0.92, 1], [0, 0.7, 1, 1, 0.9]);
-
-  useEffect(() => {
-    const sync = () => setEnabled(!reduced);
-    sync();
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, [reduced]);
 
 
 
