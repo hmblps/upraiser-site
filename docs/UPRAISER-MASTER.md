@@ -1009,3 +1009,21 @@ Status as of 31 Aug 2026. Conversion items that would put **Request Pilot** in t
 ---
 
 *End of master document. При изменении IA, hero, Routes glass, Windows quirks, preload или deploy — обновляй **этот** файл. Других проектных md нет.*
+## 27. Recent Session Logs (September 2026)
+
+### Sept 6 2026 Updates
+- **Expedition Grid (`AboutUsSection`) Redesign & Alignment:**
+  - Rewrote the intro text to span two paragraphs for better visual balance against the right-side grid, ensuring "magazine-style" typography with `text-balance`.
+  - Tuned down grid title/description font sizes (`text-sm`, `text-[13px]`) and adjusted max-widths to perfectly align the left column and right grid heights.
+  - Replaced the abstract background SVG topographic map with a highly accurate, realistic SVG trace of Mount Everest (based on a user-provided technical reference photo). 
+    - Plotted realistic climbing routes with labels for Lhotse, South Col, Khumbu Glacier, etc.
+    - Thickened mountain silhouette lines to 4px and red route lines to 6px using `var(--accent)`.
+    - Included correctly placed route nodes (`r=16`) and numbers (`16px`).
+    - Wrapped the entire schematic in an ambient container (`opacity-[0.15]`) without `mix-blend` to ensure it works beautifully in both Light (Growth) and Dark (Infrastructure) modes.
+- **`FraudScrollChart` Layout Fix:** 
+  - Fixed an issue where the last ghost number ("Bots 7.1%") was touching/overflowing the right edge of the screen. Clustered the layout points closer together (`15%` to `75%` instead of `92%`), matching the aesthetic of past builds.
+- **Typography & Rich Titles:**
+  - Refactored `ProgrammaticScrollSection` and `SectionHeader` to accept `ReactNode` instead of just strings.
+  - Split "Every Format. One Supply Path." onto two lines in the Channels section and applied `text-accent` to the second line.
+  - Removed trailing periods from all major section titles across the site (`liveContent.ts` and React components), maintaining them only on descriptive paragraphs.
+
