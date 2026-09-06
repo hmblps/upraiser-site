@@ -22,9 +22,12 @@ export function AboutUsSection() {
         </div>
 
         <div className="grid md:grid-cols-[1fr_1.5fr] lg:grid-cols-[1fr_2fr] gap-10 lg:gap-16 items-start mt-8">
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5">
             <p className="section-description !max-w-none text-body-lg leading-snug text-fg/80 text-balance">
-              Scaling the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, we combine mathematical precision, creative power, and bulletproof infrastructure toward a single compass point: guiding Your brand to the peak of growth.
+              Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth.
+            </p>
+            <p className="section-description !max-w-none text-body-lg leading-snug text-fg/80 text-balance">
+              Our foundation is built to conquer any terrain. We combine mathematical precision, creative power, and bulletproof infrastructure, ensuring that every step of Your ascent is secured by operators who understand the pure mechanics of scale.
             </p>
           </div>
 
