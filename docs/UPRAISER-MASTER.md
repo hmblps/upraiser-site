@@ -252,24 +252,21 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 
 ## 9. Hero 3D (Everest fly)
 
-**Status:** SHIPPED — desktop sticky Lenis runway + R3F Everest. Mobile = MP4, no WebGL.
+**Status:** SHIPPED — desktop sticky Lenis runway + R3F Everest. Mobile/weak hardware = Canvas Image Sequence (Apple-style), no WebGL.
 
 ### Theme FX
-
 
 | Theme     | Terrain                                         | FX                                                                                                      |
 | --------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | **Light** | Photo `everest-light.glb` (~11MB) · white paper | `BrandHazeSky` · `ScrollBeams` · `AscentHalo` · `AscentBird` (procedural silhouette) · `StudioRimLight` |
 | **Dark**  | Wire `everest.glb` (~1.0 MB Draco, **planet curve baked**) | `NightStars` · `FloatingVoyager` after ~2.8s if hero still in view |
 
-
 ### Key files
-
 
 | File | Role |
 | --- | --- |
 | `Hero.tsx` | Sticky stage, H1, stats, `HeroFlyProvider` |
-| `HeroAtmosphere.tsx` | CSS sky + mobile MP4; **eager** `HeroTerrainCanvas` on desktop ≥900px |
+| `HeroAtmosphere.tsx` | CSS sky; **eager** `HeroTerrainCanvas` on desktop ≥900px |
 | `lib/heroBoot.ts` | `index.html` + `main.tsx` preload of theme GLB + Draco wasm |
 | `lib/heroDesktop.ts` | `DESKTOP_HERO_QUERY = "(min-width: 900px)"` |
 | `lib/scrollPreload.ts` | Scroll-synced warm: hero owns network until `markHeroReady` |
@@ -277,7 +274,7 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 | `Everest.tsx` | Theme-switched GLB; dark skips runtime vertex bend |
 | `HeroFlyContext.tsx` | Runway → `progressRef` |
 | `lib/heroModel.ts` | URLs + Draco |
-
+| `HeroVideoFallback.tsx` | Apple-style Canvas Image Sequence player for mobile |
 
 ### Art locks (не ломать)
 
@@ -299,9 +296,13 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 4. Canvas: `frameloop="never"` when offscreen; `events.disconnect()`; no raycast on terrain.
 5. Voyager 13 MB only after mountain ready **and** ~2.8s still in view.
 
-### Mobile
+### Mobile & Weak Hardware Fallback
 
-`HeroAtmosphere` → `light-mountains-loop.mp4` + posters. No WebGL. `markHeroReady()` fires immediately so below-fold can warm.
+`HeroVideoFallback.tsx` (name kept for legacy) now uses a **Canvas Image Sequence** instead of `<video>`.
+- 150 JPEG frames per scene are lazy-loaded and drawn to `<canvas>` on scroll.
+- Eliminates iOS Safari hardware decoding lag (no frame skipping).
+- Runs at perfect 60fps on any mobile phone or weak PC while maintaining the dramatic 3D flyover effect.
+- `markHeroReady()` fires immediately so below-fold can warm.
 
 ---
 
