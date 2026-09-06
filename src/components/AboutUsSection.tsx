@@ -12,8 +12,8 @@ export function AboutUsSection() {
               .route-line { stroke: var(--accent); stroke-width: 6px; opacity: 0.7; stroke-linejoin: round; stroke-linecap: round; }
               .node-circle { fill: var(--accent); }
               .node-text { fill: var(--bg); font-size: 16px; font-weight: bold; text-anchor: middle; dominant-baseline: central; font-family: ui-sans-serif, system-ui, sans-serif; }
-              .label-text { fill: currentColor; font-size: 11px; opacity: 0.8; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
-              .label-title { fill: currentColor; font-size: 14px; font-weight: bold; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
+              .label-text { fill: currentColor; font-size: 11px; opacity: 0.4; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
+              .label-title { fill: currentColor; font-size: 14px; font-weight: bold; opacity: 0.5; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
             `}
           </style>
 
