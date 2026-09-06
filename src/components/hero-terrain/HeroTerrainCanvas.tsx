@@ -53,7 +53,8 @@ export function HeroTerrainCanvas({
   variant = "home",
   capture,
 }: HeroTerrainCanvasProps) {
-  const { theme } = useTheme();
+  const { theme: ctxTheme } = useTheme();
+  const theme = capture?.theme ?? ctxTheme;
   const reduced = useReducedMotion();
   const weak = useWeakHardware();
   const scrollRef = useRef<ScrollState>({ pointerX: 0, pointerY: 0 });
@@ -161,7 +162,7 @@ export function HeroTerrainCanvas({
       <Canvas
         className="hero-terrain-canvas"
         shadows
-        dpr={capturing ? 1 : [1, 1.5]}
+        dpr={capturing ? 2 : [1, 1.5]}
         frameloop={capturing || inView ? "always" : "never"}
         gl={{
           antialias: true,

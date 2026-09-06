@@ -267,10 +267,10 @@ export function Everest({
     return new MeshStandardMaterial({
       color: new Color("#d4a84a"),
       emissive: new Color("#8a6424"),
-      emissiveIntensity: 0.34,
+      emissiveIntensity: 1.5,
       wireframe: true,
       transparent: true,
-      opacity: 0.88,
+      opacity: 0.95,
       metalness: 0.05,
       roughness: 0.68,
       depthWrite: false,
