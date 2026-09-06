@@ -311,8 +311,8 @@ export function Everest({
   useFrame((state) => {
     if (!wire || heroCapture.snap) return;
     const breathe = Math.sin(state.clock.elapsedTime * IDLE_BREATHE);
-    wire.emissiveIntensity = 0.34 + breathe * 0.03;
-    wire.opacity = 0.88 + breathe * 0.01;
+    wire.emissiveIntensity = 1.5 + breathe * 0.2;
+    wire.opacity = 0.95 + breathe * 0.05;
   });
 
   return (
