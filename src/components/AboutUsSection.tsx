@@ -15,29 +15,50 @@ export function AboutUsSection() {
 
       <div className="page-container relative z-10">
         <div className="section-header">
-          <p className="section-label">The Expedition</p>
-          <h2 className="section-title max-w-3xl">
-            We mapped the mobile advertising terrain.
+          <p className="section-label">The Expedition Crew</p>
+          <h2 className="section-title max-w-4xl text-balance">
+            Elevating Your business to the absolute summit.
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-[1.5fr_1fr] gap-12 items-start mt-10">
-          <p className="section-description !max-w-none text-body-lg leading-snug text-fg/80">
-            <span className="font-bold text-fg">Basecamp London, since 2017.</span>{" "}
-            Systems, software, finance, and creative operators work at one desk.
-            You speak directly to the crew who wires Your pipes and trades Your budgets.
-          </p>
+        <div className="grid md:grid-cols-[1fr_1.2fr] lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-24 items-start mt-10">
+          <div className="flex flex-col gap-6">
+            <p className="section-description !max-w-none text-body-lg leading-snug text-fg/80">
+              Scaling the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, we combine mathematical precision, creative power, and bulletproof infrastructure toward a single compass point: guiding Your brand to the peak of growth.
+            </p>
+          </div>
 
-          <div className="bg-bg-card/60 p-8 rounded-3xl border border-border/60 backdrop-blur-md">
-            <h3 className="section-label text-accent mb-4">Our Disciplines</h3>
-            <ul className="flex flex-col gap-4 text-muted-light font-medium">
-              {["Systems & Architecture", "Software Engineering", "Financial Trading", "Creative Studio"].map((item) => (
-                <li key={item} className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+          <div className="grid sm:grid-cols-2 gap-8 lg:gap-10">
+            <div>
+              <h3 className="font-semibold text-fg mb-2">The Engineering Basecamp</h3>
+              <p className="text-muted text-sm leading-relaxed">
+                Anti-fraud and tracking architects securing Your path, ensuring absolute data integrity and clean traffic.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-fg mb-2">The Marketing Navigators</h3>
+              <p className="text-muted text-sm leading-relaxed">
+                Media veterans plotting the optimal, verified route to Your exact audience across complex digital terrains.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-fg mb-2">The Visual Architects</h3>
+              <p className="text-muted text-sm leading-relaxed">
+                UX/UI designers translating complex strategies into high-converting assets that actively drive user action.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-fg mb-2">The Data Scouts</h3>
+              <p className="text-muted text-sm leading-relaxed">
+                Analysts uncovering hidden growth vectors, monitoring metrics, and optimizing Your budgets in real-time.
+              </p>
+            </div>
+            <div className="sm:col-span-2">
+              <h3 className="font-semibold text-fg mb-2">The Expedition Guides</h3>
+              <p className="text-muted text-sm leading-relaxed max-w-xl">
+                Dedicated account managers ensuring transparent communication, seamless workflow, and steady momentum at every stage of the climb.
+              </p>
+            </div>
           </div>
         </div>
       </div>
