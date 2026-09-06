@@ -50,7 +50,9 @@ type GhostMetric = {
   id: string;
   label: string;
   left: string;
+  mobileLeft?: string;
   originY: number;
+  mobileOriginY?: number;
   drift: number;
   duration: number;
   delay: number;
@@ -58,21 +60,33 @@ type GhostMetric = {
 };
 
 const GROWTH_GHOSTS: GhostMetric[] = [
-  { id: "g1", label: "Q3 Run Rate", left: "28%", originY: 62, drift: 24, duration: 6, delay: 0, format: (t) => `$${(lerp(2.1, 14.4, t)).toFixed(1)}M` },
-  { id: "g2", label: "LTV / CAC", left: "45%", originY: 34, drift: -18, duration: 8, delay: 1.5, format: (t) => `${(lerp(1.2, 3.8, t)).toFixed(1)}x` },
-  { id: "g3", label: "Gross Margin", left: "62%", originY: 48, drift: 20, duration: 7, delay: 0.8, format: (t) => `${Math.round(lerp(24, 78, t))}%` },
-  { id: "g4", label: "Active Users", left: "75%", originY: 22, drift: -22, duration: 6.5, delay: 2, format: (t) => `${(lerp(12, 145, t)).toFixed(0)}K` },
+  { id: "g1", label: "Q3 Run Rate", left: "28%", mobileLeft: "10%", originY: 62, mobileOriginY: 65, drift: 24, duration: 6, delay: 0, format: (t) => `$${(lerp(2.1, 14.4, t)).toFixed(1)}M` },
+  { id: "g2", label: "LTV / CAC", left: "45%", mobileLeft: "35%", originY: 34, mobileOriginY: 55, drift: -18, duration: 8, delay: 1.5, format: (t) => `${(lerp(1.2, 3.8, t)).toFixed(1)}x` },
+  { id: "g3", label: "Gross Margin", left: "62%", mobileLeft: "60%", originY: 48, mobileOriginY: 75, drift: 20, duration: 7, delay: 0.8, format: (t) => `${Math.round(lerp(24, 78, t))}%` },
+  { id: "g4", label: "Active Users", left: "75%", mobileLeft: "80%", originY: 22, mobileOriginY: 45, drift: -22, duration: 6.5, delay: 2, format: (t) => `${(lerp(12, 145, t)).toFixed(0)}K` },
 ];
 
 const FRAUD_GHOSTS: GhostMetric[] = [
-  { id: "f1", label: "Bot Traffic", left: "32%", originY: 28, drift: 20, duration: 6.5, delay: 0, format: (t) => `${(lerp(48, 2, t)).toFixed(1)}%` },
-  { id: "f2", label: "Chargebacks", left: "48%", originY: 42, drift: -16, duration: 7.5, delay: 1.2, format: (t) => `$${(lerp(120, 14, t)).toFixed(0)}K` },
-  { id: "f3", label: "Spam Signups", left: "66%", originY: 25, drift: 22, duration: 8, delay: 0.5, format: (t) => `${Math.round(lerp(8500, 120, t))}` },
+  { id: "f1", label: "Bot Traffic", left: "32%", mobileLeft: "12%", originY: 28, mobileOriginY: 50, drift: 20, duration: 6.5, delay: 0, format: (t) => `${(lerp(48, 2, t)).toFixed(1)}%` },
+  { id: "f2", label: "Chargebacks", left: "48%", mobileLeft: "45%", originY: 42, mobileOriginY: 65, drift: -16, duration: 7.5, delay: 1.2, format: (t) => `$${(lerp(120, 14, t)).toFixed(0)}K` },
+  { id: "f3", label: "Spam Signups", left: "66%", mobileLeft: "75%", originY: 25, mobileOriginY: 45, drift: 22, duration: 8, delay: 0.5, format: (t) => `${Math.round(lerp(8500, 120, t))}` },
 ];
 
 function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: MotionValue<number> }) {
   const containerRef = useRef<HTMLSpanElement>(null);
   
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const finalLeft = isMobile && metric.mobileLeft ? metric.mobileLeft : metric.left;
+  const finalOriginY = isMobile && metric.mobileOriginY ? metric.mobileOriginY : metric.originY;
+
   useEffect(() => {
     const updateDOM = (v: number) => {
       if (!containerRef.current) return;
@@ -98,13 +112,10 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: MotionValu
     return unsub;
   }, [morph, metric]);
 
-  
-  
-
   return (
     <GhostBubbleMotion
-      left={metric.left}
-      originY={metric.originY}
+      left={finalLeft}
+      originY={finalOriginY}
       drift={metric.drift}
       duration={metric.duration}
       delay={metric.delay}

@@ -38,7 +38,9 @@ const GHOSTS = [
     id: "verified",
     label: "Verified",
     left: "14%",
+    mobileLeft: "10%",
     originY: 68,
+    mobileOriginY: 72,
     drift: 10,
     duration: 8.2,
     delay: 0.2,
@@ -49,7 +51,9 @@ const GHOSTS = [
     id: "parity",
     label: "Log parity",
     left: "38%",
+    mobileLeft: "35%",
     originY: 76,
+    mobileOriginY: 82,
     drift: -12,
     duration: 9,
     delay: 1.1,
@@ -60,7 +64,9 @@ const GHOSTS = [
     id: "mmp",
     label: "MMP match",
     left: "62%",
+    mobileLeft: "60%",
     originY: 66,
+    mobileOriginY: 70,
     drift: 11,
     duration: 7.6,
     delay: 0.6,
@@ -71,7 +77,9 @@ const GHOSTS = [
     id: "clean",
     label: "Clean spend",
     left: "82%",
+    mobileLeft: "85%",
     originY: 74,
+    mobileOriginY: 78,
     drift: -9,
     duration: 8.5,
     delay: 1.8,
@@ -79,6 +87,35 @@ const GHOSTS = [
     value: (t: number) => `${Math.round(84 + t * 14)}%`,
   },
 ] as const;
+
+function GhostBubble({ g, morph }: { g: typeof GHOSTS[number]; morph: number }) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const finalLeft = isMobile && g.mobileLeft ? g.mobileLeft : g.left;
+  const finalOriginY = isMobile && g.mobileOriginY ? g.mobileOriginY : g.originY;
+
+  return (
+    <GhostBubbleMotion
+      left={finalLeft}
+      originY={finalOriginY}
+      drift={g.drift}
+      duration={g.duration}
+      delay={g.delay}
+      rise={g.rise}
+      peakOpacity={0.78}
+    >
+      <ChartGhostValue value={g.value(morph)} />
+      <span className="fold-chart-ghost-label">{g.label}</span>
+    </GhostBubbleMotion>
+  );
+}
 
 function barPct(spend: number) {
   return Math.max((spend / MAX_SPEND) * MAX_BAR_PCT, 0.35);
@@ -117,13 +154,27 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
 
 
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= 767 : false
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const activeChannels = isMobile ? CHANNELS.slice(0, 6) : CHANNELS;
+
   return (
     <motion.div
       className="parity-water"
       style={
         reduced
-          ? { opacity: 0.75, ["--parity-cols" as string]: CHANNELS.length }
-          : { opacity, ["--parity-cols" as string]: CHANNELS.length }
+          ? { opacity: 0.75, ["--parity-cols" as string]: activeChannels.length }
+          : { opacity, ["--parity-cols" as string]: activeChannels.length }
       }
       aria-hidden
     >
@@ -132,7 +183,7 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
           <div className="parity-water__plot">
             <div className="parity-water__air">
               <div className="parity-water__cols">
-                {CHANNELS.map((ch) => (
+                {activeChannels.map((ch) => (
                   <div key={ch.id} className="parity-water__col parity-water__col--air">
                     <motion.div
                       className="parity-water__bar parity-water__bar--invoice"
@@ -153,7 +204,7 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
               <div className="parity-water__lake-scan">
                 <div className="parity-water__lake-tint" />
                 <div className="parity-water__cols parity-water__cols--logs">
-                  {CHANNELS.map((ch) => (
+                  {activeChannels.map((ch) => (
                     <div key={ch.id} className="parity-water__col parity-water__col--logs">
                       <motion.div
                         className="parity-water__bar parity-water__bar--logs"
@@ -175,19 +226,7 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
       {/* Full-fold overlay: left ghosts stay; dissolve vertically under copy */}
       <div className="parity-water__ghosts fold-chart-ghosts">
         {GHOSTS.map((g) => (
-            <GhostBubbleMotion
-            key={g.id}
-            left={g.left}
-            originY={g.originY}
-            drift={g.drift}
-            duration={g.duration}
-            delay={g.delay}
-            rise={g.rise}
-            peakOpacity={0.78}
-          >
-            <ChartGhostValue value={g.value(morph)} />
-            <span className="fold-chart-ghost-label">{g.label}</span>
-          </GhostBubbleMotion>
+          <GhostBubble key={g.id} g={g} morph={morph} />
         ))}
       </div>
     </motion.div>
