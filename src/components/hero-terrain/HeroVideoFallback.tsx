@@ -90,7 +90,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     first.onload = () => {
       imageCache.current[0] = first;
       drawFrame(0);
-      for (let i = 1; i < 150; i++) getFrame(i);
+      preloadFrames(0); // Only preload the first chunk initially
     };
   }, [shotFolder, isMobile, theme]);
 
