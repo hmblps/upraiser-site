@@ -131,13 +131,13 @@ export function HeroTerrainCanvas({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1, duration: 0.8 }}
-              className="relative flex items-center justify-center w-16 h-16 md:w-24 md:h-24 rounded-full border border-border/30 bg-bg-elevated/40 backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.2)]"
+              className="relative flex items-center justify-center w-16 h-16 md:w-32 md:h-32 rounded-full border border-border/30 bg-bg-elevated/40 backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.2)]"
             >
-              <div className="absolute top-1 md:top-2 text-[8px] md:text-[10px] font-mono font-bold text-fg/60 tracking-tighter">N</div>
-              <div className="absolute right-1 md:right-2 text-[8px] md:text-[10px] font-mono font-bold text-fg/60 tracking-tighter">E</div>
-              <div className="absolute bottom-1 md:bottom-2 text-[8px] md:text-[10px] font-mono font-bold text-fg/60 tracking-tighter">S</div>
-              <div className="absolute left-1 md:left-2 text-[8px] md:text-[10px] font-mono font-bold text-fg/60 tracking-tighter">W</div>
-              <Compass className="h-7 w-7 md:h-10 md:w-10 text-accent animate-spin" strokeWidth={1.5} style={{ animationDuration: "4s", animationTimingFunction: "linear" }} />
+              <div className="absolute top-1 md:top-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">N</div>
+              <div className="absolute right-1 md:right-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">E</div>
+              <div className="absolute bottom-1 md:bottom-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">S</div>
+              <div className="absolute left-1 md:left-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">W</div>
+              <Compass className="h-7 w-7 md:h-14 md:w-14 text-accent animate-spin" strokeWidth={1.5} style={{ animationDuration: "4s", animationTimingFunction: "linear" }} />
             </motion.div>
             <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg animate-pulse">Rendering Terrain</span>
           </div>

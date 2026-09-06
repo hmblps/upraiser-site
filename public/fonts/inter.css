@@ -1,9 +1,9 @@
-/* Inter — self-hosted latin. Weight ranges map missing 300/500 onto real files
-   so Windows DirectWrite never fake-lights/fake-bolds (A/V diagonals blob). */
+/* Inter — self-hosted subset (400, 600, 700, 800, latin) */
+
 @font-face {
   font-family: Inter;
   font-style: normal;
-  font-weight: 300 500;
+  font-weight: 400;
   font-display: swap;
   src: url("/fonts/inter-latin-400.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
@@ -33,7 +33,7 @@
 @font-face {
   font-family: Inter;
   font-style: normal;
-  font-weight: 800 900;
+  font-weight: 800;
   font-display: swap;
   src: url("/fonts/inter-latin-800.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
