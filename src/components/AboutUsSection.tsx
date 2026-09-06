@@ -3,15 +3,15 @@ export function AboutUsSection() {
   return (
     <section className="section-band border-t border-border/30 relative overflow-hidden">
       {/* Schematic Ascent Decoration (Realistic Trace) */}
-      <div className="absolute top-0 right-0 w-full max-w-5xl opacity-[0.20] pointer-events-none translate-x-[15%] -translate-y-[5%]">
+      <div className="absolute top-0 right-0 w-full max-w-5xl opacity-[0.15] pointer-events-none translate-x-[15%] -translate-y-[5%]">
         <svg viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" className="font-sans uppercase font-semibold">
           
           <style>
             {`
-              .mountain-line { stroke: currentColor; stroke-width: 3px; opacity: 0.25; stroke-linejoin: round; stroke-linecap: round; }
-              .route-line { stroke: var(--accent); stroke-width: 5px; opacity: 0.8; stroke-linejoin: round; stroke-linecap: round; }
+              .mountain-line { stroke: currentColor; stroke-width: 4px; opacity: 0.25; stroke-linejoin: round; stroke-linecap: round; }
+              .route-line { stroke: var(--accent); stroke-width: 6px; opacity: 0.7; stroke-linejoin: round; stroke-linecap: round; }
               .node-circle { fill: var(--accent); }
-              .node-text { fill: var(--bg); font-size: 14px; font-weight: bold; text-anchor: middle; dominant-baseline: central; font-family: ui-sans-serif, system-ui, sans-serif; }
+              .node-text { fill: var(--bg); font-size: 16px; font-weight: bold; text-anchor: middle; dominant-baseline: central; font-family: ui-sans-serif, system-ui, sans-serif; }
               .label-text { fill: currentColor; font-size: 11px; opacity: 0.8; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
               .label-title { fill: currentColor; font-size: 14px; font-weight: bold; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
             `}
@@ -39,21 +39,21 @@ export function AboutUsSection() {
 
           {/* Nodes */}
           <g>
-            <circle cx="150" cy="480" r="14" className="node-circle"/><text x="150" y="481" className="node-text">2</text>
-            <circle cx="280" cy="220" r="14" className="node-circle"/><text x="280" y="221" className="node-text">2</text>
-            <circle cx="330" cy="260" r="14" className="node-circle"/><text x="330" y="261" className="node-text">8</text>
-            <circle cx="230" cy="350" r="14" className="node-circle"/><text x="230" y="351" className="node-text">8</text>
-            <circle cx="315" cy="450" r="14" className="node-circle"/><text x="315" y="451" className="node-text">10</text>
-            <circle cx="430" cy="180" r="14" className="node-circle"/><text x="430" y="181" className="node-text">6</text>
-            <circle cx="405" cy="450" r="14" className="node-circle"/><text x="405" y="451" className="node-text">6</text>
-            <circle cx="445" cy="230" r="14" className="node-circle"/><text x="445" y="231" className="node-text">3</text>
-            <circle cx="800" cy="500" r="14" className="node-circle"/><text x="800" y="501" className="node-text">3</text>
-            <circle cx="500" cy="280" r="14" className="node-circle"/><text x="500" y="281" className="node-text">5</text>
-            <circle cx="620" cy="650" r="14" className="node-circle"/><text x="620" y="651" className="node-text">5</text>
-            <circle cx="720" cy="500" r="14" className="node-circle"/><text x="720" y="501" className="node-text">9</text>
-            <circle cx="680" cy="420" r="14" className="node-circle"/><text x="680" y="421" className="node-text">4</text>
-            <circle cx="650" cy="280" r="14" className="node-circle"/><text x="650" y="281" className="node-text">7</text>
-            <circle cx="680" cy="220" r="14" className="node-circle"/><text x="680" y="221" className="node-text">1</text>
+            <circle cx="150" cy="480" r="16" className="node-circle"/><text x="150" y="482" className="node-text">2</text>
+            <circle cx="280" cy="220" r="16" className="node-circle"/><text x="280" y="222" className="node-text">2</text>
+            <circle cx="330" cy="260" r="16" className="node-circle"/><text x="330" y="262" className="node-text">8</text>
+            <circle cx="230" cy="350" r="16" className="node-circle"/><text x="230" y="352" className="node-text">8</text>
+            <circle cx="315" cy="450" r="16" className="node-circle"/><text x="315" y="452" className="node-text">10</text>
+            <circle cx="430" cy="180" r="16" className="node-circle"/><text x="430" y="182" className="node-text">6</text>
+            <circle cx="405" cy="450" r="16" className="node-circle"/><text x="405" y="452" className="node-text">6</text>
+            <circle cx="445" cy="230" r="16" className="node-circle"/><text x="445" y="232" className="node-text">3</text>
+            <circle cx="800" cy="500" r="16" className="node-circle"/><text x="800" y="502" className="node-text">3</text>
+            <circle cx="500" cy="280" r="16" className="node-circle"/><text x="500" y="282" className="node-text">5</text>
+            <circle cx="620" cy="650" r="16" className="node-circle"/><text x="620" y="652" className="node-text">5</text>
+            <circle cx="720" cy="500" r="16" className="node-circle"/><text x="720" y="502" className="node-text">9</text>
+            <circle cx="680" cy="420" r="16" className="node-circle"/><text x="680" y="422" className="node-text">4</text>
+            <circle cx="650" cy="280" r="16" className="node-circle"/><text x="650" y="282" className="node-text">7</text>
+            <circle cx="680" cy="220" r="16" className="node-circle"/><text x="680" y="222" className="node-text">1</text>
           </g>
 
           {/* Labels */}
