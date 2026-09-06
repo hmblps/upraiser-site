@@ -7,7 +7,7 @@ type LenovoPartnershipCopyProps = {
 
 export function LenovoPartnershipCopy({
   className = "space-y-3",
-  paragraphClassName = "copy",
+  paragraphClassName = "copy text-[14px] sm:text-[15px] leading-tight sm:leading-snug",
 }: LenovoPartnershipCopyProps) {
   return (
     <div className={className}>
