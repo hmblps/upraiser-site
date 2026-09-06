@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
-import { motion } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { ACESFilmicToneMapping, PCFSoftShadowMap, SRGBColorSpace } from "three";
 import { Compass } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -106,18 +106,11 @@ export function HeroTerrainCanvas({
     return () => window.clearTimeout(t);
   }, [reduced, theme, modelReady]);
 
-  useEffect(() => {
-    if (reduced) return;
-    const shell = shellRef.current;
-    if (!shell) return;
-
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { rootMargin: "12% 0px", threshold: 0 },
-    );
-    io.observe(shell);
-    return () => io.disconnect();
-  }, [reduced]);
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (v) => {
+    if (capturing || reduced) return;
+    setInView(v < (typeof window !== "undefined" ? window.innerHeight * 2.2 : 2000));
+  });
 
   if (reduced && !capturing) return null;
 
