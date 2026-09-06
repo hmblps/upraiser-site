@@ -78,7 +78,7 @@ export function Scene({
       {isLight ? <BrandHazeSky lite={lite} /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
-        {!lite && !isLight && voyager ? <FloatingVoyager /> : null}
+        {(!lite || heroCapture.enabled) && !isLight && voyager ? <FloatingVoyager /> : null}
 
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}

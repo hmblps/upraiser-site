@@ -165,9 +165,10 @@ export function FoldChart({ progress }: FoldChartProps) {
   const ghosts = isGrowth ? GROWTH_GHOSTS : FRAUD_GHOSTS;
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
     const sync = () => setEnabled(!reduced);
     sync();
+    // Keep listener just in case reduced motion preference changes
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);

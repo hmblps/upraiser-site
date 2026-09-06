@@ -3,7 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { ACESFilmicToneMapping, PCFSoftShadowMap, SRGBColorSpace } from "three";
-import { Compass } from "lucide-react";
+import { Navigation } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
@@ -138,11 +138,11 @@ export function HeroTerrainCanvas({
               <div className="absolute right-1 md:right-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">E</div>
               <div className="absolute bottom-1 md:bottom-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">S</div>
               <div className="absolute left-1 md:left-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">W</div>
-              <div className="animate-spin" style={{ animationDuration: "4s", animationTimingFunction: "linear", willChange: "transform" }}>
-                <Compass className="h-7 w-7 md:h-14 md:w-14 text-accent" strokeWidth={1.5} />
+              <div className="animate-spin" style={{ animationDuration: "2s", animationTimingFunction: "linear", willChange: "transform" }}>
+                <Navigation className="h-6 w-6 md:h-12 md:w-12 text-accent" strokeWidth={2} />
               </div>
             </motion.div>
-            <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg animate-pulse">Rendering Terrain</span>
+            <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg/70 animate-pulse">Rendering Terrain</span>
           </div>
         </div>,
         document.body

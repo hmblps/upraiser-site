@@ -281,10 +281,12 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
 
 @media (max-width: 767px) {
   .fraud-radial-chart__plot {
-    top: 15%; /* Drop chart away from top date */
+    top: 15%;
+    padding-right: 0;
   }
   .fraud-radial-chart__svg {
-    transform: translateX(-2%) translateY(10%) scale(1.25); /* Make chart larger and drop it more */
+    transform-origin: 50% 50%;
+    transform: translateX(0) translateY(12%) scale(1.6);
   }
 }
 

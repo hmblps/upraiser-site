@@ -145,9 +145,9 @@ export function ParityWaterChart({ progress }: ParityWaterChartProps) {
   }, [barScale, enabled]);
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const sync = () => setEnabled(mq.matches && !reduced);
+    const sync = () => setEnabled(!reduced);
     sync();
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
