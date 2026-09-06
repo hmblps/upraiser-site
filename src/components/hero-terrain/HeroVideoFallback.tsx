@@ -2,50 +2,97 @@ import { useEffect, useRef, useState } from "react";
 import { useScroll } from "../../context/ScrollContext";
 import { useTheme } from "../../context/ThemeContext";
 
+type ImageCache = Record<number, HTMLImageElement>;
+
 export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "expedition" }) {
   const { theme } = useTheme();
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { registerScrollListener } = useScroll();
   const stageRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number>(0);
-  const targetTime = useRef<number>(0);
 
-  const [isMobile, setIsMobile] = useState(
+  const [isMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth <= 899 : false
   );
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 899);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const variantSuffix = isMobile ? `${variant}-mobile` : variant;
-  const [videoSrc, setVideoSrc] = useState(`/hero/${variantSuffix}-${theme}-scrub.mp4`);
+  const shotFolder = isMobile ? `${variant}-mobile-${theme}` : `${variant}-${theme}`;
   
-  useEffect(() => {
-    setVideoSrc(`/hero/${variantSuffix}-${theme}-scrub.mp4`);
-  }, [variantSuffix, theme]);
+  const imageCache = useRef<ImageCache>({});
+  const loading = useRef<Set<number>>(new Set());
 
-  // Kickstart iOS video engine and paint first frame
-  useEffect(() => {
-    const vid = videoRef.current;
-    if (!vid) return;
-
-    const onLoadedMetadata = () => {
-      // Force decode of first frame
-      vid.currentTime = targetTime.current;
-    };
+  const getFrame = (index: number): HTMLImageElement | null => {
+    if (imageCache.current[index]) return imageCache.current[index];
     
-    vid.addEventListener("loadedmetadata", onLoadedMetadata);
-    
-    // Attempt to silently play/pause to ensure the hardware decoder wakes up
-    vid.play().then(() => vid.pause()).catch(() => {});
+    if (!loading.current.has(index)) {
+      loading.current.add(index);
+      const img = new Image();
+      const padded = (index + 1).toString().padStart(4, "0");
+      img.src = `/hero/frames/${shotFolder}/frame_${padded}.jpg`;
+      img.onload = () => {
+        imageCache.current[index] = img;
+        loading.current.delete(index);
+      };
+    }
+    return null;
+  };
 
-    return () => {
-      vid.removeEventListener("loadedmetadata", onLoadedMetadata);
+  const preloadFrames = (currentIndex: number) => {
+    for (let i = currentIndex - 10; i <= currentIndex + 20; i++) {
+      if (i >= 0 && i < 150) getFrame(i);
+    }
+  };
+
+  const drawFrame = (targetIndex: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d", { alpha: false });
+    if (!ctx) return;
+
+    let imgToDraw = imageCache.current[targetIndex];
+    
+    if (!imgToDraw) {
+      let offset = 1;
+      while (offset < 150) {
+        if (targetIndex - offset >= 0 && imageCache.current[targetIndex - offset]) {
+          imgToDraw = imageCache.current[targetIndex - offset];
+          break;
+        }
+        if (targetIndex + offset < 150 && imageCache.current[targetIndex + offset]) {
+          imgToDraw = imageCache.current[targetIndex + offset];
+          break;
+        }
+        offset++;
+      }
+    }
+
+    if (imgToDraw) {
+      ctx.drawImage(imgToDraw, 0, 0, canvas.width, canvas.height);
+    }
+  };
+
+  useEffect(() => {
+    imageCache.current = {};
+    loading.current.clear();
+    
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.width = isMobile ? 540 : 1280;
+      canvas.height = isMobile ? 960 : 720;
+      const ctx = canvas.getContext("2d", { alpha: false });
+      if (ctx) {
+        ctx.fillStyle = theme === "light" ? "#ffffff" : "#050504";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    const first = new Image();
+    first.src = `/hero/frames/${shotFolder}/frame_0001.jpg`;
+    first.onload = () => {
+      imageCache.current[0] = first;
+      drawFrame(0);
+      for (let i = 1; i < 150; i++) getFrame(i);
     };
-  }, [videoSrc]);
+  }, [shotFolder, isMobile, theme]);
 
   useEffect(() => {
     function getStage() {
@@ -59,47 +106,38 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     const unsub = registerScrollListener((scrollY) => {
       const stage = getStage();
       stageRef.current = stage;
-      if (!stage || !videoRef.current) return;
+      if (!stage || !canvasRef.current) return;
       
       const top = stage.getBoundingClientRect().top + scrollY;
       const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
       const progress = Math.max(0, Math.min(1, (scrollY - top) / runway));
       
-      targetTime.current = progress * 4.96;
-
-      if (videoRef.current.readyState > 0) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = requestAnimationFrame(() => {
-          if (videoRef.current) {
-            videoRef.current.currentTime = targetTime.current;
-          }
-        });
-      }
+      const targetFrame = Math.min(149, Math.floor(progress * 150));
+      
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        drawFrame(targetFrame);
+        preloadFrames(targetFrame);
+      });
     });
 
     return () => {
       unsub();
       cancelAnimationFrame(rafRef.current);
     };
-  }, [registerScrollListener]);
+  }, [registerScrollListener, shotFolder]);
 
   return (
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden">
-      <video
-        key={videoSrc} // Force fresh video element on theme change
-        preload="auto"
-        ref={videoRef}
-        src={videoSrc}
-        muted
-        playsInline
-        autoPlay // Helps iOS wake up
+      <canvas
+        ref={canvasRef}
         className="w-full h-full object-cover"
         style={{
           width: "100%",
           height: "100%",
           display: "block",
           objectFit: "cover",
-          transform: "translateZ(0)", // Hardware acceleration hint
+          transform: "translateZ(0)", 
         }}
       />
     </div>
