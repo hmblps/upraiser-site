@@ -1,4 +1,4 @@
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { audienceByMode } from "../data/liveContent";
 import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
@@ -24,6 +24,8 @@ function AudienceStatic() {
     offset: ["start 85%", "end 35%"],
   });
 
+  const chartY = useTransform(scrollYProgress, [0, 0.4], [100, 0]);
+
   return (
     <section ref={ref} id="audience" className="section-band section-band--quiet min-h-screen">
       <ModeContentTransition mode={mode} className="section-inner">
@@ -36,9 +38,12 @@ function AudienceStatic() {
           <p className="section-description max-w-2xl whitespace-pre-wrap">{formatEventNames(content.description)}</p>
         </div>
 
-        <div className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
+        <motion.div 
+          className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center"
+          style={{ y: chartY }}
+        >
            {isFraud ? <FraudScrollChart progress={scrollYProgress} /> : <FoldChart progress={scrollYProgress} />}
-        </div>
+        </motion.div>
       </ModeContentTransition>
     </section>
   );
