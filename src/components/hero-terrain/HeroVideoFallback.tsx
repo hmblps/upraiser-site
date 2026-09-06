@@ -92,7 +92,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     }
 
     const first = new Image();
-    first.src = `/hero/frames/${shotFolder}/frame_0001.jpg?v=3`;
+    first.src = `/hero/frames/${shotFolder}/frame_0001.jpg?v=7`;
     first.onload = () => {
       imageCache.current[0] = first;
       drawFrame(0);
