@@ -11,7 +11,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
   const stageRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number>(0);
 
-  const [debugInfo, setDebugInfo] = useState({ scrollY: 0, top: 0, runway: 0, progress: 0, targetFrame: 0 });
+  const [debugInfo, setDebugInfo] = useState({ scrollY: 0, top: 0, runway: 0, progress: 0, targetFrame: 0, loaded: 0, errors: 0 });
 
   const [isMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth <= 899 : false
@@ -21,6 +21,19 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
   
   const imageCache = useRef<ImageCache>({});
   const loading = useRef<Set<number>>(new Set());
+  const errorCount = useRef(0);
+
+  const updateDebug = (targetFrame: number, progress: number, scrollY: number, top: number, runway: number) => {
+    setDebugInfo({
+      scrollY: Math.round(scrollY),
+      top: Math.round(top),
+      runway: Math.round(runway),
+      progress: Number(progress.toFixed(3)),
+      targetFrame,
+      loaded: Object.keys(imageCache.current).length,
+      errors: errorCount.current
+    });
+  };
 
   const getFrame = (index: number): HTMLImageElement | null => {
     if (imageCache.current[index]) return imageCache.current[index];
@@ -34,13 +47,17 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
         imageCache.current[index] = img;
         loading.current.delete(index);
       };
+      img.onerror = () => {
+        loading.current.delete(index);
+        errorCount.current++;
+      }
     }
     return null;
   };
 
   const preloadFrames = (currentIndex: number) => {
-    for (let i = currentIndex - 10; i <= currentIndex + 20; i++) {
-      if (i >= 0 && i < 150) getFrame(i);
+    for (let i = Math.max(0, currentIndex - 5); i <= Math.min(149, currentIndex + 20); i++) {
+      getFrame(i);
     }
   };
 
@@ -75,11 +92,12 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
   useEffect(() => {
     imageCache.current = {};
     loading.current.clear();
+    errorCount.current = 0;
     
     const canvas = canvasRef.current;
     if (canvas) {
-      canvas.width = isMobile ? 540 : 1280;
-      canvas.height = isMobile ? 960 : 720;
+      canvas.width = isMobile ? 540 : 960;
+      canvas.height = isMobile ? 960 : 540;
       const ctx = canvas.getContext("2d", { alpha: false });
       if (ctx) {
         ctx.fillStyle = theme === "light" ? "#ffffff" : "#050504";
@@ -92,6 +110,11 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     first.onload = () => {
       imageCache.current[0] = first;
       drawFrame(0);
+      preloadFrames(0);
+    };
+    first.onerror = () => {
+      errorCount.current++;
+      // Even if first frame fails, try loading others!
       preloadFrames(0);
     };
   }, [shotFolder, isMobile, theme]);
@@ -116,14 +139,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       
       const targetFrame = Math.min(149, Math.floor(progress * 150));
       
-      // Update debug info for the user to see
-      setDebugInfo({
-        scrollY: Math.round(scrollY),
-        top: Math.round(top),
-        runway: Math.round(runway),
-        progress: Number(progress.toFixed(3)),
-        targetFrame
-      });
+      updateDebug(targetFrame, progress, scrollY, top, runway);
       
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
@@ -153,17 +169,12 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       />
       {/* TEMP DEBUG VISUALIZER */}
       <div className="absolute top-1/2 left-4 z-50 bg-black/80 text-white p-4 font-mono text-xs rounded-xl shadow-2xl pointer-events-auto border border-red-500">
-        <p className="font-bold text-red-400 mb-2">DEBUG INFO (AGENT)</p>
-        <p>Device: {isMobile ? "Mobile" : "Desktop"}</p>
+        <p className="font-bold text-red-400 mb-2">DEBUG INFO (V2)</p>
         <p>Folder: {shotFolder}</p>
-        <p>Stage Height: {stageRef.current?.offsetHeight}px</p>
-        <p>Win Height: {typeof window !== "undefined" ? window.innerHeight : 0}px</p>
         <hr className="my-2 border-white/20" />
-        <p>Scroll Y: {debugInfo.scrollY}</p>
-        <p>Stage Top: {debugInfo.top}</p>
-        <p>Runway: {debugInfo.runway}</p>
-        <p>Progress: {debugInfo.progress}</p>
-        <p>Target Frame: {debugInfo.targetFrame}/149</p>
+        <p>Target: {debugInfo.targetFrame}/149</p>
+        <p className="text-green-400">Loaded: {debugInfo.loaded}</p>
+        <p className="text-red-400">Errors (404s): {debugInfo.errors}</p>
       </div>
     </div>
   );
