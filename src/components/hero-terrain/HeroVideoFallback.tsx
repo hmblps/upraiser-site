@@ -37,7 +37,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
 
   return (
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden">
-      <video
+      <video preload="auto"
         ref={videoRef}
         src={src}
         muted

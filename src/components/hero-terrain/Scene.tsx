@@ -20,7 +20,7 @@ function FirstFrameGate({ onReady }: { onReady: () => void }) {
   const { gl, scene, camera } = useThree();
 
   useLayoutEffect(() => {
-    let cancelled = false;
+    console.log("FirstFrameGate mounted!"); let cancelled = false;
     try {
       gl.compile(scene, camera);
     } catch {

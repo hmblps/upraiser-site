@@ -208,7 +208,7 @@ export function Everest({
 }: EverestProps) {
   const isLight = theme === "light";
   const modelUrl = isLight ? MODEL_URL_LIGHT : MODEL_URL;
-  const { nodes, materials, scene } = useGLTF(modelUrl, DRACO_PATH) as unknown as EverestGLTF;
+  console.log("Everest rendering!"); const { nodes, materials, scene } = useGLTF(modelUrl, DRACO_PATH) as unknown as EverestGLTF;
 
   const scale = useMemo(() => {
     const size = new Vector3();
