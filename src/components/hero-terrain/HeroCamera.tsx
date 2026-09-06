@@ -58,10 +58,20 @@ export function HeroCamera({
       2 * (1 - tFov) * tFov * path.midFov +
       tFov * tFov * path.endFov;
 
+    const aspect = state.viewport.aspect || state.size.width / state.size.height;
+    let fovMult = 1;
+    let mobileShiftX = 0;
+    if (aspect < 1) {
+      fovMult = MathUtils.clamp(1.2 / aspect, 1, 1.6);
+      mobileShiftX = 18; // shift right to avoid the thick mountain center and show the satellite
+    }
+    fovTarget *= fovMult;
 
     if (snap) {
       camera.position.copy(targetPos.current);
+      camera.position.x += mobileShiftX;
       look.current.copy(targetLook.current);
+      look.current.x += mobileShiftX * 0.4;
       camera.lookAt(look.current);
       camera.rotateZ(Math.sin(raw * Math.PI) * path.bankMax);
       camera.updateMatrixWorld();
@@ -80,11 +90,11 @@ export function HeroCamera({
     const camAlpha = 1 - Math.exp(-CAM_SETTLE * delta);
     const lookAlpha = 1 - Math.exp(-LOOK_SETTLE * delta);
 
-    camera.position.x = MathUtils.lerp(camera.position.x, targetPos.current.x + swayX + driftX, camAlpha);
+    camera.position.x = MathUtils.lerp(camera.position.x, targetPos.current.x + swayX + driftX + mobileShiftX, camAlpha);
     camera.position.y = MathUtils.lerp(camera.position.y, targetPos.current.y + swayY * 0.35 + driftY, camAlpha);
     camera.position.z = MathUtils.lerp(camera.position.z, targetPos.current.z + driftZ, camAlpha);
 
-    look.current.x = MathUtils.lerp(look.current.x, targetLook.current.x + swayX * 0.16 + lookDriftX, lookAlpha);
+    look.current.x = MathUtils.lerp(look.current.x, targetLook.current.x + swayX * 0.16 + lookDriftX + (mobileShiftX * 0.4), lookAlpha);
     look.current.y = MathUtils.lerp(look.current.y, targetLook.current.y + lookDriftY, lookAlpha);
     look.current.z = MathUtils.lerp(look.current.z, targetLook.current.z, lookAlpha);
     camera.lookAt(look.current);
