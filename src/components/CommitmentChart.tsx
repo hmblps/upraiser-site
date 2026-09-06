@@ -137,11 +137,11 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
           return (
             <motion.div
               key={index}
-              className="absolute flex flex-col items-start"
+              className={`absolute flex flex-col ${index === METRICS.length - 1 ? 'items-end' : 'items-start'}`}
               style={{
                 left:      `${frac * 100}%`,
                 top:       `${(metric.y / 400) * 100}%`,
-                transform: 'translate(-20px, -40px)',
+                transform: index === METRICS.length - 1 ? 'translate(-100%, -40px)' : 'translate(-20px, -40px)',
                 opacity:   useTransform(progress, [centre - half, centre + half], [0, 1]),
                 y:         useTransform(progress, [centre - half, centre + half], [12, 0]),
               }}
