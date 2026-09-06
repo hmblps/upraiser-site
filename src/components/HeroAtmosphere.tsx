@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import { useWeakHardware } from "../hooks/useWeakHardware";
+import { useHardwareTier } from "../hooks/useHardwareTier";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { whenHeroTerrainBytes } from "../lib/heroBoot";
 import { markHeroReady } from "../lib/scrollPreload";
@@ -30,9 +30,9 @@ export function HeroAtmosphere() {
   const isLight = theme === "light";
   const reduced = useReducedMotion();
   const desktop = useDesktopHero();
-  const weak = useWeakHardware();
+  const tier = useHardwareTier();
   
-  const use3d = desktop && !reduced && !weak;
+  const use3d = desktop && !reduced && tier === "high";
   const [boot3d, setBoot3d] = useState(false);
 
   useEffect(() => {

@@ -7,12 +7,13 @@ import { Compass } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { useWeakHardware } from "../../hooks/useWeakHardware";
+import { useHardwareTier } from "../../hooks/useHardwareTier";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "../../lib/heroModel";
 import { markHeroReady } from "../../lib/scrollPreload";
 import { CaptureDriver } from "./CaptureDriver";
 import { HeroVideoFallback } from "./HeroVideoFallback";
 import { Scene } from "./Scene";
+import { ObjSceneExporter } from "./ObjSceneExporter";
 import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode } from "./shared";
 
 export { HERO_ASCENT_DEFAULTS, EXPEDITION_ASCENT } from "./shared";
@@ -56,7 +57,7 @@ export function HeroTerrainCanvas({
   const { theme: ctxTheme } = useTheme();
   const theme = capture?.theme ?? ctxTheme;
   const reduced = useReducedMotion();
-  const weak = useWeakHardware();
+  const tier = useHardwareTier();
   const scrollRef = useRef<ScrollState>({ pointerX: 0, pointerY: 0 });
   const shellRef = useRef<HTMLDivElement>(null);
   const lite = variant === "expedition";
@@ -65,7 +66,7 @@ export function HeroTerrainCanvas({
   const [modelReady, setModelReady] = useState(false);
   const handleModelReady = useCallback(() => setModelReady(true), []);
 
-  const shouldFallback = (reduced || weak) && !capturing;
+  const shouldFallback = (reduced || tier === 'lite') && !capturing;
 
   useEffect(() => {
     setModelReady(false);
@@ -186,6 +187,7 @@ export function HeroTerrainCanvas({
         }}
       >
         <ThemeGlSync theme={theme} />
+        <ObjSceneExporter />
         <Scene
           theme={theme}
           scrollRef={scrollRef}

@@ -13,12 +13,21 @@ function isIntegratedGPU(renderer: string): boolean {
   );
 }
 
-export function useWeakHardware() {
-  const [weak, setWeak] = useState(false);
+export type HardwareTier = "high" | "lite";
+
+export function useHardwareTier(): HardwareTier {
+  const [tier, setTier] = useState<HardwareTier>("high");
   
   useEffect(() => {
     if (typeof window === "undefined") return;
     
+    // Developer override
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("lite") === "1" || params.get("mode") === "lite") {
+      setTier("lite");
+      return;
+    }
+
     // 1. Mobile devices
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
@@ -28,7 +37,7 @@ export function useWeakHardware() {
     const ram = navigator.deviceMemory || 8;
     
     if (isMobile || cores <= 4 || ram <= 4) {
-      setWeak(true);
+      setTier("lite");
       return;
     }
 
@@ -41,8 +50,8 @@ export function useWeakHardware() {
         if (debugInfo) {
           const renderer = (gl as WebGLRenderingContext).getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
           if (renderer && isIntegratedGPU(renderer)) {
-            console.log("[useWeakHardware] Integrated GPU detected:", renderer);
-            setWeak(true);
+            console.log("[useHardwareTier] Integrated GPU detected:", renderer);
+            setTier("lite");
             return;
           }
         }
@@ -53,12 +62,12 @@ export function useWeakHardware() {
 
     // 4. Force fallback if screen is very narrow
     if (window.innerWidth <= 899) {
-      setWeak(true);
+      setTier("lite");
       return;
     }
 
-    setWeak(false);
+    setTier("high");
   }, []);
   
-  return weak;
+  return tier;
 }
