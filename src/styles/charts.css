@@ -279,6 +279,15 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
   transform-origin: 28% 52%;
 }
 
+@media (max-width: 767px) {
+  .fraud-radial-chart__plot {
+    top: 15%; /* Drop chart away from top date */
+  }
+  .fraud-radial-chart__svg {
+    transform: translateX(-2%) translateY(10%) scale(1.25); /* Make chart larger and drop it more */
+  }
+}
+
 .fraud-radial-chart__track {
   color: color-mix(in srgb, var(--theme-border) 55%, transparent);
   opacity: 0.14;
@@ -540,6 +549,16 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
   margin: 0;
   padding: 0 2.5vw;
   gap: 0;
+}
+
+@media (max-width: 767px) {
+  .parity-water__stage {
+    top: 40%;
+    bottom: -2%;
+  }
+  .parity-water__rail {
+    max-height: 55vh;
+  }
 }
 
 .parity-water__air {
