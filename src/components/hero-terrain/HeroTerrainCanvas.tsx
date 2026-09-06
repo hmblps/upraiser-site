@@ -7,9 +7,11 @@ import { Compass } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { useWeakHardware } from "../../hooks/useWeakHardware";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "../../lib/heroModel";
 import { markHeroReady } from "../../lib/scrollPreload";
 import { CaptureDriver } from "./CaptureDriver";
+import { HeroVideoFallback } from "./HeroVideoFallback";
 import { Scene } from "./Scene";
 import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode } from "./shared";
 
@@ -53,6 +55,7 @@ export function HeroTerrainCanvas({
 }: HeroTerrainCanvasProps) {
   const { theme } = useTheme();
   const reduced = useReducedMotion();
+  const weak = useWeakHardware();
   const scrollRef = useRef<ScrollState>({ pointerX: 0, pointerY: 0 });
   const shellRef = useRef<HTMLDivElement>(null);
   const lite = variant === "expedition";
@@ -61,17 +64,18 @@ export function HeroTerrainCanvas({
   const [modelReady, setModelReady] = useState(false);
   const handleModelReady = useCallback(() => setModelReady(true), []);
 
+  const shouldFallback = (reduced || weak) && !capturing;
+
   useEffect(() => {
     setModelReady(false);
   }, [theme]);
 
   useEffect(() => {
-    if (modelReady && !lite) markHeroReady();
-  }, [modelReady, lite]);
+    if ((modelReady || shouldFallback) && !lite) markHeroReady();
+  }, [modelReady, shouldFallback, lite]);
 
   useEffect(() => {
-    if (capturing) return;
-    if (reduced) return;
+    if (capturing || shouldFallback) return;
     const fine = window.matchMedia("(pointer: fine)").matches;
     if (!fine) return;
 
@@ -89,30 +93,30 @@ export function HeroTerrainCanvas({
 
   // Active theme GLB only. Alternate theme waits until the mountain is on screen.
   useEffect(() => {
-    if (reduced) return;
+    if (shouldFallback) return;
     const active = theme === "light" ? MODEL_URL_LIGHT : MODEL_URL;
     void useGLTF.preload(active, DRACO_PATH);
     if (theme === "light") {
       void useTexture.preload([SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL]);
     }
-  }, [reduced, theme]);
+  }, [shouldFallback, theme]);
 
   useEffect(() => {
-    if (reduced || !modelReady) return;
+    if (shouldFallback || !modelReady) return;
     const alternate = theme === "light" ? MODEL_URL : MODEL_URL_LIGHT;
     const t = window.setTimeout(() => {
       void useGLTF.preload(alternate, DRACO_PATH);
     }, 8000);
     return () => window.clearTimeout(t);
-  }, [reduced, theme, modelReady]);
+  }, [shouldFallback, theme, modelReady]);
 
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (v) => {
-    if (capturing || reduced) return;
+    if (capturing || shouldFallback) return;
     setInView(v < (typeof window !== "undefined" ? window.innerHeight * 2.2 : 2000));
   });
 
-  if (reduced && !capturing) return null;
+  if (shouldFallback) return <HeroVideoFallback variant={variant} />;
 
   const [cx, cy, cz] = path.startPos;
   const isLight = theme === "light";
