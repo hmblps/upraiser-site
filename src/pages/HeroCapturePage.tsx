@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { HeroTerrainCanvas } from "../components/hero-terrain/HeroTerrainCanvas";
 import { EXPEDITION_ASCENT } from "../components/hero-terrain/shared";
+import { SmoothScroll } from "../components/SmoothScroll";
 
 type Shot = "home" | "expedition";
 type ThemeName = "dark" | "light";
@@ -51,25 +52,27 @@ export function HeroCapturePage() {
   const themeReady = theme === current.theme;
 
   return (
-    <div className="relative h-[100dvh] w-[100dvw] overflow-hidden bg-[#050504]">
-      {themeReady ? (
-        <HeroTerrainCanvas
-          key={`${current.shot}-${current.theme}`}
-          className="hero-terrain-root h-full w-full"
-          variant={current.shot}
-          path={current.shot === "expedition" ? EXPEDITION_ASCENT : undefined}
-          capture={{
-            shot: current.shot,
-            theme: current.theme,
-            frames,
-            onStatus: setStatus,
-            onDone: () => setIndex((n) => n + 1),
-          }}
-        />
-      ) : null}
-      <p className="pointer-events-none absolute bottom-4 left-4 z-10 font-mono text-xs text-white/80">
-        {status}
-      </p>
-    </div>
+    <SmoothScroll>
+      <div className="relative h-[100dvh] w-[100dvw] overflow-hidden bg-[#050504]">
+        {themeReady ? (
+          <HeroTerrainCanvas
+            key={`${current.shot}-${current.theme}`}
+            className="hero-terrain-root h-full w-full"
+            variant={current.shot}
+            path={current.shot === "expedition" ? EXPEDITION_ASCENT : undefined}
+            capture={{
+              shot: current.shot,
+              theme: current.theme,
+              frames,
+              onStatus: setStatus,
+              onDone: () => setIndex((n) => n + 1),
+            }}
+          />
+        ) : null}
+        <p className="pointer-events-none absolute bottom-4 left-4 z-10 font-mono text-xs text-white/80">
+          {status}
+        </p>
+      </div>
+    </SmoothScroll>
   );
 }
