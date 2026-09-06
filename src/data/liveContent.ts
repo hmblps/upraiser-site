@@ -338,9 +338,9 @@ export const lenovoPartnership = {
   title: "Lenovo PC HK LTD",
   stripLine: "Factory ROM and Google PAI delivering direct verified lanes.",
   descriptionIntro:
-    "Upraiser is the official Lenovo agency partner. Combining decades of digital advertising expertise and inventory from an industry-leading PC and mobile manufacturer,",
+    "Upraiser is the official Lenovo agency partner. We wire our programmatic infrastructure directly into OEM factory inventory.",
   descriptionLead:
-    "Together we deliver results that exceed our client expectations, and we open up space for your global growth.",
+    "You secure verified performance and unlock immediate space for Your global growth.",
 };
 
 export const aboutPage = {
