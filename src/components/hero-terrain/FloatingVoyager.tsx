@@ -33,10 +33,13 @@ function heroProbeLayout() {
   const right = new Vector3().crossVectors(view, worldUp).normalize();
   const skyUp = new Vector3().crossVectors(right, view).normalize();
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 900;
+  const rightOffset = isMobile ? 12 : 28;
+
   const anchor = look
     .clone()
     .addScaledVector(view, -38)
-    .addScaledVector(right, 28)
+    .addScaledVector(right, rightOffset)
     .addScaledVector(skyUp, 9);
 
   const outbound = new Vector3()
