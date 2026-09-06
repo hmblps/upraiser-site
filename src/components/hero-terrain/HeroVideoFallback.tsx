@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useScroll } from "../../context/ScrollContext";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -7,6 +7,35 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
   const videoRef = useRef<HTMLVideoElement>(null);
   const { registerScrollListener } = useScroll();
   const stageRef = useRef<HTMLElement | null>(null);
+  const rafRef = useRef<number>(0);
+  const targetTime = useRef<number>(0);
+
+  // Force a re-render to ensure the source changes fully
+  const [videoSrc, setVideoSrc] = useState(`/hero/${variant}-${theme}-scrub.mp4`);
+  
+  useEffect(() => {
+    setVideoSrc(`/hero/${variant}-${theme}-scrub.mp4`);
+  }, [variant, theme]);
+
+  // Kickstart iOS video engine and paint first frame
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    const onLoadedMetadata = () => {
+      // Force decode of first frame
+      vid.currentTime = targetTime.current;
+    };
+    
+    vid.addEventListener("loadedmetadata", onLoadedMetadata);
+    
+    // Attempt to silently play/pause to ensure the hardware decoder wakes up
+    vid.play().then(() => vid.pause()).catch(() => {});
+
+    return () => {
+      vid.removeEventListener("loadedmetadata", onLoadedMetadata);
+    };
+  }, [videoSrc]);
 
   useEffect(() => {
     function getStage() {
@@ -26,28 +55,41 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
       const progress = Math.max(0, Math.min(1, (scrollY - top) / runway));
       
-      // video is exactly 5.0 seconds
-      videoRef.current.currentTime = progress * 4.96;
+      targetTime.current = progress * 4.96;
+
+      if (videoRef.current.readyState > 0) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(() => {
+          if (videoRef.current) {
+            videoRef.current.currentTime = targetTime.current;
+          }
+        });
+      }
     });
 
-    return unsub;
+    return () => {
+      unsub();
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [registerScrollListener]);
-
-  const src = `/hero/${variant}-${theme}-scrub.mp4`;
 
   return (
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden">
-      <video preload="auto"
+      <video
+        key={videoSrc} // Force fresh video element on theme change
+        preload="auto"
         ref={videoRef}
-        src={src}
+        src={videoSrc}
         muted
         playsInline
+        autoPlay // Helps iOS wake up
         className="w-full h-full object-cover"
         style={{
           width: "100%",
           height: "100%",
           display: "block",
-          objectFit: "cover"
+          objectFit: "cover",
+          transform: "translateZ(0)", // Hardware acceleration hint
         }}
       />
     </div>
