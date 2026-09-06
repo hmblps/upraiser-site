@@ -11,7 +11,7 @@ export type ProgrammaticScrollSectionMobileProps = {
   laneSwitcher?: ReactNode;
   formats: readonly AdFormat[];
   headerLabel: string;
-  headerTitle: string;
+  headerTitle: ReactNode;
   headerDescription?: string;
 };
 

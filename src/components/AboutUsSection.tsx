@@ -3,12 +3,12 @@ export function AboutUsSection() {
   return (
     <section className="section-band border-t border-border/30 relative overflow-hidden">
       {/* Topographic / contour decoration */}
-      <div className="absolute top-0 right-0 w-full max-w-3xl opacity-[0.04] pointer-events-none translate-x-1/3 -translate-y-1/4">
+      <div className="absolute top-0 right-0 w-full max-w-3xl opacity-[0.05] pointer-events-none translate-x-1/3 -translate-y-1/4">
         <svg viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="400" cy="400" r="150" stroke="currentColor" strokeWidth="2" strokeDasharray="10 10"/>
-          <circle cx="400" cy="400" r="250" stroke="currentColor" strokeWidth="2"/>
-          <circle cx="400" cy="400" r="350" stroke="currentColor" strokeWidth="2" strokeDasharray="5 20"/>
-          <circle cx="400" cy="400" r="8" fill="currentColor"/>
+          <path d="M400,50 C550,60 700,150 750,400 C800,650 600,750 400,750 C150,750 50,600 50,400 C50,200 200,40 400,50 Z" stroke="currentColor" strokeWidth="4" strokeDasharray="16 16" />
+          <path d="M400,150 C500,150 600,250 630,400 C660,550 500,650 400,650 C250,650 150,550 150,400 C150,250 250,150 400,150 Z" stroke="currentColor" strokeWidth="4" />
+          <path d="M400,250 C450,260 500,320 510,400 C520,480 450,550 400,550 C320,550 280,480 290,400 C300,300 340,240 400,250 Z" stroke="currentColor" strokeWidth="4" strokeDasharray="6 12" />
+          <circle cx="400" cy="400" r="10" fill="currentColor"/>
         </svg>
       </div>
 

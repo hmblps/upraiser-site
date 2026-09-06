@@ -164,7 +164,7 @@ export type ProgrammaticScrollSectionProps = {
   sectionId?: string;
   formats?: readonly AdFormat[];
   headerLabel?: string;
-  headerTitle?: string;
+  headerTitle?: React.ReactNode;
   headerDescription?: string;
 };
 
