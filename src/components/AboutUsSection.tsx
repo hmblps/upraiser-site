@@ -8,7 +8,6 @@ export function AboutUsSection() {
           <circle cx="400" cy="400" r="150" stroke="currentColor" strokeWidth="2" strokeDasharray="10 10"/>
           <circle cx="400" cy="400" r="250" stroke="currentColor" strokeWidth="2"/>
           <circle cx="400" cy="400" r="350" stroke="currentColor" strokeWidth="2" strokeDasharray="5 20"/>
-          <path d="M400 100 L400 300 M400 500 L400 700 M100 400 L300 400 M500 400 L700 400" stroke="currentColor" strokeWidth="2"/>
           <circle cx="400" cy="400" r="8" fill="currentColor"/>
         </svg>
       </div>
