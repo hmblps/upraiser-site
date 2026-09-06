@@ -139,7 +139,9 @@ export function HeroTerrainCanvas({
               <div className="absolute right-1 md:right-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">E</div>
               <div className="absolute bottom-1 md:bottom-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">S</div>
               <div className="absolute left-1 md:left-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">W</div>
-              <Compass className="h-7 w-7 md:h-14 md:w-14 text-accent animate-spin" strokeWidth={1.5} style={{ animationDuration: "4s", animationTimingFunction: "linear" }} />
+              <div className="animate-spin" style={{ animationDuration: "4s", animationTimingFunction: "linear", willChange: "transform" }}>
+                <Compass className="h-7 w-7 md:h-14 md:w-14 text-accent" strokeWidth={1.5} />
+              </div>
             </motion.div>
             <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg animate-pulse">Rendering Terrain</span>
           </div>
