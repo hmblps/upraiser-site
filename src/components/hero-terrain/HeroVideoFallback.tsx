@@ -11,6 +11,8 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
   const stageRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number>(0);
 
+  const [debugInfo, setDebugInfo] = useState({ scrollY: 0, top: 0, runway: 0, progress: 0, targetFrame: 0 });
+
   const [isMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth <= 899 : false
   );
@@ -90,7 +92,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     first.onload = () => {
       imageCache.current[0] = first;
       drawFrame(0);
-      preloadFrames(0); // Only preload the first chunk initially
+      preloadFrames(0);
     };
   }, [shotFolder, isMobile, theme]);
 
@@ -113,6 +115,15 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       const progress = Math.max(0, Math.min(1, (scrollY - top) / runway));
       
       const targetFrame = Math.min(149, Math.floor(progress * 150));
+      
+      // Update debug info for the user to see
+      setDebugInfo({
+        scrollY: Math.round(scrollY),
+        top: Math.round(top),
+        runway: Math.round(runway),
+        progress: Number(progress.toFixed(3)),
+        targetFrame
+      });
       
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
@@ -140,6 +151,20 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
           transform: "translateZ(0)", 
         }}
       />
+      {/* TEMP DEBUG VISUALIZER */}
+      <div className="absolute top-1/2 left-4 z-50 bg-black/80 text-white p-4 font-mono text-xs rounded-xl shadow-2xl pointer-events-auto border border-red-500">
+        <p className="font-bold text-red-400 mb-2">DEBUG INFO (AGENT)</p>
+        <p>Device: {isMobile ? "Mobile" : "Desktop"}</p>
+        <p>Folder: {shotFolder}</p>
+        <p>Stage Height: {stageRef.current?.offsetHeight}px</p>
+        <p>Win Height: {typeof window !== "undefined" ? window.innerHeight : 0}px</p>
+        <hr className="my-2 border-white/20" />
+        <p>Scroll Y: {debugInfo.scrollY}</p>
+        <p>Stage Top: {debugInfo.top}</p>
+        <p>Runway: {debugInfo.runway}</p>
+        <p>Progress: {debugInfo.progress}</p>
+        <p>Target Frame: {debugInfo.targetFrame}/149</p>
+      </div>
     </div>
   );
 }
