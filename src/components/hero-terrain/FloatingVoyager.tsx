@@ -34,7 +34,7 @@ function heroProbeLayout() {
   const skyUp = new Vector3().crossVectors(right, view).normalize();
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 900;
-  const rightOffset = isMobile ? 12 : 28;
+  const rightOffset = isMobile ? 22 : 28;
 
   const anchor = look
     .clone()

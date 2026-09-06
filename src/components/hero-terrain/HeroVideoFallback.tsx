@@ -28,7 +28,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       loading.current.add(index);
       const img = new Image();
       const padded = (index + 1).toString().padStart(4, "0");
-      img.src = `/hero/frames/${shotFolder}/frame_${padded}.jpg?v=6`;
+      img.src = `/hero/frames/${shotFolder}/frame_${padded}.jpg?v=7`;
       img.onload = () => {
         imageCache.current[index] = img;
         loading.current.delete(index);
