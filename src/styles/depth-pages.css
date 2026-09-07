@@ -180,7 +180,6 @@
 }
 
 .clarity-receipt__rail {
-  display: flex;
   align-items: center;
   justify-content: center;
   gap: 0;
@@ -257,7 +256,6 @@
 }
 
 .clarity-module-ticket__stub {
-  display: flex;
   align-items: flex-start;
   justify-content: center;
   padding-top: 1.1rem;
@@ -368,8 +366,6 @@
 }
 
 .about-timeline {
-  display: flex;
-  flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -477,7 +473,6 @@
 }
 
 .trust-marquee__track {
-  display: flex;
   width: max-content;
   gap: 2.75rem;
   align-items: center;
@@ -487,7 +482,6 @@
 
 .trust-marquee__item {
   flex: 0 0 auto;
-  display: flex;
   align-items: center;
   justify-content: center;
   min-width: 5.5rem;
@@ -742,8 +736,6 @@ html.viewport-route body {
 }
 
 .viewport-route-frame {
-  display: flex;
-  flex-direction: column;
   height: 100dvh;
   max-height: 100dvh;
   padding-top: var(--site-header-height);
@@ -753,8 +745,6 @@ html.viewport-route body {
 .viewport-route-frame > .site-main {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
@@ -762,13 +752,9 @@ html.viewport-route body {
 .viewport-route-frame .section-lazy-slot {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 .viewport-page {
-  display: flex;
-  flex-direction: column;
   min-height: 0;
   flex: 1;
   overflow: hidden;
@@ -778,8 +764,6 @@ html.viewport-route body {
 /* Contact briefing — fill the locked viewport, never nest another 100dvh.
    Short Windows (125% DPI) clips rem padding + min-h-100dvh; pad with dvh instead. */
 .contact-page-shell {
-  display: flex;
-  flex-direction: column;
   flex: 1;
   min-height: 0;
   padding-top: clamp(0.5rem, 1.4dvh, 1rem);
@@ -789,8 +773,6 @@ html.viewport-route body {
 .contact-briefing-card {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
@@ -837,8 +819,6 @@ html.viewport-route body {
   margin-top: clamp(0.75rem, 2dvh, 1.75rem);
   padding-top: clamp(0.75rem, 1.8dvh, 1.5rem);
   border-top: 1px solid var(--theme-border);
-  display: flex;
-  flex-direction: column;
   gap: clamp(0.75rem, 1.8dvh, 1.5rem);
 }
 
@@ -921,8 +901,6 @@ html.viewport-route body {
 .viewport-page__shell {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 .viewport-page__intro {
@@ -978,8 +956,6 @@ html.viewport-route body {
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
   padding-top: var(--viewport-panel-pad-top);
 }
 
@@ -1051,8 +1027,6 @@ html.viewport-route body {
 /* ——— Proactiv product frame ——— */
 .proof-frame {
   position: relative;
-  display: flex;
-  flex-direction: column;
   min-height: 0;
   height: 100%;
   overflow: hidden;
@@ -1080,7 +1054,6 @@ html.viewport-route body {
 .proof-frame__chrome {
   position: relative;
   z-index: 1;
-  display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
@@ -1119,8 +1092,6 @@ html.viewport-route body {
   z-index: 1;
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
   padding: 0.65rem 0.75rem 0.85rem;
   overflow: hidden;
 }
@@ -1214,10 +1185,8 @@ html.viewport-route body {
 .gear-spec__body {
   position: relative;
   z-index: 1;
-  display: flex;
   min-height: 0;
   flex: 1;
-  flex-direction: column;
   padding: var(--space-4);
 }
 
@@ -1248,7 +1217,6 @@ html.theme-light .depth-page--gear .gear-spec,
 
 /* ——— Studio craft mini-visuals ——— */
 .studio-craft-visual {
-  display: flex;
   align-items: stretch;
   justify-content: space-between;
   gap: 0.65rem;
@@ -1267,7 +1235,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .studio-craft-visual__reel {
-  display: flex;
   gap: 0.3rem;
   flex: 1;
   align-items: stretch;
@@ -1293,7 +1260,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .studio-craft-visual__bars {
-  display: flex;
   align-items: flex-end;
   gap: 0.2rem;
   width: 2.4rem;
@@ -1317,8 +1283,6 @@ html.theme-light .depth-page--gear .gear-spec,
   border: 1px solid color-mix(in srgb, var(--theme-border) 80%, transparent);
   background: color-mix(in srgb, var(--theme-bg-card) 90%, transparent);
   padding: 0.35rem 0.28rem 0.4rem;
-  display: flex;
-  flex-direction: column;
   gap: 0.22rem;
 }
 
@@ -1348,8 +1312,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .studio-craft-visual__stack {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   gap: 0.3rem;
   flex: 1;
@@ -1363,13 +1325,11 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .studio-craft-visual--channels {
-  flex-direction: column;
   justify-content: center;
   gap: 0.45rem;
 }
 
 .studio-craft-visual__chips {
-  display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;
 }
@@ -1386,7 +1346,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .studio-craft-visual__pulse-row {
-  display: flex;
   gap: 0.35rem;
 }
 
@@ -1629,7 +1588,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .clarity-feed__chrome {
-  display: flex;
   align-items: center;
   gap: 0.55rem;
   margin-bottom: 0.85rem;
@@ -1679,8 +1637,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .company-footprint--embedded {
-  display: flex;
-  flex-direction: column;
   height: 100%;
 }
 
@@ -1724,7 +1680,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .clarity-feed__rail {
-  display: flex;
   justify-content: center;
 }
 
@@ -1790,7 +1745,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .case-dossier__mark {
-  display: flex;
   align-items: center;
   justify-content: center;
   width: 3rem;
@@ -1864,7 +1818,6 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .company-footprint__hq-line {
-  display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.45rem 0.55rem;
