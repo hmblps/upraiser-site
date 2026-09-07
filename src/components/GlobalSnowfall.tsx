@@ -158,8 +158,6 @@ export function GlobalSnowfall() {
   const isLight = useIsLightTheme();
   const reducedMotion = useReducedMotion();
 
-  if (!isLight) return null;
-
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return true;
     return !document.hidden;
@@ -171,6 +169,8 @@ export function GlobalSnowfall() {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
+
+  if (!isLight) return null;
 
   return (
     <div
