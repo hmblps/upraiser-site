@@ -106,7 +106,7 @@
 
 @media (max-width: 767px) {
   [data-theme="light"] .pilot-cta-section {
-    background: #ffffff;
+    background: #ffffff !important;
   }
   
   .cta-mountain-bg {
