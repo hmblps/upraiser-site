@@ -109,11 +109,6 @@
     background-size: 180% auto;
     background-position: center bottom;
   }
-  
-  [data-theme="light"] .pilot-cta-section {
-    /* Solid white on mobile to avoid the grey gradient clashing with the multiply blend mode */
-    background: #ffffff;
-  }
 }
 
 /* Bottom fog/glow to ground the mountain */
