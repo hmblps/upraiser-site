@@ -81,3 +81,52 @@ function VideoInterstitialScreen() {
     </>
   );
 }
+
+export function CssTablet({ mode, formatId, className = "" }: CssPhoneProps) {
+  const finish = mode === "growth" ? "deepblue" : "orange";
+  
+  return (
+    <div className={`relative flex-shrink-0 aspect-[3/4] sm:aspect-[4/3] rounded-2xl p-1.5 shadow-[0_28px_56px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.12)] prog-css-phone--${finish} ${className}`.trim()}>
+      <div className="relative w-full h-full rounded-[1rem] overflow-hidden bg-[#050505] border-2 border-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
+        <div className="absolute inset-0 overflow-hidden">
+          {formatId === "ctv-spot" || formatId === "ctv-video" ? (
+            <video
+              src="/channels/oem/screens/ctv-spot.mp4"
+              muted
+              loop
+              playsInline
+              autoPlay
+              poster="/channels/oem/screens/ctv-spot.png"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : (
+            <img src="/channels/oem/screens/oem-store.jpg" alt="OEM Store" className="absolute inset-0 w-full h-full object-cover" />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function CssTv({ mode, formatId: _formatId, className = "" }: CssPhoneProps) {
+  const finish = mode === "growth" ? "deepblue" : "orange";
+  
+  return (
+    <div className={`relative flex-shrink-0 aspect-[16/9] rounded-lg p-1 shadow-[0_28px_56px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.12)] prog-css-phone--${finish} ${className}`.trim()}>
+      <div className="relative w-full h-full rounded-md overflow-hidden bg-[#050505] border-2 border-black">
+        <div className="absolute inset-0 overflow-hidden">
+          <video
+            src="/channels/oem/screens/ctv-spot.mp4"
+            muted
+            loop
+            playsInline
+            autoPlay
+            poster="/channels/oem/screens/ctv-spot.png"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
+      </div>
+      <div className="absolute top-full left-1/2 -translate-x-1/2 w-1/3 h-2 bg-[#121c2c] rounded-b-sm border-x border-b border-black" />
+    </div>
+  );
+}

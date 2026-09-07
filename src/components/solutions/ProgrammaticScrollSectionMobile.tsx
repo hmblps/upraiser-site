@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { SiteMode } from "../../data/liveContent";
 import { SectionHeader } from "../SectionHeader";
 import type { AdFormat } from "./ProgrammaticFormats";
-import { CssPhone } from "./CssPhone";
+import { CssPhone, CssTablet, CssTv } from "./CssPhone";
 
 export type ProgrammaticScrollSectionMobileProps = {
   mode: SiteMode;
@@ -88,11 +88,17 @@ export function ProgrammaticScrollSectionMobile({
 
       {/* Sticky Sidebar Layout */}
       <div className="flex flex-row items-start px-2 sm:px-4 w-full max-w-2xl mx-auto">
-        {/* Left Sticky Phone */}
+        {/* Left Sticky Phone / Tablet / TV */}
         <div className="w-[35%] sm:w-[40%] flex-shrink-0 sticky top-[calc(var(--site-header-height,72px)+1rem)] flex flex-col items-center">
-          <div className="relative w-full aspect-[9/19] max-w-[160px]">
+          <div className={`relative w-full ${format.scene === 'tv' ? 'aspect-[16/9] max-w-[200px] mt-10' : format.scene === 'tablet' ? 'aspect-[3/4] sm:aspect-[4/3] max-w-[200px]' : 'aspect-[9/19] max-w-[160px]'}`}>
             <span className="prog-mobile-stage__glow" aria-hidden />
-            <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--mobile h-full w-full" />
+            {format.scene === 'tv' ? (
+              <CssTv mode={mode} formatId={format.id} className="h-full w-full" />
+            ) : format.scene === 'tablet' ? (
+              <CssTablet mode={mode} formatId={format.id} className="h-full w-full" />
+            ) : (
+              <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--mobile h-full w-full" />
+            )}
           </div>
           <div className="mt-4 flex flex-col items-center">
              <span className="font-mono text-xs font-semibold text-theme-muted mb-1">

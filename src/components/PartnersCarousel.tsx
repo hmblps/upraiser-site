@@ -132,7 +132,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
 
               {/* Modal card */}
               <motion.div
-                className="case-detail-modal__panel !w-full !max-w-5xl p-8 sm:p-12 overflow-y-auto mx-4"
+                className="case-detail-modal__panel !w-full !max-w-5xl p-8 sm:p-12 !overflow-y-auto mx-4 !h-auto !max-h-[calc(100dvh-2rem)] sm:!max-h-[min(92dvh,56rem)] !rounded-2xl"
                 
                 initial={{ opacity: 0, scale: 0.97, y: 24 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}

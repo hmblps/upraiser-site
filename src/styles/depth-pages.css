@@ -799,15 +799,21 @@ html.viewport-route body {
   min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 @media (min-width: 1024px) {
   .contact-briefing-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-rows: minmax(0, 1fr);
   }
 }
 
-.contact-briefing-copy,
+.contact-briefing-copy {
+  overflow: visible;
+  padding: clamp(0.85rem, 2dvh, 2rem) clamp(1rem, 2.2vw, 2.5rem);
+}
+
 .contact-briefing-form {
   min-height: 0;
   overflow-x: hidden;
@@ -815,6 +821,16 @@ html.viewport-route body {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: clamp(0.85rem, 2dvh, 2rem) clamp(1rem, 2.2vw, 2.5rem);
+}
+
+@media (min-width: 1024px) {
+  .contact-briefing-copy {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .contact-briefing-copy .contact-sidebar {

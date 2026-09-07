@@ -417,8 +417,6 @@
 }
 
 .prog-css-phone--mobile {
-  width: min(52vw, 14.25rem);
-  height: auto;
   border-radius: 1.65rem;
   padding: 0.16rem;
   box-shadow:

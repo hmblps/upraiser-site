@@ -153,7 +153,7 @@ export function Contact() {
                     ))}
                   </div>
 
-                  <div className="contact-sidebar">
+                  <div className="contact-sidebar max-md:hidden">
                     <div>
                       <h2 className="contact-sidebar__title">Basecamp London</h2>
                       <address className="copy mt-2 space-y-1 not-italic">
