@@ -124,31 +124,31 @@ export function AboutUsSection() {
           <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6 lg:gap-x-12 lg:gap-y-8">
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">The Engineering Basecamp</h3>
-              <p className="text-muted text-[13px] leading-relaxed text-balance">
+              <p className="text-muted text-sm leading-relaxed text-balance">
                 Anti-fraud and tracking architects securing Your path, ensuring absolute data integrity and clean traffic.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">The Marketing Navigators</h3>
-              <p className="text-muted text-[13px] leading-relaxed text-balance">
+              <p className="text-muted text-sm leading-relaxed text-balance">
                 Media veterans plotting the optimal, verified route to Your exact audience across complex digital terrains.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">The Visual Architects</h3>
-              <p className="text-muted text-[13px] leading-relaxed text-balance">
+              <p className="text-muted text-sm leading-relaxed text-balance">
                 UX/UI designers translating complex strategies into high-converting assets that actively drive user action.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">The Data Scouts</h3>
-              <p className="text-muted text-[13px] leading-relaxed text-balance">
+              <p className="text-muted text-sm leading-relaxed text-balance">
                 Analysts uncovering hidden growth vectors, monitoring metrics, and optimizing Your budgets in real-time.
               </p>
             </div>
             <div className="sm:col-span-2">
               <h3 className="font-semibold text-fg text-sm mb-1">The Expedition Guides</h3>
-              <p className="text-muted text-[13px] leading-relaxed max-w-xl text-balance">
+              <p className="text-muted text-sm leading-relaxed max-w-xl text-balance">
                 Dedicated account managers ensuring transparent communication, seamless workflow, and steady momentum at every stage of the climb.
               </p>
             </div>

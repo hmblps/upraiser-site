@@ -58,7 +58,7 @@ export function FormatCopy({
           exit={reduced ? undefined : "exit"}
           style={reduced ? undefined : { willChange: "transform, opacity" }}
         >
-          <p className={`stat-label format-copy__tagline whitespace-nowrap shrink-0 ${accentClass}`}>
+          <p className={`stat-label format-copy__tagline shrink-0 ${accentClass}`}>
             {format.tagline}
           </p>
 
@@ -68,7 +68,7 @@ export function FormatCopy({
 
           <ul className="channel-inventory-points mt-5 space-y-2.5">
             {format.points.map((point) => (
-              <li key={point} className="channel-inventory-points__item copy text-muted">
+              <li key={point} className="channel-inventory-points__item copy">
                   {point}
                 </li>
             ))}

@@ -153,7 +153,7 @@ UPRAISER = **expedition brand**: poetic ascent (Zero-like atmosphere) + operator
 | `/privacy` · `/terms` | Legal                | Legal                                                         |
 | `/dev/hero-capture`   | DEV only             | Everest frame capture                                         |
 
-**Нет живых страниц** `/expedition`, `/company`, `/solutions`. Footer всё ещё пишет «The Basecamp» на `/` — label отстаёт от header.
+**Нет живых страниц** `/expedition`, `/company`, `/solutions`. Footer explore на `/` = **The Agency** (синхрон с header).
 
 ### Legacy redirects (SEO — не удалять)
 
@@ -238,7 +238,7 @@ Mode-aware bodies: `**ModeContentTransition**`.
 
 ### Footer explore
 
-The Basecamp (`/`) · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft (`/craft`).  
+The Agency (`/`) · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft (`/craft`).  
 Company: только Careers inquiry → `/contact`. **Нет** Expedition. **Нет** Request Pilot в footer.
 
 ### Request Pilot — где живёт
@@ -1001,9 +1001,9 @@ Trust **`src/App.tsx` + `navLinks`**, not comments in `innerPagesData.ts` (they 
 - **Home loading:** no `LazySection` / `heroOk` on Audience / Process / Cases / Promise. Single `React.Suspense` per fold.
 - **Hero split:** high-tier = live R3F. Lite (mobile, Intel, `?lite=1`) = JPEG sequence. Dark frames include Voyager. Light frames recaptured 7 Sep evening (settle 1400 ms, qscale 2).
 
-### Git / disk (7 Sep 2026 late evening)
+### Git / disk (7 Sep 2026 night)
 
-- **This commit** ships light home JPEG recapture, lite theme-flash lock, PROOF ghost clip, MASTER sync, Audience/Promise spacing. Parent dark bake: `37988f9`.
+- **This commit** ships sitemap `/`+`/channels`, The Agency naming, light lite without the 46% white scrim, dark JPEG player sync, recaptured `home-light` / `home-mobile-light` (`?v=10`). Parent light bake: `69cd566`.
 - After push + `npm run deploy`: prod alias **https://upraiser.co.uk**.
 - **Leave untracked:** `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`, `test-modal-scroll.mjs`, `test-oem-mobile.mjs`.
 
@@ -1035,9 +1035,7 @@ Parked / in-flight:
 4. Recompress `everest-light.glb` (~11 MB) — **do not** bake the light curve
 5. Dual phone GLB fetch on `/channels` — observed, not asked
 6. Analytics / cookie banner — parked until owner + privacy update
-7. `public/sitemap.xml` still listed `/expedition` (404) — replace with `/` + `/channels` if owner wants SEO truth
-8. Footer label «The Basecamp» vs header «The Agency» — copy drift, not a bug until asked
-9. `DESKTOP_HERO_QUERY = "(min-width: 0px)"` — documented, do not silently revert to 900px
+7. `DESKTOP_HERO_QUERY = "(min-width: 0px)"` — documented, do not silently revert to 900px
 
 Do **not** start a new “load-speed refactor spec folder”. Keep notes in this file.
 
@@ -1064,7 +1062,7 @@ Status as of 7 Sep 2026. Conversion items that would put **Request Pilot** in th
 | 5 | Open Graph image | **Done** — `/og-image.png` 1200×630. Was missing locally; restored from git into `assets/brand/` + `public/`. |
 | 6 | Favicon set | **Done** — ico, 16, 32, 180 apple, 192, `site.webmanifest` |
 | 7 | robots.txt | **Done** — Allow `/`, Disallow `/contact/sent`, Sitemap |
-| 8 | sitemap.xml | **Stale** — file still lists `/expedition` (no route). Live URLs: `/`, `/channels`, `/contact`, `/privacy`, `/terms`. Craft stub is `noindex`. |
+| 8 | sitemap.xml | **Done** — live URLs: `/`, `/channels`, `/contact`, `/privacy`, `/terms`. No `/expedition`. Craft stub is `noindex`. |
 | 9 | Alt text | **Done** — named logos have alt; in-ad mockups use empty alt (decorative). Header mark is decorative (`aria-label` on the link). |
 | 10 | Mobile breakpoints | **Done** — existing `900px` hero / Routes mobile stack / 44px targets |
 | 11 | Sticky mobile CTA | **Intentional skip** — would put Request Pilot on every scroll. Mobile Routes already has a format dock. |
@@ -1122,7 +1120,9 @@ MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
 - Lite player mixed light JPEGs into dark after theme toggle → generation-scoped loads + hide 3D until `drawnTheme` matches.
 - Light home JPEG recapture (desktop + mobile), settle 1400 ms, qscale 2.
 - PROOF (`#audience`) ghost numbers no longer overlap left copy on desktop dark.
-- This ritual commits the light bake + flash/ghosts + MASTER. Everest light UV smear still the open 3D ticket. `sitemap.xml` still advertises `/expedition`.
+- This ritual commits the light bake + flash/ghosts + MASTER. Everest light UV smear still the open 3D ticket.
+- 7 Sep evening: `sitemap.xml` drops `/expedition`, adds `/channels`. Footer / contact / thank-you / craft / 404 now say **The Agency**. Format tabs/taglines no longer clamp. Dark muted token bumped for body contrast.
+- Same evening, owner pass: hero stat cards restored to gold→red (do not flatten to single gold). Light lite no longer has the 46% white scrim over the mountain base; light fog/mist pulled back; `home-light` + `home-mobile-light` recaptured (`?v=10`). Dark JPEG player draws on the same sticky progress as live 3D (no Lenis+rect mix), nearest-frame fallback, ImageBitmap. PROOF ghosts stay clipped off copy.
 
 ---
 

@@ -88,9 +88,13 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background:
-    linear-gradient(to top, var(--theme-bg) 0%, color-mix(in srgb, var(--theme-bg) 72%, transparent) 20%, transparent 46%),
-    linear-gradient(105deg, color-mix(in srgb, var(--theme-bg) 90%, transparent) 0%, transparent 44%);
+  /* Left wash only — the old bottom 46% fade buried the mountain base on lite. */
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--theme-bg) 72%, transparent) 0%,
+    transparent 36%
+  );
+  pointer-events: none;
 }
 
 .hero-bottom-fade-bridge {
@@ -98,11 +102,11 @@
   inset-inline: 0;
   bottom: 0;
   z-index: 3;
-  height: 6.5rem;
+  height: 2.25rem;
   background: linear-gradient(
     to top,
     var(--theme-bg) 0%,
-    color-mix(in srgb, var(--theme-bg) 94%, transparent) 55%,
+    color-mix(in srgb, var(--theme-bg) 70%, transparent) 45%,
     transparent 100%
   );
   pointer-events: none;

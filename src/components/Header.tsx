@@ -23,7 +23,7 @@ export function Header() {
               <ScrollLink
                 href="/"
                 className="header-brand flex items-center shrink-0"
-                aria-label="UPRAISER — The Basecamp"
+                aria-label="UPRAISER — The Agency"
               >
                 <img src="/upraiser-logo.png" alt="" className="h-7 w-7 object-contain" />
               </ScrollLink>

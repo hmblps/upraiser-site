@@ -61,10 +61,6 @@
 
 .prog-scroll-headline .section-description {
   margin-top: 0.35rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .prog-scroll-ambience {
@@ -467,6 +463,7 @@
   width: 100%;
   max-width: 28rem;
   min-height: 0;
+  overflow: visible;
 }
 
 .prog-scroll-copy-tumbler {
@@ -483,7 +480,7 @@
   justify-content: flex-start;
   gap: 1rem;
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .format-copy-wrap__switcher {
@@ -492,7 +489,11 @@
 }
 
 .format-lane-tabs {
+  display: inline-flex;
   flex-wrap: nowrap;
+  width: max-content;
+  max-width: 100%;
+  overflow: visible;
 }
 
 .format-lane-tabs .slide-tabs,
@@ -510,12 +511,12 @@
 }
 
 .format-copy__tagline {
-  white-space: nowrap;
+  white-space: normal;
   flex-shrink: 0;
   margin: 0;
   line-height: 1.3;
   padding-block: 0.12em 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .format-copy__title {
@@ -532,7 +533,7 @@
 .format-copy__body {
   margin-top: 0.85rem;
   max-width: 38ch;
-  color: var(--theme-muted-light);
+  color: color-mix(in srgb, var(--theme-fg) 82%, var(--theme-muted));
   line-height: var(--leading-body);
 }
 
@@ -812,10 +813,7 @@
   font-size: var(--text-caption, 0.75rem);
   line-height: 1.35;
   color: var(--theme-accent);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
+  white-space: normal;
 }
 
 .prog-mobile-dock__caption .prog-mobile-dots {
@@ -934,7 +932,7 @@
 
 .prog-mobile-card__tag {
   margin: 0;
-  max-width: 78%;
+  max-width: 100%;
   padding: 0.28rem 0.65rem;
   border-radius: 999px;
   font-size: var(--text-caption, 0.7rem);
@@ -946,10 +944,6 @@
   color: color-mix(in srgb, var(--theme-fg, #1a1a1a) 88%, var(--theme-accent));
   background: color-mix(in srgb, var(--theme-accent) 16%, var(--theme-bg-card, #fff));
   border: 1px solid color-mix(in srgb, var(--theme-accent) 35%, transparent);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
   white-space: normal;
 }
 
@@ -1112,7 +1106,6 @@
   }
 
   .prog-scroll-headline .section-description {
-    -webkit-line-clamp: 1;
     font-size: var(--text-caption);
   }
 

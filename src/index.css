@@ -53,8 +53,8 @@
   --theme-bg-card: #161413;
   --theme-border: #2a2622;
   --theme-fg: #f5f0e8;
-  --theme-muted: #a89b92;
-  --theme-muted-light: #c4bbb4;
+  --theme-muted: #c4b8ae;
+  --theme-muted-light: #d4cbc4;
   --theme-fg-muted: var(--theme-muted);
   --theme-text-muted: var(--theme-muted);
 

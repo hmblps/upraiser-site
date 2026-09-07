@@ -17,6 +17,11 @@ export const defaultPageMeta: PageMetaRecord = {
 
 export const pageMetaByPath: Record<string, PageMetaRecord> = {
   "/": defaultPageMeta,
+  "/channels": {
+    title: "The Routes | UPRAISER",
+    description:
+      "App Growth and OEM & CTV formats on one supply path — programmatic, social, Lenovo OEM, and connected TV.",
+  },
   "/craft": {
     title: "The Craft | UPRAISER",
     description: "Creative lab and proprietary pipelines for UPRAISER traffic infrastructure. Workshop opening soon.",
@@ -45,7 +50,7 @@ export const pageMetaByPath: Record<string, PageMetaRecord> = {
 
 export const notFoundMeta: PageMetaRecord = {
   title: "Page not on the map | UPRAISER",
-  description: "This route is not on the UPRAISER map. Return to The Basecamp or jump to The Routes.",
+  description: "This route is not on the UPRAISER map. Return to The Agency or jump to The Routes.",
   robots: "noindex, follow",
 };
 

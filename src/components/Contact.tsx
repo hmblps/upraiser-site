@@ -115,7 +115,7 @@ export function Contact() {
   };
 
   const ctaRow = [
-    { label: "The Basecamp", href: "/" },
+    { label: "The Agency", href: "/" },
     { label: "See Cases", href: "/#cases" },
     { label: "The Routes", href: "/#routes" },
     { label: "The Expedition", href: "/#promise" },

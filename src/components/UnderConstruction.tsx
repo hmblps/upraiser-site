@@ -14,7 +14,7 @@ export function UnderConstruction({
   title,
   description,
   backHref = "/",
-  backLabel = "Return to The Basecamp",
+  backLabel = "Return to The Agency",
 }: UnderConstructionProps) {
   return (
     <section className="section-band section-band--statement min-h-[min(72dvh,40rem)]">

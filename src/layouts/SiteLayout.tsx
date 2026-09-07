@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
+import { PageMeta } from "../components/PageMeta";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { SiteGrain } from "../components/SiteGrain";
 import { ScrollLink } from "../components/ScrollLink";
@@ -155,6 +156,7 @@ export function SiteLayout() {
   return (
     <SmoothScroll>
       <CaseModalProvider>
+        <PageMeta />
         <ScrollToTop />
         <ScrollLink href="/" className="skip-link">
           Skip to content

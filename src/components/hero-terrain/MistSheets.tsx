@@ -1,7 +1,9 @@
 import { useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { DoubleSide, ShaderMaterial } from "three";
+import { DoubleSide, MathUtils, ShaderMaterial } from "three";
+import { useHeroFlyOptional } from "../../context/HeroFlyContext";
 import { heroCapture } from "../../lib/heroCapture";
+import { readProgress } from "./shared";
 
 /** Noise cards in the couloirs — not a windshield, not volumetric fog. */
 function makeMistMaterial() {
@@ -71,6 +73,7 @@ const CLIMB_SHEETS = [
 export function MistSheets({ lite = false }: { lite?: boolean }) {
   const sheets = lite ? CLIMB_SHEETS : HOME_SHEETS;
   const material = useMemo(() => makeMistMaterial(), []);
+  const heroFly = useHeroFlyOptional();
 
   useEffect(
     () => () => {
@@ -81,7 +84,10 @@ export function MistSheets({ lite = false }: { lite?: boolean }) {
 
   useFrame((state) => {
     material.uniforms.uTime.value = heroCapture.snap ? 0 : state.clock.elapsedTime;
-    material.uniforms.uGain.value = lite ? 0.14 : 0.1;
+    // Keep the opening frame clear — sheets used to sit in the lower third as a white slab.
+    const climb = readProgress(heroFly);
+    const fadeIn = MathUtils.smoothstep(climb, 0.12, 0.48);
+    material.uniforms.uGain.value = (lite ? 0.1 : 0.07) * fadeIn;
   });
 
   return (

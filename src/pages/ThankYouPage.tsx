@@ -30,7 +30,7 @@ export function ThankYouPage() {
                 data-cursor="cta"
                 className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
               >
-                The Basecamp
+                The Agency
               </Link>
             </Magnetic>
             <Magnetic strength={0.22}>

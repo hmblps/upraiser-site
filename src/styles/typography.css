@@ -580,7 +580,7 @@ header nav .nav-link:focus-visible::after {
   max-width: var(--content-max-copy);
   font-size: var(--text-caption);
   line-height: 1.45;
-  color: var(--theme-muted);
+  color: color-mix(in srgb, var(--theme-fg) 78%, var(--theme-muted));
 }
 
 .spec-mono {

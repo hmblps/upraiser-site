@@ -31,10 +31,10 @@ function resolveFlyStage(cached: HTMLElement | null) {
   );
 }
 
-function flyProgressForScroll(stage: HTMLElement, scrollY: number) {
-  const top = stage.getBoundingClientRect().top + scrollY;
+/** Visual sticky-runway progress — do not mix Lenis scrollY with getBoundingClientRect. */
+export function flyProgressForStage(stage: HTMLElement) {
   const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
-  return clamp((scrollY - top) / runway, 0, 1);
+  return clamp(-stage.getBoundingClientRect().top / runway, 0, 1);
 }
 
 function countRevealed(progress: number) {
@@ -69,7 +69,7 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const next = flyProgressForScroll(stage, scrollY);
+      const next = flyProgressForStage(stage);
       progressRef.current = next;
       stage.style.setProperty("--hero-fly", next.toFixed(3));
 

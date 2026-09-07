@@ -314,7 +314,7 @@ export const bridgeByMode = {
 
 export const footerLinks = {
   explore: [
-    { label: "The Basecamp", href: "/" },
+    { label: "The Agency", href: "/" },
     { label: "The Routes", href: "/#routes" },
     { label: "The Peaks", href: "/#cases" },
     { label: "The Craft", href: "/craft" },

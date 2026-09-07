@@ -24,9 +24,9 @@ export function Atmosphere({ theme, fogProfile = "home" }: { theme: ThemeMode; f
     const f = scene.fog;
     if (!f) return;
     // For FogExp2, we interpolate density instead of near/far
-    const densityStart = 0.005;
-    const densityEnd = 0.002;
-    const densityFinale = 0.003;
+    const densityStart = isLight ? 0.0022 : 0.005;
+    const densityEnd = isLight ? 0.0011 : 0.002;
+    const densityFinale = isLight ? 0.0015 : 0.003;
     if ('density' in f) {
       f.density = MathUtils.lerp(MathUtils.lerp(densityStart, densityEnd, open), densityFinale, finale);
     }
@@ -34,7 +34,7 @@ export function Atmosphere({ theme, fogProfile = "home" }: { theme: ThemeMode; f
 
   return (
     <>
-      <fogExp2 attach="fog" args={[fog.color, 0.005]} />
+      <fogExp2 attach="fog" args={[fog.color, isLight ? 0.0022 : 0.005]} />
       <ambientLight color={isLight ? "#eef4ff" : "#ffffff"} intensity={isLight ? 0.02 : 0.05} />
       <hemisphereLight
         args={[

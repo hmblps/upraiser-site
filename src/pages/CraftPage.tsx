@@ -13,7 +13,7 @@ export function CraftPage() {
           title={mode === "infrastructure" ? "Transparent asset pipelines under rigging" : "Creative lab under rigging"}
           description={mode === "infrastructure" ? "Verifiable creator networks and raw asset supply chains are being wired. The workshop opens soon." : "Full-spectrum creative and proprietary pipelines are being wired into the ascent line. The workshop opens soon."}
           backHref="/"
-          backLabel="Return to The Basecamp"
+          backLabel="Return to The Agency"
         />
       </ModeContentTransition>
     </main>
