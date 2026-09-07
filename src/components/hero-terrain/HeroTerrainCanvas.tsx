@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
@@ -36,7 +36,7 @@ function ThemeGlSync({ theme }: { theme: ThemeMode }) {
   const { gl } = useThree();
   const isLight = theme === "light";
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     gl.toneMapping = ACESFilmicToneMapping;
     gl.toneMappingExposure = 1;
     gl.outputColorSpace = SRGBColorSpace;
@@ -63,13 +63,14 @@ export function HeroTerrainCanvas({
   const capturing = Boolean(capture);
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
-  const handleModelReady = useCallback(() => setModelReady(true), []);
+  const [drawnTheme, setDrawnTheme] = useState<ThemeMode | null>(null);
+  const handleModelReady = useCallback(() => {
+    setModelReady(true);
+    setDrawnTheme(theme);
+  }, [theme]);
+  const showTerrain = capturing || (modelReady && drawnTheme === theme);
 
   const shouldFallback = (reduced || tier === 'lite') && !capturing;
-
-  useEffect(() => {
-    setModelReady(false);
-  }, [theme]);
 
   useEffect(() => {
     if ((modelReady || shouldFallback) && !lite) markHeroReady();
@@ -125,7 +126,7 @@ export function HeroTerrainCanvas({
   return (
     <>
       {/* Loading overlay while shaders compile (crucial for mobile) */}
-      {!modelReady && !capturing && typeof document !== "undefined" ? createPortal(
+      {!showTerrain && !capturing && typeof document !== "undefined" ? createPortal(
         <div className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none transition-opacity duration-1000 backdrop-blur-xl bg-bg/20">
           <div className="flex flex flex-col items-center gap-3">
             <motion.div
@@ -150,9 +151,9 @@ export function HeroTerrainCanvas({
 
       <motion.div
         ref={shellRef}
-        className={`${className ?? ""} hero-terrain-fade${modelReady ? " is-ready" : ""}`}
+        className={`${className ?? ""} hero-terrain-fade${showTerrain ? " is-ready" : ""}`}
       initial={false}
-      animate={{ opacity: modelReady ? 1 : 0 }}
+      animate={{ opacity: showTerrain ? 1 : 0 }}
       transition={
         capturing
           ? { duration: 0 }

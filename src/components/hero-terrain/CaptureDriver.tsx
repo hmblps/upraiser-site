@@ -54,10 +54,8 @@ export function CaptureDriver({ job, modelReady }: { job: CaptureJob; modelReady
 
   useEffect(() => {
     if (!modelReady) return;
-    const t = window.setTimeout(
-      () => setArmed(true),
-      job.theme === "dark" ? 1400 : job.shot === "expedition" ? 900 : 400,
-    );
+    const settleMs = String(job.shot).includes("expedition") ? 900 : 1400;
+    const t = window.setTimeout(() => setArmed(true), settleMs);
     return () => window.clearTimeout(t);
   }, [modelReady, job.shot]);
 

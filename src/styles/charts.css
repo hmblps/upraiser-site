@@ -96,9 +96,15 @@
     clip-path: inset(0 0 0 50%);
     opacity: 0.78;
   }
+}
 
-  .accent-scroll-section--split-copy .fold-chart-ghosts {
-    clip-path: inset(0 0 0 44%);
+/* PROOF split: ghosts live in the chart column — fade before they reach copy */
+@media (min-width: 768px) {
+  .accent-scroll-section--split-copy .fold-chart-ghosts,
+  .fraud-radial-chart__ghosts {
+    clip-path: inset(0 0 0 42%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 40%, #000 52%);
+    mask-image: linear-gradient(90deg, transparent 0%, transparent 40%, #000 52%);
   }
 }
 

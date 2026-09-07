@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 
 type Theme = "light" | "dark";
 
@@ -82,7 +82,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   /** True after an explicit toggle — safe to persist even on mobile. */
   const userChoseRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyTheme(theme);
 
     // Don't overwrite a desktop dark preference just because mobile forced light on boot.

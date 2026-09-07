@@ -22,10 +22,10 @@ const segments = [
 const radii = [168, 138, 108, 78];
 
 const fraudGhostLayout = [
-  { left: "15%", mobileLeft: "15%", originY: 79, mobileOriginY: 89, drift: 16, duration: 7.2, delay: 0 },
-  { left: "35%", mobileLeft: "35%", originY: 85, mobileOriginY: 95, drift: -12, duration: 7.8, delay: 1.1 },
-  { left: "55%", mobileLeft: "55%", originY: 75, mobileOriginY: 85, drift: 14, duration: 8.1, delay: 2.0 },
-  { left: "75%", mobileLeft: "75%", originY: 81, mobileOriginY: 91, drift: -10, duration: 6.6, delay: 2.8 },
+  { left: "58%", mobileLeft: "15%", originY: 76, mobileOriginY: 89, drift: 10, duration: 7.2, delay: 0 },
+  { left: "68%", mobileLeft: "35%", originY: 84, mobileOriginY: 95, drift: -8, duration: 7.8, delay: 1.1 },
+  { left: "76%", mobileLeft: "55%", originY: 70, mobileOriginY: 85, drift: 12, duration: 8.1, delay: 2.0 },
+  { left: "84%", mobileLeft: "75%", originY: 80, mobileOriginY: 91, drift: -8, duration: 6.6, delay: 2.8 },
 ] as const;
 
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
@@ -96,8 +96,8 @@ function FraudGhost({
       drift={layout.drift}
       duration={layout.duration}
       delay={layout.delay}
-      peakOpacity={0.9}
-      rise={100 + index * 15}
+      peakOpacity={0.82}
+      rise={72 + index * 10}
     >
       <div className="flex items-center gap-1.5 mb-1.5">
         <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: seg.color }} />

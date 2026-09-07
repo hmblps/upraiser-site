@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 7 September 2026  
+> **Updated:** 7 September 2026 (evening)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** `12a623e` (`main` = `origin/main`) — Lenovo Trust Strip width; IA is Agency + Craft, formats on `/channels`  
+> **HEAD:** this ritual — light home JPEG recapture, lite flash fix, PROOF ghosts (see §25) 
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 
@@ -258,29 +258,40 @@ Company: только Careers inquiry → `/contact`. **Нет** Expedition. **�
 
 ## 9. Hero 3D (Everest fly)
 
-**Status:** SHIPPED — desktop sticky Lenis runway + R3F Everest. Mobile/weak hardware = Canvas Image Sequence (Apple-style), no WebGL.
+**Status:** SHIPPED — two paths, same fly.
+
+| Path | Who | What |
+| --- | --- | --- |
+| **Live WebGL** | Mac / discrete GPU, `useHardwareTier() === "high"` | One Canvas, theme-swapped GLB, sticky Lenis runway |
+| **JPEG sequence** | Mobile, Intel / integrated GPU, `?lite=1`, `prefers-reduced-motion` | `HeroVideoFallback` — 150 JPEGs drawn to `<canvas>` on scroll |
+
+Do **not** force Windows back onto live WebGL. Intel → lite is intentional.
 
 ### Theme FX
 
 | Theme     | Terrain                                         | FX                                                                                                      |
 | --------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| **Light** | Photo `everest-light.glb` (~11MB) · white paper | `BrandHazeSky` · `ScrollBeams` · `AscentHalo` · `AscentBird` (procedural silhouette) · `StudioRimLight` |
-| **Dark**  | Wire `everest.glb` (~1.0 MB Draco, **planet curve baked**) | `NightStars` · `FloatingVoyager` after ~2.8s if hero still in view |
+| **Light** | Photo `everest-light.glb` (~11MB) · white paper | `BrandHazeSky` · `ScrollBeams` · `AscentHalo` · `AscentBird` · `StudioRimLight` · `MistSheets` · `fogExp2`. `SeaOfClouds` **returns null** (horizontal-line artifact). Haze/halo is the Growth look — not a missing cloud mesh. |
+| **Dark**  | Wire `everest.glb` (~1.0 MB Draco, **planet curve baked**) | `NightStars` · `FloatingVoyager` in the live scene (and **baked into** dark JPEG frames) |
 
 ### Key files
 
 | File | Role |
 | --- | --- |
 | `Hero.tsx` | Sticky stage, H1, stats, `HeroFlyProvider` |
-| `HeroAtmosphere.tsx` | CSS sky; **eager** `HeroTerrainCanvas` on desktop ≥900px |
+| `HeroAtmosphere.tsx` | CSS sky; `HeroTerrainCanvas` |
 | `lib/heroBoot.ts` | `index.html` + `main.tsx` preload of theme GLB + Draco wasm |
-| `lib/heroDesktop.ts` | `DESKTOP_HERO_QUERY = "(min-width: 900px)"` |
+| `lib/heroDesktop.ts` | `DESKTOP_HERO_QUERY` is currently `"(min-width: 0px)"` (preload gate — do not “fix” without owner) |
+| `hooks/useHardwareTier.ts` | Intel / UHD / Iris / Mali / Adreno → **lite**. Override: `?lite=1` |
 | `lib/scrollPreload.ts` | Scroll-synced warm: hero owns network until `markHeroReady` |
-| `hero-terrain/*` | R3F scene graph · Voyager gated |
+| `hero-terrain/*` | R3F scene graph |
 | `Everest.tsx` | Theme-switched GLB; dark skips runtime vertex bend |
 | `HeroFlyContext.tsx` | Runway → `progressRef` |
 | `lib/heroModel.ts` | URLs + Draco |
-| `HeroVideoFallback.tsx` | Apple-style Canvas Image Sequence player for mobile |
+| `HeroVideoFallback.tsx` | JPEG sequence player (Windows / mobile / lite) |
+| `CaptureDriver.tsx` | `/dev/hero-capture` PNG dump |
+| `scripts/capture-home-dark.js` | Puppeteer driver (WebGL + Metal) — used for both themes |
+| `scripts/encode-frames.sh` | PNG → JPEG |
 
 ### Art locks (не ломать)
 
@@ -288,27 +299,50 @@ Company: только Careers inquiry → `/contact`. **Нет** Expedition. **�
 2. **No ground disc** under mountain.
 3. **Halo** camera-relative — не world-pinned sticker.
 4. **Bird** = procedural silhouette, не flappy GLB.
-5. **Theme switch:** single Canvas + `ThemeGlSync` — **не** `key={theme}` remount.
+5. **Theme switch:** single Canvas + `ThemeGlSync` — **не** `key={theme}` remount. Hide until `drawnTheme === theme`.
 6. **No GSAP** / drei `useScroll` for hero.
 7. **No desktop posters** — owner rejected stills; mountain must boot itself.
 8. **Do not** import Phone/Tablet/TV GLBs (or `ProgrammaticScrollSection`) until `markHeroReady` + the section is approaching.
 9. Dark `everest.glb` extras `planetCurved: true`. After `npm run optimize:everest` run `npm run bake:everest-curve`. Do **not** bake `everest-light.glb` (inflates ~2 MB).
+10. **No EffectComposer** / N8AO / Bloom on hero.
 
-### Boot (desktop)
+### Boot (desktop high-tier)
 
-1. Inline `index.html` script: theme + `preload` everest GLB + Draco (`fetchpriority=high`).
+1. Inline `index.html` script: theme + `preload` everest GLB + Draco (`fetchpriority=low` so HTML/JS win).
 2. `main.tsx` → `preloadHeroTerrain(theme)`.
 3. Eager Home + eager `HeroTerrainCanvas` (three/r3f in the modulepreload graph).
 4. Canvas: `frameloop="never"` when offscreen; `events.disconnect()`; no raycast on terrain.
-5. Voyager 13 MB only after mountain ready **and** ~2.8s still in view.
+5. Theme tokens apply in `useLayoutEffect` (`ThemeContext`) so `data-theme` matches the first paint after toggle.
 
-### Mobile & Weak Hardware Fallback
+### JPEG sequence (lite / Windows / mobile)
 
-`HeroVideoFallback.tsx` (name kept for legacy) now uses a **Canvas Image Sequence** instead of `<video>`.
-- 150 JPEG frames per scene are lazy-loaded and drawn to `<canvas>` on scroll.
-- Eliminates iOS Safari hardware decoding lag (no frame skipping).
-- Runs at perfect 60fps on any mobile phone or weak PC while maintaining the dramatic 3D flyover effect.
-- `markHeroReady()` fires immediately so below-fold can warm.
+Same WebGL fly, frozen to 150 stills. Closest bake to live 3D that still loads in seconds.
+
+| Sequence | Settle | Encode | Player size | Approx weight |
+| --- | --- | --- | --- | --- |
+| `home-dark` | 1400 ms | qscale **5** + lanczos | 1280×720 | ~30 MB |
+| `home-light` | 1400 ms | qscale **2** + lanczos | 1280×720 | ~11 MB |
+| `home-mobile-dark` | 1400 ms | qscale **5** | 540×960 | ~21 MB |
+| `home-mobile-light` | 1400 ms | qscale **2** | 540×960 | ~6.5 MB |
+
+- Capture PNG is 1920×1080 (desktop) / 720×1280 (mobile) via `lib/heroCapture.ts`.
+- Player cache-bust: `HeroVideoFallback` `?v=9`.
+- Player **idle-loads all 150** (`IDLE_CONCURRENCY = 8`). Loads are generation-scoped: a light `onload` must not commit into the dark cache (that was the white-flash bug).
+- Draw only images whose `src` belongs to the current `shotFolder`; otherwise fill paper `#ffffff` / `#050504`.
+- Remaining gap vs live 3D (not a hole in the bake): 720p stretched to retina, JPEG, 150 stops, no mouse parallax, no dark-wire idle breathe.
+
+**Recapture (dev only):**
+
+```bash
+npm run dev   # 5173, hero-capture plugin
+node scripts/capture-home-dark.js 'http://127.0.0.1:5173/dev/hero-capture?shot=home&theme=dark&frames=150' 'Done home dark' 1920 1080
+node scripts/capture-home-dark.js 'http://127.0.0.1:5173/dev/hero-capture?shot=home&theme=light&frames=150' 'Done home light' 1920 1080
+node scripts/capture-home-dark.js 'http://127.0.0.1:5173/dev/hero-capture?shot=home&theme=dark&frames=150&mobile=1' 'Done home-mobile dark' 720 1280
+node scripts/capture-home-dark.js 'http://127.0.0.1:5173/dev/hero-capture?shot=home&theme=light&frames=150&mobile=1' 'Done home-mobile light' 720 1280
+# then encode only the shot you recaptured — see scripts/encode-frames.sh
+```
+
+PNG folders are `captures/{shot}-{theme}/` with `frame_0000.png`…`frame_0149.png`. ffmpeg `-start_number 0` → public `frame_0001.jpg`…`frame_0150.jpg`.
 
 ---
 
@@ -600,6 +634,8 @@ Promise title: **Our Commitment**.
 
 Fold layout (`charts.css`): chart anchored `left: 52–54%`, `width: 46vw` — copy lane clear 768–1440.
 
+**PROOF ghosts (Infrastructure `#audience`):** `FraudScrollChart` floats metrics around the radial. Desktop origins sit in the **chart column** (`left` 58–84% of the 100vw overlay). `.accent-scroll-section--split-copy .fold-chart-ghosts` + `.fraud-radial-chart__ghosts` use a left mask/`clip-path` from 768px up so 47% / Device farms cannot drift onto the copy. Do not park ghosts at 15%/35% on desktop — that was the overlap.
+
 ---
 
 ## 13. Scroll Scene System
@@ -622,6 +658,18 @@ Fold layout (`charts.css`): chart anchored `left: 52–54%`, `width: 46vw` — c
 ---
 
 ## 14. Shipped polish log
+
+### 7 Sep 2026 evening — hero JPEG bake + theme flash
+
+| Area | Change |
+| --- | --- |
+| Dark bake | Recaptured `home-dark` + `home-mobile-dark` with Voyager on; idle-preload all 150 frames (`?v=8` then `?v=9`) |
+| Light bake | Recaptured `home-light` + `home-mobile-light`, settle 1400 ms, JPEG qscale 2 + lanczos (~11 MB / ~6.5 MB) |
+| Flash | Lite player: per-folder cache + cancelled loads. 3D: hide until `drawnTheme === theme`. `applyTheme` in `useLayoutEffect` |
+| PROOF | Desktop fraud ghosts stay in the radial column; left mask so they don’t sit on copy |
+| Windows | Intel integrated GPU → lite JPEG (do not re-enable live WebGL) |
+
+Dark bake shipped as **`37988f9`**. Light recapture + flash/ghosts ship in **this commit**.
 
 ### 28 Aug 2026 evening (`60478fe` → `3e11fb5` → `7484527`) — **live on prod**
 
@@ -722,7 +770,9 @@ Master: `**assets/**` → `scripts/sync-assets.sh` → `**public/**`.
 | `assets/maps/world-dots-*.svg`   | `/maps/*`                 | Yes — Company map |
 
 
-**Also in `public/`:** Draco WASM · `public/clients/*` · partner marks · phone GLBs · `channels/programmatic-*` (Routes glass).
+**Also in `public/`:** Draco WASM · `public/clients/*` · partner marks · phone GLBs · `channels/programmatic-*` (Routes glass) · **`public/hero/frames/{home,home-mobile}-{dark,light}/`** (150 JPEGs each, lite player).
+
+**Hero frame weights (home only, Sept 2026):** dark desktop ~30 MB · light desktop ~11 MB · dark mobile ~21 MB · light mobile ~6.5 MB. Expedition sequences exist on disk; home is the live bake.
 
 **Local backup (outside git):** `~/Downloads/upraiser-assets-backup/`  
 `rsync -a public/{hero,channels,phones,draco,clients,maps,images} ~/Downloads/upraiser-assets-backup/`  
@@ -863,16 +913,17 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 ## 21. Sanity checklist
 
 - [ ] `npm run build`
-- [ ] Light: white UI, photo mountain, halo, bird on scroll
-- [ ] Dark: wire + stars
-- [ ] Header: Craft · Basecamp · Expedition centered
-- [ ] `/solutions`, `/cases` redirect to home hashes
-- [ ] `#routes` glass never blank; formats scroll-sync
+- [ ] Light: white UI, photo mountain, halo, bird on scroll (haze is Growth, not a bug)
+- [ ] Dark: wire + stars + Voyager (live **and** in JPEG bake)
+- [ ] Header: The Agency + Creative Studio only
+- [ ] `/solutions` → `/#routes`; no `/expedition` / `/company` pages
+- [ ] Home `#routes` is CSS CTA → `/channels`; formats 3D only on `/channels`
 - [ ] `#cases` vertical scroll passes through on home
 - [ ] `/cases/:slug` opens modal; close → `/#cases`
 - [ ] Request Pilot only on `#pilot` + `/contact`
-- [ ] Desktop ≥900px: Everest canvas on first paint; no `tv.glb` in Network until OEM/CTV
-- [ ] Mobile: no WebGL hero
+- [ ] High-tier desktop: Everest canvas on first paint; no `tv.glb` until `/channels`
+- [ ] Lite / Windows Intel / mobile: JPEG sequence, both themes; toggle dark after light must not flash white frames
+- [ ] `#audience` Infrastructure: ghost % stay on the radial, not on copy
 - [ ] Deploy **upraiser-site-v2** · alias `upraiser.co.uk`
 - [ ] `package.json` lists three, R3F, router
 
@@ -885,6 +936,8 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 | --------------------- | -------------------------------------------------- |
 | Hero copy / stats     | `Hero.tsx`, `liveContent.ts`                       |
 | Hero 3D / camera / FX | `hero-terrain/*`, `Everest.tsx`                    |
+| Hero JPEG bake        | `/dev/hero-capture`, `scripts/capture-home-dark.js`, `scripts/encode-frames.sh` |
+| Lite / Windows hero   | `HeroVideoFallback.tsx`, `useHardwareTier.ts`      |
 | Nav / footer IA       | `liveContent.ts` `navLinks`, `footerLinks`         |
 | Routes / formats      | `ProgrammaticFormats.ts`, `ProgrammaticScrollSection.tsx` |
 | Preload / hero boot   | `lib/scrollPreload.ts`, `lib/heroBoot.ts`, `HeroAtmosphere.tsx` |
@@ -911,12 +964,16 @@ GitHub auto-deploy **не** канон — прод идёт с локально
 
 | Surface | Mac | Windows |
 | --- | --- | --- |
+| Hero | Live WebGL if discrete GPU | **JPEG sequence** if Intel / integrated (`useHardwareTier` lite). Same fly, baked frames. `?lite=1` to force. |
 | Body copy | `-webkit-font-smoothing: antialiased` | ClearType (`smoothing: auto`); real Inter 400 — no fake-light |
 | Case modal `.copy` | 76% `--theme-fg` + glass panel | 90% fg + solid `--theme-bg-elevated`, **no** `backdrop-filter` |
 | Parity water | 3px CSS mask scanlines + `mix-blend: screen` | 8px overlay scan; caustics **alpha** canvas; `mix-blend: normal` |
 | Client logos | grayscale | same, plus invert on `ink: "black"` (OKX, TikTok, Liobank, Bybit) |
+| Theme toggle | `useLayoutEffect` applyTheme | same — do not leave `data-theme` a frame behind React |
 
 Contact `/contact` is a **viewport-route**: `html.viewport-route { overflow: hidden }`. Do not nest another `min-h-[100dvh]` inside the padded frame.
+
+Lite player must not mix folders: after Growth → Infrastructure, in-flight light JPEGs used to paint white paper into the dark cache. Fix is generation-scoped `onload` in `HeroVideoFallback`.
 
 Do **not** globally invert `.partner-logo` — filled app icons become white rounded squares.
 
@@ -942,32 +999,29 @@ Trust **`src/App.tsx` + `navLinks`**, not comments in `innerPagesData.ts` (they 
 - **`/channels`:** `ProgrammaticScrollSection` (Phone3D / Tablet3D / Tv3D). Not in header — reach it from the home CTA.
 - **Header:** The Agency + Creative Studio only.
 - **Home loading:** no `LazySection` / `heroOk` on Audience / Process / Cases / Promise. Single `React.Suspense` per fold.
+- **Hero split:** high-tier = live R3F. Lite (mobile, Intel, `?lite=1`) = JPEG sequence. Dark frames include Voyager. Light frames recaptured 7 Sep evening (settle 1400 ms, qscale 2).
 
-### Git / disk (7 Sep 2026 evening)
+### Git / disk (7 Sep 2026 late evening)
 
-- **Committed HEAD:** `12a623e` — `main` **in sync** with `origin/main`. Last commit: Lenovo Trust Strip width + drop `text-balance`.
-- **Uncommitted (do not commit unless owner asks):**
-  - `src/components/Audience.tsx` — chart `mt-20 sm:mt-10` (spacing)
-  - `src/components/PromiseSection.tsx` — description `mt-4`
-  - deleted `scratch/frames/*.png` and `scratch/frames2/*.png`
-  - untracked screenshots/scripts: `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`, `test-modal-scroll.mjs`, `test-oem-mobile.mjs`
-- This MASTER rewrite may also be **uncommitted**. Antigravity on the same folder already sees disk.
+- **This commit** ships light home JPEG recapture, lite theme-flash lock, PROOF ghost clip, MASTER sync, Audience/Promise spacing. Parent dark bake: `37988f9`.
+- After push + `npm run deploy`: prod alias **https://upraiser.co.uk**.
+- **Leave untracked:** `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`, `test-modal-scroll.mjs`, `test-oem-mobile.mjs`.
 
 ### Everest (light) — leave / continue here
 
 Light path uses `everest-light.glb` + AmbientCG **Snow005** (`src/lib/heroModel.ts` → `/hero/snow005/…`). Shader: `snowSparkle.ts` (`everest-snow-poly-v25` when maps bind). `SnowSplatBinder` must stay a **child** of the mesh — putting the mesh inside `Suspense fallback={null}` hides the mountain while textures load.
 
-Scene graph (`Scene.tsx`): keep **both** `StudioRimLight` and `MistSheets` imports. Light also has `SeaOfClouds`. There is a leftover `console.log("FirstFrameGate mounted!")` — safe to delete.
+Scene graph (`Scene.tsx`): keep **both** `StudioRimLight` and `MistSheets` imports. `SeaOfClouds` is a stub (`return null`). There is a leftover `console.log("FirstFrameGate mounted!")` and `console.log("Everest rendering!")` — safe to delete.
 
-**Do not:** EffectComposer / N8AO / Bloom / GSAP ScrollTrigger on hero / `transparent: true` on the four GLB chunks / second Everest canvas / resurrect `macbook.glb` on Routes.
+**Do not:** EffectComposer / N8AO / Bloom / GSAP ScrollTrigger on hero / `transparent: true` on the four GLB chunks / second Everest canvas / resurrect `macbook.glb` on Routes / force Windows onto live WebGL.
 
-Open visual debt: **right steep face UV smear** on scroll (grazing + mips). Next 3D pass = stronger world-space triplanar / `steepRockMask`, without covering the mesh again.
+Open visual debt: **right steep face UV smear** on scroll (grazing + mips). Next 3D pass = stronger world-space triplanar / `steepRockMask`, without covering the mesh again. Light JPEG haze/halo is **on purpose** (Growth fog + `AscentHalo`).
 
 ### Do first in a new session
 
-1. `git log -1 --oneline` — expect `12a623e` (or later). `git status` for Audience/Promise WIP.
+1. `git log -1 --oneline` — light JPEG recapture commit (parent `37988f9`). Working tree should be clean except leftover test pngs/mjs.
 2. `npm run dev` → `http://localhost:5173/`
-3. Desktop light: mountain on first paint; home Network — **no** `tv.glb` / `tablet.glb` until `/channels`.
+3. Desktop **high-tier** light: live mountain on first paint. Desktop **lite** / `?lite=1`: JPEG sequence, both themes, no white flashes after toggle.
 4. Header = Agency + Craft. `/channels` reachable from `#routes` CTA. About is on home, not `/company`.
 5. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`.
 
@@ -983,12 +1037,13 @@ Parked / in-flight:
 6. Analytics / cookie banner — parked until owner + privacy update
 7. `public/sitemap.xml` still listed `/expedition` (404) — replace with `/` + `/channels` if owner wants SEO truth
 8. Footer label «The Basecamp» vs header «The Agency» — copy drift, not a bug until asked
+9. `DESKTOP_HERO_QUERY = "(min-width: 0px)"` — documented, do not silently revert to 900px
 
 Do **not** start a new “load-speed refactor spec folder”. Keep notes in this file.
 
 ### Sacred (do not break)
 
-Everest **one** canvas · Routes still→MP4 glass on `/channels` · dual theme Growth ↔ Infrastructure · Inter · white light paper · Request Pilot only on `#pilot` + `/contact` · Framer `type: "spring"` · `.cursorrules` hover/dvh/44px · H1 *We see how stunning / Your rise to the top / can be.*
+Everest **one** canvas · Routes still→MP4 glass on `/channels` · dual theme Growth ↔ Infrastructure · Inter · white light paper · Request Pilot only on `#pilot` + `/contact` · Framer `type: "spring"` · `.cursorrules` hover/dvh/44px · H1 *We see how stunning / Your rise to the top / can be.* · Windows lite stays JPEG.
 
 ### Deploy if the owner asks
 
@@ -1061,7 +1116,13 @@ Status as of 7 Sep 2026. Conversion items that would put **Request Pilot** in th
 
 ### 7 Sep 2026 evening — handoff after Antigravity / Cursor
 
-MASTER header / §5 / §6 / §8 / §10 / §25 synced to disk. Git HEAD `12a623e` matches origin. Uncommitted spacing in Audience + Promise. Everest light snow/mist still in code; right-face UV smear on fly is the open 3D ticket. `sitemap.xml` still advertises `/expedition`.
+MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
+
+- Dark home JPEG recapture with Voyager; idle-preload 150 frames. Commit **`37988f9`**, pushed, deployed to **upraiser.co.uk**.
+- Lite player mixed light JPEGs into dark after theme toggle → generation-scoped loads + hide 3D until `drawnTheme` matches.
+- Light home JPEG recapture (desktop + mobile), settle 1400 ms, qscale 2.
+- PROOF (`#audience`) ghost numbers no longer overlap left copy on desktop dark.
+- This ritual commits the light bake + flash/ghosts + MASTER. Everest light UV smear still the open 3D ticket. `sitemap.xml` still advertises `/expedition`.
 
 ---
 

@@ -83,7 +83,7 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
               .
             </motion.span>
           </p>
-          <motion.p className="section-description relative z-[2] mt-10 mb-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
+          <motion.p className="section-description relative z-[2] mt-4 mb-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
             {formatEventNames(content.description)}
           </motion.p>
         </>
