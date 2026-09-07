@@ -156,7 +156,7 @@ export function CasePreviewCard({
           {item.headline}
         </p>
 
-        <p className="mt-2.5 text-[0.78rem] leading-relaxed text-muted-light line-clamp-2">
+        <p className="mt-2.5 text-[0.78rem] leading-relaxed text-fg line-clamp-2">
           {item.growthFocus.approach}
         </p>
 

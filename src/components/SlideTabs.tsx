@@ -37,8 +37,8 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
         const active = item.id === activeId;
 
         const labelClasses = cn(
-          "relative z-10 inline-flex h-6 shrink-0 items-center justify-center",
-          "whitespace-nowrap px-3 text-[11px] font-bold tracking-wide uppercase",
+          "relative z-10 flex shrink-0 items-center justify-center",
+          "whitespace-nowrap px-4 py-1.5 text-[11px] font-bold tracking-wide uppercase",
           "touch-action-manipulation select-none transition-colors",
           active ? "text-on-accent" : "text-fg-muted",
         );
@@ -59,7 +59,7 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
 
         if (item.href) {
           return (
-            <div key={item.id} className="relative">
+            <div key={item.id} className="relative flex">
               {pill}
               <a href={item.href} className={labelClasses}>
                 {item.label}
@@ -69,7 +69,7 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
         }
 
         return (
-          <div key={item.id} className="relative">
+          <div key={item.id} className="relative flex">
             {pill}
             <motion.button
               type="button"
