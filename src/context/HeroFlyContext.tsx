@@ -111,7 +111,7 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
     // Publish in the same turn as Lenis scroll notify — no deferred rAF lag vs R3F.
     const unsubscribe = registerScrollListener(publish);
 
-    publish(window.scrollY);
+    publish();
 
     return () => {
       unsubscribe();
