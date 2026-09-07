@@ -492,11 +492,12 @@
 }
 
 .format-lane-tabs {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
-.format-lane-tabs .slide-tab,
-.format-lane-tabs .slide-tab span {
+.format-lane-tabs .slide-tabs,
+.format-lane-tabs .slide-tabs button,
+.format-lane-tabs .slide-tabs a {
   white-space: nowrap;
   flex-shrink: 0;
 }

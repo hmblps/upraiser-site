@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 31 August 2026  
+> **Updated:** 7 September 2026  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** `7484527` prod · local WIP — pre-launch checklist (meta, legal SPA, thank-you, favicons)  
+> **HEAD:** `12a623e` (`main` = `origin/main`) — Lenovo Trust Strip width; IA is Agency + Craft, formats on `/channels`  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 
@@ -38,6 +38,7 @@
 24. [Cross-platform prompt](#24-cross-platform-prompt)
 25. [Antigravity handoff](#25-antigravity-handoff)
 26. [Pre-launch checklist](#26-pre-launch-checklist)
+27. [Recent Session Logs (September 2026)](#27-recent-session-logs-september-2026)
 
 ---
 
@@ -138,35 +139,38 @@ UPRAISER = **expedition brand**: poetic ascent (Zero-like atmosphere) + operator
 ### Live routes
 
 
-| Route / anchor        | Label              | Role                                    |
-| --------------------- | ------------------ | --------------------------------------- |
-| `/`                   | **The Basecamp**   | Полный pitch                            |
-| `/#routes`            | **The Routes**     | Sticky phone + format lanes             |
-| `/#cases`             | **The Peaks**      | Full carousel + modals                  |
-| `/#pilot`             | —                  | Request Pilot (после dual-story unlock) |
-| `/craft`              | **The Craft**      | Under construction stub                 |
-| `/company`            | **The Expedition** | Ascent camps · FAQ · Brand Aurora       |
-| `/contact`            | **Request Pilot**  | Contact form                            |
-| `/cases/:slug`        | —                  | Deep-link modal на home                 |
-| `/privacy` · `/terms` | Legal              | Legal                                   |
+| Route / anchor        | Label                | Role                                                          |
+| --------------------- | -------------------- | ------------------------------------------------------------- |
+| `/`                   | **The Agency**       | Полный pitch (hero + folds + AboutUs + pilot)                 |
+| `/#routes`            | **The Routes** (CTA) | CSS `ChannelsCtaSection` → `/channels` (не 3D formats)        |
+| `/#cases`             | **The Peaks**        | Full carousel + modals                                        |
+| `/#pilot`             | —                    | Request Pilot (после dual-story unlock)                       |
+| `/channels`           | — (не в header)      | 3D `ProgrammaticScrollSection` · Phone/Tablet/TV              |
+| `/craft`              | **Creative Studio**  | Under construction stub (`noindex`)                           |
+| `/contact`            | **Request Pilot**    | Contact form                                                  |
+| `/contact/sent`       | —                    | Thank-you after Web3Forms                                     |
+| `/cases/:slug`        | —                    | Deep-link modal на home                                       |
+| `/privacy` · `/terms` | Legal                | Legal                                                         |
+| `/dev/hero-capture`   | DEV only             | Everest frame capture                                         |
 
+**Нет живых страниц** `/expedition`, `/company`, `/solutions`. Footer всё ещё пишет «The Basecamp» на `/` — label отстаёт от header.
 
 ### Legacy redirects (SEO — не удалять)
 
 
-| From                                             | To                 |
-| ------------------------------------------------ | ------------------ |
-| `/solutions`, `/studio`, `/clarity`, `/partners` | `/#routes`         |
-| `/cases`, `/clients`                             | `/#cases`          |
-| `/expertise`                                     | chain → `/#routes` |
-| `/about`, `/how-we-work`, `/resources*`          | `/company`         |
-| `/rigging`                                       | `/craft`           |
+| From                                             | To                         |
+| ------------------------------------------------ | -------------------------- |
+| `/solutions`, `/studio`, `/clarity`, `/partners` | `/#routes` (home CTA fold) |
+| `/cases`, `/clients`                             | `/#cases`                  |
+| `/expertise`                                     | chain → `/#routes`         |
+| `/about`, `/how-we-work`, `/resources*`, `/company` | `/`                     |
+| `/rigging`                                       | `/craft`                   |
 
 
 ### User flows
 
-- **Advertiser:** `/` → scroll Routes + Peaks → `#pilot` → `/contact`
-- **Expedition:** `/` → `/company` → `/#pilot`
+- **Advertiser:** `/` → `#routes` CTA → `/channels` (formats) → back `#cases` → `#pilot` → `/contact`
+- **About / Expedition:** `/` → `AboutUsSection` (перед `#pilot`) — отдельной страницы нет
 - **Case proof:** `/` → `#cases` → card → `/cases/:slug` modal → close → `/#cases`
 - **Craft (future):** `/craft` (stub) → `/`
 
@@ -174,20 +178,22 @@ UPRAISER = **expedition brand**: poetic ascent (Zero-like atmosphere) + operator
 
 ## 6. Home — порядок секций
 
-`HomePage.tsx`:
+`HomePage.tsx` (live, Sept 2026):
 
 ```
-#hero (3D fly, eager)
-→ PartnersCarousel          LazySection gate=hero
-→ #audience                 LazySection warm=mid gate=hero
-→ #process                  LazySection warm=mid gate=hero
-→ #routes                   ProgrammaticScrollSection · warm=routes gate=hero
-→ #cases                    CaseStudies · warm=cases
-→ #promise                  killer fold · warm=promise gate=hero
+#hero (3D fly, eager desktop)
+→ PartnersCarousel          React.Suspense
+→ #audience                 Audience
+→ #process                  Process
+→ #routes                   ChannelsCtaSection (CSS glass cards → /channels)
+→ #cases                    CaseStudies
+→ Outlet                    case modal /cases/:slug
+→ #promise                  PromiseSection
+→ AboutUsSection            Expedition / about (не отдельный роут)
 → #pilot                    HomePilotCta
 ```
 
-`LazySection` is two-phase IntersectionObserver (warm ~90% viewport, show ~30%). `gate="hero"` waits for `markHeroReady()` so Routes 3D cannot steal the first paint.
+`LazySection` / `heroOk` **сняты** с home: 3D formats живут на `/channels`, folds монтируются сразу. `scrollPreload.ts` всё ещё греет Routes JS, но home его больше не ждёт через gate.
 
 Killer folds (Audience / Promise) — **только на home**.
 
@@ -224,16 +230,16 @@ Mode-aware bodies: `**ModeContentTransition**`.
 | File | Role |
 | --- | --- |
 | `Header.tsx` | Fixed bar · `HeaderIsland` left · logo right |
-| `HeaderIsland.tsx` | Craft · Basecamp · Expedition + locale + theme tumbler |
+| `HeaderIsland.tsx` | `navLinks` + locale + theme tumbler |
 | `rails.css` | Grid `1fr \| auto \| 1fr` |
 
-**Nav:** The Craft · The Basecamp · The Expedition.  
-Справа в острове: locale + theme. **Нет** hamburger · **нет** Request Pilot. `HeaderNav.tsx` / `ThemeToggle.tsx` удалены.
+**Nav (live `navLinks`):** The Agency (`/`) · Creative Studio (`/craft`, `underConstruction`, hidden on small screens).  
+**Нет** Channels / Expedition / Basecamp в header. Справа в острове: locale + theme. **Нет** hamburger · **нет** Request Pilot. `HeaderNav.tsx` / `ThemeToggle.tsx` удалены.
 
 ### Footer explore
 
-The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft · The Expedition.  
-**Нет** Request Pilot в footer.
+The Basecamp (`/`) · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft (`/craft`).  
+Company: только Careers inquiry → `/contact`. **Нет** Expedition. **Нет** Request Pilot в footer.
 
 ### Request Pilot — где живёт
 
@@ -242,7 +248,7 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 | ------------------------------------------- | ------------------------ |
 | `#pilot` на home (`HomePilotCta`)           | ✅ после unlock обеих тем |
 | `/contact`                                  | ✅ форма                  |
-| Company CTA → `/#pilot`                     | ✅                        |
+| AboutUs on home → `/#pilot`                 | ✅                        |
 | Header / footer / Cases chrome / case modal | ❌ убрано (Aug 14 IA)     |
 
 
@@ -309,15 +315,16 @@ The Basecamp · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft ·
 ## 10. The Routes — Every Format. One Supply Path. (`#routes`)
 
 **Headline:** *Every Format. One Supply Path.*  
-**Anchor:** `/#routes` · **Label in nav/footer:** *The Routes*  
-**Primary:** `ProgrammaticScrollSection` lazy on `HomePage` behind `LazySection gate="hero"`.  
+**Home anchor:** `/#routes` = CSS `ChannelsCtaSection` → Link `/channels`.  
+**Formats 3D (live):** `/channels` · `ChannelsPage` · `ProgrammaticScrollSection` (desktop WebGL + mobile sticky phone).  
+**Не** монтировать `ProgrammaticScrollSection` на home — это снимает гонку с Everest.  
 **Legacy:** `/solutions` → `/#routes` (`App.tsx`). `HomeRoutesSection.tsx` **deleted**.  
 **Copy SOT:** `src/components/solutions/ProgrammaticFormats.ts`  
 **Wiring SOT:** `src/components/solutions/ProgrammaticScrollSection.tsx`
 
 ### Purpose
 
-The Routes is the central **product proof** section of the Basecamp. Its job: show every ad format UPRAISER buys with an interactive 3D device mockup + live copy, so an advertiser sees exactly what they're buying and how it's measured — without a PDF or a sales call.
+The Routes is the central **product proof** of the Agency pitch. Live 3D lives on `/channels`; home `#routes` is the CSS CTA into that page. Job: show every ad format UPRAISER buys with an interactive 3D device mockup + live copy, so an advertiser sees exactly what they're buying and how it's measured — without a PDF or a sales call.
 
 **Tone:** Operator proof. Not a feature list. Each format has a tagline, one-sentence operator description, and three infrastructure-grade bullet points (measurement trail, fraud screen, reconciliation file).
 
@@ -330,7 +337,7 @@ The Routes is the central **product proof** section of the Basecamp. Its job: sh
 
 Native scroll (`useFormatScrollSection`) drives the active format index.  
 Desktop: `DeviceCarousel3` — spatial 3-device slide carousel (Phone · Tablet · TV).  
-Mobile: stacked cards + `CssPhone` + live HTML feed.
+Mobile (Sept 7): **sticky sidebar** — large phone locked under the header (~35–40%) + scrolling format cards (~60–65%). The old bottom dock is gone.
 
 Switching lanes slides the device carousel and cross-fades format copy with a **horizontal** slide animation matching the carousel direction.
 
@@ -475,15 +482,16 @@ Style: Dynamic Island — `bg-bg-elevated/70 backdrop-blur-xl rounded-full borde
 Pill (`motion.span layoutId`) is a **sibling** of the button (not a child) — prevents `inline-flex` baseline from nudging position.  
 Spring: `{ type: "spring", bounce: 0.15, duration: 0.5 }`.
 
-**Pinned absolutely** — rendered outside `FormatCopy` / `AnimatePresence` in `.prog-scroll-copy-col`:
+Lives in `.prog-scroll-copy-stack` (copy column, not the phone grid). Island is `inline-flex` + `w-max` / `shrink-0` so labels never compress. Live tumbler is **relative** in-flow (`flex-shrink: 0`), not absolute:
 ```css
 .prog-scroll-copy-tumbler {
-  position: absolute;
-  top: clamp(4rem, calc(50% - 12rem), 11rem);
-  left: 0.25rem;
+  position: relative;
+  flex-shrink: 0;
+  z-index: 2;
+  line-height: 0;
 }
 ```
-Never shifts when format text height changes.
+Widening the island cannot shift the device column. Format copy sits below it.
 
 ---
 
@@ -500,7 +508,7 @@ Promoted on `readyState >= HAVE_CURRENT_DATA`. No Suspense remount (white flash)
 
 ### Mobile (`ProgrammaticScrollSectionMobile.tsx`)
 
-Trigger: `< 1024px` or `prefers-reduced-motion`. No WebGL — `CssPhone` + live HTML feed. Stacked format cards. Lane switcher in fixed bottom dock (`.prog-mobile-sticky`). No sticky scroll runway; native scroll.
+Trigger: `< 1024px` or `prefers-reduced-motion`. No WebGL — large sticky CSS phone (~35–40% left, locked under header) + scrolling format cards (~60–65% right). Native scroll drives the active format. The old `.prog-mobile-sticky` bottom dock is gone.
 
 ---
 
@@ -552,7 +560,7 @@ Trigger: `< 1024px` or `prefers-reduced-motion`. No WebGL — `CssPhone` + live 
 - [ ] pre-install / oem-store / system-ui → Tablet visible
 - [ ] ctv-spot / ctv-video → TV visible, screen facing camera, no legs
 - [ ] Tumbler pill never jumps between format switches
-- [ ] Mobile: no WebGL, CSS phone visible, lane switcher in bottom dock
+- [ ] Mobile: sticky split phone + cards (`ProgrammaticScrollSectionMobile`); no tiny bottom dock
 - [ ] `npm run build` passes — no TS errors on MotionValue / unused imports
 
 ---
@@ -660,14 +668,16 @@ HeaderNav 3-link island; format sticky scroll; home cases `wheel: false`; contac
 src/
 ├── App.tsx                         ← routes (eager HomePage)
 ├── main.tsx                        ← preloadHeroTerrain
-├── pages/HomePage.tsx              ← pitch + LazySection gates
-├── pages/CraftPage.tsx · ContactPage.tsx · ExpeditionPage.tsx
+├── pages/HomePage.tsx              ← pitch · Suspense folds · ChannelsCta · AboutUs
+├── pages/ChannelsPage.tsx          ← 3D formats (off home)
+├── pages/CraftPage.tsx · ContactPage.tsx
 ├── components/
 │   ├── Header.tsx · HeaderIsland.tsx
 │   ├── Hero.tsx · HeroAtmosphere.tsx
 │   ├── hero-terrain/* · Everest.tsx
-│   ├── CaseStudies.tsx · HomePilotCta.tsx
-│   └── solutions/ProgrammaticScrollSection*.tsx
+│   ├── AboutUsSection.tsx · HomePilotCta.tsx
+│   ├── CaseStudies.tsx
+│   └── solutions/ChannelsCtaSection.tsx · ProgrammaticScrollSection*.tsx
 ├── lib/
 │   ├── heroBoot.ts · heroDesktop.ts · heroModel.ts
 │   └── scrollPreload.ts            ← warmStage / markHeroReady
@@ -922,56 +932,63 @@ Paste into Agent when writing or rewriting UI:
 
 ## 25. Antigravity handoff
 
-Open this repo in Antigravity on the same disk (`Downloads/НОВЫЙ САЙТ UPRAISER`). **Read this file first** — there is no second project md. Then §4 (brand), §9 (hero boot), §10 (Routes devices), §17 (deploy), §19 (sacred). Copy lives in `src/data/liveContent.ts`.
+Open this repo on the same disk (`Downloads/НОВЫЙ САЙТ UPRAISER`). **Read this file first** — other project `.md` files do not exist. Then §4 (brand), §5 (IA), §9 (hero), §10 (formats on `/channels`), §17 (deploy), §19 (sacred). Copy: `src/data/liveContent.ts`.
 
+Trust **`src/App.tsx` + `navLinks`**, not comments in `innerPagesData.ts` (they still list `/company`).
 
-### Sept 2026 Architecture Update
+### Live architecture (Sept 2026 — this is current)
 
-We completely removed the `/expedition` separate page to vastly improve WebGL performance and UX on the site.
-- **Home (The Agency)**: Still retains the heavy `HeroAtmosphere` (Everest 3D) at the top. The inline heavy `ProgrammaticScrollSection` was replaced with a lightweight CSS-only `ChannelsCtaSection` (featuring sleek glassmorphic device UI cards in CSS).
-- **The Expedition / About Us**: Moved directly onto the homepage right before the final CTA.
-- **The Channels (`/channels`)**: The heavy `ProgrammaticScrollSection` (with Phone3D, Tablet3D, Tv3D) was offloaded to a dedicated page to prevent WebGL context crashing on initial load. This page is accessed via the CTA on the homepage.
-- **Header Navigation**: Contains only "The Agency" (Home) and "Creative Studio" (`/craft`). "The Channels" is hidden from the header to drive user flow through the homepage storytelling.
-- **Performance & Lazy Loading**: We removed the `LazySection` wrappers from the homepage sections (`Audience`, `Process`, `CaseStudies`, `PromiseSection`). Since the heavy 3D canvases were moved off the homepage, these sections are now lightweight enough to be mounted immediately using a single top-level `<React.Suspense>`. This fixes intersection observer bugs and ensures scroll charts (like the SCALE chart) mount reliably without relying on the `heroOk` gate.
+- **Home = The Agency (`/`):** Everest hero stays. Formats 3D **removed** from home. `#routes` is CSS `ChannelsCtaSection` → `/channels`. About / Expedition is `AboutUsSection` on home, before `#pilot`. No `/expedition` route.
+- **`/channels`:** `ProgrammaticScrollSection` (Phone3D / Tablet3D / Tv3D). Not in header — reach it from the home CTA.
+- **Header:** The Agency + Creative Studio only.
+- **Home loading:** no `LazySection` / `heroOk` on Audience / Process / Cases / Promise. Single `React.Suspense` per fold.
 
+### Git / disk (7 Sep 2026 evening)
 
-### Where we left off (28 Aug 2026 evening)
+- **Committed HEAD:** `12a623e` — `main` **in sync** with `origin/main`. Last commit: Lenovo Trust Strip width + drop `text-balance`.
+- **Uncommitted (do not commit unless owner asks):**
+  - `src/components/Audience.tsx` — chart `mt-20 sm:mt-10` (spacing)
+  - `src/components/PromiseSection.tsx` — description `mt-4`
+  - deleted `scratch/frames/*.png` and `scratch/frames2/*.png`
+  - untracked screenshots/scripts: `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`, `test-modal-scroll.mjs`, `test-oem-mobile.mjs`
+- This MASTER rewrite may also be **uncommitted**. Antigravity on the same folder already sees disk.
 
-Production HEAD **`7484527`** is aliased to [https://upraiser.co.uk](https://upraiser.co.uk). Mountains were slow because Routes mounted **three** WebGL canvases + `tv.glb` on first Home paint. That race is closed:
+### Everest (light) — leave / continue here
 
-- Desktop ≥900px: eager Everest canvas, no posters, no veil.
-- `scrollPreload.ts` + `LazySection gate="hero"`: Routes JS/GLB wait for `markHeroReady`.
-- `DeviceCarousel3` mounts **one** device canvas (plus ~720ms outgoing during the spring).
-- Dark `everest.glb` planet curve is **baked**; do not re-Draco without `npm run bake:everest-curve`.
-- `tv.glb` is 8.7 MB Draco. Source: gitignored `assets/channels/oem/tv.src.glb`.
+Light path uses `everest-light.glb` + AmbientCG **Snow005** (`src/lib/heroModel.ts` → `/hero/snow005/…`). Shader: `snowSparkle.ts` (`everest-snow-poly-v25` when maps bind). `SnowSplatBinder` must stay a **child** of the mesh — putting the mesh inside `Suspense fallback={null}` hides the mountain while textures load.
 
-Boot Network should show **one** canvas and `everest.glb` only. At Routes Banner: phone canvas, no `tv.glb` until CTV.
+Scene graph (`Scene.tsx`): keep **both** `StudioRimLight` and `MistSheets` imports. Light also has `SeaOfClouds`. There is a leftover `console.log("FirstFrameGate mounted!")` — safe to delete.
 
-This MASTER update may be **uncommitted**. Commit/push only if the owner asks — Antigravity on the same folder already sees disk.
+**Do not:** EffectComposer / N8AO / Bloom / GSAP ScrollTrigger on hero / `transparent: true` on the four GLB chunks / second Everest canvas / resurrect `macbook.glb` on Routes.
+
+Open visual debt: **right steep face UV smear** on scroll (grazing + mips). Next 3D pass = stronger world-space triplanar / `steepRockMask`, without covering the mesh again.
 
 ### Do first in a new session
 
-1. `git log -1 --oneline` — expect `7484527` on prod; local may have extra MASTER edits.
+1. `git log -1 --oneline` — expect `12a623e` (or later). `git status` for Audience/Promise WIP.
 2. `npm run dev` → `http://localhost:5173/`
-3. Desktop dark: mountain on first paint; DevTools Network — no `tv.glb` / `tablet.glb` until you scroll OEM/CTV.
-4. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`.
+3. Desktop light: mountain on first paint; home Network — **no** `tv.glb` / `tablet.glb` until `/channels`.
+4. Header = Agency + Craft. `/channels` reachable from `#routes` CTA. About is on home, not `/company`.
+5. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`.
 
 ### Next work (needs owner yes)
 
-Parked, not started:
+Parked / in-flight:
 
-1. OEM / CTV **live screen videos** (TimesST is local-only `public/timesst.mp4`)
-2. Merge three Routes canvases into one (quality risk)
-3. FAQ height / case modal `layoutId` keyboard
+1. Everest light: kill right-face UV stretch on the 300vh fly
+2. OEM / CTV **live screen videos** (TimesST is local-only `public/timesst.mp4`)
+3. Merge three Routes canvases into one (quality risk)
 4. Recompress `everest-light.glb` (~11 MB) — **do not** bake the light curve
-5. Dual phone GLB fetch on Routes (`MODEL_LIGHT` preload + infra chassis) — observed, not asked
-6. InMobi-adjacent Playable/Carousel tiles — parked §18
+5. Dual phone GLB fetch on `/channels` — observed, not asked
+6. Analytics / cookie banner — parked until owner + privacy update
+7. `public/sitemap.xml` still listed `/expedition` (404) — replace with `/` + `/channels` if owner wants SEO truth
+8. Footer label «The Basecamp» vs header «The Agency» — copy drift, not a bug until asked
 
 Do **not** start a new “load-speed refactor spec folder”. Keep notes in this file.
 
 ### Sacred (do not break)
 
-Everest **one** canvas · Routes still→MP4 glass · dual theme Growth ↔ Infrastructure · Inter · white light paper · Request Pilot only on `#pilot` + `/contact` · Framer `type: "spring"` · `.cursorrules` hover/dvh/44px.
+Everest **one** canvas · Routes still→MP4 glass on `/channels` · dual theme Growth ↔ Infrastructure · Inter · white light paper · Request Pilot only on `#pilot` + `/contact` · Framer `type: "spring"` · `.cursorrules` hover/dvh/44px · H1 *We see how stunning / Your rise to the top / can be.*
 
 ### Deploy if the owner asks
 
@@ -981,7 +998,7 @@ rsync backup → commit **site only** → `git push origin HEAD` → `npm run de
 
 ## 26. Pre-launch checklist
 
-Status as of 31 Aug 2026. Conversion items that would put **Request Pilot** in the hero or a sticky mobile bar are **not** shipped — sacred §8 / §19.
+Status as of 7 Sep 2026. Conversion items that would put **Request Pilot** in the hero or a sticky mobile bar are **not** shipped — sacred §8 / §19.
 
 | # | Item | Status |
 | --- | --- | --- |
@@ -992,11 +1009,11 @@ Status as of 31 Aug 2026. Conversion items that would put **Request Pilot** in t
 | 5 | Open Graph image | **Done** — `/og-image.png` 1200×630. Was missing locally; restored from git into `assets/brand/` + `public/`. |
 | 6 | Favicon set | **Done** — ico, 16, 32, 180 apple, 192, `site.webmanifest` |
 | 7 | robots.txt | **Done** — Allow `/`, Disallow `/contact/sent`, Sitemap |
-| 8 | sitemap.xml | **Done** — `/`, `/expedition`, `/contact`, `/privacy`, `/terms`. Craft stub is `noindex` (not listed). |
+| 8 | sitemap.xml | **Stale** — file still lists `/expedition` (no route). Live URLs: `/`, `/channels`, `/contact`, `/privacy`, `/terms`. Craft stub is `noindex`. |
 | 9 | Alt text | **Done** — named logos have alt; in-ad mockups use empty alt (decorative). Header mark is decorative (`aria-label` on the link). |
 | 10 | Mobile breakpoints | **Done** — existing `900px` hero / Routes mobile stack / 44px targets |
 | 11 | Sticky mobile CTA | **Intentional skip** — would put Request Pilot on every scroll. Mobile Routes already has a format dock. |
-| 12 | Loading states | **Partial** — contact `Transmitting…`, route `sr-only` Loading, LazySection slots. No skeleton zoo on home (would race Everest). |
+| 12 | Loading states | **Partial** — contact `Transmitting…`, route `sr-only` Loading. Home folds use `React.Suspense` slots, not LazySection. |
 | 13 | Form errors | **Done** — field `aria-invalid` + captions; submit alert; file-size error (no `alert()`). |
 | 14 | Thank-you page | **Done** — `/contact/sent` after Web3Forms success |
 | 15 | Privacy Policy | **Done** — full UK GDPR notice at `/privacy` (SPA wraps `public/privacy/index.html`) |
@@ -1008,7 +1025,6 @@ Status as of 31 Aug 2026. Conversion items that would put **Request Pilot** in t
 
 ---
 
-*End of master document. При изменении IA, hero, Routes glass, Windows quirks, preload или deploy — обновляй **этот** файл. Других проектных md нет.*
 ## 27. Recent Session Logs (September 2026)
 
 ### Sept 6 2026 Updates
@@ -1042,3 +1058,11 @@ Status as of 31 Aug 2026. Conversion items that would put **Request Pilot** in t
 - **Mobile Parallax Charts (`Audience.tsx`, `PromiseSection.tsx`):**
   - Added `y: useTransform(scrollYProgress, [0, 0.4], [100, 0])` to the chart containers on mobile (`AudienceStatic` and `PromiseClean`).
   - Mobile charts now physically slide up into view and lower on reverse scroll, matching the desktop's fluid interaction instead of just animating in place.
+
+### 7 Sep 2026 evening — handoff after Antigravity / Cursor
+
+MASTER header / §5 / §6 / §8 / §10 / §25 synced to disk. Git HEAD `12a623e` matches origin. Uncommitted spacing in Audience + Promise. Everest light snow/mist still in code; right-face UV smear on fly is the open 3D ticket. `sitemap.xml` still advertises `/expedition`.
+
+---
+
+*End of master document. При изменении IA, hero, Routes glass, Windows quirks, preload или deploy — обновляй **этот** файл. Других проектных md нет.*

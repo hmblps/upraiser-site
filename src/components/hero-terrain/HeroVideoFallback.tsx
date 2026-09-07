@@ -4,47 +4,97 @@ import { useTheme } from "../../context/ThemeContext";
 
 type ImageCache = Record<number, HTMLImageElement>;
 
+const FRAME_COUNT = 150;
+const LOOKAHEAD = 40;
+const IDLE_CONCURRENCY = 8;
+
+function frameUrl(folder: string, index: number) {
+  const padded = (index + 1).toString().padStart(4, "0");
+  return `/hero/frames/${folder}/frame_${padded}.jpg?v=8`;
+}
+
 export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "expedition" }) {
   const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { registerScrollListener } = useScroll();
   const stageRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number>(0);
+  const lastDrawnRef = useRef<HTMLImageElement | null>(null);
+  const idleQueueRef = useRef(0);
 
   const [isMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth <= 899 : false
+    typeof window !== "undefined" ? window.innerWidth <= 899 : false,
   );
 
   const shotFolder = isMobile ? `${variant}-mobile-${theme}` : `${variant}-${theme}`;
-  
+
   const imageCache = useRef<ImageCache>({});
   const loading = useRef<Set<number>>(new Set());
-  const errorCount = useRef(0);
 
   const getFrame = (index: number): HTMLImageElement | null => {
     if (imageCache.current[index]) return imageCache.current[index];
-    
-    if (!loading.current.has(index)) {
-      loading.current.add(index);
-      const img = new Image();
-      const padded = (index + 1).toString().padStart(4, "0");
-      img.src = `/hero/frames/${shotFolder}/frame_${padded}.jpg?v=7`;
-      img.onload = () => {
-        imageCache.current[index] = img;
-        loading.current.delete(index);
-      };
-      img.onerror = () => {
-        loading.current.delete(index);
-        errorCount.current++;
+    if (index < 0 || index >= FRAME_COUNT) return null;
+    if (loading.current.has(index)) return null;
+
+    loading.current.add(index);
+    const img = new Image();
+    img.decoding = "async";
+    img.src = frameUrl(shotFolder, index);
+    const commit = () => {
+      imageCache.current[index] = img;
+      loading.current.delete(index);
+    };
+    img.onload = () => {
+      if (typeof img.decode === "function") {
+        void img.decode().then(commit).catch(commit);
+      } else {
+        commit();
       }
-    }
+    };
+    img.onerror = () => {
+      loading.current.delete(index);
+    };
     return null;
   };
 
-  const preloadFrames = (currentIndex: number) => {
-    for (let i = Math.max(0, currentIndex - 5); i <= Math.min(149, currentIndex + 20); i++) {
-      getFrame(i);
-    }
+  const preloadWindow = (currentIndex: number) => {
+    const from = Math.max(0, currentIndex - 8);
+    const to = Math.min(FRAME_COUNT - 1, currentIndex + LOOKAHEAD);
+    for (let i = from; i <= to; i++) getFrame(i);
+  };
+
+  const fillRemainingIdle = () => {
+    let inflight = 0;
+    const kick = () => {
+      while (inflight < IDLE_CONCURRENCY && idleQueueRef.current < FRAME_COUNT) {
+        const i = idleQueueRef.current;
+        idleQueueRef.current += 1;
+        if (imageCache.current[i] || loading.current.has(i)) continue;
+        inflight += 1;
+        loading.current.add(i);
+        const img = new Image();
+        img.decoding = "async";
+        img.src = frameUrl(shotFolder, i);
+        const done = () => {
+          inflight -= 1;
+          loading.current.delete(i);
+          kick();
+        };
+        img.onload = () => {
+          const commit = () => {
+            imageCache.current[i] = img;
+            done();
+          };
+          if (typeof img.decode === "function") {
+            void img.decode().then(commit).catch(commit);
+          } else {
+            commit();
+          }
+        };
+        img.onerror = done;
+      }
+    };
+    kick();
   };
 
   const drawFrame = (targetIndex: number) => {
@@ -53,33 +103,19 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    let imgToDraw = imageCache.current[targetIndex];
-    
-    if (!imgToDraw) {
-      let offset = 1;
-      while (offset < 150) {
-        if (targetIndex - offset >= 0 && imageCache.current[targetIndex - offset]) {
-          imgToDraw = imageCache.current[targetIndex - offset];
-          break;
-        }
-        if (targetIndex + offset < 150 && imageCache.current[targetIndex + offset]) {
-          imgToDraw = imageCache.current[targetIndex + offset];
-          break;
-        }
-        offset++;
-      }
-    }
+    const imgToDraw = imageCache.current[targetIndex] ?? lastDrawnRef.current;
+    if (!imgToDraw) return;
 
-    if (imgToDraw) {
-      ctx.drawImage(imgToDraw, 0, 0, canvas.width, canvas.height);
-    }
+    lastDrawnRef.current = imgToDraw;
+    ctx.drawImage(imgToDraw, 0, 0, canvas.width, canvas.height);
   };
 
   useEffect(() => {
     imageCache.current = {};
     loading.current.clear();
-    errorCount.current = 0;
-    
+    lastDrawnRef.current = null;
+    idleQueueRef.current = 0;
+
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.width = isMobile ? 540 : 1280;
@@ -92,15 +128,25 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     }
 
     const first = new Image();
-    first.src = `/hero/frames/${shotFolder}/frame_0001.jpg?v=7`;
+    first.decoding = "async";
+    first.src = frameUrl(shotFolder, 0);
     first.onload = () => {
-      imageCache.current[0] = first;
-      drawFrame(0);
-      preloadFrames(0);
+      const show = () => {
+        imageCache.current[0] = first;
+        lastDrawnRef.current = first;
+        drawFrame(0);
+        preloadWindow(0);
+        fillRemainingIdle();
+      };
+      if (typeof first.decode === "function") {
+        void first.decode().then(show).catch(show);
+      } else {
+        show();
+      }
     };
     first.onerror = () => {
-      errorCount.current++;
-      preloadFrames(0);
+      preloadWindow(0);
+      fillRemainingIdle();
     };
   }, [shotFolder, isMobile, theme]);
 
@@ -117,17 +163,16 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       const stage = getStage();
       stageRef.current = stage;
       if (!stage || !canvasRef.current) return;
-      
+
       const top = stage.getBoundingClientRect().top + scrollY;
       const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
       const progress = Math.max(0, Math.min(1, (scrollY - top) / runway));
-      
-      const targetFrame = Math.min(149, Math.floor(progress * 150));
-      
+      const targetFrame = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
+
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         drawFrame(targetFrame);
-        preloadFrames(targetFrame);
+        preloadWindow(targetFrame);
       });
     });
 
@@ -141,13 +186,13 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden">
       <canvas
         ref={canvasRef}
-        className="w-full h-full object-cover"
+        className="h-full w-full object-cover"
         style={{
           width: "100%",
           height: "100%",
           display: "block",
           objectFit: "cover",
-          transform: "translateZ(0)", 
+          transform: "translateZ(0)",
         }}
       />
     </div>

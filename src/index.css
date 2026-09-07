@@ -16,6 +16,7 @@
   --color-bg-card: var(--theme-bg-card);
   --color-border: var(--theme-border);
   --color-fg: var(--theme-fg);
+  --color-fg-muted: var(--theme-muted);
   --color-accent: var(--theme-accent);
   --color-accent-light: var(--theme-accent-light);
   --color-accent-dim: var(--theme-accent-dim);
@@ -52,8 +53,10 @@
   --theme-bg-card: #161413;
   --theme-border: #2a2622;
   --theme-fg: #f5f0e8;
-  --theme-muted: #8c8178;
-  --theme-muted-light: #a89b92;
+  --theme-muted: #a89b92;
+  --theme-muted-light: #c4bbb4;
+  --theme-fg-muted: var(--theme-muted);
+  --theme-text-muted: var(--theme-muted);
 
   --theme-accent: var(--logo-gold);
   --theme-accent-light: #ffe066;
@@ -92,8 +95,10 @@
   --theme-bg-card: #ffffff;
   --theme-border: #e5e7eb;
   --theme-fg: #121212;
-  --theme-muted: #52525b;
-  --theme-muted-light: #71717a;
+  --theme-muted: #3f3f46;
+  --theme-muted-light: #52525b;
+  --theme-fg-muted: var(--theme-muted);
+  --theme-text-muted: var(--theme-muted);
 
   --theme-accent: var(--logo-gold);
   --theme-accent-light: #ffe14d;

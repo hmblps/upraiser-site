@@ -193,7 +193,7 @@ export function HeroTerrainCanvas({
           scrollRef={scrollRef}
           path={path}
           onModelReady={handleModelReady}
-          voyager={!capturing}
+          voyager
           lite={lite}
         />
         {capture ? <CaptureDriver job={capture} modelReady={modelReady} /> : null}

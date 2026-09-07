@@ -25,19 +25,19 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
     <motion.div
       layout
       className={cn(
-        "slide-tabs relative inline-flex items-center",
+        "slide-tabs relative inline-flex w-max shrink-0 items-center overflow-visible",
         "bg-bg-elevated/70 backdrop-blur-xl",
         "rounded-full border border-border/40 shadow-sm",
         className,
       )}
-      style={{ padding: "0.15rem", gap: "1px" }}
+      style={{ padding: "0.15rem", gap: "1px", flexShrink: 0 }}
       transition={SPRING}
     >
       {items.map((item) => {
         const active = item.id === activeId;
 
         const labelClasses = cn(
-          "relative z-10 flex shrink-0 items-center justify-center",
+          "relative z-10 flex min-w-max shrink-0 items-center justify-center",
           "whitespace-nowrap px-4 py-1.5 text-[11px] font-bold tracking-wide uppercase",
           "touch-action-manipulation select-none transition-colors",
           active ? "text-on-accent" : "text-fg-muted",
