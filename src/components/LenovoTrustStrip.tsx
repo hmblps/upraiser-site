@@ -55,7 +55,7 @@ export function LenovoTrustStrip() {
                 <p className="mt-0.5 card-title normal-case tracking-normal">{lenovoPartnership.title}</p>
               </div>
             </div>
-            <LenovoPartnershipCopy className="w-full max-w-xl sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-md xl:max-w-xl" />
+            <LenovoPartnershipCopy className="w-full max-w-xl sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-lg xl:max-w-2xl" />
           </div>
         </div>
       </div>
