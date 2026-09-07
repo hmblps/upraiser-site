@@ -4,7 +4,7 @@ import { ScrollLink } from "./ScrollLink";
 
 export const Footer = memo(function Footer() {
   return (
-    <footer className="bg-bg-elevated pb-[max(2rem,env(safe-area-inset-bottom))]">
+    <footer className="bg-bg md:bg-bg-elevated pb-[max(2rem,env(safe-area-inset-bottom))]">
       <div className="section-inner pt-12">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div>

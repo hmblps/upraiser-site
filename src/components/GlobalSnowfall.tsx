@@ -160,6 +160,18 @@ export function GlobalSnowfall() {
 
   if (!isLight) return null;
 
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof document === "undefined") return true;
+    return !document.hidden;
+  });
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const handleVisibilityChange = () => setIsVisible(!document.hidden);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
   return (
     <div
       className="global-snowfall"
@@ -179,7 +191,7 @@ export function GlobalSnowfall() {
         camera={{ fov: 45, position: [0, 0, 0], near: 0.1, far: 300 }}
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         dpr={[1, 1.5]}
-        frameloop={reducedMotion ? "never" : "always"}
+        frameloop={reducedMotion || !isVisible ? "never" : "always"}
         style={{ pointerEvents: "none" }}
       >
         <SnowParticles isLight={isLight} />

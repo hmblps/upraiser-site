@@ -105,6 +105,10 @@
 }
 
 @media (max-width: 767px) {
+  [data-theme="light"] .pilot-cta-section {
+    background: #ffffff;
+  }
+  
   .cta-mountain-bg {
     background-size: 180% auto;
     background-position: center bottom;

@@ -220,6 +220,8 @@ export function Contact() {
                         <ContactFormField label="Name & Title *" id="name" error={errors.name} disabled={status === "loading"}>
                           <input
                             type="text"
+                            autoComplete="name"
+                            enterKeyHint="next"
                             value={form.name}
                             onChange={(e) => setForm({ ...form, name: e.target.value })}
                           />
@@ -228,6 +230,9 @@ export function Contact() {
                         <ContactFormField label="Corporate Work Email *" id="email" error={errors.email} disabled={status === "loading"}>
                           <input
                             type="email"
+                            inputMode="email"
+                            autoComplete="email"
+                            enterKeyHint="next"
                             value={form.email}
                             onChange={(e) => setForm({ ...form, email: e.target.value })}
                           />
@@ -238,13 +243,15 @@ export function Contact() {
                         <ContactFormField label="Production App ID / Store URL *" id="appId" error={errors.appId} disabled={status === "loading"}>
                           <input
                             type="text"
+                            autoComplete="url"
+                            enterKeyHint="next"
                             value={form.appId}
                             onChange={(e) => setForm({ ...form, appId: e.target.value })}
                           />
                         </ContactFormField>
 
                         <ContactFormField label="Target GEOs" id="geos" disabled={status === "loading"}>
-                          <input type="text" value={form.geos} onChange={(e) => setForm({ ...form, geos: e.target.value })} />
+                          <input type="text" enterKeyHint="next" value={form.geos} onChange={(e) => setForm({ ...form, geos: e.target.value })} />
                         </ContactFormField>
                       </div>
 
@@ -278,7 +285,7 @@ export function Contact() {
                       </ContactFormField>
 
                       <ContactFormField label="Details" id="notes" disabled={status === "loading"} expand={true}>
-                        <textarea maxLength={250} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
+                        <textarea enterKeyHint="done" maxLength={250} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
                       </ContactFormField>
 
                       <div className="mt-0.5 flex flex-col gap-1">

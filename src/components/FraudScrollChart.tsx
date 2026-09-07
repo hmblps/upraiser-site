@@ -187,18 +187,6 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
   return (
     <motion.div className="fraud-radial-chart" style={{ opacity: chartOpacity }} aria-hidden>
       
-      {/* Live Date Anchor */}
-      <motion.div 
-        className="absolute top-0 left-0 right-0 md:left-auto md:top-10 md:right-[42%] flex flex-col items-center md:items-end gap-1.5 text-center md:text-right z-10"
-        style={{ opacity: dateOpacity }}
-      >
-        <span className="font-sans font-medium text-[0.65rem] tracking-widest text-accent-secondary uppercase flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-secondary animate-pulse" />
-          Live Audit
-        </span>
-        <span className="font-mono text-[0.8rem] text-muted-light tracking-wide">{liveDate}</span>
-      </motion.div>
-
       {/* Zero-cost Ghost Updates */}
       <div className="fraud-radial-chart__ghosts fold-chart-ghosts pointer-events-none">
         {segments.map((_, i) => (
@@ -214,6 +202,20 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
             preserveAspectRatio="xMidYMid meet"
           >
             <g transform={`translate(${currentCenterX}, ${currentCenterY})`}>
+              {/* Epicenter Date Anchor */}
+              <motion.foreignObject 
+                x="-70" y="-30" width="140" height="60"
+                style={{ opacity: dateOpacity }}
+              >
+                <div className="flex flex-col items-center justify-center w-full h-full text-center">
+                  <span className="font-sans font-medium text-[9px] tracking-widest text-accent-secondary uppercase flex items-center justify-center gap-1.5 w-full">
+                    <span className="w-1 h-1 rounded-full bg-accent-secondary animate-pulse" />
+                    Live Audit
+                  </span>
+                  <span className="font-mono text-[11px] text-muted-light tracking-wide mt-1">{liveDate}</span>
+                </div>
+              </motion.foreignObject>
+
               {radii.map((r, i) => (
                 <FraudArc key={i} r={r} seg={segments[i]!} morph={morph} />
               ))}

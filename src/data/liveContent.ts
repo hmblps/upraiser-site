@@ -473,7 +473,7 @@ export const contactPage = {
     "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
   email: "info@upraiser.co.uk",
-  ctaLabel: "[ START ASCENT ]",
+  ctaLabel: "[ REQUEST PILOT ]",
 } as const;
 
 export const caseStudyMeta = {
