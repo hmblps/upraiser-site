@@ -86,7 +86,7 @@ export function CssTablet({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
   
   return (
-    <div className={`relative flex-shrink-0 aspect-[3/4] sm:aspect-[4/3] rounded-2xl p-1.5 shadow-[0_28px_56px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.12)] prog-css-phone--${finish} ${className}`.trim()}>
+    <div className={`relative flex-shrink-0 aspect-[4/3] rounded-2xl p-1.5 shadow-[0_28px_56px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.12)] prog-css-phone--${finish} ${className}`.trim()}>
       <div className="relative w-full h-full rounded-[1rem] overflow-hidden bg-[#050505] border-2 border-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
         <div className="absolute inset-0 overflow-hidden">
           {formatId === "ctv-spot" || formatId === "ctv-video" ? (

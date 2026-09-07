@@ -96,7 +96,7 @@ export function ProgrammaticScrollSectionMobile({
           onClick={() => setZoomed(true)}
           aria-label="Zoom device"
         >
-          <div className={`relative w-full ${format.scene === 'tv' ? 'aspect-[16/9] max-w-[280px]' : format.scene === 'tablet' ? 'aspect-[3/4] sm:aspect-[4/3] max-w-[240px]' : 'aspect-[9/19] max-w-[200px]'}`}>
+          <div className={`relative w-full ${format.scene === 'tv' ? 'aspect-[16/9] max-w-[280px]' : format.scene === 'tablet' ? 'aspect-[4/3] max-w-[240px]' : 'aspect-[9/19] max-w-[200px]'}`}>
             <span className="prog-mobile-stage__glow" aria-hidden />
             {format.scene === 'tv' ? (
               <CssTv mode={mode} formatId={format.id} className="h-full w-full pointer-events-none" />
@@ -120,7 +120,7 @@ export function ProgrammaticScrollSectionMobile({
           className="fixed inset-0 z-[100] flex items-center justify-center bg-background/90 backdrop-blur-md p-4 cursor-zoom-out"
           onClick={() => setZoomed(false)}
         >
-          <div className={`relative w-full max-w-lg ${format.scene === 'tv' ? 'aspect-[16/9]' : format.scene === 'tablet' ? 'aspect-[3/4] sm:aspect-[4/3]' : 'aspect-[9/19] max-h-[85vh]'}`}>
+          <div className={`relative w-full max-w-lg ${format.scene === 'tv' ? 'aspect-[16/9]' : format.scene === 'tablet' ? 'aspect-[4/3]' : 'aspect-[9/19] max-h-[85vh]'}`}>
             {format.scene === 'tv' ? (
               <CssTv mode={mode} formatId={format.id} className="h-full w-full" />
             ) : format.scene === 'tablet' ? (

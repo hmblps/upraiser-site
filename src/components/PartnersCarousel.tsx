@@ -24,6 +24,23 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
+    if (modalOpen) {
+      document.body.style.overflow = "hidden";
+      // Prevent iOS Safari bounce
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.top = `-${window.scrollY}px`;
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.top = "";
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+
     if (!modalOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setModalOpen(false);
@@ -132,7 +149,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
 
               {/* Modal card */}
               <motion.div
-                className="case-detail-modal__panel !w-full !max-w-5xl p-8 sm:p-12 !overflow-y-auto mx-4 !h-auto !max-h-[calc(100dvh-2rem)] sm:!max-h-[min(92dvh,56rem)] !rounded-2xl"
+                className="case-detail-modal__panel !w-full !max-w-5xl p-8 sm:p-12 !overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] mx-4 !h-auto !max-h-[calc(100dvh-2rem)] sm:!max-h-[min(92dvh,56rem)] !rounded-2xl"
                 
                 initial={{ opacity: 0, scale: 0.97, y: 24 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
