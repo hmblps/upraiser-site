@@ -112,6 +112,11 @@
   pointer-events: none;
 }
 
+/* Light JPEG already sits on white paper — a bottom wash reads as milky blur. */
+.hero-atmosphere--light .hero-bottom-fade-bridge {
+  display: none;
+}
+
 .hero-terrain-shell,
 .hero-terrain-root {
   position: absolute;
@@ -574,9 +579,9 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: -4rem;
+  top: -1.25rem;
   z-index: 0;
-  height: 6rem;
+  height: 2rem;
   pointer-events: none;
   background: linear-gradient(
     to bottom,

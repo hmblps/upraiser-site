@@ -123,6 +123,23 @@ export function useScrollScene(
   return progress;
 }
 
+/**
+ * Mobile Audience / Promise charts. Framer `useScroll` tracks window scroll and
+ * misses Lenis, so rings/bars freeze after the first paint. Anchor the chart
+ * through the Lenis-aware bus so scrub reverses on scroll up.
+ */
+export function useMobileChartProgress(
+  sectionRef: RefObject<HTMLElement | null>,
+  chartRef: RefObject<HTMLElement | null>,
+) {
+  return useScrollScene(sectionRef, {
+    mode: "anchor",
+    anchorRef: chartRef,
+    startLine: 0.94,
+    endLine: 0.08,
+  });
+}
+
 /** Desktop ≥768px + motion ok — gate for runway scrollytelling */
 export function useScrollRunwayEnabled() {
   const reduced = useReducedMotion();

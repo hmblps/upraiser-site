@@ -286,13 +286,17 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
 }
 
 @media (max-width: 767px) {
+  .fraud-radial-chart {
+    overflow: visible;
+  }
   .fraud-radial-chart__plot {
-    top: 15%;
+    top: 32%;
     padding-right: 0;
+    overflow: visible;
   }
   .fraud-radial-chart__svg {
     transform-origin: 50% 50%;
-    transform: translateX(0) translateY(12%) scale(1.6);
+    transform: translateX(0) translateY(22%) scale(1.42);
   }
 }
 

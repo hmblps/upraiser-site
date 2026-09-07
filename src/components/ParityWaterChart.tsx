@@ -150,16 +150,17 @@ function barPct(spend: number) {
  */
 export function ParityWaterChart({ progress }: ParityWaterChartProps) {
   const reduced = useReducedMotion();
-  // Promise uses anchor progress: when chart+copy are on screen, progress is already mid/late.
-  // Grow across that visible window so scroll down raises bars and scroll up shrinks them.
-  const barScale = useTransform(progress, [0.4, 0.55, 0.72, 0.9], [0.05, 0.35, 0.7, 1]);
-  const opacity = useTransform(progress, [0.28, 0.4, 0.58, 0.92, 1], [0, 0.7, 1, 1, 0.9]);
-
-
-
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth <= 767 : false
   );
+  // Desktop fold: chart is already mid-progress when visible. Mobile: 0→1 is the
+  // chart's own travel, so bars must grow across that full window.
+  const foldBarScale = useTransform(progress, [0.4, 0.55, 0.72, 0.9], [0.05, 0.35, 0.7, 1]);
+  const mobileBarScale = useTransform(progress, [0.08, 0.28, 0.55, 0.86], [0.05, 0.35, 0.7, 1]);
+  const foldOpacity = useTransform(progress, [0.28, 0.4, 0.58, 0.92, 1], [0, 0.7, 1, 1, 0.9]);
+  const mobileOpacity = useTransform(progress, [0.04, 0.16, 0.4, 0.92, 1], [0, 0.7, 1, 1, 0.9]);
+  const barScale = isMobile ? mobileBarScale : foldBarScale;
+  const opacity = isMobile ? mobileOpacity : foldOpacity;
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");

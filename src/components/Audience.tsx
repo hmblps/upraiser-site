@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { audienceByMode } from "../data/liveContent";
-import { useScrollRunwayEnabled } from "../hooks/useScrollScene";
+import { useMobileChartProgress, useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
@@ -19,13 +19,8 @@ function AudienceStatic() {
   const isFraud = mode === "infrastructure";
   const ref = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: chartRef,
-    offset: ["start 85%", "end 35%"],
-  });
-
-  const chartY = useTransform(scrollYProgress, [0, 0.4], [100, 0]);
+  const progress = useMobileChartProgress(ref, chartRef);
+  const chartY = useTransform(progress, [0, 0.38], [72, 0]);
 
   return (
     <section ref={ref} id="audience" className="section-band section-band--quiet min-h-screen">
@@ -39,9 +34,9 @@ function AudienceStatic() {
           <p className="section-description max-w-2xl whitespace-pre-wrap">{formatEventNames(content.description)}</p>
         </div>
 
-        <div ref={chartRef} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-10 pointer-events-none flex items-center justify-center">
+        <div ref={chartRef} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-28 pt-6 overflow-visible pointer-events-none flex items-center justify-center">
           <motion.div className="w-full h-full flex items-center justify-center" style={{ y: chartY }}>
-             {isFraud ? <FraudScrollChart progress={scrollYProgress} /> : <FoldChart progress={scrollYProgress} />}
+             {isFraud ? <FraudScrollChart progress={progress} /> : <FoldChart progress={progress} />}
           </motion.div>
         </div>
       </ModeContentTransition>

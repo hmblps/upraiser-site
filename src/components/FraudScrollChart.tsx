@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState,  } from "react";
-import { motion, useTransform, type MotionValue, useMotionValue } from "framer-motion";
+import { motion, useTransform, type MotionValue } from "framer-motion";
 import { GhostBubbleMotion } from "./GhostBubbleMotion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import { clamp } from "../lib/clamp";
+import { useScrollMorph } from "../hooks/useScrollMorph";
 
 const VB = 420;
 const CX = 128;
@@ -142,7 +142,11 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
   const reduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
   const liveDate = useMemo(() => formatLiveDate(new Date()), []);
-  const morph = useMotionValue(0);
+  const morph = useScrollMorph(progress, enabled, {
+    start: 0.02,
+    span: 0.74,
+    lerp: 0.14,
+  });
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -163,23 +167,6 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, [reduced]);
-
-  // Zero-cost interpolator loop
-  useEffect(() => {
-    if (!enabled) return;
-    let raf = 0;
-    const unsub = progress.on("change", (value) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const p = clamp((value - 0.02) / 0.74, 0, 1);
-        morph.set(Math.round(p * 200) / 200);
-      });
-    });
-    return () => {
-      unsub();
-      cancelAnimationFrame(raf);
-    };
-  }, [enabled, progress, morph]);
 
   const currentCenterX = isMobile ? VB / 2 : CENTER_X;
   const currentCenterY = isMobile ? VB / 2 : CY;

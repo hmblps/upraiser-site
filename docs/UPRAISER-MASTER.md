@@ -4,7 +4,7 @@
 > **Updated:** 7 September 2026 (evening)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** this ritual — light home JPEG recapture, lite flash fix, PROOF ghosts (see §25) 
+> **HEAD:** this ritual — mobile chart Lenis scrub + light JPEG foot crop on Windows/mobile (see §25) 
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 
@@ -326,9 +326,10 @@ Same WebGL fly, frozen to 150 stills. Closest bake to live 3D that still loads i
 | `home-mobile-light` | 1400 ms | qscale **2** | 540×960 | ~6.5 MB |
 
 - Capture PNG is 1920×1080 (desktop) / 720×1280 (mobile) via `lib/heroCapture.ts`.
-- Player cache-bust: `HeroVideoFallback` `?v=9`.
-- Player **idle-loads all 150** (`IDLE_CONCURRENCY = 8`). Loads are generation-scoped: a light `onload` must not commit into the dark cache (that was the white-flash bug).
+- Player cache-bust: `HeroVideoFallback` `?v=10`.
+- Player **idle-loads all 150** (`IDLE_CONCURRENCY = 3`). Loads are generation-scoped: a light `onload` must not commit into the dark cache (that was the white-flash bug).
 - Draw only images whose `src` belongs to the current `shotFolder`; otherwise fill paper `#ffffff` / `#050504`.
+- Light JPEG foot: **no** `.hero-bottom-fade-bridge`. Baked paper fade is cropped in `drawCoverFrame` (mobile `-18%`, desktop/Windows `-22%`) then cover-fit. Do not put the milky wash back — it reads as a blur on Growth, including Intel Windows.
 - Remaining gap vs live 3D (not a hole in the bake): 720p stretched to retina, JPEG, 150 stops, no mouse parallax, no dark-wire idle breathe.
 
 **Recapture (dev only):**
@@ -636,6 +637,8 @@ Fold layout (`charts.css`): chart anchored `left: 52–54%`, `width: 46vw` — c
 
 **PROOF ghosts (Infrastructure `#audience`):** `FraudScrollChart` floats metrics around the radial. Desktop origins sit in the **chart column** (`left` 58–84% of the 100vw overlay). `.accent-scroll-section--split-copy .fold-chart-ghosts` + `.fraud-radial-chart__ghosts` use a left mask/`clip-path` from 768px up so 47% / Device farms cannot drift onto the copy. Do not park ghosts at 15%/35% on desktop — that was the overlap.
 
+**Mobile (<768px):** `AudienceStatic` / `PromiseClean`. Framer `useScroll` misses Lenis, so rings/bars used to freeze. Drive them with `useMobileChartProgress` (Lenis-aware `useScrollScene` anchor on the chart). Scrub reverses on scroll up. Keep `chartRef` on an untransformed wrapper; put `y` on the inner motion node. PROOF sits lower (`mt-28`) so the outer ring is not cut by the copy above.
+
 ---
 
 ## 13. Scroll Scene System
@@ -643,21 +646,29 @@ Fold layout (`charts.css`): chart anchored `left: 52–54%`, `width: 46vw` — c
 `useScrollScene.ts` + `scrollScene.ts` · hero via `HeroFlyContext`.
 
 
-| Mode             | Used by        | Behavior                  |
-| ---------------- | -------------- | ------------------------- |
-| HeroFly / runway | Hero           | Lenis sticky; camera / FX |
-| runway           | Promise        | sticky fold desktop       |
-| anchor           | Audience       | viewport / grid           |
-| viewportBand     | Process        | band steps                |
-| in-view          | Routes, Cases… | Reveal / Stagger          |
-| format scroll    | `#routes`      | `useFormatScrollSection`  |
+| Mode             | Used by                         | Behavior                  |
+| ---------------- | ------------------------------- | ------------------------- |
+| HeroFly / runway | Hero                            | Lenis sticky; camera / FX |
+| runway           | Promise                         | sticky fold desktop       |
+| anchor           | Audience desktop + **mobile charts** | viewport / chart travel |
+| viewportBand     | Process                         | band steps                |
+| in-view          | Routes, Cases…                  | Reveal / Stagger          |
+| format scroll    | `#routes`                       | `useFormatScrollSection`  |
 
 
-**Gate:** desktop ≥768px + not reduced motion для heavy scenes. Scroll transforms: `**spring: false`**.
+**Gate:** desktop ≥768px + not reduced motion для heavy scenes. Scroll transforms: `**spring: false`**. Mobile Audience/Promise charts use the same Lenis bus (`useMobileChartProgress`) — do not go back to Framer `useScroll({ target })` while Lenis is on (`NATIVE_SCROLL_QUERY` is `max-width: 0px`).
 
 ---
 
 ## 14. Shipped polish log
+
+### 7 Sep 2026 night — mobile chart scrub + light JPEG foot
+
+| Area | Change |
+| --- | --- |
+| Mobile charts | `#audience` + `#promise` scrub on Lenis via `useMobileChartProgress`. Both themes. PROOF dropped (`mt-28`) so the red ring is not cut by copy |
+| Light JPEG | No bottom fade-bridge. Player crops baked paper fade on **all** light sequences (`home-light` Windows + `home-mobile-light`) |
+| Windows | Still JPEG / Intel lite. Same crop as mobile light — do not treat the foot fog as iPhone-only |
 
 ### 7 Sep 2026 evening — hero JPEG bake + theme flash
 
@@ -999,11 +1010,11 @@ Trust **`src/App.tsx` + `navLinks`**, not comments in `innerPagesData.ts` (they 
 - **`/channels`:** `ProgrammaticScrollSection` (Phone3D / Tablet3D / Tv3D). Not in header — reach it from the home CTA.
 - **Header:** The Agency + Creative Studio only.
 - **Home loading:** no `LazySection` / `heroOk` on Audience / Process / Cases / Promise. Single `React.Suspense` per fold.
-- **Hero split:** high-tier = live R3F. Lite (mobile, Intel, `?lite=1`) = JPEG sequence. Dark frames include Voyager. Light frames recaptured 7 Sep evening (settle 1400 ms, qscale 2).
+- **Hero split:** high-tier = live R3F. Lite (mobile, Intel, `?lite=1`) = JPEG sequence. Dark frames include Voyager. Light frames recaptured 7 Sep evening (settle 1400 ms, qscale 2). Light player crops the baked paper fade at the foot (Windows `home-light` and mobile). No CSS bottom wash on Growth.
 
 ### Git / disk (7 Sep 2026 night)
 
-- **This commit** ships sitemap `/`+`/channels`, The Agency naming, light lite without the 46% white scrim, dark JPEG player sync, recaptured `home-light` / `home-mobile-light` (`?v=10`). Parent light bake: `69cd566`.
+- **This commit** ships mobile Lenis chart scrub (`useMobileChartProgress`) + light JPEG foot crop on Windows/mobile. Parent: `6eaf8f8`.
 - After push + `npm run deploy`: prod alias **https://upraiser.co.uk**.
 - **Leave untracked:** `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`, `test-modal-scroll.mjs`, `test-oem-mobile.mjs`.
 
@@ -1015,15 +1026,16 @@ Scene graph (`Scene.tsx`): keep **both** `StudioRimLight` and `MistSheets` impor
 
 **Do not:** EffectComposer / N8AO / Bloom / GSAP ScrollTrigger on hero / `transparent: true` on the four GLB chunks / second Everest canvas / resurrect `macbook.glb` on Routes / force Windows onto live WebGL.
 
-Open visual debt: **right steep face UV smear** on scroll (grazing + mips). Next 3D pass = stronger world-space triplanar / `steepRockMask`, without covering the mesh again. Light JPEG haze/halo is **on purpose** (Growth fog + `AscentHalo`).
+Open visual debt: **right steep face UV smear** on scroll (grazing + mips). Next 3D pass = stronger world-space triplanar / `steepRockMask`, without covering the mesh again. Light **sky** haze/halo is on purpose (`AscentHalo`). The **foot** paper fade is not — crop it in the lite player; do not add `.hero-bottom-fade-bridge` on Growth.
 
 ### Do first in a new session
 
-1. `git log -1 --oneline` — light JPEG recapture commit (parent `37988f9`). Working tree should be clean except leftover test pngs/mjs.
+1. `git log -1 --oneline` — this ritual (parent `6eaf8f8`). Working tree should be clean except leftover test pngs/mjs.
 2. `npm run dev` → `http://localhost:5173/`
-3. Desktop **high-tier** light: live mountain on first paint. Desktop **lite** / `?lite=1`: JPEG sequence, both themes, no white flashes after toggle.
-4. Header = Agency + Craft. `/channels` reachable from `#routes` CTA. About is on home, not `/company`.
-5. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`.
+3. Desktop **high-tier** light: live mountain on first paint. Desktop **lite** / Windows / `?lite=1`: JPEG sequence, both themes; Growth foot is mountain, not a milky wash.
+4. Mobile `<768`: `#audience` + `#promise` charts scrub forward/back on scroll (both themes). PROOF ring not jammed into the copy above.
+5. Header = Agency + Craft. `/channels` reachable from `#routes` CTA. About is on home, not `/company`.
+6. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`.
 
 ### Next work (needs owner yes)
 
@@ -1123,6 +1135,7 @@ MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
 - This ritual commits the light bake + flash/ghosts + MASTER. Everest light UV smear still the open 3D ticket.
 - 7 Sep evening: `sitemap.xml` drops `/expedition`, adds `/channels`. Footer / contact / thank-you / craft / 404 now say **The Agency**. Format tabs/taglines no longer clamp. Dark muted token bumped for body contrast.
 - Same evening, owner pass: hero stat cards restored to gold→red (do not flatten to single gold). Light lite no longer has the 46% white scrim over the mountain base; light fog/mist pulled back; `home-light` + `home-mobile-light` recaptured (`?v=10`). Dark JPEG player draws on the same sticky progress as live 3D (no Lenis+rect mix), nearest-frame fallback, ImageBitmap. PROOF ghosts stay clipped off copy.
+- Same night: mobile `#audience` / `#promise` charts were static again (Framer `useScroll` vs Lenis). Wired `useMobileChartProgress`. PROOF lowered on mobile. Light JPEG foot crop on **Windows `home-light` and mobile** — no CSS fade-bridge on Growth.
 
 ---
 

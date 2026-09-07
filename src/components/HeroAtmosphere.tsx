@@ -73,7 +73,7 @@ export function HeroAtmosphere() {
           <div className="hero-mountains-layer hero-mountains-layer--mobile is-active">
             <HeroVideoFallback variant="home" />
             <div className="hero-mountains-scrim" />
-            <div className="hero-bottom-fade-bridge" />
+            {!isLight ? <div className="hero-bottom-fade-bridge" /> : null}
           </div>
         ) : null}
       </div>

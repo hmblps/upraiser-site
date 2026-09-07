@@ -35,6 +35,36 @@ function whenReady(img: HTMLImageElement, ok: () => void, fail: () => void) {
   if (img.complete && img.naturalWidth > 0) succeed();
 }
 
+/** Cover-fit a frame into the canvas. Light captures keep a paper fade at the foot. */
+function drawCoverFrame(
+  ctx: CanvasRenderingContext2D,
+  src: FrameSource,
+  canvas: HTMLCanvasElement,
+  folder: string,
+) {
+  const srcW = src.width || canvas.width;
+  const srcH = src.height || canvas.height;
+  if (srcW <= 0 || srcH <= 0) {
+    ctx.drawImage(src, 0, 0, canvas.width, canvas.height);
+    return;
+  }
+
+  const cropBottom = folder.includes("light")
+    ? folder.includes("mobile")
+      ? 0.18
+      : 0.22
+    : 0;
+  const usableH = srcH * (1 - cropBottom);
+  const scale = Math.max(canvas.width / srcW, canvas.height / usableH);
+  const dw = srcW * scale;
+  const dh = usableH * scale;
+  const dx = (canvas.width - dw) / 2;
+  const focusY = folder.includes("light") ? 0.42 : 0.5;
+  let dy = canvas.height / 2 - dh * focusY;
+  dy = Math.min(0, Math.max(canvas.height - dh, dy));
+  ctx.drawImage(src, 0, 0, srcW, usableH, dx, dy, dw, dh);
+}
+
 function toPaintSource(img: HTMLImageElement, folder: string, done: (src: FrameSource | null) => void) {
   if (typeof createImageBitmap === "function") {
     void createImageBitmap(img)
@@ -151,7 +181,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       if (targetIndex === lastIndexRef.current && lastDrawnRef.current === candidate) return;
       lastDrawnRef.current = candidate;
       lastIndexRef.current = targetIndex;
-      ctx.drawImage(candidate, 0, 0, canvasEl.width, canvasEl.height);
+      drawCoverFrame(ctx, candidate, canvasEl, folder);
     };
 
     const preloadWindow = (currentIndex: number) => {
@@ -251,7 +281,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
           height: "100%",
           display: "block",
           objectFit: "cover",
-          objectPosition: "center 62%",
+          objectPosition: theme === "light" ? "center 46%" : "center 62%",
           transform: "translateZ(0)",
         }}
       />

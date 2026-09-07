@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, type MotionValue, useTransform } from 'framer-motion';
 
 interface MetricPoint {
@@ -28,17 +28,26 @@ const DRAW_OUT = 0.88;
 import { ChartGhostValue } from './ChartGhostValue';
 
 export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ progress }) => {
-  // Main line — draws exactly as text slides in
-  const pathLength = useTransform(progress, [DRAW_IN, DRAW_OUT], [0, 1]);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= 767 : false
+  );
 
-  // Track & background fade in with first text line
-  const trackOpacity = useTransform(progress, [DRAW_IN, DRAW_IN + 0.1], [0, 0.35]);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
-  // Ticks: fade in with body copy
-  const tickOpacity = useTransform(progress, [0.64, 0.76], [0, 1]);
+  const drawIn = isMobile ? 0.08 : DRAW_IN;
+  const drawOut = isMobile ? 0.88 : DRAW_OUT;
 
-  // Pulse dot: appears mid-way through draw
-  const dotOpacity = useTransform(progress, [0.56, 0.68], [0, 1]);
+  // Main line — desktop tracks fold copy; mobile scrubs the chart's own travel.
+  const pathLength = useTransform(progress, [drawIn, drawOut], [0, 1]);
+  const trackOpacity = useTransform(progress, [drawIn, drawIn + 0.1], [0, 0.35]);
+  const tickOpacity = useTransform(progress, isMobile ? [0.42, 0.68] : [0.64, 0.76], [0, 1]);
+  const dotOpacity = useTransform(progress, isMobile ? [0.32, 0.52] : [0.56, 0.68], [0, 1]);
 
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none">
@@ -131,7 +140,7 @@ export const CommitmentChart: React.FC<{ progress: MotionValue<number> }> = ({ p
         {METRICS.map((metric, index) => {
           // Map metric X onto the draw window [DRAW_IN … DRAW_OUT]
           const frac   = metric.x / 1200;
-          const centre = DRAW_IN + frac * (DRAW_OUT - DRAW_IN);
+          const centre = drawIn + frac * (drawOut - drawIn);
           const half   = 0.07;
 
           return (
