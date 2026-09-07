@@ -57,7 +57,7 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
   const lastRevealedRef = useRef(-1);
 
   useEffect(() => {
-    const publish = (scrollY: number) => {
+    const publish = () => {
       const stage = resolveFlyStage(stageRef.current);
       stageRef.current = stage;
       if (!stage) {

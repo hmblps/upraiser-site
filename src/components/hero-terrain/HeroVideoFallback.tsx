@@ -15,10 +15,6 @@ function frameUrl(folder: string, index: number) {
   return `/hero/frames/${folder}/frame_${padded}.jpg?${CACHE_BUST}`;
 }
 
-function belongsToFolder(src: string, folder: string) {
-  return src.includes(`/hero/frames/${folder}/`);
-}
-
 function whenReady(img: HTMLImageElement, ok: () => void, fail: () => void) {
   let settled = false;
   const succeed = () => {
