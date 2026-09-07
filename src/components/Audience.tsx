@@ -39,13 +39,11 @@ function AudienceStatic() {
           <p className="section-description max-w-2xl whitespace-pre-wrap">{formatEventNames(content.description)}</p>
         </div>
 
-        <motion.div 
-          ref={chartRef}
-          className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center"
-          style={{ y: chartY }}
-        >
-           {isFraud ? <FraudScrollChart progress={scrollYProgress} /> : <FoldChart progress={scrollYProgress} />}
-        </motion.div>
+        <div ref={chartRef} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center">
+          <motion.div className="w-full h-full flex items-center justify-center" style={{ y: chartY }}>
+             {isFraud ? <FraudScrollChart progress={scrollYProgress} /> : <FoldChart progress={scrollYProgress} />}
+          </motion.div>
+        </div>
       </ModeContentTransition>
     </section>
   );

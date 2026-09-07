@@ -194,7 +194,7 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
         ))}
       </div>
 
-      <div className="fraud-radial-chart__plot pointer-events-none">
+      <div className="fraud-radial-chart__plot pointer-events-none relative">
         <div className="fraud-radial-chart__frame">
           <svg 
             className="fraud-radial-chart__svg" 
@@ -202,26 +202,28 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
             preserveAspectRatio="xMidYMid meet"
           >
             <g transform={`translate(${currentCenterX}, ${currentCenterY})`}>
-              {/* Epicenter Date Anchor */}
-              <motion.foreignObject 
-                x="-70" y="-30" width="140" height="60"
-                style={{ opacity: dateOpacity }}
-              >
-                <div className="flex flex-col items-center justify-center w-full h-full text-center">
-                  <span className="font-sans font-medium text-[9px] tracking-widest text-accent-secondary uppercase flex items-center justify-center gap-1.5 w-full">
-                    <span className="w-1 h-1 rounded-full bg-accent-secondary animate-pulse" />
-                    Live Audit
-                  </span>
-                  <span className="font-mono text-[11px] text-muted-light tracking-wide mt-1">{liveDate}</span>
-                </div>
-              </motion.foreignObject>
-
               {radii.map((r, i) => (
                 <FraudArc key={i} r={r} seg={segments[i]!} morph={morph} />
               ))}
             </g>
           </svg>
         </div>
+
+        {/* Epicenter Date Anchor - HTML overlay to avoid foreignObject bugs */}
+        <motion.div 
+          className="absolute flex flex-col items-center justify-center text-center transform -translate-x-1/2 -translate-y-1/2"
+          style={{ 
+            opacity: dateOpacity,
+            left: `${(currentCenterX / VB) * 100}%`,
+            top: `${(currentCenterY / VB) * 100}%`,
+          }}
+        >
+          <span className="font-sans font-medium text-[9px] sm:text-[10px] tracking-widest text-accent-secondary uppercase flex items-center justify-center gap-1.5 whitespace-nowrap">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-secondary animate-pulse" />
+            Live Audit
+          </span>
+          <span className="font-mono text-[11px] sm:text-xs text-muted-light tracking-wide mt-1.5 whitespace-nowrap">{liveDate}</span>
+        </motion.div>
       </div>
     </motion.div>
   );
