@@ -15,7 +15,7 @@ export type ProgrammaticScrollSectionMobileProps = {
   headerDescription?: string;
 };
 
-/** Mobile / reduced-motion Routes — stacked cards + bottom phone dock. */
+/** Mobile / reduced-motion Routes — cards with inline phones. */
 export function ProgrammaticScrollSectionMobile({
   mode,
   lane = "app-growth",
@@ -25,89 +25,7 @@ export function ProgrammaticScrollSectionMobile({
   headerTitle,
   headerDescription,
 }: ProgrammaticScrollSectionMobileProps) {
-  const reduced = useReducedMotion();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [dockPinned, setDockPinned] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
-  const dockRef = useRef<HTMLDivElement | null>(null);
-  const cardRefs = useRef<(HTMLElement | null)[]>([]);
-  const indexByLaneRef = useRef<Record<string, number>>({});
-  const laneRef = useRef(lane);
-  const ignoreObserverRef = useRef(false);
-  const format = formats[activeIndex] ?? formats[0]!;
-
-  if (laneRef.current !== lane) {
-    indexByLaneRef.current[laneRef.current] = activeIndex;
-    const restore = Math.min(indexByLaneRef.current[lane] ?? 0, Math.max(0, formats.length - 1));
-    laneRef.current = lane;
-    setActiveIndex(restore);
-    ignoreObserverRef.current = true;
-  }
-
-  useEffect(() => {
-    if (!ignoreObserverRef.current) return;
-    const restore = Math.min(indexByLaneRef.current[lane] ?? 0, Math.max(0, formats.length - 1));
-    cardRefs.current[restore]?.scrollIntoView({ behavior: "auto", block: "start" });
-    const t = window.setTimeout(() => {
-      ignoreObserverRef.current = false;
-    }, 160);
-    return () => window.clearTimeout(t);
-  }, [lane, formats.length]);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setDockPinned(Boolean(entry?.isIntersecting));
-      },
-      { rootMargin: "-8% 0px -8% 0px", threshold: [0, 0.05, 0.15] },
-    );
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const dock = dockRef.current;
-    const section = sectionRef.current;
-    if (!dock || !section) return;
-
-    const syncHeight = () => {
-      const h = Math.ceil(dock.getBoundingClientRect().height);
-      if (h > 0) section.style.setProperty("--prog-dock-h", `${h}px`);
-    };
-    syncHeight();
-    const ro = new ResizeObserver(syncHeight);
-    ro.observe(dock);
-    return () => ro.disconnect();
-  }, [dockPinned, formats.length]);
-
-  useEffect(() => {
-    const nodes = cardRefs.current.filter(Boolean) as HTMLElement[];
-    if (!nodes.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        if (ignoreObserverRef.current) return;
-        const idx = Number((visible.target as HTMLElement).dataset.index);
-        if (!Number.isNaN(idx)) setActiveIndex(idx);
-      },
-      { rootMargin: "-12% 0px -42% 0px", threshold: [0.15, 0.35, 0.6] },
-    );
-
-    nodes.forEach((n) => observer.observe(n));
-    return () => observer.disconnect();
-  }, [formats]);
-
-  const goTo = (idx: number) => {
-    setActiveIndex(idx);
-    cardRefs.current[idx]?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
-  };
 
   return (
     <section
@@ -127,12 +45,13 @@ export function ProgrammaticScrollSectionMobile({
         {formats.map((fmt, i) => (
           <article
             key={fmt.id + fmt.label}
-            ref={(el) => {
-              cardRefs.current[i] = el;
-            }}
-            data-index={i}
-            className={`prog-scroll-section__mobile-card${i === activeIndex ? " is-active" : ""}`}
+            className="prog-scroll-section__mobile-card is-active"
           >
+            <div className="relative w-full max-w-[200px] mx-auto mb-6 mt-2 flex justify-center items-center aspect-[9/19]">
+              <span className="prog-mobile-stage__glow" aria-hidden />
+              <CssPhone mode={mode} formatId={fmt.id} className="prog-css-phone--mobile h-full w-full" />
+            </div>
+
             <div className="prog-mobile-card__meta">
               <p className="prog-mobile-card__tag">{fmt.tagline}</p>
               <span className="prog-mobile-card__index" aria-hidden>
@@ -150,40 +69,6 @@ export function ProgrammaticScrollSectionMobile({
             </ul>
           </article>
         ))}
-      </div>
-
-      <div
-        ref={dockRef}
-        className={`prog-mobile-sticky${dockPinned ? " is-pinned" : ""}`}
-        aria-hidden={!dockPinned}
-      >
-        <div className="prog-mobile-dock">
-          <div className="prog-mobile-dock__phone">
-            <span className="prog-mobile-stage__glow" aria-hidden />
-            <CssPhone mode={mode} formatId={format.id} className="prog-css-phone--mobile prog-css-phone--dock" />
-          </div>
-          <div className="prog-mobile-dock__caption">
-            <p className="prog-mobile-dock__index" aria-hidden>
-              {String(activeIndex + 1).padStart(2, "0")} / {String(formats.length).padStart(2, "0")}
-            </p>
-            <p className="prog-mobile-dock__label">{format.label}</p>
-            <p className="prog-mobile-dock__tag">{format.tagline}</p>
-            <div className="prog-mobile-dots" role="tablist" aria-label="Formats">
-              {formats.map((fmt, i) => (
-                <button
-                  key={fmt.id + fmt.label}
-                  type="button"
-                  role="tab"
-                  aria-selected={i === activeIndex}
-                  aria-label={fmt.label}
-                  tabIndex={dockPinned ? 0 : -1}
-                  className={`min-h-11 min-w-11${i === activeIndex ? " is-active" : ""}`}
-                  onClick={() => goTo(i)}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
