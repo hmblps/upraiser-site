@@ -1,4 +1,5 @@
 import {
+  memo,
   Suspense,
   useCallback,
   useEffect,
@@ -178,7 +179,7 @@ function applyScreenTexture(root: Object3D, map: Texture) {
   });
 }
 
-function PhoneMesh({
+const PhoneMesh = memo(function PhoneMesh({
   url,
   formatId,
   inView,
@@ -353,9 +354,9 @@ function PhoneMesh({
       </Center>
     </group>
   );
-}
+});
 
-function PhoneScene({
+const PhoneScene = memo(function PhoneScene({
   url,
   formatId,
   inView,
@@ -396,7 +397,7 @@ function PhoneScene({
       </Suspense>
     </>
   );
-}
+});
 
 /** Rich-media iframe native size. Scale to screen width; layout is absolute so the unscaled box cannot cast a square. */
 const AD_W = 320;
@@ -637,7 +638,7 @@ function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" }
  * Glass: still PNG instantly → format MP4 on the same materials (no remount flash).
  * For "rich" format: CSS phone frame with live Vidout HTML ad iframe.
  */
-export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3DProps) {
+export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className }: Phone3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -784,8 +785,4 @@ export function Phone3D({ mode, formatId, entranceProgress, className }: Phone3D
       </AnimatePresence>
     </div>
   );
-}
-
-/* Active growth chassis only at module eval — dark / stills warm on idle via preloadPhone3DAssets */
-useGLTF.preload(MODEL_LIGHT, DRACO_PATH);
-useTexture.preload([SCREEN_STILL.banner!]);
+});

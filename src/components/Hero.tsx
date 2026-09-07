@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, animate } from "framer-motion";
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import { memo, useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { useCarouselActiveIndex } from "../hooks/useCarouselActiveIndex";
 import { useCountUp } from "../hooks/useCountUp";
 import { useApplePreview } from "../hooks/useApplePreview";
@@ -90,7 +90,7 @@ function StatCard({ value, label, counted, accent, align = "center" }: { value: 
   );
 }
 
-function HeroPinnedScene() {
+const HeroPinnedScene = memo(function HeroPinnedScene() {
   const reduced = useReducedMotion();
   const { mode } = useMode();
   const { isActive } = useApplePreview();
@@ -252,15 +252,15 @@ function HeroPinnedScene() {
       </div>
     </section>
   );
-}
+});
 
 /**
  * Home Hero — big lower headline rides the ascent; ghost stats reveal on scroll.
  */
-export function Hero() {
+export const Hero = memo(function Hero() {
   return (
     <HeroFlyProvider>
       <HeroPinnedScene />
     </HeroFlyProvider>
   );
-}
+});

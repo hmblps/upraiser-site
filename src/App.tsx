@@ -1,31 +1,17 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useSearchParams } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
 import { HomePage } from "./pages/HomePage";
 
-import {
-  RedirectExpertiseToSolutions,
-  RedirectMeasurementToExpertise,
-} from "./pages/LegacyRedirects";
-
 const CraftPage = lazy(() => import("./pages/CraftPage").then((m) => ({ default: m.CraftPage })));
-
 const ChannelsPage = lazy(() => import("./pages/ChannelsPage").then((m) => ({ default: m.ChannelsPage })));
-const CaseDetailPage = lazy(() =>
-  import("./pages/CaseDetailPage").then((m) => ({ default: m.CaseDetailPage })),
-);
-const NotFoundPage = lazy(() =>
-  import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })),
-);
-const PrivacyPage = lazy(() =>
-  import("./pages/LegalPages").then((m) => ({ default: m.PrivacyPage })),
-);
+const CaseDetailPage = lazy(() => import("./pages/CaseDetailPage").then((m) => ({ default: m.CaseDetailPage })));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
+const PrivacyPage = lazy(() => import("./pages/LegalPages").then((m) => ({ default: m.PrivacyPage })));
 const TermsPage = lazy(() => import("./pages/LegalPages").then((m) => ({ default: m.TermsPage })));
 const ContactPage = lazy(() => import("./pages/ContactPage").then((m) => ({ default: m.ContactPage })));
 const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((m) => ({ default: m.ThankYouPage })));
-const HeroCapturePage = lazy(() =>
-  import("./pages/HeroCapturePage").then((m) => ({ default: m.HeroCapturePage })),
-);
+const HeroCapturePage = lazy(() => import("./pages/HeroCapturePage").then((m) => ({ default: m.HeroCapturePage })));
 
 function RouteFallback() {
   return (
@@ -38,6 +24,37 @@ function RouteFallback() {
 /** Legacy depth pages → home anchors (Routes + Peaks live on `/`). */
 function RedirectHomeHash({ hash }: { hash: string }) {
   return <Navigate to={{ pathname: "/", hash }} replace />;
+}
+
+const PILLAR_TO_CHANNEL: Record<string, string> = {
+  oem: "oem",
+  media: "programmatic",
+  performance: "performance",
+  programmatic: "programmatic",
+  social: "social",
+  "paid-social": "social",
+  creators: "influencer",
+  influencer: "influencer",
+  ctv: "ctv",
+  premium: "native",
+  retargeting: "retargeting",
+  rewarded: "rewarded",
+};
+
+function RedirectExpertiseToRoutes() {
+  const [params] = useSearchParams();
+  const next = new URLSearchParams();
+  const channel = params.get("channel");
+  const pillar = params.get("pillar");
+
+  if (channel) {
+    next.set("channel", channel);
+  } else if (pillar && PILLAR_TO_CHANNEL[pillar]) {
+    next.set("channel", PILLAR_TO_CHANNEL[pillar]);
+  }
+
+  const qs = next.toString();
+  return <Navigate to={qs ? `/?${qs}#routes` : "/#routes"} replace />;
 }
 
 export default function App() {
@@ -55,7 +72,7 @@ export default function App() {
           <Route path="channels" element={<ChannelsPage />} />
 
           <Route path="craft" element={<CraftPage />} />
-                    <Route path="contact/sent" element={<ThankYouPage />} />
+          <Route path="contact/sent" element={<ThankYouPage />} />
           <Route path="contact" element={<ContactPage />} />
 
           {/* Retired IA → home sections or redirects */}
@@ -68,9 +85,9 @@ export default function App() {
 
           {/* Legacy depth URLs */}
           <Route path="clarity" element={<RedirectHomeHash hash="routes" />} />
-          <Route path="expertise" element={<RedirectExpertiseToSolutions />} />
-          <Route path="measurement" element={<RedirectMeasurementToExpertise />} />
-          <Route path="technology" element={<RedirectMeasurementToExpertise />} />
+          <Route path="expertise" element={<RedirectExpertiseToRoutes />} />
+          <Route path="measurement" element={<RedirectHomeHash hash="routes" />} />
+          <Route path="technology" element={<RedirectHomeHash hash="routes" />} />
           <Route path="partners" element={<RedirectHomeHash hash="routes" />} />
           <Route path="about" element={<Navigate to="/" replace />} />
           <Route path="how-we-work" element={<Navigate to="/" replace />} />
