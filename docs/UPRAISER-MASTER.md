@@ -1027,3 +1027,18 @@ Status as of 31 Aug 2026. Conversion items that would put **Request Pilot** in t
   - Split "Every Format. One Supply Path." onto two lines in the Channels section and applied `text-accent` to the second line.
   - Removed trailing periods from all major section titles across the site (`liveContent.ts` and React components), maintaining them only on descriptive paragraphs.
 
+### Sept 7 2026 Updates
+- **Mobile Channels (Routes) UX Overhaul (`ProgrammaticScrollSectionMobile.tsx`):**
+  - Completely removed the tiny, hard-to-read "docked" phone at the bottom of the screen.
+  - Implemented a "sticky sidebar" split-screen layout for mobile:
+    - **Left (35-40%):** A large, fully visible sticky phone locked directly beneath the header.
+    - **Right (60-65%):** A scrolling column of format description cards.
+  - The phone now dynamically switches formats (Playable, Native, Interstitial, etc.) as the user scrolls through the cards, perfectly mirroring the desktop experience on a narrower screen.
+- **Mobile HomePilotCta (Ready to be Upraised) Fixes:**
+  - Fixed an issue where the absolute mountain background (`cta-mountain-bg`) overlapped or was severely cropped by short text containers on mobile.
+  - Added explicit bottom spacing (`pb-[60vw]`) to the text wrapper on mobile, forcing the mountain to render below the text and buttons.
+  - Centered the mountain peak (`background-position: center bottom`) for maximum impact.
+  - Removed the `background: #ffffff` override from mobile light mode, restoring the "metallic sky" gradient so the visual sequence (Hero Metallic -> White Content -> Footer Metallic) is unbroken across all devices.
+- **Mobile Parallax Charts (`Audience.tsx`, `PromiseSection.tsx`):**
+  - Added `y: useTransform(scrollYProgress, [0, 0.4], [100, 0])` to the chart containers on mobile (`AudienceStatic` and `PromiseClean`).
+  - Mobile charts now physically slide up into view and lower on reverse scroll, matching the desktop's fluid interaction instead of just animating in place.
