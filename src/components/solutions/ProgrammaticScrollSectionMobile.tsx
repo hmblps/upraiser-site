@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { SiteMode } from "../../data/liveContent";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { SectionHeader } from "../SectionHeader";
 import type { AdFormat } from "./ProgrammaticFormats";
 import { CssPhone } from "./CssPhone";
@@ -25,7 +24,7 @@ export function ProgrammaticScrollSectionMobile({
   headerTitle,
   headerDescription,
 }: ProgrammaticScrollSectionMobileProps) {
-  const reduced = useReducedMotion();
+  // removed unused useReducedMotion
   const [activeIndex, setActiveIndex] = useState(0);
   const sectionRef = useRef<HTMLElement | null>(null);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);

@@ -144,6 +144,15 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
   const liveDate = useMemo(() => formatLiveDate(new Date()), []);
   const morph = useMotionValue(0);
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const chartOpacity = useTransform(progress, [0, 0.06, 0.5, 0.88, 1], [0, 0.85, 1, 1, 1]);
   const dateOpacity = useTransform(progress, [0.18, 0.36], [0, 1]);
 
@@ -172,7 +181,8 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
     };
   }, [enabled, progress, morph]);
 
-
+  const currentCenterX = isMobile ? VB / 2 : CENTER_X;
+  const currentCenterY = isMobile ? VB / 2 : CY;
 
   return (
     <motion.div className="fraud-radial-chart" style={{ opacity: chartOpacity }} aria-hidden>
@@ -203,7 +213,7 @@ export function FraudScrollChart({ progress }: { progress: MotionValue<number> }
             viewBox={`0 0 ${VB} ${VB}`}
             preserveAspectRatio="xMidYMid meet"
           >
-            <g transform={`translate(${CENTER_X}, ${CY})`}>
+            <g transform={`translate(${currentCenterX}, ${currentCenterY})`}>
               {radii.map((r, i) => (
                 <FraudArc key={i} r={r} seg={segments[i]!} morph={morph} />
               ))}

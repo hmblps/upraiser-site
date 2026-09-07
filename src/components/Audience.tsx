@@ -18,9 +18,10 @@ function AudienceStatic() {
   const content = audienceByMode[mode];
   const isFraud = mode === "infrastructure";
   const ref = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: chartRef,
     offset: ["start 85%", "end 35%"],
   });
 
@@ -39,6 +40,7 @@ function AudienceStatic() {
         </div>
 
         <motion.div 
+          ref={chartRef}
           className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-8 pointer-events-none flex items-center justify-center"
           style={{ y: chartY }}
         >
