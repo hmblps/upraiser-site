@@ -2,12 +2,14 @@ import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "rea
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { useFormatScrollSection } from "../../hooks/useFormatScrollSection";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { useHardwareTier } from "../../hooks/useHardwareTier";
 import type { SiteMode } from "../../data/liveContent";
 import { SectionHeader } from "../SectionHeader";
 import { BrandAurora } from "../BrandAurora";
 import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
+import { CssPhone, CssTablet, CssTv } from "./CssPhone";
 import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobile";
 import { warmStage } from "../../lib/scrollPreload";
 
@@ -40,33 +42,24 @@ function DeviceCarousel3({
   scene = "phone",
   entranceProgress,
   className,
+  flat = false,
 }: {
   mode: SiteMode;
   formatId: string;
   scene?: "phone" | "tablet" | "tv";
   entranceProgress: MotionValue<number>;
   className?: string;
+  /** Same GLBs, face-on — lite / Intel. */
+  flat?: boolean;
 }) {
   const targetPhase = scene === "tablet" ? 1 : scene === "tv" ? 2 : 0;
   const phaseRaw = useMotionValue(targetPhase);
   // Slightly springy — feels alive without bouncing content off-screen
   const phase = useSpring(phaseRaw, { stiffness: 340, damping: 32, mass: 0.6 });
 
-  const [armed, setArmed] = useState(() => new Set([targetPhase]));
-
   useEffect(() => {
     phaseRaw.set(targetPhase);
   }, [targetPhase, phaseRaw]);
-
-  useEffect(() => {
-    setArmed((prev) => {
-      const next = new Set(prev);
-      next.add(targetPhase);
-      return next;
-    });
-    const t = window.setTimeout(() => setArmed(new Set([targetPhase])), 720);
-    return () => window.clearTimeout(t);
-  }, [targetPhase]);
 
   // ── Signed distance from each slot (negative = left, positive = right) ────
   const phoneDist  = useTransform(phase, (p) => Math.abs(0 - p));
@@ -88,9 +81,8 @@ function DeviceCarousel3({
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-      {/* Phone — App Growth formats
-          Canvas capped at 62% column width: phone is a small device; the
-          narrower stage makes that legible without faking real proportions. */}
+      {/* One WebGL device at a time — concurrent phone+tablet+TV canvases starve the
+          tablet buffer (stuck 300×150) and flash the wrong chassis on format change. */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
         style={{
@@ -99,24 +91,26 @@ function DeviceCarousel3({
           pointerEvents: scene === "phone" ? "auto" : "none",
         }}
       >
-        <div style={{ width: "62%", height: "100%", position: "relative" }}>
-          {armed.has(0) ? (
-          <Suspense fallback={<div className={className} />}>
-            <CanvasErrorBoundary fallback={<div className={className} />}>
+        <div className="prog-device-slot prog-device-slot--phone">
+          {scene === "phone" ? (
+          <Suspense fallback={<CssPhone mode={mode} formatId={formatId} className="prog-css-phone--desktop prog-css-phone--slot" />}>
+            <CanvasErrorBoundary fallback={<CssPhone mode={mode} formatId={formatId} className="prog-css-phone--desktop prog-css-phone--slot" />}>
               <Phone3D
                 mode={mode}
                 formatId={formatId}
-                entranceProgress={entranceProgress}
+                entranceProgress={flat ? undefined : entranceProgress}
                 className={className}
+                active
+                flat={flat}
               />
             </CanvasErrorBoundary>
           </Suspense>
-          ) : null}
+          ) : (
+            <CssPhone mode={mode} formatId={formatId} className="prog-css-phone--desktop prog-css-phone--slot" />
+          )}
         </div>
       </motion.div>
 
-      {/* Tablet — OEM formats
-          85% width: tablet is mid-size; noticeably larger than phone. */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
         style={{
@@ -125,33 +119,38 @@ function DeviceCarousel3({
           pointerEvents: scene === "tablet" ? "auto" : "none",
         }}
       >
-        <div style={{ width: "85%", height: "100%", position: "relative" }}>
-          {armed.has(1) ? (
-          <Suspense fallback={<div className={className} />}>
-            <CanvasErrorBoundary fallback={<div className={className} />}>
-              <Tablet3D mode={mode} formatId={formatId} className={className} />
+        <div className="prog-device-slot prog-device-slot--tablet">
+          {flat || scene !== "tablet" ? (
+            <CssTablet mode={mode} formatId={formatId} className="prog-css-tablet prog-css-tablet--slot" />
+          ) : (
+          <Suspense fallback={<CssTablet mode={mode} formatId={formatId} className="prog-css-tablet prog-css-tablet--slot" />}>
+            <CanvasErrorBoundary fallback={<CssTablet mode={mode} formatId={formatId} className="prog-css-tablet prog-css-tablet--slot" />}>
+              <Tablet3D mode={mode} formatId={formatId} className={className} active />
             </CanvasErrorBoundary>
           </Suspense>
-          ) : null}
+          )}
         </div>
       </motion.div>
 
-      {/* TV — CTV formats — fills the full column (biggest screen) */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 flex items-center justify-center"
         style={{
           x: tvX,
           opacity: tvOpacity,
           pointerEvents: scene === "tv" ? "auto" : "none",
         }}
       >
-        <Suspense fallback={null}>
-          {armed.has(2) ? (
-          <CanvasErrorBoundary fallback={null}>
-            <Tv3D mode={mode} formatId={formatId} className={className} />
-          </CanvasErrorBoundary>
-          ) : null}
-        </Suspense>
+        <div className="prog-device-slot prog-device-slot--tv">
+          {flat || scene !== "tv" ? (
+            <CssTv mode={mode} formatId={formatId} className="prog-css-tv prog-css-tv--slot" />
+          ) : (
+          <Suspense fallback={<CssTv mode={mode} formatId={formatId} className="prog-css-tv prog-css-tv--slot" />}>
+            <CanvasErrorBoundary fallback={<CssTv mode={mode} formatId={formatId} className="prog-css-tv prog-css-tv--slot" />}>
+              <Tv3D mode={mode} formatId={formatId} className={className} active />
+            </CanvasErrorBoundary>
+          </Suspense>
+          )}
+        </div>
       </motion.div>
     </div>
   );
@@ -170,7 +169,9 @@ export type ProgrammaticScrollSectionProps = {
 
 /**
  * Native sticky scroll drives the active format — no wheel hijack.
- * Desktop: 3D phone. Mobile / reduced: stacked cards + CssPhone dock.
+ * Desktop high-tier: perspective GLB. Desktop lite / `?lite=1`: flat phone GLB;
+ * tablet/TV stay CSS chassis (avoids CSS→WebGL fly-off on OEM/CTV).
+ * Width < 1024 or reduced-motion: ProgrammaticScrollSectionMobile (same glass files).
  */
 export function ProgrammaticScrollSection({
   mode,
@@ -183,9 +184,13 @@ export function ProgrammaticScrollSection({
   headerDescription,
 }: ProgrammaticScrollSectionProps) {
   const reduced = useReducedMotion();
+  const tier = useHardwareTier();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < DESKTOP_MIN_WIDTH : false,
+  );
   const desktopEnabled = !isMobile && !reduced;
+  const use3d = desktopEnabled && tier === "high";
 
   const { activeIndex, jumpTo, totalVirtual, entranceProgress } = useFormatScrollSection(sectionRef, {
     enabled: desktopEnabled,
@@ -228,9 +233,12 @@ export function ProgrammaticScrollSection({
   useEffect(() => {
     if (!desktopEnabled) return;
     const scene = format.scene ?? "phone";
-    if (scene === "tablet") warmStage("routes-tablet");
-    else if (scene === "tv") warmStage("routes-tv");
-    else warmStage("routes");
+    if (scene === "tablet" || scene === "tv") {
+      warmStage("routes-tablet");
+      warmStage("routes-tv");
+    } else {
+      warmStage("routes");
+    }
 
     const ahead = formats[Math.min(activeIndex + 1, formats.length - 1)];
     const aheadScene = ahead?.scene ?? "phone";
@@ -281,6 +289,7 @@ export function ProgrammaticScrollSection({
                 scene={format.scene ?? "phone"}
                 entranceProgress={entranceProgress}
                 className="prog-scroll-canvas"
+                flat={!use3d}
               />
             </div>
 

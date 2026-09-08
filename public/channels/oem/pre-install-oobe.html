@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Review additional apps - Play Auto Install</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          android: {
+            bg: "#000000",
+            surface: "#121212",
+            primary: "#a8c7fa",
+            onPrimary: "#062e6f",
+            textPrimary: "#e3e3e3",
+            textSecondary: "#8e918f",
+          },
+        },
+        fontFamily: {
+          sans: ['"Google Sans"', "Roboto", "sans-serif"],
+          roboto: ["Roboto", "sans-serif"],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  /* Screen-only, one page — chassis is CssTablet / Tablet3D */
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    color: #e3e3e3;
+    font-family: "Google Sans", Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .oobe {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #000;
+  }
+  .oobe-main {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .m3-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 2px solid #8e918f;
+    background: transparent;
+    width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 2px;
+    display: inline-grid;
+    place-content: center;
+  }
+  .m3-checkbox:checked {
+    background: #a8c7fa;
+    border-color: #a8c7fa;
+  }
+  .m3-checkbox:checked::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.28rem;
+    border-left: 2px solid #062e6f;
+    border-bottom: 2px solid #062e6f;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+</style>
+</head>
+<body>
+<div class="oobe" data-purpose="tablet-viewport">
+  <header class="shrink-0 pt-2.5 pb-1 px-4 flex justify-between items-center text-[11px] text-neutral-300 font-medium">
+    <span>10:00</span>
+    <div class="flex items-center gap-1.5 text-[12px]">
+      <span class="text-[9px] font-semibold tracking-tighter px-0.5 border border-neutral-400 rounded-sm text-neutral-400">LTE</span>
+      <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M2 22h20L12 2 2 22z"/></svg>
+      <div class="flex items-center gap-0.5">
+        <div class="w-4 h-2 border border-neutral-300 rounded-[2px] p-px flex items-center"><div class="w-3/4 h-full bg-neutral-200 rounded-[1px]"></div></div>
+        <div class="w-0.5 h-1 bg-neutral-300 rounded-r-sm"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="oobe-main px-4 pt-1 pb-2">
+    <section class="shrink-0 flex flex-col items-center text-center mb-2">
+      <div class="w-8 h-8 mb-1.5">
+        <svg class="w-8 h-8" viewBox="0 0 48 48">
+          <path d="M8.8,4.2C8.3,4.7,8,5.5,8,6.5v35c0,1,0.3,1.8,0.8,2.3l0.1,0.1L28.2,24.6V24.3L8.9,4.1L8.8,4.2z" fill="#4CAF50"/>
+          <path d="M34.7,31.1l-6.5-6.5V24.3l6.5-6.5l0.1,0.1l7.8,4.4c2.2,1.3,2.2,3.3,0,4.6L34.7,31.1z" fill="#FFC107"/>
+          <path d="M28.2,24.6L8.8,44c0.7,0.8,1.9,0.9,3.2,0.1l22.7-13L28.2,24.6z" fill="#F44336"/>
+          <path d="M28.2,24.3L34.7,17.8L12,5c-1.3-0.7-2.5-0.7-3.2,0.1L28.2,24.3z" fill="#00BCD4"/>
+        </svg>
+      </div>
+      <h1 class="text-[17px] font-normal text-white tracking-tight leading-tight">Review additional apps</h1>
+      <p class="text-[11px] leading-snug text-android-textSecondary mt-0.5">Apps will be downloaded when Wi-Fi is available</p>
+    </section>
+
+    <section class="shrink-0 flex items-center justify-between py-2 border-b border-neutral-800 mb-1.5">
+      <div class="flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-neutral-400 fill-current" viewBox="0 0 24 24">
+          <rect height="3.5" rx="0.5" width="3.5" x="4" y="4"/><rect height="3.5" rx="0.5" width="3.5" x="10.25" y="4"/><rect height="3.5" rx="0.5" width="3.5" x="16.5" y="4"/>
+          <rect height="3.5" rx="0.5" width="3.5" x="4" y="10.25"/><rect height="3.5" rx="0.5" width="3.5" x="10.25" y="10.25"/><rect height="3.5" rx="0.5" width="3.5" x="16.5" y="10.25"/>
+          <rect height="3.5" rx="0.5" width="3.5" x="4" y="16.5"/><rect height="3.5" rx="0.5" width="3.5" x="10.25" y="16.5"/><rect height="3.5" rx="0.5" width="3.5" x="16.5" y="16.5"/>
+        </svg>
+        <span class="text-[13px] font-medium text-white">All of the following apps</span>
+      </div>
+      <input checked class="m3-checkbox" type="checkbox"/>
+    </section>
+
+    <div class="flex-1 min-h-0 overflow-hidden flex flex-col gap-1.5">
+      <section class="shrink-0">
+        <h2 class="text-[10px] font-medium text-android-textSecondary tracking-wider uppercase mb-1">From Google</h2>
+        <div class="space-y-0">
+          <div class="flex items-center justify-between py-1.5 px-0.5">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center shrink-0 text-[11px] font-bold text-white">1</div>
+              <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight">Google One</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
+            </div>
+            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+          </div>
+          <div class="flex items-center justify-between py-1.5 px-0.5">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center shrink-0"><span class="text-red-500 text-sm">⌂</span></div>
+              <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight">Google Home</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
+            </div>
+            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+          </div>
+          <div class="flex items-center justify-between py-1.5 px-0.5">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center shrink-0"><div class="w-4 h-3 rounded-sm bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500"></div></div>
+              <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight">Google Wallet</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
+            </div>
+            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+          </div>
+        </div>
+      </section>
+
+      <section class="flex-1 min-h-0 overflow-hidden flex flex-col">
+        <div class="shrink-0 flex items-center justify-between mb-1">
+          <h2 class="text-[10px] font-medium text-android-textSecondary tracking-wider uppercase">From Operator &amp; Partners</h2>
+          <span class="text-[9px] uppercase font-semibold tracking-wider text-amber-400/90 bg-amber-400/10 px-1.5 py-0.5 rounded-full border border-amber-400/20">Featured</span>
+        </div>
+        <div class="flex-1 min-h-0 overflow-hidden flex flex-col gap-1">
+          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-gradient-to-r from-neutral-900/90 via-amber-950/20 to-neutral-900/90 border border-amber-500/30">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center shrink-0 text-black font-black text-sm">A</div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1"><span class="text-[13px] font-semibold text-white">Apex Pay</span><span class="text-[8px] font-bold uppercase px-1 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">Partner</span></div>
+                <p class="text-[10px] text-android-textSecondary">Financial Partner • Included</p>
+              </div>
+            </div>
+            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+          </div>
+          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-red-600 via-purple-600 to-indigo-700 flex items-center justify-center shrink-0 text-white text-[10px]">▶</div>
+              <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight">Xfinity Stream</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
+            </div>
+            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+          </div>
+          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 text-white font-black text-sm">P</div>
+              <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight truncate">Pandora - Music &amp; Podcasts</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
+            </div>
+            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+          </div>
+          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-xl bg-emerald-700/80 flex items-center justify-center shrink-0 text-emerald-200 text-sm">▤</div>
+              <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight">Shopping &amp; Utilities</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
+            </div>
+            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="shrink-0 border-t border-neutral-900 bg-black">
+    <div class="px-4 py-2.5 flex justify-end">
+      <button class="min-w-[72px] h-9 px-5 rounded-full bg-android-primary text-android-onPrimary font-medium text-sm" type="button">OK</button>
+    </div>
+    <div class="h-5 flex items-center justify-center pb-1.5"><div class="w-24 h-1 bg-neutral-600 rounded-full"></div></div>
+  </footer>
+</div>
+</body>
+</html>

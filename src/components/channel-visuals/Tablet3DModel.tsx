@@ -1,72 +1,81 @@
-import * as THREE from 'three'
-import { useGLTF } from '@react-three/drei'
-import { DRACO_PATH } from '../../lib/heroModel'
-import type { GLTF } from 'three-stdlib'
-import type { ThreeElements } from '@react-three/fiber'
-import type { SiteMode } from "../../data/liveContent";
+import { useEffect, useLayoutEffect, useMemo } from "react";
+import { useGLTF } from "@react-three/drei";
+import {
+  Box3,
+  Color,
+  MeshBasicMaterial,
+  Vector3,
+  type Mesh,
+  type Object3D,
+  type Texture,
+} from "three";
+import type { ThreeElements } from "@react-three/fiber";
+import { DRACO_PATH } from "../../lib/heroModel";
 
-type GLTFResult = GLTF & {
-  nodes: {
-    큐브: THREE.Mesh
-    큐브_1: THREE.Mesh
-    큐브_2: THREE.Mesh
-    큐브_3: THREE.Mesh
-    큐브_4: THREE.Mesh
-    큐브_5: THREE.Mesh
-    큐브_6: THREE.Mesh
-    큐브_7: THREE.Mesh
-    Cube: THREE.Mesh
-    Cube_1: THREE.Mesh
-    Cube_2: THREE.Mesh
-    Cube_3: THREE.Mesh
-    Cube_4: THREE.Mesh
-    Cube001: THREE.Mesh
-    Cube001_1: THREE.Mesh
-    Cube001_2: THREE.Mesh
-  }
-  materials: {
-    ['매테리얼.001']: THREE.MeshStandardMaterial
-    Material: THREE.MeshStandardMaterial
-    white: THREE.MeshStandardMaterial
-    steel: THREE.MeshStandardMaterial
-    Logo: THREE.MeshStandardMaterial
-    lense: THREE.MeshPhysicalMaterial
-    glass: THREE.MeshPhysicalMaterial
-    매테리얼: THREE.MeshStandardMaterial
-    bronze: THREE.MeshStandardMaterial
-    ['right apple pencil dock']: THREE.MeshStandardMaterial
-    black: THREE.MeshStandardMaterial
-  }
-}
+const TABLET_URL = "/channels/oem/tablet.glb";
 
-export function Model(props: ThreeElements['group'] & { mode?: SiteMode }) {
-  const { nodes, materials } = useGLTF('/channels/oem/tablet.glb') as unknown as GLTFResult
+type ModelProps = ThreeElements["group"] & {
+  screenMap?: Texture | null;
+};
+
+/**
+ * Clone the cached GLB (flat in XZ). Parent π/2 in Tablet3D stands it up.
+ * Screen = unlit plane sized from the body bounds (GLB "glass" is the camera lens only).
+ */
+export function Model({ screenMap = null, ...props }: ModelProps) {
+  const { scene } = useGLTF(TABLET_URL, DRACO_PATH);
+
+  const { root, screenMat, screenPose } = useMemo(() => {
+    const root = scene.clone(true);
+    root.traverse((obj: Object3D) => {
+      const mesh = obj as Mesh;
+      if (mesh.isMesh && mesh.name === "Cube_1") mesh.visible = false;
+    });
+
+    const box = new Box3().setFromObject(root);
+    const size = box.getSize(new Vector3());
+    const center = box.getCenter(new Vector3());
+
+    const screenMat = new MeshBasicMaterial({
+      name: "upraiser-tablet-screen",
+      color: new Color("#000000"),
+      toneMapped: false,
+    });
+
+    const screenPose = {
+      position: [center.x, box.max.y + 0.00035, center.z] as [number, number, number],
+      rotation: [-Math.PI / 2, 0, 0] as [number, number, number],
+      size: [size.x * 0.905, size.z * 0.92] as [number, number],
+    };
+
+    return { root, screenMat, screenPose };
+  }, [scene]);
+
+  useEffect(() => () => screenMat.dispose(), [screenMat]);
+
+  useLayoutEffect(() => {
+    if (screenMap) {
+      screenMap.flipY = true;
+      screenMap.needsUpdate = true;
+      screenMat.map = screenMap;
+      screenMat.color = new Color("#ffffff");
+      screenMat.needsUpdate = true;
+    } else {
+      screenMat.map = null;
+      screenMat.color = new Color("#111111");
+      screenMat.needsUpdate = true;
+    }
+  }, [screenMap, screenMat]);
+
   return (
     <group {...props} dispose={null}>
-      <group scale={[0.159, 0.096, 0.159]}>
-        <mesh geometry={nodes.큐브.geometry} material={materials['매테리얼.001']} />
-        <mesh geometry={nodes.큐브_1.geometry} material={materials.Material} />
-        <mesh geometry={nodes.큐브_2.geometry} material={materials.white} />
-        <mesh geometry={nodes.큐브_3.geometry} material={materials.steel} />
-        <mesh geometry={nodes.큐브_4.geometry} material={materials.Logo} />
-        <mesh geometry={nodes.큐브_5.geometry} material={materials.lense} />
-        <mesh geometry={nodes.큐브_6.geometry} material={materials.glass} />
-        <mesh geometry={nodes.큐브_7.geometry} material={materials.white} />
-        <group scale={[1, 1.065, 1]}>
-          <mesh geometry={nodes.Cube.geometry} material={materials.매테리얼} />
-          <mesh geometry={nodes.Cube_1.geometry} material={materials.Material} />
-          <mesh geometry={nodes.Cube_2.geometry} material={materials.steel} />
-          <mesh geometry={nodes.Cube_3.geometry} material={materials.bronze} />
-          <mesh geometry={nodes.Cube_4.geometry} material={materials.white} />
-        </group>
-        <group scale={[1, 1.065, 1]}>
-          <mesh geometry={nodes.Cube001.geometry} material={materials.Material} />
-          <mesh geometry={nodes.Cube001_1.geometry} material={materials['right apple pencil dock']} />
-          <mesh geometry={nodes.Cube001_2.geometry} material={materials.black} />
-        </group>
-      </group>
+      <primitive object={root} />
+      <mesh position={screenPose.position} rotation={screenPose.rotation} renderOrder={2}>
+        <planeGeometry args={screenPose.size} />
+        <primitive object={screenMat} attach="material" />
+      </mesh>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/channels/oem/tablet.glb', DRACO_PATH)
+useGLTF.preload(TABLET_URL, DRACO_PATH);

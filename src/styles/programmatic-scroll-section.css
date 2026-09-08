@@ -275,16 +275,13 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-.prog-css-phone__notch {
+.prog-css-phone__notch,
+.prog-css-phone__island {
   position: absolute;
-  top: 0.5rem;
+  top: 0.72rem;
   left: 50%;
   z-index: 6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.28rem;
-  width: 34%;
+  width: 32%;
   height: 1.05rem;
   transform: translateX(-50%);
   border-radius: 999px;
@@ -293,26 +290,11 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.06),
     0 0.5px 1px rgba(0, 0, 0, 0.55);
   pointer-events: none;
-  flex-shrink: 0;
 }
 
-.prog-css-phone__speaker {
-  display: block;
-  width: 42%;
-  height: 0.22rem;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #1a1a1a, #0a0a0a);
-  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.12);
-}
-
+.prog-css-phone__speaker,
 .prog-css-phone__lens {
-  display: block;
-  width: 0.32rem;
-  height: 0.32rem;
-  border-radius: 999px;
-  background:
-    radial-gradient(circle at 35% 30%, #6a8cff 0%, #1a2a66 45%, #050505 100%);
-  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.25);
+  display: none;
 }
 
 .prog-css-phone__home-glow {
@@ -333,14 +315,21 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #fcf9f8;
-  /* Scale feed typography to phone width (design ~390px) */
+  background: #000;
   container-type: inline-size;
   container-name: phone-screen;
 }
 
+.prog-format-glass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
 .prog-css-phone__live-ad,
-.prog-css-phone__live-video {
+.prog-css-phone__live-video,
+.prog-format-glass .prog-css-phone__live-ad {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -410,6 +399,210 @@
   max-width: min(100%, 22.5rem);
   margin-inline: auto;
   align-self: center;
+}
+
+/* Standing iPad — same visual weight as Tablet3D, not a landscape screenshot slab. */
+.prog-css-tablet {
+  --prog-tablet-budget: calc(100dvh - var(--site-header-height, 72px) - 11.5rem);
+  aspect-ratio: 3 / 4;
+  height: min(88%, var(--prog-tablet-budget));
+  max-height: min(70dvh, var(--prog-tablet-budget));
+  width: auto;
+  max-width: 100%;
+  margin-inline: auto;
+  border-radius: 1.35rem;
+  padding: 0.45rem;
+  box-shadow:
+    0 28px 56px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.prog-css-tablet__bezel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #050505;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  /* Absolute FormatGlass must not collapse / intrinsic-PNG inflate */
+  min-height: 0;
+  contain: strict;
+}
+
+.prog-css-tablet__bezel .prog-css-phone__live-ad,
+.prog-css-tablet__screen {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  background: #eaeef2;
+}
+
+.prog-css-tv {
+  aspect-ratio: 16 / 9;
+  width: min(100%, 42rem);
+  height: auto;
+  max-height: min(58dvh, 100%);
+  margin-inline: auto;
+  border-radius: 0.65rem;
+  padding: 0.35rem;
+  box-shadow:
+    0 28px 56px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.prog-css-tv__bezel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  background: #050505;
+}
+
+.prog-css-tv__bezel .prog-css-phone__live-ad,
+.prog-css-tv__screen {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Bleed past any baked edge / GLB glass margin */
+  transform: scale(1.04);
+  transform-origin: center;
+}
+
+.prog-css-tv__foot {
+  width: 33%;
+  height: 0.5rem;
+  margin: 0 auto;
+  background: #121c2c;
+  border-radius: 0 0 0.25rem 0.25rem;
+  border: 1px solid #000;
+  border-top: 0;
+}
+
+.prog-scroll-lite-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.prog-scroll-lite-stage__frame {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 0;
+  pointer-events: auto;
+}
+
+.prog-scroll-lite-stage__frame--phone {
+  width: 40%;
+}
+
+.prog-scroll-lite-stage__frame--tablet {
+  width: 88%;
+}
+
+.prog-scroll-lite-stage__frame--tv {
+  width: 100%;
+}
+
+.prog-device-load {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Fixed-aspect device slots — CSS chassis and WebGL share one box (no inflate→shrink). */
+.prog-device-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 100%;
+  min-height: 0;
+}
+
+.prog-device-slot--phone {
+  width: min(40%, 18rem);
+  aspect-ratio: 9 / 19.5;
+  height: auto;
+  max-height: min(74dvh, var(--prog-phone-budget, 74dvh));
+}
+
+.prog-device-slot--tablet {
+  width: min(88%, 28rem);
+  aspect-ratio: 3 / 4;
+  height: auto;
+  max-height: min(70dvh, var(--prog-phone-budget, 70dvh));
+}
+
+.prog-device-slot--tv {
+  width: min(100%, 48rem);
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-height: min(64dvh, 100%);
+}
+
+.prog-device-slot .phone-glb-stage,
+.prog-device-slot .prog-device-load,
+.prog-device-slot .tablet-glb-canvas,
+.prog-device-slot .tv-glb-canvas,
+.prog-device-slot .phone-glb-canvas,
+.prog-css-phone--slot,
+.prog-css-tablet--slot,
+.prog-css-tv--slot {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+}
+
+.prog-css-phone--slot {
+  aspect-ratio: unset;
+}
+
+.prog-css-tablet--slot {
+  aspect-ratio: unset;
+  padding: 0.45rem;
+}
+
+.prog-css-tv--slot {
+  aspect-ratio: unset;
+  padding: 0.28rem;
+}
+
+.prog-css-tv--slot .prog-css-tv__foot {
+  display: none;
+}
+
+.prog-device-load__placeholder,
+.prog-device-load__canvas {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prog-device-load__canvas {
+  pointer-events: auto;
+}
+
+.prog-device-load__placeholder {
+  pointer-events: none;
 }
 
 .prog-css-phone--mobile {

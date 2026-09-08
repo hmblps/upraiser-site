@@ -85,4 +85,15 @@ html[data-os="windows"] {
   touch-action: none;
   outline: none;
   -webkit-tap-highlight-color: transparent;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.phone-glb-canvas canvas,
+.tablet-glb-canvas canvas,
+.tv-glb-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }

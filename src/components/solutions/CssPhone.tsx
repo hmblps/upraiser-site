@@ -1,7 +1,14 @@
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import type { SiteMode } from "../../data/liveContent";
-import { ProgrammaticFullFeed } from "../channel-visuals/programmatic/ProgrammaticFullFeed";
-import { InterstitialVideo } from "./InterstitialVideo";
+import { FORMAT_HTML, FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
+import {
+  isAnimatedTabletGlass,
+  paintGlassAnim,
+  paintStill,
+  type GlassAnimId,
+} from "../../lib/tabletGlassAnim";
 
 type CssPhoneProps = {
   mode: SiteMode;
@@ -9,8 +16,121 @@ type CssPhoneProps = {
   className?: string;
 };
 
+const GLASS_SPRING = { type: "spring" as const, stiffness: 260, damping: 34, mass: 0.7 };
+
+/** Lite tablet glass — same canvas painters as Tablet3D. */
+function AnimatedTabletGlass({ formatId }: { formatId: GlassAnimId }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const reduced = useReducedMotion();
+  const still = FORMAT_STILL[formatId];
+
+  useEffect(() => {
+    if (!still) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    let cancelled = false;
+    let raf = 0;
+    let img: HTMLImageElement | null = null;
+    const t0 = performance.now();
+
+    const tick = (now: number) => {
+      if (cancelled || !img || !canvasRef.current) return;
+      paintGlassAnim(formatId, canvasRef.current, img, (now - t0) / 1000, reduced);
+      if (!reduced) raf = requestAnimationFrame(tick);
+    };
+
+    img = new Image();
+    img.decoding = "async";
+    img.onload = () => {
+      if (cancelled || !canvasRef.current || !img) return;
+      paintStill(canvasRef.current, img);
+      raf = requestAnimationFrame(tick);
+    };
+    img.src = still;
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
+  }, [formatId, still, reduced]);
+
+  return (
+    <motion.canvas
+      key={`a-${formatId}`}
+      ref={canvasRef}
+      className="prog-css-phone__live-ad"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={GLASS_SPRING}
+    />
+  );
+}
+
 /**
- * CSS phone chassis with live HTML format feed (Solutions glass).
+ * Same glass files as Phone3D / Tablet3D / Tv3D (`deviceScreens.ts`).
+ * Prefer live HTML → animated OEM canvas → MP4 → still.
+ */
+export function FormatGlass({ formatId }: { formatId: string }) {
+  const html = FORMAT_HTML[formatId];
+  const video = FORMAT_VIDEO[formatId];
+  const still = FORMAT_STILL[formatId];
+  const animated = isAnimatedTabletGlass(formatId);
+
+  return (
+    <div className="prog-format-glass">
+      <AnimatePresence mode="sync" initial={false}>
+        {html ? (
+          <motion.iframe
+            key={`h-${formatId}`}
+            src={html}
+            title={formatId}
+            className="prog-css-phone__live-ad"
+            scrolling="no"
+            style={{ overflow: "hidden" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={GLASS_SPRING}
+          />
+        ) : animated && still ? (
+          <AnimatedTabletGlass key={`a-${formatId}`} formatId={formatId} />
+        ) : video ? (
+          <motion.video
+            key={`v-${formatId}`}
+            src={video}
+            poster={still}
+            muted
+            loop
+            playsInline
+            autoPlay
+            className="prog-css-phone__live-ad"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={GLASS_SPRING}
+          />
+        ) : still ? (
+          <motion.img
+            key={`s-${formatId}`}
+            src={still}
+            alt=""
+            className="prog-css-phone__live-ad"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={GLASS_SPRING}
+          />
+        ) : null}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/**
+ * Thin Pro Max–proportion chassis — load fallback + true mobile + lite tablet/TV.
+ * Desktop lite phone still uses flat GLB; tablet/TV stay CSS (no CSS→GLB fly-off).
  */
 export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
@@ -22,111 +142,37 @@ export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
       <span className="prog-css-phone__btn prog-css-phone__btn--vol-down" aria-hidden />
       <span className="prog-css-phone__btn prog-css-phone__btn--power" aria-hidden />
       <div className="prog-css-phone__bezel">
-        <div className="prog-css-phone__notch" aria-hidden>
-          <span className="prog-css-phone__speaker" />
-          <span className="prog-css-phone__lens" />
-        </div>
+        <div className="prog-css-phone__island" aria-hidden />
         <div className="prog-css-phone__screen">
-          {formatId === "rich" ? (
-            <iframe
-              src="/rich-media-ad.html"
-              title="Rich Media Ad"
-              allow="autoplay; encrypted-media"
-              className="prog-css-phone__live-ad"
-            />
-          ) : formatId === "video" ? (
-            <VideoInterstitialScreen />
-          ) : formatId === "ctv-spot" || formatId === "ctv-video" ? (
-            <video
-              src="/channels/oem/screens/ctv-spot.mp4"
-              muted
-              loop
-              playsInline
-              autoPlay
-              poster="/channels/oem/screens/ctv-spot.png"
-              className="prog-css-phone__live-ad"
-            />
-          ) : (
-            <ProgrammaticFullFeed activeFormatId={formatId} />
-          )}
+          <FormatGlass formatId={formatId} />
         </div>
-        <span className="prog-css-phone__home-glow" aria-hidden />
       </div>
     </div>
-  );
-}
-
-function VideoInterstitialScreen() {
-  const [closed, setClosed] = useState(false);
-
-  if (closed) {
-    return <div className="prog-css-phone__ad-closed">Ad closed</div>;
-  }
-
-  return (
-    <>
-      <InterstitialVideo className="prog-css-phone__live-video" />
-      <button
-        type="button"
-        className="prog-css-phone__ad-close"
-        aria-label="Close ad"
-        onClick={() => setClosed(true)}
-      >
-        <span aria-hidden>
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-            <path d="M1.2 1.2l9.6 9.6M10.8 1.2L1.2 10.8" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
-          </svg>
-        </span>
-      </button>
-    </>
   );
 }
 
 export function CssTablet({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
-  
+
   return (
-    <div className={`relative flex-shrink-0 aspect-[4/3] rounded-2xl p-1.5 shadow-[0_28px_56px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.12)] prog-css-phone--${finish} ${className}`.trim()}>
-      <div className="relative w-full h-full rounded-[1rem] overflow-hidden bg-[#050505] border-2 border-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
-        <div className="absolute inset-0 overflow-hidden">
-          {formatId === "ctv-spot" || formatId === "ctv-video" ? (
-            <video
-              src="/channels/oem/screens/ctv-spot.mp4"
-              muted
-              loop
-              playsInline
-              autoPlay
-              poster="/channels/oem/screens/ctv-spot.png"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          ) : (
-            <img src="/channels/oem/screens/oem-store.jpg" alt="OEM Store" className="absolute inset-0 w-full h-full object-cover" />
-          )}
-        </div>
+    <div className={`prog-css-tablet prog-css-phone--${finish} ${className}`.trim()}>
+      <div className="prog-css-tablet__bezel">
+        <FormatGlass formatId={formatId} />
       </div>
     </div>
   );
 }
 
-export function CssTv({ mode, formatId: _formatId, className = "" }: CssPhoneProps) {
+export function CssTv({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
-  
+  const glassId = FORMAT_VIDEO[formatId] || FORMAT_STILL[formatId] ? formatId : "ctv-spot";
+
   return (
-    <div className={`relative flex-shrink-0 aspect-[16/9] rounded-lg p-1 shadow-[0_28px_56px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(255,255,255,0.12)] prog-css-phone--${finish} ${className}`.trim()}>
-      <div className="relative w-full h-full rounded-md overflow-hidden bg-[#050505] border-2 border-black">
-        <div className="absolute inset-0 overflow-hidden">
-          <video
-            src="/channels/oem/screens/ctv-spot.mp4"
-            muted
-            loop
-            playsInline
-            autoPlay
-            poster="/channels/oem/screens/ctv-spot.png"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
+    <div className={`prog-css-tv prog-css-phone--${finish} ${className}`.trim()}>
+      <div className="prog-css-tv__bezel">
+        <FormatGlass formatId={glassId} />
       </div>
-      <div className="absolute top-full left-1/2 -translate-x-1/2 w-1/3 h-2 bg-[#121c2c] rounded-b-sm border-x border-b border-black" />
+      <div className="prog-css-tv__foot" aria-hidden />
     </div>
   );
 }

@@ -2,19 +2,21 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useMemo,
   useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, Environment, useGLTF } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
-  Color,
-  MeshStandardMaterial,
+  CanvasTexture,
   SRGBColorSpace,
+  Texture,
+  TextureLoader,
   VideoTexture,
   type Group,
 } from "three";
@@ -22,69 +24,81 @@ import type { SiteMode } from "../../data/liveContent";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH } from "../../lib/heroModel";
+import { FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
+import {
+  isAnimatedTabletGlass,
+  paintGlassAnim,
+  paintStill,
+  type GlassAnimId,
+} from "../../lib/tabletGlassAnim";
+import { DeviceLoadStage } from "../solutions/DeviceLoadStage";
+import { CssTablet } from "../solutions/CssPhone";
 import { Model as TabletModel } from "./Tablet3DModel";
 
 const REST_Y = 0.06;
 const REST_X = -0.03;
 
-/** Screen assets for the tablet — OEM formats (setup wizard, store, system notification). */
-const TABLET_SCREEN_VIDEO: Record<string, string> = {
-  "pre-install": "/channels/oem/screens/pre-install.mp4",
-  "oem-store":   "/channels/oem/screens/oem-store.mp4",
-  "system-ui":   "/channels/oem/screens/system-ui.mp4",
-};
-const TABLET_SCREEN_STILL: Record<string, string> = {
-  "pre-install": "/channels/oem/screens/pre-install.png",
-  "oem-store":   "/channels/oem/screens/oem-store.png",
-  "system-ui":   "/channels/oem/screens/system-ui.png",
-};
+const TABLET_SCREEN_VIDEO = FORMAT_VIDEO;
+const TABLET_SCREEN_STILL = FORMAT_STILL;
 
 type Tablet3DProps = {
   mode: SiteMode;
   formatId?: string;
   className?: string;
+  /** Freeze the canvas (keep last frame) while another device is in front. */
+  active?: boolean;
+  flat?: boolean;
 };
 
-function applyScreenTexture(
-  root: Group | null,
-  tex: VideoTexture | { image: HTMLImageElement },
-) {
-  if (!root) return;
-  root.traverse((obj) => {
-    if (!("material" in obj)) return;
-    const mat = (obj as { material: unknown }).material;
-    if (!mat || typeof mat !== "object") return;
-    const m = mat as MeshStandardMaterial;
-    // Target the `glass` material which is the tablet screen
-    if (m.name !== "glass") return;
-    m.map = tex as MeshStandardMaterial["map"];
-    m.emissiveMap = tex as MeshStandardMaterial["map"];
-    m.color = new Color("#ffffff");
-    m.emissive = new Color("#ffffff");
-    m.emissiveIntensity = 1.1;
-    m.roughness = 0.05;
-    m.metalness = 0;
-    m.transparent = false;
-    m.opacity = 1;
-    m.needsUpdate = true;
-  });
+function configureMap(tex: Texture) {
+  tex.colorSpace = SRGBColorSpace;
+  tex.flipY = true; // PlaneGeometry UVs expect flipY true for TextureLoader PNGs
+  tex.needsUpdate = true;
+}
+
+/** R3F can boot at 300×150 under absolute/opacity wrappers — force the slot box. */
+function ForceCanvasSize({ w, h, onSized }: { w: number; h: number; onSized?: () => void }) {
+  const { gl, setSize, invalidate } = useThree();
+  useLayoutEffect(() => {
+    const dpr = Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 1.5);
+    gl.setPixelRatio(dpr);
+    gl.setSize(w, h, false);
+    setSize(w, h);
+    invalidate();
+    onSized?.();
+  }, [gl, w, h, setSize, invalidate, onSized]);
+  return null;
 }
 
 function TabletMesh({
   rotX,
   rotY,
-  mode,
   formatId,
+  playing,
   onReady,
+  flat = false,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
   mode: SiteMode;
   formatId?: string;
+  playing: boolean;
   onReady?: () => void;
+  flat?: boolean;
 }) {
   const group = useRef<Group>(null);
-  const modeRef = useRef<"still" | "video">("still");
+  const modeRef = useRef<"still" | "video" | "anim">("still");
+  const playingRef = useRef(playing);
+  playingRef.current = playing;
+  const reduced = useReducedMotion();
+  const [screenMap, setScreenMap] = useState<Texture | null>(null);
+  const animRef = useRef<{
+    canvas: HTMLCanvasElement;
+    tex: CanvasTexture;
+    img: HTMLImageElement;
+    t0: number;
+    id: GlassAnimId;
+  } | null>(null);
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
@@ -95,7 +109,8 @@ function TabletMesh({
     v.setAttribute("playsinline", "");
     v.preload = "auto";
     const t = new VideoTexture(v);
-    t.colorSpace = SRGBColorSpace;
+    configureMap(t);
+    t.flipY = true;
     return { video: v, videoTex: t };
   }, []);
 
@@ -109,7 +124,9 @@ function TabletMesh({
     };
   }, [video, videoTex]);
 
-  useEffect(() => {
+  // Chassis is enough to reveal (Phone/TV pattern). Never gate on screenMap —
+  // StrictMode cancels the old rAF+readySent guard and left the CSS chassis stuck.
+  useLayoutEffect(() => {
     onReady?.();
   }, [onReady]);
 
@@ -117,42 +134,137 @@ function TabletMesh({
     if (!formatId) return;
     const src = TABLET_SCREEN_VIDEO[formatId];
     const stillSrc = TABLET_SCREEN_STILL[formatId];
+    let cancelled = false;
+    let ownedTex: Texture | null = null;
 
-    // Fallback to still while video loads
-    if (stillSrc && group.current) {
+    animRef.current = null;
+
+    const commitMap = (tex: Texture, mode: "still" | "video" | "anim") => {
+      if (cancelled) {
+        if (tex !== videoTex) tex.dispose();
+        return;
+      }
+      modeRef.current = mode;
+      setScreenMap((prev) => {
+        if (prev && prev !== tex && prev !== videoTex) prev.dispose();
+        return tex;
+      });
+    };
+
+    // OEM glass — paint into canvas first, then wrap CanvasTexture (avoids 300×150 blank).
+    if (stillSrc && isAnimatedTabletGlass(formatId)) {
+      const canvas = document.createElement("canvas");
       const img = new Image();
-      img.onload = () => applyScreenTexture(group.current, { image: img } as never);
+      img.decoding = "async";
+      const apply = () => {
+        if (cancelled) return;
+        paintStill(canvas, img);
+        const tex = new CanvasTexture(canvas);
+        configureMap(tex);
+        ownedTex = tex;
+        animRef.current = {
+          canvas,
+          tex,
+          img,
+          t0: performance.now(),
+          id: formatId,
+        };
+        commitMap(tex, "anim");
+      };
+      img.onload = apply;
+      img.onerror = () => { /* keep previous map */ };
       img.src = stillSrc;
+      if (img.complete && img.naturalWidth > 0) {
+        img.onload = null;
+        apply();
+      }
+      return () => {
+        cancelled = true;
+        animRef.current = null;
+        // owned tex disposed on next commitMap / unmount via setScreenMap swap
+        if (ownedTex && ownedTex !== videoTex) {
+          /* leave live map until replaced */
+        }
+      };
     }
 
-    if (!src) return;
+    if (stillSrc) {
+      const loader = new TextureLoader();
+      loader.load(
+        stillSrc,
+        (tex) => {
+          configureMap(tex);
+          ownedTex = tex;
+          if (modeRef.current !== "video") commitMap(tex, "still");
+          else if (cancelled) tex.dispose();
+        },
+        undefined,
+        () => { /* keep previous map */ },
+      );
+    }
+
+    if (!src) {
+      return () => {
+        cancelled = true;
+      };
+    }
 
     const promote = () => {
+      if (cancelled || !playingRef.current) return;
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
-      modeRef.current = "video";
-      applyScreenTexture(group.current, videoTex);
+      configureMap(videoTex);
+      commitMap(videoTex, "video");
       void video.play().catch(() => { /* autoplay blocked */ });
     };
 
+    video.loop = true;
     video.src = src;
     video.addEventListener("loadeddata", promote);
     video.addEventListener("canplay", promote);
-    video.addEventListener("ended", () => video.pause());
     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
     else video.load();
 
     return () => {
+      cancelled = true;
       video.removeEventListener("loadeddata", promote);
       video.removeEventListener("canplay", promote);
       video.pause();
       video.removeAttribute("src");
       video.load();
-      modeRef.current = "still";
+      if (modeRef.current === "video") modeRef.current = "still";
     };
   }, [formatId, video, videoTex]);
 
+  useEffect(() => {
+    if (!playing) {
+      video.pause();
+      return;
+    }
+    if (modeRef.current === "video") void video.play().catch(() => { /* autoplay blocked */ });
+  }, [playing, video]);
+
   useFrame((state) => {
     if (!group.current) return;
+
+    const anim = animRef.current;
+    if (anim && modeRef.current === "anim" && playingRef.current) {
+      paintGlassAnim(
+        anim.id,
+        anim.canvas,
+        anim.img,
+        (performance.now() - anim.t0) / 1000,
+        reduced,
+      );
+      anim.tex.needsUpdate = true;
+    }
+
+    if (flat) {
+      group.current.rotation.x = 0;
+      group.current.rotation.y = 0;
+      group.current.position.y = 0;
+      if (modeRef.current === "video") videoTex.needsUpdate = true;
+      return;
+    }
 
     const t = state.clock.elapsedTime;
     const floatRotX = Math.sin(t * 0.7) * 0.025;
@@ -170,10 +282,9 @@ function TabletMesh({
   return (
     <group ref={group}>
       <Center>
-        {/* iPad — slightly tilted for depth */}
-        <group rotation={[0.08, 0, 0]}>
+        <group rotation={flat ? [0, 0, 0] : [0.08, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
-            <TabletModel mode={mode} />
+            <TabletModel screenMap={screenMap} />
           </group>
         </group>
       </Center>
@@ -186,13 +297,17 @@ function TabletScene({
   rotY,
   isDark,
   formatId,
+  playing,
   onMeshReady,
+  flat = false,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
   isDark: boolean;
   formatId?: string;
+  playing: boolean;
   onMeshReady?: () => void;
+  flat?: boolean;
 }) {
   return (
     <>
@@ -202,39 +317,60 @@ function TabletScene({
       <spotLight position={[0, 5, 3]} angle={0.4} penumbra={0.7} intensity={1.0} />
 
       <Suspense fallback={null}>
-        <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.85} frames={1} />
         <TabletMesh
           rotX={rotX}
           rotY={rotY}
           mode={isDark ? "infrastructure" : "growth"}
           formatId={formatId}
+          playing={playing}
           onReady={onMeshReady}
+          flat={flat}
         />
       </Suspense>
-
-      {/* ContactShadows removed — white oval artefact on transparent canvas */}
+      <Suspense fallback={null}>
+        <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.85} frames={1} />
+      </Suspense>
     </>
   );
 }
 
-export function Tablet3D({ mode, formatId, className }: Tablet3DProps) {
+export function Tablet3D({ mode, formatId, className, active = true, flat = false }: Tablet3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const last = useRef({ x: 0, y: 0 });
 
-  const rotY = useMotionValue(REST_Y);
-  const rotX = useMotionValue(REST_X);
+  const rotY = useMotionValue(flat ? 0 : REST_Y);
+  const rotX = useMotionValue(flat ? 0 : REST_X);
   const springY = useSpring(rotY, { stiffness: 260, damping: 30, mass: 0.7 });
   const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
 
   const [isDragging, setIsDragging] = useState(false);
   const [inView, setInView] = useState(true);
   const [meshReady, setMeshReady] = useState(false);
+  const [slotBox, setSlotBox] = useState<{ w: number; h: number } | null>(null);
 
   const isDark = mode !== "growth";
 
   const markMeshReady = useCallback(() => setMeshReady(true), []);
+
+  useEffect(() => {
+    const node = stageRef.current;
+    if (!node) return;
+
+    const check = () => {
+      const { width, height } = node.getBoundingClientRect();
+      if (width >= 64 && height >= 64) {
+        setSlotBox({ w: Math.round(width), h: Math.round(height) });
+      }
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, []);
+
+  // Do not flip meshReady off on format change — glass swaps under the hood.
 
   useEffect(() => {
     const node = stageRef.current;
@@ -248,7 +384,7 @@ export function Tablet3D({ mode, formatId, className }: Tablet3DProps) {
   }, []);
 
   const onPointerDown = (e: ReactPointerEvent) => {
-    if (reduced) return;
+    if (reduced || flat) return;
     dragging.current = true;
     setIsDragging(true);
     last.current = { x: e.clientX, y: e.clientY };
@@ -288,15 +424,15 @@ export function Tablet3D({ mode, formatId, className }: Tablet3DProps) {
       aria-label="Interactive iPad mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
     >
-      <div
-        className={cn(
-          "absolute inset-0 transition-opacity duration-700 ease-out",
-          meshReady ? "opacity-100" : "opacity-0",
-        )}
+      <DeviceLoadStage
+        ready={meshReady}
+        placeholder={<CssTablet mode={mode} formatId={formatId ?? "oem-store"} className="prog-css-tablet prog-css-tablet--slot" />}
       >
+        {slotBox ? (
         <Canvas className="tablet-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={(!inView || reduced) ? "never" : "always"}
+          frameloop={reduced ? "never" : "always"}
+          resize={{ debounce: 0, offsetSize: true }}
           gl={{
             antialias: true,
             alpha: true,
@@ -304,8 +440,13 @@ export function Tablet3D({ mode, formatId, className }: Tablet3DProps) {
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.2, 3.8], fov: 30, near: 0.1, far: 80 }}
-          style={{ background: "transparent" }}
+          camera={{ position: [0, 0.15, flat ? 3.15 : 3.8], fov: flat ? 28 : 30, near: 0.1, far: 80 }}
+          style={{
+            width: slotBox.w,
+            height: slotBox.h,
+            display: "block",
+            background: "transparent",
+          }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.05;
@@ -313,15 +454,19 @@ export function Tablet3D({ mode, formatId, className }: Tablet3DProps) {
             gl.setClearColor(0x000000, 0);
           }}
         >
+          <ForceCanvasSize w={slotBox.w} h={slotBox.h} onSized={markMeshReady} />
           <TabletScene
             isDark={isDark}
             rotX={springX}
             rotY={springY}
             formatId={formatId}
+            playing={active && !reduced && inView}
             onMeshReady={markMeshReady}
+            flat={flat}
           />
         </Canvas>
-      </div>
+        ) : null}
+      </DeviceLoadStage>
     </div>
   );
 }

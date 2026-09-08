@@ -26,19 +26,20 @@ import type { SiteMode } from "../../data/liveContent";
 import { DRACO_PATH } from "../../lib/heroModel";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { DeviceLoadStage } from "../solutions/DeviceLoadStage";
+import { CssTv } from "../solutions/CssPhone";
+import { FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
 
 const MODEL_PATH = "/channels/oem/tv.glb";
-const TV_SCREEN_VIDEO = "/channels/oem/screens/ctv-spot.mp4";
-const TV_SCREEN_STILL = "/channels/oem/screens/ctv-spot.png";
 
 const REST_Y = 0.05;
 const REST_X = 0.01;
 
-/** Screen plane in the already-scaled face-forward space (TV height ≈ 1.91). */
-const SCREEN_W = 2.70;
-const SCREEN_H = 1.51;
-const SCREEN_Z = 0.11;
-const SCREEN_Y = 0.06;
+/** Screen plane in the already-scaled face-forward space — bleed past bezel so content kisses the glass edge. */
+const SCREEN_W = 2.98;
+const SCREEN_H = 1.68;
+const SCREEN_Z = 0.12;
+const SCREEN_Y = 0.05;
 
 // ─── Compute model centre + scale BEFORE the scene is parented ────────────────
 // We call this once after useGLTF resolves. At that point the scene is a
@@ -82,11 +83,9 @@ type Tv3DProps = {
   mode: SiteMode;
   formatId?: string;
   className?: string;
+  active?: boolean;
+  flat?: boolean;
 };
-
-function hasCtvScreen(formatId?: string) {
-  return formatId === "ctv-spot" || formatId === "ctv-video";
-}
 
 // ─── Inner scene (runs inside <Canvas className="tv-glb-canvas">) ──────────────────────────────────────
 
@@ -111,16 +110,20 @@ function TvMesh({
   formatId,
   inView,
   onReady,
+  flat = false,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
   formatId?: string;
   inView: boolean;
   onReady?: () => void;
+  flat?: boolean;
 }) {
   const outerRef = useRef<Group>(null);
   const { scene } = useGLTF(MODEL_PATH, DRACO_PATH);
-  const showScreen = hasCtvScreen(formatId);
+  const videoSrc = formatId ? FORMAT_VIDEO[formatId] : undefined;
+  const stillSrc = (formatId && FORMAT_STILL[formatId]) || FORMAT_STILL["ctv-spot"];
+  const showScreen = Boolean(videoSrc || stillSrc);
   const modeRef = useRef<"still" | "video">("still");
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
@@ -160,7 +163,7 @@ function TvMesh({
     }
     let cancelled = false;
     const loader = new TextureLoader();
-    loader.load(TV_SCREEN_STILL, (tex) => {
+    loader.load(stillSrc!, (tex) => {
       if (cancelled) {
         tex.dispose();
         return;
@@ -178,10 +181,10 @@ function TvMesh({
     return () => {
       cancelled = true;
     };
-  }, [showScreen, video]);
+  }, [showScreen, stillSrc, video]);
 
   useEffect(() => {
-    if (!showScreen || !inView) {
+    if (!showScreen || !inView || !videoSrc) {
       video.pause();
       return;
     }
@@ -200,7 +203,7 @@ function TvMesh({
       });
     };
 
-    video.src = TV_SCREEN_VIDEO;
+    video.src = videoSrc;
     video.addEventListener("loadeddata", promote);
     video.addEventListener("canplay", promote);
     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
@@ -211,10 +214,17 @@ function TvMesh({
       video.removeEventListener("canplay", promote);
       video.pause();
     };
-  }, [showScreen, inView, video, videoTex]);
+  }, [showScreen, inView, videoSrc, video, videoTex]);
 
   useFrame((state) => {
     if (!outerRef.current) return;
+    if (flat) {
+      outerRef.current.rotation.x = 0;
+      outerRef.current.rotation.y = 0;
+      outerRef.current.position.y = 0;
+      if (modeRef.current === "video") videoTex.needsUpdate = true;
+      return;
+    }
     const t = state.clock.elapsedTime;
     outerRef.current.rotation.x = rotX.get() + Math.sin(t * 0.8) * 0.02;
     outerRef.current.rotation.y = rotY.get() + Math.cos(t * 0.6) * 0.03;
@@ -223,16 +233,16 @@ function TvMesh({
   });
 
   return (
-    <group ref={outerRef} rotation={[0.06, 0, 0]}>
+    <group ref={outerRef} rotation={flat ? [0, 0, 0] : [0.06, 0, 0]}>
       <group scale={xf.scale} rotation={[0, Math.PI, 0]}>
         <group position={[-xf.cx, -xf.cy, -xf.cz]}>
           <primitive object={scene} dispose={null} />
         </group>
       </group>
       {showScreen && screenMap ? (
-        <mesh position={[0, SCREEN_Y, SCREEN_Z]} renderOrder={2}>
+        <mesh position={[0, SCREEN_Y, SCREEN_Z]} scale={[1.02, 1.02, 1]} renderOrder={2}>
           <planeGeometry args={[SCREEN_W, SCREEN_H]} />
-          <meshBasicMaterial map={screenMap} toneMapped={false} />
+          <meshBasicMaterial map={screenMap} toneMapped={false} depthWrite={false} />
         </mesh>
       ) : null}
     </group>
@@ -246,6 +256,7 @@ function TvScene({
   formatId,
   inView,
   onMeshReady,
+  flat = false,
 }: {
   rotX: { get: () => number };
   rotY: { get: () => number };
@@ -253,6 +264,7 @@ function TvScene({
   formatId?: string;
   inView: boolean;
   onMeshReady?: () => void;
+  flat?: boolean;
 }) {
   return (
     <>
@@ -262,8 +274,10 @@ function TvScene({
       <spotLight position={[0, 6, 4]} angle={0.4} penumbra={0.8} intensity={1.5} />
 
       <Suspense fallback={null}>
+        <TvMesh rotX={rotX} rotY={rotY} formatId={formatId} inView={inView} onReady={onMeshReady} flat={flat} />
+      </Suspense>
+      <Suspense fallback={null}>
         <Environment preset="city" environmentIntensity={isDark ? 1.0 : 1.3} frames={1} />
-        <TvMesh rotX={rotX} rotY={rotY} formatId={formatId} inView={inView} onReady={onMeshReady} />
       </Suspense>
     </>
   );
@@ -271,14 +285,14 @@ function TvScene({
 
 // ─── Public component ─────────────────────────────────────────────────────────
 
-export function Tv3D({ mode, formatId, className }: Tv3DProps) {
+export function Tv3D({ mode, formatId, className, active = true, flat = false }: Tv3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const last = useRef({ x: 0, y: 0 });
 
-  const rotY = useMotionValue(REST_Y);
-  const rotX = useMotionValue(REST_X);
+  const rotY = useMotionValue(flat ? 0 : REST_Y);
+  const rotX = useMotionValue(flat ? 0 : REST_X);
   const springY = useSpring(rotY, { stiffness: 260, damping: 30, mass: 0.7 });
   const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
 
@@ -288,6 +302,10 @@ export function Tv3D({ mode, formatId, className }: Tv3DProps) {
 
   const isDark = mode !== "growth";
   const markMeshReady = useCallback(() => setMeshReady(true), []);
+
+  useEffect(() => {
+    setMeshReady(true);
+  }, []);
 
   useEffect(() => {
     const node = stageRef.current;
@@ -301,7 +319,7 @@ export function Tv3D({ mode, formatId, className }: Tv3DProps) {
   }, []);
 
   const onPointerDown = (e: ReactPointerEvent) => {
-    if (reduced) return;
+    if (reduced || flat) return;
     dragging.current = true;
     setIsDragging(true);
     last.current = { x: e.clientX, y: e.clientY };
@@ -341,15 +359,13 @@ export function Tv3D({ mode, formatId, className }: Tv3DProps) {
       aria-label="Interactive TV mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
     >
-      <div
-        className={cn(
-          "absolute inset-0 transition-opacity duration-700 ease-out",
-          meshReady ? "opacity-100" : "opacity-0",
-        )}
+      <DeviceLoadStage
+        ready={meshReady}
+        placeholder={<CssTv mode={mode} formatId={formatId ?? "ctv-spot"} className="prog-css-tv prog-css-tv--slot" />}
       >
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={(!inView || reduced) ? "never" : "always"}
+          frameloop={reduced ? "never" : "always"}
           gl={{
             antialias: true,
             alpha: true,
@@ -357,8 +373,8 @@ export function Tv3D({ mode, formatId, className }: Tv3DProps) {
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.2, 5.5], fov: 34, near: 0.1, far: 100 }}
-          style={{ background: "transparent" }}
+          camera={{ position: [0, 0.15, flat ? 4.55 : 5.5], fov: flat ? 32 : 34, near: 0.1, far: 100 }}
+          style={{ width: "100%", height: "100%", display: "block", background: "transparent" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.15;
@@ -369,13 +385,14 @@ export function Tv3D({ mode, formatId, className }: Tv3DProps) {
           <TvScene
             isDark={isDark}
             formatId={formatId}
-            inView={inView}
+            inView={active && !reduced}
             rotX={springX}
             rotY={springY}
             onMeshReady={markMeshReady}
+            flat={flat}
           />
         </Canvas>
-      </div>
+      </DeviceLoadStage>
     </div>
   );
 }

@@ -4,9 +4,10 @@
 > **Updated:** 8 September 2026  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** this ritual — Windows light JPEG holds last frame (no paper flash on scroll) (see §25) 
+> **HEAD:** this ritual — OEM/CTV glass SOT + single active WebGL device on `/channels` (see §25)  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
+> **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`
 
 ---
 
@@ -152,6 +153,8 @@ UPRAISER = **expedition brand**: poetic ascent (Zero-like atmosphere) + operator
 | `/cases/:slug`        | —                    | Deep-link modal на home                                       |
 | `/privacy` · `/terms` | Legal                | Legal                                                         |
 | `/dev/hero-capture`   | DEV only             | Everest frame capture                                         |
+| `/dev/hero-lite`      | DEV only             | Redirect → `/?lite=1&theme=light` — real home JPEG fly        |
+| `/dev/hero-dark`      | DEV only             | Redirect → `/?lite=1&theme=dark` — same, Infrastructure       |
 
 **Нет живых страниц** `/expedition`, `/company`, `/solutions`. Footer explore на `/` = **The Agency** (синхрон с header).
 
@@ -428,7 +431,9 @@ Each format carries `scene?: "phone" | "tablet" | "tv"` in `ProgrammaticFormats.
 A Framer Motion spring (`stiffness: 340, damping: 32, mass: 0.6`) drives `phase` 0→1→2.  
 Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade. No `scale` or `filter:blur` on WebGL canvas (causes bilinear→native pixel snap artifact).
 
-**Mount policy:** only the **active** slot (plus the outgoing slot for ~720ms during the spring). App Growth = phone canvas only. Tablet/TV GLBs warm on the **next** format (`warmStage("routes-tablet"|"routes-tv")`), not at parse.
+**Mount policy:** only the **active** slot (plus the outgoing slot for ~720ms during the spring). App Growth = phone canvas only. On OEM & CTV, warm **both** `routes-tablet` and `routes-tv` as soon as the lane is active (`tv.glb` is ~9 MB Draco — do not wait until CTV Spot). Off `/` (`/channels`), `whenHeroReady` must **not** wait for Everest (`scrollPreload.ts`).
+
+**Graceful degradation (same as Everest):** width `< 1024` or `prefers-reduced-motion` → `ProgrammaticScrollSectionMobile`. Desktop lite (Intel / `?lite=1`) keeps the **two-column sticky** layout with `LiteDeviceStage` (CSS phone/tablet/TV) — not the mobile stacked page. High-tier desktop → `DeviceCarousel3` + `DeviceLoadStage` (CSS silhouette → spring-fade WebGL). No full-page spinner.
 
 | Device | Width in col | Camera | GLB |
 | --- | --- | --- | --- |
@@ -453,8 +458,11 @@ File: `src/components/solutions/Phone3D.tsx`
 ### Tablet3D
 
 File: `src/components/channel-visuals/Tablet3D.tsx`  
-Model: iPad GLB, `drei/Center` auto-centering, `rotation={[Math.PI/2, 0, 0]} scale={6.8}`.  
-Screen: material named `"glass"` → `VideoTexture` via `traverse()`.  
+Model wrapper: `Tablet3DModel.tsx` — **`primitive` of the GLB scene**. Current `tablet.glb` is iPad Air 4 (`body` / `frame` / `Ipad Air 4`). The old gltfjsx graph (`큐브`, `큐브_1`, …) **does not exist** in this file; reading `nodes.큐브.geometry` throws and `CanvasErrorBoundary` left an empty column.
+
+Framing: `Center` + `rotation={[0.08, 0, 0]}` `scale={5.6}`. **Do not** add `rotation X = π/2` on this GLB (it is already face-forward; +90° shows the edge).  
+Screen: materials whose `name` matches `/glass/i`. OEM stills: `public/channels/oem/screens/{pre-install,oem-store,system-ui}.png`. OEM **mp4s are not in git** (only `ctv-spot.mp4` / `.png` are tracked).  
+Load UX: `DeviceLoadStage` — CSS chassis (`CssTablet`) visible immediately, 3D spring-fades in. No full-page spinner.  
 No `ContactShadows` (white oval artifact on transparent canvas).
 
 ---
@@ -534,8 +542,8 @@ Widening the island cannot shift the device column. Format copy sits below it.
 
 1. **Still (App Growth):** `public/channels/programmatic-refs/screens/{format}.png`
 2. **Video (App Growth):** `public/channels/programmatic-feed/formats/{format}.mp4`
-3. **Still (OEM):** `public/channels/oem/screens/{format}.png`
-4. **Video (OEM):** `public/channels/oem/screens/{format}.mp4`
+3. **Still (OEM):** `public/channels/oem/screens/{format}.png` — `ctv-spot.png` is git-tracked; `pre-install` / `oem-store` / `system-ui` stills are local stand-ins until real OEM art exists.  
+4. **Video (OEM):** only `ctv-spot.mp4` is in git. Do not point `<video>` at missing OEM mp4s (Vite returns HTML).
 
 Promoted on `readyState >= HAVE_CURRENT_DATA`. No Suspense remount (white flash).
 
@@ -1012,38 +1020,106 @@ Trust **`src/App.tsx` + `navLinks`**, not comments in `innerPagesData.ts` (they 
 - **Home loading:** no `LazySection` / `heroOk` on Audience / Process / Cases / Promise. Single `React.Suspense` per fold.
 - **Hero split:** high-tier = live R3F. Lite (mobile, Intel, `?lite=1`) = JPEG sequence. Dark frames include Voyager. Light frames recaptured 7 Sep evening (settle 1400 ms, qscale 2). Light player crops the baked paper fade at the foot (Windows `home-light` and mobile). No CSS bottom wash on Growth.
 
-### Git / disk (8 Sep 2026)
+### Git / disk (8 Sep 2026 — evening OEM glass)
 
-- **This commit** holds the last JPEG on Windows light scroll (no white paper flash). Parent: `777eb75`.
+- **This commit** ships OEM/CTV glass SOT + tablet/TV load fixes (see OEM block below). Parent includes Windows light JPEG hold (`7f5ffc0`).
 - After push + `npm run deploy`: prod alias **https://upraiser.co.uk**.
 - **Leave untracked:** `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`, `test-modal-scroll.mjs`, `test-oem-mobile.mjs`.
+- **Do not commit** mass `D` on `public/hero/**` from a depleted local disk — restore via `restore-assets.sh` / `git restore`, do not treat as intentional product delete.
 
 ### Everest (light) — leave / continue here
 
 Light path uses `everest-light.glb` + AmbientCG **Snow005** (`src/lib/heroModel.ts` → `/hero/snow005/…`). Shader: `snowSparkle.ts` (`everest-snow-poly-v25` when maps bind). `SnowSplatBinder` must stay a **child** of the mesh — putting the mesh inside `Suspense fallback={null}` hides the mountain while textures load.
 
-Scene graph (`Scene.tsx`): keep **both** `StudioRimLight` and `MistSheets` imports. `SeaOfClouds` is a stub (`return null`). There is a leftover `console.log("FirstFrameGate mounted!")` and `console.log("Everest rendering!")` — safe to delete.
+Scene graph (`Scene.tsx`): keep **both** `StudioRimLight` and `MistSheets` imports. `SeaOfClouds` is a stub (`return null`).
 
 **Do not:** EffectComposer / N8AO / Bloom / GSAP ScrollTrigger on hero / `transparent: true` on the four GLB chunks / second Everest canvas / resurrect `macbook.glb` on Routes / force Windows onto live WebGL.
 
 Open visual debt: **right steep face UV smear** on scroll (grazing + mips). Next 3D pass = stronger world-space triplanar / `steepRockMask`, without covering the mesh again. Light **sky** haze/halo is on purpose (`AscentHalo`). The **foot** paper fade is not — crop it in the lite player; do not add `.hero-bottom-fade-bridge` on Growth.
 
+### Local assets that vanish (read this before “3D is broken”)
+
+`public/hero/**`, `public/draco/gltf/draco_decoder.wasm`, `public/channels/**`, `public/phones/**` keep disappearing from disk (`git status` mass `D`). Vite then **200s `index.html`** for the missing URL (`Content-Type: text/html`, ~5 KB). `useGLTF` / `useTexture` hang or throw; canvases stay empty or the compass spinner never clears.
+
+- `scripts/restore-assets.sh` (`predev`) uses rsync `--ignore-existing`. A **folder can exist while a file inside is gone**, and the backup can also lack the file → script prints “All assets present”.
+- Critical list in that script now includes Draco WASM, Everest GLBs, `tablet.glb`, `tv.glb`. Backup: `~/Downloads/upraiser-assets-backup/`.
+- If a tracked binary is still missing: `git restore -- public/…` then copy into the backup.
+- `draco_decoder.wasm` was **not** in the backup (only the two JS files). Without WASM, **dark Everest** and **TV** (Draco) hang in Suspense. `tablet.glb` is **not** Draco.
+
+### Hero boot — compass “Rendering Terrain” (8 Sep)
+
+Cause: `FirstFrameGate` sits in the same `Suspense` as Everest. If the GLB never decodes, the gate never mounts, overlay never clears.
+
+1. Missing `public/draco/gltf/draco_decoder.wasm` (Vite served HTML).
+2. Light: missing Snow005 JPG → `SnowSplatBinder` throw → empty sky (error boundary now falls back to JPEG).
+3. Voyager (~13 MB) must **not** share that Suspense (`Scene.tsx` sibling). `whenHeroTerrainBytes` waits on the **mountain** GLB + Draco WASM only. Force-boot canvas at **2500 ms**. Overlay auto-hides at **4000 ms** (`bootStuck` in `HeroTerrainCanvas`) so the compass cannot stick forever.
+
+Apple / Metal / NVIDIA / Radeon → hardware tier **high** even if Chrome reports 4 cores / 4 GB (`useHardwareTier.ts`). Intel/UHD/Iris/Mali/Adreno → lite. `?lite=1` still forces lite.
+
+### OEM & CTV glass (8 Sep evening — shipped this commit)
+
+Owner: `/channels` → **OEM & CTV** lane. CSS chassis under canvas is the load state — **no** full-page spinner.
+
+#### Glass SOT (`src/data/deviceScreens.ts`)
+
+| Format id | Still | Video / HTML | Notes |
+| --- | --- | --- | --- |
+| `pre-install` | `…/pre-install-oobe.png` (PAI “Review additional apps”, 3:4 pad) | canvas OS ticks | Keep real-screenshot feel; do not replace with Lenovo ZUI stitch unless owner asks |
+| `oem-store` | `…/oem-store.png` | lite: `oem-store.html`; 3D: canvas marquee | Featured large icons = unique `cases/logos` + `clients` (no stitch trademark dumps) |
+| `system-ui` | `…/system-ui.png` | canvas OS ticks | Notification shade |
+| `ctv-spot` | `…/ctv-spot.png` | — | Smart TV still |
+| `ctv-video` | same PNG as poster | `…/ctv-spot.mp4` (~19 s loop) | Spot ≠ Video on glass |
+
+Shared painters: `src/lib/tabletGlassAnim.ts` (lite `FormatGlass` + Tablet3D `CanvasTexture`).
+
+**OS-like motion only (no sheen):**
+
+- `oem-store` — slow horizontal ribbon on large icon rows
+- `pre-install` — live clock + install progress under Apex Pay
+- `system-ui` — live clock + one notification settle-in
+- Prefer `prefers-reduced-motion` → still + clock only
+
+#### Tablet / TV load (bugs fixed)
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| CSS chassis stuck / flash on format change | StrictMode cancelled `rAF` + `readySent`; `setMeshReady(false)` + `setScreenMap(null)` on every format | Reveal via `ForceCanvasSize` / chassis ready; **do not** clear map until next texture commits; no meshReady bounce on format id |
+| Empty / 300×150 WebGL buffer | Phone+tablet+TV canvases concurrent; canvas mounted before slot box | **One active WebGL device** in `ProgrammaticScrollSection` (others = CSS); mount Canvas only after slot ≥64×64; `ForceCanvasSize` |
+| Blank glass | Missing OEM stills | Real stitch-derived PNGs + HTML under `public/channels/oem/` |
+| Decorative “marketing” pulses | Earlier sheen experiments | Removed; OS ticks only |
+
+Helpers: `DeviceLoadStage.tsx`, `FormatGlass` in `CssPhone.tsx`, `Tablet3DModel` screen plane (`MeshBasicMaterial`, GLB `glass` = camera lens only).
+
+#### Verify
+
+1. Desktop ≥1024, high tier: `/channels` → OEM & CTV → Pre-install = 3D iPad with PAI glass (not empty column).
+2. OEM Store = unique case/client icons (HTML lite / marquee 3D).
+3. CTV Spot = still; CTV Video = mp4 loop on TV.
+4. `?lite=1` = CSS chassis + same `deviceScreens` files.
+5. Format switches must not flash a second chassis or black glass.
+
+#### Still open (owner yes)
+
+1. Optional Lenovo ZUI first-boot stitch instead of phone-style PAI (owner previously preferred keep/naturalize PAI).
+2. Everest light right-face UV smear (separate ticket).
+3. Deploy only when owner asks (`npm run deploy`).
+
 ### Do first in a new session
 
-1. `git log -1 --oneline` — this ritual (parent `6eaf8f8`). Working tree should be clean except leftover test pngs/mjs.
-2. `npm run dev` → `http://localhost:5173/`
+1. Restore missing `public/` binaries **before** debugging WebGL (`git restore`, `restore-assets.sh`, check WASM `Content-Type: application/wasm`).
+2. `npm run dev` → `http://localhost:5173/` and `http://localhost:5173/channels` (desktop ≥1024).
 3. Desktop **high-tier** light: live mountain on first paint. Desktop **lite** / Windows / `?lite=1`: JPEG sequence, both themes; Growth foot is mountain, not a milky wash.
 4. Mobile `<768`: `#audience` + `#promise` charts scrub forward/back on scroll (both themes). PROOF ring not jammed into the copy above.
 5. Header = Agency + Craft. `/channels` reachable from `#routes` CTA. About is on home, not `/company`.
-6. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`.
+6. Do not commit `.agents/skills`, `.claude/skills`, `public/timesst.mp4`, `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`.
 
 ### Next work (needs owner yes)
 
 Parked / in-flight:
 
-1. Everest light: kill right-face UV stretch on the 300vh fly
-2. OEM / CTV **live screen videos** (TimesST is local-only `public/timesst.mp4`)
-3. Merge three Routes canvases into one (quality risk)
+1. Optional Lenovo ZUI pre-install stitch (vs current PAI naturalize)
+2. Everest light: kill right-face UV stretch on the 300vh fly
+3. Merge three Routes canvases into one (quality risk) — currently **one WebGL at a time** by scene
 4. Recompress `everest-light.glb` (~11 MB) — **do not** bake the light curve
 5. Dual phone GLB fetch on `/channels` — observed, not asked
 6. Analytics / cookie banner — parked until owner + privacy update
@@ -1137,6 +1213,21 @@ MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
 - Same evening, owner pass: hero stat cards restored to gold→red (do not flatten to single gold). Light lite no longer has the 46% white scrim over the mountain base; light fog/mist pulled back; `home-light` + `home-mobile-light` recaptured (`?v=10`). Dark JPEG player draws on the same sticky progress as live 3D (no Lenis+rect mix), nearest-frame fallback, ImageBitmap. PROOF ghosts stay clipped off copy.
 - Same night: mobile `#audience` / `#promise` charts were static again (Framer `useScroll` vs Lenis). Wired `useMobileChartProgress`. PROOF lowered on mobile. Light JPEG foot crop on **Windows `home-light` and mobile** — no CSS fade-bridge on Growth.
 - 8 Sep: Windows light JPEG looked like a reload on scroll — missing frames filled white paper (dark hid the same hole). Player now keeps the last decoded frame, caches `<img>` immediately, closest-index fallback, no `desynchronized` 2d.
+
+### 8 Sep 2026 evening — hero hang + OEM/CTV 3D
+
+- Home compass spinner hung: missing `draco_decoder.wasm` (Vite served HTML). Restored from git; overlay timeout 4 s; Voyager not on the first-paint Suspense. Apple GPU stays hardware **high**.
+- Light mountain empty: Snow005 JPG 404 crashed the canvas → JPEG fallback on `CanvasErrorBoundary`.
+- `/channels` 3D phone: `native.png` 404 killed `useTexture` of all stills.
+- OEM tablet empty: `Tablet3DModel` still targeted deleted `큐브_*` nodes. Wrapper is now scene clone + screen plane. TV is Draco ~9 MB — same WASM hole.
+- No full-page OEM spinner. `DeviceLoadStage` shows CSS chassis, then spring-fades 3D. `/channels` no longer waits 4 s on hero before warming GLBs.
+
+### 8 Sep 2026 night — OEM glass SOT + WebGL isolation
+
+- `deviceScreens.ts` is the only glass feed: PAI pre-install, OEM store (HTML + unique case icons), system-ui, CTV Spot still / CTV Video mp4.
+- `tabletGlassAnim.ts`: store marquee + OS clock/progress/notification only.
+- Routes carousel mounts **one** Phone3D | Tablet3D | Tv3D at a time (inactive slots = CSS) to stop 300×150 / context starvation.
+- Tablet: slot-box gate + `ForceCanvasSize`; keep previous screen map across format changes (no black-glass flash).
 
 ---
 

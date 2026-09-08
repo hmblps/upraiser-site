@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en" style="width:100%;height:100%"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Smart TV Interactive Ad - All New GT700</title>
+<!-- Tailwind CSS CDN with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration for custom colors and fonts -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            tvOverlay: 'rgba(0, 0, 0, 0.65)',
+            tvPill: 'rgba(15, 17, 21, 0.78)',
+            tvPillBorder: 'rgba(255, 255, 255, 0.18)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for precise TV overlay optics -->
+<style data-purpose="ad-overlay-styling">
+    /* Subtle text shadow for crisp visibility over dynamic imagery */
+    .tv-shadow {
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    }
+    
+    /* Triple dot remote pill button indicator */
+    .remote-dots-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 0 4px;
+      height: 16px;
+      min-width: 26px;
+      border-radius: 9999px;
+      background-color: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      vertical-align: middle;
+    }
+  
+    html, body { width:100%; height:100%; margin:0; overflow:hidden; }
+  </style>
+</head>
+<body class="bg-black text-white m-0 p-0 overflow-hidden select-none antialiased w-full h-full">
+<!-- BEGIN: TV Screen Frame (16:9 Aspect Ratio Container) -->
+<main class="relative w-full h-full overflow-hidden bg-black" data-purpose="tv-display-surface">
+<!-- BEGIN: Background Car Cinematic Image -->
+<div class="absolute inset-0 z-0">
+<img alt="All New GT700 driving on scenic highway at sunset" class="w-full h-full object-cover object-center pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpOgZFrEpyVepNLzmikKQfIoP_Fo78jNVLMyWEHtlWb8WxE2C5e13NRMiv9XiLkmrS5CLOYsDr0ucojLDoxuSjIqv5aXYXdpzEJdzfmlXAi1wxc0ngzkpprOMhOIkL4erwJYjD7GVE68eczEAHmtWLW5H2NsH91X_Q8MPR4SM2Z8BAoY27AiN-HKa16WJH6LpkGuhq32Gm1GJT4RMmfeghspA5UWNtYI-PoNfdGPzb0a08jT-OYxd8hw">
+<!-- Gentle atmospheric gradient to ensure typographic contrast -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30 pointer-events-none" data-purpose="contrast-overlay"></div>
+</div>
+<!-- END: Background Car Cinematic Image -->
+<!-- BEGIN: Top Navigation Bar Badges -->
+<header class="absolute top-0 inset-x-0 z-20 flex items-center justify-between px-8 pt-7 sm:px-12 sm:pt-8" data-purpose="top-status-bar">
+<!-- Left Pill: Press to open action -->
+<div class="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-tvPill/85 border border-tvPillBorder backdrop-blur-md shadow-lg" data-purpose="action-indicator">
+<!-- Remote 3-Dots Button Graphic -->
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/20 border border-white/50">
+<span class="flex space-x-[2px] items-center">
+<span class="w-1 h-1 rounded-full bg-white"></span>
+<span class="w-1 h-1 rounded-full bg-white"></span>
+<span class="w-1 h-1 rounded-full bg-white"></span>
+</span>
+</span>
+<span class="text-xs sm:text-sm font-medium tracking-wide text-gray-200">Press to open</span>
+</div>
+<!-- Right Pill: Sponsored Disclosure -->
+<div class="px-4 py-1.5 rounded-full bg-tvPill/85 border border-tvPillBorder backdrop-blur-md shadow-lg" data-purpose="sponsored-badge">
+<span class="text-xs sm:text-sm font-medium tracking-wide text-gray-200">Sponsored</span>
+</div>
+</header>
+<!-- END: Top Navigation Bar Badges -->
+<!-- BEGIN: Main Promotional Callout Content -->
+<section class="absolute left-8 sm:left-14 top-[24%] bottom-10 z-20 flex flex-col justify-between max-w-xl" data-purpose="campaign-callout">
+<!-- Upper Section: Brand Logo & Headline -->
+<div class="space-y-4 sm:space-y-6">
+<!-- Brand Insignia: Circular 'G' Emblem -->
+<div class="flex items-center" data-purpose="brand-logo">
+<svg aria-label="GT Brand Logo" class="w-14 h-14 sm:w-16 sm:h-16 text-white drop-shadow-md" fill="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Circular Outer Ring -->
+<circle cx="50" cy="50" r="42" stroke="white" stroke-linecap="round" stroke-width="8"></circle>
+<!-- Stylized GT Central Glyph -->
+<path d="M 50 28 L 72 28 L 72 40 L 59 40 L 59 72 L 47 72 L 47 40 L 32 40" fill="white" stroke="white" stroke-width="2"></path>
+<path d="M 50 50 L 68 50 L 68 68 L 50 68" fill="white" stroke="white" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Typography: Campaign Title & Subtitle -->
+<div class="tv-shadow space-y-1 sm:space-y-2">
+<h1 class="text-3xl sm:text-5xl font-light tracking-tight text-white leading-tight">
+            All New GT700.
+          </h1>
+<h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+            Big Electric<br>Performance.
+          </h2>
+</div>
+</div>
+<!-- Lower Section: Remote Interactive Call-To-Action -->
+<footer class="pt-8 sm:pt-0" data-purpose="interactive-remote-cue">
+<div class="flex items-center text-xs sm:text-sm font-normal text-gray-200 tracking-wide tv-shadow select-none">
+<span class="">Press</span>
+<!-- Inline Remote Option Button -->
+<span class="remote-dots-icon mx-2">
+<span class="w-[3px] h-[3px] rounded-full bg-white"></span>
+<span class="w-[3px] h-[3px] rounded-full bg-white"></span>
+<span class="w-[3px] h-[3px] rounded-full bg-white"></span>
+</span>
+<span class="">on your remote to learn more</span>
+</div>
+</footer>
+</section>
+<!-- END: Main Promotional Callout Content -->
+</main>
+<!-- END: TV Screen Frame -->
+
+
+</body></html>

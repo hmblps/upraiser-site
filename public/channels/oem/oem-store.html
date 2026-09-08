@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OEM Store</title>
+<style>
+  /* Screen-only — chassis is CssTablet / Tablet3D */
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #eef1f4;
+    font-family: "Roboto", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    touch-action: manipulation;
+  }
+  .store {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #eef1f4;
+    color: #1a1c1e;
+  }
+  .ribbons {
+    flex: 0 0 auto;
+    padding: 7% 0 2%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6%;
+  }
+  .row {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+  }
+  .track {
+    display: flex;
+    gap: 2.2%;
+    width: max-content;
+    will-change: transform;
+  }
+  .row--sm .track { animation: marquee 42s linear infinite; }
+  .row--sm:nth-child(2) .track { animation-duration: 48s; animation-direction: reverse; }
+  .row--sm:nth-child(3) .track { animation-duration: 44s; }
+  .row--lg .track { animation: marquee 28s linear infinite; }
+  .row--lg:nth-child(2) .track { animation-duration: 34s; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none !important; }
+  }
+  .icon {
+    flex: 0 0 auto;
+    border-radius: 22%;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+  .row--sm .icon {
+    width: clamp(28px, 6.2vw, 48px);
+    height: clamp(28px, 6.2vw, 48px);
+  }
+  .row--lg .icon {
+    width: clamp(56px, 11.5vw, 92px);
+    height: clamp(56px, 11.5vw, 92px);
+    border-radius: 24%;
+  }
+  .icon img {
+    width: 72%;
+    height: 72%;
+    object-fit: contain;
+    display: block;
+  }
+  .icon--tile {
+    font-weight: 700;
+    font-size: 0.55em;
+    letter-spacing: 0.02em;
+    color: #fff;
+  }
+  .copy {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 4% 8% 0;
+  }
+  .copy h1 {
+    margin: 0;
+    font-size: clamp(1.15rem, 4.6vw, 1.85rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .copy p.lead {
+    margin: 0.55em 0 0;
+    font-size: clamp(0.78rem, 2.8vw, 1.05rem);
+    font-weight: 500;
+    color: #2a2e33;
+  }
+  .copy p.legal {
+    margin: 1.1em 0 0;
+    max-width: 36em;
+    font-size: clamp(0.48rem, 1.55vw, 0.62rem);
+    line-height: 1.45;
+    color: #6b7280;
+  }
+  .copy a { color: inherit; text-decoration: underline; }
+  .dock-wrap {
+    flex: 0 0 auto;
+    padding: 3% 10% calc(4% + env(safe-area-inset-bottom, 0px));
+  }
+  .dock {
+    height: clamp(44px, 8.5vw, 64px);
+    border-radius: 999px;
+    background: rgba(220, 230, 238, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0 4%;
+  }
+  .dock span {
+    width: clamp(18px, 4.2vw, 28px);
+    height: clamp(18px, 4.2vw, 28px);
+    border-radius: 50%;
+    background: #94a3b8;
+  }
+  .dock span:nth-child(1) { background: #3b82f6; border-radius: 30%; }
+  .dock span:nth-child(2) { background: #2563eb; }
+  .dock span:nth-child(3) {
+    background: conic-gradient(#ea4335, #fbbc04, #34a853, #4285f4, #ea4335);
+  }
+  .dock span:nth-child(4) {
+    background: radial-gradient(circle at 30% 30%, #60a5fa, #a78bfa 45%, #f472b6 70%, #fbbf24);
+  }
+  .dock span:nth-child(5) {
+    background: linear-gradient(135deg, #34a853, #4285f4 40%, #fbbc04 70%, #ea4335);
+    clip-path: polygon(18% 12%, 88% 50%, 18% 88%);
+    border-radius: 0;
+  }
+  .dock span:nth-child(6) {
+    background: conic-gradient(#ea4335, #fbbc04, #34a853, #4285f4);
+  }
+  .dock span:nth-child(7) {
+    background: #64748b;
+    mask: radial-gradient(circle, transparent 28%, #000 29%);
+  }
+</style>
+</head>
+<body>
+<div class="store" aria-hidden="true">
+  <div class="ribbons">
+    <!-- Small discovery rows — abstract tiles only (no trademark dumps, no case-logo dups). -->
+    <div class="row row--sm" data-row="sm1"></div>
+    <div class="row row--sm" data-row="sm2"></div>
+    <div class="row row--sm" data-row="sm3"></div>
+    <!-- Featured large rows — unique UPRAISER case / client marks. -->
+    <div class="row row--lg" data-row="lg1"></div>
+    <div class="row row--lg" data-row="lg2"></div>
+  </div>
+  <div class="copy">
+    <h1>Get your favorite apps</h1>
+    <p class="lead">Discover and install great apps. All apps are free!</p>
+    <p class="legal">
+      To provide this personalized service, we need to collect your personal information
+      for advertising purposes. This service is offered by AppLovin Array. For more details,
+      please see <a href="#">AppLovin Array Terms of Service</a> and
+      <a href="#">AppLovin Array Privacy Policy</a>.
+    </p>
+  </div>
+  <div class="dock-wrap"><div class="dock">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div></div>
+</div>
+<script>
+(function () {
+  const TILES = [
+    ["#e50914", "N"], ["#1db954", "S"], ["#010101", "X"], ["#1877f2", "f"],
+    ["#ff0000", "▶"], ["#ff9900", "a"], ["#e60023", "P"], ["#ff4500", "r"],
+    ["#5865f2", "D"], ["#9146ff", "T"], ["#229ed9", "✈"], ["#7360f2", "V"],
+    ["#0088cc", "t"], ["#06c755", "L"], ["#fe3c72", "♥"], ["#00aeef", "M"],
+    ["#34a853", "G"], ["#33ccff", "W"], ["#000000", "U"], ["#ff00bf", "ly"],
+    ["#ff5a5f", "A"], ["#003580", "B"], ["#58cc02", "🦉"], ["#2d8cff", "☾"],
+  ];
+
+  /** Unique featured marks — cases first, then clients. Paths relative to /public. */
+  const FEATURED = [
+    "/cases/logos/fanatics.png",
+    "/cases/logos/block-blast.png",
+    "/cases/logos/fiverr.png",
+    "/cases/logos/shopee.png",
+    "/cases/logos/snoop.png",
+    "/cases/logos/vantage.png",
+    "/cases/logos/azar.png",
+    "/cases/logos/banco-azteca.png",
+    "/cases/logos/autodoc.png",
+    "/clients/groww.png",
+    "/clients/banki-ru.png",
+    "/clients/playwing.png",
+    "/clients/purevpn.png",
+    "/clients/rapiplata.png",
+  ];
+
+  function tileIcon(color, label) {
+    const el = document.createElement("div");
+    el.className = "icon icon--tile";
+    el.style.background = color;
+    el.textContent = label;
+    return el;
+  }
+
+  function logoIcon(src) {
+    const el = document.createElement("div");
+    el.className = "icon";
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "";
+    img.decoding = "async";
+    el.appendChild(img);
+    return el;
+  }
+
+  function fillRow(sel, makers, count) {
+    const row = document.querySelector(sel);
+    if (!row) return;
+    const track = document.createElement("div");
+    track.className = "track";
+    const items = [];
+    for (let i = 0; i < count; i++) items.push(makers[i % makers.length](i));
+    // Duplicate for seamless marquee
+    [...items, ...items.map((n) => n.cloneNode(true))].forEach((n) => track.appendChild(n));
+    row.appendChild(track);
+  }
+
+  fillRow('[data-row="sm1"]', TILES.slice(0, 12).map(([c, l]) => () => tileIcon(c, l)), 12);
+  fillRow('[data-row="sm2"]', TILES.slice(12, 24).map(([c, l]) => () => tileIcon(c, l)), 12);
+  fillRow('[data-row="sm3"]', TILES.slice(6, 18).map(([c, l]) => () => tileIcon(c, l)), 12);
+
+  const lg1 = FEATURED.slice(0, 7).map((src) => () => logoIcon(src));
+  const lg2 = FEATURED.slice(7, 14).map((src) => () => logoIcon(src));
+  fillRow('[data-row="lg1"]', lg1, 7);
+  fillRow('[data-row="lg2"]', lg2, 7);
+})();
+</script>
+</body>
+</html>
