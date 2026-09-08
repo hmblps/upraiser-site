@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 7 September 2026 (evening)  
+> **Updated:** 8 September 2026  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** this ritual — mobile chart Lenis scrub + light JPEG foot crop on Windows/mobile (see §25) 
+> **HEAD:** this ritual — Windows light JPEG holds last frame (no paper flash on scroll) (see §25) 
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 
@@ -327,8 +327,8 @@ Same WebGL fly, frozen to 150 stills. Closest bake to live 3D that still loads i
 
 - Capture PNG is 1920×1080 (desktop) / 720×1280 (mobile) via `lib/heroCapture.ts`.
 - Player cache-bust: `HeroVideoFallback` `?v=10`.
-- Player **idle-loads all 150** (`IDLE_CONCURRENCY = 3`). Loads are generation-scoped: a light `onload` must not commit into the dark cache (that was the white-flash bug).
-- Draw only images whose `src` belongs to the current `shotFolder`; otherwise fill paper `#ffffff` / `#050504`.
+- Player **idle-loads all 150** (`IDLE_CONCURRENCY = 8`). Cache the decoded `<img>` immediately — do not wait on `createImageBitmap` (that hole painted paper on Windows light). Never `fillRect` paper mid-scroll if a frame is already on the canvas; pick the closest cached index.
+- Opaque 2d context, **no** `desynchronized: true` (Intel Windows flickered blank).
 - Light JPEG foot: **no** `.hero-bottom-fade-bridge`. Baked paper fade is cropped in `drawCoverFrame` (mobile `-18%`, desktop/Windows `-22%`) then cover-fit. Do not put the milky wash back — it reads as a blur on Growth, including Intel Windows.
 - Remaining gap vs live 3D (not a hole in the bake): 720p stretched to retina, JPEG, 150 stops, no mouse parallax, no dark-wire idle breathe.
 
@@ -1012,9 +1012,9 @@ Trust **`src/App.tsx` + `navLinks`**, not comments in `innerPagesData.ts` (they 
 - **Home loading:** no `LazySection` / `heroOk` on Audience / Process / Cases / Promise. Single `React.Suspense` per fold.
 - **Hero split:** high-tier = live R3F. Lite (mobile, Intel, `?lite=1`) = JPEG sequence. Dark frames include Voyager. Light frames recaptured 7 Sep evening (settle 1400 ms, qscale 2). Light player crops the baked paper fade at the foot (Windows `home-light` and mobile). No CSS bottom wash on Growth.
 
-### Git / disk (7 Sep 2026 night)
+### Git / disk (8 Sep 2026)
 
-- **This commit** ships mobile Lenis chart scrub (`useMobileChartProgress`) + light JPEG foot crop on Windows/mobile. Parent: `6eaf8f8`.
+- **This commit** holds the last JPEG on Windows light scroll (no white paper flash). Parent: `777eb75`.
 - After push + `npm run deploy`: prod alias **https://upraiser.co.uk**.
 - **Leave untracked:** `modal-open.png`, `modal-scrolled.png`, `oem-mobile.png`, `test-modal-scroll.mjs`, `test-oem-mobile.mjs`.
 
@@ -1136,6 +1136,7 @@ MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
 - 7 Sep evening: `sitemap.xml` drops `/expedition`, adds `/channels`. Footer / contact / thank-you / craft / 404 now say **The Agency**. Format tabs/taglines no longer clamp. Dark muted token bumped for body contrast.
 - Same evening, owner pass: hero stat cards restored to gold→red (do not flatten to single gold). Light lite no longer has the 46% white scrim over the mountain base; light fog/mist pulled back; `home-light` + `home-mobile-light` recaptured (`?v=10`). Dark JPEG player draws on the same sticky progress as live 3D (no Lenis+rect mix), nearest-frame fallback, ImageBitmap. PROOF ghosts stay clipped off copy.
 - Same night: mobile `#audience` / `#promise` charts were static again (Framer `useScroll` vs Lenis). Wired `useMobileChartProgress`. PROOF lowered on mobile. Light JPEG foot crop on **Windows `home-light` and mobile** — no CSS fade-bridge on Growth.
+- 8 Sep: Windows light JPEG looked like a reload on scroll — missing frames filled white paper (dark hid the same hole). Player now keeps the last decoded frame, caches `<img>` immediately, closest-index fallback, no `desynchronized` 2d.
 
 ---
 

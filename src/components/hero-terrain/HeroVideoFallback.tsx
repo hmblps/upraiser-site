@@ -7,7 +7,7 @@ type FrameSource = CanvasImageSource & { width?: number; height?: number };
 
 const FRAME_COUNT = 150;
 const LOOKAHEAD = 72;
-const IDLE_CONCURRENCY = 3;
+const IDLE_CONCURRENCY = 8;
 const CACHE_BUST = "v=10";
 
 function frameUrl(folder: string, index: number) {
@@ -33,6 +33,11 @@ function whenReady(img: HTMLImageElement, ok: () => void, fail: () => void) {
     fail();
   };
   if (img.complete && img.naturalWidth > 0) succeed();
+}
+
+function tagSource(src: FrameSource, folder: string) {
+  (src as FrameSource & { __folder?: string }).__folder = folder;
+  return src;
 }
 
 /** Cover-fit a frame into the canvas. Light captures keep a paper fade at the foot. */
@@ -63,23 +68,6 @@ function drawCoverFrame(
   let dy = canvas.height / 2 - dh * focusY;
   dy = Math.min(0, Math.max(canvas.height - dh, dy));
   ctx.drawImage(src, 0, 0, srcW, usableH, dx, dy, dw, dh);
-}
-
-function toPaintSource(img: HTMLImageElement, folder: string, done: (src: FrameSource | null) => void) {
-  if (typeof createImageBitmap === "function") {
-    void createImageBitmap(img)
-      .then((bmp) => {
-        (bmp as FrameSource & { __folder?: string }).__folder = folder;
-        done(bmp);
-      })
-      .catch(() => {
-        (img as FrameSource & { __folder?: string }).__folder = folder;
-        done(img);
-      });
-    return;
-  }
-  (img as FrameSource & { __folder?: string }).__folder = folder;
-  done(img);
 }
 
 export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "expedition" }) {
@@ -121,22 +109,65 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     loading.current = new Set();
     lastDrawnRef.current = null;
     lastIndexRef.current = -1;
+    const targetRef = { current: 0 };
+    const paintedIndexRef = { current: -1 };
 
     const canvas = canvasRef.current;
     if (canvas) {
-      canvas.width = isMobile ? 540 : 1280;
-      canvas.height = isMobile ? 960 : 720;
-      ctxRef.current = canvas.getContext("2d", { alpha: false, desynchronized: true });
+      const nextW = isMobile ? 540 : 1280;
+      const nextH = isMobile ? 960 : 720;
+      if (canvas.width !== nextW || canvas.height !== nextH) {
+        canvas.width = nextW;
+        canvas.height = nextH;
+      }
+      // Opaque 2d — desynchronized:true flickered blank on Windows Intel.
+      ctxRef.current = canvas.getContext("2d", { alpha: false }) ?? canvas.getContext("2d");
       paintPaper(folder);
     }
 
     const live = () => !cancelled && folderRef.current === folder;
 
+    const pickFrame = (targetIndex: number) => {
+      if (cache[targetIndex]) return { src: cache[targetIndex], index: targetIndex };
+      let bestIndex = -1;
+      let bestDist = Infinity;
+      for (const key in cache) {
+        const i = Number(key);
+        const d = Math.abs(i - targetIndex);
+        if (d < bestDist) {
+          bestDist = d;
+          bestIndex = i;
+        }
+      }
+      if (bestIndex >= 0) return { src: cache[bestIndex]!, index: bestIndex };
+      if (lastDrawnRef.current) return { src: lastDrawnRef.current, index: paintedIndexRef.current };
+      return null;
+    };
+
+    const drawFrame = (targetIndex: number) => {
+      if (!live()) return;
+      const canvasEl = canvasRef.current;
+      const ctx = ctxRef.current;
+      if (!canvasEl || !ctx) return;
+
+      const picked = pickFrame(targetIndex);
+      if (!picked) return;
+
+      if (targetIndex === lastIndexRef.current && lastDrawnRef.current === picked.src) return;
+      lastDrawnRef.current = picked.src;
+      lastIndexRef.current = targetIndex;
+      paintedIndexRef.current = picked.index;
+      drawCoverFrame(ctx, picked.src, canvasEl, folder);
+    };
+
     const store = (index: number, img: HTMLImageElement) => {
-      toPaintSource(img, folder, (src) => {
-        if (!live() || !src) return;
-        cache[index] = src;
-      });
+      if (!live()) return;
+      cache[index] = tagSource(img, folder);
+      const target = targetRef.current;
+      const painted = paintedIndexRef.current;
+      if (painted < 0 || Math.abs(index - target) < Math.abs(painted - target)) {
+        drawFrame(target);
+      }
     };
 
     const getFrame = (index: number) => {
@@ -150,41 +181,14 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
         img,
         () => {
           loading.current.delete(index);
-          if (!live()) return;
           store(index, img);
         },
         () => loading.current.delete(index),
       );
     };
 
-    const pickFrame = (targetIndex: number) => {
-      if (cache[targetIndex]) return cache[targetIndex];
-      for (let d = 1; d <= 16; d += 1) {
-        if (cache[targetIndex - d]) return cache[targetIndex - d];
-        if (cache[targetIndex + d]) return cache[targetIndex + d];
-      }
-      return lastDrawnRef.current;
-    };
-
-    const drawFrame = (targetIndex: number) => {
-      if (!live()) return;
-      const canvasEl = canvasRef.current;
-      const ctx = ctxRef.current;
-      if (!canvasEl || !ctx) return;
-
-      const candidate = pickFrame(targetIndex);
-      const folderTag = candidate ? (candidate as FrameSource & { __folder?: string }).__folder : "";
-      if (!candidate || (folderTag && folderTag !== folder)) {
-        paintPaper(folder);
-        return;
-      }
-      if (targetIndex === lastIndexRef.current && lastDrawnRef.current === candidate) return;
-      lastDrawnRef.current = candidate;
-      lastIndexRef.current = targetIndex;
-      drawCoverFrame(ctx, candidate, canvasEl, folder);
-    };
-
     const preloadWindow = (currentIndex: number) => {
+      getFrame(currentIndex);
       const from = Math.max(0, currentIndex - 6);
       const to = Math.min(FRAME_COUNT - 1, currentIndex + LOOKAHEAD);
       for (let i = from; i <= to; i++) getFrame(i);
@@ -211,7 +215,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
         whenReady(
           img,
           () => {
-            if (live()) store(i, img);
+            store(i, img);
             done();
           },
           done,
@@ -226,14 +230,9 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       first,
       () => {
         if (!live()) return;
-        toPaintSource(first, folder, (src) => {
-          if (!live() || !src) return;
-          cache[0] = src;
-          lastDrawnRef.current = src;
-          drawFrame(0);
-          preloadWindow(0);
-          fillIdle();
-        });
+        store(0, first);
+        preloadWindow(0);
+        fillIdle();
       },
       () => {
         if (cancelled) return;
@@ -258,6 +257,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
 
       const progress = flyProgressRef.current?.current ?? flyProgressForStage(stage);
       const targetFrame = Math.min(FRAME_COUNT - 1, Math.floor(progress * (FRAME_COUNT - 1)));
+      targetRef.current = targetFrame;
       drawFrame(targetFrame);
       preloadWindow(targetFrame);
     });
@@ -265,9 +265,6 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     return () => {
       cancelled = true;
       unsub();
-      for (const src of Object.values(cache)) {
-        if (typeof ImageBitmap !== "undefined" && src instanceof ImageBitmap) src.close();
-      }
     };
   }, [shotFolder, isMobile, theme, registerScrollListener]);
 
