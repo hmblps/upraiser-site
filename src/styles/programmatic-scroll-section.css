@@ -648,7 +648,7 @@
    * Living-room scale — wide peer to copy. Aspect taller than 16:9 so Plastic
    * bezel + stand stay inside the GL framebuffer (no canvas crop).
    */
-  width: min(118%, 52rem);
+  width: 100%;
   aspect-ratio: 16 / 11;
   height: auto;
   max-height: min(84dvh, 100%);
@@ -688,7 +688,7 @@
 
 /* TV optical slot — larger than tablet, still left-of-copy (not full-bleed hero) */
 [data-scene="tv"] .prog-device-slot--tv {
-  width: min(112%, 52rem);
+  width: 100%;
   max-height: min(84dvh, 100%);
   height: auto;
   aspect-ratio: 16 / 11;
