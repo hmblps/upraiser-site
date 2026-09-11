@@ -159,7 +159,7 @@ function applyScreenTexture(root: Object3D, map: Texture, formatId?: string) {
       if (!/screen/i.test(name)) return mat;
 
       const screen = mat as MeshStandardMaterial;
-    if (formatId) screen.visible = formatId !== "rich";
+    
       screen.map = map;
       screen.emissiveMap = map;
       screen.color = new Color("#ffffff");
@@ -354,14 +354,8 @@ const PhoneMesh = memo(function PhoneMesh({
         <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
           {formatId === "rich" && (
-            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.094}>
-              <Html
-                transform
-                prepend
-                /* occlude removed for hole punch */
-                zIndexRange={[-100, -10]}
-                distanceFactor={1.42}
-              >
+            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.088}>
+              <Html transform occlude="blending" distanceFactor={1.42}>
                 <div
                   style={{
                     width: 320,
