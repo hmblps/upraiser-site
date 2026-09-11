@@ -23,10 +23,6 @@ const ApplePreviewPanel = lazy(() =>
   import("../components/apple-preview/ApplePreviewPanel").then((m) => ({ default: m.ApplePreviewPanel })),
 );
 
-const CustomCursor = lazy(() =>
-  import("../components/CustomCursor").then((m) => ({ default: m.CustomCursor })),
-);
-
 const Footer = lazy(() => import("../components/Footer").then((m) => ({ default: m.Footer })));
 const GlobalAmbientModalBackground = lazy(() =>
   import("../components/GlobalAmbientModalBackground").then((m) => ({
@@ -47,22 +43,6 @@ function DeferredModalAmbient() {
   return (
     <Suspense fallback={null}>
       <GlobalAmbientModalBackground />
-    </Suspense>
-  );
-}
-
-function DeferredCustomCursor() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    return whenHeroReady(() => setReady(true));
-  }, []);
-
-  if (!ready) return null;
-
-  return (
-    <Suspense fallback={null}>
-      <CustomCursor />
     </Suspense>
   );
 }
@@ -162,7 +142,6 @@ export function SiteLayout() {
           Skip to content
         </ScrollLink>
         <SiteGrain />
-        <DeferredCustomCursor />
         <DeferredModalAmbient />
         <Header />
         <div className={viewportRoute ? "viewport-route-frame" : undefined}>

@@ -20,7 +20,7 @@ function FirstFrameGate({ onReady }: { onReady: () => void }) {
   const { gl, scene, camera } = useThree();
 
   useLayoutEffect(() => {
-    console.log("FirstFrameGate mounted!"); let cancelled = false;
+    let cancelled = false;
     try {
       gl.compile(scene, camera);
     } catch {
@@ -78,10 +78,13 @@ export function Scene({
       {isLight ? <BrandHazeSky lite={lite} /> : <NightStars />}
       <Suspense fallback={null}>
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
-        {(!lite || (typeof window !== "undefined" && window.location.pathname.includes("hero-capture"))) && !isLight && voyager ? <FloatingVoyager /> : null}
-
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}
+      </Suspense>
+      <Suspense fallback={null}>
+        {(!lite || (typeof window !== "undefined" && window.location.pathname.includes("hero-capture"))) && !isLight && voyager ? (
+          <FloatingVoyager />
+        ) : null}
       </Suspense>
       {isLight ? <SeaOfClouds theme={theme} lite={lite} /> : null}
       {isLight ? <MistSheets lite={lite} /> : null}

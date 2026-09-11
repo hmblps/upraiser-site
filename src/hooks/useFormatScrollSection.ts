@@ -15,11 +15,9 @@ type UseFormatScrollSectionOptions = {
   lane?: string;
 };
 
-/**
- * Sticky Routes scroll — Lenis-aware progress via registerScrollListener + runwayProgress.
- */
-const INTRO_SCROLL_PX = 650; // Phone arrives before copy is fully read
-
+/** Sticky Routes scroll — Lenis-aware progress via registerScrollListener + runwayProgress. */
+/** Was 650px phone-arrival runway; entrance dolly removed → no dead intro scroll. */
+const INTRO_SCROLL_PX = 0;
 export function useFormatScrollSection(
   sectionRef: RefObject<HTMLElement | null>,
   { enabled, formatCount, reduced, lane = "app-growth" }: UseFormatScrollSectionOptions,
@@ -54,12 +52,8 @@ export function useFormatScrollSection(
 
       const rect = section.getBoundingClientRect();
       
-      // Entrance progress covers both the scroll into view (innerHeight) + pinned intro (INTRO_SCROLL_PX)
-      const scrolledInPx = window.innerHeight - rect.top;
-      const totalIntroPx = window.innerHeight + INTRO_SCROLL_PX;
-      const rawEntrance = scrolledInPx / totalIntroPx;
-      entranceProgress.set(Math.max(0, Math.min(1, rawEntrance)));
-
+      // Entrance progress kept at 1 — phone no longer dollies in on scroll.
+      entranceProgress.set(1);
       // Content progress starts ONLY AFTER the intro scroll is finished
       const totalPinnedScroll = section.offsetHeight - window.innerHeight;
       const contentScrollable = totalPinnedScroll - INTRO_SCROLL_PX;

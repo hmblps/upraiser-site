@@ -12,9 +12,9 @@
   /* Full-bleed into phone glass — no side gutters */
   .ad{position:relative;width:100%;height:100%;min-height:100%;display:flex;flex-direction:column;overflow:hidden;background:#0b1220}
 
-  /* ─── Video slot (≈ 37% of height) ─── */
+  /* ─── Video slot (taller — upper ad block) ─── */
   .video-wrap{
-    position:relative;width:100%;height:37%;min-height:0;flex:0 0 37%;
+    position:relative;width:100%;height:44%;min-height:0;flex:0 0 44%;
     background:#0b1220;overflow:hidden;margin:0;padding:0;align-self:stretch;
   }
   .ad-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
@@ -44,10 +44,10 @@
   .brand-panel{
     flex:1 1 auto;width:100%;align-self:stretch;background:#f7f2e9;position:relative;
     display:flex;flex-direction:column;align-items:center;
-    justify-content:flex-start;padding:8px 10px 66px;overflow:hidden;
+    justify-content:flex-start;padding:10px 10px 78px;overflow:hidden;
     margin:0;min-width:100%;box-sizing:border-box;
   }
-  .headline{font-size:18px;font-weight:800;color:#e85500;text-align:center;line-height:1.15;margin:0 0 6px;z-index:2}
+  .headline{font-size:20px;font-weight:800;color:#e85500;text-align:center;line-height:1.15;margin:0 0 8px;z-index:2}
 
   /* ─── Shredder visual (photo-style CSS replica) ─── */
   .shredder-wrap{position:relative;width:190px;height:168px;cursor:pointer;flex-shrink:0;z-index:2}
@@ -127,23 +127,23 @@
 
   /* ─── ING lion badge ─── */
   .ing-badge{
-    position:absolute;bottom:72px;left:50%;transform:translateX(-50%);
+    position:absolute;bottom:84px;left:50%;transform:translateX(-50%);
     font-size:12px;color:#cc6600;font-weight:700;opacity:.6;user-select:none;white-space:nowrap;
   }
 
-  /* ─── Bottom bar ─── */
+  /* ─── Bottom bar (taller — lower ad block / Open ING) ─── */
   .bottom-bar{
-    position:absolute;bottom:0;left:0;right:0;height:62px;
+    position:absolute;bottom:0;left:0;right:0;height:74px;
     background:rgba(255,255,255,.97);backdrop-filter:blur(10px);
     border-top:1px solid rgba(0,0,0,.09);
     display:flex;align-items:center;justify-content:space-between;
     padding:0 16px;z-index:30;gap:12px;
   }
-  .disclaimer{font-size:9px;color:#555;line-height:1.4;max-width:185px}
+  .disclaimer{font-size:10px;color:#555;line-height:1.4;max-width:185px}
   .cta-btn{
-    flex-shrink:0;height:38px;padding:0 20px;
+    flex-shrink:0;height:44px;padding:0 22px;
     background:#ff5500;color:#fff;border:none;border-radius:999px;
-    font-size:13px;font-weight:800;cursor:pointer;
+    font-size:14px;font-weight:800;cursor:pointer;
     transition:background .18s,transform .1s;white-space:nowrap;touch-action:manipulation;
   }
   .cta-btn:hover{background:#e04400}
@@ -224,7 +224,7 @@
   <!-- ═══ BOTTOM BAR ═══ -->
   <div class="bottom-bar">
     <div class="disclaimer">No wire fees, no transfer charges,<br>no annual card fee. Not one.*</div>
-    <button class="cta-btn" onclick="triggerShredder()">Open ING</button>
+    <button class="cta-btn" type="button" id="ctaBtn">Open ING</button>
   </div>
 </div>
 
@@ -384,6 +384,20 @@ function triggerShredder() {
     machineBtn.classList.add('idle');
   }, 2800);
 }
+
+function openIngCta() {
+  triggerShredder();
+  try {
+    window.open('https://zerofee.ing', '_blank', 'noopener,noreferrer');
+  } catch (e) {}
+}
+
+document.getElementById('ctaBtn').addEventListener('click', openIngCta);
+window.addEventListener('message', function (e) {
+  if (e.origin !== location.origin) return;
+  if (!e.data || e.data.source !== 'upraiser-parent') return;
+  if (e.data.type === 'rich-cta') openIngCta();
+});
 </script>
 </body>
 </html>

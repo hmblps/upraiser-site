@@ -27,10 +27,11 @@
   }
   .ribbons {
     flex: 0 0 auto;
-    padding: 7% 0 2%;
+    padding: 6% 0 3%;
     display: flex;
     flex-direction: column;
-    gap: 1.6%;
+    /* More air between discovery / featured rows */
+    gap: 3.4%;
   }
   .row {
     display: flex;
@@ -65,12 +66,12 @@
     place-items: center;
   }
   .row--sm .icon {
-    width: clamp(28px, 6.2vw, 48px);
-    height: clamp(28px, 6.2vw, 48px);
+    width: clamp(26px, 5.8vw, 44px);
+    height: clamp(26px, 5.8vw, 44px);
   }
   .row--lg .icon {
-    width: clamp(56px, 11.5vw, 92px);
-    height: clamp(56px, 11.5vw, 92px);
+    width: clamp(52px, 10.8vw, 86px);
+    height: clamp(52px, 10.8vw, 86px);
     border-radius: 24%;
   }
   .icon img {
@@ -162,7 +163,7 @@
 <body>
 <div class="store" aria-hidden="true">
   <div class="ribbons">
-    <!-- Small discovery rows — abstract tiles only (no trademark dumps, no case-logo dups). -->
+    <!-- Discovery rows — real client / case marks (no letter placeholders). -->
     <div class="row row--sm" data-row="sm1"></div>
     <div class="row row--sm" data-row="sm2"></div>
     <div class="row row--sm" data-row="sm3"></div>
@@ -186,16 +187,35 @@
 </div>
 <script>
 (function () {
-  const TILES = [
-    ["#e50914", "N"], ["#1db954", "S"], ["#010101", "X"], ["#1877f2", "f"],
-    ["#ff0000", "▶"], ["#ff9900", "a"], ["#e60023", "P"], ["#ff4500", "r"],
-    ["#5865f2", "D"], ["#9146ff", "T"], ["#229ed9", "✈"], ["#7360f2", "V"],
-    ["#0088cc", "t"], ["#06c755", "L"], ["#fe3c72", "♥"], ["#00aeef", "M"],
-    ["#34a853", "G"], ["#33ccff", "W"], ["#000000", "U"], ["#ff00bf", "ly"],
-    ["#ff5a5f", "A"], ["#003580", "B"], ["#58cc02", "🦉"], ["#2d8cff", "☾"],
+  /** Discovery + featured — real marks from prior builds (cases + clients). */
+  const DISCOVERY = [
+    "/clients/tiktok.svg",
+    "/clients/opera.svg",
+    "/clients/binance.svg",
+    "/clients/bybit.svg",
+    "/clients/okx.svg",
+    "/clients/starbucks.svg",
+    "/clients/surfshark.svg",
+    "/clients/gcash.svg",
+    "/clients/iq-options.svg",
+    "/clients/liobank.svg",
+    "/clients/mbs.png",
+    "/clients/underdog.png",
+    "/clients/arvanix.png",
+    "/clients/platiza.png",
+    "/clients/betking.webp",
+    "/clients/moneycat.webp",
+    "/clients/nira.avif",
+    "/clients/solprestado.jpg",
+    "/cases/logos/fanatics.png",
+    "/cases/logos/block-blast.png",
+    "/cases/logos/fiverr.png",
+    "/cases/logos/shopee.png",
+    "/cases/logos/snoop.png",
+    "/cases/logos/vantage.png",
   ];
 
-  /** Unique featured marks — cases first, then clients. Paths relative to /public. */
+  /** Featured large rows — unique UPRAISER case / client marks. */
   const FEATURED = [
     "/cases/logos/fanatics.png",
     "/cases/logos/block-blast.png",
@@ -212,14 +232,6 @@
     "/clients/purevpn.png",
     "/clients/rapiplata.png",
   ];
-
-  function tileIcon(color, label) {
-    const el = document.createElement("div");
-    el.className = "icon icon--tile";
-    el.style.background = color;
-    el.textContent = label;
-    return el;
-  }
 
   function logoIcon(src) {
     const el = document.createElement("div");
@@ -244,9 +256,9 @@
     row.appendChild(track);
   }
 
-  fillRow('[data-row="sm1"]', TILES.slice(0, 12).map(([c, l]) => () => tileIcon(c, l)), 12);
-  fillRow('[data-row="sm2"]', TILES.slice(12, 24).map(([c, l]) => () => tileIcon(c, l)), 12);
-  fillRow('[data-row="sm3"]', TILES.slice(6, 18).map(([c, l]) => () => tileIcon(c, l)), 12);
+  fillRow('[data-row="sm1"]', DISCOVERY.slice(0, 12).map((src) => () => logoIcon(src)), 12);
+  fillRow('[data-row="sm2"]', DISCOVERY.slice(12, 24).map((src) => () => logoIcon(src)), 12);
+  fillRow('[data-row="sm3"]', DISCOVERY.slice(6, 18).map((src) => () => logoIcon(src)), 12);
 
   const lg1 = FEATURED.slice(0, 7).map((src) => () => logoIcon(src));
   const lg2 = FEATURED.slice(7, 14).map((src) => () => logoIcon(src));

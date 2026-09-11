@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.tailwindcss.com?plugins=container-queries"></script>
 <script>
   tailwind.config = {
     theme: {
@@ -58,9 +58,19 @@
     display: flex;
     flex-direction: column;
   }
+  /* Kill native caret / focus ring that bakes as a “blinking line” next to checks */
+  input, input:focus, input:focus-visible {
+    caret-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
   .m3-checkbox {
+    caret-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
     appearance: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
     border: 2px solid #8e918f;
     background: transparent;
     width: 1.05rem;
@@ -68,20 +78,52 @@
     border-radius: 2px;
     display: inline-grid;
     place-content: center;
+    color: transparent;
+    accent-color: transparent;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .m3-checkbox:focus, .m3-checkbox:focus-visible, .m3-checkbox:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #8e918f;
   }
   .m3-checkbox:checked {
     background: #a8c7fa;
     border-color: #a8c7fa;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .m3-checkbox:checked:focus, .m3-checkbox:checked:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #a8c7fa;
   }
   .m3-checkbox:checked::before {
     content: "";
-    width: 0.5rem;
-    height: 0.28rem;
+    width: 0.42rem;
+    height: 0.22rem;
     border-left: 2px solid #062e6f;
     border-bottom: 2px solid #062e6f;
-    transform: rotate(-45deg) translate(1px, -1px);
+    transform: rotate(-45deg) translateY(-1px);
+    margin: 0;
+  }
+  /* Tablet glass bake (?bake=1): denser 3:4 read, less empty black */
+  html[data-bake="1"] {
+    zoom: 1.45;
+  }
+  html[data-bake="1"] .oobe-main .flex-1 {
+    flex: 0 0 auto;
+  }
+  html[data-bake="1"] footer {
+    margin-top: auto;
   }
 </style>
+<script>
+  if (new URLSearchParams(location.search).has("bake")) {
+    document.documentElement.dataset.bake = "1";
+  }
+</script>
 </head>
 <body>
 <div class="oobe" data-purpose="tablet-viewport">
@@ -156,37 +198,38 @@
           <h2 class="text-[10px] font-medium text-android-textSecondary tracking-wider uppercase">From Operator &amp; Partners</h2>
           <span class="text-[9px] uppercase font-semibold tracking-wider text-amber-400/90 bg-amber-400/10 px-1.5 py-0.5 rounded-full border border-amber-400/20">Featured</span>
         </div>
-        <div class="flex-1 min-h-0 overflow-hidden flex flex-col gap-1">
-          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-gradient-to-r from-neutral-900/90 via-amber-950/20 to-neutral-900/90 border border-amber-500/30">
+        <div class="flex-1 min-h-0 overflow-hidden flex flex-col gap-0">
+          <!-- Clean icon swap — same row chrome as Google list (no card border = no “caret” seam) -->
+          <div class="flex items-center justify-between py-1.5 px-0.5">
             <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center shrink-0 text-black font-black text-sm">A</div>
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#0075EB] to-[#00A1FC] flex items-center justify-center shrink-0 text-white font-black text-[11px] tracking-tight" aria-hidden="true">R</div>
               <div class="min-w-0">
-                <div class="flex items-center gap-1"><span class="text-[13px] font-semibold text-white">Apex Pay</span><span class="text-[8px] font-bold uppercase px-1 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">Partner</span></div>
-                <p class="text-[10px] text-android-textSecondary">Financial Partner • Included</p>
+                <div class="flex items-center gap-1"><span class="text-[13px] font-medium text-white leading-tight">Revolut</span><span class="text-[8px] font-bold uppercase px-1 rounded bg-amber-400/15 text-amber-300/90 border border-amber-400/25">Partner</span></div>
+                <p class="text-[10px] text-android-textSecondary">Included</p>
               </div>
             </div>
-            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+            <input checked class="m3-checkbox shrink-0" type="checkbox" tabindex="-1"/>
           </div>
-          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+          <div class="flex items-center justify-between py-1.5 px-0.5">
             <div class="flex items-center gap-2.5 min-w-0">
               <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-red-600 via-purple-600 to-indigo-700 flex items-center justify-center shrink-0 text-white text-[10px]">▶</div>
               <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight">Xfinity Stream</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
             </div>
-            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+            <input checked class="m3-checkbox shrink-0" type="checkbox" tabindex="-1"/>
           </div>
-          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+          <div class="flex items-center justify-between py-1.5 px-0.5">
             <div class="flex items-center gap-2.5 min-w-0">
               <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 text-white font-black text-sm">P</div>
               <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight truncate">Pandora - Music &amp; Podcasts</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
             </div>
-            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+            <input checked class="m3-checkbox shrink-0" type="checkbox" tabindex="-1"/>
           </div>
-          <div class="flex items-center justify-between py-1.5 px-2 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+          <div class="flex items-center justify-between py-1.5 px-0.5">
             <div class="flex items-center gap-2.5 min-w-0">
               <div class="w-8 h-8 rounded-xl bg-emerald-700/80 flex items-center justify-center shrink-0 text-emerald-200 text-sm">▤</div>
               <div class="min-w-0"><p class="text-[13px] font-medium text-white leading-tight">Shopping &amp; Utilities</p><p class="text-[10px] text-android-textSecondary">Included</p></div>
             </div>
-            <input checked class="m3-checkbox shrink-0" type="checkbox"/>
+            <input checked class="m3-checkbox shrink-0" type="checkbox" tabindex="-1"/>
           </div>
         </div>
       </section>

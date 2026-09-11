@@ -1,39 +1,14 @@
 const fs = require('fs');
-const content = fs.readFileSync('src/components/hero-terrain/shared.ts', 'utf8');
+let code = fs.readFileSync('src/components/solutions/Phone3D.tsx', 'utf8');
 
-const interfaceDef = `
-export type AscentPath = {
-  startPos: [number, number, number];
-  midPos: [number, number, number];
-  endPos: [number, number, number];
-  startLook: [number, number, number];
-  midLook: [number, number, number];
-  endLook: [number, number, number];
-  startFov: number;
-  midFov: number;
-  endFov: number;
-  bankMax: number;
-};
-`;
-
-let newContent = content.replace(
-  'export type AscentPath = typeof HERO_ASCENT_DEFAULTS;', 
-  interfaceDef
+code = code.replace(
+  /type Phone3DProps = \{/,
+  'type Phone3DProps = {\n  active?: boolean;\n  flat?: boolean;'
 );
 
-// Also fix ExpeditionCamera error: Property 'fov' does not exist on type '{ pos: number[]; look: number[]; }'
-// wait, EXPEDITION_CLIMB.poses doesn't have fov! I put fovs: [46, 40, 34]. I need to put fov inside poses.
-
-newContent = newContent.replace(
-  /export const EXPEDITION_CLIMB = \{[\s\S]*?\};/,
-  `export const EXPEDITION_CLIMB = {
-  poses: [
-    { pos: [-4, 12, 188], look: [18, 28, -28], fov: 46 },
-    { pos: [-2, 38, 140], look: [14, 10, -40], fov: 40 },
-    { pos: [-10, 72, 122], look: [12, 16, -68], fov: 34 }
-  ],
-  bankMax: -0.08,
-};`
+code = code.replace(
+  /export const Phone3D = memo\(function Phone3D\(\{\n  mode,\n  formatId,\n  entranceProgress,\n  className,\n\}: Phone3DProps\) \{/,
+  'export const Phone3D = memo(function Phone3D({\n  mode,\n  formatId,\n  entranceProgress,\n  className,\n  active,\n  flat,\n}: Phone3DProps) {'
 );
 
-fs.writeFileSync('src/components/hero-terrain/shared.ts', newContent);
+fs.writeFileSync('src/components/solutions/Phone3D.tsx', code);

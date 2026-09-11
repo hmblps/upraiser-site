@@ -126,6 +126,7 @@
 
 
 @import "./styles/base.css"; /* black-ink logos: invert only, not app icons */
+@import "./styles/cursors.css"; /* Operator Dot — CSS url() cursors, no JS */
 @import "./styles/cross-platform.css";
 @import "./styles/accent-scroll.css";
 @import "./styles/typography.css";

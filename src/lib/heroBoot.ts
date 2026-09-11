@@ -42,13 +42,13 @@ export function preloadHeroTerrain(theme: "light" | "dark") {
   }
 }
 
-/** Resolves when the active GLB bytes are in cache (parse still happens in R3F). */
+/** Resolves when the mountain GLB is in cache. Voyager must not block first paint. */
 export function whenHeroTerrainBytes(theme: "light" | "dark") {
   preloadHeroTerrain(theme);
-  const fetches = [fetch(heroModelUrl(theme), { credentials: "same-origin" }).then(() => undefined)];
-  if (theme === "dark") {
-    fetches.push(fetch(VOYAGER_URL, { credentials: "same-origin" }).then(() => undefined));
-  }
   if (typeof fetch === "undefined") return Promise.resolve();
-  return Promise.all(fetches).then(() => undefined);
+  const wasm = `${DRACO_PATH}draco_decoder.wasm`;
+  return Promise.all([
+    fetch(heroModelUrl(theme), { credentials: "same-origin" }),
+    fetch(wasm, { credentials: "same-origin" }),
+  ]).then(() => undefined);
 }

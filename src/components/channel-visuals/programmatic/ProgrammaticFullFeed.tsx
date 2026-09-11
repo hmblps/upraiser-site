@@ -5,8 +5,9 @@ const LOGO = "/brand/upraiser-logo.png";
 const LOGO_MARK = "/logo.svg";
 const NATIVE_HERO = "/channels/programmatic-feed/native-hero.jpg";
 const INTERSTITIAL_BG = "/channels/programmatic-feed/interstitial-bg.jpg";
-const RICH_BG = "/channels/programmatic-feed/rich-bg.jpg";
 const VIDEO_BG = "/channels/programmatic-feed/video-bg.jpg";
+/** Live ING unit (video + CTA) — same glass as Routes / lite. */
+const RICH_HTML = "/rich-media-ad.html";
 
 const SPRING = { type: "spring" as const, stiffness: 200, damping: 28, mass: 1 };
 
@@ -83,28 +84,21 @@ function FormatPanel({ id }: { id: string }) {
       );
     case "rich":
       return (
-        <div className="pf-rich pf-rich--fill">
-          <img src={RICH_BG} alt="" className="pf-rich__bg" decoding="async" loading="lazy" />
-          <div className="pf-rich__overlay">
-            <div className="pf-format-tag pf-format-tag--on-dark" aria-hidden>
-              <span>04.</span> Rich Media
-            </div>
-            <span className="pf-rich__chip">Conquer 2026</span>
-            <h2>
-              Summit
-              <br />
-              Strategy
-            </h2>
-            <p>Elevate your vision into reality with high-tech climbing solutions.</p>
-            <div className="pf-rich__actions">
-              <span>
-                <Icon name="ads_click" />
-              </span>
-              <span className="pf-rich__nudge">
-                <Icon name="swipe_up" />
-              </span>
-            </div>
-          </div>
+        <div className="pf-rich pf-rich--fill" style={{ background: "#0b1220" }}>
+          <iframe
+            src={RICH_HTML}
+            title="ING Rich Media"
+            className="pf-rich__iframe"
+            scrolling="no"
+            allow="autoplay; encrypted-media"
+            style={{
+              width: "100%",
+              height: "100%",
+              border: 0,
+              display: "block",
+              background: "#0b1220",
+            }}
+          />
         </div>
       );
     case "video":

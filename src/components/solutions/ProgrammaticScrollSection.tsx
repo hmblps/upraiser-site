@@ -81,6 +81,7 @@ function DeviceCarousel3({
           opacity: phoneOpacity,
           pointerEvents: scene === "phone" ? "auto" : "none",
           zIndex: scene === "phone" ? 3 : 1,
+          overflow: "visible",
         }}
       >
         <div className="prog-device-slot prog-device-slot--phone">
@@ -110,6 +111,7 @@ function DeviceCarousel3({
           pointerEvents: scene === "tablet" ? "auto" : "none",
           /* Above copy / sticky chrome so rotate corners aren't eaten. */
           zIndex: scene === "tablet" ? 6 : 1,
+          overflow: "visible",
         }}
       >
         <div className="prog-device-slot prog-device-slot--tablet">
@@ -136,6 +138,7 @@ function DeviceCarousel3({
           opacity: tvOpacity,
           pointerEvents: scene === "tv" ? "auto" : "none",
           zIndex: scene === "tv" ? 6 : 1,
+          overflow: "visible",
         }}
       >
         <div className="prog-device-slot prog-device-slot--tv">

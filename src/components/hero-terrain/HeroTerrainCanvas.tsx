@@ -64,13 +64,22 @@ export function HeroTerrainCanvas({
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
   const [drawnTheme, setDrawnTheme] = useState<ThemeMode | null>(null);
+  /** If Draco/GLB hang, do not keep the compass overlay forever. */
+  const [bootStuck, setBootStuck] = useState(false);
   const handleModelReady = useCallback(() => {
     setModelReady(true);
     setDrawnTheme(theme);
+    setBootStuck(false);
   }, [theme]);
   const showTerrain = capturing || (modelReady && drawnTheme === theme);
-
   const shouldFallback = (reduced || tier === 'lite') && !capturing;
+
+  useEffect(() => {
+    setBootStuck(false);
+    if (capturing || shouldFallback) return;
+    const t = window.setTimeout(() => setBootStuck(true), 4000);
+    return () => window.clearTimeout(t);
+  }, [theme, capturing, shouldFallback]);
 
   useEffect(() => {
     if ((modelReady || shouldFallback) && !lite) markHeroReady();
@@ -126,7 +135,7 @@ export function HeroTerrainCanvas({
   return (
     <>
       {/* Loading overlay while shaders compile (crucial for mobile) */}
-      {!showTerrain && !capturing && typeof document !== "undefined" ? createPortal(
+      {!showTerrain && !capturing && !bootStuck && typeof document !== "undefined" ? createPortal(
         <div className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none transition-opacity duration-1000 backdrop-blur-xl bg-bg/20">
           <div className="flex flex flex-col items-center gap-3">
             <motion.div

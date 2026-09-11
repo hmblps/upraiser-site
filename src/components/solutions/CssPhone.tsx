@@ -69,8 +69,9 @@ function AnimatedTabletGlass({ formatId }: { formatId: GlassAnimId }) {
 }
 
 /**
- * Same glass files as Phone3D / Tablet3D / Tv3D (`deviceScreens.ts`).
- * Prefer live HTML → animated OEM canvas → MP4 → still.
+ * Prefer HTML when both exist (interactive rich / OEM store on CSS glass).
+ * 3D phone still uses FORMAT_VIDEO / FORMAT_STILL textures.
+ * App Growth banner/native/interstitial = still; rich + video = MP4; CTV Video = MP4.
  */
 export function FormatGlass({ formatId }: { formatId: string }) {
   const html = FORMAT_HTML[formatId];

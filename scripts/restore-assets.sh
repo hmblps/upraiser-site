@@ -32,6 +32,26 @@ for folder in hero channels phones draco clients maps images; do
   fi
 done
 
+# A folder can exist while a tracked binary inside is gone (git D + empty dir).
+# rsync --ignore-existing then reports "all present". Force-copy these.
+CRITICAL=(
+  "draco/gltf/draco_decoder.wasm"
+  "hero/everest.glb"
+  "hero/everest-light.glb"
+  "hero/voyager-nasa.glb"
+  "channels/oem/tablet.glb"
+  "channels/oem/tv.glb"
+)
+for rel in "${CRITICAL[@]}"; do
+  if [ -f "$PUBLIC/$rel" ]; then continue; fi
+  if [ -f "$BACKUP/$rel" ]; then
+    mkdir -p "$(dirname "$PUBLIC/$rel")"
+    cp "$BACKUP/$rel" "$PUBLIC/$rel"
+    echo "🔄  Restoring public/$rel from backup…"
+    RESTORED=$((RESTORED + 1))
+  fi
+done
+
 if [ "$RESTORED" -gt 0 ]; then
   echo "✅  Restored $RESTORED asset(s) from backup."
 else

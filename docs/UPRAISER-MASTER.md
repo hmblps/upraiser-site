@@ -428,18 +428,18 @@ Switching lanes slides the device carousel and cross-fades format copy with a **
 ### 3D Device Carousel (`DeviceCarousel3`)
 
 Each format carries `scene?: "phone" | "tablet" | "tv"` in `ProgrammaticFormats.ts` (default `"phone"`).  
-A Framer Motion spring (`stiffness: 340, damping: 32, mass: 0.6`) drives `phase` 0→1→2.  
-Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade. No `scale` or `filter:blur` on WebGL canvas (causes bilinear→native pixel snap artifact).
+A Framer Motion spring (`stiffness: 160, damping: 28, mass: 0.95`) drives `phase` 0→1→2.  
+Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade (`1 - d * 1.15`). No `scale` or `filter:blur` on WebGL canvas (causes bilinear→native pixel snap artifact).
 
 **Mount policy:** only the **active** slot (plus the outgoing slot for ~720ms during the spring). App Growth = phone canvas only. On OEM & CTV, warm **both** `routes-tablet` and `routes-tv` as soon as the lane is active (`tv.glb` is ~9 MB Draco — do not wait until CTV Spot). Off `/` (`/channels`), `whenHeroReady` must **not** wait for Everest (`scrollPreload.ts`).
 
-**Graceful degradation (same as Everest):** width `< 1024` or `prefers-reduced-motion` → `ProgrammaticScrollSectionMobile`. Desktop lite (Intel / `?lite=1`) keeps the **two-column sticky** layout with `LiteDeviceStage` (CSS phone/tablet/TV) — not the mobile stacked page. High-tier desktop → `DeviceCarousel3` + `DeviceLoadStage` (CSS silhouette → spring-fade WebGL). No full-page spinner.
+**Graceful degradation (same as Everest):** width `< 1024` or `prefers-reduced-motion` → `ProgrammaticScrollSectionMobile`. Desktop lite (Intel / `?lite=1`) keeps the **two-column sticky** layout with **flat GLB** phone/tablet/TV (same `DeviceCarousel3`, `flat`) — not CSS chassis stand-ins (those caused big→small snap). High-tier → perspective GLB. `DeviceLoadStage` reveals settled WebGL only (`placeholder={null}`, instant). No full-page spinner.
 
 | Device | Width in col | Camera | GLB |
 | --- | --- | --- | --- |
-| Phone | 62% | Phone3D default | `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark) |
-| Tablet | 85% | fov 30, z=3.8 | `/channels/oem/tablet.glb` |
-| TV | 100% | fov 34, z=5.5 | `/channels/oem/tv.glb` (8.7 MB Draco, no legs) |
+| Phone | `min(48%, 21.5rem)` | Phone3D default | `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark) |
+| Tablet | `min(74%, 26rem)` | fov 30, z=3.8 | `/channels/oem/tablet.glb` |
+| TV | `min(118%, 52rem)` | fov 34, z=5.5 | `/channels/oem/tv.glb` |
 
 **Drag limits (all 3 devices, unified):** Y ±0.45 rad · X ±0.15 rad · sensitivity dx×0.006 / dy×0.004 · spring 260/30/0.7 · release snaps 35% toward REST.
 
@@ -462,7 +462,7 @@ Model wrapper: `Tablet3DModel.tsx` — **`primitive` of the GLB scene**. Current
 
 Framing: `Center` + `rotation={[0.08, 0, 0]}` `scale={5.6}`. **Do not** add `rotation X = π/2` on this GLB (it is already face-forward; +90° shows the edge).  
 Screen: materials whose `name` matches `/glass/i`. OEM stills: `public/channels/oem/screens/{pre-install,oem-store,system-ui}.png`. OEM **mp4s are not in git** (only `ctv-spot.mp4` / `.png` are tracked).  
-Load UX: `DeviceLoadStage` — CSS chassis (`CssTablet`) visible immediately, 3D spring-fades in. No full-page spinner.  
+Load UX: `DeviceLoadStage` — no CSS placeholder; reveal GLB only after size settles (kills big→small). No full-page spinner.  
 No `ContactShadows` (white oval artifact on transparent canvas).
 
 ---
@@ -1056,17 +1056,20 @@ Cause: `FirstFrameGate` sits in the same `Suspense` as Everest. If the GLB never
 
 Apple / Metal / NVIDIA / Radeon → hardware tier **high** even if Chrome reports 4 cores / 4 GB (`useHardwareTier.ts`). Intel/UHD/Iris/Mali/Adreno → lite. `?lite=1` still forces lite.
 
-### OEM & CTV glass (8 Sep evening — shipped this commit)
+### OEM & CTV glass (9 Sep — snap / fill / rich polish)
 
-Owner: `/channels` → **OEM & CTV** lane. CSS chassis under canvas is the load state — **no** full-page spinner.
+Owner: `/channels` → **OEM & CTV** lane. Reveal GLB after size settle — **no** CSS chassis stand-in, **no** full-page spinner.
 
 #### Glass SOT (`src/data/deviceScreens.ts`)
 
 | Format id | Still | Video / HTML | Notes |
 | --- | --- | --- | --- |
-| `pre-install` | `…/pre-install-oobe.png` (PAI “Review additional apps”, 3:4 pad) | canvas OS ticks | Keep real-screenshot feel; do not replace with Lenovo ZUI stitch unless owner asks |
-| `oem-store` | `…/oem-store.png` | lite: `oem-store.html`; 3D: canvas marquee | Featured large icons = unique `cases/logos` + `clients` (no stitch trademark dumps) |
-| `system-ui` | `…/system-ui.png` | canvas OS ticks | Notification shade |
+| `rich` | `…/rich-media.png` | **still only** | Full-bleed static creative (no HTML / no MP4 loop) |
+| `banner` / `native` / `interstitial` | matching PNGs | **still only** | Restored PNGs; no idle float on phone |
+| `video` | `…/video.png` poster | `video.mp4` | Only App Growth format that plays motion |
+| `pre-install` | `…/pre-install-oobe.png` (cropped fill 900×1200) | canvas OS ticks | Side letterbox removed; clock + progress remapped in `tabletGlassAnim` |
+| `oem-store` | `…/oem-store.png` (zoomed dense fill) | lite: `oem-store.html`; 3D: canvas marquee | Featured icons = unique `cases/logos` + `clients` |
+| `system-ui` | `…/system-ui.png` | canvas OS ticks | Shade inset is intentional |
 | `ctv-spot` | `…/ctv-spot.png` | — | Smart TV still |
 | `ctv-video` | same PNG as poster | `…/ctv-spot.mp4` (~19 s loop) | Spot ≠ Video on glass |
 
@@ -1083,20 +1086,22 @@ Shared painters: `src/lib/tabletGlassAnim.ts` (lite `FormatGlass` + Tablet3D `Ca
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
-| CSS chassis stuck / flash on format change | StrictMode cancelled `rAF` + `readySent`; `setMeshReady(false)` + `setScreenMap(null)` on every format | Reveal via `ForceCanvasSize` / chassis ready; **do not** clear map until next texture commits; no meshReady bounce on format id |
-| Empty / 300×150 WebGL buffer | Phone+tablet+TV canvases concurrent; canvas mounted before slot box | **One active WebGL device** in `ProgrammaticScrollSection` (others = CSS); mount Canvas only after slot ≥64×64; `ForceCanvasSize` |
-| Blank glass | Missing OEM stills | Real stitch-derived PNGs + HTML under `public/channels/oem/` |
+| CSS chassis stuck / flash on format change | StrictMode cancelled `rAF` + `readySent`; `setMeshReady(false)` + `setScreenMap(null)` on every format | Reveal only after GLB first paint (double-rAF); **do not** clear map until next texture commits; no meshReady bounce on format id |
+| Tablet/TV **big→small snap** + TV chassis vanish | `ForceCanvasSize` / `useEffect(() => setMeshReady(true))` revealed empty canvas; CSS filled slot while camera framed smaller | Never mark ready from size alone; wait for mesh; pull camera closer / larger `getTargetHeight`; softer `DeviceLoadStage` spring |
+| Glass content letterboxed | Side-padded PNGs + screen plane 0.90 | Crop/zoom stills to fill; screen plane ≈0.98 |
+| Harsh phone↔tablet↔TV cut | `stiffness: 340`, opacity `1−dist×1.9` | Softer spring (`160/28/0.95`) + opacity `1−dist×1.15` |
+| Empty / 300×150 WebGL buffer | Phone+tablet+TV canvases concurrent; canvas mounted before slot box | **One active WebGL device** in `ProgrammaticScrollSection` (others = CSS); mount Canvas only after slot ≥64×64; `ForceCanvasSize` sizes buffer only |
 | Decorative “marketing” pulses | Earlier sheen experiments | Removed; OS ticks only |
 
 Helpers: `DeviceLoadStage.tsx`, `FormatGlass` in `CssPhone.tsx`, `Tablet3DModel` screen plane (`MeshBasicMaterial`, GLB `glass` = camera lens only).
 
 #### Verify
 
-1. Desktop ≥1024, high tier: `/channels` → OEM & CTV → Pre-install = 3D iPad with PAI glass (not empty column).
-2. OEM Store = unique case/client icons (HTML lite / marquee 3D).
-3. CTV Spot = still; CTV Video = mp4 loop on TV.
-4. `?lite=1` = CSS chassis + same `deviceScreens` files.
-5. Format switches must not flash a second chassis or black glass.
+1. Desktop ≥1024, high tier: `/channels` → App Growth → banner/native/interstitial/rich = **static full-bleed stills** (no breathing); Video format = mp4.
+2. OEM & CTV → Pre-install / OEM Store glass fills the iPad screen (no fat side pads).
+3. Tablet/TV first paint: no oversized CSS→tiny GLB snap; TV keeps chassis.
+4. Scroll phone → tablet → TV feels soft (longer opacity overlap).
+5. CTV Spot = still; CTV Video = mp4 loop. `?lite=1` = same `deviceScreens` files.
 
 #### Still open (owner yes)
 
@@ -1220,7 +1225,7 @@ MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
 - Light mountain empty: Snow005 JPG 404 crashed the canvas → JPEG fallback on `CanvasErrorBoundary`.
 - `/channels` 3D phone: `native.png` 404 killed `useTexture` of all stills.
 - OEM tablet empty: `Tablet3DModel` still targeted deleted `큐브_*` nodes. Wrapper is now scene clone + screen plane. TV is Draco ~9 MB — same WASM hole.
-- No full-page OEM spinner. `DeviceLoadStage` shows CSS chassis, then spring-fades 3D. `/channels` no longer waits 4 s on hero before warming GLBs.
+- No full-page OEM spinner. `DeviceLoadStage` holds empty then reveals settled GLB (no CSS→3D size snap). `/channels` no longer waits 4 s on hero before warming GLBs.
 
 ### 8 Sep 2026 night — OEM glass SOT + WebGL isolation
 

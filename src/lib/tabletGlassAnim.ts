@@ -2,35 +2,23 @@
  * Shared canvas painters for OEM tablet glass (lite CssTablet + 3D CanvasTexture).
  *
  * OS-like only:
- * - oem-store: slow horizontal ribbon (storefront carousel)
- * - pre-install: live clock + partner install progress
- * - system-ui: live clock + one notification settle-in
+ * - pre-install: live clock
+ * - system-ui: live clock (notif settle-in disabled — cut sushi after PNG crop)
+ * - oem-store: still only (marquee row windows broke after storefront zoom)
  */
 
 export type GlassAnimId = "oem-store" | "pre-install" | "system-ui";
 
-/** Padded OEM stills are 1032×1376; content column is 768 wide, x=132. */
-const OEM_STORE = {
-  contentX: 132,
-  contentW: 768,
-  rows: [
-    { y: 215, h: 64, speed: 14 },
-    { y: 303, h: 64, speed: 11 },
-  ] as const,
-};
-
-/** pre-install-oobe.png is 1200×1600 with side letterbox; content ≈ x250–949. */
+/** pre-install-oobe.png — ?bake=1 densified 900×1200; partner = Revolut. */
 const PRE = {
-  clock: { x: 268, y: 10, w: 92, h: 36, size: 22, color: "#e8eaed", bg: "#000000" },
-  /** Under Apex Pay subtitle, inside gold partner card. */
-  progress: { x: 400, y: 848, w: 400, h: 5, track: "#2a2a2a", fill: "#a8c7fa" },
+  clock: { x: 20, y: 15, w: 70, h: 28, size: 18, color: "#e8eaed", bg: "#000000" },
 };
 
-/** system-ui.png padded 1032×1376; content ≈ x132–899. */
+/** system-ui.png (900×1200) — content inset on matching black pads (~86% width). */
 const SYS = {
-  clock: { x: 148, y: 40, w: 100, h: 36, size: 22, color: "#ffffff", bg: "#000000" },
-  /** Aurora expanded notification card */
-  notif: { x: 160, y: 328, w: 712, h: 312 },
+  clock: { x: 100, y: 45, w: 110, h: 36, size: 23, color: "#ffffff", bg: "#050505" },
+  /** Kept for a future re-tuned settle-in; paintSystemUi is still+clock only. */
+  notif: { x: 63, y: 366, w: 774, h: 600 },
 };
 
 function ensureSize(canvas: HTMLCanvasElement, w: number, h: number) {
@@ -71,50 +59,22 @@ export function paintStill(canvas: HTMLCanvasElement, img: HTMLImageElement) {
 }
 
 /**
- * oem-store: both large rows drift the same way, slightly different speeds —
- * reads as parallax carousel, not a marketing “shimmer”.
+ * oem-store: still fill only. Marquee row windows were calibrated to an older
+ * crop and painted white seams across featured logos after the zoom pass.
  */
 export function paintOemStore(
   canvas: HTMLCanvasElement,
   img: HTMLImageElement,
-  timeSec: number,
+  _timeSec: number,
 ) {
-  const w = img.naturalWidth || img.width;
-  const h = img.naturalHeight || img.height;
-  ensureSize(canvas, w, h);
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-
-  ctx.drawImage(img, 0, 0);
-
-  const { contentX, contentW, rows } = OEM_STORE;
-  for (const row of rows) {
-    const offset = ((timeSec * row.speed) % contentW + contentW) % contentW;
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(contentX, row.y, contentW, row.h);
-    ctx.clip();
-    ctx.fillStyle = "#eef1f4";
-    ctx.fillRect(contentX, row.y, contentW, row.h);
-    ctx.drawImage(
-      img,
-      contentX, row.y, contentW, row.h,
-      contentX - offset, row.y, contentW, row.h,
-    );
-    ctx.drawImage(
-      img,
-      contentX, row.y, contentW, row.h,
-      contentX - offset + contentW, row.y, contentW, row.h,
-    );
-    ctx.restore();
-  }
+  paintStill(canvas, img);
 }
 
-/** Live clock + soft install bar under Apex Pay partner row. */
+/** Live clock only — progress bar over partner subtitle read as a cracked UI. */
 export function paintPreInstall(
   canvas: HTMLCanvasElement,
   img: HTMLImageElement,
-  timeSec: number,
+  _timeSec: number,
 ) {
   const w = img.naturalWidth || img.width;
   const h = img.naturalHeight || img.height;
@@ -124,23 +84,14 @@ export function paintPreInstall(
 
   ctx.drawImage(img, 0, 0);
   paintClock(ctx, PRE.clock);
-
-  // Loop 18s install cycle 8% → 92% (reads as real PAI download).
-  const cycle = ((timeSec % 18) / 18);
-  const pct = 0.08 + cycle * 0.84;
-  const { x, y, w: bw, h: bh, track, fill } = PRE.progress;
-  const fillW = Math.max(bh, bw * pct);
-  ctx.fillStyle = track;
-  ctx.fillRect(x, y, bw, bh);
-  ctx.fillStyle = fill;
-  ctx.fillRect(x, y, fillW, bh);
 }
 
-/** Live clock + one notification settles in once, then holds. */
+/** Live clock only — notif settle-in cut a black seam across Aurora sushi
+ * after the system-ui.png crop changed (old SYS.notif box no longer matched). */
 export function paintSystemUi(
   canvas: HTMLCanvasElement,
   img: HTMLImageElement,
-  timeSec: number,
+  _timeSec: number,
 ) {
   const w = img.naturalWidth || img.width;
   const h = img.naturalHeight || img.height;
@@ -148,24 +99,7 @@ export function paintSystemUi(
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  const { x, y, w: nw, h: nh } = SYS.notif;
-  const enterT = Math.min(1, timeSec / 0.95);
-  const ease = 1 - Math.pow(1 - enterT, 3);
-  const dy = (1 - ease) * -56;
-
   ctx.drawImage(img, 0, 0);
-
-  // Clear card slot, then redraw card with settle offset.
-  ctx.fillStyle = "#000000";
-  ctx.fillRect(x, y, nw, nh + 8);
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(x - 2, y - 60, nw + 4, nh + 70);
-  ctx.clip();
-  ctx.globalAlpha = 0.35 + 0.65 * ease;
-  ctx.drawImage(img, x, y, nw, nh, x, y + dy, nw, nh);
-  ctx.restore();
-
   paintClock(ctx, SYS.clock);
 }
 
@@ -196,5 +130,6 @@ export function paintGlassAnim(
 }
 
 export function isAnimatedTabletGlass(formatId: string): formatId is GlassAnimId {
-  return formatId === "oem-store" || formatId === "pre-install" || formatId === "system-ui";
+  // CanvasTexture path for all OEM tablet formats — same math as Pre-install (no TextureLoader crop).
+  return formatId === "pre-install" || formatId === "system-ui" || formatId === "oem-store";
 }

@@ -70,7 +70,16 @@ function drawCoverFrame(
   ctx.drawImage(src, 0, 0, srcW, usableH, dx, dy, dw, dh);
 }
 
-export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "expedition" }) {
+export function HeroVideoFallback({
+  variant = "home",
+  scrub,
+  forceMobile,
+}: {
+  variant?: "home" | "expedition";
+  /** 0–1. Dev scrubber: paint this progress, ignore page scroll. */
+  scrub?: number;
+  forceMobile?: boolean;
+}) {
   const { theme } = useTheme();
   const heroFly = useHeroFlyOptional();
   const flyProgressRef = useRef(heroFly?.progressRef);
@@ -82,9 +91,12 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
   const lastDrawnRef = useRef<FrameSource | null>(null);
   const lastIndexRef = useRef(-1);
   const folderRef = useRef("");
+  const applyProgressRef = useRef<(progress: number) => void>(() => {});
+  const scrubRef = useRef(scrub);
+  scrubRef.current = scrub;
 
-  const [isMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth <= 899 : false,
+  const [isMobile] = useState(() =>
+    forceMobile ?? (typeof window !== "undefined" ? window.innerWidth <= 899 : false),
   );
 
   const shotFolder = isMobile ? `${variant}-mobile-${theme}` : `${variant}-${theme}`;
@@ -111,6 +123,20 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
     lastIndexRef.current = -1;
     const targetRef = { current: 0 };
     const paintedIndexRef = { current: -1 };
+    const pendingImgs = new Set<HTMLImageElement>();
+
+    const abortImg = (img: HTMLImageElement) => {
+      img.onload = null;
+      img.onerror = null;
+      img.src = "";
+    };
+
+    const loadImg = () => {
+      const img = new Image();
+      img.decoding = "async";
+      pendingImgs.add(img);
+      return img;
+    };
 
     const canvas = canvasRef.current;
     if (canvas) {
@@ -174,8 +200,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       if (!live() || index < 0 || index >= FRAME_COUNT) return;
       if (cache[index] || loading.current.has(index)) return;
       loading.current.add(index);
-      const img = new Image();
-      img.decoding = "async";
+      const img = loadImg();
       img.src = frameUrl(folder, index);
       whenReady(
         img,
@@ -204,8 +229,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
         if (cache[i] || loading.current.has(i)) continue;
         inflight += 1;
         loading.current.add(i);
-        const img = new Image();
-        img.decoding = "async";
+        const img = loadImg();
         img.src = frameUrl(folder, i);
         const done = () => {
           inflight -= 1;
@@ -223,8 +247,7 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       }
     };
 
-    const first = new Image();
-    first.decoding = "async";
+    const first = loadImg();
     first.src = frameUrl(folder, 0);
     whenReady(
       first,
@@ -241,6 +264,14 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
       },
     );
 
+    function applyProgress(progress: number) {
+      const targetFrame = Math.min(FRAME_COUNT - 1, Math.floor(progress * (FRAME_COUNT - 1)));
+      targetRef.current = targetFrame;
+      drawFrame(targetFrame);
+      preloadWindow(targetFrame);
+    }
+    applyProgressRef.current = applyProgress;
+
     function getStage() {
       if (stageRef.current?.isConnected) return stageRef.current;
       return (
@@ -251,22 +282,29 @@ export function HeroVideoFallback({ variant = "home" }: { variant?: "home" | "ex
 
     const unsub = registerScrollListener(() => {
       if (!live()) return;
+      if (scrubRef.current != null) return;
       const stage = getStage();
       stageRef.current = stage;
       if (!stage || !canvasRef.current) return;
-
-      const progress = flyProgressRef.current?.current ?? flyProgressForStage(stage);
-      const targetFrame = Math.min(FRAME_COUNT - 1, Math.floor(progress * (FRAME_COUNT - 1)));
-      targetRef.current = targetFrame;
-      drawFrame(targetFrame);
-      preloadWindow(targetFrame);
+      applyProgress(flyProgressRef.current?.current ?? flyProgressForStage(stage));
     });
+
+    if (scrubRef.current != null) {
+      applyProgress(scrubRef.current);
+    }
 
     return () => {
       cancelled = true;
       unsub();
+      pendingImgs.forEach(abortImg);
+      pendingImgs.clear();
     };
   }, [shotFolder, isMobile, theme, registerScrollListener]);
+
+  useEffect(() => {
+    if (scrub == null) return;
+    applyProgressRef.current(scrub);
+  }, [scrub]);
 
   return (
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden">

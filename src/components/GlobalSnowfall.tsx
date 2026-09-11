@@ -1,4 +1,5 @@
 import { useMemo, useRef, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { InstancedMesh, MeshBasicMaterial, AdditiveBlending, NormalBlending, PlaneGeometry } from "three";
 import { useScroll } from "../context/ScrollContext";
@@ -155,8 +156,11 @@ function SnowParticles({ isLight }: { isLight: boolean }) {
 }
 
 export function GlobalSnowfall() {
+  const { pathname } = useLocation();
   const isLight = useIsLightTheme();
   const reducedMotion = useReducedMotion();
+  // Three live pages: home, /channels, /contact. Snow is a hero veil — home only.
+  const onHome = pathname === "/";
 
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return true;
@@ -170,7 +174,7 @@ export function GlobalSnowfall() {
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  if (!isLight) return null;
+  if (!isLight || !onHome) return null;
 
   return (
     <div

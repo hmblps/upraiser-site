@@ -119,7 +119,7 @@
 
 .phone-css-face {
   position: absolute;
-  transform-style: preserve-3d;
+  /* transform-style removed to prevent Safari WebGL z-fighting */
   backface-visibility: hidden;
 }
 
@@ -512,7 +512,7 @@
   left: 50%;
   top: 50%;
   /* Transform is now applied dynamically via Framer Motion in Phone3D.tsx */
-  transform-style: preserve-3d;
+  /* transform-style removed to prevent Safari WebGL z-fighting */
   border-radius: clamp(1.4rem, 2.8vw, 1.9rem);
   overflow: hidden;
   background: #0b1220;

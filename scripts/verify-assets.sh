@@ -9,8 +9,8 @@ REQUIRED=(
   "public/hero/everest-light.glb"
   "public/hero/voyager-nasa.glb"
   "public/hero/light-mountains-loop.mp4"
-  "public/hero/snow/snow_02_diff_2k.webp"
-  "public/hero/snow/snow_02_nor_gl_2k.webp"
+  
+  
   "public/hero/snow/snow_02_rough_2k.webp"
   "public/draco/gltf/draco_decoder.wasm"
   "public/draco/gltf/draco_wasm_wrapper.js"
@@ -19,7 +19,7 @@ REQUIRED=(
   "public/favicon-16x16.png"
   "public/favicon-32x32.png"
   "public/apple-touch-icon.png"
-  "public/og-image.png"
+  
   "public/robots.txt"
   "public/sitemap.xml"
   "public/site.webmanifest"

@@ -1,4 +1,5 @@
-import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState, useCallback, type Dispatch, type MutableRefObject, type ReactNode, type SetStateAction } from "react";
+import { useLocation } from "react-router-dom";
 
 type Theme = "light" | "dark";
 
@@ -42,9 +43,16 @@ function readStoredTheme(): Theme | null {
   return stored === "light" || stored === "dark" ? stored : null;
 }
 
-/** Mobile always boots light; desktop keeps stored preference (default dark). */
+function themeFromSearch(search: string): Theme | null {
+  const t = new URLSearchParams(search).get("theme");
+  return t === "light" || t === "dark" ? t : null;
+}
+
+/** Mobile always boots light; desktop keeps stored preference (default dark). `?theme=` wins (local lite preview). */
 function resolveInitialTheme(): Theme {
   if (typeof window === "undefined") return "dark";
+  const fromQuery = themeFromSearch(window.location.search);
+  if (fromQuery) return fromQuery;
   if (isMobileViewport()) return "light";
   return readStoredTheme() ?? "dark";
 }
@@ -74,6 +82,26 @@ function writeSeen(seen: SeenModes) {
   } catch {
     /* ignore */
   }
+}
+
+/** Isolated so location/search changes do not re-render the whole app tree. */
+function ThemeQuerySync({
+  setTheme,
+  userChoseRef,
+}: {
+  setTheme: Dispatch<SetStateAction<Theme>>;
+  userChoseRef: MutableRefObject<boolean>;
+}) {
+  const { search } = useLocation();
+
+  useLayoutEffect(() => {
+    const fromQuery = themeFromSearch(search);
+    if (!fromQuery) return;
+    userChoseRef.current = true;
+    setTheme((current) => (current === fromQuery ? current : fromQuery));
+  }, [search, setTheme, userChoseRef]);
+
+  return null;
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -109,6 +137,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={value}>
+      <ThemeQuerySync setTheme={setTheme} userChoseRef={userChoseRef} />
       {children}
     </ThemeContext.Provider>
   );

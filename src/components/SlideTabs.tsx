@@ -78,6 +78,7 @@ export function SlideTabs({ items, activeId, onChange, layoutId, className = "" 
               className={labelClasses}
               whileTap={reduced ? undefined : { scale: 0.94 }}
               transition={SPRING}
+              style={{ outline: "none" }}
             >
               {item.label}
             </motion.button>

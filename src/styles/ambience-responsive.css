@@ -143,19 +143,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.custom-cursor-active,
-  body.custom-cursor-active a,
-  body.custom-cursor-active button,
-  body.custom-cursor-active input,
-  body.custom-cursor-active textarea,
-  body.custom-cursor-active select,
-  body.custom-cursor-active label,
-  body.custom-cursor-active iframe,
-  body.custom-cursor-active video {
-    cursor: auto !important;
-  }
-
-  .custom-cursor-root {
-    display: none;
-  }
+  /* Operator Dot cursors stay CSS-only — nothing to disable here. */
 }

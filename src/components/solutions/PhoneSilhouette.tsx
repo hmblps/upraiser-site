@@ -1,5 +1,6 @@
 import type { SiteMode } from "../../data/liveContent";
 import { cn } from "../../lib/cn";
+import { FORMAT_STILL } from "../../data/deviceScreens";
 
 type PhoneSilhouetteProps = {
   mode: SiteMode;
@@ -7,20 +8,12 @@ type PhoneSilhouetteProps = {
   className?: string;
 };
 
-const SCREEN_STILL: Record<string, string> = {
-  banner: "/channels/programmatic-refs/screens/banner.png",
-  native: "/channels/programmatic-refs/screens/native.png",
-  interstitial: "/channels/programmatic-refs/screens/interstitial.png",
-  rich: "/channels/programmatic-refs/screens/rich-media.png",
-  video: "/channels/programmatic-refs/screens/video.png",
-};
-
 /**
  * Chassis stand-in with active format screen image — no pitch-black empty glass.
  */
 export function PhoneSilhouette({ mode, formatId = "banner", className = "" }: PhoneSilhouetteProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
-  const stillSrc = SCREEN_STILL[formatId] || SCREEN_STILL.banner;
+  const stillSrc = FORMAT_STILL[formatId] || FORMAT_STILL.banner;
 
   return (
     <div

@@ -1,0 +1,93 @@
+/**
+ * Operator Dot — OS-level CSS cursors (0 JS).
+ * Same language site-wide: Growth = ink+gold, Infrastructure = gold+ring.
+ * Interactive = red ring (logo secondary). Drag zones keep native grab.
+ */
+
+@media (hover: hover) and (pointer: fine) {
+  /* Default = dark theme (Infrastructure) */
+  :root,
+  [data-theme="dark"] {
+    cursor: url("/cursors/operator-dot-light.svg") 16 16,
+      url("/cursors/operator-dot-light.png") 32 32,
+      auto;
+  }
+
+  [data-theme="light"] {
+    cursor: url("/cursors/operator-dot-dark.svg") 16 16,
+      url("/cursors/operator-dot-dark.png") 32 32,
+      auto;
+  }
+
+  a,
+  button,
+  [role="button"],
+  [data-cursor="pointer"],
+  [data-cursor="link"],
+  [data-cursor="cta"],
+  label[for],
+  summary,
+  .card-lift,
+  .btn-caps {
+    cursor: url("/cursors/operator-pointer-light.svg") 16 16,
+      url("/cursors/operator-pointer-light.png") 32 32,
+      pointer;
+  }
+
+  [data-theme="light"] a,
+  [data-theme="light"] button,
+  [data-theme="light"] [role="button"],
+  [data-theme="light"] [data-cursor="pointer"],
+  [data-theme="light"] [data-cursor="link"],
+  [data-theme="light"] [data-cursor="cta"],
+  [data-theme="light"] label[for],
+  [data-theme="light"] summary,
+  [data-theme="light"] .card-lift,
+  [data-theme="light"] .btn-caps {
+    cursor: url("/cursors/operator-pointer-dark.svg") 16 16,
+      url("/cursors/operator-pointer-dark.png") 32 32,
+      pointer;
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable="true"] {
+    cursor: text;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="range"],
+  input[type="file"],
+  input[type="color"] {
+    cursor: url("/cursors/operator-pointer-light.svg") 16 16,
+      url("/cursors/operator-pointer-light.png") 32 32,
+      pointer;
+  }
+
+  [data-theme="light"] input[type="checkbox"],
+  [data-theme="light"] input[type="radio"],
+  [data-theme="light"] input[type="range"],
+  [data-theme="light"] input[type="file"],
+  [data-theme="light"] input[type="color"] {
+    cursor: url("/cursors/operator-pointer-dark.svg") 16 16,
+      url("/cursors/operator-pointer-dark.png") 32 32,
+      pointer;
+  }
+
+  /* Product / carousel drag — system affordance stays clearer than a branded grab */
+  .cursor-grab,
+  [data-dragging="false"].cursor-grab,
+  .prog-css-phone,
+  .phone-glb-stage,
+  .tablet-glb-canvas,
+  .tv-glb-canvas {
+    cursor: grab;
+  }
+
+  .cursor-grabbing,
+  [data-dragging="true"] {
+    cursor: grabbing;
+  }
+}

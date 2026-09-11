@@ -1,5 +1,19 @@
 /* ── Programmatic scroll-hijack section ── */
 
+.channels-page {
+  /* Let Routes ambience / aurora wash under the fixed header — no solid white band. */
+  background: var(--theme-bg, #fdf8f6);
+}
+
+[data-theme="dark"] .channels-page {
+  background: #06090e;
+}
+
+.channels-page__stage {
+  /* Keep optical room under floating chrome without a blank white slab. */
+  padding-top: 0;
+}
+
 .prog-scroll-outer {
   position: relative;
   width: 100%;
@@ -631,14 +645,13 @@
 
 .prog-device-slot--tv {
   /*
-   * Bigger than tablet, wide living-room read.
-   * Aspect taller than 16:9 so GL framebuffer has bleed (stand never canvas-crops).
-   * Default (non-tv scene): relative so carousel can slide it off-screen.
+   * Living-room scale — wide peer to copy. Aspect taller than 16:9 so Plastic
+   * bezel + stand stay inside the GL framebuffer (no canvas crop).
    */
-  width: min(132%, 62rem);
-  aspect-ratio: 16 / 10;
+  width: min(118%, 52rem);
+  aspect-ratio: 16 / 11;
   height: auto;
-  max-height: min(82dvh, 100%);
+  max-height: min(84dvh, 100%);
   align-self: center;
   margin-top: 0;
   margin-bottom: 0.35rem;
@@ -649,39 +662,36 @@
 }
 
 /*
- * TV SCENE OVERRIDE — when the current format uses scene="tv",
- * the phone-col becomes a full-bleed absolute stage so the TV canvas
- * is NOT constrained by the grid-column height.
- * The carousel motion.div still slides (x transform) correctly because
- * .prog-device-slot--tv keeps its relative sizing inside the absolute pool.
+ * TV SCENE — stay in the left device column (peer to phone/tablet), not a
+ * full-sticky absolute takeover. Overflow stays visible so chassis isn't CSS-cropped.
  */
 [data-scene="tv"] .prog-scroll-phone-col--lifted {
-  position: absolute;
-  inset: 0;
-  height: auto;
+  position: relative;
+  inset: auto;
+  height: 100%;
   max-height: none;
-  align-self: unset;
+  align-self: stretch;
   transform: none;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   pointer-events: auto;
   overflow: visible;
+  z-index: 6;
 }
 
-/* Give the carousel wrapper full height of the absolute stage */
 [data-scene="tv"] .prog-scroll-phone-col--lifted > div {
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
-/* TV slot inside the absolute stage: full-bleed, centered, larger than tablet */
+/* TV optical slot — larger than tablet, still left-of-copy (not full-bleed hero) */
 [data-scene="tv"] .prog-device-slot--tv {
-  width: min(95%, 70rem);
-  max-height: 80dvh;
+  width: min(112%, 52rem);
+  max-height: min(84dvh, 100%);
   height: auto;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 11;
   margin: 0 auto;
 }
 

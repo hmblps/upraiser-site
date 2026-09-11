@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useHardwareTier } from "../hooks/useHardwareTier";
@@ -27,6 +28,8 @@ function useDesktopHero() {
 
 export function HeroAtmosphere() {
   const { theme } = useTheme();
+  const [params] = useSearchParams();
+  const forceMobileFrames = params.get("mobile") === "1";
   const isLight = theme === "light";
   const reduced = useReducedMotion();
   const desktop = useDesktopHero();
@@ -45,7 +48,7 @@ export function HeroAtmosphere() {
     const boot = () => {
       if (!cancelled) setBoot3d(true);
     };
-    const force = window.setTimeout(boot, 8000);
+    const force = window.setTimeout(boot, 2500);
     void whenHeroTerrainBytes(theme).finally(() => {
       window.clearTimeout(force);
       if (cancelled) return;
@@ -64,14 +67,23 @@ export function HeroAtmosphere() {
     >
       <div className="hero-atmosphere__sky hero-terrain-shell">
         {use3d && boot3d ? (
-          <CanvasErrorBoundary>
+          <CanvasErrorBoundary
+            key={theme}
+            fallback={
+              <div className={`hero-mountains-layer hero-mountains-layer--mobile is-active`}>
+                <HeroVideoFallback variant="home" forceMobile={forceMobileFrames || undefined} />
+                <div className="hero-mountains-scrim" />
+                {!isLight ? <div className="hero-bottom-fade-bridge" /> : null}
+              </div>
+            }
+          >
             <HeroTerrainCanvas className="hero-terrain-root" />
           </CanvasErrorBoundary>
         ) : null}
         
         {!use3d ? (
           <div className="hero-mountains-layer hero-mountains-layer--mobile is-active">
-            <HeroVideoFallback variant="home" />
+            <HeroVideoFallback variant="home" forceMobile={forceMobileFrames || undefined} />
             <div className="hero-mountains-scrim" />
             {!isLight ? <div className="hero-bottom-fade-bridge" /> : null}
           </div>

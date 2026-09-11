@@ -12,6 +12,7 @@ const TermsPage = lazy(() => import("./pages/LegalPages").then((m) => ({ default
 const ContactPage = lazy(() => import("./pages/ContactPage").then((m) => ({ default: m.ContactPage })));
 const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((m) => ({ default: m.ThankYouPage })));
 const HeroCapturePage = lazy(() => import("./pages/HeroCapturePage").then((m) => ({ default: m.HeroCapturePage })));
+const HeroLitePreviewPage = lazy(() => import("./pages/HeroLitePreviewPage").then((m) => ({ default: m.HeroLitePreviewPage })));
 
 function RouteFallback() {
   return (
@@ -62,6 +63,8 @@ export default function App() {
     <Suspense fallback={<RouteFallback />}>
       <Routes>
         {import.meta.env.DEV ? <Route path="dev/hero-capture" element={<HeroCapturePage />} /> : null}
+        {import.meta.env.DEV ? <Route path="dev/hero-lite" element={<HeroLitePreviewPage theme="light" />} /> : null}
+        {import.meta.env.DEV ? <Route path="dev/hero-dark" element={<HeroLitePreviewPage theme="dark" />} /> : null}
         <Route element={<SiteLayout />}>
           {/* Home now includes Cases (Peaks) and Routes natively */}
           <Route path="/" element={<HomePage />}>

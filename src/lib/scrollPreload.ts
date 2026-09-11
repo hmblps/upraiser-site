@@ -5,8 +5,12 @@
  *   hero  →  mid (audience/process)  →  routes phone  →  tablet  →  tv
  *         →  cases  →  promise
  *
- * `warmStage` is idempotent. Routes 3D never starts until `markHeroReady`.
+ * `warmStage` is idempotent. On `/`, Routes 3D waits for `markHeroReady`.
+ * On `/channels` there is no hero — warm immediately.
  */
+
+import { preloadFetch } from "./heroBoot";
+import { DRACO_PATH } from "./heroModel";
 
 export type PreloadStage =
   | "mid"
@@ -31,9 +35,13 @@ export function markHeroReady() {
   for (const fn of queued) fn();
 }
 
-/** Run `fn` now, or as soon as Everest has painted. Returns unsubscribe. */
+function onHomePage() {
+  return typeof window !== "undefined" && window.location.pathname === "/";
+}
+
+/** Run `fn` now, or as soon as Everest has painted. Off `/` there is no hero — run immediately. */
 export function whenHeroReady(fn: () => void): () => void {
-  if (heroReady) {
+  if (heroReady || !onHomePage()) {
     fn();
     return () => {};
   }
@@ -70,11 +78,15 @@ export function warmStage(id: PreloadStage) {
         break;
       case "routes-tablet":
         whenHeroReady(() => {
+          preloadFetch("/channels/oem/tablet.glb");
+          preloadFetch(`${DRACO_PATH}draco_decoder.wasm`);
           void import("../components/channel-visuals/Tablet3D");
         });
         break;
       case "routes-tv":
         whenHeroReady(() => {
+          preloadFetch("/channels/oem/tv.glb");
+          preloadFetch(`${DRACO_PATH}draco_decoder.wasm`);
           void import("../components/channel-visuals/Tv3D");
         });
         break;
