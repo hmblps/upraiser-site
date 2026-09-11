@@ -123,7 +123,7 @@ function configureMap(map: Texture, isVideo: boolean) {
   map.needsUpdate = true;
 }
 
-function applyScreenTexture(root: Object3D, map: Texture) {
+function applyScreenTexture(root: Object3D, map: Texture, formatId?: string) {
   const isVideo =
     Boolean((map as Texture & { isVideoTexture?: boolean }).isVideoTexture) ||
     map.image instanceof HTMLVideoElement;
@@ -159,7 +159,7 @@ function applyScreenTexture(root: Object3D, map: Texture) {
       if (!/screen/i.test(name)) return mat;
 
       const screen = mat as MeshStandardMaterial;
-    screen.visible = formatId !== "rich";
+    if (formatId) screen.visible = formatId !== "rich";
       screen.map = map;
       screen.emissiveMap = map;
       screen.color = new Color("#ffffff");
@@ -240,7 +240,7 @@ const PhoneMesh = memo(function PhoneMesh({
   useEffect(() => {
     if (!rootRef.current) return;
     modeRef.current = "still";
-    applyScreenTexture(rootRef.current, still);
+    applyScreenTexture(rootRef.current, still, formatId);
     onReady?.();
   }, [still, prepared, onReady]);
 
@@ -271,7 +271,7 @@ const PhoneMesh = memo(function PhoneMesh({
       void video.play().catch(() => {
         if (token !== visitToken.current || !rootRef.current) return;
         modeRef.current = "still";
-        applyScreenTexture(rootRef.current, still);
+        applyScreenTexture(rootRef.current, still, formatId);
       });
     };
 
@@ -293,7 +293,7 @@ const PhoneMesh = memo(function PhoneMesh({
       video.load();
       
       if (modeRef.current === "video" && rootRef.current) {
-        applyScreenTexture(rootRef.current, still);
+        applyScreenTexture(rootRef.current, still, formatId);
         modeRef.current = "still";
       }
     };
