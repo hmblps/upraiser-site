@@ -284,7 +284,7 @@ function TabletMesh({
       <Center>
         <group rotation={flat ? [0, 0, 0] : [0.08, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
-            <TabletModel screenMap={screenMap} />
+            <TabletModel screenMap={screenMap} contentScaleX={formatId === "system-ui" ? 0.90 : 1} />
           </group>
         </group>
       </Center>

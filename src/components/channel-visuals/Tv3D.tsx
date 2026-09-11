@@ -27,33 +27,18 @@ import { DRACO_PATH } from "../../lib/heroModel";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DeviceLoadStage } from "../solutions/DeviceLoadStage";
-import { CssTv } from "../solutions/CssPhone";
 import { FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
 
 const MODEL_PATH = "/channels/oem/tv.glb";
 
-const REST_Y = 0.05;
-const REST_X = 0.01;
+const REST_Y = 0.04;
+const REST_X = 0.008;
 
-/** Screen plane in the already-scaled face-forward space — bleed past bezel so content kisses the glass edge. */
-const SCREEN_W = 2.98;
-const SCREEN_H = 1.68;
-const SCREEN_Z = 0.12;
-const SCREEN_Y = 0.05;
-
-// ─── Compute model centre + scale BEFORE the scene is parented ────────────────
-// We call this once after useGLTF resolves. At that point the scene is a
-// standalone THREE.Group (no parent), so scene.matrixWorld = scene.matrix.
-// scene.updateMatrixWorld(true) propagates transforms down to every mesh, which
-// lets Box3.setFromObject read correct world-space vertex positions.
-//
-// Target: TV height fills ~57 % of the visible area on desktop.
-// On narrow screens (mobile/portrait), we must scale down so the 16:9 TV width fits.
+// Larger living-room read — still leave frustum room for Plastic bezel + stand.
 function getTargetHeight() {
-  if (typeof window === "undefined") return 1.7;
+  if (typeof window === "undefined") return 1.85;
   const aspect = window.innerWidth / window.innerHeight;
-  // If aspect is less than ~1.2 (narrow window), scale down the height to fit width
-  return Math.min(1.7, 1.5 * aspect);
+  return Math.min(2.0, 1.8 * Math.min(aspect, 1.55));
 }
 
 function computeTransform(scene: Object3D): {
@@ -66,8 +51,7 @@ function computeTransform(scene: Object3D): {
   const box = new Box3().setFromObject(scene, /* precise */ true);
 
   if (box.isEmpty()) {
-    // Fallback from accessor analysis (FBX +180°X + Sketchfab −90°X net = +90°X)
-    return { scale: 0.022 * (getTargetHeight() / 1.7), cx: 99.25, cy: -69.52, cz: -2.13 };
+    return { scale: 0.022 * (getTargetHeight() / 2.05), cx: 99.25, cy: -69.52, cz: -2.13 };
   }
 
   const size = new Vector3();
@@ -89,20 +73,35 @@ type Tv3DProps = {
 
 // ─── Inner scene (runs inside <Canvas className="tv-glb-canvas">) ──────────────────────────────────────
 
-// Node names to hide in the TV model — stand / leg geometry.
-//
-// Layer 03 / Object_22: the actual leg — 13k verts extending ~7 % below the
-//   TV body bounding box (world Y < body minimum). Identified via manual bbox
-//   calculation: centered Y ≈ [−54.4, −52.7] vs body min ≈ −51.5.
-// Layer 05: tiny plastic-2 corner nub (440 verts) at far right-bottom edge.
-// Layer 06: thin metal back-surface strip (169 verts).
+/**
+ * Legs + stock crystal screen (Object_1). Ad lives on an inset OUTER plane so
+ * Spot still + CTV Video read inside the bezel (not floating past Plastic).
+ */
 const HIDDEN_NODE_NAMES = new Set([
   "Layer 03", "Object_22", "Object_22_Custom_0",
   "Layer 05",
   "Object_5", "Object_6", "Object_7", "Object_8",
   "Object_5_Plastic (2)_0", "Object_6_Plastic (2)_0",
   "Object_7_Plastic (2)_0", "Object_8_Plastic (2)_0",
+  "Front",
+  "Object_65",
+  "Layer 04",
+  "Object_1",
+  "Object_1_Custom (1)_0",
 ]);
+
+/**
+ * Ad plane inset inside Plastic aperture — must leave bezel visible.
+ * Oversized planes swallow the chassis and read as a naked floating rectangle.
+ */
+function screenPlaneForHeight(h: number) {
+  return {
+    w: h * (16 / 9) * 0.995, // stretch screen
+    h: h * 0.955,            // stretch screen
+    y: 0.015,
+    z: 0.095,
+  };
+}
 
 function TvMesh({
   rotX,
@@ -128,6 +127,7 @@ function TvMesh({
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
   const [xf] = useState(() => computeTransform(scene));
+  const screen = screenPlaneForHeight(getTargetHeight());
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
@@ -143,16 +143,30 @@ function TvMesh({
     t.minFilter = LinearFilter;
     t.magFilter = LinearFilter;
     t.generateMipmaps = false;
+    t.flipY = true;
     return { video: v, videoTex: t };
   }, []);
 
   useEffect(() => {
+    document.body.appendChild(video);
+    return () => {
+      video.pause();
+      video.remove();
+    };
+  }, [video]);
+
+  useEffect(() => {
     scene.traverse((obj) => {
-      if (HIDDEN_NODE_NAMES.has(obj.name)) {
-        obj.visible = false;
-      }
+      if (HIDDEN_NODE_NAMES.has(obj.name)) obj.visible = false;
     });
-    onReady?.();
+    let id2 = 0;
+    const id1 = requestAnimationFrame(() => {
+      id2 = requestAnimationFrame(() => onReady?.());
+    });
+    return () => {
+      cancelAnimationFrame(id1);
+      cancelAnimationFrame(id2);
+    };
   }, [scene, onReady]);
 
   useEffect(() => {
@@ -171,6 +185,7 @@ function TvMesh({
       tex.colorSpace = SRGBColorSpace;
       tex.minFilter = LinearFilter;
       tex.magFilter = LinearFilter;
+      tex.flipY = true;
       tex.needsUpdate = true;
       modeRef.current = "still";
       setScreenMap((prev) => {
@@ -181,7 +196,7 @@ function TvMesh({
     return () => {
       cancelled = true;
     };
-  }, [showScreen, stillSrc, video]);
+  }, [showScreen, stillSrc, video, videoTex]);
 
   useEffect(() => {
     if (!showScreen || !inView || !videoSrc) {
@@ -194,6 +209,8 @@ function TvMesh({
       if (promoted || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
       promoted = true;
       modeRef.current = "video";
+      videoTex.flipY = true;
+      videoTex.needsUpdate = true;
       setScreenMap((prev) => {
         if (prev && prev !== videoTex) prev.dispose();
         return videoTex;
@@ -216,33 +233,38 @@ function TvMesh({
     };
   }, [showScreen, inView, videoSrc, video, videoTex]);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!outerRef.current) return;
     if (flat) {
       outerRef.current.rotation.x = 0;
       outerRef.current.rotation.y = 0;
-      outerRef.current.position.y = 0;
+      outerRef.current.position.y = 0.08;
       if (modeRef.current === "video") videoTex.needsUpdate = true;
       return;
     }
-    const t = state.clock.elapsedTime;
-    outerRef.current.rotation.x = rotX.get() + Math.sin(t * 0.8) * 0.02;
-    outerRef.current.rotation.y = rotY.get() + Math.cos(t * 0.6) * 0.03;
-    outerRef.current.position.y = Math.sin(t * 1.2) * 0.03;
+    outerRef.current.rotation.x = rotX.get();
+    outerRef.current.rotation.y = rotY.get();
+    /* Lift in frustum so stand/legs stay inside the GL canvas */
+    outerRef.current.position.y = 0.22;
     if (modeRef.current === "video") videoTex.needsUpdate = true;
   });
 
   return (
-    <group ref={outerRef} rotation={flat ? [0, 0, 0] : [0.06, 0, 0]}>
+    <group ref={outerRef} rotation={flat ? [0, 0, 0] : [0.02, 0, 0]}>
       <group scale={xf.scale} rotation={[0, Math.PI, 0]}>
         <group position={[-xf.cx, -xf.cy, -xf.cz]}>
           <primitive object={scene} dispose={null} />
         </group>
       </group>
       {showScreen && screenMap ? (
-        <mesh position={[0, SCREEN_Y, SCREEN_Z]} scale={[1.02, 1.02, 1]} renderOrder={2}>
-          <planeGeometry args={[SCREEN_W, SCREEN_H]} />
-          <meshBasicMaterial map={screenMap} toneMapped={false} depthWrite={false} />
+        <mesh position={[0, screen.y, screen.z]} renderOrder={1}>
+          <planeGeometry args={[screen.w, screen.h]} />
+          <meshBasicMaterial
+            map={screenMap}
+            toneMapped={false}
+            depthWrite
+            depthTest
+          />
         </mesh>
       ) : null}
     </group>
@@ -304,10 +326,6 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
   const markMeshReady = useCallback(() => setMeshReady(true), []);
 
   useEffect(() => {
-    setMeshReady(true);
-  }, []);
-
-  useEffect(() => {
     const node = stageRef.current;
     if (!node) return;
     const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
@@ -331,8 +349,8 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
     const dx = e.clientX - last.current.x;
     const dy = e.clientY - last.current.y;
     last.current = { x: e.clientX, y: e.clientY };
-    rotY.set(Math.max(-0.45, Math.min(0.45, rotY.get() + dx * 0.006)));
-    rotX.set(Math.max(-0.15, Math.min(0.15, rotX.get() - dy * 0.004)));
+    rotY.set(Math.max(-0.18, Math.min(0.18, rotY.get() + dx * 0.004)));
+    rotX.set(Math.max(-0.08, Math.min(0.08, rotX.get() - dy * 0.0025)));
   };
 
   const endDrag = (e: ReactPointerEvent) => {
@@ -359,13 +377,10 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       aria-label="Interactive TV mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
     >
-      <DeviceLoadStage
-        ready={meshReady}
-        placeholder={<CssTv mode={mode} formatId={formatId ?? "ctv-spot"} className="prog-css-tv prog-css-tv--slot" />}
-      >
+      <DeviceLoadStage ready={meshReady} placeholder={null} instant>
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={reduced ? "never" : "always"}
+          frameloop={reduced ? "never" : active && inView ? "always" : "demand"}
           gl={{
             antialias: true,
             alpha: true,
@@ -373,7 +388,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.15, flat ? 4.55 : 5.5], fov: flat ? 32 : 34, near: 0.1, far: 100 }}
+          camera={{ position: [0, 0.05, flat ? 5.15 : 5.45], fov: flat ? 30 : 30.5, near: 0.1, far: 100 }}
           style={{ width: "100%", height: "100%", display: "block", background: "transparent" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
