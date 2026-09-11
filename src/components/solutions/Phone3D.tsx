@@ -123,7 +123,7 @@ function configureMap(map: Texture, isVideo: boolean) {
   map.needsUpdate = true;
 }
 
-function applyScreenTexture(root: Object3D, map: Texture) {
+function applyScreenTexture(root: Object3D, map: Texture, formatId?: string) {
   const isVideo =
     Boolean((map as Texture & { isVideoTexture?: boolean }).isVideoTexture) ||
     map.image instanceof HTMLVideoElement;
@@ -160,10 +160,17 @@ function applyScreenTexture(root: Object3D, map: Texture) {
 
       const screen = mat as MeshStandardMaterial;
     
-      screen.map = map;
-      screen.emissiveMap = map;
-      screen.color = new Color("#ffffff");
-      screen.emissive = new Color("#ffffff");
+      if (formatId === "rich") {
+        screen.map = null;
+        screen.emissiveMap = null;
+        screen.color = new Color("#0b1220");
+        screen.emissive = new Color("#000000");
+      } else {
+        screen.map = map;
+        screen.emissiveMap = map;
+        screen.color = new Color("#ffffff");
+        screen.emissive = new Color("#ffffff");
+      }
       screen.emissiveIntensity = 1.25;
       screen.roughness = 0.9;
       screen.metalness = 0;
@@ -240,7 +247,7 @@ const PhoneMesh = memo(function PhoneMesh({
   useEffect(() => {
     if (!rootRef.current) return;
     modeRef.current = "still";
-    applyScreenTexture(rootRef.current, still);
+    applyScreenTexture(rootRef.current, still, formatId);
     onReady?.();
   }, [still, prepared, onReady]);
 
@@ -271,7 +278,7 @@ const PhoneMesh = memo(function PhoneMesh({
       void video.play().catch(() => {
         if (token !== visitToken.current || !rootRef.current) return;
         modeRef.current = "still";
-        applyScreenTexture(rootRef.current, still);
+        applyScreenTexture(rootRef.current, still, formatId);
       });
     };
 
@@ -293,7 +300,7 @@ const PhoneMesh = memo(function PhoneMesh({
       video.load();
       
       if (modeRef.current === "video" && rootRef.current) {
-        applyScreenTexture(rootRef.current, still);
+        applyScreenTexture(rootRef.current, still, formatId);
         modeRef.current = "still";
       }
     };
@@ -354,15 +361,15 @@ const PhoneMesh = memo(function PhoneMesh({
         <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
           {formatId === "rich" && (
-            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.049}>
+            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.053}>
               <Html transform occlude="blending" distanceFactor={1.42}>
                 <div
                   style={{
                     position: "relative",
-                    width: 320,
-                    height: 700,
+                    width: 390,
+                    height: 844,
                     background: "#0b1220",
-                    borderRadius: 38,
+                    borderRadius: 44,
                     overflow: "hidden",
                     pointerEvents: "auto",
                   }}
@@ -373,10 +380,10 @@ const PhoneMesh = memo(function PhoneMesh({
                     top: 10,
                     left: "50%",
                     transform: "translateX(-50%)",
-                    width: 100,
-                    height: 28,
+                    width: 120,
+                    height: 35,
                     background: "#000",
-                    borderRadius: 14,
+                    borderRadius: 17,
                     zIndex: 100,
                     pointerEvents: "none"
                   }}
