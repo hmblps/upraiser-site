@@ -36,9 +36,7 @@ const REST_X = 0.008;
 
 // Larger living-room read — still leave frustum room for Plastic bezel + stand.
 function getTargetHeight() {
-  if (typeof window === "undefined") return 1.85;
-  const aspect = window.innerWidth / window.innerHeight;
-  return Math.min(2.0, 1.8 * Math.min(aspect, 1.55));
+  return 2.15;
 }
 
 function computeTransform(scene: Object3D): {
@@ -130,10 +128,10 @@ const HIDDEN_NODE_NAMES = new Set([
  */
 function screenPlaneForHeight(h: number) {
   return {
-    w: h * (16 / 9) * 0.72,
-    h: h * 0.72,
-    y: h * 0.09,
-    z: 0.095,
+    w: 3.52,  // Точная ширина экрана под 16:9 апертуру
+    h: 1.98,  // Точная высота экрана
+    y: 0.045, // Центр экрана по вертикали относительно центра корпуса
+    z: 0.092, // Стеклянный слой чуть впереди подложки
   };
 }
 
@@ -279,18 +277,21 @@ function TvMesh({
     outerRef.current.rotation.x = rotX.get();
     outerRef.current.rotation.y = rotY.get();
     /* Lift in frustum so stand/legs stay inside the GL canvas */
-    outerRef.current.position.y = 0.22;
+    outerRef.current.position.y = 0.02;
     if (modeRef.current === "video") videoTex.needsUpdate = true;
   });
 
   return (
-    <group ref={outerRef} rotation={flat ? [0, 0, 0] : [0.02, 0, 0]}>
+    <group ref={outerRef} rotation={flat ? [0, 0, 0] : [0.06, 0, 0]}>
+      {/* Корпус телевизора */}
       <group scale={xf.scale} rotation={[0, Math.PI, 0]}>
         <group position={[-xf.cx, -xf.cy, -xf.cz]}>
           <primitive object={scene} dispose={null} />
         </group>
       </group>
-      {showScreen && screenMap ? (
+
+      {/* Плоскость экрана: строго по центру апертуры */}
+      {showScreen && screenMap && (
         <mesh position={[0, screen.y, screen.z]} renderOrder={1}>
           <planeGeometry args={[screen.w, screen.h]} />
           <meshBasicMaterial
@@ -300,7 +301,7 @@ function TvMesh({
             depthTest
           />
         </mesh>
-      ) : null}
+      )}
     </group>
   );
 }
@@ -422,17 +423,8 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.05, flat ? 6.86 : 7.25], fov: flat ? 30 : 30.5, near: 0.1, far: 100 }}
-          style={{ 
-            width: "200%", 
-            height: "200%", 
-            left: "-50%", 
-            top: "-50%", 
-            position: "absolute", 
-            display: "block", 
-            background: "transparent",
-            pointerEvents: "none"
-          }}
+          camera={{ position: [0, 0.05, flat ? 4.1 : 4.25], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
+          style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.15;

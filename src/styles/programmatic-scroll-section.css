@@ -643,23 +643,7 @@
   z-index: 4;
 }
 
-.prog-device-slot--tv {
-  /*
-   * Living-room scale — wide peer to copy. Aspect taller than 16:9 so Plastic
-   * bezel + stand stay inside the GL framebuffer (no canvas crop).
-   */
-  width: 100%;
-  aspect-ratio: 16 / 11;
-  height: auto;
-  max-height: min(84dvh, 100%);
-  align-self: center;
-  margin-top: 0;
-  margin-bottom: 0.35rem;
-  transform: none;
-  overflow: visible;
-  position: relative;
-  z-index: 6;
-}
+
 
 /*
  * TV SCENE — stay in the left device column (peer to phone/tablet), not a
@@ -687,16 +671,33 @@
 }
 
 /* TV optical slot — larger than tablet, still left-of-copy (not full-bleed hero) */
-[data-scene="tv"] .prog-device-slot--tv {
-  width: 100%;
-  max-height: min(84dvh, 100%);
+[data-scene="tv"] 
+
+
+
+
+.prog-device-slot--tv {
+  width: min(100%, 54rem);
+  aspect-ratio: 16 / 10;
   height: auto;
-  aspect-ratio: 16 / 11;
+  max-height: min(76dvh, var(--prog-phone-budget, 76dvh));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   margin: 0 auto;
+  overflow: visible;
+  z-index: 6;
 }
 
-.prog-device-slot--tv .tv-glb-canvas {
-  overflow: visible !important;
+.prog-device-slot--tv .tv-glb-canvas,
+.prog-device-slot--tv .prog-device-load {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
 }
 
 .prog-device-slot .phone-glb-stage,
