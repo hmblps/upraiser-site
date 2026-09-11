@@ -354,10 +354,11 @@ const PhoneMesh = memo(function PhoneMesh({
         <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
           {formatId === "rich" && (
-            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.088}>
+            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.045}>
               <Html transform occlude="blending" distanceFactor={1.42}>
                 <div
                   style={{
+                    position: "relative",
                     width: 320,
                     height: 693,
                     background: "#0b1220",
@@ -366,7 +367,21 @@ const PhoneMesh = memo(function PhoneMesh({
                     pointerEvents: "auto",
                   }}
                 >
-                  <iframe
+                  <div
+                  style={{
+                    position: "absolute",
+                    top: 10,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: 100,
+                    height: 28,
+                    background: "#000",
+                    borderRadius: 14,
+                    zIndex: 100,
+                    pointerEvents: "none"
+                  }}
+                />
+                <iframe
                     src="/rich-media-ad.html"
                     title="Rich Media Interactive Demo"
                     style={{
