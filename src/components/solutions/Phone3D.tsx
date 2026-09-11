@@ -123,7 +123,7 @@ function configureMap(map: Texture, isVideo: boolean) {
   map.needsUpdate = true;
 }
 
-function applyScreenTexture(root: Object3D, map: Texture, formatId?: string) {
+function applyScreenTexture(root: Object3D, map: Texture) {
   const isVideo =
     Boolean((map as Texture & { isVideoTexture?: boolean }).isVideoTexture) ||
     map.image instanceof HTMLVideoElement;
@@ -240,7 +240,7 @@ const PhoneMesh = memo(function PhoneMesh({
   useEffect(() => {
     if (!rootRef.current) return;
     modeRef.current = "still";
-    applyScreenTexture(rootRef.current, still, formatId);
+    applyScreenTexture(rootRef.current, still);
     onReady?.();
   }, [still, prepared, onReady]);
 
@@ -271,7 +271,7 @@ const PhoneMesh = memo(function PhoneMesh({
       void video.play().catch(() => {
         if (token !== visitToken.current || !rootRef.current) return;
         modeRef.current = "still";
-        applyScreenTexture(rootRef.current, still, formatId);
+        applyScreenTexture(rootRef.current, still);
       });
     };
 
@@ -293,7 +293,7 @@ const PhoneMesh = memo(function PhoneMesh({
       video.load();
       
       if (modeRef.current === "video" && rootRef.current) {
-        applyScreenTexture(rootRef.current, still, formatId);
+        applyScreenTexture(rootRef.current, still);
         modeRef.current = "still";
       }
     };
