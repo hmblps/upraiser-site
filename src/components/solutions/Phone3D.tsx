@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Center, Environment, useGLTF, useTexture } from "@react-three/drei";
-import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
 import {
   ACESFilmicToneMapping,
   ClampToEdgeWrapping,
@@ -460,7 +460,7 @@ function AdCloseButton({ onClick }: { onClick?: () => void }) {
  * CSS chassis for formats that need real HTML (rich iframe, video interstitial).
  * Drop-shadow lives on the untransformed wrapper so perspective cannot square the shadow.
  */
-function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" }) {
+function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" | "video" }) {
   const isDark = mode !== "growth";
   const wrapRef = useRef<HTMLDivElement>(null);
   const [adScale, setAdScale] = useState(0.64);
@@ -709,7 +709,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
     rotX.set(REST_X + (rotX.get() - REST_X) * 0.35);
   };
 
-  const isCssFormat = formatId === "rich" || formatId === "video";
+  const isCssFormat = formatId === "video";
 
   return (
     <div
@@ -781,8 +781,24 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
       </div>
 
       <AnimatePresence>
-        {isCssFormat && <CssFormatPhone mode={mode} formatId={formatId as "rich"} />}
+        {isCssFormat && <CssFormatPhone mode={mode} formatId={formatId as "rich" | "video"} />}
       </AnimatePresence>
+
+      {formatId === "rich" && (
+        <motion.div
+          className="phone-rich-on-glb"
+          style={{
+            transform: useMotionTemplate`perspective(1200px) translate(-50%, -50%) rotateX(${springX}rad) rotateY(${springY}rad) translateZ(8px)`
+          }}
+        >
+          <iframe
+            src="/rich-media-ad.html"
+            style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+            allow="autoplay; encrypted-media"
+            title="Rich Media Ad"
+          />
+        </motion.div>
+      )}
     </div>
   );
 });
