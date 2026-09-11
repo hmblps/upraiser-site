@@ -47,8 +47,20 @@ function computeTransform(scene: Object3D): {
   cy: number;
   cz: number;
 } {
+  // Temporarily hide nodes to compute accurate bounding box
+  const hidden: Object3D[] = [];
+  scene.traverse((obj) => {
+    if (HIDDEN_NODE_NAMES.has(obj.name) && obj.visible) {
+      obj.visible = false;
+      hidden.push(obj);
+    }
+  });
+
   scene.updateMatrixWorld(true);
-  const box = new Box3().setFromObject(scene, /* precise */ true);
+  const box = new Box3().setFromObject(scene, true);
+
+  // Restore visibility
+  hidden.forEach((obj) => (obj.visible = true));
 
   if (box.isEmpty()) {
     return { scale: 0.022 * (getTargetHeight() / 2.05), cx: 99.25, cy: -69.52, cz: -2.13 };
