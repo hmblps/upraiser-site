@@ -128,11 +128,12 @@ const HIDDEN_NODE_NAMES = new Set([
  */
 function screenPlaneForHeight(h: number) {
   return {
-    w: 3.64,
-    h: 2.05,
-    y: 0.045,
+    w: 3.76,
+    h: 2.12,
+    y: 0.02,
     z: 0.125,
   };
+};
 }
 
 function TvMesh({
@@ -384,8 +385,8 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
     const dx = e.clientX - last.current.x;
     const dy = e.clientY - last.current.y;
     last.current = { x: e.clientX, y: e.clientY };
-    rotY.set(Math.max(-0.18, Math.min(0.18, rotY.get() + dx * 0.004)));
-    rotX.set(Math.max(-0.08, Math.min(0.08, rotX.get() - dy * 0.0025)));
+    rotY.set(Math.max(-0.12, Math.min(0.12, rotY.get() + dx * 0.004)));
+    rotX.set(Math.max(-0.06, Math.min(0.06, rotX.get() - dy * 0.0025)));
   };
 
   const endDrag = (e: ReactPointerEvent) => {
@@ -423,7 +424,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.05, flat ? 4.35 : 4.65], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
+          camera={{ position: [0, 0.05, flat ? 4.75 : 5.05], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
           style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
