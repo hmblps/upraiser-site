@@ -125,31 +125,6 @@ function configureMap(map: Texture, isVideo: boolean) {
 }
 
 
-function applyDarkScreen(root: Object3D) {
-  root.traverse((obj) => {
-    const mesh = obj as Mesh;
-    if (!mesh.isMesh) return;
-
-    const paint = (mat: Material) => {
-      // КРАСИМ ТОЛЬКО ЭКРАН! Корпус (body, frame, glass) не трогаем!
-      if (!/screen/i.test(mat.name || "")) return mat;
-      
-      const screen = mat as MeshStandardMaterial;
-      screen.map = null;
-      screen.emissiveMap = null;
-      screen.color = new Color("#0b1220");
-      screen.emissive = new Color("#0b1220");
-      screen.emissiveIntensity = 0;
-      screen.roughness = 0.95;
-      screen.metalness = 0;
-      screen.needsUpdate = true;
-      return screen;
-    };
-
-    if (Array.isArray(mesh.material)) mesh.material = mesh.material.map(paint);
-    else if (mesh.material) mesh.material = paint(mesh.material);
-  });
-}
 
 function applyScreenTexture(root: Object3D, map: Texture) {
   const isVideo =
@@ -268,7 +243,7 @@ const PhoneMesh = memo(function PhoneMesh({
   useEffect(() => {
     if (!rootRef.current) return;
     modeRef.current = "still";
-    if (formatId === "rich") applyDarkScreen(rootRef.current); else if (formatId === "rich") applyDarkScreen(rootRef.current); else applyScreenTexture(rootRef.current, still);
+    applyScreenTexture(rootRef.current, still);
     onReady?.();
   }, [still, prepared, onReady]);
 
@@ -280,7 +255,7 @@ const PhoneMesh = memo(function PhoneMesh({
 
     if (root) {
       modeRef.current = "still";
-      if (formatId === "rich") applyDarkScreen(root); else applyScreenTexture(root, still);
+      applyScreenTexture(root, still);
     }
 
     const src = SCREEN_VIDEO[formatId];
@@ -295,7 +270,7 @@ const PhoneMesh = memo(function PhoneMesh({
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
       promoted = true;
       modeRef.current = "video";
-      if (formatId === "rich") applyDarkScreen(rootRef.current); else applyScreenTexture(rootRef.current, videoTex);
+      applyScreenTexture(rootRef.current, videoTex);
       void video.play().catch(() => {
         if (token !== visitToken.current || !rootRef.current) return;
         modeRef.current = "still";
@@ -683,6 +658,18 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
   const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
 
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    if (flat) {
+      rotY.set(0);
+      rotX.set(0);
+      return;
+    }
+    rotY.set(REST_Y);
+    rotX.set(REST_X);
+  }, [formatId, flat, rotX, rotY]);
+
+
   const [inView, setInView] = useState(true);
   const [meshReady, setMeshReady] = useState(false);
 
@@ -743,7 +730,6 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
   };
 
   const isCssFormat = false;
-  const isRichMedia = formatId === "rich";
   
 
   return (
@@ -755,10 +741,10 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         className,
       )}
       style={isCssFormat ? { cursor: "auto" } : undefined}
-      onPointerDown={isCssFormat || isRichMedia ? undefined : onPointerDown}
-      onPointerMove={isCssFormat || isRichMedia ? undefined : onPointerMove}
-      onPointerUp={isCssFormat || isRichMedia ? undefined : endDrag}
-      onPointerCancel={isCssFormat || isRichMedia ? undefined : endDrag}
+      onPointerDown={isCssFormat ? undefined : onPointerDown}
+      onPointerMove={isCssFormat ? undefined : onPointerMove}
+      onPointerUp={isCssFormat ? undefined : endDrag}
+      onPointerCancel={isCssFormat ? undefined : endDrag}
       role="img"
       aria-label="Interactive phone mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
@@ -820,16 +806,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         {isCssFormat && <CssFormatPhone mode={mode} formatId={formatId as "rich" | "video"} />}
       </AnimatePresence>
 
-      {isRichMedia ? (
-        <div className="phone-rich-on-glb" aria-hidden={false}>
-          <iframe
-            src="/rich-media-ad.html"
-            title="ING Rich Media"
-            allow="autoplay; encrypted-media"
-            scrolling="no"
-          />
-        </div>
-      ) : null}
+
     </div>
   );
 });

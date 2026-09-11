@@ -13,7 +13,7 @@
  * CTV Spot = still; CTV Video = loop MP4.
  */
 export const FORMAT_VIDEO: Record<string, string> = {
-  /** Video only — Rich stays on still so the GLB glass lock never drifts. */
+  rich: "/channels/programmatic-feed/formats/rich.mp4",
   video: "/channels/programmatic-feed/formats/video.mp4",
   /** CTV Video = living loop; CTV Spot stays still below. */
   "ctv-video": "/channels/oem/screens/ctv-spot.mp4",
