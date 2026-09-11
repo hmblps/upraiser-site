@@ -128,10 +128,10 @@ const HIDDEN_NODE_NAMES = new Set([
  */
 function screenPlaneForHeight(h: number) {
   return {
-    w: 3.52,  // Точная ширина экрана под 16:9 апертуру
-    h: 1.98,  // Точная высота экрана
-    y: 0.045, // Центр экрана по вертикали относительно центра корпуса
-    z: 0.092, // Стеклянный слой чуть впереди подложки
+    w: 3.64,
+    h: 2.05,
+    y: 0.045,
+    z: 0.125,
   };
 }
 
@@ -423,7 +423,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.05, flat ? 4.1 : 4.25], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
+          camera={{ position: [0, 0.05, flat ? 4.35 : 4.65], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
           style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
