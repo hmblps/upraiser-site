@@ -96,10 +96,10 @@ const HIDDEN_NODE_NAMES = new Set([
  */
 function screenPlaneForHeight(h: number) {
   return {
-    w: h * (16 / 9) * 0.995, // stretch screen
-    h: h * 0.955,            // stretch screen
-    y: 0.015,
-    z: 0.095,
+    w: h * (16 / 9) * 0.72,
+    h: h * 0.72,
+    y: h * 0.09,
+    z: 0.04,
   };
 }
 
@@ -388,8 +388,17 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.05, flat ? 5.15 : 5.45], fov: flat ? 30 : 30.5, near: 0.1, far: 100 }}
-          style={{ width: "100%", height: "100%", display: "block", background: "transparent" }}
+          camera={{ position: [0, 0.05, flat ? 4.0 : 4.2], fov: flat ? 30 : 30.5, near: 0.1, far: 100 }}
+          style={{ 
+            width: "130%", 
+            height: "130%", 
+            left: "-15%", 
+            top: "-15%", 
+            position: "absolute", 
+            display: "block", 
+            background: "transparent",
+            pointerEvents: "none"
+          }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.15;
