@@ -225,7 +225,7 @@ const PhoneMesh = memo(function PhoneMesh({
     v.setAttribute("playsinline", "true");
     v.setAttribute("muted", "true");
     v.preload = "auto";
-    v.loop = false;
+    v.loop = true;
     v.crossOrigin = "anonymous";
     const t = new VideoTexture(v);
     configureMap(t, true);
@@ -282,7 +282,6 @@ const PhoneMesh = memo(function PhoneMesh({
     video.addEventListener("loadeddata", promote);
     video.addEventListener("canplay", promote);
     video.addEventListener("playing", promote);
-    video.addEventListener("ended", () => video.pause());
 
     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
     else video.load();
