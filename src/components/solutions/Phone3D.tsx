@@ -710,6 +710,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
   };
 
   const isCssFormat = formatId === "video";
+  const richTransform = useMotionTemplate`perspective(1200px) translate(-50%, -50%) rotateX(${springX}rad) rotateY(${springY}rad) translateZ(8px)`;
 
   return (
     <div
@@ -788,7 +789,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         <motion.div
           className="phone-rich-on-glb"
           style={{
-            transform: useMotionTemplate`perspective(1200px) translate(-50%, -50%) rotateX(${springX}rad) rotateY(${springY}rad) translateZ(8px)`
+            transform: richTransform
           }}
         >
           <iframe
