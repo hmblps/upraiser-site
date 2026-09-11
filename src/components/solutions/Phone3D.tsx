@@ -353,7 +353,7 @@ const PhoneMesh = memo(function PhoneMesh({
         <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
           {formatId === "rich" && (
-            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={1/7.0}>
               <Html
                 transform
                 occlude="blending"
