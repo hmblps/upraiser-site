@@ -400,12 +400,12 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.05, flat ? 1.6 : 1.68], fov: flat ? 30 : 30.5, near: 0.1, far: 100 }}
+          camera={{ position: [0, 0.05, flat ? 6.86 : 7.25], fov: flat ? 30 : 30.5, near: 0.1, far: 100 }}
           style={{ 
-            width: "250%", 
-            height: "250%", 
-            left: "-75%", 
-            top: "-75%", 
+            width: "200%", 
+            height: "200%", 
+            left: "-50%", 
+            top: "-50%", 
             position: "absolute", 
             display: "block", 
             background: "transparent",
