@@ -32,7 +32,7 @@ import {
   type GlassAnimId,
 } from "../../lib/tabletGlassAnim";
 import { DeviceLoadStage } from "../solutions/DeviceLoadStage";
-import { CssTablet } from "../solutions/CssPhone";
+
 import { Model as TabletModel } from "./Tablet3DModel";
 
 const REST_Y = 0.06;
@@ -426,7 +426,8 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
     >
       <DeviceLoadStage
         ready={meshReady}
-        placeholder={<CssTablet mode={mode} formatId={formatId ?? "oem-store"} className="prog-css-tablet prog-css-tablet--slot" />}
+        placeholder={null}
+        instant
       >
         {slotBox ? (
         <Canvas className="tablet-glb-canvas"
