@@ -361,7 +361,7 @@ const PhoneMesh = memo(function PhoneMesh({
         <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
           {formatId === "rich" && (
-            <mesh position={[0, -0.0035, 0]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.053}>
+            <mesh position={[0, -0.0035, 0.085]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.051}>
               <Html transform occlude="blending" distanceFactor={1.42}>
                 <div
                   style={{
@@ -369,7 +369,9 @@ const PhoneMesh = memo(function PhoneMesh({
                     width: 390,
                     height: 844,
                     background: "#0b1220",
-                    borderRadius: 44,
+                    borderRadius: 48,
+                    clipPath: "inset(0 round 48px)",
+                    WebkitClipPath: "inset(0 round 48px)",
                     overflow: "hidden",
                     pointerEvents: "auto",
                   }}
