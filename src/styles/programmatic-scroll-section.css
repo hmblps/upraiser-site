@@ -633,11 +633,11 @@
 }
 
 .prog-device-slot--tablet {
-  /* Slightly smaller optical peer — TV must read larger. */
-  width: min(74%, 26rem);
+  /* Sized to rival the phone in hierarchy */
+  width: min(85%, 32rem);
   aspect-ratio: 3 / 4;
   height: auto;
-  max-height: min(72dvh, var(--prog-phone-budget, 72dvh));
+  max-height: min(75dvh, var(--prog-phone-budget, 75dvh));
   overflow: visible;
   position: relative;
   z-index: 4;

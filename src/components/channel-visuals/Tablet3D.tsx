@@ -283,7 +283,7 @@ function TabletMesh({
     <group ref={group}>
       <Center>
         <group rotation={flat ? [0, 0, 0] : [0.08, 0, 0]}>
-          <group rotation={[Math.PI / 2, 0, 0]} scale={5.6}>
+          <group rotation={[Math.PI / 2, 0, 0]} scale={6.2}>
             <TabletModel screenMap={screenMap} contentScaleX={formatId === "system-ui" ? 0.90 : 1} />
           </group>
         </group>
@@ -440,7 +440,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.15, flat ? 3.15 : 3.8], fov: flat ? 28 : 30, near: 0.1, far: 80 }}
+          camera={{ position: [0, 0.15, flat ? 3.15 : 3.48], fov: 28, near: 0.1, far: 80 }}
           style={{
             width: slotBox.w,
             height: slotBox.h,
