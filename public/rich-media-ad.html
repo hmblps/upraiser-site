@@ -6,18 +6,18 @@
 <title>ING Rich Media</title>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  html,body{width:320px;height:630px;overflow:hidden;background:#0b1220;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0b1220;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
   html.no-native-cursor,html.no-native-cursor *{cursor:none!important}
 
-  /* ─── Outer layout ─── */
-  .ad{position:relative;width:320px;height:630px;display:flex;flex-direction:column;overflow:hidden}
+  /* Full-bleed into phone glass — no side gutters */
+  .ad{position:relative;width:100%;height:100%;min-height:100%;display:flex;flex-direction:column;overflow:hidden;background:#0b1220}
 
   /* ─── Video slot (≈ 37% of height) ─── */
   .video-wrap{
-    position:relative;width:100%;height:234px;background:#0b1220;
-    flex-shrink:0;overflow:hidden;
+    position:relative;width:100%;height:37%;min-height:0;flex:0 0 37%;
+    background:#0b1220;overflow:hidden;margin:0;padding:0;align-self:stretch;
   }
-  .ad-video{width:100%;height:100%;object-fit:cover;display:block}
+  .ad-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
   /* Cover bottom caption subtitles */
   .sub-cover{position:absolute;bottom:0;left:0;right:0;height:58px;
     background:linear-gradient(transparent 0%,rgba(11,18,32,.95) 50%,#0b1220 100%);
@@ -42,14 +42,15 @@
 
   /* ─── ING brand panel (≈ 63%) ─── */
   .brand-panel{
-    flex:1;background:#f7f2e9;position:relative;
+    flex:1 1 auto;width:100%;align-self:stretch;background:#f7f2e9;position:relative;
     display:flex;flex-direction:column;align-items:center;
-    justify-content:flex-start;padding:16px 18px 70px;overflow:hidden;
+    justify-content:flex-start;padding:8px 10px 66px;overflow:hidden;
+    margin:0;min-width:100%;box-sizing:border-box;
   }
-  .headline{font-size:21px;font-weight:800;color:#e85500;text-align:center;line-height:1.2;margin-bottom:10px;z-index:2}
+  .headline{font-size:18px;font-weight:800;color:#e85500;text-align:center;line-height:1.15;margin:0 0 6px;z-index:2}
 
   /* ─── Shredder visual (photo-style CSS replica) ─── */
-  .shredder-wrap{position:relative;width:220px;height:200px;cursor:pointer;flex-shrink:0;z-index:2}
+  .shredder-wrap{position:relative;width:190px;height:168px;cursor:pointer;flex-shrink:0;z-index:2}
 
   /* Background scene */
   .scene-bg{position:absolute;inset:0;border-radius:8px;
@@ -61,28 +62,28 @@
 
   /* Shredder machine */
   .machine{
-    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
-    width:142px;height:156px;
+    position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+    width:122px;height:134px;
   }
   .machine-body{
-    position:absolute;bottom:22px;width:100%;height:120px;
+    position:absolute;bottom:20px;width:100%;height:102px;
     background:linear-gradient(160deg,#ff8040 0%,#ff5500 40%,#d94400 100%);
-    border-radius:14px 14px 10px 10px;
+    border-radius:12px 12px 8px 8px;
     box-shadow:0 8px 24px rgba(150,40,0,.35),0 2px 0 rgba(255,150,80,.2) inset,
                0 -2px 0 rgba(0,0,0,.2) inset;
   }
   /* Slot at top */
   .machine-slot{
-    position:absolute;top:12px;left:50%;transform:translateX(-50%);
-    width:104px;height:12px;background:#111;border-radius:3px;
+    position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:90px;height:10px;background:#111;border-radius:3px;
     box-shadow:0 2px 6px rgba(0,0,0,.8) inset;
   }
   /* Slot prongs */
-  .slot-prong{position:absolute;top:-1px;width:2px;height:16px;background:#333;border-radius:1px}
+  .slot-prong{position:absolute;top:-1px;width:2px;height:14px;background:#333;border-radius:1px}
   /* Orange press button */
   .machine-btn{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-46%);
-    width:72px;height:72px;border-radius:50%;
+    width:62px;height:62px;border-radius:50%;
     background:radial-gradient(circle at 36% 30%,#ffcc80,#ff7200 42%,#cc4400);
     box-shadow:0 6px 18px rgba(0,0,0,.45),0 1px 0 rgba(255,200,120,.4) inset;
     display:flex;align-items:center;justify-content:center;
@@ -90,13 +91,13 @@
   }
   .machine-btn:hover{transform:translate(-50%,-46%) scale(1.05)}
   .machine-btn:active{transform:translate(-50%,-46%) scale(0.92);box-shadow:0 3px 10px rgba(0,0,0,.5)}
-  .btn-label{font-size:12px;font-weight:900;color:#fff;letter-spacing:.3px;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+  .btn-label{font-size:11px;font-weight:900;color:#fff;letter-spacing:.3px;text-shadow:0 1px 2px rgba(0,0,0,.4)}
   /* Legs */
-  .machine-legs{position:absolute;bottom:0;width:100%;display:flex;justify-content:space-around;padding:0 24px}
-  .leg{width:16px;height:25px;background:linear-gradient(180deg,#cc4400,#992200);border-radius:0 0 6px 6px}
+  .machine-legs{position:absolute;bottom:0;width:100%;display:flex;justify-content:space-around;padding:0 20px}
+  .leg{width:14px;height:22px;background:linear-gradient(180deg,#cc4400,#992200);border-radius:0 0 5px 5px}
   /* ING wordmark on machine front — below the button */
-  .machine-brand{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
-    font-size:11px;font-weight:900;color:rgba(255,255,255,.55);letter-spacing:1.5px;pointer-events:none;user-select:none;white-space:nowrap}
+  .machine-brand{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+    font-size:10px;font-weight:900;color:rgba(255,255,255,.55);letter-spacing:1.5px;pointer-events:none;user-select:none;white-space:nowrap}
 
   /* Shred output strips */
   .shred-strips{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);

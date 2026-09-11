@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useFormatScrollSection } from "../../hooks/useFormatScrollSection";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useHardwareTier } from "../../hooks/useHardwareTier";
@@ -9,7 +9,6 @@ import { BrandAurora } from "../BrandAurora";
 import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
-import { CssPhone, CssTablet, CssTv } from "./CssPhone";
 import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobile";
 import { warmStage } from "../../lib/scrollPreload";
 
@@ -30,32 +29,27 @@ const DESKTOP_MIN_WIDTH = 1024;
 //
 //   x       = (index − phase) × 100%   — hard slide, clipped by overflow:hidden
 //   scale   = max(0.82, 1 − dist×0.18) — shrinks as it leaves (depth cue)
-//   opacity = max(0,    1 − dist×1.9)  — fades fast on exit, blooms on entry
-//   filter  = blur(dist × dist × 6px)  — peaks mid-travel, bridges the gap
+//   opacity = max(0,    1 − dist×1.15) — longer overlap while sliding
 //
-// Emil: "blur bridges the visual gap — tricks the eye into a single smooth
-// transformation instead of two objects swapping."
-// Emil: "Nothing in the real world appears from nothing — start from scale(0.9)."
+// Slide + soft opacity only (no CSS scale on WebGL — bilinear→native snap).
 function DeviceCarousel3({
   mode,
   formatId,
   scene = "phone",
-  entranceProgress,
   className,
   flat = false,
 }: {
   mode: SiteMode;
   formatId: string;
   scene?: "phone" | "tablet" | "tv";
-  entranceProgress: MotionValue<number>;
   className?: string;
   /** Same GLBs, face-on — lite / Intel. */
   flat?: boolean;
 }) {
   const targetPhase = scene === "tablet" ? 1 : scene === "tv" ? 2 : 0;
   const phaseRaw = useMotionValue(targetPhase);
-  // Slightly springy — feels alive without bouncing content off-screen
-  const phase = useSpring(phaseRaw, { stiffness: 340, damping: 32, mass: 0.6 });
+  // Softer travel between phone → tablet → TV
+  const phase = useSpring(phaseRaw, { stiffness: 160, damping: 28, mass: 0.95 });
 
   useEffect(() => {
     phaseRaw.set(targetPhase);
@@ -71,16 +65,13 @@ function DeviceCarousel3({
   const tabletX = useTransform(phase, (p) => `${(1 - p) * 100}%`);
   const tvX     = useTransform(phase, (p) => `${(2 - p) * 100}%`);
 
-  // ── Opacity — fast exit fade, natural bloom on entry ─────────────────────
-  // No CSS scale on WebGL canvases: the browser switches from bilinear
-  // sampling to native pixel-mapping exactly at scale=1.0, producing a
-  // visible snap. Slide + fade is sufficient for an Apple-like feel.
-  const phoneOpacity  = useTransform(phoneDist,  (d) => Math.max(0, 1 - d * 1.9));
-  const tabletOpacity = useTransform(tabletDist, (d) => Math.max(0, 1 - d * 1.9));
-  const tvOpacity     = useTransform(tvDist,     (d) => Math.max(0, 1 - d * 1.9));
+  // ── Opacity — gentler crossfade so chassis never hard-cuts mid-slide ─────
+  const phoneOpacity  = useTransform(phoneDist,  (d) => Math.max(0, 1 - d * 1.15));
+  const tabletOpacity = useTransform(tabletDist, (d) => Math.max(0, 1 - d * 1.15));
+  const tvOpacity     = useTransform(tvDist,     (d) => Math.max(0, 1 - d * 1.15));
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "visible" }}>
       {/* One WebGL device at a time — concurrent phone+tablet+TV canvases starve the
           tablet buffer (stuck 300×150) and flash the wrong chassis on format change. */}
       <motion.div
@@ -89,25 +80,25 @@ function DeviceCarousel3({
           x: phoneX,
           opacity: phoneOpacity,
           pointerEvents: scene === "phone" ? "auto" : "none",
+          zIndex: scene === "phone" ? 3 : 1,
         }}
       >
         <div className="prog-device-slot prog-device-slot--phone">
+          {/* Never mount Css* stand-ins — optical size ≠ GLB (big→small snap on
+              scene change + load). Inactive slots stay empty; only one WebGL at a time. */}
           {scene === "phone" ? (
-          <Suspense fallback={<CssPhone mode={mode} formatId={formatId} className="prog-css-phone--desktop prog-css-phone--slot" />}>
-            <CanvasErrorBoundary fallback={<CssPhone mode={mode} formatId={formatId} className="prog-css-phone--desktop prog-css-phone--slot" />}>
-              <Phone3D
-                mode={mode}
-                formatId={formatId}
-                entranceProgress={flat ? undefined : entranceProgress}
-                className={className}
-                active
-                flat={flat}
-              />
-            </CanvasErrorBoundary>
-          </Suspense>
-          ) : (
-            <CssPhone mode={mode} formatId={formatId} className="prog-css-phone--desktop prog-css-phone--slot" />
-          )}
+            <Suspense fallback={null}>
+              <CanvasErrorBoundary fallback={null}>
+                <Phone3D
+                  mode={mode}
+                  formatId={formatId}
+                  className={className}
+                  active
+                  flat={flat}
+                />
+              </CanvasErrorBoundary>
+            </Suspense>
+          ) : null}
         </div>
       </motion.div>
 
@@ -117,18 +108,24 @@ function DeviceCarousel3({
           x: tabletX,
           opacity: tabletOpacity,
           pointerEvents: scene === "tablet" ? "auto" : "none",
+          /* Above copy / sticky chrome so rotate corners aren't eaten. */
+          zIndex: scene === "tablet" ? 6 : 1,
         }}
       >
         <div className="prog-device-slot prog-device-slot--tablet">
-          {flat || scene !== "tablet" ? (
-            <CssTablet mode={mode} formatId={formatId} className="prog-css-tablet prog-css-tablet--slot" />
-          ) : (
-          <Suspense fallback={<CssTablet mode={mode} formatId={formatId} className="prog-css-tablet prog-css-tablet--slot" />}>
-            <CanvasErrorBoundary fallback={<CssTablet mode={mode} formatId={formatId} className="prog-css-tablet prog-css-tablet--slot" />}>
-              <Tablet3D mode={mode} formatId={formatId} className={className} active />
-            </CanvasErrorBoundary>
-          </Suspense>
-          )}
+          {scene === "tablet" ? (
+            <Suspense fallback={null}>
+              <CanvasErrorBoundary fallback={null}>
+                <Tablet3D
+                  mode={mode}
+                  formatId={formatId}
+                  className={className}
+                  active
+                  flat={flat}
+                />
+              </CanvasErrorBoundary>
+            </Suspense>
+          ) : null}
         </div>
       </motion.div>
 
@@ -138,18 +135,23 @@ function DeviceCarousel3({
           x: tvX,
           opacity: tvOpacity,
           pointerEvents: scene === "tv" ? "auto" : "none",
+          zIndex: scene === "tv" ? 6 : 1,
         }}
       >
         <div className="prog-device-slot prog-device-slot--tv">
-          {flat || scene !== "tv" ? (
-            <CssTv mode={mode} formatId={formatId} className="prog-css-tv prog-css-tv--slot" />
-          ) : (
-          <Suspense fallback={<CssTv mode={mode} formatId={formatId} className="prog-css-tv prog-css-tv--slot" />}>
-            <CanvasErrorBoundary fallback={<CssTv mode={mode} formatId={formatId} className="prog-css-tv prog-css-tv--slot" />}>
-              <Tv3D mode={mode} formatId={formatId} className={className} active />
-            </CanvasErrorBoundary>
-          </Suspense>
-          )}
+          {scene === "tv" ? (
+            <Suspense fallback={null}>
+              <CanvasErrorBoundary fallback={null}>
+                <Tv3D
+                  mode={mode}
+                  formatId={formatId}
+                  className={className}
+                  active
+                  flat={flat}
+                />
+              </CanvasErrorBoundary>
+            </Suspense>
+          ) : null}
         </div>
       </motion.div>
     </div>
@@ -169,8 +171,8 @@ export type ProgrammaticScrollSectionProps = {
 
 /**
  * Native sticky scroll drives the active format — no wheel hijack.
- * Desktop high-tier: perspective GLB. Desktop lite / `?lite=1`: flat phone GLB;
- * tablet/TV stay CSS chassis (avoids CSS→WebGL fly-off on OEM/CTV).
+ * Desktop high-tier: perspective GLB. Desktop lite / `?lite=1`: flat GLB
+ * (phone · tablet · TV) — no CSS chassis stand-ins (avoids big→small snap).
  * Width < 1024 or reduced-motion: ProgrammaticScrollSectionMobile (same glass files).
  */
 export function ProgrammaticScrollSection({
@@ -192,7 +194,7 @@ export function ProgrammaticScrollSection({
   const desktopEnabled = !isMobile && !reduced;
   const use3d = desktopEnabled && tier === "high";
 
-  const { activeIndex, jumpTo, totalVirtual, entranceProgress } = useFormatScrollSection(sectionRef, {
+  const { activeIndex, jumpTo, totalVirtual } = useFormatScrollSection(sectionRef, {
     enabled: desktopEnabled,
     formatCount: formats.length,
     reduced,
@@ -273,25 +275,33 @@ export function ProgrammaticScrollSection({
       <div className="prog-scroll-sticky">
         <div className="prog-scroll-ambience" aria-hidden />
         <BrandAurora tone="routes" className="prog-scroll-stage-aurora" />
+
+        {/*
+          Device stage is a sibling ABOVE sticky-inner (not nested in the
+          gutter/grid). 3D TV/tablet yaw no longer gets corner-chopped by
+          layout overflow / isolation on the copy column.
+        */}
+        <div className="prog-scroll-device-lift">
+          <div className="prog-scroll-device-lift__frame" data-scene={format.scene ?? "phone"}>
+            <div className="prog-scroll-phone-col prog-scroll-phone-col--lifted">
+              <DeviceCarousel3
+                mode={mode}
+                formatId={format.id}
+                scene={format.scene ?? "phone"}
+                className="prog-scroll-canvas"
+                flat={!use3d}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="prog-scroll-sticky-inner">
           <div className="prog-scroll-headline">
             <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
           </div>
           <div className="prog-scroll-layout">
-            {/* ── Unified 3-device spatial carousel: Phone · Tablet · TV ── */}
-            <div
-              className="prog-scroll-phone-col"
-              style={{ position: "relative", overflow: "hidden" }}
-            >
-              <DeviceCarousel3
-                mode={mode}
-                formatId={format.id}
-                scene={format.scene ?? "phone"}
-                entranceProgress={entranceProgress}
-                className="prog-scroll-canvas"
-                flat={!use3d}
-              />
-            </div>
+            {/* Optical spacer — mirrors lifted device column for copy alignment */}
+            <div className="prog-scroll-phone-col prog-scroll-phone-col--spacer" aria-hidden />
 
             <div className="prog-scroll-copy-col">
               <div className="prog-scroll-copy-stack">

@@ -15,12 +15,58 @@
   display: flex;
   flex-direction: column;
   justify-content: stretch;
-  overflow: hidden;
-  /* clip-path forces GPU clip — prevents filter:blur from bleeding into next section */
-  clip-path: inset(0 0 0 0);
+  /*
+   * TV/tablet clip fix: overflow:hidden + 3D rotate chops chassis corners.
+   * Keep overflow visible; contain page bounce with overscroll-behavior instead.
+   */
+  overflow: visible;
+  overscroll-behavior: contain;
   isolation: isolate;
   background: transparent;
   touch-action: pan-y;
+}
+
+/*
+ * Device stage lifted above sticky-inner — same gutters/max-width so the
+ * optical left column still lines up with the copy grid spacer.
+ */
+.prog-scroll-device-lift {
+  position: absolute;
+  inset: 0;
+  z-index: 24;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.prog-scroll-device-lift__frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.95fr);
+  align-items: stretch;
+  gap: clamp(1.25rem, 3.5vw, 3rem);
+  width: 100%;
+  height: 100%;
+  max-width: var(--site-max-width, 1280px);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+  /* Match sticky-inner top chrome; keep bottom room so TV chassis isn't canvas-cropped */
+  padding-top: calc(var(--site-header-height, 72px) + 0.25rem + 4.75rem);
+  padding-bottom: 1.25rem;
+  box-sizing: border-box;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.prog-scroll-phone-col--lifted {
+  pointer-events: auto;
+  overflow: visible !important;
+  z-index: 6;
+}
+
+.prog-scroll-phone-col--spacer {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .prog-scroll-sticky-inner {
@@ -97,15 +143,16 @@
   /* Sticky band minus headline + chrome + breathing room top/bottom */
   --prog-phone-budget: calc(100dvh - var(--site-header-height, 72px) - 11.5rem);
   position: relative;
-  z-index: 2;
+  z-index: 8;
   display: flex;
   align-items: center;
   justify-content: center;
   height: min(100%, var(--prog-phone-budget));
-  max-height: min(74dvh, var(--prog-phone-budget));
+  max-height: min(82dvh, var(--prog-phone-budget));
   min-height: 0;
   overflow: visible;
-  padding-top: 0;
+  padding-top: 0.35rem;
+  padding-bottom: 0.5rem;
   align-self: center;
   /* Sit under the optical middle of “EVERY FORMAT. ONE SUPPLY PATH.” */
   transform: translateX(-5.5%);
@@ -187,6 +234,26 @@
   animation: phone-silhouette-pulse 1.6s ease-in-out infinite;
 }
 
+/* Boot placeholder sized like Phone3D — not full-slot CssPhone (that caused size snap). */
+.phone-silhouette--slot {
+  width: 100%;
+  height: 100%;
+}
+
+.phone-silhouette--slot .phone-silhouette__body {
+  height: 90%;
+  max-height: 90%;
+  max-width: none;
+  width: auto;
+  aspect-ratio: 9 / 19.5;
+  transform: none;
+  border-radius: 2.1rem;
+}
+
+.phone-silhouette--slot .phone-silhouette__glass {
+  animation: none;
+}
+
 @keyframes phone-silhouette-pulse {
   0%,
   100% {
@@ -209,10 +276,14 @@
   flex-shrink: 0;
   aspect-ratio: 9 / 19.5;
   border-radius: 2.35rem;
-  padding: 0.22rem;
+  padding: 0.55rem;
   box-shadow:
     0 28px 56px rgba(0, 0, 0, 0.28),
     0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+
+.prog-css-phone--slot {
+  padding: 0.55rem;
 }
 
 .prog-css-phone--deepblue {
@@ -506,15 +577,15 @@
 }
 
 .prog-scroll-lite-stage__frame--phone {
-  width: 40%;
+  width: 36%;
 }
 
 .prog-scroll-lite-stage__frame--tablet {
-  width: 88%;
+  width: 68%;
 }
 
 .prog-scroll-lite-stage__frame--tv {
-  width: 100%;
+  width: 94%;
 }
 
 .prog-device-load {
@@ -524,35 +595,98 @@
   min-height: 0;
 }
 
-/* Fixed-aspect device slots — CSS chassis and WebGL share one box (no inflate→shrink). */
+/* Fixed-aspect device slots — CSS chassis and WebGL share one box.
+   Optical hierarchy (not equal heights):
+   phone = tall hero · tablet ≈ 1.35–1.5× phone area · TV = widest, shorter.
+   Shared inset keeps the stage margin identical across scene swaps. */
 .prog-device-slot {
+  --device-optical-inset: 2%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: 100%;
+  max-width: calc(100% - 2 * var(--device-optical-inset));
+  max-height: calc(100% - 2 * var(--device-optical-inset));
   min-height: 0;
 }
 
 .prog-device-slot--phone {
-  width: min(40%, 18rem);
+  /* Larger hero — placements must read without zooming. */
+  width: min(48%, 21.5rem);
   aspect-ratio: 9 / 19.5;
   height: auto;
-  max-height: min(74dvh, var(--prog-phone-budget, 74dvh));
+  max-height: min(82dvh, var(--prog-phone-budget, 82dvh));
 }
 
 .prog-device-slot--tablet {
-  width: min(88%, 28rem);
+  /* Slightly smaller optical peer — TV must read larger. */
+  width: min(74%, 26rem);
   aspect-ratio: 3 / 4;
   height: auto;
-  max-height: min(70dvh, var(--prog-phone-budget, 70dvh));
+  max-height: min(72dvh, var(--prog-phone-budget, 72dvh));
+  overflow: visible;
+  position: relative;
+  z-index: 4;
 }
 
 .prog-device-slot--tv {
-  width: min(100%, 48rem);
-  aspect-ratio: 16 / 9;
+  /*
+   * Bigger than tablet, wide living-room read.
+   * Aspect taller than 16:9 so GL framebuffer has bleed (stand never canvas-crops).
+   * Default (non-tv scene): relative so carousel can slide it off-screen.
+   */
+  width: min(132%, 62rem);
+  aspect-ratio: 16 / 10;
   height: auto;
-  max-height: min(64dvh, 100%);
+  max-height: min(82dvh, 100%);
+  align-self: center;
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  transform: none;
+  overflow: visible;
+  position: relative;
+  z-index: 6;
+}
+
+/*
+ * TV SCENE OVERRIDE — when the current format uses scene="tv",
+ * the phone-col becomes a full-bleed absolute stage so the TV canvas
+ * is NOT constrained by the grid-column height.
+ * The carousel motion.div still slides (x transform) correctly because
+ * .prog-device-slot--tv keeps its relative sizing inside the absolute pool.
+ */
+[data-scene="tv"] .prog-scroll-phone-col--lifted {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  max-height: none;
+  align-self: unset;
+  transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: auto;
+  overflow: visible;
+}
+
+/* Give the carousel wrapper full height of the absolute stage */
+[data-scene="tv"] .prog-scroll-phone-col--lifted > div {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* TV slot inside the absolute stage: full-bleed, centered, larger than tablet */
+[data-scene="tv"] .prog-device-slot--tv {
+  width: min(95%, 70rem);
+  max-height: 80dvh;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  margin: 0 auto;
+}
+
+.prog-device-slot--tv .tv-glb-canvas {
+  overflow: visible !important;
 }
 
 .prog-device-slot .phone-glb-stage,
@@ -687,6 +821,15 @@
   width: max-content;
   max-width: 100%;
   overflow: visible;
+}
+
+/* Yellow pill is enough — kill square :focus-visible outline on lane tabs. */
+.format-lane-tabs .slide-tabs button:focus,
+.format-lane-tabs .slide-tabs button:focus-visible,
+.format-lane-tabs .slide-tabs a:focus,
+.format-lane-tabs .slide-tabs a:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .format-lane-tabs .slide-tabs,
