@@ -57,10 +57,32 @@ function computeTransform(scene: Object3D): {
   });
 
   scene.updateMatrixWorld(true);
-  const box = new Box3().setFromObject(scene, true);
+  
+  // Calculate bounding box MANUALLY to respect visibility!
+  const box = new Box3();
+  box.makeEmpty();
+  scene.traverse((obj) => {
+    // If it's in the hidden list, we skip it and all its children!
+    if (HIDDEN_NODE_NAMES.has(obj.name)) {
+      obj.visible = false;
+      return; // But Box3 traversal can't be stopped easily with early return, so we compute manually
+    }
+  });
 
-  // Restore visibility
-  hidden.forEach((obj) => (obj.visible = true));
+  // Second pass: actually compute box on visible meshes
+  scene.traverse((obj) => {
+    if (!obj.visible) return;
+    if ((obj as any).isMesh) {
+      const geometry = (obj as any).geometry;
+      if (geometry) {
+        geometry.computeBoundingBox();
+        const meshBox = geometry.boundingBox.clone();
+        meshBox.applyMatrix4(obj.matrixWorld);
+        box.expandByPoint(meshBox.min);
+        box.expandByPoint(meshBox.max);
+      }
+    }
+  });
 
   if (box.isEmpty()) {
     return { scale: 0.022 * (getTargetHeight() / 2.05), cx: 99.25, cy: -69.52, cz: -2.13 };
@@ -111,7 +133,7 @@ function screenPlaneForHeight(h: number) {
     w: h * (16 / 9) * 0.72,
     h: h * 0.72,
     y: h * 0.09,
-    z: 0.04,
+    z: 0.095,
   };
 }
 
