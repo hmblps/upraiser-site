@@ -30,6 +30,7 @@ import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DRACO_PATH } from "../../lib/heroModel";
 import type { MotionValue } from "framer-motion";
+import { DeviceLoadStage } from "./DeviceLoadStage";
 import { InterstitialVideo } from "./InterstitialVideo";
 
 import "../../styles/phone-css-3d.css";
@@ -123,7 +124,34 @@ function configureMap(map: Texture, isVideo: boolean) {
   map.needsUpdate = true;
 }
 
-function applyScreenTexture(root: Object3D, map: Texture, formatId?: string) {
+
+function applyDarkScreen(root: Object3D) {
+  root.traverse((obj) => {
+    const mesh = obj as Mesh;
+    if (!mesh.isMesh) return;
+
+    const paint = (mat: Material) => {
+      // КРАСИМ ТОЛЬКО ЭКРАН! Корпус (body, frame, glass) не трогаем!
+      if (!/screen/i.test(mat.name || "")) return mat;
+      
+      const screen = mat as MeshStandardMaterial;
+      screen.map = null;
+      screen.emissiveMap = null;
+      screen.color = new Color("#0b1220");
+      screen.emissive = new Color("#0b1220");
+      screen.emissiveIntensity = 0;
+      screen.roughness = 0.95;
+      screen.metalness = 0;
+      screen.needsUpdate = true;
+      return screen;
+    };
+
+    if (Array.isArray(mesh.material)) mesh.material = mesh.material.map(paint);
+    else if (mesh.material) mesh.material = paint(mesh.material);
+  });
+}
+
+function applyScreenTexture(root: Object3D, map: Texture) {
   const isVideo =
     Boolean((map as Texture & { isVideoTexture?: boolean }).isVideoTexture) ||
     map.image instanceof HTMLVideoElement;
@@ -160,17 +188,10 @@ function applyScreenTexture(root: Object3D, map: Texture, formatId?: string) {
 
       const screen = mat as MeshStandardMaterial;
     
-      if (formatId === "rich") {
-        screen.map = null;
-        screen.emissiveMap = null;
-        screen.color = new Color("#0b1220");
-        screen.emissive = new Color("#000000");
-      } else {
-        screen.map = map;
-        screen.emissiveMap = map;
-        screen.color = new Color("#ffffff");
-        screen.emissive = new Color("#ffffff");
-      }
+      screen.map = map;
+      screen.emissiveMap = map;
+      screen.color = new Color("#ffffff");
+      screen.emissive = new Color("#ffffff");
       screen.emissiveIntensity = 1.25;
       screen.roughness = 0.9;
       screen.metalness = 0;
@@ -247,7 +268,7 @@ const PhoneMesh = memo(function PhoneMesh({
   useEffect(() => {
     if (!rootRef.current) return;
     modeRef.current = "still";
-    applyScreenTexture(rootRef.current, still, formatId);
+    if (formatId === "rich") applyDarkScreen(rootRef.current); else if (formatId === "rich") applyDarkScreen(rootRef.current); else applyScreenTexture(rootRef.current, still);
     onReady?.();
   }, [still, prepared, onReady]);
 
@@ -259,7 +280,7 @@ const PhoneMesh = memo(function PhoneMesh({
 
     if (root) {
       modeRef.current = "still";
-      applyScreenTexture(root, still);
+      if (formatId === "rich") applyDarkScreen(root); else applyScreenTexture(root, still);
     }
 
     const src = SCREEN_VIDEO[formatId];
@@ -274,11 +295,11 @@ const PhoneMesh = memo(function PhoneMesh({
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
       promoted = true;
       modeRef.current = "video";
-      applyScreenTexture(rootRef.current, videoTex);
+      if (formatId === "rich") applyDarkScreen(rootRef.current); else applyScreenTexture(rootRef.current, videoTex);
       void video.play().catch(() => {
         if (token !== visitToken.current || !rootRef.current) return;
         modeRef.current = "still";
-        applyScreenTexture(rootRef.current, still, formatId);
+        applyScreenTexture(rootRef.current, still);
       });
     };
 
@@ -300,7 +321,7 @@ const PhoneMesh = memo(function PhoneMesh({
       video.load();
       
       if (modeRef.current === "video" && rootRef.current) {
-        applyScreenTexture(rootRef.current, still, formatId);
+        applyScreenTexture(rootRef.current, still);
         modeRef.current = "still";
       }
     };
@@ -385,6 +406,7 @@ const PhoneScene = memo(function PhoneScene({
   entranceProgress?: MotionValue<number>;
   isDark: boolean;
   onMeshReady?: () => void;
+  flat?: boolean;
 }) {
   return (
     <>
@@ -649,7 +671,7 @@ function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" |
  * Glass: still PNG instantly → format MP4 on the same materials (no remount flash).
  * For "rich" format: CSS phone frame with live Vidout HTML ad iframe.
  */
-export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className }: Phone3DProps) {
+export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className, flat = false }: Phone3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -749,17 +771,8 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         </>
       )}
 
-      {/* 3D canvas — always mounted (keep WebGL context), hidden behind CSS formats */}
-      <div
-        className={cn(
-          "phone-glb-canvas-wrap transition-opacity duration-700 ease-out",
-          meshReady ? "opacity-100" : "opacity-0",
-        )}
-        style={{
-          pointerEvents: "auto",
-          visibility: "visible",
-        }}
-      >
+      {/* 1. 3D ТЕЛЕФОН МОНТИРУЕТСЯ ВСЕГДА, БЕЗ УСЛОВИЙ */}
+      <DeviceLoadStage ready={meshReady} placeholder={null} instant>
         <Canvas
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
@@ -771,13 +784,21 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, -0.08, 3.78], fov: 28, near: 0.05, far: 80 }}
-          style={{ background: "transparent" }}
-          onCreated={({ gl }) => {
+          camera={{ position: [0, -0.08, flat ? 3.15 : 3.48], fov: 28, near: 0.05, far: 80 }}
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "block",
+            background: "transparent",
+          }}
+          onCreated={({ gl, size }) => {
             gl.toneMapping = ACESFilmicToneMapping;
-            gl.toneMappingExposure = 1.05;
+            gl.toneMappingExposure = isDark ? 1.05 : 0.98;
             gl.outputColorSpace = SRGBColorSpace;
             gl.setClearColor(0x000000, 0);
+            if (size.width > 0 && size.height > 0) {
+              gl.setSize(size.width, size.height, false);
+            }
           }}
         >
           <PhoneScene
@@ -789,9 +810,10 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
             rotY={springY}
             entranceProgress={entranceProgress}
             onMeshReady={markMeshReady}
+            flat={flat}
           />
         </Canvas>
-      </div>
+      </DeviceLoadStage>
 
       
       <AnimatePresence>
