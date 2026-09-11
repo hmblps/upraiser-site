@@ -9,7 +9,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Center, Environment, useGLTF, useTexture, Html } from "@react-three/drei";
+import { Center, Environment, useGLTF, useTexture } from "@react-three/drei";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
@@ -360,50 +360,7 @@ const PhoneMesh = memo(function PhoneMesh({
       <Center>
         <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
-          {formatId === "rich" && (
-            <mesh position={[0, -0.0035, 0.085]} rotation={[-Math.PI / 2, Math.PI, 0]} scale={0.051}>
-              <Html transform occlude="blending" distanceFactor={1.42}>
-                <div
-                  style={{
-                    position: "relative",
-                    width: 390,
-                    height: 844,
-                    background: "#0b1220",
-                    borderRadius: 48,
-                    clipPath: "inset(0 round 48px)",
-                    WebkitClipPath: "inset(0 round 48px)",
-                    overflow: "hidden",
-                    pointerEvents: "auto",
-                  }}
-                >
-                  <div
-                  style={{
-                    position: "absolute",
-                    top: 10,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: 120,
-                    height: 35,
-                    background: "#000",
-                    borderRadius: 17,
-                    zIndex: 100,
-                    pointerEvents: "none"
-                  }}
-                />
-                <iframe
-                    src="/rich-media-ad.html"
-                    title="Rich Media Interactive Demo"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      border: "none",
-                      pointerEvents: "auto",
-                    }}
-                  />
-                </div>
-              </Html>
-            </mesh>
-          )}
+          
         </group>
       </Center>
     </group>
@@ -764,6 +721,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
   };
 
   const isCssFormat = false;
+  const isRichMedia = formatId === "rich";
   
 
   return (
@@ -775,10 +733,10 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         className,
       )}
       style={isCssFormat ? { cursor: "auto" } : undefined}
-      onPointerDown={isCssFormat ? undefined : onPointerDown}
-      onPointerMove={isCssFormat ? undefined : onPointerMove}
-      onPointerUp={isCssFormat ? undefined : endDrag}
-      onPointerCancel={isCssFormat ? undefined : endDrag}
+      onPointerDown={isCssFormat || isRichMedia ? undefined : onPointerDown}
+      onPointerMove={isCssFormat || isRichMedia ? undefined : onPointerMove}
+      onPointerUp={isCssFormat || isRichMedia ? undefined : endDrag}
+      onPointerCancel={isCssFormat || isRichMedia ? undefined : endDrag}
       role="img"
       aria-label="Interactive phone mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
@@ -835,11 +793,21 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         </Canvas>
       </div>
 
+      
       <AnimatePresence>
         {isCssFormat && <CssFormatPhone mode={mode} formatId={formatId as "rich" | "video"} />}
       </AnimatePresence>
 
-      
+      {isRichMedia ? (
+        <div className="phone-rich-on-glb" aria-hidden={false}>
+          <iframe
+            src="/rich-media-ad.html"
+            title="ING Rich Media"
+            allow="autoplay; encrypted-media"
+            scrolling="no"
+          />
+        </div>
+      ) : null}
     </div>
   );
 });
