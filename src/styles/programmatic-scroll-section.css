@@ -50,6 +50,7 @@
   z-index: 24;
   pointer-events: none;
   overflow: visible;
+  overflow: visible !important;
 }
 
 .prog-scroll-device-lift__frame {
@@ -662,6 +663,7 @@
   pointer-events: auto;
   overflow: visible;
   z-index: 6;
+  overflow: visible !important;
 }
 
 [data-scene="tv"] .prog-scroll-phone-col--lifted > div {
@@ -678,26 +680,27 @@
 
 .prog-device-slot--tv {
   width: min(100%, 54rem);
-  aspect-ratio: 16 / 10;
+  /* 
+     Важно: делаем пропорцию слота 16 / 12 (или 4 / 3), 
+     чтобы у канваса был вертикальный запас под наклоненный ТВ 
+  */
+  aspect-ratio: 16 / 12;
   height: auto;
-  max-height: min(76dvh, var(--prog-phone-budget, 76dvh));
+  max-height: min(84dvh, var(--prog-phone-budget, 84dvh));
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   margin: 0 auto;
-  overflow: visible;
+  overflow: visible !important;
   z-index: 6;
 }
 
-.prog-device-slot--tv .tv-glb-canvas,
-.prog-device-slot--tv .prog-device-load {
+.prog-device-slot--tv .prog-device-load,
+.prog-device-slot--tv .tv-glb-canvas {
   width: 100% !important;
   height: 100% !important;
-  position: relative !important;
-  top: 0 !important;
-  left: 0 !important;
-  transform: none !important;
+  overflow: visible !important;
 }
 
 .prog-device-slot .phone-glb-stage,

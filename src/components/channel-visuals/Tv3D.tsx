@@ -128,12 +128,11 @@ const HIDDEN_NODE_NAMES = new Set([
  */
 function screenPlaneForHeight(h: number) {
   return {
-    w: 3.76,
-    h: 2.12,
-    y: 0.02,
-    z: 0.125,
+    w: 3.44,  // Уменьшаем ширину, чтобы проявились боковые рамки
+    h: 1.94,  // Уменьшаем высоту, чтобы проявилась верхняя рамка
+    y: 0.048, // Точное выравнивание центра экрана
+    z: 0.088, // Не задирать выше 0.09, иначе плоскость перекрывает безель корпуса
   };
-};
 }
 
 function TvMesh({
@@ -271,14 +270,14 @@ function TvMesh({
     if (flat) {
       outerRef.current.rotation.x = 0;
       outerRef.current.rotation.y = 0;
-      outerRef.current.position.y = 0.08;
+      outerRef.current.position.y = 0.0;
       if (modeRef.current === "video") videoTex.needsUpdate = true;
       return;
     }
     outerRef.current.rotation.x = rotX.get();
     outerRef.current.rotation.y = rotY.get();
-    /* Lift in frustum so stand/legs stay inside the GL canvas */
-    outerRef.current.position.y = 0.02;
+    /* Снять лишний подъем по Y, который выталкивал верх телевизора за срез */
+    outerRef.current.position.y = 0.0;
     if (modeRef.current === "video") videoTex.needsUpdate = true;
   });
 
@@ -424,7 +423,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.05, flat ? 4.75 : 5.05], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
+          camera={{ position: [0, 0.02, flat ? 4.4 : 4.65], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
           style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
