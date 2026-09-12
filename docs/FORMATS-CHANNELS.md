@@ -124,6 +124,18 @@ Painters: `src/lib/tabletGlassAnim.ts`
 | `programmatic-scroll-section.css` | Layout, slots, **TV absolute breakout** |
 | `phone-css-3d.css` | Phone stage + **`.phone-rich-on-glb`** |
 
+
+### Cross-Canvas Animation Sync
+Phone, Tablet, and TV live in separate, lazily-loaded `<Canvas>` elements inside `ProgrammaticScrollSection`.
+**Rule:** Never use local `state.clock.elapsedTime` for animations that need to match across devices! Since canvases mount at different times during scrolling, their internal clocks start at `0` asynchronously, leading to severe phase desynchronization (devices floating out of rhythm).
+**Fix:** Always use the global absolute wall-clock: `const t = performance.now() / 1000;`. This ensures all isolated 3D contexts float like synchronized swimmers.
+
+### DeviceLoadStage & Suspense Architecture
+We deliberately **decouple** texture loading from React's `<Suspense>` boundary to prevent the 3D chassis from disappearing ("white hole" effect) on slow networks.
+1. `useGLTF(MODEL_PATH)` suspends the mesh. This is aggressive-preloaded globally in `App.tsx` so the GLB is cached long before the user scrolls to it.
+2. We use `TextureLoader` inside a `useEffect` for screen images/videos, rather than `useTexture`. This ensures the TV/Tablet chassis renders instantly (as a black matrix) even if the poster image is still downloading in the background.
+3. **`DeviceLoadStage` Spring Trap:** The `DeviceLoadStage` wrapper defaults to a 2-second CSS spring fade-in (`opacity` from `0.02` to `1.0`). For heavy 3D models like the TV that perfectly match their CSS optical size, this creates an illusion of a 2-3 second "network delay". Always pass `placeholder={null} instant` for Tablet and TV so they snap in instantly once the mesh is ready.
+
 ### Device stage hierarchy (Antigravity)
 
 ```
@@ -338,7 +350,7 @@ rich-media-ad.html        ING unit (compressed)
 | When | What |
 | --- | --- |
 | **11 Sep — `dc8f65a` (Antigravity)** | Rich overlay height/center/radius; ING HTML compress; tablet slot `74%/72dvh`; **TV `data-scene` absolute breakout** (`95%/70rem`, `80dvh`) |
-| **11 Sep — local (uncommitted)** | Rich further inset: `height: 80%`, `translate(-50%, -50%)`, tighter radius |
+| **13 Sep — Antigravity V2** | Fixed Canvas clock phase desync (t = performance.now()), removed TV 2-second spring delay (instant), added aggressive App.tsx preload for Tv3D/Tablet3D, removed TV CSS clip (overflow: visible), fixed video pause state mutation bug when switching to ctv-spot. |
 | **9–10 Sep** | CanvasTexture for oem-store; System UI settle-in disabled; TV camera pullback + screen plane lip; device-lift sibling |
 
 ---
