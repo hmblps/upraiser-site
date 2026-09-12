@@ -32,13 +32,6 @@ export function ChannelsPage() {
           sectionId="channels-scroll"
           lane={lane}
           mode={mode}
-          laneSwitcher={
-            <RoutesLaneSwitcher
-              lane={lane}
-              onLaneChange={setLane}
-              layoutId="channels-solutions-lane-pill"
-            />
-          }
           formats={formats}
           headerLabel={headerLabel}
           headerTitle={headerTitle}

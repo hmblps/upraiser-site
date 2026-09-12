@@ -1,43 +1,32 @@
-import { useState } from "react";
 import { useMode } from "../components/SectionHeader";
 import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/ProgrammaticFormats";
 
-export type RoutesLaneId = "app-growth" | "oem-ctv";
+export type RoutesLaneId = "app-growth" | "oem-ctv" | "unified";
 
 export const ROUTES_LANE_TABS = [
   { id: "app-growth", label: "App Growth" },
   { id: "oem-ctv", label: "OEM & CTV" },
 ] as const;
 
-/** Shared lane state + copy for home Routes and legacy Solutions page. */
+/** Unified sequential flow: Phone -> Tablet -> TV */
 export function useRoutesLane() {
   const { mode } = useMode();
-  const [lane, setLane] = useState<RoutesLaneId>("app-growth");
 
-  const formats = lane === "app-growth" ? AD_FORMATS : OEM_CTV_FORMATS;
+  const formats = [...AD_FORMATS, ...OEM_CTV_FORMATS];
 
-  const headerTitle =
-    lane === "app-growth" ? (
-      <>
-        Every Format<br />
-        <span className="text-accent">One Supply Path</span>
-      </>
-    ) : (
-      <>
-        OEM & CTV<br />
-        <span className="text-accent">Measured Supply</span>
-      </>
-    );
+  const headerTitle = (
+    <>
+      Every Format<br />
+      <span className="text-accent">One Supply Path</span>
+    </>
+  );
 
-  const headerDescription =
-    lane === "app-growth"
-      ? "Equipment for altitude. Formats on a direct supply path You can defend."
-      : "Pre-install, OEM storefronts, and CTV. Fixed lines that survive procurement.";
+  const headerDescription = "From in-app display to living-room CTV. Equipment for altitude on a direct supply path you can defend.";
 
   return {
     mode,
-    lane,
-    setLane,
+    lane: "unified", // keep for compatibility if used internally
+    setLane: () => {},
     formats,
     headerLabel: "The Routes" as const,
     headerTitle,
