@@ -34,14 +34,10 @@ type FormatCopyProps = {
 
 export function FormatCopy({
   format,
-  index,
-  total,
   mode,
   reduced,
   transitionDir = "scroll",
   laneDirection = 1,
-  formats,
-  onJump,
 }: FormatCopyProps) {
   const accentClass = mode === "growth" ? "text-accent" : "text-accent";
 

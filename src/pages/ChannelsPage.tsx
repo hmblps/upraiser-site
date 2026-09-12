@@ -1,12 +1,12 @@
 import { useScrollToTop } from "../hooks/useScrollToTop";
 import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticScrollSection";
-import { RoutesLaneSwitcher } from "../components/RoutesLaneSwitcher";
+
 import { useRoutesLane } from "../hooks/useRoutesLane";
 import { Link } from "react-router-dom";
 
 export function ChannelsPage() {
   useScrollToTop();
-  const { mode, lane, setLane, formats, headerLabel, headerTitle, headerDescription } = useRoutesLane();
+  const { mode, lane, formats, headerLabel, headerTitle, headerDescription } = useRoutesLane();
 
   // Intel / reduced-motion / <1024 handled inside ProgrammaticScrollSection:
   // desktop lite keeps the two-column sticky layout (CSS chassis);
