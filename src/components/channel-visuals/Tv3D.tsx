@@ -208,25 +208,6 @@ function TvMesh({
     onReady?.();
   }, [scene, onReady]);
 
-  useEffect(() => {
-    if (!showScreen || !stillSrc) return;
-    let cancelled = false;
-    const loader = new TextureLoader();
-    loader.load(stillSrc, (tex) => {
-      if (cancelled) return;
-      tex.colorSpace = SRGBColorSpace;
-      tex.minFilter = LinearFilter;
-      tex.magFilter = LinearFilter;
-      tex.flipY = true;
-      tex.needsUpdate = true;
-      if (modeRef.current !== "video") {
-        modeRef.current = "still";
-        setScreenMap(tex);
-      }
-    });
-    return () => { cancelled = true; };
-  }, [showScreen, stillSrc]);
-
   const playingRef = useRef(false);
   useEffect(() => {
     playingRef.current = inView;
@@ -238,43 +219,59 @@ function TvMesh({
   }, [inView, video]);
 
   useEffect(() => {
-    if (!showScreen || !videoSrc) {
-      video.pause();
-      return;
-    }
-
+    if (!showScreen) return;
     let cancelled = false;
-    let promoted = false;
-    const promote = () => {
-      if (cancelled || promoted) return;
-      promoted = true;
-      modeRef.current = "video";
-      videoTex.flipY = true;
-      videoTex.needsUpdate = true;
-      setScreenMap((prev) => {
-        if (prev && prev !== videoTex) prev.dispose();
-        return videoTex;
-      });
-      if (playingRef.current) {
-        void video.play().catch(() => {
-          modeRef.current = "still";
+
+    if (videoSrc) {
+      let promoted = false;
+      const promote = () => {
+        if (cancelled || promoted) return;
+        promoted = true;
+        modeRef.current = "video";
+        videoTex.flipY = true;
+        videoTex.needsUpdate = true;
+        setScreenMap((prev) => {
+          if (prev && prev !== videoTex) prev.dispose();
+          return videoTex;
         });
+        if (playingRef.current) {
+          void video.play().catch(() => {
+            modeRef.current = "still";
+          });
+        }
+      };
+
+      video.src = videoSrc;
+      video.addEventListener("loadeddata", promote);
+      video.addEventListener("canplay", promote);
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
+      else video.load();
+
+      return () => {
+        cancelled = true;
+        video.removeEventListener("loadeddata", promote);
+        video.removeEventListener("canplay", promote);
+        video.pause();
+      };
+    } else if (stillSrc) {
+      if (playingRef.current) {
+        playingRef.current = false;
+        video.pause();
       }
-    };
-
-    video.src = videoSrc;
-    video.addEventListener("loadeddata", promote);
-    video.addEventListener("canplay", promote);
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
-    else video.load();
-
-    return () => {
-      cancelled = true;
-      video.removeEventListener("loadeddata", promote);
-      video.removeEventListener("canplay", promote);
-      video.pause();
-    };
-  }, [showScreen, videoSrc, video, videoTex]);
+      const loader = new TextureLoader();
+      loader.load(stillSrc, (tex) => {
+        if (cancelled) return;
+        tex.colorSpace = SRGBColorSpace;
+        tex.minFilter = LinearFilter;
+        tex.magFilter = LinearFilter;
+        tex.flipY = true;
+        tex.needsUpdate = true;
+        modeRef.current = "still";
+        setScreenMap(tex);
+      });
+      return () => { cancelled = true; };
+    }
+  }, [showScreen, videoSrc, stillSrc, video, videoTex]);
 
   useFrame(({ clock }) => {
     if (!outerRef.current) return;
