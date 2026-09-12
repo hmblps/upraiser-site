@@ -29,7 +29,7 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { DeviceLoadStage } from "../solutions/DeviceLoadStage";
 import { FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
 
-const MODEL_PATH = "/channels/oem/tv.glb";
+const MODEL_PATH = "/channels/oem/tv-draco.glb";
 
 const REST_Y = 0.04;
 const REST_X = 0.008;
