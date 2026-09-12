@@ -703,12 +703,8 @@
 }
 
 .prog-device-slot--tv .tv-glb-canvas {
-  width: 130% !important;
-  height: 130% !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+  width: 100% !important;
+  height: 100% !important;
   overflow: visible !important;
 }
 

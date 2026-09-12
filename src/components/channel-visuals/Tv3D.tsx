@@ -36,7 +36,7 @@ const REST_X = 0.008;
 
 // Larger living-room read — still leave frustum room for Plastic bezel + stand.
 function getTargetHeight() {
-  return 2.15;
+  return 1.65;
 }
 
 function computeTransform(scene: Object3D): {
@@ -127,11 +127,12 @@ const HIDDEN_NODE_NAMES = new Set([
  * Oversized planes swallow the chassis and read as a naked floating rectangle.
  */
 function screenPlaneForHeight(h: number) {
+  const ratio = h / 2.15;
   return {
-    w: 3.44,  // Уменьшаем ширину, чтобы проявились боковые рамки
-    h: 1.94,  // Уменьшаем высоту, чтобы проявилась верхняя рамка
-    y: 0.048, // Точное выравнивание центра экрана
-    z: 0.088, // Не задирать выше 0.09, иначе плоскость перекрывает безель корпуса
+    w: 3.44 * ratio,
+    h: 1.94 * ratio,
+    y: 0.048 * ratio,
+    z: 0.088 * ratio,
   };
 }
 
@@ -423,8 +424,8 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.02, flat ? 5.75 : 6.1], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
-          style={{ width: "130%", height: "130%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", position: "absolute", display: "block", background: "transparent", pointerEvents: "none" }}
+          camera={{ position: [0, 0.02, flat ? 4.4 : 4.65], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
+          style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.15;
