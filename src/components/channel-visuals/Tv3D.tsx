@@ -128,11 +128,11 @@ const HIDDEN_NODE_NAMES = new Set([
 function screenPlaneForHeight(h: number) {
   const ratio = h / 2.15;
   return {
-    w: 3.59 * ratio,
-    h: 2.02 * ratio,
-    x: 0.010 * ratio,
-    y: 0.035 * ratio,
-    z: 0.090 * ratio,
+    w: 3.64 * ratio,
+    h: 2.06 * ratio,
+    x: 0,
+    y: 0.02 * ratio,
+    z: 0.088 * ratio,
   };
 }
 
@@ -154,19 +154,6 @@ function TvMesh({
   const outerRef = useRef<Group>(null);
   const { scene } = useGLTF(MODEL_PATH, DRACO_PATH);
 
-  useEffect(() => {
-    if (!scene) return;
-    scene.traverse((child: any) => {
-      if (child.isMesh && child.material) {
-        const matName = child.material.name?.toLowerCase() || "";
-        if (matName.includes("screen") || matName.includes("display") || matName.includes("glass")) {
-          child.material.color.set("#000000");
-          child.material.emissive.set("#000000");
-          child.material.needsUpdate = true;
-        }
-      }
-    });
-  }, [scene]);
   const videoSrc = formatId ? FORMAT_VIDEO[formatId] : undefined;
   const stillSrc = (formatId && FORMAT_STILL[formatId]) || FORMAT_STILL["ctv-spot"];
   const showScreen = Boolean(videoSrc || stillSrc);
@@ -316,7 +303,7 @@ function TvMesh({
 
       {/* Плоскость экрана: строго по центру апертуры */}
       {showScreen && screenMap && (
-        <mesh position={[screen.x || 0, screen.y, screen.z]} renderOrder={1}>
+        <mesh position={[screen.x || 0, screen.y, screen.z]}>
           <planeGeometry args={[screen.w, screen.h]} />
           <meshBasicMaterial
             map={screenMap}
