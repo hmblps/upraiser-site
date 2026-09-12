@@ -132,7 +132,6 @@ function DeviceCarousel3({
           pointerEvents: scene === "tv" ? "auto" : "none",
           zIndex: scene === "tv" ? 6 : 1,
           overflow: "hidden",
-          visibility: tvOpacity.get() < 0.01 ? "hidden" : undefined,
         }}
       >
         <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
