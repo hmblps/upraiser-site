@@ -796,6 +796,8 @@
   min-height: 0;
   padding-inline-start: 0.25rem;
   touch-action: pan-y;
+  /* Must sit above .prog-scroll-device-lift (z-index:24) so the lane-switcher receives clicks */
+  z-index: 30;
 }
 
 /* Tumbler + copy as one column. Gap is in the box model (not a guessed
