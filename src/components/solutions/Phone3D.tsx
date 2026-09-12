@@ -47,9 +47,9 @@ const SHARED_ORIENT: [number, number, number] = [Math.PI / 2, 0, Math.PI];
 
 const SCREEN_VIDEO: Record<string, string> = {
   // App Growth lane
-  banner:       "/channels/programmatic-feed/formats/banner.mp4",
-  native:       "/channels/programmatic-feed/formats/native.mp4",
-  interstitial: "/channels/programmatic-feed/formats/interstitial.mp4",
+  // banner:       "/channels/programmatic-feed/formats/banner.mp4",
+  // native:       "/channels/programmatic-feed/formats/native.mp4",
+  // interstitial: "/channels/programmatic-feed/formats/interstitial.mp4",
   rich:         "/channels/programmatic-feed/formats/rich.mp4",
   video:        "/channels/programmatic-feed/formats/video.mp4",
   // OEM lane — setup wizard, store featured, system notification
