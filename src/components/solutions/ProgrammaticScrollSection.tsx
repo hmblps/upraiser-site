@@ -235,6 +235,15 @@ export function ProgrammaticScrollSection({
 
   const format = formats[activeIndex] ?? formats[0]!;
 
+  // Pre-warm TV assets immediately on section mount (not lazily on approach).
+  // tv-draco.glb is only 546KB but the Draco WASM decoder needs ~400ms to
+  // compile — starting that download immediately hides the latency entirely.
+  useEffect(() => {
+    if (!desktopEnabled) return;
+    warmStage("routes-tablet");
+    warmStage("routes-tv");
+  }, [desktopEnabled]);
+
   useEffect(() => {
     if (!desktopEnabled) return;
     const scene = format.scene ?? "phone";
