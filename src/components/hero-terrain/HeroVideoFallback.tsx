@@ -140,8 +140,8 @@ export function HeroVideoFallback({
 
     const canvas = canvasRef.current;
     if (canvas) {
-      const nextW = isMobile ? 540 : 1280;
-      const nextH = isMobile ? 960 : 720;
+      const nextW = isMobile ? 720 : 1920;
+      const nextH = isMobile ? 1280 : 1080;
       if (canvas.width !== nextW || canvas.height !== nextH) {
         canvas.width = nextW;
         canvas.height = nextH;

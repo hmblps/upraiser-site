@@ -44,6 +44,12 @@
           preload("/channels/oem/tv-draco.glb", "fetch");
           preload("/channels/oem/tablet.glb", "fetch");
         }
+        // Fallback frames preload (Windows or Mobile)
+        if (mobile || /Windows/i.test(navigator.userAgent)) {
+          var folder = mobile ? "home-mobile-" + t : "home-" + t;
+          preload("/hero/frames/" + folder + "/frame_0001.jpg", "image");
+        }
+
       })();
     </script>
     <link rel="icon" href="/favicon.ico" sizes="any" />

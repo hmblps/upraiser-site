@@ -3,6 +3,7 @@ import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticS
 
 import { useRoutesLane } from "../hooks/useRoutesLane";
 import { Link } from "react-router-dom";
+import { ChannelsLoader } from "../components/ChannelsLoader";
 
 export function ChannelsPage() {
   useScrollToTop();
@@ -14,6 +15,7 @@ export function ChannelsPage() {
 
   return (
     <main className="site-main channels-page">
+      <ChannelsLoader />
       {/* Floating Header */}
       <div className="fixed top-8 left-8 z-50">
         <Link 
