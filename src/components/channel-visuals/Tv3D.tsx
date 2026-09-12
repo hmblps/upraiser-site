@@ -283,7 +283,7 @@ function TvMesh({
       return;
     }
 
-    const t = clock.getElapsedTime();
+    const t = performance.now() / 1000;
     const floatRotX = Math.sin(t * 0.8) * 0.03;
     const floatRotY = Math.cos(t * 0.6) * 0.04;
     const floatPosY = Math.sin(t * 1.2) * 0.04;
