@@ -45,8 +45,42 @@ function computeTransform(scene: Object3D): {
   cy: number;
   cz: number;
 } {
+  // Temporarily hide nodes to compute accurate bounding box
+  const hidden: Object3D[] = [];
+  scene.traverse((obj) => {
+    if (HIDDEN_NODE_NAMES.has(obj.name) && obj.visible) {
+      obj.visible = false;
+      hidden.push(obj);
+    }
+  });
+
   scene.updateMatrixWorld(true);
-  const box = new Box3().setFromObject(scene, true);
+  
+  // Calculate bounding box MANUALLY to respect visibility!
+  const box = new Box3();
+  box.makeEmpty();
+  scene.traverse((obj) => {
+    // If it's in the hidden list, we skip it and all its children!
+    if (HIDDEN_NODE_NAMES.has(obj.name)) {
+      obj.visible = false;
+      return; // But Box3 traversal can't be stopped easily with early return, so we compute manually
+    }
+  });
+
+  // Second pass: actually compute box on visible meshes
+  scene.traverse((obj) => {
+    if (!obj.visible) return;
+    if ((obj as any).isMesh) {
+      const geometry = (obj as any).geometry;
+      if (geometry) {
+        geometry.computeBoundingBox();
+        const meshBox = geometry.boundingBox.clone();
+        meshBox.applyMatrix4(obj.matrixWorld);
+        box.expandByPoint(meshBox.min);
+        box.expandByPoint(meshBox.max);
+      }
+    }
+  });
 
   if (box.isEmpty()) {
     return { scale: 0.022 * (getTargetHeight() / 2.05), cx: 99.25, cy: -69.52, cz: -2.13 };
@@ -92,13 +126,13 @@ const HIDDEN_NODE_NAMES = new Set([
  * Ad plane inset inside Plastic aperture — must leave bezel visible.
  * Oversized planes swallow the chassis and read as a naked floating rectangle.
  */
-// True unscaled aperture dimensions (derived from original fallback scale 0.02135)
-function screenPlaneForScale(scale: number) {
+function screenPlaneForHeight(h: number) {
+  const ratio = h / 2.15;
   return {
-    w: 122.8 * scale,
-    h: 69.3 * scale,
-    y: 1.61 * scale,
-    z: 3.16 * scale,
+    w: 3.42 * ratio,
+    h: 1.93 * ratio,
+    y: 0.045 * ratio,
+    z: 0.088 * ratio,
   };
 }
 
@@ -126,7 +160,7 @@ function TvMesh({
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
   const [xf] = useState(() => computeTransform(scene));
-  const screen = screenPlaneForScale(xf.scale);
+  const screen = screenPlaneForHeight(getTargetHeight());
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
