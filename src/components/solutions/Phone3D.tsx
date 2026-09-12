@@ -645,7 +645,7 @@ function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" |
  * Glass: still PNG instantly → format MP4 on the same materials (no remount flash).
  * For "rich" format: CSS phone frame with live Vidout HTML ad iframe.
  */
-export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className, flat = false }: Phone3DProps) {
+export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className, flat = false, active = true }: Phone3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);

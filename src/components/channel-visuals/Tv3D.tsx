@@ -8,7 +8,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, useGLTF } from "@react-three/drei";
+import { Environment, useGLTF, useTexture } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
@@ -450,3 +450,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
 }
 
 useGLTF.preload(MODEL_PATH, DRACO_PATH);
+
+if (typeof window !== "undefined") {
+  useTexture.preload([FORMAT_STILL["ctv-spot"]]);
+}
