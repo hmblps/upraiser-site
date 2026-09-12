@@ -891,7 +891,7 @@
 }
 
 .format-copy__body {
-  margin-top: auto;
+  margin-top: 1.75rem;
   max-width: 38ch;
   color: color-mix(in srgb, var(--theme-fg) 82%, var(--theme-muted));
   line-height: var(--leading-body);
