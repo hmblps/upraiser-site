@@ -415,6 +415,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
     >
       <DeviceLoadStage ready={meshReady} placeholder={null} instant>
         <Canvas className="tv-glb-canvas"
+          style={{ pointerEvents: active ? "auto" : "none" }}
           dpr={[1, 1.5]}
           frameloop={reduced ? "never" : active && inView ? "always" : "demand"}
           gl={{

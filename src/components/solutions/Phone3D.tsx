@@ -760,6 +760,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
       <DeviceLoadStage ready={meshReady} placeholder={null} instant>
         <Canvas
           className="phone-glb-canvas"
+          style={{ pointerEvents: active ? "auto" : "none" }}
           dpr={[1, 1.5]}
           frameloop={(!inView || reduced || isCssFormat) ? "never" : "always"}
           gl={{

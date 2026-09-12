@@ -431,6 +431,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
       >
         {slotBox ? (
         <Canvas className="tablet-glb-canvas"
+          style={{ pointerEvents: active ? "auto" : "none" }}
           dpr={[1, 1.5]}
           frameloop={reduced ? "never" : "always"}
           resize={{ debounce: 0, offsetSize: true }}
