@@ -2,6 +2,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -200,18 +201,11 @@ function TvMesh({
     };
   }, [video]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     scene.traverse((obj) => {
       if (HIDDEN_NODE_NAMES.has(obj.name)) obj.visible = false;
     });
-    let id2 = 0;
-    const id1 = requestAnimationFrame(() => {
-      id2 = requestAnimationFrame(() => onReady?.());
-    });
-    return () => {
-      cancelAnimationFrame(id1);
-      cancelAnimationFrame(id2);
-    };
+    onReady?.();
   }, [scene, onReady]);
 
   useEffect(() => {
@@ -293,9 +287,9 @@ function TvMesh({
     }
 
     const t = clock.getElapsedTime();
-    const floatRotX = Math.sin(t * 0.5) * 0.015;
-    const floatRotY = Math.cos(t * 0.4) * 0.02;
-    const floatPosY = Math.sin(t * 0.8) * 0.015;
+    const floatRotX = Math.sin(t * 0.8) * 0.03;
+    const floatRotY = Math.cos(t * 0.6) * 0.04;
+    const floatPosY = Math.sin(t * 1.2) * 0.04;
 
     outerRef.current.rotation.x = rotX.get() + floatRotX;
     outerRef.current.rotation.y = rotY.get() + floatRotY;

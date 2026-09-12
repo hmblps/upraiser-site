@@ -1,19 +1,45 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/components/PartnersCarousel.tsx', 'utf-8');
-
-// Replace the return block for the modal to use createPortal
-if (!code.includes('createPortal')) {
-    code = `import { createPortal } from "react-dom";\n` + code;
-}
+const fs = require("fs");
+const file = "src/styles/programmatic-scroll-section.css";
+let code = fs.readFileSync(file, "utf8");
 
 code = code.replace(
-    /<AnimatePresence>\s*\{modalOpen && \(\s*<div className="fixed inset-0 z-\[1000\] flex items-center justify-center p-4 sm:p-8">\s*<motion\.div/g,
-    `<AnimatePresence>\n        {modalOpen && createPortal(\n          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-8">\n            <motion.div`
+  /\.prog-scroll-copy-stack \{[^}]+\}/,
+  `.prog-scroll-copy-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.35rem;
+  width: 100%;
+  max-width: 28rem;
+  min-height: 0;
+  height: 25rem;
+  overflow: visible;
+}`
 );
 
 code = code.replace(
-    /<\/motion\.div>\s*<\/div>\s*\)\}\s*<\/AnimatePresence>/g,
-    `</motion.div>\n          </div>,\n          document.body\n        )}\n      </AnimatePresence>`
+  /\.format-copy-wrap \{[^}]+\}/,
+  `.format-copy-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1rem;
+  min-height: 0;
+  overflow: visible;
+  height: 100%;
+}`
 );
 
-fs.writeFileSync('src/components/PartnersCarousel.tsx', code);
+code = code.replace(
+  /\.format-copy \{[^}]+\}/,
+  `.format-copy {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  will-change: transform, opacity;
+}`
+);
+
+fs.writeFileSync(file, code);

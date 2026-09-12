@@ -267,12 +267,13 @@ function TabletMesh({
     }
 
     const t = state.clock.elapsedTime;
-    const floatRotX = Math.sin(t * 0.7) * 0.025;
-    const floatRotY = Math.cos(t * 0.5) * 0.03;
+    const floatRotX = Math.sin(t * 0.8) * 0.03;
+    const floatRotY = Math.cos(t * 0.6) * 0.04;
+    const floatPosY = Math.sin(t * 1.2) * 0.04;
 
     group.current.rotation.x = rotX.get() + floatRotX;
     group.current.rotation.y = rotY.get() + floatRotY;
-    group.current.position.y = Math.sin(t * 1.0) * 0.035;
+    group.current.position.y = floatPosY;
 
     if (modeRef.current === "video") {
       videoTex.needsUpdate = true;

@@ -1,14 +1,12 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/components/GlobalAmbientModalBackground.tsx', 'utf-8');
+const fs = require("fs");
+const file = "src/styles/programmatic-scroll-section.css";
+let code = fs.readFileSync(file, "utf8");
 
 code = code.replace(
-    /\{isOpen && \(\s*<video/g,
-    `<video`
+  /\.format-copy__progress\s*\{\s*margin-top:\s*0\.85rem;\s*\}/,
+  `.format-copy__progress {
+    margin-top: auto;
+  }`
 );
 
-code = code.replace(
-    /<\/video>\s*\)\}/g,
-    `</video>`
-);
-
-fs.writeFileSync('src/components/GlobalAmbientModalBackground.tsx', code);
+fs.writeFileSync(file, code);
