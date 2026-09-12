@@ -563,8 +563,8 @@ function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "rich" |
               borderRadius: "999px",
               background: "#000",
               zIndex: 5,
-              pointerEvents: "none",
-            }}
+              pointerEvents: active ? "auto" : "none",
+          }}
           />
 
           {formatId === "rich" ? (

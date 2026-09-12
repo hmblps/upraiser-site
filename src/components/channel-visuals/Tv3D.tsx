@@ -15,8 +15,7 @@ import {
   Box3,
   LinearFilter,
   SRGBColorSpace,
-  TextureLoader,
-  Vector3,
+    Vector3,
   VideoTexture,
   type Group,
   type Object3D,
@@ -129,11 +128,11 @@ const HIDDEN_NODE_NAMES = new Set([
 function screenPlaneForHeight(h: number) {
   const ratio = h / 2.15;
   return {
-    w: 3.61 * ratio,
-    h: 2.04 * ratio,
-    x: 0.018 * ratio,
-    y: 0.025 * ratio,
-    z: 0.090 * ratio,
+    w: 3.72 * ratio,
+    h: 2.12 * ratio,
+    x: 0,
+    y: 0.02 * ratio,
+    z: 0.088 * ratio,
   };
 }
 
@@ -425,7 +424,6 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
     >
       <DeviceLoadStage ready={meshReady} placeholder={null} instant>
         <Canvas className="tv-glb-canvas"
-          style={{ pointerEvents: active ? "auto" : "none" }}
           dpr={[1, 1.5]}
           frameloop={reduced ? "never" : active && inView ? "always" : "demand"}
           gl={{
@@ -436,7 +434,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             stencil: false,
           }}
           camera={{ position: [0, 0.02, flat ? 4.4 : 4.65], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
-          style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: "none" }}
+          style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: active ? "auto" : "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.15;
