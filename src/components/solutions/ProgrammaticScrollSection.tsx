@@ -276,7 +276,7 @@ export function ProgrammaticScrollSection({
       aria-label="Ad formats"
     >
       <div className="prog-scroll-sticky">
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full flex flex-col">
         <div className="prog-scroll-ambience" aria-hidden />
         <BrandAurora tone="routes" className="prog-scroll-stage-aurora" />
 
