@@ -105,10 +105,8 @@ function DeviceCarousel3({
           x: tabletX,
           opacity: tabletOpacity,
           pointerEvents: scene === "tablet" ? "auto" : "none",
-          /* Above copy / sticky chrome so rotate corners aren't eaten. */
           zIndex: scene === "tablet" ? 6 : 1,
           overflow: "visible",
-          visibility: tabletOpacity.get() < 0.01 ? "hidden" : undefined,
         }}
       >
         <div className="prog-device-slot prog-device-slot--tablet">
@@ -126,6 +124,7 @@ function DeviceCarousel3({
         </div>
       </motion.div>
 
+      {/* TV wrapper: overflow hidden clips any canvas bleed outside the section */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
         style={{
@@ -133,12 +132,10 @@ function DeviceCarousel3({
           opacity: tvOpacity,
           pointerEvents: scene === "tv" ? "auto" : "none",
           zIndex: scene === "tv" ? 6 : 1,
-          overflow: "visible",
+          overflow: "hidden",
         }}
       >
-        {/* clip the TV slot so nothing escapes into the page flow below the section */}
-        <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }} aria-hidden />
-        <div className="prog-device-slot prog-device-slot--tv">
+        <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={null}>
               <Tv3D

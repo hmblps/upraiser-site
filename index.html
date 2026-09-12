@@ -40,6 +40,9 @@
           preload(glb, "fetch");
           preload("/draco/gltf/draco_wasm_wrapper.js", "script");
           preload("/draco/gltf/draco_decoder.wasm", "fetch");
+          // Channel device models — preload on all pages so they're ready when user scrolls to Routes
+          preload("/channels/oem/tv-draco.glb", "fetch");
+          preload("/channels/oem/tablet.glb", "fetch");
         }
       })();
     </script>

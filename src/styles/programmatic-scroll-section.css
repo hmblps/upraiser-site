@@ -789,12 +789,11 @@
 .prog-scroll-copy-col {
   position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   height: 100%;
   min-height: 0;
   padding-inline-start: 0.25rem;
-  padding-top: clamp(1.5rem, 4dvh, 3.5rem);
   touch-action: pan-y;
 }
 
@@ -813,7 +812,8 @@
 }
 
 .prog-scroll-copy-tumbler {
-  position: relative;
+  position: sticky;
+  top: clamp(1.5rem, 3dvh, 2.5rem);
   flex-shrink: 0;
   z-index: 2;
   line-height: 0;
