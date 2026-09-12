@@ -12,12 +12,13 @@ export const ROUTES_LANE_TABS = [
 export function useRoutesLane() {
   const { mode } = useMode();
 
-  // 5 curated formats for the unified sequence (2 phone, 2 tablet, 1 TV)
+  // 6 curated formats for the unified sequence (2 phone, 2 tablet, 2 TV)
   const formats = [
     AD_FORMATS.find((f) => f.id === "banner")!,
     AD_FORMATS.find((f) => f.id === "interstitial")!,
     OEM_CTV_FORMATS.find((f) => f.id === "pre-install")!,
     OEM_CTV_FORMATS.find((f) => f.id === "oem-store")!,
+    OEM_CTV_FORMATS.find((f) => f.id === "ctv-spot")!,
     OEM_CTV_FORMATS.find((f) => f.id === "ctv-video")!,
   ];
 

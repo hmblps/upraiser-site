@@ -45,42 +45,8 @@ function computeTransform(scene: Object3D): {
   cy: number;
   cz: number;
 } {
-  // Temporarily hide nodes to compute accurate bounding box
-  const hidden: Object3D[] = [];
-  scene.traverse((obj) => {
-    if (HIDDEN_NODE_NAMES.has(obj.name) && obj.visible) {
-      obj.visible = false;
-      hidden.push(obj);
-    }
-  });
-
   scene.updateMatrixWorld(true);
-  
-  // Calculate bounding box MANUALLY to respect visibility!
-  const box = new Box3();
-  box.makeEmpty();
-  scene.traverse((obj) => {
-    // If it's in the hidden list, we skip it and all its children!
-    if (HIDDEN_NODE_NAMES.has(obj.name)) {
-      obj.visible = false;
-      return; // But Box3 traversal can't be stopped easily with early return, so we compute manually
-    }
-  });
-
-  // Second pass: actually compute box on visible meshes
-  scene.traverse((obj) => {
-    if (!obj.visible) return;
-    if ((obj as any).isMesh) {
-      const geometry = (obj as any).geometry;
-      if (geometry) {
-        geometry.computeBoundingBox();
-        const meshBox = geometry.boundingBox.clone();
-        meshBox.applyMatrix4(obj.matrixWorld);
-        box.expandByPoint(meshBox.min);
-        box.expandByPoint(meshBox.max);
-      }
-    }
-  });
+  const box = new Box3().setFromObject(scene, true);
 
   if (box.isEmpty()) {
     return { scale: 0.022 * (getTargetHeight() / 2.05), cx: 99.25, cy: -69.52, cz: -2.13 };
