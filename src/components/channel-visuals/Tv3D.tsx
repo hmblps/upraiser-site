@@ -129,10 +129,10 @@ const HIDDEN_NODE_NAMES = new Set([
 function screenPlaneForHeight(h: number) {
   const ratio = h / 2.15;
   return {
-    w: 3.59 * ratio,
-    h: 2.02 * ratio,
-    x: 0.002 * ratio,
-    y: 0.046 * ratio,
+    w: 3.61 * ratio,
+    h: 2.04 * ratio,
+    x: 0.018 * ratio,
+    y: 0.025 * ratio,
     z: 0.090 * ratio,
   };
 }
