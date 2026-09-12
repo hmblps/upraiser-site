@@ -809,12 +809,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.35rem;
   width: 100%;
-  max-width: 28rem;
-  min-height: 0;
-  height: 25rem;
-  overflow: visible;
+  position: relative;
+  height: 21rem;
 }
 
 .prog-scroll-copy-tumbler {
@@ -827,13 +824,13 @@
 
 .format-copy-wrap {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 1rem;
   min-height: 0;
   overflow: visible;
-  height: 100%;
 }
 
 .format-copy-wrap__switcher {
