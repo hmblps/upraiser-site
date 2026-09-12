@@ -123,7 +123,7 @@ function DeviceCarousel3({
         </div>
       </motion.div>
 
-      {/* TV wrapper: overflow hidden clips any canvas bleed outside the section */}
+      {/* TV wrapper */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
         style={{
@@ -131,7 +131,7 @@ function DeviceCarousel3({
           opacity: tvOpacity,
           pointerEvents: scene === "tv" ? "auto" : "none",
           zIndex: scene === "tv" ? 6 : 1,
-          overflow: "hidden",
+          overflow: "visible",
         }}
       >
         <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
