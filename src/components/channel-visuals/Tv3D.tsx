@@ -92,13 +92,13 @@ const HIDDEN_NODE_NAMES = new Set([
  * Ad plane inset inside Plastic aperture — must leave bezel visible.
  * Oversized planes swallow the chassis and read as a naked floating rectangle.
  */
-function screenPlaneForHeight(h: number) {
-  const ratio = h / 2.15;
+// True unscaled aperture dimensions (derived from original fallback scale 0.02135)
+function screenPlaneForScale(scale: number) {
   return {
-    w: 3.42 * ratio,
-    h: 1.93 * ratio,
-    y: 0.045 * ratio,
-    z: 0.088 * ratio,
+    w: 122.8 * scale,
+    h: 69.3 * scale,
+    y: 1.61 * scale,
+    z: 3.16 * scale,
   };
 }
 
@@ -126,7 +126,7 @@ function TvMesh({
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
   const [xf] = useState(() => computeTransform(scene));
-  const screen = screenPlaneForHeight(getTargetHeight());
+  const screen = screenPlaneForScale(xf.scale);
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
