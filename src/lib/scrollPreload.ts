@@ -85,7 +85,7 @@ export function warmStage(id: PreloadStage) {
         break;
       case "routes-tv":
         whenHeroReady(() => {
-          preloadFetch("/channels/oem/tv.glb");
+          preloadFetch("/channels/oem/tv-draco.glb");
           preloadFetch(`${DRACO_PATH}draco_decoder.wasm`);
           void import("../components/channel-visuals/Tv3D");
         });

@@ -131,7 +131,7 @@ function screenPlaneForHeight(h: number) {
   return {
     w: 3.66 * ratio,
     h: 2.06 * ratio,
-    y: 0.01 * ratio,
+    y: 0.022 * ratio,
     z: 0.088 * ratio,
   };
 }
