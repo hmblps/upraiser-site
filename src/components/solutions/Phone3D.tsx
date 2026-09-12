@@ -301,10 +301,10 @@ const PhoneMesh = memo(function PhoneMesh({
     };
   }, [formatId, inView, still, video, videoTex]);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!group.current) return;
 
-    const t = state.clock.elapsedTime;
+    const t = performance.now() / 1000;
     const p = entranceProgress ? Math.max(0, Math.min(1, entranceProgress.get())) : 1;
 
     // --- easing helpers (no allocations each frame) ---

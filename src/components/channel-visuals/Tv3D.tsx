@@ -273,7 +273,7 @@ function TvMesh({
     }
   }, [showScreen, videoSrc, stillSrc, video, videoTex]);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (!outerRef.current) return;
     if (flat) {
       outerRef.current.rotation.x = 0;
