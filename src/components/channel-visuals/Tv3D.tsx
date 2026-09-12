@@ -129,9 +129,9 @@ const HIDDEN_NODE_NAMES = new Set([
 function screenPlaneForHeight(h: number) {
   const ratio = h / 2.15;
   return {
-    w: 3.42 * ratio,
-    h: 1.93 * ratio,
-    y: 0.045 * ratio,
+    w: 3.52 * ratio,
+    h: 1.99 * ratio,
+    y: 0.038 * ratio,
     z: 0.088 * ratio,
   };
 }
@@ -239,15 +239,26 @@ function TvMesh({
     };
   }, [showScreen, stillSrc, video, videoTex]);
 
+  const playingRef = useRef(false);
   useEffect(() => {
-    if (!showScreen || !inView || !videoSrc) {
+    playingRef.current = inView;
+    if (inView && modeRef.current === "video") {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [inView, video]);
+
+  useEffect(() => {
+    if (!showScreen || !videoSrc) {
       video.pause();
       return;
     }
 
+    let cancelled = false;
     let promoted = false;
     const promote = () => {
-      if (promoted || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+      if (cancelled || promoted || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
       promoted = true;
       modeRef.current = "video";
       videoTex.flipY = true;
@@ -256,9 +267,11 @@ function TvMesh({
         if (prev && prev !== videoTex) prev.dispose();
         return videoTex;
       });
-      void video.play().catch(() => {
-        modeRef.current = "still";
-      });
+      if (playingRef.current) {
+        void video.play().catch(() => {
+          modeRef.current = "still";
+        });
+      }
     };
 
     video.src = videoSrc;
@@ -268,11 +281,12 @@ function TvMesh({
     else video.load();
 
     return () => {
+      cancelled = true;
       video.removeEventListener("loadeddata", promote);
       video.removeEventListener("canplay", promote);
       video.pause();
     };
-  }, [showScreen, inView, videoSrc, video, videoTex]);
+  }, [showScreen, videoSrc, video, videoTex]);
 
   useFrame(() => {
     if (!outerRef.current) return;
