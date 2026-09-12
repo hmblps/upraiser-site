@@ -235,9 +235,7 @@ function TvMesh({
           return videoTex;
         });
         if (playingRef.current) {
-          void video.play().catch(() => {
-            modeRef.current = "still";
-          });
+          void video.play().catch(() => {});
         }
       };
 
@@ -255,7 +253,6 @@ function TvMesh({
       };
     } else if (stillSrc) {
       if (playingRef.current) {
-        playingRef.current = false;
         video.pause();
       }
       const loader = new TextureLoader();

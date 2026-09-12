@@ -10,10 +10,6 @@ import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
 
-import { useGLTF } from "@react-three/drei";
-import { DRACO_PATH } from "../../lib/heroModel";
-useGLTF.preload("/channels/oem/tv-draco.glb", DRACO_PATH);
-useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
 
 import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobile";
 import { warmStage } from "../../lib/scrollPreload";

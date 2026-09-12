@@ -3,6 +3,12 @@ import { Routes, Route, Navigate, useSearchParams } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
 import { HomePage } from "./pages/HomePage";
 
+import { useGLTF } from "@react-three/drei";
+import { DRACO_PATH } from "./lib/heroModel";
+useGLTF.preload("/channels/oem/tv-draco.glb", DRACO_PATH);
+useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
+
+
 const CraftPage = lazy(() => import("./pages/CraftPage").then((m) => ({ default: m.CraftPage })));
 const ChannelsPage = lazy(() => import("./pages/ChannelsPage").then((m) => ({ default: m.ChannelsPage })));
 const CaseDetailPage = lazy(() => import("./pages/CaseDetailPage").then((m) => ({ default: m.CaseDetailPage })));
