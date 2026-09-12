@@ -423,8 +423,8 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.02, flat ? 5.7 : 6.05], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
-          style={{ width: "130%", height: "130%", left: "-15%", top: "-15%", position: "absolute", display: "block", background: "transparent", pointerEvents: "none" }}
+          camera={{ position: [0, 0.02, flat ? 5.75 : 6.1], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
+          style={{ width: "130%", height: "130%", left: "50%", top: "50%", transform: "translate(-50%, -50%)", position: "absolute", display: "block", background: "transparent", pointerEvents: "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.15;
