@@ -8,9 +8,10 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, useGLTF, useTexture } from "@react-three/drei";
+import { Environment, useGLTF } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
+  TextureLoader,
   ACESFilmicToneMapping,
   Box3,
   LinearFilter,
@@ -159,7 +160,6 @@ function TvMesh({
   const showScreen = Boolean(videoSrc || stillSrc);
   const modeRef = useRef<"still" | "video">("still");
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
-  const stillTex = useTexture(stillSrc);
 
   const [xf] = useState(() => computeTransform(scene));
   const screen = screenPlaneForHeight(getTargetHeight());
@@ -215,17 +215,23 @@ function TvMesh({
   }, [scene, onReady]);
 
   useEffect(() => {
-    if (!showScreen || !stillTex) return;
-    if (modeRef.current === "video") return;
-    
-    stillTex.colorSpace = SRGBColorSpace;
-    stillTex.minFilter = LinearFilter;
-    stillTex.magFilter = LinearFilter;
-    stillTex.flipY = true;
-    stillTex.needsUpdate = true;
-    modeRef.current = "still";
-    setScreenMap(stillTex);
-  }, [showScreen, stillTex]);
+    if (!showScreen || !stillSrc) return;
+    let cancelled = false;
+    const loader = new TextureLoader();
+    loader.load(stillSrc, (tex) => {
+      if (cancelled) return;
+      tex.colorSpace = SRGBColorSpace;
+      tex.minFilter = LinearFilter;
+      tex.magFilter = LinearFilter;
+      tex.flipY = true;
+      tex.needsUpdate = true;
+      if (modeRef.current !== "video") {
+        modeRef.current = "still";
+        setScreenMap(tex);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [showScreen, stillSrc]);
 
   const playingRef = useRef(false);
   useEffect(() => {
@@ -466,6 +472,3 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
 
 useGLTF.preload(MODEL_PATH, DRACO_PATH);
 
-if (typeof window !== "undefined") {
-  useTexture.preload([FORMAT_STILL["ctv-spot"]]);
-}
