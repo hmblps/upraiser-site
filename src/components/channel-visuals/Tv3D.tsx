@@ -129,10 +129,11 @@ const HIDDEN_NODE_NAMES = new Set([
 function screenPlaneForHeight(h: number) {
   const ratio = h / 2.15;
   return {
-    w: 3.68 * ratio,
-    h: 2.10 * ratio,
-    y: -0.02 * ratio,
-    z: 0.088 * ratio,
+    w: 3.54 * ratio,
+    h: 1.99 * ratio,
+    x: 0.002 * ratio,
+    y: 0.046 * ratio,
+    z: 0.090 * ratio,
   };
 }
 
@@ -158,12 +159,15 @@ function TvMesh({
   const showScreen = Boolean(videoSrc || stillSrc);
   const modeRef = useRef<"still" | "video">("still");
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
+  const stillTex = useTexture(stillSrc);
 
   const [xf] = useState(() => computeTransform(scene));
   const screen = screenPlaneForHeight(getTargetHeight());
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
+    v.crossOrigin = "anonymous";
+    v.preload = "auto";
     v.style.position = "fixed";
     v.style.top = "0";
     v.style.left = "0";
@@ -211,33 +215,17 @@ function TvMesh({
   }, [scene, onReady]);
 
   useEffect(() => {
-    if (!showScreen) {
-      setScreenMap(null);
-      video.pause();
-      return;
-    }
-    let cancelled = false;
-    const loader = new TextureLoader();
-    loader.load(stillSrc!, (tex) => {
-      if (cancelled) {
-        tex.dispose();
-        return;
-      }
-      tex.colorSpace = SRGBColorSpace;
-      tex.minFilter = LinearFilter;
-      tex.magFilter = LinearFilter;
-      tex.flipY = true;
-      tex.needsUpdate = true;
-      modeRef.current = "still";
-      setScreenMap((prev) => {
-        if (prev && prev !== videoTex) prev.dispose();
-        return tex;
-      });
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [showScreen, stillSrc, video, videoTex]);
+    if (!showScreen || !stillTex) return;
+    if (modeRef.current === "video") return;
+    
+    stillTex.colorSpace = SRGBColorSpace;
+    stillTex.minFilter = LinearFilter;
+    stillTex.magFilter = LinearFilter;
+    stillTex.flipY = true;
+    stillTex.needsUpdate = true;
+    modeRef.current = "still";
+    setScreenMap(stillTex);
+  }, [showScreen, stillTex]);
 
   const playingRef = useRef(false);
   useEffect(() => {
@@ -315,7 +303,7 @@ function TvMesh({
 
       {/* Плоскость экрана: строго по центру апертуры */}
       {showScreen && screenMap && (
-        <mesh position={[0, screen.y, screen.z]} renderOrder={1}>
+        <mesh position={[screen.x || 0, screen.y, screen.z]} renderOrder={1}>
           <planeGeometry args={[screen.w, screen.h]} />
           <meshBasicMaterial
             map={screenMap}
