@@ -74,28 +74,7 @@ export function FormatCopy({
             ))}
           </ul>
 
-          <div className="format-copy__progress">
-            <span className="format-copy__progress-label stat-label text-muted whitespace-nowrap shrink-0">
-              {index + 1} / {total}
-            </span>
-            <div className="format-copy__dots" role="tablist" aria-label="Formats">
-              {formats.map((fmt, idx) => (
-                <motion.button
-                  key={fmt.id + fmt.label}
-                  type="button"
-                  role="tab"
-                  whileHover={reduced ? undefined : { scale: 1.2 }}
-                  whileTap={reduced ? undefined : { scale: 0.8 }}
-                  transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
-                  aria-selected={idx === index}
-                  aria-label={`${idx + 1}. ${fmt.label}`}
-                  className={`format-copy__dot min-h-11 min-w-11${idx === index ? " format-copy__dot--active" : ""}`}
-                  onClick={() => onJump?.(idx)}
-                />
-              ))}
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
       </AnimatePresence>
     </div>
   );
