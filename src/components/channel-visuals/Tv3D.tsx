@@ -129,8 +129,8 @@ const HIDDEN_NODE_NAMES = new Set([
 function screenPlaneForHeight(h: number) {
   const ratio = h / 2.15;
   return {
-    w: 3.54 * ratio,
-    h: 1.99 * ratio,
+    w: 3.46 * ratio,
+    h: 1.92 * ratio,
     x: 0.002 * ratio,
     y: 0.046 * ratio,
     z: 0.090 * ratio,
@@ -246,7 +246,7 @@ function TvMesh({
     let cancelled = false;
     let promoted = false;
     const promote = () => {
-      if (cancelled || promoted || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+      if (cancelled || promoted) return;
       promoted = true;
       modeRef.current = "video";
       videoTex.flipY = true;
