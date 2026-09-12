@@ -276,7 +276,7 @@ function TvMesh({
     };
   }, [showScreen, videoSrc, video, videoTex]);
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     if (!outerRef.current) return;
     if (flat) {
       outerRef.current.rotation.x = 0;
@@ -285,10 +285,16 @@ function TvMesh({
       if (modeRef.current === "video") videoTex.needsUpdate = true;
       return;
     }
-    outerRef.current.rotation.x = rotX.get();
-    outerRef.current.rotation.y = rotY.get();
+
+    const t = clock.getElapsedTime();
+    const floatRotX = Math.sin(t * 0.5) * 0.015;
+    const floatRotY = Math.cos(t * 0.4) * 0.02;
+    const floatPosY = Math.sin(t * 0.8) * 0.015;
+
+    outerRef.current.rotation.x = rotX.get() + floatRotX;
+    outerRef.current.rotation.y = rotY.get() + floatRotY;
     /* Снять лишний подъем по Y, который выталкивал верх телевизора за срез */
-    outerRef.current.position.y = 0.0;
+    outerRef.current.position.y = 0.0 + floatPosY;
     if (modeRef.current === "video") videoTex.needsUpdate = true;
   });
 
