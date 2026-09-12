@@ -84,22 +84,18 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--phone">
-          {/* Never mount Css* stand-ins — optical size ≠ GLB (big→small snap on
-              scene change + load). Inactive slots stay empty; only one WebGL at a time. */}
-          {scene === "phone" ? (
-            <Suspense fallback={null}>
-              <CanvasErrorBoundary fallback={null}>
-                <Phone3D
-                  mode={mode}
-                  formatId={formatId}
-                  className={className}
-                  active
-                  flat={flat}
-                />
-              </CanvasErrorBoundary>
-            </Suspense>
-          ) : null}
+        <div className="prog-device-slot prog-device-slot--phone" style={{ display: scene === "phone" ? undefined : "none" }}>
+          <Suspense fallback={null}>
+            <CanvasErrorBoundary fallback={null}>
+              <Phone3D
+                mode={mode}
+                formatId={formatId}
+                className={className}
+                active={scene === "phone"}
+                flat={flat}
+              />
+            </CanvasErrorBoundary>
+          </Suspense>
         </div>
       </motion.div>
 
@@ -114,20 +110,18 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--tablet">
-          {scene === "tablet" ? (
-            <Suspense fallback={null}>
-              <CanvasErrorBoundary fallback={null}>
-                <Tablet3D
-                  mode={mode}
-                  formatId={formatId}
-                  className={className}
-                  active
-                  flat={flat}
-                />
-              </CanvasErrorBoundary>
-            </Suspense>
-          ) : null}
+        <div className="prog-device-slot prog-device-slot--tablet" style={{ display: scene === "tablet" ? undefined : "none" }}>
+          <Suspense fallback={null}>
+            <CanvasErrorBoundary fallback={null}>
+              <Tablet3D
+                mode={mode}
+                formatId={formatId}
+                className={className}
+                active={scene === "tablet"}
+                flat={flat}
+              />
+            </CanvasErrorBoundary>
+          </Suspense>
         </div>
       </motion.div>
 
@@ -141,20 +135,18 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--tv">
-          {scene === "tv" ? (
-            <Suspense fallback={null}>
-              <CanvasErrorBoundary fallback={null}>
-                <Tv3D
-                  mode={mode}
-                  formatId={formatId}
-                  className={className}
-                  active
-                  flat={flat}
-                />
-              </CanvasErrorBoundary>
-            </Suspense>
-          ) : null}
+        <div className="prog-device-slot prog-device-slot--tv" style={{ display: scene === "tv" ? undefined : "none" }}>
+          <Suspense fallback={null}>
+            <CanvasErrorBoundary fallback={null}>
+              <Tv3D
+                mode={mode}
+                formatId={formatId}
+                className={className}
+                active={scene === "tv"}
+                flat={flat}
+              />
+            </CanvasErrorBoundary>
+          </Suspense>
         </div>
       </motion.div>
     </div>
