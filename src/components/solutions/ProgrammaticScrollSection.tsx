@@ -84,7 +84,7 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--phone" style={{ display: scene === "phone" ? undefined : "none" }}>
+        <div className="prog-device-slot prog-device-slot--phone">
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={null}>
               <Phone3D
@@ -108,9 +108,10 @@ function DeviceCarousel3({
           /* Above copy / sticky chrome so rotate corners aren't eaten. */
           zIndex: scene === "tablet" ? 6 : 1,
           overflow: "visible",
+          visibility: tabletOpacity.get() < 0.01 ? "hidden" : undefined,
         }}
       >
-        <div className="prog-device-slot prog-device-slot--tablet" style={{ display: scene === "tablet" ? undefined : "none" }}>
+        <div className="prog-device-slot prog-device-slot--tablet">
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={null}>
               <Tablet3D
@@ -135,7 +136,9 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--tv" style={{ display: scene === "tv" ? undefined : "none" }}>
+        {/* clip the TV slot so nothing escapes into the page flow below the section */}
+        <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }} aria-hidden />
+        <div className="prog-device-slot prog-device-slot--tv">
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={null}>
               <Tv3D

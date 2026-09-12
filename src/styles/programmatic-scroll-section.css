@@ -627,7 +627,7 @@
 
 .prog-device-slot--phone {
   /* Larger hero — placements must read without zooming. */
-  width: min(42%, 18.5rem);
+  width: min(35%, 15rem);
   aspect-ratio: 9 / 19.5;
   height: auto;
   max-height: min(82dvh, var(--prog-phone-budget, 82dvh));
@@ -635,7 +635,7 @@
 
 .prog-device-slot--tablet {
   /* Sized to rival the phone in hierarchy */
-  width: min(72%, 26rem);
+  width: min(60%, 23rem);
   aspect-ratio: 3 / 4;
   height: auto;
   max-height: min(75dvh, var(--prog-phone-budget, 75dvh));
@@ -789,11 +789,12 @@
 .prog-scroll-copy-col {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   height: 100%;
   min-height: 0;
   padding-inline-start: 0.25rem;
+  padding-top: clamp(1.5rem, 4dvh, 3.5rem);
   touch-action: pan-y;
 }
 
