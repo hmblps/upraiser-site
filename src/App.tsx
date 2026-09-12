@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { Loader } from "@react-three/drei";
 import { Routes, Route, Navigate, useSearchParams } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
 import { HomePage } from "./pages/HomePage";
@@ -7,6 +8,10 @@ import { useGLTF } from "@react-three/drei";
 import { DRACO_PATH } from "./lib/heroModel";
 useGLTF.preload("/channels/oem/tv-draco.glb", DRACO_PATH);
 useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
+
+useGLTF.preload("/phones/deep-blue.glb", DRACO_PATH);
+useGLTF.preload("/phones/orange.glb", DRACO_PATH);
+
 
 
 const CraftPage = lazy(() => import("./pages/CraftPage").then((m) => ({ default: m.CraftPage })));
@@ -67,6 +72,7 @@ function RedirectExpertiseToRoutes() {
 export default function App() {
   return (
     <Suspense fallback={<RouteFallback />}>
+      <Loader containerStyles={{ zIndex: 99999, background: "#000" }} innerStyles={{ width: "300px" }} barStyles={{ background: "#fff", height: "2px" }} dataInterpolation={(p) => `Loading UPRAISER ${p.toFixed(0)}%`} />
       <Routes>
         {import.meta.env.DEV ? <Route path="dev/hero-capture" element={<HeroCapturePage />} /> : null}
         {import.meta.env.DEV ? <Route path="dev/hero-lite" element={<HeroLitePreviewPage theme="light" />} /> : null}
