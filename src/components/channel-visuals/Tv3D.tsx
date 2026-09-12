@@ -130,6 +130,14 @@ function TvMesh({
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
+    v.style.position = "fixed";
+    v.style.top = "0";
+    v.style.left = "0";
+    v.style.width = "1px";
+    v.style.height = "1px";
+    v.style.opacity = "0";
+    v.style.pointerEvents = "none";
+    v.style.zIndex = "-1000";
     v.muted = true;
     v.defaultMuted = true;
     v.loop = true;
