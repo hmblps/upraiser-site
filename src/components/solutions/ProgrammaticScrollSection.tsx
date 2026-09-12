@@ -308,13 +308,14 @@ export function ProgrammaticScrollSection({
             <div className="prog-scroll-phone-col prog-scroll-phone-col--spacer" aria-hidden />
 
             <div className="prog-scroll-copy-col">
+              {/* Switcher is pinned absolutely so vertical re-centering of the
+                  copy-stack (when text height changes) never moves the pill */}
+              {laneSwitcher && (
+                <div className="prog-scroll-copy-tumbler">
+                  {laneSwitcher}
+                </div>
+              )}
               <div className="prog-scroll-copy-stack">
-                {laneSwitcher && (
-                  <div className="prog-scroll-copy-tumbler">
-                    {laneSwitcher}
-                  </div>
-                )}
-
                 <FormatCopy
                   format={format}
                   index={activeIndex}
