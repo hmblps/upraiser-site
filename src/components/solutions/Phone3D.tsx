@@ -769,7 +769,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, -0.08, flat ? 3.65 : 4.05], fov: 28, near: 0.05, far: 80 }}
+          camera={{ position: [0, -0.08, flat ? 3.15 : 3.48], fov: 28, near: 0.05, far: 80 }}
           style={{
             width: "100%",
             height: "100%",

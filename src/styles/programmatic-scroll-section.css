@@ -627,7 +627,7 @@
 
 .prog-device-slot--phone {
   /* Larger hero — placements must read without zooming. */
-  width: min(48%, 21.5rem);
+  width: min(42%, 18.5rem);
   aspect-ratio: 9 / 19.5;
   height: auto;
   max-height: min(82dvh, var(--prog-phone-budget, 82dvh));
@@ -635,7 +635,7 @@
 
 .prog-device-slot--tablet {
   /* Sized to rival the phone in hierarchy */
-  width: min(85%, 32rem);
+  width: min(72%, 26rem);
   aspect-ratio: 3 / 4;
   height: auto;
   max-height: min(75dvh, var(--prog-phone-budget, 75dvh));
