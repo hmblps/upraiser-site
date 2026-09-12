@@ -696,10 +696,18 @@
   z-index: 6;
 }
 
-.prog-device-slot--tv .prog-device-load,
-.prog-device-slot--tv .tv-glb-canvas {
+.prog-device-slot--tv .prog-device-load {
   width: 100% !important;
   height: 100% !important;
+  overflow: visible !important;
+}
+
+.prog-device-slot--tv .tv-glb-canvas {
+  width: 130% !important;
+  height: 130% !important;
+  position: absolute !important;
+  top: -15% !important;
+  left: -15% !important;
   overflow: visible !important;
 }
 
