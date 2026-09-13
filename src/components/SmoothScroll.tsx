@@ -161,9 +161,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     const lenis = new Lenis({
       // Lower lerp and wheelMultiplier to gently cap scroll velocity for better asset preloading,
       // while keeping the feeling natural and smooth (no forced heavy dragging).
-      lerp: 0.09,
+      lerp: 0.07,
       smoothWheel: true,
-      wheelMultiplier: 0.85,
+      wheelMultiplier: 0.8,
       // Standard touch scroll speed for the whole site (slightly limited as requested)
       touchMultiplier: 0.85,
       syncTouch: false,
