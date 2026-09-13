@@ -431,7 +431,7 @@ Each format carries `scene?: "phone" | "tablet" | "tv"` in `ProgrammaticFormats.
 A Framer Motion spring (`stiffness: 160, damping: 28, mass: 0.95`) drives `phase` 0→1→2.  
 Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade (`1 - d * 1.15`). No `scale` or `filter:blur` on WebGL canvas (causes bilinear→native pixel snap artifact).
 
-**Mount policy:** only the **active** slot (plus the outgoing slot for ~720ms during the spring). App Growth = phone canvas only. On OEM & CTV, warm **both** `routes-tablet` and `routes-tv` as soon as the lane is active (`tv.glb` is ~9 MB Draco — do not wait until CTV Spot). Off `/` (`/channels`), `whenHeroReady` must **not** wait for Everest (`scrollPreload.ts`).
+**Mount policy:** only the **active** slot (plus the outgoing slot for ~720ms during the spring). App Growth = phone canvas only. On OEM & CTV, warm **both** `routes-tablet` and `routes-tv` as soon as the lane is active (`tv.glb` is ~500 KB Draco — do not wait until CTV Spot). Off `/` (`/channels`), `whenHeroReady` must **not** wait for Everest (`scrollPreload.ts`).
 
 **Graceful degradation (same as Everest):** width `< 1024` or `prefers-reduced-motion` → `ProgrammaticScrollSectionMobile`. Desktop lite (Intel / `?lite=1`) keeps the **two-column sticky** layout with **flat GLB** phone/tablet/TV (same `DeviceCarousel3`, `flat`) — not CSS chassis stand-ins (those caused big→small snap). High-tier → perspective GLB. `DeviceLoadStage` reveals settled WebGL only (`placeholder={null}`, instant). No full-page spinner.
 
@@ -1231,7 +1231,7 @@ MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
 - Home compass spinner hung: missing `draco_decoder.wasm` (Vite served HTML). Restored from git; overlay timeout 4 s; Voyager not on the first-paint Suspense. Apple GPU stays hardware **high**.
 - Light mountain empty: Snow005 JPG 404 crashed the canvas → JPEG fallback on `CanvasErrorBoundary`.
 - `/channels` 3D phone: `native.png` 404 killed `useTexture` of all stills.
-- OEM tablet empty: `Tablet3DModel` still targeted deleted `큐브_*` nodes. Wrapper is now scene clone + screen plane. TV is Draco ~9 MB — same WASM hole.
+- OEM tablet empty: `Tablet3DModel` still targeted deleted `큐브_*` nodes. Wrapper is now scene clone + screen plane. TV is Draco ~500 KB — same WASM hole.
 - No full-page OEM spinner. `DeviceLoadStage` holds empty then reveals settled GLB (no CSS→3D size snap). `/channels` no longer waits 4 s on hero before warming GLBs.
 
 ### 8 Sep 2026 night — OEM glass SOT + WebGL isolation
