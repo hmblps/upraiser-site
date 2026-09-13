@@ -119,8 +119,15 @@ function TabletMesh({
     const t = new VideoTexture(v);
     configureMap(t);
     t.flipY = true;
+        
+    v.addEventListener("loadeddata", () => {
+      try {
+        if (typeof gl !== 'undefined') gl.initTexture(t);
+      } catch (e) {}
+    }, { once: true });
+    
     return { video: v, videoTex: t };
-  }, []);
+  }, [gl]);
 
   useEffect(() => {
     return () => {
@@ -334,7 +341,7 @@ function TabletScene({
 }
 
 function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
-  const { gl, scene, camera } = useThree();
+  const { scene, camera } = useThree();
   useEffect(() => {
     if (meshReady) {
       // Async compilation prevents main thread freeze on Windows/Intel ANGLE

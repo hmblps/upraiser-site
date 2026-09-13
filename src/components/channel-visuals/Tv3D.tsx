@@ -204,8 +204,16 @@ function TvMesh({
     t.magFilter = LinearFilter;
     t.generateMipmaps = false;
     t.flipY = true;
+        
+    v.addEventListener("loadeddata", () => {
+      // Force GPU upload of the video frame immediately to prevent 200ms freeze later
+      try {
+        if (typeof gl !== 'undefined') gl.initTexture(t);
+      } catch (e) {}
+    }, { once: true });
+    
     return { video: v, videoTex: t };
-  }, []);
+  }, [gl]);
 
 
 
