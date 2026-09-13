@@ -1244,3 +1244,10 @@ MASTER header / §5 / §6 / §8 / §10 / §25 first synced to `12a623e`. Then:
 ---
 
 *End of master document. При изменении IA, hero, Routes glass, Windows quirks, preload или deploy — обновляй **этот** файл. Других проектных md нет.*
+
+### Background Warming (September 2026 Fix)
+To prevent severe main-thread freezing (up to 2.5s) on Intel GPUs when scrolling to the TV formats in the programmatic feed, we implemented **Background Warming**. 
+- The TV component (`Tv3D`) is deliberately mounted off-screen (`x: 100%`) when the user reaches the **Tablet** stage (`scene === "tablet"`).
+- A hidden mesh with `videoTex` forces the browser to compile the WebGL shaders and upload the heavy MP4 first frame to the GPU *while* the user is reading the tablet copy.
+- When the user scrolls to TV, it slides in with 60FPS. 
+- See `docs/LESHA-PAIN-POINTS.md` for full context on why `frameloop="always"` or `gl.compile` failed.

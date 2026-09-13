@@ -50,9 +50,9 @@ As the user scrolls from "Video" (Phone) to "Pre-install" (Tablet), the phase an
 ### 4.3 TV (`Tv3D.tsx`)
 - Uses `tv-draco.glb` (highly compressed).
 - **Dynamic Bounding Box:** The TV uses `Box3().setFromObject(scene, true)` to dynamically calculate its exact bounding box (including the stand) to ensure perfect optical centering via `cx, cy, cz` offsets.
-- **Screen Plane Projection:** The screen texture (car video) is NOT applied to the GLTF material. Instead, a separate `<mesh>` with a `<planeGeometry>` is rendered directly in front of the TV aperture. 
+- **Screen Plane Projection:** The screen texture is NOT applied to the GLTF material. Instead, a separate `<mesh>` with a `<planeGeometry>` is rendered directly in front of the TV aperture. 
 - **Bezel Fit:** The dimensions of this plane (`w, h, y, z`) are dynamically multiplied by the TV's runtime `xf.scale` to ensure the screen plane perfectly seals against the inner plastic bezels regardless of screen size.
-- **Background Loading:** The HTML `<video>` element for the TV formats begins fetching from the network as soon as the `videoSrc` is assigned, **decoupled from `inView`**, eliminating the load delay when scrolling to the TV slot.
+- **Background Warming (The 2.5s Lag Fix):** The TV canvas is NOT mounted while the user is on the Phone formats to save memory. However, as soon as the user scrolls to the Tablet, the TV is **mounted silently off-screen** (`x: 100%`). This forces the browser to parse the Draco WASM, compile the shader materials, and upload the heavy `VideoTexture` to the GPU *while the user is distracted by reading the Tablet text*. By the time they scroll to the TV, it is 100% pre-compiled in VRAM and slides in with zero main-thread freezing.
 
 ## 5. Text Alignment (`FormatCopy.tsx`)
 The right-side text stack has a fixed `height: 21rem` (set in CSS) with `flex-start` alignment and a hardcoded `margin-top: 1.75rem` on the body text. 
