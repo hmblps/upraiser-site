@@ -333,12 +333,7 @@ function TvMesh({
         </mesh>
       )}
 
-      {/* HIDDEN MESH: Forces WebGL to compile and upload the VideoTexture to the GPU 
-          on initial mount, preventing the 2.5s main thread freeze when the user scrolls to TV. */}
-      <mesh visible={false}>
-        <planeGeometry args={[0.1, 0.1]} />
-        <meshBasicMaterial map={videoTex} />
-      </mesh>
+      
     </group>
   );
 }
