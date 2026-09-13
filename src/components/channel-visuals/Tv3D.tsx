@@ -295,7 +295,7 @@ function TvMesh({
       outerRef.current.rotation.x = 0;
       outerRef.current.rotation.y = 0;
       outerRef.current.position.y = 0.0;
-      if (modeRef.current === "video") videoTex.needsUpdate = true;
+      
       return;
     }
 
@@ -308,7 +308,7 @@ function TvMesh({
     outerRef.current.rotation.y = rotY.get() + floatRotY;
     /* Снять лишний подъем по Y, который выталкивал верх телевизора за срез */
     outerRef.current.position.y = 0.0 + floatPosY;
-    if (modeRef.current === "video") videoTex.needsUpdate = true;
+    
   });
 
   return (

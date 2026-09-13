@@ -262,7 +262,7 @@ function TabletMesh({
       group.current.rotation.x = 0;
       group.current.rotation.y = 0;
       group.current.position.y = 0;
-      if (modeRef.current === "video") videoTex.needsUpdate = true;
+      
       return;
     }
 
@@ -275,9 +275,7 @@ function TabletMesh({
     group.current.rotation.y = rotY.get() + floatRotY;
     group.current.position.y = floatPosY;
 
-    if (modeRef.current === "video") {
-      videoTex.needsUpdate = true;
-    }
+
   });
 
   return (

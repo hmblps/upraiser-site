@@ -345,9 +345,7 @@ const PhoneMesh = memo(function PhoneMesh({
     group.current.position.y = targetPosY + floatPosY;
     group.current.position.z = targetPosZ;
 
-    if (modeRef.current === "video") {
-      videoTex.needsUpdate = true;
-    }
+
   });
 
   return (
