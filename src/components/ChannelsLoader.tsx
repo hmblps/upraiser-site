@@ -26,7 +26,7 @@ export function ChannelsLoader() {
     // Wait for at least one frame, then if it's not active and progress is 100, we can hide.
     // If it's active, wait until it finishes.
     if (!active && progress === 100) {
-      const t = setTimeout(() => setShow(false), 400);
+      const t = setTimeout(() => setShow(false), 2500);
       return () => clearTimeout(t);
     }
   }, [active, progress]);
