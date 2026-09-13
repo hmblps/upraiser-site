@@ -132,8 +132,12 @@ function TabletMesh({
 
   useEffect(() => {
     if (!formatId) return;
-    const src = TABLET_SCREEN_VIDEO[formatId];
-    const stillSrc = TABLET_SCREEN_STILL[formatId];
+
+    const isTabletFormat = formatId === "pre-install" || formatId === "oem-store" || formatId === "system-ui";
+    const safeFormatId = isTabletFormat ? formatId : "pre-install";
+    const src = TABLET_SCREEN_VIDEO[safeFormatId];
+    const stillSrc = TABLET_SCREEN_STILL[safeFormatId];
+
     let cancelled = false;
     let ownedTex: Texture | null = null;
 

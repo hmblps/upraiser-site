@@ -156,8 +156,12 @@ function TvMesh({
   const outerRef = useRef<Group>(null);
   const { scene } = useGLTF(MODEL_PATH, DRACO_PATH);
 
-  const videoSrc = formatId ? FORMAT_VIDEO[formatId] : undefined;
-  const stillSrc = (formatId && FORMAT_STILL[formatId]) || FORMAT_STILL["ctv-spot"];
+
+  const isTvFormat = formatId === "ctv-spot" || formatId === "ctv-video";
+  const safeFormatId = isTvFormat ? formatId : "ctv-spot";
+  const videoSrc = safeFormatId ? FORMAT_VIDEO[safeFormatId] : undefined;
+  const stillSrc = (safeFormatId && FORMAT_STILL[safeFormatId]) || FORMAT_STILL["ctv-spot"];
+
   const showScreen = Boolean(videoSrc || stillSrc);
   const modeRef = useRef<"still" | "video">("still");
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
