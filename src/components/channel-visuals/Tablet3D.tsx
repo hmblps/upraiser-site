@@ -16,7 +16,6 @@ import {
   CanvasTexture,
   SRGBColorSpace,
   Texture,
-  TextureLoader,
   VideoTexture,
   type Group,
 } from "three";

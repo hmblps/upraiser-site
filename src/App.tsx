@@ -12,12 +12,13 @@ useGLTF.preload("/phones/deep-blue.glb", DRACO_PATH);
 useGLTF.preload("/phones/orange.glb", DRACO_PATH);
 
 
-import { TextureLoader } from "three";
+import { useTexture } from "@react-three/drei";
 if (typeof window !== "undefined") {
-  const tl = new TextureLoader();
-  tl.load("/channels/oem/screens/ctv-spot.png");
-  tl.load("/channels/programmatic-refs/screens/video.png");
-  tl.load("/channels/programmatic-refs/screens/banner.png");
+  useTexture.preload([
+    "/channels/oem/screens/ctv-spot.png",
+    "/channels/programmatic-refs/screens/video.png",
+    "/channels/programmatic-refs/screens/banner.png"
+  ]);
   
   const v = document.createElement("video");
   v.src = "/channels/oem/screens/ctv-spot.mp4";

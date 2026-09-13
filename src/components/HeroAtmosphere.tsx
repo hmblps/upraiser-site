@@ -37,10 +37,11 @@ export function HeroAtmosphere() {
   
   const use3d = desktop && !reduced && tier === "high";
   const [boot3d, setBoot3d] = useState(false);
+  const lite = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("lite");
 
   useEffect(() => {
-    if (!use3d) markHeroReady();
-  }, [use3d]);
+    if (!use3d || lite) markHeroReady();
+  }, [use3d, lite]);
 
   useEffect(() => {
     if (!use3d) return;

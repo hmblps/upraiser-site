@@ -12,7 +12,6 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, useGLTF, useTexture } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
-  TextureLoader,
   ACESFilmicToneMapping,
   Box3,
   LinearFilter,
@@ -215,6 +214,7 @@ function TvMesh({
   }, [video]);
 
   useLayoutEffect(() => {
+    console.log("[TvMesh] useLayoutEffect ran (mesh loaded)!");
     scene.traverse((obj) => {
       if (HIDDEN_NODE_NAMES.has(obj.name)) obj.visible = false;
     });
@@ -372,7 +372,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
   const [meshReady, setMeshReady] = useState(false);
 
   const isDark = mode !== "growth";
-  const markMeshReady = useCallback(() => setMeshReady(true), []);
+  const markMeshReady = useCallback(() => { console.log("[Tv3D] markMeshReady called!"); setMeshReady(true); }, []);
 
   useEffect(() => {
     const node = stageRef.current;
@@ -426,7 +426,15 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       aria-label="Interactive TV mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
     >
-      <DeviceLoadStage ready={meshReady} placeholder={null} instant>
+      <DeviceLoadStage
+        ready={meshReady}
+        instant
+        placeholder={
+          <div className="w-full h-full flex flex-col items-center justify-center opacity-50">
+            <div className="w-[80%] aspect-video rounded-xl border border-white/20 bg-white/5 animate-pulse" />
+          </div>
+        }
+      >
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
           frameloop={reduced ? "never" : active && inView ? "always" : "demand"}

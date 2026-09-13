@@ -82,7 +82,7 @@ export function HeroTerrainCanvas({
   }, [theme, capturing, shouldFallback]);
 
   useEffect(() => {
-    if ((modelReady || shouldFallback) && !lite) markHeroReady();
+    if (lite || modelReady || shouldFallback) markHeroReady();
   }, [modelReady, shouldFallback, lite]);
 
   useEffect(() => {
