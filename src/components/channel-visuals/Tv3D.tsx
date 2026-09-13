@@ -396,12 +396,33 @@ function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
   const { gl, scene, camera } = useThree();
   useEffect(() => {
     if (meshReady) {
-      // Async compilation prevents main thread freeze on Windows/Intel ANGLE
-      if (typeof gl.compileAsync === "function") {
-        gl.compileAsync(scene, camera, scene).catch(() => {});
-      } else {
-        gl.compile(scene, camera);
-      }
+      const warmup = async () => {
+        const restored: any[] = [];
+        scene.traverse((o: any) => {
+          if (!o.isMesh && !o.isSkinnedMesh) return;
+          restored.push([o, o.visible, o.frustumCulled]);
+          o.visible = true;
+          o.frustumCulled = false;
+        });
+
+        if (typeof gl.compileAsync === "function") {
+          try {
+            await gl.compileAsync(scene, camera, scene);
+          } catch (e) {}
+        } else {
+          gl.compile(scene, camera);
+        }
+        
+        // Force upload of geometries, VAOs, and textures
+        gl.render(scene, camera);
+
+        for (const [o, v, f] of restored) {
+          o.visible = v;
+          o.frustumCulled = f;
+        }
+      };
+      
+      void warmup();
     }
   }, [meshReady, gl, scene, camera]);
   return null;
@@ -484,7 +505,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       >
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={reduced ? "never" : active ? "always" : "demand"}
+          frameloop={active ? "always" : "never"}
           gl={{
             antialias: true,
             alpha: true,
