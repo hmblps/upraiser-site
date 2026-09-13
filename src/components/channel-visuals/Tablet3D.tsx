@@ -91,7 +91,16 @@ function TabletMesh({
   const playingRef = useRef(playing);
   playingRef.current = playing;
   const reduced = useReducedMotion();
-  const [screenMap, setScreenMap] = useState<Texture | null>(null);
+  const isTabletFormat = formatId === "pre-install" || formatId === "oem-store" || formatId === "system-ui";
+  const safeFormatId = isTabletFormat ? formatId : "pre-install";
+  const stillSrc = TABLET_SCREEN_STILL[safeFormatId!];
+  const stillTex = useTexture(stillSrc || TABLET_SCREEN_STILL["pre-install"]!);
+
+  const [screenMap, setScreenMap] = useState<Texture>(stillTex);
+
+  useMemo(() => {
+    configureMap(stillTex);
+  }, [stillTex]);
   const animRef = useRef<{
     canvas: HTMLCanvasElement;
     tex: CanvasTexture;
