@@ -180,7 +180,17 @@ function TvMesh({
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
-    v.src = "/channels/oem/screens/ctv-spot.mp4"; // PRELOAD SOURCE IMMEDIATELY
+    // Aggressively fetch the video as a Blob to prevent the browser from throttling buffering
+    // when the video is paused (which happens when it's off-screen).
+    fetch("/channels/oem/screens/ctv-spot.mp4")
+      .then((res) => res.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        v.src = url;
+        v.load();
+      }).catch(() => {
+        v.src = "/channels/oem/screens/ctv-spot.mp4";
+      });
     v.crossOrigin = "anonymous";
     v.preload = "auto";
     v.style.position = "fixed";
@@ -264,7 +274,7 @@ function TvMesh({
         }
       };
 
-      if (!video.src.endsWith(videoSrc)) {
+      if (!video.src.startsWith("blob:") && !video.src.endsWith(videoSrc)) {
         video.src = videoSrc;
       }
       
