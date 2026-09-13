@@ -85,6 +85,7 @@ function TabletMesh({
   onReady?: () => void;
   flat?: boolean;
 }) {
+  const { gl } = useThree();
   const group = useRef<Group>(null);
   const modeRef = useRef<"still" | "video" | "anim">("still");
   const playingRef = useRef(playing);
@@ -341,7 +342,7 @@ function TabletScene({
 }
 
 function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
-  const { scene, camera } = useThree();
+  const { gl, scene, camera } = useThree();
   useEffect(() => {
     if (meshReady) {
       // Async compilation prevents main thread freeze on Windows/Intel ANGLE

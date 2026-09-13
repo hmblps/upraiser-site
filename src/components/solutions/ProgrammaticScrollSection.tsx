@@ -66,9 +66,9 @@ function DeviceCarousel3({
   const tvX     = useTransform(phase, (p) => `${(2 - p) * 100}%`);
 
   // ── Opacity — faster crossfade so devices dissolve quickly as they leave ─────
-  const phoneOpacity = 1;
-  const tabletOpacity = 1;
-  const tvOpacity = 1;
+  const phoneOpacity = useTransform(phoneDist, (d) => Math.max(0, 1.5 - d * 1.5));
+  const tabletOpacity = useTransform(tabletDist, (d) => Math.max(0, 1.5 - d * 1.5));
+  const tvOpacity = useTransform(tvDist, (d) => Math.max(0, 1.5 - d * 1.5));
 
   const shouldWarmTablet = true;
   const shouldWarmTv = true;
