@@ -429,11 +429,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       <DeviceLoadStage
         ready={meshReady}
         instant
-        placeholder={null} //
-          <div className="w-full h-full flex flex-col items-center justify-center opacity-50">
-            <div className="w-[80%] aspect-video rounded-xl border border-border/50 bg-border/20 animate-pulse dark:border-white/20 dark:bg-white/5" />
-          </div>
-        }
+        placeholder={null}
       >
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
