@@ -437,7 +437,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       >
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={reduced ? "never" : active && inView ? "always" : "demand"}
+          frameloop="always"
           gl={{
             antialias: true,
             alpha: true,
@@ -457,7 +457,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
           <TvScene
             isDark={isDark}
             formatId={formatId}
-            inView={active && !reduced}
+            inView={active}
             rotX={springX}
             rotY={springY}
             onMeshReady={markMeshReady}
