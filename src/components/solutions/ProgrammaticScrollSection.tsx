@@ -93,7 +93,7 @@ function DeviceCarousel3({
               <Phone3D
                 mode={mode}
                 formatId={formatId}
-                entranceProgress={phaseRaw}
+                active={scene === "phone"}
                 className={className}
                 flat={flat}
               />
