@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useFormatScrollSection } from "../../hooks/useFormatScrollSection";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
@@ -17,11 +17,9 @@ import { warmStage } from "../../lib/scrollPreload";
 import "../../styles/programmatic-scroll-section.css";
 import "../../styles/programmatic-full-feed.css";
 
-const Phone3D = lazy(() => import("./Phone3D").then((m) => ({ default: m.Phone3D })));
-const Tablet3D = lazy(() =>
-  import("../channel-visuals/Tablet3D").then((m) => ({ default: m.Tablet3D })),
-);
-const Tv3D = lazy(() => import("../channel-visuals/Tv3D").then((m) => ({ default: m.Tv3D })));
+import { Phone3D } from "./Phone3D";
+import { Tablet3D } from "../channel-visuals/Tablet3D";
+import { Tv3D } from "../channel-visuals/Tv3D";
 
 const DESKTOP_MIN_WIDTH = 1024;
 

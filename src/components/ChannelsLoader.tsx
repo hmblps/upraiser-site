@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useProgress } from "@react-three/drei";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
@@ -5,7 +6,30 @@ import { Cpu } from "lucide-react";
 
 export function ChannelsLoader() {
   const { active, progress } = useProgress();
-  const show = active && progress < 100;
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [show]);
+
+  useEffect(() => {
+    // Wait for at least one frame, then if it's not active and progress is 100, we can hide.
+    // If it's active, wait until it finishes.
+    if (!active && progress === 100) {
+      const t = setTimeout(() => setShow(false), 400);
+      return () => clearTimeout(t);
+    }
+  }, [active, progress]);
 
   if (typeof document === "undefined") return null;
 
@@ -13,11 +37,11 @@ export function ChannelsLoader() {
     <AnimatePresence>
       {show && (
         <motion.div 
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none backdrop-blur-xl bg-bg/20"
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-bg/80 dark:bg-bg/95 backdrop-blur-3xl"
         >
           <div className="flex flex-col items-center gap-3">
             <motion.div

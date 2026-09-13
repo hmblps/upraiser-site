@@ -1,4 +1,6 @@
 import { useRef, useEffect } from "react";
+import { warmStage } from "../../lib/scrollPreload";
+
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
@@ -184,6 +186,12 @@ function InteractiveVisuals() {
 
 export function ChannelsCtaSection() {
   const reduced = useReducedMotion();
+
+  useEffect(() => {
+    warmStage("routes");
+    warmStage("routes-tablet");
+    warmStage("routes-tv");
+  }, []);
 
   return (
     <section id="routes" className="section-band border-t border-border/30 relative overflow-hidden">
