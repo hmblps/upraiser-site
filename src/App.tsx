@@ -12,6 +12,23 @@ useGLTF.preload("/phones/deep-blue.glb", DRACO_PATH);
 useGLTF.preload("/phones/orange.glb", DRACO_PATH);
 
 
+import { TextureLoader } from "three";
+if (typeof window !== "undefined") {
+  const tl = new TextureLoader();
+  tl.load("/channels/oem/screens/ctv-spot.png");
+  tl.load("/channels/programmatic-refs/screens/video.png");
+  tl.load("/channels/programmatic-refs/screens/banner.png");
+  
+  const v = document.createElement("video");
+  v.src = "/channels/oem/screens/ctv-spot.mp4";
+  v.preload = "auto";
+  v.muted = true;
+  v.load();
+}
+
+
+
+
 
 const CraftPage = lazy(() => import("./pages/CraftPage").then((m) => ({ default: m.CraftPage })));
 const ChannelsPage = lazy(() => import("./pages/ChannelsPage").then((m) => ({ default: m.ChannelsPage })));

@@ -87,6 +87,8 @@ export function warmStage(id: PreloadStage) {
         whenHeroReady(() => {
           preloadFetch("/channels/oem/tv-draco.glb");
           preloadFetch(`${DRACO_PATH}draco_decoder.wasm`);
+          preloadFetch("/channels/oem/screens/ctv-spot.png");
+          preloadFetch("/channels/oem/screens/ctv-spot.mp4");
           void import("../components/channel-visuals/Tv3D");
         });
         break;
