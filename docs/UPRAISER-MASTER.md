@@ -1251,3 +1251,6 @@ To prevent severe main-thread freezing (up to 2.5s) on Intel GPUs when scrolling
 - A hidden mesh with `videoTex` forces the browser to compile the WebGL shaders and upload the heavy MP4 first frame to the GPU *while* the user is reading the tablet copy.
 - When the user scrolls to TV, it slides in with 60FPS. 
 - See `docs/LESHA-PAIN-POINTS.md` for full context on why `frameloop="always"` or `gl.compile` failed.
+
+**Update (Late September 2026):**
+The background warming strategy failed because browsers pause `requestAnimationFrame` for off-screen canvases, even if `frameloop="demand"`. To force the GPU compilation while the canvas is off-screen, we introduced `<WarmupRenderer>`. It listens for `meshReady` and synchronously calls `gl.render(scene, camera)`. This manually forces WebGL to compile all shaders and upload the `VideoTexture` to VRAM, bypassing `rAF` limitations.

@@ -26,3 +26,7 @@ This document tracks the specific visual bugs, regressions, and architecture fru
 **Symptom:** A semi-transparent dashed rectangle would flash for a split second before the TV appeared.
 **Root Cause:** The `DeviceLoadStage` for the TV had a hardcoded `placeholder` (a CSS dashed rectangle). Since the TV took a second to render its first frame, this ugly placeholder was visible.
 **The Fix:** Removed the placeholder entirely (`placeholder={null}`). The Tablet didn't have one and looked great. Keep it that way.
+
+**Update on The 2.5 Second "TV Fall From Sky" Lag:**
+Just mounting the `Tv3D` component off-screen was NOT enough to trigger background warming, because modern browsers pause `requestAnimationFrame` for canvases that are physically outside the viewport. This meant that `frameloop="demand"` never fired its initial render, and the 2.5s compilation lag STILL happened when the TV scrolled into view. 
+**The Real Fix:** A custom `<WarmupRenderer>` component inside the `<Canvas>`. Once `meshReady` fires (indicating `useGLTF` has resolved), it manually calls `gl.render(scene, camera)`. This bypasses `rAF` and forces WebGL to synchronously compile the shaders and upload the `VideoTexture` to VRAM immediately, guaranteeing a 60FPS slide-in when the TV finally enters the screen.
