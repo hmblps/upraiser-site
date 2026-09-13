@@ -70,6 +70,9 @@ function DeviceCarousel3({
   const tabletOpacity = useTransform(tabletDist, (d) => Math.max(0, 1.5 - d * 1.5));
   const tvOpacity     = useTransform(tvDist,     (d) => Math.max(0, 1.5 - d * 1.5));
 
+  const shouldWarmTablet = scene === "phone" || scene === "tablet" || scene === "tv";
+  const shouldWarmTv = scene === "tablet" || scene === "tv";
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "visible" }}>
       {/* One WebGL device at a time — concurrent phone+tablet+TV canvases starve the
@@ -90,7 +93,8 @@ function DeviceCarousel3({
               <Phone3D
                 mode={mode}
                 formatId={formatId}
-                active={scene === "phone"}
+                entranceProgress={phaseRaw}
+                className={className}
                 flat={flat}
               />
             </CanvasErrorBoundary>
@@ -108,16 +112,18 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--tablet">
+        <div className="prog-device-slot prog-device-slot--tablet" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={null}>
-              <Tablet3D
-                mode={mode}
-                formatId={formatId}
-                className={className}
-                active={scene === "tablet"}
-                flat={flat}
-              />
+              {shouldWarmTablet && (
+                <Tablet3D
+                  mode={mode}
+                  formatId={formatId}
+                  className={className}
+                  active={scene === "tablet"}
+                  flat={flat}
+                />
+              )}
             </CanvasErrorBoundary>
           </Suspense>
         </div>
@@ -137,13 +143,15 @@ function DeviceCarousel3({
         <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={null}>
-              <Tv3D
-                mode={mode}
-                formatId={formatId}
-                className={className}
-                active={scene === "tv"}
-                flat={flat}
-              />
+              {shouldWarmTv && (
+                <Tv3D
+                  mode={mode}
+                  formatId={formatId}
+                  className={className}
+                  active={scene === "tv"}
+                  flat={flat}
+                />
+              )}
             </CanvasErrorBoundary>
           </Suspense>
         </div>
