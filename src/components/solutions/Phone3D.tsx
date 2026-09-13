@@ -761,7 +761,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         <Canvas
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={(!inView || reduced || isCssFormat) ? "never" : active ? "always" : "demand"}
+          frameloop={(!inView || reduced || isCssFormat) ? "never" : "always"}
           gl={{
             antialias: true,
             alpha: true,

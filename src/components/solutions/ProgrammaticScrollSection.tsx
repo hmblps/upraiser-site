@@ -66,9 +66,9 @@ function DeviceCarousel3({
   const tvX     = useTransform(phase, (p) => `${(2 - p) * 100}%`);
 
   // ── Opacity — faster crossfade so devices dissolve quickly as they leave ─────
-  const phoneOpacity  = useTransform(phoneDist,  (d) => Math.max(0, 1 - d * 2.5));
-  const tabletOpacity = useTransform(tabletDist, (d) => Math.max(0, 1 - d * 2.5));
-  const tvOpacity     = useTransform(tvDist,     (d) => Math.max(0, 1 - d * 2.5));
+  const phoneOpacity  = useTransform(phoneDist,  (d) => Math.max(0, 1.5 - d * 1.5));
+  const tabletOpacity = useTransform(tabletDist, (d) => Math.max(0, 1.5 - d * 1.5));
+  const tvOpacity     = useTransform(tvDist,     (d) => Math.max(0, 1.5 - d * 1.5));
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "visible" }}>
