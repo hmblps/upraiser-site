@@ -335,9 +335,14 @@ function TabletScene({
 
 function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
   const { gl, scene, camera } = useThree();
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (meshReady) {
-      gl.render(scene, camera);
+      // Async compilation prevents main thread freeze on Windows/Intel ANGLE
+      if (typeof gl.compileAsync === "function") {
+        gl.compileAsync(scene, camera, scene).catch(() => {});
+      } else {
+        gl.compile(scene, camera);
+      }
     }
   }, [meshReady, gl, scene, camera]);
   return null;
