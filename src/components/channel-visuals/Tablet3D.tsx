@@ -327,21 +327,12 @@ function TabletScene({
           onReady={onMeshReady}
           flat={flat}
         />
-        <Compiler />
       </Suspense>
       <Suspense fallback={null}>
         <Environment preset="city" environmentIntensity={isDark ? 0.7 : 0.85} frames={1} />
       </Suspense>
     </>
   );
-}
-
-function Compiler() {
-  const { gl, scene, camera } = useThree();
-  useLayoutEffect(() => {
-    gl.compile(scene, camera);
-  }, [gl, scene, camera]);
-  return null;
 }
 
 export function Tablet3D({ mode, formatId, className, active = true, flat = false }: Tablet3DProps) {
