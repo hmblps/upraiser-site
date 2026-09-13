@@ -437,7 +437,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       >
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop="always"
+          frameloop={reduced ? "never" : active ? "always" : "demand"}
           gl={{
             antialias: true,
             alpha: true,
