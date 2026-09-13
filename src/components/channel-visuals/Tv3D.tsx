@@ -176,6 +176,7 @@ function TvMesh({
 
   const [xf] = useState(() => computeTransform(scene));
   const screen = screenPlaneForHeight(getTargetHeight());
+  const { gl, scene: rootScene, camera } = useThree();
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
@@ -205,6 +206,33 @@ function TvMesh({
     t.flipY = true;
     return { video: v, videoTex: t };
   }, []);
+
+
+  useEffect(() => {
+    let warmed = false;
+    const handleLoaded = () => {
+      if (warmed) return;
+      warmed = true;
+      console.log("[TvMesh] background warming video loaded! Forcing GPU upload.");
+      videoTex.needsUpdate = true;
+      // Force a synchronous render to upload the texture immediately, 
+      // preventing the 2.5s lag when the user scrolls to TV later.
+      try {
+        gl.initTexture(videoTex);
+      } catch (e) {
+        gl.render(rootScene, camera);
+      }
+    };
+    
+    video.addEventListener("loadeddata", handleLoaded);
+    video.addEventListener("canplay", handleLoaded);
+    if (video.readyState >= 2) handleLoaded();
+    
+    return () => {
+      video.removeEventListener("loadeddata", handleLoaded);
+      video.removeEventListener("canplay", handleLoaded);
+    };
+  }, [video, videoTex, gl, rootScene, camera]);
 
   useEffect(() => {
     document.body.appendChild(video);
@@ -322,7 +350,7 @@ function TvMesh({
 
       {/* HIDDEN MESH: Forces WebGL to compile and upload the VideoTexture to the GPU 
           on initial mount, preventing the 2.5s main thread freeze when the user scrolls to TV. */}
-      <mesh visible={false}>
+      <mesh visible={true} position={[0, -1000, 0]} frustumCulled={false}>
         <planeGeometry args={[0.1, 0.1]} />
         <meshBasicMaterial map={videoTex} />
       </mesh>
