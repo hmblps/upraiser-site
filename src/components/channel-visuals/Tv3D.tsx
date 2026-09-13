@@ -8,7 +8,7 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, useGLTF, useTexture } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
@@ -366,6 +366,16 @@ function TvScene({
 
 // ─── Public component ─────────────────────────────────────────────────────────
 
+function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
+  const { gl, scene, camera } = useThree();
+  useLayoutEffect(() => {
+    if (meshReady) {
+      gl.render(scene, camera);
+    }
+  }, [meshReady, gl, scene, camera]);
+  return null;
+}
+
 export function Tv3D({ mode, formatId, className, active = true, flat = false }: Tv3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
@@ -469,6 +479,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             onMeshReady={markMeshReady}
             flat={flat}
           />
+          <WarmupRenderer meshReady={meshReady} />
         </Canvas>
       </DeviceLoadStage>
     </div>
