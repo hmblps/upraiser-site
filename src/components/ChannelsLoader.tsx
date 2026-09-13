@@ -12,13 +12,16 @@ export function ChannelsLoader() {
     if (show) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
+      if (typeof window !== 'undefined') window.dispatchEvent(new Event("stop-scroll"));
     } else {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
+      if (typeof window !== 'undefined') window.dispatchEvent(new Event("start-scroll"));
     }
     return () => {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
+      if (typeof window !== 'undefined') window.dispatchEvent(new Event("start-scroll"));
     };
   }, [show]);
 
@@ -26,7 +29,7 @@ export function ChannelsLoader() {
     // Wait for at least one frame, then if it's not active and progress is 100, we can hide.
     // If it's active, wait until it finishes.
     if (!active && progress === 100) {
-      const t = setTimeout(() => setShow(false), 2500);
+      const t = setTimeout(() => setShow(false), 400);
       return () => clearTimeout(t);
     }
   }, [active, progress]);
@@ -41,7 +44,7 @@ export function ChannelsLoader() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-bg/80 dark:bg-bg/95 backdrop-blur-3xl"
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-white dark:bg-[#06090e]"
         >
           <div className="flex flex-col items-center gap-3">
             <motion.div
