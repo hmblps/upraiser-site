@@ -9,7 +9,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Center, Environment, useGLTF } from "@react-three/drei";
+import { Center, Environment, useGLTF, useTexture } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
@@ -136,7 +136,6 @@ function TabletMesh({
     const isTabletFormat = formatId === "pre-install" || formatId === "oem-store" || formatId === "system-ui";
     const safeFormatId = isTabletFormat ? formatId : "pre-install";
     const src = TABLET_SCREEN_VIDEO[safeFormatId];
-    const stillSrc = TABLET_SCREEN_STILL[safeFormatId];
 
     let cancelled = false;
     let ownedTex: Texture | null = null;
@@ -193,18 +192,7 @@ function TabletMesh({
     }
 
     if (stillSrc) {
-      const loader = new TextureLoader();
-      loader.load(
-        stillSrc,
-        (tex) => {
-          configureMap(tex);
-          ownedTex = tex;
-          if (modeRef.current !== "video") commitMap(tex, "still");
-          else if (cancelled) tex.dispose();
-        },
-        undefined,
-        () => { /* keep previous map */ },
-      );
+      if (modeRef.current !== "video") commitMap(stillTex, "still");
     }
 
     if (!src) {

@@ -9,7 +9,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, useGLTF } from "@react-three/drei";
+import { Environment, useGLTF, useTexture } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   TextureLoader,
@@ -163,8 +163,17 @@ function TvMesh({
   const stillSrc = (safeFormatId && FORMAT_STILL[safeFormatId]) || FORMAT_STILL["ctv-spot"];
 
   const showScreen = Boolean(videoSrc || stillSrc);
+  const stillTex = useTexture(stillSrc || FORMAT_STILL["ctv-spot"]);
   const modeRef = useRef<"still" | "video">("still");
-  const [screenMap, setScreenMap] = useState<Texture | null>(null);
+  const [screenMap, setScreenMap] = useState<Texture>(stillTex);
+
+  useMemo(() => {
+    stillTex.colorSpace = SRGBColorSpace;
+    stillTex.minFilter = LinearFilter;
+    stillTex.magFilter = LinearFilter;
+    stillTex.flipY = true;
+    stillTex.needsUpdate = true;
+  }, [stillTex]);
 
   const [xf] = useState(() => computeTransform(scene));
   const screen = screenPlaneForHeight(getTargetHeight());
@@ -259,18 +268,8 @@ function TvMesh({
       if (playingRef.current) {
         video.pause();
       }
-      const loader = new TextureLoader();
-      loader.load(stillSrc, (tex) => {
-        if (cancelled) return;
-        tex.colorSpace = SRGBColorSpace;
-        tex.minFilter = LinearFilter;
-        tex.magFilter = LinearFilter;
-        tex.flipY = true;
-        tex.needsUpdate = true;
-        modeRef.current = "still";
-        setScreenMap(tex);
-      });
-      return () => { cancelled = true; };
+      modeRef.current = "still";
+      setScreenMap(stillTex);
     }
   }, [showScreen, videoSrc, stillSrc, video, videoTex]);
 
