@@ -383,7 +383,7 @@ function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
   const { gl, scene, camera } = useThree();
   useLayoutEffect(() => {
     if (meshReady) {
-      gl.render(scene, camera);
+      gl.compile(scene, camera);
     }
   }, [meshReady, gl, scene, camera]);
   return null;
