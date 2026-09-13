@@ -346,6 +346,7 @@ function TvScene({
 
       <Suspense fallback={null}>
         <TvMesh rotX={rotX} rotY={rotY} formatId={formatId} inView={inView} onReady={onMeshReady} flat={flat} />
+          <Compiler />
       </Suspense>
       <Suspense fallback={null}>
         <Environment preset="city" environmentIntensity={isDark ? 1.0 : 1.3} frames={1} />
@@ -355,6 +356,14 @@ function TvScene({
 }
 
 // ─── Public component ─────────────────────────────────────────────────────────
+
+function Compiler() {
+  const { gl, scene, camera } = useThree();
+  useLayoutEffect(() => {
+    gl.compile(scene, camera);
+  }, [gl, scene, camera]);
+  return null;
+}
 
 export function Tv3D({ mode, formatId, className, active = true, flat = false }: Tv3DProps) {
   const reduced = useReducedMotion();
