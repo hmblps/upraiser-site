@@ -208,31 +208,6 @@ function TvMesh({
   }, []);
 
 
-  useEffect(() => {
-    let warmed = false;
-    const handleLoaded = () => {
-      if (warmed) return;
-      warmed = true;
-      console.log("[TvMesh] background warming video loaded! Forcing GPU upload.");
-      videoTex.needsUpdate = true;
-      // Force a synchronous render to upload the texture immediately, 
-      // preventing the 2.5s lag when the user scrolls to TV later.
-      try {
-        gl.initTexture(videoTex);
-      } catch (e) {
-        gl.render(rootScene, camera);
-      }
-    };
-    
-    video.addEventListener("loadeddata", handleLoaded);
-    video.addEventListener("canplay", handleLoaded);
-    if (video.readyState >= 2) handleLoaded();
-    
-    return () => {
-      video.removeEventListener("loadeddata", handleLoaded);
-      video.removeEventListener("canplay", handleLoaded);
-    };
-  }, [video, videoTex, gl, rootScene, camera]);
 
   useEffect(() => {
     document.body.appendChild(video);
@@ -264,7 +239,7 @@ function TvMesh({
     if (!showScreen) return;
     let cancelled = false;
 
-    if (videoSrc) {
+    if (videoSrc && inView) {
       let promoted = false;
       const promote = () => {
         if (cancelled || promoted) return;
@@ -284,15 +259,25 @@ function TvMesh({
       if (!video.src.endsWith(videoSrc)) {
         video.src = videoSrc;
       }
-      video.addEventListener("loadeddata", promote);
-      video.addEventListener("canplay", promote);
-      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) promote();
+      
+      let timer: any;
+      const attemptPromote = () => {
+        if (cancelled || promoted) return;
+        // Delay the heavy GPU upload (600ms on iGPU) until AFTER the TV 
+        // slide-in animation finishes (approx 800ms), so the slide-in is 60FPS.
+        timer = setTimeout(promote, 850);
+      };
+
+      video.addEventListener("loadeddata", attemptPromote);
+      video.addEventListener("canplay", attemptPromote);
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) attemptPromote();
       else video.load();
 
       return () => {
         cancelled = true;
-        video.removeEventListener("loadeddata", promote);
-        video.removeEventListener("canplay", promote);
+        clearTimeout(timer);
+        video.removeEventListener("loadeddata", attemptPromote);
+        video.removeEventListener("canplay", attemptPromote);
         video.pause();
       };
     } else if (stillSrc) {
@@ -302,7 +287,7 @@ function TvMesh({
       modeRef.current = "still";
       setScreenMap(stillTex);
     }
-  }, [showScreen, videoSrc, stillSrc, video, videoTex]);
+  }, [showScreen, videoSrc, stillSrc, video, videoTex, inView]);
 
   useFrame(() => {
     if (!outerRef.current) return;
@@ -350,7 +335,7 @@ function TvMesh({
 
       {/* HIDDEN MESH: Forces WebGL to compile and upload the VideoTexture to the GPU 
           on initial mount, preventing the 2.5s main thread freeze when the user scrolls to TV. */}
-      <mesh visible={true} position={[0, -1000, 0]} frustumCulled={false}>
+      <mesh visible={false}>
         <planeGeometry args={[0.1, 0.1]} />
         <meshBasicMaterial map={videoTex} />
       </mesh>
