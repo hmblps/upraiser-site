@@ -166,12 +166,14 @@ function TvMesh({
   const showScreen = Boolean(videoSrc || stillSrc);
   
   const modeRef = useRef<"still" | "video">("still");
+  const stillTexRef = useRef<Texture | null>(null);
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
   useEffect(() => {
     const loader = new TextureLoader();
     loader.load(stillSrc || FORMAT_STILL["ctv-spot"], (tex) => {
       tex.flipY = true;
       tex.colorSpace = SRGBColorSpace;
+      stillTexRef.current = tex;
       setScreenMap((prev) => {
         if (!prev || (prev as any).isVideoTexture === undefined) {
           invalidate();
@@ -340,7 +342,8 @@ function TvMesh({
         video.pause();
       }
       modeRef.current = "still";
-      // setScreenMap(stillTex);
+      if (stillTexRef.current) setScreenMap(stillTexRef.current);
+      invalidate();
     }
   }, [showScreen, videoSrc, stillSrc, video, videoTex, inView]);
 
@@ -535,7 +538,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       aria-label="Interactive TV mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
     >
-      <div className="test-bypass" style={{width: "100%", height: "100%"}}>
+      <div className="prog-device-load"><div className="prog-device-load__canvas" style={{zIndex: 1}}>
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
           frameloop={active ? "always" : "demand"}
@@ -566,7 +569,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
           />
           <WarmupRenderer meshReady={meshReady} />
         </Canvas>
-      </div>
+      </div></div>
     </div>
   );
 }
