@@ -9,6 +9,7 @@ import { BrandAurora } from "../BrandAurora";
 import { CanvasErrorBoundary } from "../CanvasErrorBoundary";
 import { AD_FORMATS, type AdFormat } from "./ProgrammaticFormats";
 import { FormatCopy } from "./FormatCopy";
+import { CssPhone, CssTablet, CssTv } from "./CssPhone";
 
 
 import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobile";
@@ -89,14 +90,18 @@ function DeviceCarousel3({
       >
         <div className="prog-device-slot prog-device-slot--phone">
           <Suspense fallback={null}>
-            <CanvasErrorBoundary fallback={null}>
-              <Phone3D
-                mode={mode}
-                formatId={formatId}
-                active={scene === "phone"}
-                className={className}
-                flat={flat}
-              />
+            <CanvasErrorBoundary fallback={<CssPhone mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
+              {use3d ? (
+                <Phone3D
+                  mode={mode}
+                  formatId={formatId}
+                  active={scene === "phone"}
+                  className={className}
+                  flat={false}
+                />
+              ) : (
+                <CssPhone mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />
+              )}
             </CanvasErrorBoundary>
           </Suspense>
         </div>
@@ -114,15 +119,19 @@ function DeviceCarousel3({
       >
         <div className="prog-device-slot prog-device-slot--tablet" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
-            <CanvasErrorBoundary fallback={null}>
-              {shouldWarmTablet && (
-                <Tablet3D
-                  mode={mode}
-                  formatId={formatId}
-                  className={className}
-                  active={scene === "tablet"}
-                  flat={flat}
-                />
+            <CanvasErrorBoundary fallback={<CssTablet mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
+              {use3d ? (
+                shouldWarmTablet && (
+                  <Tablet3D
+                    mode={mode}
+                    formatId={formatId}
+                    className={className}
+                    active={scene === "tablet"}
+                    flat={false}
+                  />
+                )
+              ) : (
+                shouldWarmTablet && <CssTablet mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />
               )}
             </CanvasErrorBoundary>
           </Suspense>
@@ -142,15 +151,19 @@ function DeviceCarousel3({
       >
         <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
-            <CanvasErrorBoundary fallback={null}>
-              {shouldWarmTv && (
-                <Tv3D
-                  mode={mode}
-                  formatId={formatId}
-                  className={className}
-                  active={scene === "tv"}
-                  flat={flat}
-                />
+            <CanvasErrorBoundary fallback={<CssTv mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
+              {use3d ? (
+                shouldWarmTv && (
+                  <Tv3D
+                    mode={mode}
+                    formatId={formatId}
+                    className={className}
+                    active={scene === "tv"}
+                    flat={false}
+                  />
+                )
+              ) : (
+                shouldWarmTv && <CssTv mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />
               )}
             </CanvasErrorBoundary>
           </Suspense>
