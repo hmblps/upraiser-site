@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useScroll as useFramerScroll } from "framer-motion";\n
+import { AnimatePresence, motion, useScroll as useFramerScroll } from "framer-motion";
 import type { SiteMode } from "../../data/liveContent";
 import { SectionHeader } from "../SectionHeader";
 import type { AdFormat } from "./ProgrammaticFormats";
