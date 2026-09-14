@@ -1287,3 +1287,10 @@ We successfully debugged a major issue where the 3D TV component would cause a m
 2. For devices with identical fallback images (like TV using `ctv-spot.png` for both `ctv-spot` and `ctv-video`), hardcode the `stillSrc` in the mesh component so `TextureLoader` only runs once on page load, not during scroll transitions.
 3. Use a `useRef` (e.g., `stillTexRef`) to cache the loaded texture. When switching back from a video format to a still format, instantly apply `stillTexRef.current` to the material instead of re-triggering a load.
 
+
+### WebGL Fallbacks & Cross-Platform Stability (Windows/Intel)
+- **Zero-Tolerance Crash Handling:** Never assume `tier === "high"` guarantees a stable WebGL context. On Windows, graphics drivers can freeze the main thread if they fail to compile Draco shaders or allocate buffers.
+- **Bypass 3D Mount on Fallback:** If `!use3d` (e.g. `tier === "lite"` or `reduced === true`), **never** mount a `<Canvas>` just to show a "flat" model. Always mount the lightweight DOM CSS equivalent (`<CssPhone>`).
+- **CanvasErrorBoundary Fallback:** Wrap every critical 3D scene in `<CanvasErrorBoundary>`. If WebGL crashes, the fallback must be a fully functional CSS layout (e.g. `fallback={<CssPhone />}`), not `null`. Otherwise, the page goes blank and the browser stalls.
+- **R3F Camera Memoization:** In React-Three-Fiber, passing an inline object to the `<Canvas>` camera prop (`camera={{ position: [x,y,z] }}`) forces a camera reset on every React parent re-render. Always memoize the camera object using `useMemo` if the parent can re-render (e.g., from scroll state changes), otherwise the camera will violently snap to start and jump back.
+
