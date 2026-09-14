@@ -80,19 +80,29 @@ export function ProgrammaticScrollSectionMobile({
       className="prog-scroll-section prog-scroll-section--mobile relative"
       aria-label="Ad formats"
     >
-      <div className="prog-mobile-ambience" aria-hidden />
-
-      <div className="prog-mobile-headline section-inner">
+      <div className="prog-mobile-headline section-inner relative z-30 bg-background">
         <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
       </div>
 
-      {laneSwitcher ? <div className="prog-mobile-switcher section-inner mb-6 z-20 relative">{laneSwitcher}</div> : null}
+      {laneSwitcher ? <div className="prog-mobile-switcher section-inner mb-0 pb-6 z-30 relative bg-background">{laneSwitcher}</div> : null}
 
-      {/* Sticky Device Center */}
-      <div className="sticky top-[20vh] sm:top-[25vh] z-0 flex flex-col items-center justify-center w-full max-w-sm mx-auto px-4 mt-8 pointer-events-auto">
+            {/* Sticky Device Center */}
+      <div className="sticky top-0 z-20 flex flex-col items-center justify-center w-full pt-[12vh] pb-[8vh] pointer-events-auto">
+        {/* Background Mask to hide scrolling text */}
+        <div 
+          className="absolute inset-0 bg-background pointer-events-none"
+          style={{ 
+            maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)"
+          }} 
+        />
+        
+        {/* We move the ambience glow here so it stays behind the phone */}
+        <div className="prog-mobile-ambience absolute inset-0 !top-0" style={{ position: "absolute" }} aria-hidden />
+
         <button
           type="button"
-          className="w-full flex justify-center outline-none"
+          className="w-full flex justify-center outline-none relative z-10"
           onClick={() => setZoomed(true)}
           aria-label="Zoom device"
         >
@@ -107,7 +117,7 @@ export function ProgrammaticScrollSectionMobile({
             )}
           </div>
         </button>
-        <div className="mt-4 flex flex-col items-center">
+        <div className="mt-4 flex flex-col items-center relative z-10">
            <span className="font-mono text-xs font-semibold text-theme-muted mb-1">
               Tap to expand · {String(activeIndex + 1).padStart(2, "0")} / {String(formats.length).padStart(2, "0")}
            </span>
@@ -133,7 +143,7 @@ export function ProgrammaticScrollSectionMobile({
       )}
 
       {/* Scrolling Cards Overlay */}
-      <div className="relative z-10 w-full max-w-md mx-auto px-4 mt-[30vh] pb-[30vh] flex flex-col gap-12 sm:gap-24">
+      <div className="relative z-10 w-full max-w-md mx-auto px-4 mt-[15vh] pb-[30vh] flex flex-col gap-12 sm:gap-24">
         {formats.map((fmt, i) => (
           <article
             key={fmt.id + fmt.label}

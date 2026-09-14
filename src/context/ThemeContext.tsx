@@ -126,9 +126,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     });
   }, [theme]);
 
-  const toggleTheme = useCallback(() => {
+    const toggleTheme = useCallback(() => {
     userChoseRef.current = true;
-    setTheme((t) => (t === "dark" ? "light" : "dark"));
+    setTheme((t) => {
+      const next = t === "dark" ? "light" : "dark";
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        url.searchParams.set("theme", next);
+        window.history.replaceState({}, "", url.toString());
+      }
+      return next;
+    });
   }, []);
 
   const dualStoryReady = useMemo(() => seen.light && seen.dark, [seen.light, seen.dark]);
