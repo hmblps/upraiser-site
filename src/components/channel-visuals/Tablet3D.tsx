@@ -221,7 +221,7 @@ function TabletMesh({
     }
 
     if (stillSrc) {
-      if (modeRef.current !== "video") // commitMap(stillTex, "still");
+      if (modeRef.current !== "video") {} // commitMap removed
     }
 
     if (!src) {
