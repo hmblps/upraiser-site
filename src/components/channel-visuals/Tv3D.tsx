@@ -255,12 +255,14 @@ function TvMesh({
   }, [video]);
 
   useLayoutEffect(() => {
-    console.log("[TvMesh] useLayoutEffect ran (mesh loaded)!");
     scene.traverse((obj) => {
       if (HIDDEN_NODE_NAMES.has(obj.name)) obj.visible = false;
     });
-    onReady?.();
-  }, [scene, onReady]);
+    if (screenMap) {
+      console.log("[TvMesh] mesh and screenMap ready!");
+      onReady?.();
+    }
+  }, [scene, onReady, screenMap]);
 
   const playingRef = useRef(false);
   useEffect(() => {
