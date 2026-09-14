@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState , useMemo } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
