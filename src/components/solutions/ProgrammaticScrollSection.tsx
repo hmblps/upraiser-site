@@ -21,7 +21,7 @@ import { Phone3D } from "./Phone3D";
 import { Tablet3D } from "../channel-visuals/Tablet3D";
 import { Tv3D } from "../channel-visuals/Tv3D";
 
-const DESKTOP_MIN_WIDTH = 1024;
+const DESKTOP_MIN_WIDTH = 900;
 
 // ─── 3-device Apple-like slide switcher ───────────────────────────────────────
 // Phone · Tablet · TV occupy slots 0 · 1 · 2.

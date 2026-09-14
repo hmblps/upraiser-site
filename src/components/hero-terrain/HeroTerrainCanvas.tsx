@@ -130,6 +130,13 @@ export function HeroTerrainCanvas({
   if (shouldFallback) return <HeroVideoFallback variant={variant} />;
 
   const [cx, cy, cz] = path.startPos;
+  const cameraConfig = useMemo(() => ({
+    position: [cx, cy, cz] as [number, number, number],
+    fov: path.startFov,
+    near: 0.5,
+    far: 900
+  }), [cx, cy, cz, path.startFov]);
+
   const isLight = theme === "light";
 
   return (
@@ -184,7 +191,7 @@ export function HeroTerrainCanvas({
           stencil: false,
           depth: true,
         }}
-        camera={{ position: [cx, cy, cz], fov: path.startFov, near: 0.5, far: 900 }}
+        camera={cameraConfig}
         style={{ width: "100%", height: "100%", display: "block", background: isLight ? "#ffffff" : "#050504", pointerEvents: "none" }}
         onCreated={({ gl, events }) => {
           events.disconnect?.();
