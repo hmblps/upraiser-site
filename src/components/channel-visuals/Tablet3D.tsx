@@ -32,7 +32,6 @@ import {
   paintStill,
   type GlassAnimId,
 } from "../../lib/tabletGlassAnim";
-import { DeviceLoadStage } from "../solutions/DeviceLoadStage";
 
 import { Model as TabletModel } from "./Tablet3DModel";
 

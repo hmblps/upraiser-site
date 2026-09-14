@@ -28,7 +28,6 @@ import type { SiteMode } from "../../data/liveContent";
 import { DRACO_PATH } from "../../lib/heroModel";
 import { cn } from "../../lib/cn";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { DeviceLoadStage } from "../solutions/DeviceLoadStage";
 import { FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
 
 const MODEL_PATH = "/channels/oem/tv-draco.glb";
@@ -187,7 +186,7 @@ function TvMesh({
   
   const [xf] = useState(() => computeTransform(scene));
   const screen = screenPlaneForHeight(getTargetHeight());
-  const { gl, scene: rootScene, camera, invalidate } = useThree();
+  const { gl, invalidate } = useThree();
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
@@ -480,7 +479,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
   const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
 
   const [isDragging, setIsDragging] = useState(false);
-  const [inView, setInView] = useState(true);
+  const [, setInView] = useState(true);
   const [meshReady, setMeshReady] = useState(false);
 
   const isDark = mode !== "growth";
