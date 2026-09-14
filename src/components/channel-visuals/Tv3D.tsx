@@ -216,10 +216,20 @@ function TvMesh({
     t.flipY = true;
         
     v.addEventListener("loadeddata", () => {
-      // Force GPU upload of the video frame immediately to prevent 200ms freeze later
-      try {
-        if (typeof gl !== 'undefined') gl.initTexture(t);
-      } catch (e) {}
+      // Force hardware decode of the first frame by briefly playing the video
+      const p = v.play();
+      if (p !== undefined) {
+        p.then(() => {
+          v.pause();
+          if ('requestVideoFrameCallback' in v) {
+            v.requestVideoFrameCallback(() => {
+              try { if (typeof gl !== 'undefined') gl.initTexture(t); } catch(e) {}
+            });
+          } else {
+            try { if (typeof gl !== 'undefined') gl.initTexture(t); } catch(e) {}
+          }
+        }).catch(() => {});
+      }
     }, { once: true });
     
     return { video: v, videoTex: t };
