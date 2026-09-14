@@ -84,29 +84,21 @@ export function ProgrammaticScrollSectionMobile({
         <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
       </div>
 
-      {laneSwitcher ? <div className="prog-mobile-switcher section-inner mb-0 pb-6 z-30 relative bg-background">{laneSwitcher}</div> : null}
+      {laneSwitcher ? <div className="prog-mobile-switcher section-inner mb-0 pb-6 z-30 relative bg-background pointer-events-auto">{laneSwitcher}</div> : null}
 
-            {/* Sticky Device Center */}
-      <div className="sticky top-0 z-20 flex flex-col items-center justify-center w-full pt-[12vh] pb-[8vh] pointer-events-auto">
-        {/* Background Mask to hide scrolling text */}
-        <div 
-          className="absolute inset-0 bg-background pointer-events-none"
-          style={{ 
-            maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)"
-          }} 
-        />
+                  {/* Sticky Device Center (Solid Background Panel) */}
+      <div className="sticky top-0 z-20 flex flex-col items-center justify-end w-full pt-[10vh] pb-4 pointer-events-none bg-background border-b border-border/20 shadow-[0_10px_30px_rgba(0,0,0,0.4)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
         
         {/* We move the ambience glow here so it stays behind the phone */}
-        <div className="prog-mobile-ambience absolute inset-0 !top-0" style={{ position: "absolute" }} aria-hidden />
+        <div className="prog-mobile-ambience absolute inset-0 !top-0" style={{ position: "absolute", height: "100%" }} aria-hidden />
 
         <button
           type="button"
-          className="w-full flex justify-center outline-none relative z-10"
+          className="w-full flex justify-center outline-none relative z-10 pointer-events-auto"
           onClick={() => setZoomed(true)}
           aria-label="Zoom device"
         >
-          <div className={`relative w-full ${format.scene === 'tv' ? 'aspect-[16/9] max-w-[280px]' : format.scene === 'tablet' ? 'aspect-[3/4] max-w-[240px]' : 'aspect-[9/19] max-w-[200px]'}`}>
+          <div className={`relative w-full ${format.scene === 'tv' ? 'aspect-[16/9] max-w-[220px]' : format.scene === 'tablet' ? 'aspect-[3/4] max-w-[180px]' : 'aspect-[9/19] max-w-[150px]'}`}>
             <span className="prog-mobile-stage__glow" aria-hidden />
             {format.scene === 'tv' ? (
               <CssTv mode={mode} formatId={format.id} className="h-full w-full pointer-events-none" />
@@ -117,11 +109,14 @@ export function ProgrammaticScrollSectionMobile({
             )}
           </div>
         </button>
-        <div className="mt-4 flex flex-col items-center relative z-10">
-           <span className="font-mono text-xs font-semibold text-theme-muted mb-1">
+        <button 
+          className="mt-4 flex flex-col items-center relative z-10 pointer-events-auto"
+          onClick={() => setZoomed(true)}
+        >
+           <span className="font-mono text-xs font-semibold text-theme-muted mb-1 bg-background/50 px-3 py-1 rounded-full backdrop-blur-sm">
               Tap to expand · {String(activeIndex + 1).padStart(2, "0")} / {String(formats.length).padStart(2, "0")}
            </span>
-        </div>
+        </button>
       </div>
 
       {/* Zoom Modal */}
