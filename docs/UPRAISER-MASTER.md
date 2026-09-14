@@ -1265,3 +1265,13 @@ To prevent severe main-thread freezing (up to 2.5s) on Intel GPUs when scrolling
 
 **Update (Late September 2026):**
 The background warming strategy failed because browsers pause `requestAnimationFrame` for off-screen canvases, even if `frameloop="demand"`. To force the GPU compilation while the canvas is off-screen, we introduced `<WarmupRenderer>`. It listens for `meshReady` and synchronously calls `gl.render(scene, camera)`. This synchronous JS call forces WebGL to compile all shaders and upload the `VideoTexture` to VRAM without waiting for the deferred `rAF` loop. Because `<Tv3D>` is preserved in the React tree during the transition to the TV stage, this exact WebGL context is reused, preventing any main-thread blocking when the TV slides into view.
+
+### WebGL ResizeObserver Stutter (The TV "Squish" Bug)
+**Anti-Pattern:** Gating physical CSS dimensions of a WebGL container behind a scroll-triggered state like `[data-scene="tv"] .prog-device-slot--tv`.
+**Why it fails:** When the container has no explicit dimensions (or falls back to a default "squished" state) while off-screen, it renders the `<Canvas>` at the wrong size. When the user scrolls past the intersection threshold, `data-scene` updates, the correct CSS instantly applies, and the DOM container expands. This triggers R3F's `ResizeObserver`, which synchronously forces a WebGL projection matrix recalculation and re-renders the 9MB GLB mid-scroll. This physically blocks the main thread for 50-150ms, causing a massive scroll stutter (lag) and delaying subsequent state updates (like the TV screen texture appearing, which looks like a "pop-in" or "щелчок").
+**Solution:** Always define fixed or responsive dimensions (e.g. `aspect-ratio`) unconditionally for WebGL wrappers. Removing the `[data-scene="tv"]` prefix from `.prog-device-slot--tv` ensures the `<Canvas>` is always the correct size, preventing `ResizeObserver` from firing during scroll transitions.
+
+### DeviceLoadStage 2-Second Emptiness (Framer Motion WebGL Bug)
+**Anti-Pattern:** Wrapping heavy WebGL models in `<DeviceLoadStage>` using Framer Motion (`animate={{ opacity: ready ? 1 : 0.02 }}`).
+**Why it fails:** Even if the opacity transition is set to `duration: 0` (`instant={true}`), Framer Motion's animation queue can get starved/blocked when the main thread is busy unpacking Draco geometry or compiling shaders. This leaves the opacity stuck at `0.02` for exactly 2 seconds, creating a phantom "white hole / emptiness" before the model pops in.
+**Solution:** Completely remove `<DeviceLoadStage>` (and its `motion.div` wrapper) for TV and Tablet slots. Instead, use standard CSS classes (`<div className="prog-device-load">`) so the canvas is natively visible the millisecond WebGL renders it.

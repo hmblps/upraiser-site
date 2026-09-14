@@ -679,11 +679,6 @@
 } */
 
 /* TV optical slot — larger than tablet, still left-of-copy (not full-bleed hero) */
-[data-scene="tv"] 
-
-
-
-
 .prog-device-slot--tv {
   width: min(100%, 54rem);
   /* 
