@@ -21,7 +21,7 @@ import { Phone3D } from "./Phone3D";
 import { Tablet3D } from "../channel-visuals/Tablet3D";
 import { Tv3D } from "../channel-visuals/Tv3D";
 
-const DESKTOP_MIN_WIDTH = 900;
+const DESKTOP_MIN_WIDTH = 768;
 
 // ─── 3-device Apple-like slide switcher ───────────────────────────────────────
 // Phone · Tablet · TV occupy slots 0 · 1 · 2.
@@ -193,7 +193,7 @@ export function ProgrammaticScrollSection({
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth < DESKTOP_MIN_WIDTH : false,
   );
-  const desktopEnabled = !isMobile && !reduced;
+  const desktopEnabled = !isMobile;
   const use3d = desktopEnabled && tier === "high";
 
   const { activeIndex, jumpTo, totalVirtual } = useFormatScrollSection(sectionRef, {
