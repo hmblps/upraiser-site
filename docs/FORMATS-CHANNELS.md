@@ -162,7 +162,7 @@ We deliberately **decouple** texture loading from React's `<Suspense>` boundary 
 
 - Phase `0|1|2` = phone | tablet | tv  
 - Spring: `stiffness: 160, damping: 28, mass: 0.95`  
-- Opacity: `1 − dist × 1.15`  
+- Opacity: `Math.max(0, 1.5 - d * 1.5)`  
 - **One WebGL device at a time** — inactive slots = `null` (no CssPhone/Tablet/Tv stand-ins)  
 - No CSS `scale` / `filter:blur` on WebGL wrappers  
 - Carousel wrapper: `overflow: visible`
