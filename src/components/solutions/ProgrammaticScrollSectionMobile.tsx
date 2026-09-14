@@ -80,14 +80,17 @@ export function ProgrammaticScrollSectionMobile({
       className="prog-scroll-section prog-scroll-section--mobile relative"
       aria-label="Ad formats"
     >
-      <div className="prog-mobile-headline section-inner relative z-30 bg-background">
+      <div className="prog-mobile-headline section-inner relative z-30"
+        style={{ backgroundColor: "var(--theme-bg)" }}>
         <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
       </div>
 
-      {laneSwitcher ? <div className="prog-mobile-switcher section-inner mb-0 pb-6 z-30 relative bg-background pointer-events-auto">{laneSwitcher}</div> : null}
+      {laneSwitcher ? <div className="prog-mobile-switcher section-inner mb-0 pb-6 z-30 relative pointer-events-auto"
+        style={{ backgroundColor: "var(--theme-bg)" }}>{laneSwitcher}</div> : null}
 
                   {/* Sticky Device Center (Solid Background Panel) */}
-      <div className="sticky top-0 z-20 flex flex-col items-center justify-end w-full pt-[10vh] pb-4 pointer-events-none bg-background border-b border-border/20 shadow-[0_10px_30px_rgba(0,0,0,0.4)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+      <div className="sticky top-0 z-20 flex flex-col items-center justify-end w-full pt-[10vh] pb-4 pointer-events-none border-b border-border/20 shadow-[0_10px_30px_rgba(0,0,0,0.4)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+        style={{ backgroundColor: "var(--theme-bg)" }}>
         
         {/* We move the ambience glow here so it stays behind the phone */}
         <div className="prog-mobile-ambience absolute inset-0 !top-0" style={{ position: "absolute", height: "100%" }} aria-hidden />
