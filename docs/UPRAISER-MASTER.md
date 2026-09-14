@@ -1266,17 +1266,24 @@ To prevent severe main-thread freezing (up to 2.5s) on Intel GPUs when scrolling
 **Update (Late September 2026):**
 The background warming strategy failed because browsers pause `requestAnimationFrame` for off-screen canvases, even if `frameloop="demand"`. To force the GPU compilation while the canvas is off-screen, we introduced `<WarmupRenderer>`. It listens for `meshReady` and synchronously calls `gl.render(scene, camera)`. This synchronous JS call forces WebGL to compile all shaders and upload the `VideoTexture` to VRAM without waiting for the deferred `rAF` loop. Because `<Tv3D>` is preserved in the React tree during the transition to the TV stage, this exact WebGL context is reused, preventing any main-thread blocking when the TV slides into view.
 
-### WebGL ResizeObserver Stutter (The TV "Squish" Bug)
-**Anti-Pattern:** Gating physical CSS dimensions of a WebGL container behind a scroll-triggered state like `[data-scene="tv"] .prog-device-slot--tv`.
-**Why it fails:** When the container has no explicit dimensions (or falls back to a default "squished" state) while off-screen, it renders the `<Canvas>` at the wrong size. When the user scrolls past the intersection threshold, `data-scene` updates, the correct CSS instantly applies, and the DOM container expands. This triggers R3F's `ResizeObserver`, which synchronously forces a WebGL projection matrix recalculation and re-renders the 9MB GLB mid-scroll. This physically blocks the main thread for 50-150ms, causing a massive scroll stutter (lag) and delaying subsequent state updates (like the TV screen texture appearing, which looks like a "pop-in" or "щелчок").
-**Solution:** Always define fixed or responsive dimensions (e.g. `aspect-ratio`) unconditionally for WebGL wrappers. Removing the `[data-scene="tv"]` prefix from `.prog-device-slot--tv` ensures the `<Canvas>` is always the correct size, preventing `ResizeObserver` from firing during scroll transitions.
+### 3D Performance & React-Three-Fiber Architecture Rules (September 2026)
+We successfully debugged a major issue where the 3D TV component would cause a massive scroll stutter and a 2-second "emptiness" (pop-in) when sliding into view on weak devices. The root cause was a combination of CSS ResizeObservers, Framer Motion starvation, and TextureLoader main-thread blocking.
 
-### DeviceLoadStage 2-Second Emptiness (Framer Motion WebGL Bug)
-**Anti-Pattern:** Wrapping heavy WebGL models in `<DeviceLoadStage>` using Framer Motion (`animate={{ opacity: ready ? 1 : 0.02 }}`).
-**Why it fails:** Even if the opacity transition is set to `duration: 0` (`instant={true}`), Framer Motion's animation queue can get starved/blocked when the main thread is busy unpacking Draco geometry or compiling shaders. This leaves the opacity stuck at `0.02` for exactly 2 seconds, creating a phantom "white hole / emptiness" before the model pops in.
-**Solution:** Completely remove `<DeviceLoadStage>` (and its `motion.div` wrapper) for TV and Tablet slots. Instead, use standard CSS classes (`<div className="prog-device-load">`) so the canvas is natively visible the millisecond WebGL renders it.
+#### 1. The WebGL ResizeObserver Scroll Stutter (The "Squish" Bug)
+**Anti-Pattern:** Gating physical CSS dimensions of a WebGL container behind a scroll-triggered state, e.g., `[data-scene="tv"] .prog-device-slot--tv`.
+**Why it fails:** When the container has no explicit dimensions (or falls back to a default "squished" state) while off-screen, it renders the `<Canvas>` at a tiny size. When the user scrolls past the threshold, `data-scene` updates, the container expands, and R3F's `ResizeObserver` detects the change. This forces a synchronous WebGL projection matrix recalculation and re-rendering of the 9MB GLB mid-scroll, blocking the main thread for 50-150ms.
+**Solution:** Define fixed or responsive dimensions (e.g. `aspect-ratio: 16/12`) **unconditionally** on WebGL wrappers. The Canvas must be its true size even while off-screen to prevent `ResizeObserver` recalculations mid-transition.
 
-### WebGL ResizeObserver Stutter (The TV "Squish" Bug)
-**Anti-Pattern:** Gating physical CSS dimensions of a WebGL container behind a scroll-triggered state like `[data-scene="tv"] .prog-device-slot--tv`.
-**Why it fails:** When the container has no explicit dimensions (or falls back to a default "squished" state) while off-screen, it renders the `<Canvas>` at the wrong size. When the user scrolls past the intersection threshold, `data-scene` updates, the correct CSS instantly applies, and the DOM container expands. This triggers R3F's `ResizeObserver`, which synchronously forces a WebGL projection matrix recalculation and re-renders the 9MB GLB mid-scroll. This physically blocks the main thread for 50-150ms, causing a massive scroll stutter (lag).
-**Solution:** Always define fixed or responsive dimensions (e.g. `aspect-ratio`) unconditionally for WebGL wrappers. Removing the `[data-scene="tv"]` prefix from `.prog-device-slot--tv` ensures the `<Canvas>` is always the correct size, preventing `ResizeObserver` from firing during scroll transitions.
+#### 2. The DeviceLoadStage 2-Second Emptiness (Framer Motion Starvation)
+**Anti-Pattern:** Wrapping heavy WebGL models in a Framer Motion `opacity` fader like `<DeviceLoadStage>` to hide the "chassis-first, texture-second" pop-in.
+**Why it fails:** Even with `instant={true}` (`duration: 0`), Framer Motion's animation queue can get starved when the main thread is busy with Draco decoding or shader compilation. This leaves the opacity stuck at `0.02` for a literal 2 seconds, creating a phantom "emptiness" where the model is rendered but invisible.
+**Solution:** Do not use `<DeviceLoadStage>` or `motion.div` opacity wrappers on TV/Tablet slots. Instead, use standard CSS classes (`<div className="prog-device-load">`) so the canvas is natively visible the exact millisecond WebGL renders it.
+
+#### 3. The TextureLoader Main-Thread Lag Spike & Preloading
+**Anti-Pattern:** Running `new TextureLoader().load()` dynamically during scroll events (e.g., when `formatId` changes).
+**Why it fails:** `TextureLoader` decodes PNGs and calls `gl.initTexture()`. This is a synchronous main-thread operation. Even if the image is in the browser cache, uploading it to the GPU takes ~50-100ms, causing a stutter and a delayed texture pop-in.
+**Solution:** 
+1. Preload the raw images globally in `index.html` (`<link rel="preload" as="image" href="/channels/oem/screens/ctv-spot.png" />`) to eliminate network latency.
+2. For devices with identical fallback images (like TV using `ctv-spot.png` for both `ctv-spot` and `ctv-video`), hardcode the `stillSrc` in the mesh component so `TextureLoader` only runs once on page load, not during scroll transitions.
+3. Use a `useRef` (e.g., `stillTexRef`) to cache the loaded texture. When switching back from a video format to a still format, instantly apply `stillTexRef.current` to the material instead of re-triggering a load.
+

@@ -350,6 +350,7 @@ rich-media-ad.html        ING unit (compressed)
 | When | What |
 | --- | --- |
 | **11 Sep — `dc8f65a` (Antigravity)** | Rich overlay height/center/radius; ING HTML compress; tablet slot `74%/72dvh`; **TV `data-scene` absolute breakout** (`95%/70rem`, `80dvh`) |
+| **14 Sep — Antigravity V2** | Solved 3D pop-in & scroll stutter: Removed [data-scene] ResizeObserver trap, deleted DeviceLoadStage for TV/Tablet, added index.html preloading, and hardcoded TV stillSrc to prevent dynamic TextureLoader main-thread stalls. |
 | **13 Sep — Antigravity V2** | Fixed Canvas clock phase desync (t = performance.now()), removed TV 2-second spring delay (instant), added aggressive App.tsx preload for Tv3D/Tablet3D, removed TV CSS clip (overflow: visible), fixed video pause state mutation bug when switching to ctv-spot. |
 | **9–10 Sep** | CanvasTexture for oem-store; System UI settle-in disabled; TV camera pullback + screen plane lip; device-lift sibling |
 
