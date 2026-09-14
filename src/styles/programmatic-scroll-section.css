@@ -652,7 +652,7 @@
  * TV SCENE — stay in the left device column (peer to phone/tablet), not a
  * full-sticky absolute takeover. Overflow stays visible so chassis isn't CSS-cropped.
  */
-[data-scene="tv"] .prog-scroll-phone-col--lifted {
+/* [data-scene="tv"] .prog-scroll-phone-col--lifted {
   -webkit-mask-image: none !important;
   mask-image: none !important;
   position: relative;
@@ -670,13 +670,13 @@
   overflow: visible !important;
   -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
   mask-image: linear-gradient(to right, black 85%, transparent 100%);
-}
+} */
 
-[data-scene="tv"] .prog-scroll-phone-col--lifted > div {
+/* [data-scene="tv"] .prog-scroll-phone-col--lifted > div {
   width: 100%;
   height: 100%;
   overflow: visible;
-}
+} */
 
 /* TV optical slot — larger than tablet, still left-of-copy (not full-bleed hero) */
 [data-scene="tv"] 
