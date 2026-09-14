@@ -162,18 +162,24 @@ function TvMesh({
   const stillSrc = (safeFormatId && FORMAT_STILL[safeFormatId]) || FORMAT_STILL["ctv-spot"];
 
   const showScreen = Boolean(videoSrc || stillSrc);
-  const stillTex = useTexture(stillSrc || FORMAT_STILL["ctv-spot"]);
-  const modeRef = useRef<"still" | "video">("still");
-  const [screenMap, setScreenMap] = useState<Texture>(stillTex);
+  const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
-  useMemo(() => {
-    stillTex.colorSpace = SRGBColorSpace;
-    stillTex.minFilter = LinearFilter;
-    stillTex.magFilter = LinearFilter;
-    stillTex.flipY = true;
-    stillTex.needsUpdate = true;
-  }, [stillTex]);
+  useEffect(() => {
+    const loader = new TextureLoader();
+    loader.load(stillSrc || FORMAT_STILL["ctv-spot"], (tex) => {
+      tex.flipY = true;
+      tex.colorSpace = SRGBColorSpace;
+      setScreenMap((prev) => {
+        // If we haven't already promoted to videoTex, use this still texture
+        if (!prev || (prev as any).isVideoTexture === undefined) {
+          return tex;
+        }
+        return prev;
+      });
+    });
+  }, [stillSrc]);
 
+  
   const [xf] = useState(() => computeTransform(scene));
   const screen = screenPlaneForHeight(getTargetHeight());
   const { gl, scene: rootScene, camera } = useThree();
@@ -274,13 +280,28 @@ function TvMesh({
         promoted = true;
         modeRef.current = "video";
         videoTex.flipY = true;
-        videoTex.needsUpdate = true;
-        setScreenMap((prev) => {
-          if (prev && prev !== videoTex) prev.dispose();
-          return videoTex;
-        });
+        
+        const applyTexture = () => {
+          if (cancelled) return;
+          videoTex.needsUpdate = true;
+          setScreenMap((prev) => {
+            if (prev && prev !== videoTex && (prev as any).dispose) prev.dispose();
+            return videoTex;
+          });
+        };
+
         if (playingRef.current) {
-          void video.play().catch(() => {});
+          video.play().then(() => {
+            if ('requestVideoFrameCallback' in video) {
+              video.requestVideoFrameCallback(applyTexture);
+            } else {
+              setTimeout(applyTexture, 150);
+            }
+          }).catch(() => {
+            applyTexture();
+          });
+        } else {
+          applyTexture();
         }
       };
 
@@ -317,7 +338,7 @@ function TvMesh({
         video.pause();
       }
       modeRef.current = "still";
-      setScreenMap(stillTex);
+      // setScreenMap(stillTex);
     }
   }, [showScreen, videoSrc, stillSrc, video, videoTex, inView]);
 
@@ -357,7 +378,7 @@ function TvMesh({
         <mesh position={[screen.x || 0, screen.y, screen.z]}>
           <planeGeometry args={[screen.w, screen.h]} />
           <meshBasicMaterial
-            map={screenMap}
+            map={screenMap || null}
             toneMapped={false}
             depthWrite
             depthTest
@@ -555,4 +576,3 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
 useGLTF.preload(MODEL_PATH, DRACO_PATH);
 
 
-useTexture.preload("/channels/oem/screens/ctv-spot.png");

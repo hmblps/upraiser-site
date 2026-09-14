@@ -94,9 +94,22 @@ function TabletMesh({
   const isTabletFormat = formatId === "pre-install" || formatId === "oem-store" || formatId === "system-ui";
   const safeFormatId = isTabletFormat ? formatId : "pre-install";
   const stillSrc = TABLET_SCREEN_STILL[safeFormatId!];
-  const stillTex = useTexture(stillSrc || TABLET_SCREEN_STILL["pre-install"]!);
+  const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
-  const [screenMap, setScreenMap] = useState<Texture>(stillTex);
+  useEffect(() => {
+    const loader = new TextureLoader();
+    loader.load(stillSrc || TABLET_SCREEN_STILL["pre-install"]!, (tex) => {
+      tex.flipY = true;
+      tex.colorSpace = SRGBColorSpace;
+      setScreenMap((prev) => {
+        // If we haven't already promoted to videoTex, use this still texture
+        if (!prev || (prev as any).isVideoTexture === undefined) {
+          return tex;
+        }
+        return prev;
+      });
+    });
+  }, [stillSrc]);
 
   useMemo(() => {
     configureMap(stillTex);
@@ -208,7 +221,7 @@ function TabletMesh({
     }
 
     if (stillSrc) {
-      if (modeRef.current !== "video") commitMap(stillTex, "still");
+      if (modeRef.current !== "video") // commitMap(stillTex, "still");
     }
 
     if (!src) {
@@ -220,9 +233,22 @@ function TabletMesh({
     const promote = () => {
       if (cancelled || !playingRef.current) return;
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
-      configureMap(videoTex);
-      commitMap(videoTex, "video");
-      void video.play().catch(() => { /* autoplay blocked */ });
+      
+      const applyTexture = () => {
+        if (cancelled) return;
+        configureMap(videoTex);
+        commitMap(videoTex, "video");
+      };
+
+      video.play().then(() => {
+        if ('requestVideoFrameCallback' in video) {
+          video.requestVideoFrameCallback(applyTexture);
+        } else {
+          setTimeout(applyTexture, 150);
+        }
+      }).catch(() => {
+        applyTexture();
+      });
     };
 
     video.loop = true;
@@ -518,4 +544,3 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
 
 useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
 
-Object.values(TABLET_SCREEN_STILL).forEach((src) => { if (src) useTexture.preload(src); });
