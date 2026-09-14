@@ -535,11 +535,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       aria-label="Interactive TV mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
     >
-      <DeviceLoadStage
-        ready={meshReady}
-        instant
-        placeholder={null}
-      >
+      <div className="test-bypass" style={{width: "100%", height: "100%"}}>
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
           frameloop={active ? "always" : "demand"}
@@ -570,7 +566,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
           />
           <WarmupRenderer meshReady={meshReady} />
         </Canvas>
-      </DeviceLoadStage>
+      </div>
     </div>
   );
 }

@@ -492,11 +492,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
       aria-label="Interactive iPad mockup — drag to rotate"
       data-dragging={isDragging ? "true" : "false"}
     >
-      <DeviceLoadStage
-        ready={meshReady}
-        placeholder={null}
-        instant
-      >
+      <div className="test-bypass" style={{width: "100%", height: "100%"}}>
         {slotBox ? (
         <Canvas className="tablet-glb-canvas"
           dpr={[1, 1.5]}
@@ -536,7 +532,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
           <WarmupRenderer meshReady={meshReady} />
         </Canvas>
         ) : null}
-      </DeviceLoadStage>
+      </div>
     </div>
   );
 }
