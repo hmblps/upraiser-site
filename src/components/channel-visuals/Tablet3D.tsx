@@ -517,3 +517,5 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
 }
 
 useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
+
+Object.values(TABLET_SCREEN_STILL).forEach((src) => { if (src) useTexture.preload(src); });

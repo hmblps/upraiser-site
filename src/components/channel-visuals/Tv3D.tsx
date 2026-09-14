@@ -291,6 +291,10 @@ function TvMesh({
       let timer: any;
       const attemptPromote = () => {
         if (cancelled || promoted) return;
+        if (!playingRef.current) {
+          timer = setTimeout(attemptPromote, 100);
+          return;
+        }
         // Delay the heavy GPU upload (600ms on iGPU) until AFTER the TV 
         // slide-in animation finishes (approx 800ms), so the slide-in is 60FPS.
         timer = setTimeout(promote, 850);
@@ -550,3 +554,5 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
 
 useGLTF.preload(MODEL_PATH, DRACO_PATH);
 
+
+useTexture.preload("/channels/oem/screens/ctv-spot.png");
