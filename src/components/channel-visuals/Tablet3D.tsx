@@ -156,8 +156,10 @@ function TabletMesh({
   // Chassis is enough to reveal (Phone/TV pattern). Never gate on screenMap —
   // StrictMode cancels the old rAF+readySent guard and left the CSS chassis stuck.
   useLayoutEffect(() => {
-    onReady?.();
-  }, [onReady]);
+    if (screenMap) {
+      onReady?.();
+    }
+  }, [onReady, screenMap]);
 
   useEffect(() => {
     if (!formatId) return;
