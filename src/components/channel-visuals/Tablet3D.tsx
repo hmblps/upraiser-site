@@ -1,3 +1,5 @@
+import { TextureLoader } from "three";
+
 import {
   Suspense,
   useCallback,
@@ -9,7 +11,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Center, Environment, useGLTF, useTexture } from "@react-three/drei";
+import { Center, Environment, useGLTF } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
@@ -85,7 +87,7 @@ function TabletMesh({
   onReady?: () => void;
   flat?: boolean;
 }) {
-  const { gl } = useThree();
+  const { gl, invalidate } = useThree();
   const group = useRef<Group>(null);
   const modeRef = useRef<"still" | "video" | "anim">("still");
   const playingRef = useRef(playing);
@@ -95,7 +97,6 @@ function TabletMesh({
   const safeFormatId = isTabletFormat ? formatId : "pre-install";
   const stillSrc = TABLET_SCREEN_STILL[safeFormatId!];
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
-
   useEffect(() => {
     const loader = new TextureLoader();
     loader.load(stillSrc || TABLET_SCREEN_STILL["pre-install"]!, (tex) => {
@@ -103,13 +104,15 @@ function TabletMesh({
       tex.colorSpace = SRGBColorSpace;
       setScreenMap((prev) => {
         if (!prev || (prev as any).isVideoTexture === undefined) {
-          invalidate(); // Force render since frameloop might be "never"
+          invalidate();
           return tex;
         }
         return prev;
       });
     });
   }, [stillSrc]);
+
+  
 
     const animRef = useRef<{
     canvas: HTMLCanvasElement;
@@ -175,11 +178,9 @@ function TabletMesh({
       }
       modeRef.current = mode;
       setScreenMap((prev) => {
-        if (!prev || (prev as any).isVideoTexture === undefined) {
-          invalidate(); // Force render since frameloop might be "never"
-          return tex;
-        }
-        return prev;
+        if (prev && prev !== tex && prev !== videoTex) prev.dispose();
+        invalidate();
+        return tex;
       });
     };
 
@@ -233,22 +234,18 @@ function TabletMesh({
     const promote = () => {
       if (cancelled || !playingRef.current) return;
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
-      
       const applyTexture = () => {
         if (cancelled) return;
         configureMap(videoTex);
         commitMap(videoTex, "video");
       };
-
       video.play().then(() => {
-        if ('requestVideoFrameCallback' in video) {
-          video.requestVideoFrameCallback(applyTexture);
+        if ("requestVideoFrameCallback" in video) {
+          (video as any).requestVideoFrameCallback(applyTexture);
         } else {
           setTimeout(applyTexture, 150);
         }
-      }).catch(() => {
-        applyTexture();
-      });
+      }).catch(() => applyTexture());
     };
 
     video.loop = true;
@@ -543,4 +540,3 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
 }
 
 useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
-

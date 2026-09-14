@@ -1,3 +1,5 @@
+import { TextureLoader } from "three";
+
 import {
   Suspense,
   useCallback,
@@ -9,7 +11,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, useGLTF, useTexture } from "@react-three/drei";
+import { Environment, useGLTF } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import {
   ACESFilmicToneMapping,
@@ -162,9 +164,9 @@ function TvMesh({
   const stillSrc = (safeFormatId && FORMAT_STILL[safeFormatId]) || FORMAT_STILL["ctv-spot"];
 
   const showScreen = Boolean(videoSrc || stillSrc);
+  
   const modeRef = useRef<"still" | "video">("still");
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
-
   useEffect(() => {
     const loader = new TextureLoader();
     loader.load(stillSrc || FORMAT_STILL["ctv-spot"], (tex) => {
@@ -172,7 +174,7 @@ function TvMesh({
       tex.colorSpace = SRGBColorSpace;
       setScreenMap((prev) => {
         if (!prev || (prev as any).isVideoTexture === undefined) {
-          invalidate(); // Force render since frameloop might be "never"
+          invalidate();
           return tex;
         }
         return prev;
@@ -281,29 +283,23 @@ function TvMesh({
         promoted = true;
         modeRef.current = "video";
         videoTex.flipY = true;
-        
         const applyTexture = () => {
           if (cancelled) return;
           videoTex.needsUpdate = true;
           setScreenMap((prev) => {
-        if (!prev || (prev as any).isVideoTexture === undefined) {
-          invalidate(); // Force render since frameloop might be "never"
-          return tex;
-        }
-        return prev;
-      });
+            if (prev && prev !== videoTex && (prev as any).dispose) prev.dispose();
+            invalidate();
+            return videoTex;
+          });
         };
-
         if (playingRef.current) {
           video.play().then(() => {
-            if ('requestVideoFrameCallback' in video) {
-              video.requestVideoFrameCallback(applyTexture);
+            if ("requestVideoFrameCallback" in video) {
+              (video as any).requestVideoFrameCallback(applyTexture);
             } else {
               setTimeout(applyTexture, 150);
             }
-          }).catch(() => {
-            applyTexture();
-          });
+          }).catch(() => applyTexture());
         } else {
           applyTexture();
         }
@@ -578,5 +574,4 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
 }
 
 useGLTF.preload(MODEL_PATH, DRACO_PATH);
-
 
