@@ -171,8 +171,8 @@ function TvMesh({
       tex.flipY = true;
       tex.colorSpace = SRGBColorSpace;
       setScreenMap((prev) => {
-        // If we haven't already promoted to videoTex, use this still texture
         if (!prev || (prev as any).isVideoTexture === undefined) {
+          invalidate(); // Force render since frameloop might be "never"
           return tex;
         }
         return prev;
@@ -183,7 +183,7 @@ function TvMesh({
   
   const [xf] = useState(() => computeTransform(scene));
   const screen = screenPlaneForHeight(getTargetHeight());
-  const { gl, scene: rootScene, camera } = useThree();
+  const { gl, scene: rootScene, camera, invalidate } = useThree();
 
   const { video, videoTex } = useMemo(() => {
     const v = document.createElement("video");
@@ -286,9 +286,12 @@ function TvMesh({
           if (cancelled) return;
           videoTex.needsUpdate = true;
           setScreenMap((prev) => {
-            if (prev && prev !== videoTex && (prev as any).dispose) prev.dispose();
-            return videoTex;
-          });
+        if (!prev || (prev as any).isVideoTexture === undefined) {
+          invalidate(); // Force render since frameloop might be "never"
+          return tex;
+        }
+        return prev;
+      });
         };
 
         if (playingRef.current) {
@@ -541,7 +544,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       >
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={active ? "always" : "never"}
+          frameloop={active ? "always" : "demand"}
           gl={{
             antialias: true,
             alpha: true,

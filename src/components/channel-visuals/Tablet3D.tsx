@@ -102,8 +102,8 @@ function TabletMesh({
       tex.flipY = true;
       tex.colorSpace = SRGBColorSpace;
       setScreenMap((prev) => {
-        // If we haven't already promoted to videoTex, use this still texture
         if (!prev || (prev as any).isVideoTexture === undefined) {
+          invalidate(); // Force render since frameloop might be "never"
           return tex;
         }
         return prev;
@@ -175,8 +175,11 @@ function TabletMesh({
       }
       modeRef.current = mode;
       setScreenMap((prev) => {
-        if (prev && prev !== tex && prev !== videoTex) prev.dispose();
-        return tex;
+        if (!prev || (prev as any).isVideoTexture === undefined) {
+          invalidate(); // Force render since frameloop might be "never"
+          return tex;
+        }
+        return prev;
       });
     };
 
@@ -498,7 +501,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
         {slotBox ? (
         <Canvas className="tablet-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={active ? "always" : "never"}
+          frameloop={active ? "always" : "demand"}
           resize={{ debounce: 0, offsetSize: true }}
           gl={{
             antialias: true,
