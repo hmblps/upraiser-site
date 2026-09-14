@@ -111,10 +111,7 @@ function TabletMesh({
     });
   }, [stillSrc]);
 
-  useMemo(() => {
-    configureMap(stillTex);
-  }, [stillTex]);
-  const animRef = useRef<{
+    const animRef = useRef<{
     canvas: HTMLCanvasElement;
     tex: CanvasTexture;
     img: HTMLImageElement;

@@ -162,6 +162,7 @@ function TvMesh({
   const stillSrc = (safeFormatId && FORMAT_STILL[safeFormatId]) || FORMAT_STILL["ctv-spot"];
 
   const showScreen = Boolean(videoSrc || stillSrc);
+  const modeRef = useRef<"still" | "video">("still");
   const [screenMap, setScreenMap] = useState<Texture | null>(null);
 
   useEffect(() => {
