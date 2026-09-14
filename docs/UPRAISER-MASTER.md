@@ -1147,7 +1147,18 @@ rsync backup → commit **site only** → `git push origin HEAD` → `npm run de
 1. **Aggressive Preloading:** Large models (`tv-draco.glb`, `tablet.glb`) must be aggressively preloaded in the root `App.tsx` (`useGLTF.preload`) to bypass React Suspense network delays during scroll.
 2. **Synchronized Phases:** Separate `<Canvas>` components (Phone, Tablet, TV) mount asynchronously. Animations driven by `state.clock.elapsedTime` will desynchronize. Always use global `performance.now() / 1000` for `Math.sin()` floats to keep all devices breathing in perfect unison.
 3. **Instant Reveal:** Avoid `DeviceLoadStage` CSS spring fade-ins for models without a fallback silhouette. Use `placeholder={null} instant` so the chassis pops in instantly.
-4. **Decoupled Textures:** Never use `useTexture` for dynamic screen posters on heavy devices. It suspends the entire chassis, leaving a "white hole" in the layout. Use `TextureLoader` inside a `useEffect` so the black matrix renders immediately while the image fetches in the background.
+4. **Texture Loading & "White Holes" Anti-Pattern:**
+   - ❌ **FAILED:** `useTexture(stillSrc)` suspends the entire React tree. On a slow network, the 9MB chassis waits for a 100KB PNG, leaving a "white hole" (emptiness) in the layout.
+   - ❌ **FAILED:** `TextureLoader` inside `useEffect` (blindly). Chassis mounts instantly, but the screen is black for 200ms. Result: an ugly "pop-in" effect where the screen appears after the chassis.
+   - ✅ **SOLUTION:** Use `TextureLoader` inside `useEffect`, but **delay** calling `onReady?.()` until `screenMap` is loaded. `DeviceLoadStage` keeps the CSS `opacity: 0` until `onReady` fires. This guarantees the chassis and poster appear simultaneously, but without blocking the main React thread (no Suspense).
+
+5. **Video Hardware Decode Stutter Anti-Pattern:**
+   - ❌ **FAILED:** Calling `video.play()` and immediately swapping to `VideoTexture`. The browser's `loadeddata` event triggers `gl.initTexture()`, which blocks the main thread for 200–500ms on weak hardware. If this happens while the TV is sliding in via CSS, the animation stutters horribly.
+   - ✅ **SOLUTION:** 
+     1. Delay `video.play()` by 850ms (let the CSS slide-in animation finish at 60 FPS).
+     2. Call `video.play()`.
+     3. Wait for `video.requestVideoFrameCallback` (guarantees the GPU has fully decoded and uploaded the frame).
+     4. Only *then* swap the material to `VideoTexture`. Zero black flashes, zero scroll stutter.
 
 ## 26. Pre-launch checklist
 
