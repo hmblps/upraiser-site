@@ -91,7 +91,7 @@ function DeviceCarousel3({
         <div className="prog-device-slot prog-device-slot--phone">
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={<CssPhone mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
-              {use3d ? (
+              {!flat ? (
                 <Phone3D
                   mode={mode}
                   formatId={formatId}
@@ -120,7 +120,7 @@ function DeviceCarousel3({
         <div className="prog-device-slot prog-device-slot--tablet" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={<CssTablet mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
-              {use3d ? (
+              {!flat ? (
                 shouldWarmTablet && (
                   <Tablet3D
                     mode={mode}
@@ -152,7 +152,7 @@ function DeviceCarousel3({
         <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={<CssTv mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
-              {use3d ? (
+              {!flat ? (
                 shouldWarmTv && (
                   <Tv3D
                     mode={mode}
