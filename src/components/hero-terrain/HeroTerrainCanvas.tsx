@@ -7,7 +7,7 @@ import { Navigation } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
-import { useHardwareTier } from "../../hooks/useHardwareTier";
+// import { useHardwareTier } from "../../hooks/useHardwareTier";
 import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "../../lib/heroModel";
 import { markHeroReady } from "../../lib/scrollPreload";
 import { CaptureDriver } from "./CaptureDriver";
@@ -77,7 +77,7 @@ export function HeroTerrainCanvas({
   const { theme: ctxTheme } = useTheme();
   const theme = capture?.theme ?? ctxTheme;
   const reduced = useReducedMotion();
-  const tier = useHardwareTier();
+  // const tier = useHardwareTier();
   const scrollRef = useRef<ScrollState>({ pointerX: 0, pointerY: 0 });
   const shellRef = useRef<HTMLDivElement>(null);
   const lite = variant === "expedition";
