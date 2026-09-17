@@ -78,7 +78,7 @@ export function Scene({
       <HeroCamera scrollRef={scrollRef} path={path} />
       {isLight ? <BrandHazeSky lite={lite} /> : <NightStars />}
       <Suspense fallback={null}>
-        {isLight ? <Environment files="/hero/sky.exr" /> : null}
+        {/* Environment map removed: baked model doesn't need heavy 9MB EXR lighting */}
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}
