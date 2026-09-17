@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useLayoutEffect, type MutableRefObject } from "react";
 import { useThree } from "@react-three/fiber";
+import { Environment } from "@react-three/drei";
 import { Everest } from "../Everest";
 import { Atmosphere, HorizonGlow, SunRig } from "./Atmosphere";
 import { AscentBird } from "./AscentBird";
@@ -77,6 +78,7 @@ export function Scene({
       <HeroCamera scrollRef={scrollRef} path={path} />
       {isLight ? <BrandHazeSky lite={lite} /> : <NightStars />}
       <Suspense fallback={null}>
+        {isLight ? <Environment files="/hero/sky.exr" /> : null}
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}
