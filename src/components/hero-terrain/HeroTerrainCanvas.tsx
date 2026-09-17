@@ -99,7 +99,7 @@ export function HeroTerrainCanvas({
   useEffect(() => {
     setBootStuck(false);
     if (capturing || shouldFallback) return;
-    const t = window.setTimeout(() => setBootStuck(true), 15000);
+    const t = window.setTimeout(() => setBootStuck(true), 4000);
     return () => window.clearTimeout(t);
   }, [theme, capturing, shouldFallback]);
 
