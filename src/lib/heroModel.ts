@@ -1,7 +1,8 @@
 /** Dark / wireframe terrain (textures stripped, UV pruned). */
 export const MODEL_URL = "/hero/everest.glb";
+export const MODEL_URL_DARK = "/hero/everest-dark.glb";
 /** Light-theme terrain — new mountain with embedded PBR snow textures, Draco-compressed. */
-export const MODEL_URL_LIGHT = "/hero/mountain-light.glb";
+export const MODEL_URL_LIGHT = "/hero/mountain-light-baked.glb";
 /** Dark-theme starfield probe — Sketchfab Voyager, wire only. */
 export const VOYAGER_URL = "/hero/voyager-nasa.glb";
 /** Local Draco wasm — matches KHR_draco_mesh_compression on the GLB. */
