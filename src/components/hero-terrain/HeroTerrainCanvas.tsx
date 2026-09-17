@@ -46,6 +46,27 @@ function ThemeGlSync({ theme }: { theme: ThemeMode }) {
   return null;
 }
 
+/** 
+ * Waits for the browser to actually paint the WebGL canvas before signaling ready.
+ * This prevents the CSS loading spinner from disappearing during the synchronous 1-second GPU upload freeze.
+ */
+function GpuUnlocker({ onUnlock }: { onUnlock: () => void }) {
+  useEffect(() => {
+    let frame1: number;
+    let frame2: number;
+    frame1 = requestAnimationFrame(() => {
+      frame2 = requestAnimationFrame(() => {
+        onUnlock();
+      });
+    });
+    return () => {
+      cancelAnimationFrame(frame1);
+      cancelAnimationFrame(frame2);
+    };
+  }, [onUnlock]);
+  return null;
+}
+
 /** Brand-warm Everest — dark wire / light photo maps + drone ascent. */
 export function HeroTerrainCanvas({
   className,
@@ -63,6 +84,7 @@ export function HeroTerrainCanvas({
   const capturing = Boolean(capture);
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
+  const [gpuReady, setGpuReady] = useState(false);
   const [drawnTheme, setDrawnTheme] = useState<ThemeMode | null>(null);
   /** If Draco/GLB hang, do not keep the compass overlay forever. */
   const [bootStuck, setBootStuck] = useState(false);
@@ -71,7 +93,7 @@ export function HeroTerrainCanvas({
     setDrawnTheme(theme);
     setBootStuck(false);
   }, [theme]);
-  const showTerrain = capturing || (modelReady && drawnTheme === theme);
+  const showTerrain = capturing || (gpuReady && drawnTheme === theme);
   const shouldFallback = (reduced || tier === 'lite') && !capturing;
 
   useEffect(() => {
@@ -223,6 +245,7 @@ export function HeroTerrainCanvas({
           voyager
           lite={lite}
         />
+        {modelReady ? <GpuUnlocker onUnlock={() => setGpuReady(true)} /> : null}
         {capture ? <CaptureDriver job={capture} modelReady={modelReady} /> : null}
       </Canvas>
     </motion.div>
