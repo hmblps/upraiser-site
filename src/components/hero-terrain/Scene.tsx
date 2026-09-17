@@ -78,7 +78,7 @@ export function Scene({
       <HeroCamera scrollRef={scrollRef} path={path} />
       {isLight ? <BrandHazeSky lite={lite} /> : <NightStars />}
       <Suspense fallback={null}>
-        {isLight ? <Environment files="/hero/sky.hdr" /> : null}
+        {/* Environment map removed until sky.hdr is uploaded by user */}
         <Everest theme={theme} castShadow={isLight} receiveShadow={isLight} />
         <FirstFrameGate key={theme} onReady={handleReady} />
         {lite ? <AscentRoute /> : null}
