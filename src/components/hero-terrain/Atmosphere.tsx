@@ -139,9 +139,9 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
       <object3D ref={targetRef} position={[0, 14, 0]} />
       <directionalLight
         ref={keyLightRef}
-        color="#ffd4a0"
-        intensity={0} // ВЫКЛЮЧЕНО для теста (было 3.5)
-        position={[-30, 10, 15]}
+        color="#ffffff"
+        intensity={0.8} // Мягкий постоянный свет для красивых бликов
+        position={[-30, 20, 15]}
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-bias={-0.0001}
