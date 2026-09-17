@@ -264,11 +264,28 @@ export function HeroVideoFallback({
       },
     );
 
+    let currentFrameFloat = 0;
+    let frameLoopId = 0;
+
+    const renderLoop = () => {
+      if (!live()) return;
+      const target = targetRef.current;
+      // Lerp float for smooth touch tracking
+      currentFrameFloat += (target - currentFrameFloat) * 0.15;
+      
+      const rounded = Math.round(currentFrameFloat);
+      if (Math.abs(currentFrameFloat - target) > 0.01 || rounded !== lastIndexRef.current) {
+        drawFrame(rounded);
+        preloadWindow(rounded);
+      }
+      
+      frameLoopId = requestAnimationFrame(renderLoop);
+    };
+    frameLoopId = requestAnimationFrame(renderLoop);
+
     function applyProgress(progress: number) {
       const targetFrame = Math.min(FRAME_COUNT - 1, Math.floor(progress * (FRAME_COUNT - 1)));
       targetRef.current = targetFrame;
-      drawFrame(targetFrame);
-      preloadWindow(targetFrame);
     }
     applyProgressRef.current = applyProgress;
 
@@ -296,6 +313,7 @@ export function HeroVideoFallback({
     return () => {
       cancelled = true;
       unsub();
+      cancelAnimationFrame(frameLoopId);
       pendingImgs.forEach(abortImg);
       pendingImgs.clear();
     };
