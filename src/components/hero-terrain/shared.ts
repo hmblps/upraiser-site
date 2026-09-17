@@ -70,10 +70,6 @@ export type AscentPath = {
 export type ThemeMode = "light" | "dark";
 export type ScrollState = { pointerX: number; pointerY: number };
 
-export function easeInOutSine(t: number) {
-  return -(Math.cos(Math.PI * t) - 1) / 2;
-}
-
 export function easeInOutCubic(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }

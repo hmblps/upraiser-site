@@ -10,7 +10,6 @@ import {
   easeInCubic,
   easeInOutCubic,
   easeOutCubic,
-  easeInOutSine,
   readProgress,
   sampleArc,
   type AscentPath,
@@ -47,8 +46,8 @@ export function HeroCamera({
     const lookDriftX = snap ? 0 : Math.sin(t * 0.18 + 2.6) * 1.1;
     const lookDriftY = snap ? 0 : Math.sin(t * 0.24 + 0.4) * 0.6;
 
-    const tPos = easeInOutSine(raw);
-    const tLook = easeInOutSine(raw);
+    const tPos = easeOutCubic(raw);
+    const tLook = easeInOutCubic(raw);
     const tFov = easeInCubic(MathUtils.clamp(raw * 1.05, 0, 1));
 
     sampleArc(tPos, path.startPos, path.midPos, path.endPos, targetPos.current);
