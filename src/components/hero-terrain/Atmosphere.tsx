@@ -121,8 +121,23 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
 
   useFrame((_, delta) => {
     if (!isLight) return;
-    // For baked GLB we don't need the moving/yellowing directional light, 
-    // it was overriding the intensity=0 prop and turning yellow at the peak.
+    progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
+    const p = progressSmooth.current;
+    
+    // Динамический "луч света" (glare), который вспыхивает при пролете первого хребта (прогресс ~0.35)
+    const ridgeDistance = Math.max(0, 1 - Math.abs(p - 0.35) * 4); // 1.0 на пике, 0.0 по краям
+    const smoothGlare = ridgeDistance * ridgeDistance * (3 - 2 * ridgeDistance); 
+
+    if (keyLightRef.current) {
+      // Базовая мягкая яркость 0.6, на хребте вспыхивает до 2.6 для красивого блика
+      keyLightRef.current.intensity = 0.6 + smoothGlare * 2.0;
+      
+      // Проводим свет слева направо во время скролла, чтобы блик "скользил" по камню
+      const x = MathUtils.lerp(-50, -10, p);
+      const y = MathUtils.lerp(15, 25, p); 
+      const z = MathUtils.lerp(5, 30, p);
+      keyLightRef.current.position.set(x, y, z);
+    }
   });
 
   if (!isLight) {
