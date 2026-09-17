@@ -94,7 +94,7 @@ export function HeroTerrainCanvas({
     setBootStuck(false);
   }, [theme]);
   const showTerrain = capturing || (gpuReady && drawnTheme === theme);
-  const shouldFallback = (reduced || tier === 'lite') && !capturing;
+  const shouldFallback = !capturing; // FORCED fallback sequence for all devices
 
   useEffect(() => {
     setBootStuck(false);
