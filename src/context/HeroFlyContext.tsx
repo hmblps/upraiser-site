@@ -31,10 +31,10 @@ function resolveFlyStage(cached: HTMLElement | null) {
   );
 }
 
-/** Visual sticky-runway progress — do not mix Lenis scrollY with getBoundingClientRect. */
+/** Visual sticky-runway progress — allow overscroll to 1.15 for seamless handoff to next section */
 export function flyProgressForStage(stage: HTMLElement) {
   const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
-  return clamp(-stage.getBoundingClientRect().top / runway, 0, 1);
+  return clamp(-stage.getBoundingClientRect().top / runway, 0, 1.15);
 }
 
 function countRevealed(progress: number) {
