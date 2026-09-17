@@ -30,12 +30,12 @@ export function HeroAtmosphere() {
   const { theme } = useTheme();
   const [params] = useSearchParams();
   const forceMobileFrames = params.get("mobile") === "1";
+  const lite = params.has("lite");
   const isLight = theme === "light";
   const reduced = useReducedMotion();
   const desktop = useDesktopHero();
   const tier = useHardwareTier();
   
-  const lite = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("lite");
   const use3d = desktop && !reduced && tier === "high" && !lite;
   const [boot3d, setBoot3d] = useState(false);
 
