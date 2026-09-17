@@ -158,8 +158,8 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
       <directionalLight
         ref={keyLightRef}
         color="#ffd4a0"
-        intensity={3.5}
-        position={[-30, 10, 15]} // Начальная позиция слева
+        intensity={0} // ВЫКЛЮЧЕНО для теста (было 3.5)
+        position={[-30, 10, 15]}
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-bias={-0.0001}

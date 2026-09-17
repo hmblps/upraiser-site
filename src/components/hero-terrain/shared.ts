@@ -41,12 +41,14 @@ export const FOG = {
  * 3) Lock focus onto the far ridgeline (gentle punch-in)
  */
 export const HERO_ASCENT_DEFAULTS = {
-  startPos: [-4, 12, 188] as [number, number, number],
-  midPos: [-2, 38, 140] as [number, number, number],
-  endPos: [-10, 72, 122] as [number, number, number],
+  // Start further back and slightly lower for a longer approach
+  startPos: [-4, 8, 220] as [number, number, number],
+  midPos: [-2, 38, 150] as [number, number, number],
+  // End higher and closer to the peak for a more dramatic finale
+  endPos: [-15, 88, 100] as [number, number, number],
   startLook: [18, 28, -28] as [number, number, number],
   midLook: [14, 10, -40] as [number, number, number],
-  endLook: [12, 16, -68] as [number, number, number],
+  endLook: [12, 10, -75] as [number, number, number],
   startFov: 46,
   midFov: 40,
   endFov: 34,

@@ -191,16 +191,16 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-stage--fly {
-    /* ~3s sticky runway — cinematic drone beat with room to land */
-    height: 300vh;
-    min-height: 300vh;
+    /* Extended sticky runway — slower cinematic drone beat to enjoy the new mountain */
+    height: 600vh;
+    min-height: 600vh;
   }
 
   @media (max-width: 899px) {
     .hero-stage--fly {
-      /* Much faster scroll-through on mobile */
-      height: 300vh;
-      min-height: 300vh;
+      /* Extended on mobile too */
+      height: 600vh;
+      min-height: 600vh;
     }
   }
 
