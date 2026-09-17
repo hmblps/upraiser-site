@@ -121,26 +121,8 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
 
   useFrame((_, delta) => {
     if (!isLight) return;
-    progressSmooth.current = MathUtils.damp(progressSmooth.current, readProgress(heroFly), TRACK_FOLLOW, delta);
-    const rise = easeOutCubic(progressSmooth.current);
-    
-    // АГРЕССИВНЫЙ БОКОВОЙ СВЕТ (Sculpting Light)
-    // Свет бьет резко слева и немного сверху, прорисовывая каждый изгиб геометрии
-    const x = MathUtils.lerp(-60, -30, rise);
-    const y = MathUtils.lerp(20, 10, rise); 
-    const z = MathUtils.lerp(5, 15, rise);
-
-    if (keyLightRef.current) {
-      keyLightRef.current.position.set(x, y, z);
-      // Компенсируем кромешную тьму от убитого envMapIntensity мощнейшим солнцем
-      keyLightRef.current.intensity = MathUtils.lerp(2.0, 3.8, rise); 
-      keyLightRef.current.color.lerpColors(SUNRISE.keyDawn, SUNRISE.keyNoon, rise);
-      keyLightRef.current.shadow.camera.updateMatrixWorld();
-    }
-    if (targetRef.current) {
-      targetRef.current.position.set(0, 14, 0);
-      keyLightRef.current?.target.updateMatrixWorld();
-    }
+    // For baked GLB we don't need the moving/yellowing directional light, 
+    // it was overriding the intensity=0 prop and turning yellow at the peak.
   });
 
   if (!isLight) {
