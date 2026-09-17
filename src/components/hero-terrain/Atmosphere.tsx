@@ -93,16 +93,12 @@ export function HorizonGlow({ theme }: { theme: ThemeMode }) {
       {/* Soft backlight — enough rim, not a wash on photo albedo */}
       <directionalLight ref={rimRef} color={accent} intensity={isLight ? 0.22 : 0.35} position={[8, 36, -90]} />
       {isLight ? (
-        <pointLight ref={glowRef} color="#ffe2b8" intensity={0.16} distance={140} decay={2} position={[0, 22, -48]} />
+        <pointLight ref={glowRef} color="#ffffff" intensity={0.16} distance={140} decay={2} position={[0, 22, -48]} />
       ) : null}
     </group>
   );
 }
 
-const SUNRISE = {
-  keyDawn: new Color("#8fa6c4"), // Gloomy, blizzard grey-blue
-  keyNoon: new Color("#ffe4bc"), // Bright warm sun
-} as const;
 
 export function SunRig({ theme }: { theme: ThemeMode }) {
   const heroFly = useHeroFlyOptional();
