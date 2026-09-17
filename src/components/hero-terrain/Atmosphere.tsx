@@ -131,7 +131,7 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
         intensity={0.8} // Мягкий постоянный свет для красивых бликов
         position={[-30, 20, 15]}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[8192, 8192]}
         shadow-bias={-0.0001}
         shadow-normalBias={0.07}
         shadow-camera-near={1}

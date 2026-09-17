@@ -213,7 +213,7 @@ export function HeroTerrainCanvas({
       <Canvas
         className="hero-terrain-canvas"
         shadows
-        dpr={capturing ? 2 : [1, 1.5]}
+        dpr={capturing ? 3 : [1, 1.5]}
         frameloop={capturing || inView ? "always" : "never"}
         gl={{
           antialias: true,
