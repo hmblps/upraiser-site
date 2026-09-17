@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import type { DirectionalLight, Object3D, PointLight } from "three";
-import { Color, MathUtils } from "three";
+import { MathUtils } from "three";
 import { useHeroFlyOptional } from "../../context/HeroFlyContext";
 import { FOG, EXPEDITION_FOG, TRACK_FOLLOW, easeOutCubic, readProgress, type ThemeMode } from "./shared";
 import { heroCapture } from "../../lib/heroCapture";
@@ -101,10 +101,8 @@ export function HorizonGlow({ theme }: { theme: ThemeMode }) {
 
 
 export function SunRig({ theme }: { theme: ThemeMode }) {
-  const heroFly = useHeroFlyOptional();
   const keyLightRef = useRef<DirectionalLight>(null);
   const targetRef = useRef<Object3D>(null);
-  const progressSmooth = useRef(0);
   const isLight = theme === "light";
 
   useLayoutEffect(() => {
@@ -114,13 +112,6 @@ export function SunRig({ theme }: { theme: ThemeMode }) {
     light.target = target;
     light.target.updateMatrixWorld();
   }, [isLight]);
-
-  useFrame((_, delta) => {
-    if (!isLight) return;
-    // Оставляем свет полностью статичным.
-    // Блики будут появляться естественно за счет движения самой камеры (PBR), 
-    // а глобальная освещенность больше не будет "прыгать" или мигать.
-  });
 
   if (!isLight) {
     return (
