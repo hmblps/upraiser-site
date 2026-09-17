@@ -105,7 +105,8 @@ export function readProgress(heroFly: { progressRef: MutableRefObject<number> } 
   if (heroCapture.snap) {
     return heroCapture.progress;
   }
-  return MathUtils.clamp(heroFly?.progressRef.current ?? 0, 0, 1);
+  // Allow progress up to 1.15 so the camera continues moving during the unpin overscroll
+  return MathUtils.clamp(heroFly?.progressRef.current ?? 0, 0, 1.15);
 }
 
 export function idle01(t: number, phase = 0) {
