@@ -41,15 +41,12 @@ export const FOG = {
  * 3) Lock focus onto the far ridgeline (gentle punch-in)
  */
 export const HERO_ASCENT_DEFAULTS = {
-  // Start further back and slightly lower for a longer approach
-  startPos: [-4, 8, 220] as [number, number, number],
-  midPos: [-2, 38, 150] as [number, number, number],
-  // Push the end position MUCH further and higher over the peak so it keeps moving fast at the end
-  endPos: [-25, 120, 30] as [number, number, number],
+  startPos: [-4, 12, 188] as [number, number, number],
+  midPos: [-2, 38, 140] as [number, number, number],
+  endPos: [-10, 72, 122] as [number, number, number],
   startLook: [18, 28, -28] as [number, number, number],
   midLook: [14, 10, -40] as [number, number, number],
-  // Look down at the valley as it flies over
-  endLook: [10, 0, -100] as [number, number, number],
+  endLook: [12, 16, -68] as [number, number, number],
   startFov: 46,
   midFov: 40,
   endFov: 34,
@@ -106,8 +103,7 @@ export function readProgress(heroFly: { progressRef: MutableRefObject<number> } 
   if (heroCapture.snap) {
     return heroCapture.progress;
   }
-  // Allow progress up to 1.15 so the camera continues moving during the unpin overscroll
-  return MathUtils.clamp(heroFly?.progressRef.current ?? 0, 0, 1.15);
+  return MathUtils.clamp(heroFly?.progressRef.current ?? 0, 0, 1);
 }
 
 export function idle01(t: number, phase = 0) {
