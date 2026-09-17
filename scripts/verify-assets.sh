@@ -7,6 +7,7 @@ cd "$ROOT"
 REQUIRED=(
   "public/hero/everest.glb"
   "public/hero/everest-light.glb"
+  "public/hero/mountain-light.glb"
   "public/hero/voyager-nasa.glb"
   "public/hero/light-mountains-loop.mp4"
   
