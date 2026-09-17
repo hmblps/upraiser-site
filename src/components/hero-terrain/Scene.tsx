@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useLayoutEffect, type MutableRefObject } from "react";
 import { useThree } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
+
 import { Everest } from "../Everest";
 import { Atmosphere, HorizonGlow, SunRig } from "./Atmosphere";
 import { AscentBird } from "./AscentBird";

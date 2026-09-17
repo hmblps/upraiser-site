@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState , useMemo } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { ACESFilmicToneMapping, PCFSoftShadowMap, SRGBColorSpace } from "three";
 import { Navigation } from "lucide-react";
 import { createPortal } from "react-dom";
