@@ -205,7 +205,7 @@ export function HeroTerrainCanvas({
       transition={
         capturing
           ? { duration: 0 }
-          : { type: "spring", stiffness: 70, damping: 24, mass: 0.9 }
+          : { duration: 0.4, ease: "easeOut" }
       }
       aria-hidden
     >
