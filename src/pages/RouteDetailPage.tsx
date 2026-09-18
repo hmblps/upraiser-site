@@ -1,10 +1,8 @@
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { AD_FORMATS, OEM_CTV_FORMATS } from "../components/solutions/ProgrammaticFormats";
 import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticScrollSection";
-import { useScrollToTop } from "../hooks/useScrollToTop";
 
 export function RouteDetailPage() {
-  useScrollToTop();
   const { slug } = useParams();
   const navigate = useNavigate();
   

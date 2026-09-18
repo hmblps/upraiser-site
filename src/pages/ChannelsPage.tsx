@@ -1,4 +1,3 @@
-import { useScrollToTop } from "../hooks/useScrollToTop";
 import { ProgrammaticScrollSection } from "../components/solutions/ProgrammaticScrollSection";
 
 import { useRoutesLane } from "../hooks/useRoutesLane";
@@ -6,7 +5,6 @@ import { Link } from "react-router-dom";
 import { ChannelsLoader } from "../components/ChannelsLoader";
 
 export function ChannelsPage() {
-  useScrollToTop();
   const { mode, lane, formats, headerLabel, headerTitle, headerDescription } = useRoutesLane();
 
   // Intel / reduced-motion / <1024 handled inside ProgrammaticScrollSection:

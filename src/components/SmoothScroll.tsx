@@ -16,7 +16,7 @@ function getSectionTop(el: HTMLElement, offset = HEADER_OFFSET) {
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   const nativeScroll = usePreferNativeScroll();
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const viewportRoute = isViewportPath(pathname);
   const useLenis = !reduced && !nativeScroll;
   const lenisRef = useRef<Lenis | null>(null);
@@ -283,6 +283,30 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       lenis.start();
     }
   }, [viewportRoute, notifyScroll]);
+
+  // Handle cross-page hash links and automatic scroll-to-top on route changes
+  useEffect(() => {
+    if (hash) {
+      const t = window.setTimeout(() => {
+        const id = hash.replace("#", "");
+        const el = document.getElementById(id);
+        if (el) {
+          if (lenisRef.current && useLenis) {
+            lenisRef.current.scrollTo(el, { offset: -HEADER_OFFSET, immediate: true, force: true });
+          } else {
+            window.scrollTo({ top: getSectionTop(el, -HEADER_OFFSET), behavior: "auto" });
+          }
+        }
+      }, 100);
+      return () => window.clearTimeout(t);
+    } else {
+      // Standard route change without a hash -> scroll to very top
+      if (lenisRef.current && useLenis) {
+        lenisRef.current.scrollTo(0, { immediate: true, force: true });
+      }
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash, useLenis]);
 
   return (
     <ScrollProvider
