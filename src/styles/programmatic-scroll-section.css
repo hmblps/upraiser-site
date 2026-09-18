@@ -629,18 +629,20 @@
 
 .prog-device-slot--phone {
   /* Larger hero — placements must read without zooming. */
-  width: min(35%, 15rem);
-  aspect-ratio: 9 / 19.5;
-  height: auto;
+  height: 100%;
   max-height: min(82dvh, var(--prog-phone-budget, 82dvh));
+  width: auto;
+  max-width: min(35%, 15rem);
+  aspect-ratio: 9 / 19.5;
 }
 
 .prog-device-slot--tablet {
   /* Sized to rival the phone in hierarchy */
-  width: min(60%, 23rem);
-  aspect-ratio: 3 / 4;
-  height: auto;
+  height: 100%;
   max-height: min(75dvh, var(--prog-phone-budget, 75dvh));
+  width: auto;
+  max-width: min(60%, 23rem);
+  aspect-ratio: 3 / 4;
   overflow: visible;
   position: relative;
   z-index: 4;
@@ -680,14 +682,15 @@
 
 /* TV optical slot — larger than tablet, still left-of-copy (not full-bleed hero) */
 .prog-device-slot--tv {
-  width: min(100%, 54rem);
   /* 
      Важно: делаем пропорцию слота 16 / 12 (или 4 / 3), 
      чтобы у канваса был вертикальный запас под наклоненный ТВ 
   */
-  aspect-ratio: 16 / 12;
-  height: auto;
+  height: 100%;
   max-height: min(84dvh, var(--prog-phone-budget, 84dvh));
+  width: auto;
+  max-width: min(100%, 54rem);
+  aspect-ratio: 16 / 12;
   display: flex;
   align-items: center;
   justify-content: center;
