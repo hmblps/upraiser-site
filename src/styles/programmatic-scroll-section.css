@@ -987,7 +987,7 @@
 .prog-scroll-section--mobile {
   --prog-dock-h: 11.25rem;
   position: relative;
-  padding: 0 0 clamp(2.5rem, 10vw, 4rem);
+  padding: calc(var(--site-header-height, 72px)) 0 clamp(2.5rem, 10vw, 4rem);
   /* Avoid overflow-* on sticky ancestors — breaks mobile sticky chrome */
   touch-action: pan-y;
   scroll-padding-top: calc(var(--site-header-height, 72px) + 0.75rem);
@@ -1464,7 +1464,7 @@
 /* Windows 125% / short laptop viewports (~1536×864) — keep chassis fully in frame */
 @media (max-height: 920px) {
   .prog-scroll-sticky-inner {
-    padding-block: 0.25rem 0.5rem;
+    
   }
 
   .prog-scroll-headline .section-description {
