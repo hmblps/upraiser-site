@@ -8,7 +8,7 @@ type FrameSource = CanvasImageSource & { width?: number; height?: number };
 const FRAME_COUNT = 150;
 const LOOKAHEAD = 72;
 const IDLE_CONCURRENCY = 8;
-const CACHE_BUST = "v=10";
+const CACHE_BUST = "v=12";
 
 function frameUrl(folder: string, index: number) {
   const padded = (index + 1).toString().padStart(4, "0");
