@@ -36,7 +36,8 @@ export function HeroAtmosphere() {
   const desktop = useDesktopHero();
   const tier = useHardwareTier();
   
-  const use3d = desktop && !reduced && tier === "high" && !lite;
+  // Enable 3D on mobile ONLY for the dark theme (since it's a lightweight wireframe)
+  const use3d = (!isLight || desktop) && !reduced && tier === "high" && !lite;
   const [boot3d, setBoot3d] = useState(false);
 
   useEffect(() => {

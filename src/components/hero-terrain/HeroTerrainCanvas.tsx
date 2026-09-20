@@ -85,7 +85,11 @@ export function HeroTerrainCanvas({
   const [inView, setInView] = useState(true);
   const [modelReady, setModelReady] = useState(false);
   const [gpuReady, setGpuReady] = useState(false);
-  const [drawnTheme, setDrawnTheme] = useState<ThemeMode | null>(null);
+  // Recreate canvas on theme switch to ensure clean WebGL context and assets
+  const [drawnTheme, setDrawnTheme] = useState<ThemeMode>(theme);
+  useEffect(() => {
+    setDrawnTheme(theme);
+  }, [theme]);
   /** If Draco/GLB hang, do not keep the compass overlay forever. */
   const [bootStuck, setBootStuck] = useState(false);
   const handleModelReady = useCallback(() => {
@@ -94,7 +98,8 @@ export function HeroTerrainCanvas({
     setBootStuck(false);
   }, [theme]);
   const showTerrain = capturing || (gpuReady && drawnTheme === theme);
-  const shouldFallback = !capturing; // FORCED fallback sequence for all devices
+  const isLight = theme === "light";
+  const shouldFallback = !capturing && isLight; // FORCED fallback sequence ONLY for light theme
 
   useEffect(() => {
     setBootStuck(false);
@@ -159,7 +164,6 @@ export function HeroTerrainCanvas({
     far: 900
   }), [cx, cy, cz, path.startFov]);
 
-  const isLight = theme === "light";
 
   return (
     <>
