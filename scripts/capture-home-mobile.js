@@ -13,7 +13,7 @@ import puppeteer from 'puppeteer';
     }
   });
 
-  await page.goto('http://localhost:5173/dev/hero-capture?shot=home&theme=dark&frames=150&mobile=1');
+  await page.goto('http://localhost:3000/dev/hero-capture?shot=home&theme=dark&frames=150&mobile=1');
   
   for (let i = 0; i < 150; i++) {
     if (done) break;
@@ -30,7 +30,7 @@ import puppeteer from 'puppeteer';
     }
   });
   
-  await page.goto('http://localhost:5173/dev/hero-capture?shot=home&theme=light&frames=150&mobile=1');
+  await page.goto('http://localhost:3000/dev/hero-capture?shot=home&theme=light&frames=150&mobile=1');
   
   for (let i = 0; i < 150; i++) {
     if (done) break;

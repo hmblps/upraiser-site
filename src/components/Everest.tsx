@@ -129,6 +129,17 @@ export function Everest({
   const nodes = gltf.nodes as Record<string, Mesh>;
   const materials = gltf.materials as Record<string, MeshStandardMaterial>;
 
+  // Apply shadows to all nested meshes so the primitive casts/receives properly
+  useLayoutEffect(() => {
+    if (!scene) return;
+    scene.traverse((child) => {
+      if ((child as Mesh).isMesh) {
+        child.castShadow = castShadow;
+        child.receiveShadow = receiveShadow;
+      }
+    });
+  }, [scene, castShadow, receiveShadow]);
+
   // ── Shared: auto-scale to TERRAIN_SPAN regardless of model source ──────────
   const scale = useMemo(() => {
     const size = new Vector3();

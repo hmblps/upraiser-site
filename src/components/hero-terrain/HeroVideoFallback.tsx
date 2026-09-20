@@ -122,6 +122,7 @@ export function HeroVideoFallback({
     lastDrawnRef.current = null;
     lastIndexRef.current = -1;
     const targetRef = { current: 0 };
+    const currentFrameRef = { current: 0 };
     const paintedIndexRef = { current: -1 };
     const pendingImgs = new Set<HTMLImageElement>();
 
@@ -189,10 +190,12 @@ export function HeroVideoFallback({
     const store = (index: number, img: HTMLImageElement) => {
       if (!live()) return;
       cache[index] = tagSource(img, folder);
-      const target = targetRef.current;
+      // We must draw the currently displayed lerped frame, not the raw target, 
+      // otherwise it flickers violently between lerped and raw positions during scroll.
+      const currentLerpFrame = Math.round(currentFrameRef.current);
       const painted = paintedIndexRef.current;
-      if (painted < 0 || Math.abs(index - target) < Math.abs(painted - target)) {
-        drawFrame(target);
+      if (painted < 0 || Math.abs(index - currentLerpFrame) < Math.abs(painted - currentLerpFrame)) {
+        drawFrame(currentLerpFrame);
       }
     };
 
@@ -264,17 +267,16 @@ export function HeroVideoFallback({
       },
     );
 
-    let currentFrameFloat = 0;
     let frameLoopId = 0;
 
     const renderLoop = () => {
       if (!live()) return;
       const target = targetRef.current;
       // Lerp float for smooth touch tracking
-      currentFrameFloat += (target - currentFrameFloat) * 0.15;
+      currentFrameRef.current += (target - currentFrameRef.current) * 0.15;
       
-      const rounded = Math.round(currentFrameFloat);
-      if (Math.abs(currentFrameFloat - target) > 0.01 || rounded !== lastIndexRef.current) {
+      const rounded = Math.round(currentFrameRef.current);
+      if (Math.abs(currentFrameRef.current - target) > 0.01 || rounded !== lastIndexRef.current) {
         drawFrame(rounded);
         preloadWindow(rounded);
       }

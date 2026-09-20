@@ -13,7 +13,7 @@ import puppeteer from 'puppeteer';
     }
   });
 
-  await page.goto('http://localhost:5173/dev/hero-capture?batch=1&frames=150');
+  await page.goto('http://localhost:3000/dev/hero-capture?batch=1&frames=150');
   
   for (let i = 0; i < 300; i++) {
     if (done) break;
