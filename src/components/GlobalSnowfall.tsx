@@ -1,7 +1,5 @@
-import { useMemo, useRef, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { InstancedMesh, MeshBasicMaterial, AdditiveBlending, NormalBlending, PlaneGeometry } from "three";
+import { useEffect, useRef, useState} from "react";
+
 import { useScroll } from "../context/ScrollContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -23,31 +21,27 @@ function useIsLightTheme() {
   return isLight;
 }
 
-function SnowParticles({ isLight }: { isLight: boolean }) {
-  const count = 5500;
-  const meshRef = useRef<InstancedMesh>(null);
-  const materialRef = useRef<MeshBasicMaterial>(null);
-  const geometryRef = useRef<PlaneGeometry>(null);
+export function GlobalSnowfall() {
+  // const { pathname } = useLocation();
+  const isLight = useIsLightTheme();
   const reducedMotion = useReducedMotion();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const { positions, phases, scales } = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const ph = new Float32Array(count);
-    const sc = new Float32Array(count);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3 + 0] = (Math.random() - 0.5) * 120;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 120;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 60 - 40;
-      ph[i] = Math.random() * Math.PI * 2;
-      sc[i] = Math.random() * 0.8 + 0.5;
-    }
-    return { positions: pos, phases: ph, scales: sc };
-  }, [count]);
+  // Enable globally for all pages as requested, but keep it lightweight 2D
+  // If we only wanted it on home: const onHome = pathname === "/";
+  // Removing onHome restriction so snow falls everywhere!
 
-  const uniforms = useMemo(() => ({
-    uTime: { value: 0 },
-    uScrollDelta: { value: 0 },
-  }), []);
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof document === "undefined") return true;
+    return !document.hidden;
+  });
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const handleVisibilityChange = () => setIsVisible(!document.hidden);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
 
   const { registerScrollListener } = useScroll();
   const prevScrollY = useRef(0);
@@ -62,119 +56,92 @@ function SnowParticles({ isLight }: { isLight: boolean }) {
     });
   }, [registerScrollListener, reducedMotion]);
 
-  // Memory Management: Strict cleanup of WebGL buffers
   useEffect(() => {
-    return () => {
-      if (geometryRef.current) geometryRef.current.dispose();
-      if (materialRef.current) materialRef.current.dispose();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
+    if (!ctx) return;
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const handleResize = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
     };
-  }, []);
+    window.addEventListener("resize", handleResize);
 
-  useFrame((state, delta) => {
-    if (reducedMotion) return; // Zero-cost when user requests no motion
-    uniforms.uTime.value = state.clock.elapsedTime;
-    scrollVelocity.current *= 0.92;
-    uniforms.uScrollDelta.value += scrollVelocity.current * delta * 1.0;
-  });
+    // Optimized particle count for 2D (looks identical to 5500 in 3D due to screen density)
+    const count = window.innerWidth < 768 ? 400 : 1200;
+    const particles = new Float32Array(count * 5); // x, y, speed, size, phase
 
-  const snowColor = isLight ? "#7a8fa8" : "#ffffff";
-  const snowOpacity = isLight ? 0.55 : 0.65;
-  const snowBlending = isLight ? NormalBlending : AdditiveBlending;
+    for (let i = 0; i < count; i++) {
+      particles[i * 5 + 0] = Math.random() * width;
+      particles[i * 5 + 1] = Math.random() * height;
+      particles[i * 5 + 2] = Math.random() * 0.5 + 0.5; // speed
+      particles[i * 5 + 3] = Math.random() * 2.5 + 1; // size
+      particles[i * 5 + 4] = Math.random() * Math.PI * 2; // phase
+    }
 
-  return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, count]} frustumCulled={false}>
-      <planeGeometry ref={geometryRef} args={[0.08, 0.08]}>
-        <instancedBufferAttribute attach="attributes-offset" args={[positions, 3]} />
-        <instancedBufferAttribute attach="attributes-phase" args={[phases, 1]} />
-        <instancedBufferAttribute attach="attributes-pscale" args={[scales, 1]} />
-      </planeGeometry>
-      <meshBasicMaterial
-        ref={materialRef}
-        color={snowColor}
-        transparent
-        opacity={snowOpacity}
-        depthWrite={false}
-        blending={snowBlending}
-        onBeforeCompile={(shader) => {
-          shader.uniforms.uTime = uniforms.uTime;
-          shader.uniforms.uScrollDelta = uniforms.uScrollDelta;
+    let animationId: number;
+    let lastTime = performance.now();
 
-          shader.vertexShader = `
-            uniform float uTime;
-            uniform float uScrollDelta;
-            attribute vec3 offset;
-            attribute float phase;
-            attribute float pscale;
-            varying vec2 vUvCustom;
-            ${shader.vertexShader}
-          `.replace(
-            `#include <begin_vertex>`,
-            `#include <begin_vertex>
-            vUvCustom = uv;
+    const render = (time: number) => {
+      if (reducedMotion || !isVisible) {
+        animationId = requestAnimationFrame(render);
+        return;
+      }
+      
+      const delta = (time - lastTime) / 1000;
+      lastTime = time;
 
-            float fallSpeed = 1.1;
-            float windSpeed = 0.4;
+      ctx.clearRect(0, 0, width, height);
+      
+      const baseColor = isLight ? "122, 143, 168" : "255, 255, 255";
+      const baseOpacity = isLight ? 0.5 : 0.6;
+      ctx.fillStyle = `rgba(${baseColor}, ${baseOpacity})`;
+      
+      scrollVelocity.current *= 0.92;
+      const scrollOffset = scrollVelocity.current * 0.5;
 
-            vec3 pos = offset;
-            pos.y -= uTime * fallSpeed * pscale;
-            pos.y += uScrollDelta * pscale;
-            pos.x += uTime * windSpeed + sin(uTime * 1.5 + phase) * 1.2;
+      ctx.beginPath();
+      for (let i = 0; i < count; i++) {
+        const pIdx = i * 5;
+        let x = particles[pIdx + 0];
+        let y = particles[pIdx + 1];
+        const speed = particles[pIdx + 2];
+        const size = particles[pIdx + 3];
+        const phase = particles[pIdx + 4];
 
-            float boxXY = 120.0;
-            float boxZ = 60.0;
-            vec3 wrapPos;
-            wrapPos.x = mod(pos.x + boxXY * 0.5, boxXY) - boxXY * 0.5;
-            wrapPos.y = mod(pos.y + boxXY * 0.5, boxXY) - boxXY * 0.5;
-            wrapPos.z = mod(pos.z + boxZ * 0.5, boxZ) - boxZ * 0.5 - 40.0;
-            `
-          ).replace(
-            `#include <project_vertex>`,
-            `
-            vec4 mvPosition = modelViewMatrix * vec4(wrapPos, 1.0);
-            mvPosition.xy += position.xy * pscale;
-            gl_Position = projectionMatrix * mvPosition;
-            `
-          );
+        y += (speed * 60 * delta) - scrollOffset * speed;
+        x += (Math.sin(time * 0.001 * speed + phase) * 0.5) + (speed * 10 * delta);
 
-          shader.fragmentShader = `
-            varying vec2 vUvCustom;
-            ${shader.fragmentShader}
-          `.replace(
-            `#include <dithering_fragment>`,
-            `#include <dithering_fragment>
+        if (y > height + 10) y = -10;
+        if (y < -10) y = height + 10;
+        if (x > width + 10) x = -10;
+        if (x < -10) x = width + 10;
 
-            float d = length(vUvCustom - 0.5);
-            if (d > 0.5) discard;
-            float alpha = smoothstep(0.5, 0.05, d);
-            gl_FragColor.a *= alpha;
-            `
-          );
-        }}
-      />
-    </instancedMesh>
-  );
-}
+        particles[pIdx + 0] = x;
+        particles[pIdx + 1] = y;
 
-export function GlobalSnowfall() {
-  const { pathname } = useLocation();
-  const isLight = useIsLightTheme();
-  const reducedMotion = useReducedMotion();
-  // Three live pages: home, /channels, /contact. Snow is a hero veil — home only.
-  const onHome = pathname === "/";
+        ctx.rect(x, y, size, size);
+      }
+      ctx.fill();
 
-  const [isVisible, setIsVisible] = useState(() => {
-    if (typeof document === "undefined") return true;
-    return !document.hidden;
-  });
+      animationId = requestAnimationFrame(render);
+    };
 
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const handleVisibilityChange = () => setIsVisible(!document.hidden);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, []);
+    animationId = requestAnimationFrame(render);
 
-  if (!isLight || !onHome) return null;
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationId);
+    };
+  }, [isLight, reducedMotion, isVisible]);
 
   return (
     <div
@@ -191,15 +158,10 @@ export function GlobalSnowfall() {
       }}
       aria-hidden="true"
     >
-      <Canvas
-        camera={{ fov: 45, position: [0, 0, 0], near: 0.1, far: 300 }}
-        gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
-        dpr={[1, 1.5]}
-        frameloop={reducedMotion || !isVisible ? "never" : "always"}
-        style={{ pointerEvents: "none" }}
-      >
-        <SnowParticles isLight={isLight} />
-      </Canvas>
+      <canvas
+        ref={canvasRef}
+        style={{ width: "100%", height: "100%", pointerEvents: "none", display: "block" }}
+      />
     </div>
   );
 }

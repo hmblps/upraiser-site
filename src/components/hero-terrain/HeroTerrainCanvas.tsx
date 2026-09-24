@@ -13,9 +13,9 @@ import { markHeroReady } from "../../lib/scrollPreload";
 import { CaptureDriver } from "./CaptureDriver";
 import { HeroVideoFallback } from "./HeroVideoFallback";
 import { Scene } from "./Scene";
-export { HERO_ASCENT_DEFAULTS, EXPEDITION_ASCENT } from "./shared";
-
 import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode } from "./shared";
+
+export { HERO_ASCENT_DEFAULTS, EXPEDITION_ASCENT } from "./shared";
 
 function HeroLoadingPortal({ show }: { show: boolean }) {
   const [mounted, setMounted] = useState(false);
@@ -57,9 +57,9 @@ function HeroLoadingPortal({ show }: { show: boolean }) {
   );
 }
 
-export function HeroTerrainCanvas({
-//...
 
+
+type HeroTerrainCanvasProps = {
   className?: string;
   path?: AscentPath;
   /** Expedition reuses the mesh with a different shot — skip Voyager / bird / home-ready. */
@@ -210,7 +210,6 @@ export function HeroTerrainCanvas({
   return (
     <>
       <HeroLoadingPortal show={!showTerrain && !capturing && !bootStuck} />
-
 
       <motion.div
         ref={shellRef}
