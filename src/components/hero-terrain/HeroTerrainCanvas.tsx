@@ -13,11 +13,53 @@ import { markHeroReady } from "../../lib/scrollPreload";
 import { CaptureDriver } from "./CaptureDriver";
 import { HeroVideoFallback } from "./HeroVideoFallback";
 import { Scene } from "./Scene";
-import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode } from "./shared";
-
 export { HERO_ASCENT_DEFAULTS, EXPEDITION_ASCENT } from "./shared";
 
-type HeroTerrainCanvasProps = {
+import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode } from "./shared";
+
+function HeroLoadingPortal({ show }: { show: boolean }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  
+  if (!mounted || typeof document === "undefined") return null;
+  
+  return createPortal(
+    <AnimatePresence>
+      {show ? (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none backdrop-blur-xl bg-bg/20"
+        >
+          <div className="flex flex flex-col items-center gap-3">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.8 }}
+              className="relative flex items-center justify-center w-16 h-16 md:w-32 md:h-32 rounded-full border border-border/30 bg-bg-elevated/40 backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.2)]"
+            >
+              <div className="absolute top-1 md:top-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">N</div>
+              <div className="absolute right-1 md:right-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">E</div>
+              <div className="absolute bottom-1 md:bottom-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">S</div>
+              <div className="absolute left-1 md:left-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">W</div>
+              <div className="animate-spin" style={{ animationDuration: "2s", animationTimingFunction: "linear", willChange: "transform" }}>
+                <Navigation className="h-6 w-6 md:h-12 md:w-12 text-accent" strokeWidth={2} />
+              </div>
+            </motion.div>
+            <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg/70 animate-pulse">Rendering Terrain</span>
+          </div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>,
+    document.body
+  );
+}
+
+export function HeroTerrainCanvas({
+//...
+
   className?: string;
   path?: AscentPath;
   /** Expedition reuses the mesh with a different shot — skip Voyager / bird / home-ready. */
@@ -104,7 +146,7 @@ export function HeroTerrainCanvas({
   useEffect(() => {
     setBootStuck(false);
     if (capturing || shouldFallback) return;
-    const t = window.setTimeout(() => setBootStuck(true), 15000);
+    const t = window.setTimeout(() => setBootStuck(true), 8000);
     return () => window.clearTimeout(t);
   }, [theme, capturing, shouldFallback]);
 
@@ -167,39 +209,8 @@ export function HeroTerrainCanvas({
 
   return (
     <>
-      {/* Loading overlay while shaders compile (crucial for mobile) */}
-      {!capturing && !bootStuck && typeof document !== "undefined" ? createPortal(
-        <AnimatePresence>
-          {!showTerrain ? (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
-              className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none backdrop-blur-xl bg-bg/20"
-            >
-              <div className="flex flex flex-col items-center gap-3">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1, duration: 0.8 }}
-                  className="relative flex items-center justify-center w-16 h-16 md:w-32 md:h-32 rounded-full border border-border/30 bg-bg-elevated/40 backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.2)]"
-                >
-                  <div className="absolute top-1 md:top-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">N</div>
-                  <div className="absolute right-1 md:right-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">E</div>
-                  <div className="absolute bottom-1 md:bottom-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">S</div>
-                  <div className="absolute left-1 md:left-3 text-[8px] md:text-xs font-mono font-bold text-fg/60 tracking-tighter">W</div>
-                  <div className="animate-spin" style={{ animationDuration: "2s", animationTimingFunction: "linear", willChange: "transform" }}>
-                    <Navigation className="h-6 w-6 md:h-12 md:w-12 text-accent" strokeWidth={2} />
-                  </div>
-                </motion.div>
-                <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg/70 animate-pulse">Rendering Terrain</span>
-              </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>,
-        document.body
-      ) : null}
+      <HeroLoadingPortal show={!showTerrain && !capturing && !bootStuck} />
+
 
       <motion.div
         ref={shellRef}

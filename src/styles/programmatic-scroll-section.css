@@ -871,7 +871,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  will-change: transform, opacity;
+  /* will-change removed for performance */
 }
 
 .format-copy__tagline {

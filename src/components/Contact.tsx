@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, useRef, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { contactPage } from "../data/liveContent";
@@ -47,6 +47,13 @@ export function Contact() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const abortCtrl = useRef<AbortController | null>(null);
+  useEffect(() => {
+    return () => {
+      if (abortCtrl.current) abortCtrl.current.abort();
+    };
+  }, []);
+
   const validate = () => {
     const next: FormErrors = {};
     if (!form.name.trim()) next.name = "Required";
@@ -60,6 +67,8 @@ export function Contact() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setStatus("idle");
+    setSubmitError(null);
     if (!validate()) return;
 
     if (!accessKey) {
@@ -70,6 +79,11 @@ export function Contact() {
 
     setStatus("loading");
     setSubmitError(null);
+
+    if (abortCtrl.current) {
+      abortCtrl.current.abort();
+    }
+    abortCtrl.current = new AbortController();
 
     try {
       const formData = new FormData();
@@ -95,6 +109,7 @@ export function Contact() {
           Accept: "application/json",
         },
         body: formData,
+        signal: abortCtrl.current.signal,
       });
 
       const data = (await response.json()) as { success?: boolean; message?: string };

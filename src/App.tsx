@@ -3,29 +3,6 @@ import { Routes, Route, Navigate, useSearchParams } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
 import { HomePage } from "./pages/HomePage";
 
-import { useGLTF } from "@react-three/drei";
-import { DRACO_PATH } from "./lib/heroModel";
-useGLTF.preload("/channels/oem/tv-draco.glb", DRACO_PATH);
-useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
-
-useGLTF.preload("/phones/deep-blue.glb", DRACO_PATH);
-useGLTF.preload("/phones/orange.glb", DRACO_PATH);
-
-
-import { useTexture } from "@react-three/drei";
-if (typeof window !== "undefined") {
-  useTexture.preload([
-    "/channels/oem/screens/ctv-spot.png",
-    "/channels/programmatic-refs/screens/video.png",
-    "/channels/programmatic-refs/screens/banner.png"
-  ]);
-  
-  const v = document.createElement("video");
-  v.src = "/channels/oem/screens/ctv-spot.mp4";
-  v.preload = "auto";
-  v.muted = true;
-  v.load();
-}
 
 
 
@@ -86,7 +63,35 @@ function RedirectExpertiseToRoutes() {
   return <Navigate to={qs ? `/?${qs}#routes` : "/#routes"} replace />;
 }
 
+import { useEffect } from "react";
+import { useGLTF, useTexture } from "@react-three/drei";
+import { DRACO_PATH } from "./lib/heroModel";
+
 export default function App() {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname;
+      if (path === "/" || path === "/channels") {
+        useGLTF.preload("/channels/oem/tv-draco.glb", DRACO_PATH);
+        useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
+        useGLTF.preload("/phones/deep-blue.glb", DRACO_PATH);
+        useGLTF.preload("/phones/orange.glb", DRACO_PATH);
+
+        useTexture.preload([
+          "/channels/oem/screens/ctv-spot.png",
+          "/channels/programmatic-refs/screens/video.png",
+          "/channels/programmatic-refs/screens/banner.png"
+        ]);
+        
+        const v = document.createElement("video");
+        v.src = "/channels/oem/screens/ctv-spot.mp4";
+        v.preload = "auto";
+        v.muted = true;
+        v.load();
+      }
+    }
+  }, []);
+
   return (
     <Suspense fallback={<RouteFallback />}>
       <Routes>
