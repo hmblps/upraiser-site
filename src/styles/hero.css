@@ -65,12 +65,12 @@
 }
 
 .hero-mountains-layer--mobile.is-light .hero-mountains-poster {
-  opacity: 0.4;
+  opacity: 1;
   filter: contrast(1.04) saturate(1.05) brightness(0.98);
 }
 
 .hero-mountains-layer--mobile.is-light .hero-mountains-video.is-active {
-  opacity: 0.42;
+  opacity: 1;
   filter: contrast(1.04) saturate(1.05) brightness(0.98);
 }
 
@@ -80,7 +80,7 @@
 }
 
 .hero-mountains-layer--mobile.is-dark .hero-mountains-video.is-active {
-  opacity: 0.4;
+  opacity: 1;
   filter: contrast(1.08) saturate(0.86) brightness(0.78);
 }
 
@@ -92,7 +92,7 @@
   background: linear-gradient(
     105deg,
     color-mix(in srgb, var(--theme-bg) 72%, transparent) 0%,
-    transparent 36%
+    color-mix(in srgb, var(--theme-bg) 0%, transparent) 36%
   );
   pointer-events: none;
 }
