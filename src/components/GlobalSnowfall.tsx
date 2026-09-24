@@ -76,14 +76,14 @@ export function GlobalSnowfall() {
     window.addEventListener("resize", handleResize);
 
     // Optimized particle count for 2D (looks identical to 5500 in 3D due to screen density)
-    const count = window.innerWidth < 768 ? 400 : 1200;
+    const count = window.innerWidth < 768 ? 600 : 1800;
     const particles = new Float32Array(count * 5); // x, y, speed, size, phase
 
     for (let i = 0; i < count; i++) {
       particles[i * 5 + 0] = Math.random() * width;
       particles[i * 5 + 1] = Math.random() * height;
-      particles[i * 5 + 2] = Math.random() * 0.5 + 0.5; // speed
-      particles[i * 5 + 3] = Math.random() * 2.5 + 1; // size
+      particles[i * 5 + 2] = Math.random() * 0.8 + 0.4; // speed
+      particles[i * 5 + 3] = Math.random() * 1.5 + 0.4; // size (smaller, finer)
       particles[i * 5 + 4] = Math.random() * Math.PI * 2; // phase
     }
 
@@ -117,8 +117,8 @@ export function GlobalSnowfall() {
         const size = particles[pIdx + 3];
         const phase = particles[pIdx + 4];
 
-        y += (speed * 60 * delta) - scrollOffset * speed;
-        x += (Math.sin(time * 0.001 * speed + phase) * 0.5) + (speed * 10 * delta);
+        y += (speed * 300 * delta) - scrollOffset * speed; // faster fall (blizzard)
+        x -= (speed * 200 * delta) + (Math.sin(time * 0.005 * speed + phase) * 1.0); // strong slanted wind to left
 
         if (y > height + 10) y = -10;
         if (y < -10) y = height + 10;
