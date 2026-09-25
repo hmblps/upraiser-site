@@ -171,8 +171,8 @@
   padding-top: 0.35rem;
   padding-bottom: 0.5rem;
   align-self: center;
-  /* Sit under the optical middle of “EVERY FORMAT. ONE SUPPLY PATH.” */
-  transform: translateX(-5.5%);
+  /* Optical shift removed — left-clip fix */
+  /* Optical shift removed — left-clip fix */
 }
 
 /*
