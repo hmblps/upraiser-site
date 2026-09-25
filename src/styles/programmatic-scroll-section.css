@@ -813,7 +813,7 @@
   justify-content: center;
   height: 100%;
   min-height: 0;
-  padding-inline-start: 0.25rem;
+  padding-inline-start: clamp(2rem, 4vw, 4.5rem);
   touch-action: pan-y;
   /* Must sit above .prog-scroll-device-lift (z-index:24) so the lane-switcher receives clicks */
   z-index: 30;
