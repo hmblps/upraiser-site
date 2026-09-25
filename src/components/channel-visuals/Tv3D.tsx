@@ -37,7 +37,7 @@ const REST_X = 0.008;
 
 // Larger living-room read — still leave frustum room for Plastic bezel + stand.
 function getTargetHeight() {
-  return 0.95;
+  return 1.25;
 }
 
 function computeTransform(scene: Object3D): {

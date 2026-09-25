@@ -504,7 +504,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.15, flat ? 3.15 : 3.48], fov: 30, near: 0.1, far: 80 }}
+          camera={{ position: [0, 0.15, flat ? 3.15 : 3.48], fov: 36, near: 0.1, far: 80 }}
           style={{
             width: slotBox.w,
             height: slotBox.h,
