@@ -57,7 +57,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: stretch;
   gap: clamp(1.25rem, 3.5vw, 3rem);
   width: 100%;
@@ -145,7 +145,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: stretch;
   gap: clamp(1.25rem, 3.5vw, 3rem);
   width: 100%;
@@ -170,7 +170,7 @@
   padding-top: 0.35rem;
   padding-bottom: 0.5rem;
   align-self: center;
-  transform: translateX(-5.5%);
+  
 }
 
 /*

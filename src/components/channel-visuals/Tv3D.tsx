@@ -548,7 +548,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.02, flat ? 4.4 : 4.65], fov: flat ? 36 : 38, near: 0.1, far: 100 }}
+          camera={{ position: [0, 0.02, flat ? 4.4 : 4.65], fov: flat ? 45 : 45, near: 0.1, far: 100 }}
           style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: active ? "auto" : "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;
