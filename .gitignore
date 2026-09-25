@@ -109,3 +109,11 @@ import_skills.py
 /agent/skills/
 /data/skills/
 /skills/
+*.cjs
+*.py
+context_dump.txt
+.tmp-*
+output_frame*
+old_*.tsx
+new_*.tsx
+

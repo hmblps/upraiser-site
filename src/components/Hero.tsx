@@ -37,11 +37,12 @@ const itemVariants = {
 
 function HeroStatsDots({
   containerRef,
-  count,
+  labels,
   activeIndex,
 }: {
+  labels: string[];
   containerRef: RefObject<HTMLDivElement | null>;
-  count: number;
+  
   activeIndex: number;
 }) {
   const scrollTo = (index: number) => {
@@ -61,13 +62,13 @@ function HeroStatsDots({
 
   return (
     <div className="hero-stats-dots" role="tablist" aria-label="Hero metrics">
-      {Array.from({ length: count }, (_, index) => (
+      {labels.map((label, index) => (
         <motion.button
           key={index}
           type="button"
           role="tab"
           aria-selected={index === activeIndex}
-          aria-label={`Metric ${index + 1}`}
+          aria-label={label}
           className={`hero-stats-dot${index === activeIndex ? " is-active" : ""}`}
           whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.9 }}
@@ -239,7 +240,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                   </motion.div>
                 </AnimatePresence>
               </div>
-              <HeroStatsDots containerRef={statsScrollRef} count={highlights.length} activeIndex={activeStatIndex} />
+              <HeroStatsDots containerRef={statsScrollRef} labels={highlights.map(h => h.label)} activeIndex={activeStatIndex} />
             </div>
           </div>
         </div>

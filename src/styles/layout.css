@@ -37,7 +37,10 @@
 
 .channel-panel.live-panel {
   position: relative;
-  overflow: hidden;
+  /* overflow:clip cuts painting (scan-line stays inside) but unlike overflow:hidden
+     it does NOT establish a new scroll container — children can still escape via
+     overflow:visible. This fixes 3D canvases being cut at panel edges. */
+  overflow: clip;
 }
 
 .channel-panel.live-panel::after {

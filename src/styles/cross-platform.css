@@ -146,3 +146,29 @@ select {
     min-height: 0;
   }
 }
+
+/* WINDOWS SCROLLBAR FIX */
+/* Gives Windows users a sleek, unobtrusive scrollbar like Mac instead of the 17px gray block */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--theme-muted) 30%, transparent);
+  border-radius: 9999px;
+  border: 3px solid var(--theme-bg);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--theme-muted) 60%, transparent);
+  border: 3px solid var(--theme-bg);
+  background-clip: padding-box;
+}
+/* Firefox fallback */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--theme-muted) 30%, transparent) transparent;
+}

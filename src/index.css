@@ -44,6 +44,10 @@
 
 :root,
 [data-theme="dark"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
   color-scheme: dark;
   --logo-gold: #ffcc00;
   --logo-red: #ff003b;
