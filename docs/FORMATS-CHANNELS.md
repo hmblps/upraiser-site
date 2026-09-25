@@ -183,12 +183,14 @@ We deliberately **decouple** texture loading from React's `<Suspense>` boundary 
 
 ### Optical slots (CSS)
 
-| Slot | Width | Aspect | Max height |
+- **Grid:** `1fr 1fr` perfectly balanced layout. Text column is padded (`padding-inline-start: clamp(2rem, 4vw, 4.5rem)`) to give devices breathing room without breaking balance.
+- **WebGL Clipping Fix:** The 3D canvases for Phone and Tablet have `width: 150%` + `flex-shrink: 0`. Because their slots are narrow, this safely widens the WebGL aspect ratio to prevent clipping without overlapping the text. TV canvas has `width: 110%` for the same purpose.
+
+| Slot | CSS Width | Aspect | Canvas Width Hack |
 | --- | --- | --- | --- |
-| Phone | `min(48%, 21.5rem)` | 9 / 19.5 | ~82dvh |
-| Tablet | `min(74%, 26rem)` | 3 / 4 | ~72dvh |
-| TV (idle) | `min(118%, 52rem)` | 16 / 11 | `min(84dvh, 100%)` |
-| TV (`data-scene=tv`) | `min(112%, 52rem)` | 16 / 11 | `min(84dvh, 100%)` |
+| Phone | `max-width: min(35%, 15rem)` | 9 / 19.5 | 150% |
+| Tablet | `max-width: min(60%, 23rem)` | 3 / 4 | 150% |
+| TV | `max-width: min(100%, 54rem)` | 16 / 12 | 110% |
 
 ### Phone3D
 
@@ -244,9 +246,9 @@ Pre-install source: `public/channels/oem/pre-install-oobe.html` (`?bake=1` densi
 | | |
 | --- | --- |
 | GLB | `/channels/oem/tv.glb` (+ Draco wasm) |
-| `getTargetHeight()` | `min(2.2, 1.95 × aspect)` |
+| `getTargetHeight()` | `1.25` (forces safe horizontal fit) |
 | Screen plane | `w = h×(16/9)×0.94`, `h = h×0.88`, `y=0.012`, `z=0.1` |
-| Camera | `[0, 0.04, flat ? 5.2 : 5.75]`, fov `30|31` |
+| Camera | `[0, 0.02, flat ? 4.4 : 4.65]`, fov `30|31` |
 | Mesh lift | `position.y ≈ 0.14` |
 | Drag limits | yaw ±0.18, pitch ±0.08 |
 | Hidden | legs + stock crystal (`Object_1`, …) — ad on **outer** plane |
@@ -346,6 +348,11 @@ rich-media-ad.html        ING unit (compressed)
 ---
 
 ## 13. Recent change log (Formats only)
+
+| When | What |
+| --- | --- |
+| **25 Sep (Antigravity)** | Solved the WebGL clipping vs overlap paradox. Standardized on a perfectly balanced `1fr 1fr` grid. Padded the right column for breathing room. Used `width: 150%` on Phone/Tablet canvases to stop 3D clipping inside narrow slots. For the massive TV, adjusted 3D scale (`getTargetHeight = 1.25`) and `110%` canvas to prevent text overlap. Size hierarchy established (Phone < Tablet < TV). |
+
 
 | When | What |
 | --- | --- |

@@ -438,8 +438,8 @@ Devices slide via `x: (slotIndex − phase) × 100%` + opacity fade (`1 - d * 1.
 | Device | Width in col | Camera | GLB |
 | --- | --- | --- | --- |
 | Phone | `min(48%, 21.5rem)` | Phone3D default | `/phones/deep-blue.glb` (light) · `/phones/orange.glb` (dark) |
-| Tablet | `min(74%, 26rem)` | fov 30, z=3.8 | `/channels/oem/tablet.glb` |
-| TV | `min(118%, 52rem)` | fov 34, z=5.5 | `/channels/oem/tv.glb` |
+| Tablet | `min(60%, 23rem)` | fov 36, z=3.48 | `/channels/oem/tablet.glb` |
+| TV | `min(100%, 54rem)` | fov 31, targetHeight 1.25 | `/channels/oem/tv.glb` |
 
 **Drag limits (all 3 devices, unified):** Y ±0.45 rad · X ±0.15 rad · sensitivity dx×0.006 / dy×0.004 · spring 260/30/0.7 · release snaps 35% toward REST.
 
