@@ -76,10 +76,9 @@
 .prog-scroll-phone-col--lifted {
   pointer-events: auto;
   overflow: visible !important;
-  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
-  mask-image: linear-gradient(to right, black 85%, transparent 100%);
   z-index: 6;
 }
+
 
 .prog-scroll-phone-col--spacer {
   visibility: hidden;
@@ -171,8 +170,9 @@
   padding-top: 0.35rem;
   padding-bottom: 0.5rem;
   align-self: center;
-  /* Optical shift removed — left-clip fix */
-  /* Optical shift removed — left-clip fix */
+  transform: translateX(-5.5%);
+  
+  
 }
 
 /*
@@ -190,6 +190,7 @@
   min-height: 0;
   cursor: grab;
   align-self: center;
+  transform: translateX(-5.5%);
   touch-action: pan-y;
   will-change: transform;
 }
@@ -487,6 +488,7 @@
   max-width: min(100%, 22.5rem);
   margin-inline: auto;
   align-self: center;
+  transform: translateX(-5.5%);
 }
 
 /* Standing iPad — same visual weight as Tablet3D, not a landscape screenshot slab. */
@@ -654,25 +656,12 @@
  * TV SCENE — stay in the left device column (peer to phone/tablet), not a
  * full-sticky absolute takeover. Overflow stays visible so chassis isn't CSS-cropped.
  */
-/* [data-scene="tv"] .prog-scroll-phone-col--lifted {
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-  position: relative;
-  inset: auto;
-  height: 100%;
-  max-height: none;
-  align-self: stretch;
-  transform: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.prog-scroll-phone-col--lifted {
   pointer-events: auto;
-  overflow: visible;
-  z-index: 6;
   overflow: visible !important;
-  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
-  mask-image: linear-gradient(to right, black 85%, transparent 100%);
-} */
+  z-index: 6;
+}
+
 
 /* [data-scene="tv"] .prog-scroll-phone-col--lifted > div {
   width: 100%;
@@ -716,6 +705,14 @@
 .prog-device-slot .prog-device-load,
 .prog-device-slot .tablet-glb-canvas,
 .prog-device-slot .phone-glb-canvas,
+.prog-device-slot .tv-glb-canvas {
+  width: 150% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin-left: -25% !important;
+  margin-top: 0 !important;
+}
 .prog-css-phone--slot,
 .prog-css-tablet--slot,
 .prog-css-tv--slot {
@@ -725,6 +722,7 @@
   max-height: none !important;
   margin: 0 !important;
 }
+
 
 .prog-css-phone--slot {
   aspect-ratio: unset;
