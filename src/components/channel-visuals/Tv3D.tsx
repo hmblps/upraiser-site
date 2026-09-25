@@ -37,7 +37,7 @@ const REST_X = 0.008;
 
 // Larger living-room read — still leave frustum room for Plastic bezel + stand.
 function getTargetHeight() {
-  return 1.65;
+  return 0.95;
 }
 
 function computeTransform(scene: Object3D): {
@@ -548,7 +548,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, 0.02, flat ? 4.4 : 4.65], fov: flat ? 40 : 40, near: 0.1, far: 100 }}
+          camera={{ position: [0, 0.02, flat ? 4.4 : 4.65], fov: flat ? 30 : 31, near: 0.1, far: 100 }}
           style={{ width: "100%", height: "100%", display: "block", background: "transparent", pointerEvents: active ? "auto" : "none" }}
           onCreated={({ gl }) => {
             gl.toneMapping = ACESFilmicToneMapping;

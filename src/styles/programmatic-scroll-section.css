@@ -711,11 +711,27 @@
 
 .prog-device-slot .phone-glb-stage,
 .prog-device-slot .prog-device-load,
-.prog-device-slot .tablet-glb-canvas,
-.prog-device-slot .phone-glb-canvas,
 .prog-css-phone--slot,
 .prog-css-tablet--slot,
 .prog-css-tv--slot {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+}
+
+.prog-device-slot .tablet-glb-canvas,
+.prog-device-slot .phone-glb-canvas {
+  width: 150% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
+.prog-device-slot .tv-glb-canvas {
   width: 100% !important;
   height: 100% !important;
   max-width: none !important;
