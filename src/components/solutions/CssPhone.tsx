@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useEffect, useRef } from "react";
 import type { SiteMode } from "../../data/liveContent";
 import { FORMAT_HTML, FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
@@ -9,6 +9,37 @@ import {
   paintStill,
   type GlassAnimId,
 } from "../../lib/tabletGlassAnim";
+
+
+function useCssDrag() {
+  const reduced = useReducedMotion();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const springConfig = { damping: 20, stiffness: 150 };
+  const smoothX = useSpring(x, springConfig);
+  const smoothY = useSpring(y, springConfig);
+
+  const rotX = useTransform(smoothY, [-1, 1], [15, -15]);
+  const rotY = useTransform(smoothX, [-1, 1], [-20, 20]);
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (reduced) return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    x.set((e.clientX - cx) / (rect.width / 2));
+    y.set((e.clientY - cy) / (rect.height / 2));
+  };
+
+  const handlePointerLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return { rotX, rotY, handlePointerMove, handlePointerLeave };
+}
+
 
 type CssPhoneProps = {
   mode: SiteMode;
@@ -135,9 +166,18 @@ export function FormatGlass({ formatId }: { formatId: string }) {
  */
 export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
+  const { rotX, rotY, handlePointerMove, handlePointerLeave } = useCssDrag();
 
   return (
-    <div className={`prog-css-phone prog-css-phone--${finish} ${className}`.trim()}>
+    <div 
+      style={{ perspective: 1200, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
+      <motion.div 
+        className={`prog-css-phone prog-css-phone--${finish} ${className}`.trim()}
+        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)" }}
+      >
       <span className="prog-css-phone__btn prog-css-phone__btn--silent" aria-hidden />
       <span className="prog-css-phone__btn prog-css-phone__btn--vol-up" aria-hidden />
       <span className="prog-css-phone__btn prog-css-phone__btn--vol-down" aria-hidden />
@@ -148,18 +188,29 @@ export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
           <FormatGlass formatId={formatId} />
         </div>
       </div>
+      </motion.div>
     </div>
   );
 }
 
 export function CssTablet({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
+  const { rotX, rotY, handlePointerMove, handlePointerLeave } = useCssDrag();
 
   return (
-    <div className={`prog-css-tablet prog-css-phone--${finish} ${className}`.trim()}>
+    <div 
+      style={{ perspective: 1200, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
+      <motion.div 
+        className={`prog-css-tablet prog-css-phone--${finish} ${className}`.trim()}
+        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)" }}
+      >
       <div className="prog-css-tablet__bezel">
         <FormatGlass formatId={formatId} />
       </div>
+      </motion.div>
     </div>
   );
 }
@@ -167,13 +218,23 @@ export function CssTablet({ mode, formatId, className = "" }: CssPhoneProps) {
 export function CssTv({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
   const glassId = FORMAT_VIDEO[formatId] || FORMAT_STILL[formatId] ? formatId : "ctv-spot";
+  const { rotX, rotY, handlePointerMove, handlePointerLeave } = useCssDrag();
 
   return (
-    <div className={`prog-css-tv prog-css-phone--${finish} ${className}`.trim()}>
+    <div 
+      style={{ perspective: 1200, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
+      <motion.div 
+        className={`prog-css-tv prog-css-phone--${finish} ${className}`.trim()}
+        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d", boxShadow: "0 35px 60px -15px rgba(0,0,0,0.6)" }}
+      >
       <div className="prog-css-tv__bezel">
         <FormatGlass formatId={glassId} />
       </div>
       <div className="prog-css-tv__foot" aria-hidden />
+      </motion.div>
     </div>
   );
 }
