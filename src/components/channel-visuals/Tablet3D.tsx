@@ -470,7 +470,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
     rotX.set(REST_X);
   };
 
-  
+  return (
     <div
       ref={stageRef}
       className={cn(

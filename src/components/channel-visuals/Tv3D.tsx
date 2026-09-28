@@ -516,7 +516,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
     rotX.set(REST_X);
   };
 
-  
+  return (
     <div
       ref={stageRef}
       className={cn(
