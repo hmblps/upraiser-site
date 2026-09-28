@@ -428,13 +428,9 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    if (flat) {
-      rotY.set(0);
-      rotX.set(0);
-      return;
-    }
-    rotY.set(REST_Y);
-    rotX.set(REST_X);
+    // Reset to rest pose on format change (works in both flat and 3D mode)
+    rotY.set(flat ? 0 : REST_Y);
+    rotX.set(flat ? 0 : REST_X);
   }, [formatId, flat, rotX, rotY]);
 
 

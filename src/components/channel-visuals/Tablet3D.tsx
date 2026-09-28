@@ -451,7 +451,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
   }, []);
 
   const onPointerDown = (e: ReactPointerEvent) => {
-    if (reduced || flat) return;
+    if (reduced) return;
     dragging.current = true;
     setIsDragging(true);
     last.current = { x: e.clientX, y: e.clientY };

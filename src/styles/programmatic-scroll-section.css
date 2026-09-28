@@ -14,6 +14,12 @@
   padding-top: 0;
 }
 
+/* channels-page: no site header — sticky-inner starts from top.
+   Use var to match the back button height so "THE ROUTES" label clears the button. */
+.channels-page .prog-scroll-sticky-inner {
+  padding-top: 1rem;
+}
+
 .prog-scroll-outer {
   position: relative;
   width: 100%;

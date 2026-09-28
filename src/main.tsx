@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import "./styles/andy-kowalski.css";
 import App from "./App.tsx";
+import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { preloadHeroTerrain } from "./lib/heroBoot.ts";
 
@@ -27,10 +28,12 @@ if (typeof history !== "undefined" && "scrollRestoration" in history) {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <HelmetProvider>
     <BrowserRouter>
       <ThemeProvider>
         <App />
       </ThemeProvider>
     </BrowserRouter>
+    </HelmetProvider>
   </StrictMode>,
 );

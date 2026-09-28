@@ -26,6 +26,12 @@ export function ChannelsLoader() {
   }, [show]);
 
   useEffect(() => {
+    // Hard timeout: never block the UI longer than 5s on slow connections
+    const hardTimeout = setTimeout(() => setShow(false), 5000);
+    return () => clearTimeout(hardTimeout);
+  }, []);
+
+  useEffect(() => {
     // Wait for at least one frame, then if it's not active and progress is 100, we can hide.
     // If it's active, wait until it finishes.
     if (!active && progress === 100) {

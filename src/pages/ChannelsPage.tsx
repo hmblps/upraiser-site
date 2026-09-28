@@ -15,7 +15,7 @@ export function ChannelsPage() {
     <main className="site-main channels-page">
       <ChannelsLoader />
       {/* Floating Header */}
-      <div className="fixed top-8 left-8 z-50">
+      <div className="fixed top-6 left-6 z-[200]">
         <Link 
           to="/#routes"
           className="flex items-center gap-2 px-4 py-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 backdrop-blur-md rounded-full text-sm font-bold transition-colors"
@@ -27,7 +27,7 @@ export function ChannelsPage() {
         </Link>
       </div>
 
-      <div className="channels-page__stage">
+      <div className="channels-page__stage" style={{paddingTop: "4.5rem"}}>
         <ProgrammaticScrollSection 
           sectionId="channels-scroll"
           lane={lane}

@@ -82,8 +82,12 @@ export function CssFormatPhone({ mode, formatId }: { mode: SiteMode; formatId: "
     const el = wrapRef.current;
     if (!el) return;
     const ro = new ResizeObserver(([entry]) => {
-      const { width } = entry.contentRect;
-      if (width > 0) setAdScale(Math.min(1, width / AD_W));
+      const { width, height } = entry.contentRect;
+      if (width > 0) {
+        const scaleByW = width / AD_W;
+        const scaleByH = height > 0 ? height / AD_H : 1;
+        setAdScale(Math.min(1, scaleByW, scaleByH));
+      }
     });
     ro.observe(el);
     return () => ro.disconnect();

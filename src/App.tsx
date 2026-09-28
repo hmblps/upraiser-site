@@ -1,3 +1,4 @@
+import { SEO } from "./components/SEO.tsx";
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useSearchParams } from "react-router-dom";
 import { SiteLayout } from "./layouts/SiteLayout";
