@@ -417,16 +417,13 @@ const PhoneScene = memo(function PhoneScene({
 export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className, flat = false }: Phone3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
-  const last = useRef({ x: 0, y: 0 });
-
+    
   const rotY = useMotionValue(REST_Y);
   const rotX = useMotionValue(REST_X);
   const springY = useSpring(rotY, { stiffness: 260, damping: 30, mass: 0.7 });
   const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
 
-  const [isDragging, setIsDragging] = useState(false);
-
+  
   useEffect(() => {
     // Reset to rest pose on format change (works in both flat and 3D mode)
     rotY.set(flat ? 0 : REST_Y);
@@ -463,37 +460,31 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
     return () => io.disconnect();
   }, []);
 
-  const onPointerDown = (e: ReactPointerEvent) => {
+    const onPointerMove = (e: React.PointerEvent) => {
     if (reduced) return;
-    dragging.current = true;
-    setIsDragging(true);
-    last.current = { x: e.clientX, y: e.clientY };
-    stageRef.current?.setPointerCapture(e.pointerId);
+    const el = stageRef.current;
+    if (!el) return;
+    
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    
+    const nx = (e.clientX - cx) / (rect.width / 2);
+    const ny = (e.clientY - cy) / (rect.height / 2);
+    
+    // Invert X and Y for natural parallax feel
+    rotY.set(REST_Y + nx * 0.2);
+    rotX.set(REST_X - ny * 0.08);
   };
 
-  const onPointerMove = (e: ReactPointerEvent) => {
-    if (!dragging.current) return;
-    const dx = e.clientX - last.current.x;
-    const dy = e.clientY - last.current.y;
-    last.current = { x: e.clientX, y: e.clientY };
-    rotY.set(Math.max(-0.45, Math.min(0.45, rotY.get() + dx * 0.006)));
-    rotX.set(Math.max(-0.15, Math.min(0.15, rotX.get() - dy * 0.004)));
-  };
-
-  const endDrag = (e: ReactPointerEvent) => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    setIsDragging(false);
-    try {
-      stageRef.current?.releasePointerCapture(e.pointerId);
-    } catch {
-      /* ignore */
-    }
-    rotY.set(REST_Y + (rotY.get() - REST_Y) * 0.35);
-    rotX.set(REST_X + (rotX.get() - REST_X) * 0.35);
+  const onPointerLeave = () => {
+    if (reduced) return;
+    rotY.set(REST_Y);
+    rotX.set(REST_X);
   };
 
   const isCssFormat = false;
+  
   
 
   return (
@@ -505,13 +496,12 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         className,
       )}
       style={isCssFormat ? { cursor: "auto" } : undefined}
-      onPointerDown={isCssFormat ? undefined : onPointerDown}
       onPointerMove={isCssFormat ? undefined : onPointerMove}
-      onPointerUp={isCssFormat ? undefined : endDrag}
-      onPointerCancel={isCssFormat ? undefined : endDrag}
+      onPointerLeave={isCssFormat ? undefined : onPointerLeave}
+      onPointerCancel={isCssFormat ? undefined : onPointerLeave}
       role="img"
-      aria-label="Interactive phone mockup — drag to rotate"
-      data-dragging={isDragging ? "true" : "false"}
+      aria-label="Interactive phone mockup — hover to rotate"
+      
     >
       {!isCssFormat && (
         <>

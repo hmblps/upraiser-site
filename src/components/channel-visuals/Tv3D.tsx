@@ -470,16 +470,13 @@ function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
 export function Tv3D({ mode, formatId, className, active = true, flat = false }: Tv3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
-  const last = useRef({ x: 0, y: 0 });
-
+    
   const rotY = useMotionValue(flat ? 0 : REST_Y);
   const rotX = useMotionValue(flat ? 0 : REST_X);
   const springY = useSpring(rotY, { stiffness: 260, damping: 30, mass: 0.7 });
   const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [, setInView] = useState(true);
+    const [, setInView] = useState(true);
   const [meshReady, setMeshReady] = useState(false);
 
   const isDark = mode !== "growth";
@@ -496,46 +493,42 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
     return () => io.disconnect();
   }, []);
 
-  const onPointerDown = (e: ReactPointerEvent) => {
+    const onPointerMove = (e: React.PointerEvent) => {
     if (reduced) return;
-    dragging.current = true;
-    setIsDragging(true);
-    last.current = { x: e.clientX, y: e.clientY };
-    stageRef.current?.setPointerCapture(e.pointerId);
+    const el = stageRef.current;
+    if (!el) return;
+    
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    
+    const nx = (e.clientX - cx) / (rect.width / 2);
+    const ny = (e.clientY - cy) / (rect.height / 2);
+    
+    // Invert X and Y for natural parallax feel
+    rotY.set(REST_Y + nx * 0.08);
+    rotX.set(REST_X - ny * 0.04);
   };
 
-  const onPointerMove = (e: ReactPointerEvent) => {
-    if (!dragging.current) return;
-    const dx = e.clientX - last.current.x;
-    const dy = e.clientY - last.current.y;
-    last.current = { x: e.clientX, y: e.clientY };
-    rotY.set(Math.max(-0.12, Math.min(0.12, rotY.get() + dx * 0.004)));
-    rotX.set(Math.max(-0.06, Math.min(0.06, rotX.get() - dy * 0.0025)));
+  const onPointerLeave = () => {
+    if (reduced) return;
+    rotY.set(REST_Y);
+    rotX.set(REST_X);
   };
 
-  const endDrag = (e: ReactPointerEvent) => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    setIsDragging(false);
-    try { stageRef.current?.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
-    rotY.set(REST_Y + (rotY.get() - REST_Y) * 0.35);
-    rotX.set(REST_X + (rotX.get() - REST_X) * 0.35);
-  };
-
-  return (
+  
     <div
       ref={stageRef}
       className={cn(
-        "relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing",
+        "relative w-full h-full flex items-center justify-center ",
         className,
       )}
-      onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
+      onPointerLeave={onPointerLeave}
+      onPointerCancel={onPointerLeave}
       role="img"
-      aria-label="Interactive TV mockup — drag to rotate"
-      data-dragging={isDragging ? "true" : "false"}
+      aria-label="Interactive TV mockup — hover to rotate"
+      
     >
       <div className="prog-device-load"><div className="prog-device-load__canvas" style={{zIndex: 1}}>
         <Canvas className="tv-glb-canvas"
