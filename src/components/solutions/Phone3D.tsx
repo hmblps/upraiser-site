@@ -8,7 +8,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type PointerEvent as ReactPointerEvent,
 } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Center, Environment, useGLTF, useTexture } from "@react-three/drei";
