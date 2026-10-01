@@ -336,7 +336,7 @@ export function HeroVideoFallback({
           height: "100%",
           display: "block",
           objectFit: "cover",
-          objectPosition: theme === "light" ? "center 46%" : "center 62%",
+          objectPosition: "center center",
           transform: "translateZ(0)",
         }}
       />

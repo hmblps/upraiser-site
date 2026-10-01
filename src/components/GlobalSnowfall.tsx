@@ -143,6 +143,8 @@ export function GlobalSnowfall() {
     };
   }, [isLight, reducedMotion, isVisible]);
 
+  if (!isLight) return null;
+
   return (
     <div
       className="global-snowfall"
