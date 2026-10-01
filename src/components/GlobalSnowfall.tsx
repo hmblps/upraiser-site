@@ -75,15 +75,15 @@ export function GlobalSnowfall() {
     };
     window.addEventListener("resize", handleResize);
 
-    // Optimized particle count for 2D (looks identical to 5500 in 3D due to screen density)
-    const count = window.innerWidth < 768 ? 600 : 1800;
+    // Optimized particle count for 2D
+    const count = window.innerWidth < 768 ? 800 : 2500;
     const particles = new Float32Array(count * 5); // x, y, speed, size, phase
 
     for (let i = 0; i < count; i++) {
       particles[i * 5 + 0] = Math.random() * width;
       particles[i * 5 + 1] = Math.random() * height;
       particles[i * 5 + 2] = Math.random() * 0.8 + 0.4; // speed
-      particles[i * 5 + 3] = Math.random() * 1.5 + 0.4; // size (smaller, finer)
+      particles[i * 5 + 3] = Math.random() * 2.0 + 0.8; // size (larger, more visible)
       particles[i * 5 + 4] = Math.random() * Math.PI * 2; // phase
     }
 
@@ -101,8 +101,8 @@ export function GlobalSnowfall() {
 
       ctx.clearRect(0, 0, width, height);
       
-      const baseColor = isLight ? "122, 143, 168" : "255, 255, 255";
-      const baseOpacity = isLight ? 0.5 : 0.6;
+      const baseColor = isLight ? "180, 200, 220" : "255, 255, 255";
+      const baseOpacity = isLight ? 0.85 : 0.6;
       ctx.fillStyle = `rgba(${baseColor}, ${baseOpacity})`;
       
       scrollVelocity.current *= 0.92;

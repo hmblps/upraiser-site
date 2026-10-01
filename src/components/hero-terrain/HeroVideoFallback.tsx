@@ -5,10 +5,10 @@ import { useTheme } from "../../context/ThemeContext";
 
 type FrameSource = CanvasImageSource & { width?: number; height?: number };
 
-const FRAME_COUNT = 150;
+const FRAME_COUNT = 300;
 const LOOKAHEAD = 72;
 const IDLE_CONCURRENCY = 8;
-const CACHE_BUST = "v=13";
+const CACHE_BUST = "v=14";
 
 function frameUrl(folder: string, index: number) {
   // ffmpeg %03d padding starts at 1
