@@ -8,11 +8,12 @@ type FrameSource = CanvasImageSource & { width?: number; height?: number };
 const FRAME_COUNT = 150;
 const LOOKAHEAD = 72;
 const IDLE_CONCURRENCY = 8;
-const CACHE_BUST = "v=12";
+const CACHE_BUST = "v=13";
 
 function frameUrl(folder: string, index: number) {
-  const padded = (index + 1).toString().padStart(4, "0");
-  return `/hero/frames/${folder}/frame_${padded}.jpg?${CACHE_BUST}`;
+  // ffmpeg %03d padding starts at 1
+  const padded = (index + 1).toString().padStart(3, "0");
+  return `/hero/${folder}/frame_${padded}.jpg?${CACHE_BUST}`;
 }
 
 function whenReady(img: HTMLImageElement, ok: () => void, fail: () => void) {
@@ -273,7 +274,7 @@ export function HeroVideoFallback({
       if (!live()) return;
       const target = targetRef.current;
       // Lerp float for smooth touch tracking
-      currentFrameRef.current += (target - currentFrameRef.current) * 0.15;
+      currentFrameRef.current += (target - currentFrameRef.current) * 0.08;
       
       const rounded = Math.round(currentFrameRef.current);
       if (Math.abs(currentFrameRef.current - target) > 0.01 || rounded !== lastIndexRef.current) {
@@ -286,7 +287,7 @@ export function HeroVideoFallback({
     frameLoopId = requestAnimationFrame(renderLoop);
 
     function applyProgress(progress: number) {
-      const targetFrame = Math.min(FRAME_COUNT - 1, Math.floor(progress * (FRAME_COUNT - 1)));
+      const targetFrame = Math.min(FRAME_COUNT - 1, Math.max(0, progress * (FRAME_COUNT - 1)));
       targetRef.current = targetFrame;
     }
     applyProgressRef.current = applyProgress;
