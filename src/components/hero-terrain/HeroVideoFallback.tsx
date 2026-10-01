@@ -172,20 +172,43 @@ export function HeroVideoFallback({
       return null;
     };
 
-    const drawFrame = (targetIndex: number) => {
+    const drawBlendedFrame = (exactFrame: number) => {
       if (!live()) return;
       const canvasEl = canvasRef.current;
       const ctx = ctxRef.current;
       if (!canvasEl || !ctx) return;
 
-      const picked = pickFrame(targetIndex);
-      if (!picked) return;
+      const frame1 = Math.floor(exactFrame);
+      const frame2 = Math.min(frame1 + 1, FRAME_COUNT - 1);
+      const alpha = exactFrame - frame1;
 
-      if (targetIndex === lastIndexRef.current && lastDrawnRef.current === picked.src) return;
-      lastDrawnRef.current = picked.src;
-      lastIndexRef.current = targetIndex;
-      paintedIndexRef.current = picked.index;
-      drawCoverFrame(ctx, picked.src, canvasEl, folder);
+      const f1 = pickFrame(frame1);
+      const f2 = pickFrame(frame2);
+
+      if (!f1) return;
+
+      if (!f2 || f1.index === f2.index || alpha < 0.01) {
+        if (lastIndexRef.current === exactFrame && lastDrawnRef.current === f1.src) return;
+        lastDrawnRef.current = f1.src;
+        lastIndexRef.current = exactFrame;
+        paintedIndexRef.current = f1.index;
+        
+        ctx.globalAlpha = 1;
+        drawCoverFrame(ctx, f1.src, canvasEl, folder);
+        return;
+      }
+
+      lastDrawnRef.current = null;
+      lastIndexRef.current = exactFrame;
+      paintedIndexRef.current = f1.index;
+
+      ctx.globalAlpha = 1;
+      drawCoverFrame(ctx, f1.src, canvasEl, folder);
+
+      ctx.globalAlpha = alpha;
+      drawCoverFrame(ctx, f2.src, canvasEl, folder);
+      
+      ctx.globalAlpha = 1;
     };
 
     const store = (index: number, img: HTMLImageElement) => {
@@ -193,10 +216,10 @@ export function HeroVideoFallback({
       cache[index] = tagSource(img, folder);
       // We must draw the currently displayed lerped frame, not the raw target, 
       // otherwise it flickers violently between lerped and raw positions during scroll.
-      const currentLerpFrame = Math.round(currentFrameRef.current);
+      const currentLerpFrame = currentFrameRef.current;
       const painted = paintedIndexRef.current;
       if (painted < 0 || Math.abs(index - currentLerpFrame) < Math.abs(painted - currentLerpFrame)) {
-        drawFrame(currentLerpFrame);
+        drawBlendedFrame(currentLerpFrame);
       }
     };
 
@@ -276,10 +299,10 @@ export function HeroVideoFallback({
       // Lerp float for smooth touch tracking
       currentFrameRef.current += (target - currentFrameRef.current) * 0.08;
       
-      const rounded = Math.round(currentFrameRef.current);
-      if (Math.abs(currentFrameRef.current - target) > 0.01 || rounded !== lastIndexRef.current) {
-        drawFrame(rounded);
-        preloadWindow(rounded);
+      const exactFrame = currentFrameRef.current;
+      if (Math.abs(exactFrame - target) > 0.01 || Math.abs(exactFrame - lastIndexRef.current) > 0.01) {
+        drawBlendedFrame(exactFrame);
+        preloadWindow(Math.round(exactFrame));
       }
       
       frameLoopId = requestAnimationFrame(renderLoop);

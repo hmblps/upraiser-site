@@ -75,16 +75,17 @@ export function GlobalSnowfall() {
     };
     window.addEventListener("resize", handleResize);
 
-    // Optimized particle count for 2D
+    // Optimized particle count for 3D projection
     const count = window.innerWidth < 768 ? 800 : 2500;
-    const particles = new Float32Array(count * 5); // x, y, speed, size, phase
+    const particles = new Float32Array(count * 5); // x, y, z, speed, phase
 
+    // Initialize 3D space
     for (let i = 0; i < count; i++) {
-      particles[i * 5 + 0] = Math.random() * width;
-      particles[i * 5 + 1] = Math.random() * height;
-      particles[i * 5 + 2] = Math.random() * 0.8 + 0.4; // speed
-      particles[i * 5 + 3] = Math.random() * 2.0 + 0.8; // size (larger, more visible)
-      particles[i * 5 + 4] = Math.random() * Math.PI * 2; // phase
+      particles[i * 5 + 0] = (Math.random() - 0.5) * 3000; // x spread
+      particles[i * 5 + 1] = (Math.random() - 0.5) * 3000; // y spread
+      particles[i * 5 + 2] = Math.random() * 1000 + 10;    // z depth
+      particles[i * 5 + 3] = Math.random() * 0.8 + 0.4;    // speed
+      particles[i * 5 + 4] = Math.random() * Math.PI * 2;  // phase
     }
 
     let animationId: number;
@@ -107,30 +108,58 @@ export function GlobalSnowfall() {
       
       scrollVelocity.current *= 0.92;
       const scrollOffset = scrollVelocity.current * 0.5;
+      
+      const cx = width / 2;
+      const cy = height / 2;
 
       ctx.beginPath();
       for (let i = 0; i < count; i++) {
         const pIdx = i * 5;
         let x = particles[pIdx + 0];
         let y = particles[pIdx + 1];
-        const speed = particles[pIdx + 2];
-        const size = particles[pIdx + 3];
+        let z = particles[pIdx + 2];
+        const speed = particles[pIdx + 3];
         const phase = particles[pIdx + 4];
 
-        y += (speed * 300 * delta) - scrollOffset * speed; // faster fall (blizzard)
-        x -= (speed * 200 * delta) + (Math.sin(time * 0.005 * speed + phase) * 1.0); // strong slanted wind to left
+        // 3D backward flight: particles fly TOWARDS the camera (Z decreases)
+        // Scroll speed pushes them faster. 
+        // Also simulate gravity in Y.
+        z -= (speed * 400 * delta) + (scrollOffset * 0.5); 
+        y += (speed * 100 * delta); // natural falling gravity
+        x += Math.sin(time * 0.002 + phase) * 0.5; // slight wind drift
 
-        if (y > height + 10) y = -10;
-        if (y < -10) y = height + 10;
-        if (x > width + 10) x = -10;
-        if (x < -10) x = width + 10;
+        // If particle passes the camera (Z < 1) or goes too far out of bounds, reset deep in the distance
+        if (z < 1 || z > 1500) {
+          z = 1000 + Math.random() * 200;
+          x = (Math.random() - 0.5) * 3000;
+          y = (Math.random() - 0.5) * 3000 - 500; // spawn slightly higher
+        }
 
         particles[pIdx + 0] = x;
         particles[pIdx + 1] = y;
+        particles[pIdx + 2] = z;
 
-        ctx.rect(x, y, size, size);
+        // 3D Projection
+        const fov = 400; // perspective intensity
+        const scale = fov / z;
+        const screenX = cx + x * scale;
+        const screenY = cy + y * scale;
+        
+        // Culling: don't draw if WAY off screen
+        if (screenX < -50 || screenX > width + 50 || screenY < -50 || screenY > height + 50) {
+           continue;
+        }
+
+        const size = Math.max(0.5, (isLight ? 2.5 : 1.5) * scale);
+        
+        // Depth-based opacity fading (further away = more transparent)
+        const depthAlpha = Math.min(1, Math.max(0.1, 1 - (z / 1000)));
+        ctx.globalAlpha = baseOpacity * depthAlpha;
+
+        ctx.rect(screenX, screenY, size, size);
       }
       ctx.fill();
+      ctx.globalAlpha = 1.0; // reset
 
       animationId = requestAnimationFrame(render);
     };
