@@ -293,6 +293,13 @@ export function HeroVideoFallback({
     function applyProgress(progress: number) {
       const targetFrame = Math.min(FRAME_COUNT - 1, Math.max(0, progress * (FRAME_COUNT - 1)));
       targetRef.current = targetFrame;
+      
+      const idleVideo = document.getElementById("hero-idle-video");
+      if (idleVideo) {
+        // Fade out quickly in the first 2% of scroll
+        const fade = Math.max(0, 1 - (progress / 0.02));
+        idleVideo.style.opacity = fade.toString();
+      }
     }
     applyProgressRef.current = applyProgress;
 
@@ -344,6 +351,18 @@ export function HeroVideoFallback({
           objectPosition: "center center",
         }}
       />
+      {theme === "dark" && (
+        <video
+          id="hero-idle-video"
+          src="/hero/home-dark-idle.webm"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-300 hero-video-canvas"
+          style={{ opacity: 1, zIndex: 1 }}
+        />
+      )}
     </div>
   );
 }
