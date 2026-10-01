@@ -295,10 +295,32 @@ export function HeroVideoFallback({
       targetRef.current = targetFrame;
       
       const idleVideo = document.getElementById("hero-idle-video");
+      const canvasEl = canvasRef.current;
+      
+      // Invisible cut on motion (Speed Ramp / Blur)
+      const threshold = 0.05; // first 5% of scroll
+      const t = Math.min(1, Math.max(0, progress / threshold));
+      
+      // Easing function for a punchier "ramp" (ease-in-out cubic)
+      const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      
       if (idleVideo) {
-        // Fade out quickly in the first 2% of scroll
-        const fade = Math.max(0, 1 - (progress / 0.02));
-        idleVideo.style.opacity = fade.toString();
+        const idleOpacity = 1 - ease;
+        const idleScale = 1 + (0.1 * ease);
+        const idleBlur = 10 * ease;
+        idleVideo.style.opacity = idleOpacity.toString();
+        idleVideo.style.transform = `scale(${idleScale})`;
+        idleVideo.style.filter = `blur(${idleBlur}px)`;
+      }
+      
+      if (canvasEl) {
+        // If there's no idle video (e.g. light theme), don't hide the canvas at progress 0
+        const canvasOpacity = idleVideo ? ease : 1;
+        const canvasScale = 1.1 - (0.1 * ease);
+        const canvasBlur = idleVideo ? 10 * (1 - ease) : 0;
+        canvasEl.style.opacity = canvasOpacity.toString();
+        canvasEl.style.transform = `scale(${canvasScale})`;
+        canvasEl.style.filter = `blur(${canvasBlur}px)`;
       }
     }
     applyProgressRef.current = applyProgress;
@@ -339,16 +361,17 @@ export function HeroVideoFallback({
   }, [scrub]);
 
   return (
-    <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden hero-video-canvas">
       <canvas
         ref={canvasRef}
-        className="hero-video-canvas h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover"
         style={{
           width: "100%",
           height: "100%",
           display: "block",
           objectFit: "cover",
           objectPosition: "center center",
+          opacity: 0, // initially hidden by scroll logic
         }}
       />
       {theme === "dark" && (
@@ -359,7 +382,7 @@ export function HeroVideoFallback({
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-300 hero-video-canvas"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           style={{ opacity: 1, zIndex: 1 }}
         />
       )}
