@@ -298,28 +298,34 @@ export function HeroVideoFallback({
       const canvasEl = canvasRef.current;
       
       // Invisible cut on motion (Speed Ramp / Blur)
-      const threshold = 0.05; // first 5% of scroll
+      const threshold = 0.015; // first 1.5% of scroll triggers the full ramp
       const t = Math.min(1, Math.max(0, progress / threshold));
       
-      // Easing function for a punchier "ramp" (ease-in-out cubic)
-      const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      // Sharp ease-in, then snap — feels like a camera acceleration punch
+      const ease = t < 0.4 ? 2.5 * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      
+      // PHASE 1 (t: 0→0.5): idle video blurs out and vanishes
+      // PHASE 2 (t: 0.5→1): canvas unblurs and appears
+      // They are NEVER both visible simultaneously — hides the position mismatch completely
       
       if (idleVideo) {
-        const idleOpacity = 1 - ease;
-        const idleScale = 1 + (0.1 * ease);
-        const idleBlur = 10 * ease;
+        const phase1 = Math.min(1, t / 0.5); // 0→1 over first half
+        const ease1 = phase1 * phase1; // ease-in
+        const idleOpacity = 1 - ease1;
+        const idleScale = 1 + (0.1 * ease1);
+        const idleBlur = 18 * ease1;
         idleVideo.style.opacity = idleOpacity.toString();
         idleVideo.style.transform = `scale(${idleScale})`;
         idleVideo.style.filter = `blur(${idleBlur}px)`;
       }
       
       if (canvasEl) {
-        // If there's no idle video (e.g. light theme), don't hide the canvas at progress 0
-        const canvasOpacity = idleVideo ? ease : 1;
-        const canvasScale = 1.1 - (0.1 * ease);
-        const canvasBlur = idleVideo ? 10 * (1 - ease) : 0;
+        const phase2 = Math.max(0, (t - 0.4) / 0.6); // 0→1 over second half (with slight overlap at blur peak)
+        const ease2 = phase2 < 0.5 ? 2 * phase2 * phase2 : 1 - Math.pow(-2 * phase2 + 2, 2) / 2;
+        const canvasOpacity = idleVideo ? ease2 : 1;
+        const canvasBlur = idleVideo ? Math.max(0, 18 * (1 - ease2)) : 0;
         canvasEl.style.opacity = canvasOpacity.toString();
-        canvasEl.style.transform = `scale(${canvasScale})`;
+        canvasEl.style.transform = `scale(1)`;
         canvasEl.style.filter = `blur(${canvasBlur}px)`;
       }
     }
@@ -371,21 +377,47 @@ export function HeroVideoFallback({
           display: "block",
           objectFit: "cover",
           objectPosition: "center center",
-          opacity: 0, // initially hidden by scroll logic
+          opacity: 0, // initially hidden — controlled by applyProgress
         }}
       />
       {theme === "dark" && (
-        <video
-          id="hero-idle-video"
-          src="/hero/home-dark-idle.webm"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          style={{ opacity: 1, zIndex: 1 }}
+        <PingPongVideo
+          srcFwd="/hero/home-dark-idle.webm"
+          srcRev="/hero/home-dark-idle-rev.webm"
         />
       )}
     </div>
+  );
+}
+
+// Seamless ping-pong: plays forward, then backward, then forward…
+function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
+  const [src, setSrc] = useState(srcFwd);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleEnded = () => {
+    setSrc(prev => (prev === srcFwd ? srcRev : srcFwd));
+  };
+
+  // Restart autoplay whenever src changes
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.load();
+    void v.play().catch(() => {});
+  }, [src]);
+
+  return (
+    <video
+      id="hero-idle-video"
+      ref={videoRef}
+      src={src}
+      autoPlay
+      muted
+      playsInline
+      onEnded={handleEnded}
+      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      style={{ opacity: 1, zIndex: 1 }}
+    />
   );
 }
