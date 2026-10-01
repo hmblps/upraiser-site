@@ -102,9 +102,8 @@ export function GlobalSnowfall() {
 
       ctx.clearRect(0, 0, width, height);
       
-      const baseColor = isLight ? "180, 200, 220" : "255, 255, 255";
-      const baseOpacity = isLight ? 0.85 : 0.6;
-      ctx.fillStyle = `rgba(${baseColor}, ${baseOpacity})`;
+      const baseColor = isLight ? "255, 255, 255" : "255, 255, 255";
+      const baseOpacity = isLight ? 0.6 : 0.6;
       
       scrollVelocity.current *= 0.92;
       const scrollOffset = scrollVelocity.current * 0.5;
@@ -112,7 +111,6 @@ export function GlobalSnowfall() {
       const cx = width / 2;
       const cy = height / 2;
 
-      ctx.beginPath();
       for (let i = 0; i < count; i++) {
         const pIdx = i * 5;
         let x = particles[pIdx + 0];
@@ -122,43 +120,39 @@ export function GlobalSnowfall() {
         const phase = particles[pIdx + 4];
 
         // 3D backward flight: particles fly TOWARDS the camera (Z decreases)
-        // Scroll speed pushes them faster. 
-        // Also simulate gravity in Y.
         z -= (speed * 400 * delta) + (scrollOffset * 0.5); 
         y += (speed * 100 * delta); // natural falling gravity
         x += Math.sin(time * 0.002 + phase) * 0.5; // slight wind drift
 
-        // If particle passes the camera (Z < 1) or goes too far out of bounds, reset deep in the distance
         if (z < 1 || z > 1500) {
           z = 1000 + Math.random() * 200;
           x = (Math.random() - 0.5) * 3000;
-          y = (Math.random() - 0.5) * 3000 - 500; // spawn slightly higher
+          y = (Math.random() - 0.5) * 3000 - 500;
         }
 
         particles[pIdx + 0] = x;
         particles[pIdx + 1] = y;
         particles[pIdx + 2] = z;
 
-        // 3D Projection
-        const fov = 400; // perspective intensity
+        const fov = 400;
         const scale = fov / z;
         const screenX = cx + x * scale;
         const screenY = cy + y * scale;
         
-        // Culling: don't draw if WAY off screen
         if (screenX < -50 || screenX > width + 50 || screenY < -50 || screenY > height + 50) {
            continue;
         }
 
-        const size = Math.max(0.5, (isLight ? 2.5 : 1.5) * scale);
+        // Slightly smaller, "dust-like" size for sunny spindrift
+        const size = Math.max(0.5, (isLight ? 1.8 : 1.2) * scale);
         
-        // Depth-based opacity fading (further away = more transparent)
-        const depthAlpha = Math.min(1, Math.max(0.1, 1 - (z / 1000)));
-        ctx.globalAlpha = baseOpacity * depthAlpha;
+        const depthAlpha = Math.min(1, Math.max(0.05, 1 - (z / 1000)));
+        ctx.fillStyle = `rgba(${baseColor}, ${baseOpacity * depthAlpha})`;
 
-        ctx.rect(screenX, screenY, size, size);
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
+        ctx.fill();
       }
-      ctx.fill();
       ctx.globalAlpha = 1.0; // reset
 
       animationId = requestAnimationFrame(render);
