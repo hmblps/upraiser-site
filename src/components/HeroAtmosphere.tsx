@@ -74,6 +74,7 @@ export function HeroAtmosphere() {
             fallback={
               <div className={`hero-mountains-layer hero-mountains-layer--mobile is-active`}>
                 <HeroVideoFallback variant="home" forceMobile={forceMobileFrames || undefined} />
+                <div className="hero-brand-tint" />
                 <div className="hero-mountains-scrim" />
                 {!isLight ? <div className="hero-bottom-fade-bridge" /> : null}
               </div>
@@ -86,6 +87,7 @@ export function HeroAtmosphere() {
         {!use3d ? (
           <div className="hero-mountains-layer hero-mountains-layer--mobile is-active">
             <HeroVideoFallback variant="home" forceMobile={forceMobileFrames || undefined} />
+            <div className="hero-brand-tint" />
             <div className="hero-mountains-scrim" />
             {!isLight ? <div className="hero-bottom-fade-bridge" /> : null}
           </div>

@@ -354,7 +354,7 @@ export function HeroVideoFallback({
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden">
       <canvas
         ref={canvasRef}
-        className="h-full w-full object-cover"
+        className="hero-video-canvas h-full w-full object-cover"
         style={{
           width: "100%",
           height: "100%",
