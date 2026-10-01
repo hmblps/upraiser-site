@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import { useHardwareTier } from "../hooks/useHardwareTier";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { whenHeroTerrainBytes } from "../lib/heroBoot";
 import { markHeroReady } from "../lib/scrollPreload";
@@ -32,12 +30,10 @@ export function HeroAtmosphere() {
   const forceMobileFrames = params.get("mobile") === "1";
   const lite = params.has("lite");
   const isLight = theme === "light";
-  const reduced = useReducedMotion();
   const desktop = useDesktopHero();
-  const tier = useHardwareTier();
   
   // Временно выключаем 3D-горы для тестирования видео-варианта
-  const use3d = false; // (!isLight || desktop) && !reduced && tier === "high" && !lite;
+  const use3d = false;
   const [boot3d, setBoot3d] = useState(false);
 
   useEffect(() => {

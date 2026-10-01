@@ -342,7 +342,6 @@ export function HeroVideoFallback({
           display: "block",
           objectFit: "cover",
           objectPosition: "center center",
-          transform: "translateZ(0)",
         }}
       />
     </div>
