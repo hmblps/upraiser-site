@@ -7,7 +7,7 @@ type FrameSource = CanvasImageSource & { width?: number; height?: number };
 
 // Set true to show the idle video ping-pong only (no scroll-driven frame sequence).
 // Set false to re-enable the scroll-driven canvas animation.
-const VIDEO_ONLY_MODE = true;
+export const VIDEO_ONLY_MODE = true;
 
 const FRAME_COUNT = 60;
 const LOOKAHEAD = 8;
@@ -541,6 +541,7 @@ function PingPongVideo({
         id="hero-idle-video"
         src={srcFwd}
         muted
+        loop
         playsInline
         preload="auto"
         style={{ position: "absolute", width: 1, height: 1, opacity: 0 }}
@@ -549,6 +550,7 @@ function PingPongVideo({
         ref={revRef}
         src={srcRev}
         muted
+        loop
         playsInline
         preload="auto"
         style={{ position: "absolute", width: 1, height: 1, opacity: 0 }}

@@ -10,6 +10,7 @@ import {
 } from "react";
 import { clamp, smoothstep } from "../lib/clamp";
 import { useScroll } from "./ScrollContext";
+import { VIDEO_ONLY_MODE } from "../components/hero-terrain/HeroVideoFallback";
 
 /** Must stay in sync with Hero card reveal thresholds. */
 export const HERO_CARD_REVEAL_AT = [0.18, 0.38, 0.58, 0.78] as const;
@@ -51,8 +52,11 @@ function countRevealed(progress: number) {
  */
 export function HeroFlyProvider({ children }: { children: ReactNode }) {
   const { registerScrollListener } = useScroll();
-  const progressRef = useRef(0);
-  const [revealedCount, setRevealedCount] = useState(0);
+  const progressRef = useRef(VIDEO_ONLY_MODE ? 1 : 0);
+  // In VIDEO_ONLY_MODE scroll is disabled — reveal all stat cards immediately.
+  const [revealedCount, setRevealedCount] = useState(
+    VIDEO_ONLY_MODE ? HERO_CARD_REVEAL_AT.length : 0,
+  );
   const stageRef = useRef<HTMLElement | null>(null);
   const lastRevealedRef = useRef(-1);
 
