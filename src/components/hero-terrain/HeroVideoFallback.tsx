@@ -432,21 +432,25 @@ function PingPongVideo({
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
+    // Non-null aliases for use inside closures (TS can't narrow across callbacks)
+    const c: HTMLCanvasElement = canvas;
+    const ct: CanvasRenderingContext2D = ctx;
+
     // timeupdate fires ~250ms — need >> 250ms lead
     const LEAD_S   = 2.0;
     const FADE_MS  = 1600;
 
     // Fit canvas pixels to container
     function resize() {
-      const p = canvas.parentElement;
+      const p = c.parentElement;
       if (!p) return;
       const dpr = devicePixelRatio || 1;
-      canvas.width  = Math.round(p.clientWidth  * dpr);
-      canvas.height = Math.round(p.clientHeight * dpr);
+      c.width  = Math.round(p.clientWidth  * dpr);
+      c.height = Math.round(p.clientHeight * dpr);
     }
     resize();
     const ro = new ResizeObserver(resize);
-    ro.observe(canvas.parentElement!);
+    ro.observe(c.parentElement!);
 
     // Crossfade state
     let activeA: HTMLVideoElement = fwd; // outgoing (fades 1→0)
@@ -455,8 +459,8 @@ function PingPongVideo({
     let fadeStart = -1; // performance.now() when fade began, -1 = idle
 
     function draw(now: DOMHighResTimeStamp) {
-      const W = canvas.width;
-      const H = canvas.height;
+      const W = c.width;
+      const H = c.height;
 
       // alpha = how visible the OUTGOING video is (1 = fully visible, 0 = gone)
       let alpha = 1;
@@ -477,17 +481,17 @@ function PingPongVideo({
 
       // Draw outgoing
       if (activeA.readyState >= 2) {
-        ctx.globalAlpha = alpha;
-        ctx.drawImage(activeA, 0, 0, W, H);
+        ct.globalAlpha = alpha;
+        ct.drawImage(activeA, 0, 0, W, H);
       }
 
       // Draw incoming on top
       if (alpha < 1 && activeB.readyState >= 2) {
-        ctx.globalAlpha = 1 - alpha;
-        ctx.drawImage(activeB, 0, 0, W, H);
+        ct.globalAlpha = 1 - alpha;
+        ct.drawImage(activeB, 0, 0, W, H);
       }
 
-      ctx.globalAlpha = 1;
+      ct.globalAlpha = 1;
       requestAnimationFrame(draw);
     }
 
@@ -576,6 +580,10 @@ function SnowParticles() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Non-null aliases for closures
+    const c: HTMLCanvasElement = canvas;
+    const ct: CanvasRenderingContext2D = ctx;
+
     interface Flake {
       angle: number; // polar angle from vanishing point (radians)
       r: number;     // 0 = centre, 1 = edge of screen
@@ -603,24 +611,24 @@ function SnowParticles() {
 
     function resize() {
       const dpr = devicePixelRatio || 1;
-      canvas.width  = canvas.offsetWidth  * dpr;
-      canvas.height = canvas.offsetHeight * dpr;
+      c.width  = c.offsetWidth  * dpr;
+      c.height = c.offsetHeight * dpr;
     }
     resize();
     const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
+    ro.observe(c);
 
     let raf = 0;
 
     function draw() {
-      const W  = canvas.width;
-      const H  = canvas.height;
+      const W  = c.width;
+      const H  = c.height;
       // Vanishing point slightly above centre — matches mountain drone horizon
       const cx = W * 0.5;
       const cy = H * 0.44;
       const maxR = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
 
-      ctx.clearRect(0, 0, W, H);
+      ct.clearRect(0, 0, W, H);
 
       for (let i = 0; i < flakes.length; i++) {
         const f = flakes[i];
