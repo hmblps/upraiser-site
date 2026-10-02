@@ -192,15 +192,15 @@
 @media (prefers-reduced-motion: no-preference) {
   .hero-stage--fly {
     /* ~6s sticky runway — cinematic drone beat with room to land */
-    height: 600vh;
-    min-height: 600vh;
+    height: 200vh;
+    min-height: 200vh;
   }
 
   @media (max-width: 899px) {
     .hero-stage--fly {
       /* Matching desktop scroll length for consistent video speed */
-      height: 600vh;
-      min-height: 600vh;
+      height: 200vh;
+      min-height: 200vh;
     }
   }
 
