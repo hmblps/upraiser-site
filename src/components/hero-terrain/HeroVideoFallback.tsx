@@ -387,6 +387,12 @@ export function HeroVideoFallback({
           srcRev="/hero/home-dark-idle-rev.webm"
         />
       )}
+      {theme === "light" && (
+        <PingPongVideo
+          srcFwd="/hero/home-light-idle.webm"
+          srcRev="/hero/home-light-idle-rev.webm"
+        />
+      )}
     </div>
   );
 }
