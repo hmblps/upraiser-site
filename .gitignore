@@ -125,3 +125,6 @@ public/hero/home-mobile-dark/
 public/hero/home-mobile-light/
 public/hero/expedition-mobile-dark/
 public/hero/expedition-mobile-light/
+
+# Expedition frame sequences (keep locally, not in git)
+public/hero/frames/
