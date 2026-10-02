@@ -5,15 +5,15 @@ import { useTheme } from "../../context/ThemeContext";
 
 type FrameSource = CanvasImageSource & { width?: number; height?: number };
 
-const FRAME_COUNT = 300;
-const LOOKAHEAD = 72;
-const IDLE_CONCURRENCY = 8;
-const CACHE_BUST = "v=14";
+const FRAME_COUNT = 60;
+const LOOKAHEAD = 8;
+const IDLE_CONCURRENCY = 4;
+const CACHE_BUST = "v=15";
 
 function frameUrl(folder: string, index: number) {
   // ffmpeg %03d padding starts at 1
   const padded = (index + 1).toString().padStart(3, "0");
-  return `/hero/${folder}/frame_${padded}.jpg?${CACHE_BUST}`;
+  return `/hero/${folder}-60/frame_${padded}.jpg?${CACHE_BUST}`;
 }
 
 function whenReady(img: HTMLImageElement, ok: () => void, fail: () => void) {
@@ -93,6 +93,7 @@ export function HeroVideoFallback({
   const lastIndexRef = useRef(-1);
   const folderRef = useRef("");
   const applyProgressRef = useRef<(progress: number) => void>(() => {});
+  const blackOverlayRef = useRef<HTMLDivElement | null>(null);
   const scrubRef = useRef(scrub);
   scrubRef.current = scrub;
 

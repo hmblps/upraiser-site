@@ -1,0 +1,39 @@
+--- src/components/hero-terrain/HeroVideoFallback.tsx
++++ src/components/hero-terrain/HeroVideoFallback.tsx
+@@ -74,6 +74,8 @@
+     lastIndexRef.current = -1;
+     const targetRef = { current: 0 };
+     const currentFrameRef = { current: 0 };
++    const idleDriftRef = { current: 0 };
++    let lastTime = performance.now();
+     const paintedIndexRef = { current: -1 };
+     const pendingImgs = new Set<HTMLImageElement>();
+ 
+@@ -194,10 +196,16 @@
+ 
+     let frameLoopId = 0;
+ 
+-    const renderLoop = () => {
++    const renderLoop = (time: number) => {
+       if (!live()) return;
+-      const target = targetRef.current;
++      
++      const dt = time - lastTime;
++      lastTime = time;
++      
++      if (folder.includes("dark") && targetRef.current < FRAME_COUNT - 1) {
++        idleDriftRef.current += (10 * dt) / 1000; // 10 fps idle playback
++      }
++
++      const target = Math.min(FRAME_COUNT - 1, targetRef.current + idleDriftRef.current);
+       // Lerp float for smooth touch tracking
+       currentFrameRef.current += (target - currentFrameRef.current) * 0.08;
+       
+@@ -215,7 +223,8 @@
+ 
+     function applyProgress(progress: number) {
+       const targetFrame = Math.min(FRAME_COUNT - 1, Math.max(0, progress * (FRAME_COUNT - 1)));
+       targetRef.current = targetFrame;
++      idleDriftRef.current = 0; // Reset drift when user actively scrolls
+     }
+     applyProgressRef.current = applyProgress;

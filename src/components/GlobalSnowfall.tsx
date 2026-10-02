@@ -144,11 +144,17 @@ export function GlobalSnowfall() {
         }
 
         // Slightly smaller, "dust-like" size for sunny spindrift
-        const size = Math.max(0.5, (isLight ? 1.8 : 1.2) * scale);
+        const size = Math.max(0.5, (isLight ? 2.5 : 1.5) * scale);
         
         const depthAlpha = Math.min(1, Math.max(0.05, 1 - (z / 1000)));
-        ctx.fillStyle = `rgba(${baseColor}, ${baseOpacity * depthAlpha})`;
-
+        
+        // Soft gradient to prevent tiny particles from looking like hard squares
+        const grad = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size);
+        grad.addColorStop(0, `rgba(${baseColor}, ${baseOpacity * depthAlpha})`);
+        grad.addColorStop(0.5, `rgba(${baseColor}, ${baseOpacity * depthAlpha * 0.6})`);
+        grad.addColorStop(1, `rgba(${baseColor}, 0)`);
+        
+        ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
         ctx.fill();
