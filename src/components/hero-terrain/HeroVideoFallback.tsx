@@ -97,7 +97,6 @@ export function HeroVideoFallback({
   const lastIndexRef = useRef(-1);
   const folderRef = useRef("");
   const applyProgressRef = useRef<(progress: number) => void>(() => {});
-  const blackOverlayRef = useRef<HTMLDivElement | null>(null);
   const scrubRef = useRef(scrub);
   scrubRef.current = scrub;
 
@@ -309,9 +308,6 @@ export function HeroVideoFallback({
       // Invisible cut on motion (Speed Ramp / Blur)
       const threshold = 0.015; // first 1.5% of scroll triggers the full ramp
       const t = Math.min(1, Math.max(0, progress / threshold));
-      
-      // Sharp ease-in, then snap — feels like a camera acceleration punch
-      const ease = t < 0.4 ? 2.5 * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       
       // PHASE 1 (t: 0→0.5): idle video blurs out and vanishes
       // PHASE 2 (t: 0.5→1): canvas unblurs and appears
