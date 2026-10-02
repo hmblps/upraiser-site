@@ -431,20 +431,19 @@ function PingPongVideo({
     const wrap = wrapRef.current;
     if (!fwd || !rev || !wrap) return;
 
-    // Must be > (timeupdate interval ~250ms) to reliably catch the trigger.
-    // 1.5s gives 6+ timeupdate events before the video ends — never missed.
-    const LEAD_S = 1.5;
-    // Total crossfade. The blur peak hides both videos playing simultaneously.
-    const FADE_MS = 1200;
+    // timeupdate fires ~250ms intervals — LEAD_S must be >> 250ms to guarantee detection.
+    const LEAD_S = 2.0;
+    const FADE_MS = 1400;
     const HALF = FADE_MS / 2;
-    // Base filter (theme-specific). Blur layer is added on top during crossfade.
-    const baseFilter = staticFilter || "none";
+    const baseFilter = staticFilter || "";
 
     function applyFilter(blur: number, brightness: number) {
-      const blurStr = blur > 0 ? `blur(${blur}px)` : "";
-      const brtStr = `brightness(${brightness})`;
-      const base = staticFilter ? staticFilter : "";
-      wrap.style.filter = [base, blurStr, brtStr].filter(Boolean).join(" ");
+      const parts = [
+        staticFilter,
+        blur > 0 ? `blur(${blur}px)` : "",
+        brightness !== 1 ? `brightness(${brightness})` : "",
+      ].filter(Boolean);
+      wrap.style.filter = parts.join(" ") || "";
     }
 
     function crossfadeTo(
@@ -456,38 +455,39 @@ function PingPongVideo({
       switchingRef.current = true;
       activeRef.current = next;
 
-      // Queue incoming video at its start (= visual same position as outgoing end)
-      to.currentTime = 0;
-      to.play().catch(() => {});
-
-      // Phase 1: ramp blur UP — ease-in to peak at midpoint
+      // ── STEP 1: blur fires FIRST — viewer sees smear, not a click ──────────
       wrap.style.transition = `filter ${HALF}ms ease-in`;
-      applyFilter(12, 1.2);
+      applyFilter(14, 1.25);
 
-      // Opacity crossfade runs for the full duration simultaneously
-      const fadeEase = `opacity ${FADE_MS}ms ease-in-out`;
-      from.style.transition = fadeEase;
-      to.style.transition = fadeEase;
-      from.style.opacity = "0";
-      to.style.opacity = "1";
+      // ── STEP 2: 120ms later (deep inside blur) — seek + fade ───────────────
+      // Any decoder latency (seek stutter) is fully hidden by the 14px blur.
+      // Both decoders are already warm (both videos have been playing since mount).
+      setTimeout(() => {
+        to.currentTime = 0;
+        // No play() needed — both videos never pause (see mount code below).
 
-      // Phase 2: ramp blur DOWN — ease-out back to base filter
+        const fadeEase = `opacity ${FADE_MS - 120}ms ease-in-out`;
+        from.style.transition = fadeEase;
+        to.style.transition = fadeEase;
+        from.style.opacity = "0";
+        to.style.opacity = "1";
+      }, 120);
+
+      // ── STEP 3: blur out after peak ─────────────────────────────────────────
       setTimeout(() => {
         wrap.style.transition = `filter ${HALF}ms ease-out`;
-        wrap.style.filter = baseFilter || "none";
+        wrap.style.filter = baseFilter;
       }, HALF);
 
-      // Cleanup: retire the old video silently in the background
+      // ── STEP 4: cleanup — old video stays playing invisibly (decoder stays warm) ─
       setTimeout(() => {
-        from.pause();
-        from.currentTime = 0;
+        // Do NOT pause from — keeping it running means instant seek next round.
         from.style.transition = "none";
         to.style.transition = "none";
         wrap.style.transition = "none";
-        // Restore static filter exactly (no extra blur)
-        wrap.style.filter = baseFilter || "";
+        wrap.style.filter = baseFilter;
         switchingRef.current = false;
-      }, FADE_MS + 100);
+      }, FADE_MS + 200);
     }
 
     const onFwdTime = () => {
@@ -506,7 +506,12 @@ function PingPongVideo({
 
     fwd.addEventListener("timeupdate", onFwdTime);
     rev.addEventListener("timeupdate", onRevTime);
+
+    // ── Both videos start immediately so decoders are always hot ───────────────
+    // rev plays invisibly (opacity:0) — when crossfade happens, its decoder
+    // has been running for seconds → seeking to 0 is instant, no stutter.
     fwd.play().catch(() => {});
+    rev.play().catch(() => {});
 
     return () => {
       fwd.removeEventListener("timeupdate", onFwdTime);
