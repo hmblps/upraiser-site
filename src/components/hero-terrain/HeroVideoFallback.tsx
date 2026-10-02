@@ -398,16 +398,27 @@ export function HeroVideoFallback({
         <PingPongVideo
           srcFwd="/hero/home-light-idle.webm"
           srcRev="/hero/home-light-idle-rev.webm"
+          staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
     </div>
   );
 }
 
-// Seamless ping-pong: two pre-mounted videos + lens-breathe filter at direction change.
-// LEAD_S=0.1 → minimal overlap (just avoids 1-frame gap).
-// At reversal: blur peak + brightness pulse masks exact direction flip — looks like camera breathe.
-function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
+// ─── PingPong crossfade ───────────────────────────────────────────────────────
+// Like a video-editor dissolve: both tracks genuinely overlap.
+// LEAD_S must be ≥ 0.5s — timeupdate fires ~250ms intervals, smaller windows get missed.
+// Strong blur (12px) hides the dual-motion during overlap — same as Premiere's "blur dissolve".
+// staticFilter: optional base CSS filter (e.g. contrast/saturation boost per theme).
+function PingPongVideo({
+  srcFwd,
+  srcRev,
+  staticFilter = "",
+}: {
+  srcFwd: string;
+  srcRev: string;
+  staticFilter?: string;
+}) {
   const fwdRef = useRef<HTMLVideoElement>(null);
   const revRef = useRef<HTMLVideoElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -420,11 +431,21 @@ function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
     const wrap = wrapRef.current;
     if (!fwd || !rev || !wrap) return;
 
-    // Minimal overlap — just enough to avoid the 1-frame black gap on ended
-    const LEAD_S = 0.1;
-    // Total crossfade duration (ms). Keep short so motion directions barely overlap.
-    const FADE_MS = 350;
+    // Must be > (timeupdate interval ~250ms) to reliably catch the trigger.
+    // 1.5s gives 6+ timeupdate events before the video ends — never missed.
+    const LEAD_S = 1.5;
+    // Total crossfade. The blur peak hides both videos playing simultaneously.
+    const FADE_MS = 1200;
     const HALF = FADE_MS / 2;
+    // Base filter (theme-specific). Blur layer is added on top during crossfade.
+    const baseFilter = staticFilter || "none";
+
+    function applyFilter(blur: number, brightness: number) {
+      const blurStr = blur > 0 ? `blur(${blur}px)` : "";
+      const brtStr = `brightness(${brightness})`;
+      const base = staticFilter ? staticFilter : "";
+      wrap.style.filter = [base, blurStr, brtStr].filter(Boolean).join(" ");
+    }
 
     function crossfadeTo(
       from: HTMLVideoElement,
@@ -435,37 +456,38 @@ function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
       switchingRef.current = true;
       activeRef.current = next;
 
-      // Prep incoming video at start position
+      // Queue incoming video at its start (= visual same position as outgoing end)
       to.currentTime = 0;
       to.play().catch(() => {});
 
-      // Phase 1: blur in (ease-in to peak)
+      // Phase 1: ramp blur UP — ease-in to peak at midpoint
       wrap.style.transition = `filter ${HALF}ms ease-in`;
-      wrap.style.filter = "blur(2px) brightness(1.07)";
+      applyFilter(12, 1.2);
 
-      // Swap opacity simultaneously
+      // Opacity crossfade runs for the full duration simultaneously
       const fadeEase = `opacity ${FADE_MS}ms ease-in-out`;
       from.style.transition = fadeEase;
       to.style.transition = fadeEase;
       from.style.opacity = "0";
       to.style.opacity = "1";
 
-      // Phase 2: blur out (ease-out from peak)
+      // Phase 2: ramp blur DOWN — ease-out back to base filter
       setTimeout(() => {
         wrap.style.transition = `filter ${HALF}ms ease-out`;
-        wrap.style.filter = "blur(0px) brightness(1)";
+        wrap.style.filter = baseFilter || "none";
       }, HALF);
 
-      // Cleanup
+      // Cleanup: retire the old video silently in the background
       setTimeout(() => {
         from.pause();
         from.currentTime = 0;
         from.style.transition = "none";
         to.style.transition = "none";
         wrap.style.transition = "none";
-        wrap.style.filter = "";
+        // Restore static filter exactly (no extra blur)
+        wrap.style.filter = baseFilter || "";
         switchingRef.current = false;
-      }, FADE_MS + 80);
+      }, FADE_MS + 100);
     }
 
     const onFwdTime = () => {
@@ -506,7 +528,12 @@ function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
   return (
     <div
       ref={wrapRef}
-      style={{ position: "absolute", inset: 0, willChange: "filter" }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        filter: staticFilter || undefined,
+        willChange: "filter",
+      }}
     >
       <video
         ref={fwdRef}
