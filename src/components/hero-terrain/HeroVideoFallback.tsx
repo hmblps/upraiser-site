@@ -401,15 +401,15 @@ export function HeroVideoFallback({
           staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
+      {theme === "light" && <SnowParticles />}
     </div>
   );
 }
 
-// ─── PingPong crossfade ───────────────────────────────────────────────────────
-// Like a video-editor dissolve: both tracks genuinely overlap.
-// LEAD_S must be ≥ 0.5s — timeupdate fires ~250ms intervals, smaller windows get missed.
-// Strong blur (12px) hides the dual-motion during overlap — same as Premiere's "blur dissolve".
-// staticFilter: optional base CSS filter (e.g. contrast/saturation boost per theme).
+// ─── PingPong — canvas blend (zero flash, zero seek stutter) ─────────────────
+// Both video elements decode continuously (never paused).
+// A canvas RAF loop reads frames via drawImage and blends globalAlpha in JS.
+// No CSS opacity transitions → no reliance on CSS timing → frame-perfect.
 function PingPongVideo({
   srcFwd,
   srcRev,
@@ -419,127 +419,119 @@ function PingPongVideo({
   srcRev: string;
   staticFilter?: string;
 }) {
-  const fwdRef = useRef<HTMLVideoElement>(null);
-  const revRef = useRef<HTMLVideoElement>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const activeRef = useRef<"fwd" | "rev">("fwd");
-  const switchingRef = useRef(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fwdRef   = useRef<HTMLVideoElement>(null);
+  const revRef   = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const fwd = fwdRef.current;
-    const rev = revRef.current;
-    const wrap = wrapRef.current;
-    if (!fwd || !rev || !wrap) return;
+    const canvas = canvasRef.current;
+    const fwd    = fwdRef.current;
+    const rev    = revRef.current;
+    if (!canvas || !fwd || !rev) return;
 
-    // timeupdate fires ~250ms intervals — LEAD_S must be >> 250ms to guarantee detection.
-    const LEAD_S = 2.0;
-    const FADE_MS = 1400;
-    const HALF = FADE_MS / 2;
-    const baseFilter = staticFilter || "";
+    const ctx = canvas.getContext("2d", { alpha: false });
+    if (!ctx) return;
 
-    function applyFilter(blur: number, brightness: number) {
-      const parts = [
-        staticFilter,
-        blur > 0 ? `blur(${blur}px)` : "",
-        brightness !== 1 ? `brightness(${brightness})` : "",
-      ].filter(Boolean);
-      wrap.style.filter = parts.join(" ") || "";
+    // timeupdate fires ~250ms — need >> 250ms lead
+    const LEAD_S   = 2.0;
+    const FADE_MS  = 1600;
+
+    // Fit canvas pixels to container
+    function resize() {
+      const p = canvas.parentElement;
+      if (!p) return;
+      const dpr = devicePixelRatio || 1;
+      canvas.width  = Math.round(p.clientWidth  * dpr);
+      canvas.height = Math.round(p.clientHeight * dpr);
+    }
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas.parentElement!);
+
+    // Crossfade state
+    let activeA: HTMLVideoElement = fwd; // outgoing (fades 1→0)
+    let activeB: HTMLVideoElement = rev; // incoming (fades 0→1)
+    let switching = false;
+    let fadeStart = -1; // performance.now() when fade began, -1 = idle
+
+    function draw(now: DOMHighResTimeStamp) {
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // alpha = how visible the OUTGOING video is (1 = fully visible, 0 = gone)
+      let alpha = 1;
+      if (fadeStart >= 0) {
+        const t = Math.min(1, (now - fadeStart) / FADE_MS);
+        // smooth step: t²(3−2t)
+        const ease = t * t * (3 - 2 * t);
+        alpha = 1 - ease;
+
+        if (t >= 1) {
+          // Fade done — swap roles, reset state
+          [activeA, activeB] = [activeB, activeA];
+          alpha      = 1;
+          fadeStart  = -1;
+          switching  = false;
+        }
+      }
+
+      // Draw outgoing
+      if (activeA.readyState >= 2) {
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(activeA, 0, 0, W, H);
+      }
+
+      // Draw incoming on top
+      if (alpha < 1 && activeB.readyState >= 2) {
+        ctx.globalAlpha = 1 - alpha;
+        ctx.drawImage(activeB, 0, 0, W, H);
+      }
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
     }
 
-    function crossfadeTo(
-      from: HTMLVideoElement,
-      to: HTMLVideoElement,
-      next: "fwd" | "rev",
-    ) {
-      if (switchingRef.current) return;
-      switchingRef.current = true;
-      activeRef.current = next;
+    function startCrossfade() {
+      if (switching) return;
+      switching = true;
 
-      // ── STEP 1: blur fires FIRST — viewer sees smear, not a click ──────────
-      wrap.style.transition = `filter ${HALF}ms ease-in`;
-      applyFilter(14, 1.25);
+      // Seek incoming to its first frame while it's invisible.
+      // Decoder is warm (both have been playing since mount) → seek is fast.
+      activeB.currentTime = 0;
 
-      // ── STEP 2: 120ms later (deep inside blur) — seek + fade ───────────────
-      // Any decoder latency (seek stutter) is fully hidden by the 14px blur.
-      // Both decoders are already warm (both videos have been playing since mount).
-      setTimeout(() => {
-        to.currentTime = 0;
-        // No play() needed — both videos never pause (see mount code below).
-
-        const fadeEase = `opacity ${FADE_MS - 120}ms ease-in-out`;
-        from.style.transition = fadeEase;
-        to.style.transition = fadeEase;
-        from.style.opacity = "0";
-        to.style.opacity = "1";
-      }, 120);
-
-      // ── STEP 3: blur out after peak ─────────────────────────────────────────
-      setTimeout(() => {
-        wrap.style.transition = `filter ${HALF}ms ease-out`;
-        wrap.style.filter = baseFilter;
-      }, HALF);
-
-      // ── STEP 4: cleanup — old video stays playing invisibly (decoder stays warm) ─
-      setTimeout(() => {
-        // Do NOT pause from — keeping it running means instant seek next round.
-        from.style.transition = "none";
-        to.style.transition = "none";
-        wrap.style.transition = "none";
-        wrap.style.filter = baseFilter;
-        switchingRef.current = false;
-      }, FADE_MS + 200);
+      // Small settle window, then begin the alpha ramp
+      setTimeout(() => { fadeStart = performance.now(); }, 80);
     }
 
-    const onFwdTime = () => {
-      if (activeRef.current !== "fwd" || switchingRef.current) return;
-      if (fwd.duration > 0 && fwd.currentTime >= fwd.duration - LEAD_S) {
-        crossfadeTo(fwd, rev, "rev");
+    const onTime = () => {
+      if (switching) return;
+      const active = activeA; // whichever is currently showing
+      if (active.duration > 0 && active.currentTime >= active.duration - LEAD_S) {
+        startCrossfade();
       }
     };
 
-    const onRevTime = () => {
-      if (activeRef.current !== "rev" || switchingRef.current) return;
-      if (rev.duration > 0 && rev.currentTime >= rev.duration - LEAD_S) {
-        crossfadeTo(rev, fwd, "fwd");
-      }
-    };
+    fwd.addEventListener("timeupdate", onTime);
+    rev.addEventListener("timeupdate", onTime);
 
-    fwd.addEventListener("timeupdate", onFwdTime);
-    rev.addEventListener("timeupdate", onRevTime);
-
-    // ── Both videos start immediately so decoders are always hot ───────────────
-    // rev plays invisibly (opacity:0) — when crossfade happens, its decoder
-    // has been running for seconds → seeking to 0 is instant, no stutter.
+    // Both play from mount — decoders always hot, seek at crossfade is instant
     fwd.play().catch(() => {});
     rev.play().catch(() => {});
 
+    requestAnimationFrame(draw);
+
     return () => {
-      fwd.removeEventListener("timeupdate", onFwdTime);
-      rev.removeEventListener("timeupdate", onRevTime);
+      ro.disconnect();
+      fwd.removeEventListener("timeupdate", onTime);
+      rev.removeEventListener("timeupdate", onTime);
       fwd.pause();
       rev.pause();
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const videoStyle: React.CSSProperties = {
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    transition: "none",
-  };
-
   return (
-    <div
-      ref={wrapRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        filter: staticFilter || undefined,
-        willChange: "filter",
-      }}
-    >
+    <div style={{ position: "absolute", inset: 0 }}>
+      {/* Videos decode invisibly — canvas reads them via drawImage */}
       <video
         ref={fwdRef}
         id="hero-idle-video"
@@ -547,8 +539,7 @@ function PingPongVideo({
         muted
         playsInline
         preload="auto"
-        className="pointer-events-none"
-        style={{ ...videoStyle, opacity: 1, zIndex: 1 }}
+        style={{ position: "absolute", width: 1, height: 1, opacity: 0 }}
       />
       <video
         ref={revRef}
@@ -556,9 +547,153 @@ function PingPongVideo({
         muted
         playsInline
         preload="auto"
-        className="pointer-events-none"
-        style={{ ...videoStyle, opacity: 0, zIndex: 1 }}
+        style={{ position: "absolute", width: 1, height: 1, opacity: 0 }}
+      />
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          display: "block",
+          filter: staticFilter || undefined,
+        }}
       />
     </div>
+  );
+}
+
+// ─── FPV snow particles ───────────────────────────────────────────────────────
+// Snowflakes burst from the horizon center and rush toward the camera,
+// matching the forward-flight FPV drone perspective of the mountain video.
+function SnowParticles() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    interface Flake {
+      angle: number; // polar angle from vanishing point (radians)
+      r: number;     // 0 = centre, 1 = edge of screen
+      speed: number; // r increment per frame at r=0
+      size: number;  // base radius (CSS px units)
+      alpha: number; // max opacity
+      wind: number;  // angle drift per frame (subtle turbulence)
+    }
+
+    const COUNT = 160;
+
+    function spawn(): Flake {
+      return {
+        angle: Math.random() * Math.PI * 2,
+        // New particles start near centre — spread them out a little
+        r:     Math.random() * 0.3,
+        speed: 0.003 + Math.random() * 0.006,
+        size:  0.3 + Math.random() * 2.0,
+        alpha: 0.25 + Math.random() * 0.75,
+        wind:  (Math.random() - 0.5) * 0.006,
+      };
+    }
+
+    const flakes: Flake[] = Array.from({ length: COUNT }, spawn);
+
+    function resize() {
+      const dpr = devicePixelRatio || 1;
+      canvas.width  = canvas.offsetWidth  * dpr;
+      canvas.height = canvas.offsetHeight * dpr;
+    }
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+
+    let raf = 0;
+
+    function draw() {
+      const W  = canvas.width;
+      const H  = canvas.height;
+      // Vanishing point slightly above centre — matches mountain drone horizon
+      const cx = W * 0.5;
+      const cy = H * 0.44;
+      const maxR = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
+
+      ctx.clearRect(0, 0, W, H);
+
+      for (let i = 0; i < flakes.length; i++) {
+        const f = flakes[i];
+
+        // Exponential acceleration: the closer to camera the faster it moves
+        f.r     += f.speed * (1 + f.r * f.r * 7);
+        f.angle += f.wind;
+
+        if (f.r >= 1.1) {
+          flakes[i] = spawn();
+          continue;
+        }
+
+        // Polar → screen coordinates
+        const dist = f.r * maxR;
+        const x    = cx + Math.cos(f.angle) * dist;
+        const y    = cy + Math.sin(f.angle) * dist;
+
+        // Motion streak: tail fades from transparent to opaque at the tip
+        const trailPx = 3 + f.r * f.r * 55;
+        const prevDist = Math.max(0, dist - trailPx);
+        const px = cx + Math.cos(f.angle) * prevDist;
+        const py = cy + Math.sin(f.angle) * prevDist;
+
+        // Scale: tiny at horizon, grows as it rushes toward camera
+        const scale   = 0.1 + f.r * f.r * 6;
+        const radius  = Math.max(0.3, f.size * scale);
+        const opacity = Math.min(1, f.alpha * (0.15 + f.r * 1.2));
+
+        // Streak line with gradient tail
+        const grad = ctx.createLinearGradient(px, py, x, y);
+        grad.addColorStop(0, `rgba(255,255,255,0)`);
+        grad.addColorStop(1, `rgba(255,255,255,${opacity.toFixed(3)})`);
+
+        ctx.beginPath();
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = Math.max(0.4, radius);
+        ctx.lineCap     = "round";
+        ctx.moveTo(px, py);
+        ctx.lineTo(x,  y);
+        ctx.stroke();
+
+        // Bright dot at the tip for close-range flakes
+        if (radius > 1) {
+          ctx.beginPath();
+          ctx.arc(x, y, radius * 0.45, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
+          ctx.fill();
+        }
+      }
+
+      raf = requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 2,
+      }}
+    />
   );
 }
