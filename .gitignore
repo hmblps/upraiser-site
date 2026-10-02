@@ -117,3 +117,11 @@ output_frame*
 old_*.tsx
 new_*.tsx
 
+
+# Original heavy frame folders — use *-60/ optimized versions instead
+public/hero/home-dark/
+public/hero/home-light/
+public/hero/home-mobile-dark/
+public/hero/home-mobile-light/
+public/hero/expedition-mobile-dark/
+public/hero/expedition-mobile-light/
