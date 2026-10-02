@@ -659,24 +659,24 @@ function SnowParticles() {
         const opacity = Math.min(1, f.alpha * (0.15 + f.r * 1.2));
 
         // Streak line with gradient tail
-        const grad = ctx.createLinearGradient(px, py, x, y);
+        const grad = ct.createLinearGradient(px, py, x, y);
         grad.addColorStop(0, `rgba(255,255,255,0)`);
         grad.addColorStop(1, `rgba(255,255,255,${opacity.toFixed(3)})`);
 
-        ctx.beginPath();
-        ctx.strokeStyle = grad;
-        ctx.lineWidth   = Math.max(0.4, radius);
-        ctx.lineCap     = "round";
-        ctx.moveTo(px, py);
-        ctx.lineTo(x,  y);
-        ctx.stroke();
+        ct.beginPath();
+        ct.strokeStyle = grad;
+        ct.lineWidth   = Math.max(0.4, radius);
+        ct.lineCap     = "round";
+        ct.moveTo(px, py);
+        ct.lineTo(x,  y);
+        ct.stroke();
 
         // Bright dot at the tip for close-range flakes
         if (radius > 1) {
-          ctx.beginPath();
-          ctx.arc(x, y, radius * 0.45, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
-          ctx.fill();
+          ct.beginPath();
+          ct.arc(x, y, radius * 0.45, 0, Math.PI * 2);
+          ct.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
+          ct.fill();
         }
       }
 
