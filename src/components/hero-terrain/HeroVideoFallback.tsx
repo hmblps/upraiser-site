@@ -5,6 +5,10 @@ import { useTheme } from "../../context/ThemeContext";
 
 type FrameSource = CanvasImageSource & { width?: number; height?: number };
 
+// Set true to show the idle video ping-pong only (no scroll-driven frame sequence).
+// Set false to re-enable the scroll-driven canvas animation.
+const VIDEO_ONLY_MODE = true;
+
 const FRAME_COUNT = 60;
 const LOOKAHEAD = 8;
 const IDLE_CONCURRENCY = 4;
@@ -258,38 +262,42 @@ export function HeroVideoFallback({
 
     const first = loadImg();
     first.src = frameUrl(folder, 0);
-    whenReady(
-      first,
-      () => {
-        if (!live()) return;
-        store(0, first);
-        preloadWindow(0);
-        fillIdle();
-      },
-      () => {
-        if (cancelled) return;
-        preloadWindow(0);
-        fillIdle();
-      },
-    );
+    if (!VIDEO_ONLY_MODE) {
+      whenReady(
+        first,
+        () => {
+          if (!live()) return;
+          store(0, first);
+          preloadWindow(0);
+          fillIdle();
+        },
+        () => {
+          if (cancelled) return;
+          preloadWindow(0);
+          fillIdle();
+        },
+      );
+    } else {
+      // VIDEO_ONLY_MODE: just load frame 0 so canvas has a poster, no further preloading
+      whenReady(first, () => { if (live()) store(0, first); }, () => {});
+    }
 
     let frameLoopId = 0;
 
-    const renderLoop = () => {
-      if (!live()) return;
-      const target = targetRef.current;
-      // Lerp float for smooth touch tracking
-      currentFrameRef.current += (target - currentFrameRef.current) * 0.08;
-      
-      const exactFrame = currentFrameRef.current;
-      if (Math.abs(exactFrame - target) > 0.01 || Math.abs(exactFrame - lastIndexRef.current) > 0.01) {
-        drawBlendedFrame(exactFrame);
-        preloadWindow(Math.round(exactFrame));
-      }
-      
+    if (!VIDEO_ONLY_MODE) {
+      const renderLoop = () => {
+        if (!live()) return;
+        const target = targetRef.current;
+        currentFrameRef.current += (target - currentFrameRef.current) * 0.08;
+        const exactFrame = currentFrameRef.current;
+        if (Math.abs(exactFrame - target) > 0.01 || Math.abs(exactFrame - lastIndexRef.current) > 0.01) {
+          drawBlendedFrame(exactFrame);
+          preloadWindow(Math.round(exactFrame));
+        }
+        frameLoopId = requestAnimationFrame(renderLoop);
+      };
       frameLoopId = requestAnimationFrame(renderLoop);
-    };
-    frameLoopId = requestAnimationFrame(renderLoop);
+    }
 
     function applyProgress(progress: number) {
       const targetFrame = Math.min(FRAME_COUNT - 1, Math.max(0, progress * (FRAME_COUNT - 1)));
@@ -340,14 +348,17 @@ export function HeroVideoFallback({
       );
     }
 
-    const unsub = registerScrollListener(() => {
-      if (!live()) return;
-      if (scrubRef.current != null) return;
-      const stage = getStage();
-      stageRef.current = stage;
-      if (!stage || !canvasRef.current) return;
-      applyProgress(flyProgressRef.current?.current ?? flyProgressForStage(stage));
-    });
+    let unsub = () => {};
+    if (!VIDEO_ONLY_MODE) {
+      unsub = registerScrollListener(() => {
+        if (!live()) return;
+        if (scrubRef.current != null) return;
+        const stage = getStage();
+        stageRef.current = stage;
+        if (!stage || !canvasRef.current) return;
+        applyProgress(flyProgressRef.current?.current ?? flyProgressForStage(stage));
+      });
+    }
 
     if (scrubRef.current != null) {
       applyProgress(scrubRef.current);
@@ -397,34 +408,111 @@ export function HeroVideoFallback({
   );
 }
 
-// Seamless ping-pong: plays forward, then backward, then forward…
+// Seamless ping-pong: two pre-mounted videos crossfade at direction change.
+// No src swap → no buffering gap → no click.
 function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
-  const [src, setSrc] = useState(srcFwd);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const fwdRef = useRef<HTMLVideoElement>(null);
+  const revRef = useRef<HTMLVideoElement>(null);
+  const activeRef = useRef<"fwd" | "rev">("fwd");
+  const switchingRef = useRef(false);
 
-  const handleEnded = () => {
-    setSrc(prev => (prev === srcFwd ? srcRev : srcFwd));
+  useEffect(() => {
+    const fwd = fwdRef.current;
+    const rev = revRef.current;
+    if (!fwd || !rev) return;
+
+    // Start crossfade this many seconds before the video ends.
+    // Longer = softer blend; shorter = snappier reversal.
+    const LEAD_S = 1.0;
+    const FADE_MS = 900;
+
+    function crossfadeTo(
+      from: HTMLVideoElement,
+      to: HTMLVideoElement,
+      next: "fwd" | "rev",
+    ) {
+      if (switchingRef.current) return;
+      switchingRef.current = true;
+      activeRef.current = next;
+
+      // Queue the incoming video at position 0 before fading
+      to.currentTime = 0;
+      to.play().catch(() => {});
+
+      // Direct DOM manipulation — no React setState, no re-render stutter
+      const ease = `opacity ${FADE_MS}ms ease-in-out`;
+      from.style.transition = ease;
+      to.style.transition = ease;
+      from.style.opacity = "0";
+      to.style.opacity = "1";
+
+      setTimeout(() => {
+        from.pause();
+        from.currentTime = 0;
+        // Remove transition so future opacity resets are instant
+        from.style.transition = "none";
+        to.style.transition = "none";
+        switchingRef.current = false;
+      }, FADE_MS + 100);
+    }
+
+    const onFwdTime = () => {
+      if (activeRef.current !== "fwd" || switchingRef.current) return;
+      if (fwd.duration > 0 && fwd.currentTime >= fwd.duration - LEAD_S) {
+        crossfadeTo(fwd, rev, "rev");
+      }
+    };
+
+    const onRevTime = () => {
+      if (activeRef.current !== "rev" || switchingRef.current) return;
+      if (rev.duration > 0 && rev.currentTime >= rev.duration - LEAD_S) {
+        crossfadeTo(rev, fwd, "fwd");
+      }
+    };
+
+    fwd.addEventListener("timeupdate", onFwdTime);
+    rev.addEventListener("timeupdate", onRevTime);
+
+    fwd.play().catch(() => {});
+
+    return () => {
+      fwd.removeEventListener("timeupdate", onFwdTime);
+      rev.removeEventListener("timeupdate", onRevTime);
+      fwd.pause();
+      rev.pause();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const videoStyle: React.CSSProperties = {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    transition: "none",
   };
 
-  // Restart autoplay whenever src changes
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.load();
-    void v.play().catch(() => {});
-  }, [src]);
-
   return (
-    <video
-      id="hero-idle-video"
-      ref={videoRef}
-      src={src}
-      autoPlay
-      muted
-      playsInline
-      onEnded={handleEnded}
-      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-      style={{ opacity: 1, zIndex: 1 }}
-    />
+    <>
+      <video
+        ref={fwdRef}
+        id="hero-idle-video"
+        src={srcFwd}
+        muted
+        playsInline
+        preload="auto"
+        className="pointer-events-none"
+        style={{ ...videoStyle, opacity: 1, zIndex: 1 }}
+      />
+      <video
+        ref={revRef}
+        src={srcRev}
+        muted
+        playsInline
+        preload="auto"
+        className="pointer-events-none"
+        style={{ ...videoStyle, opacity: 0, zIndex: 1 }}
+      />
+    </>
   );
 }
