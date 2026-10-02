@@ -404,23 +404,27 @@ export function HeroVideoFallback({
   );
 }
 
-// Seamless ping-pong: two pre-mounted videos crossfade at direction change.
-// No src swap → no buffering gap → no click.
+// Seamless ping-pong: two pre-mounted videos + lens-breathe filter at direction change.
+// LEAD_S=0.1 → minimal overlap (just avoids 1-frame gap).
+// At reversal: blur peak + brightness pulse masks exact direction flip — looks like camera breathe.
 function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
   const fwdRef = useRef<HTMLVideoElement>(null);
   const revRef = useRef<HTMLVideoElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<"fwd" | "rev">("fwd");
   const switchingRef = useRef(false);
 
   useEffect(() => {
     const fwd = fwdRef.current;
     const rev = revRef.current;
-    if (!fwd || !rev) return;
+    const wrap = wrapRef.current;
+    if (!fwd || !rev || !wrap) return;
 
-    // Start crossfade this many seconds before the video ends.
-    // Longer = softer blend; shorter = snappier reversal.
-    const LEAD_S = 1.0;
-    const FADE_MS = 900;
+    // Minimal overlap — just enough to avoid the 1-frame black gap on ended
+    const LEAD_S = 0.1;
+    // Total crossfade duration (ms). Keep short so motion directions barely overlap.
+    const FADE_MS = 350;
+    const HALF = FADE_MS / 2;
 
     function crossfadeTo(
       from: HTMLVideoElement,
@@ -431,25 +435,37 @@ function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
       switchingRef.current = true;
       activeRef.current = next;
 
-      // Queue the incoming video at position 0 before fading
+      // Prep incoming video at start position
       to.currentTime = 0;
       to.play().catch(() => {});
 
-      // Direct DOM manipulation — no React setState, no re-render stutter
-      const ease = `opacity ${FADE_MS}ms ease-in-out`;
-      from.style.transition = ease;
-      to.style.transition = ease;
+      // Phase 1: blur in (ease-in to peak)
+      wrap.style.transition = `filter ${HALF}ms ease-in`;
+      wrap.style.filter = "blur(2px) brightness(1.07)";
+
+      // Swap opacity simultaneously
+      const fadeEase = `opacity ${FADE_MS}ms ease-in-out`;
+      from.style.transition = fadeEase;
+      to.style.transition = fadeEase;
       from.style.opacity = "0";
       to.style.opacity = "1";
 
+      // Phase 2: blur out (ease-out from peak)
+      setTimeout(() => {
+        wrap.style.transition = `filter ${HALF}ms ease-out`;
+        wrap.style.filter = "blur(0px) brightness(1)";
+      }, HALF);
+
+      // Cleanup
       setTimeout(() => {
         from.pause();
         from.currentTime = 0;
-        // Remove transition so future opacity resets are instant
         from.style.transition = "none";
         to.style.transition = "none";
+        wrap.style.transition = "none";
+        wrap.style.filter = "";
         switchingRef.current = false;
-      }, FADE_MS + 100);
+      }, FADE_MS + 80);
     }
 
     const onFwdTime = () => {
@@ -468,7 +484,6 @@ function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
 
     fwd.addEventListener("timeupdate", onFwdTime);
     rev.addEventListener("timeupdate", onRevTime);
-
     fwd.play().catch(() => {});
 
     return () => {
@@ -489,7 +504,10 @@ function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
   };
 
   return (
-    <>
+    <div
+      ref={wrapRef}
+      style={{ position: "absolute", inset: 0, willChange: "filter" }}
+    >
       <video
         ref={fwdRef}
         id="hero-idle-video"
@@ -509,6 +527,6 @@ function PingPongVideo({ srcFwd, srcRev }: { srcFwd: string; srcRev: string }) {
         className="pointer-events-none"
         style={{ ...videoStyle, opacity: 0, zIndex: 1 }}
       />
-    </>
+    </div>
   );
 }
