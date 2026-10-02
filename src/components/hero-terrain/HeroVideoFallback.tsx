@@ -389,10 +389,13 @@ export function HeroVideoFallback({
         }}
       />
       {theme === "dark" && (
-        <PingPongVideo
-          srcFwd="/hero/home-dark-idle.webm"
-          srcRev="/hero/home-dark-idle-rev.webm"
-        />
+        <>
+          <PingPongVideo
+            srcFwd="/hero/home-dark-idle.mp4"
+            srcRev="/hero/home-dark-idle-rev.mp4"
+          />
+          <DataStreamParticles />
+        </>
       )}
       {theme === "light" && (
         <PingPongVideo
@@ -678,6 +681,142 @@ function SnowParticles() {
           ct.beginPath();
           ct.arc(x, y, radius * 0.45, 0, Math.PI * 2);
           ct.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
+          ct.fill();
+        }
+      }
+
+      raf = requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 2,
+      }}
+    />
+  );
+}
+
+// ─── Cyber Data Streams (Dark Theme) ──────────────────────────────────────────
+// Glowing cyan/blue/amber streaks rushing toward the camera (cyberpunk style).
+function DataStreamParticles() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const c: HTMLCanvasElement = canvas;
+    const ct: CanvasRenderingContext2D = ctx;
+
+    interface Stream {
+      angle: number;
+      r: number;
+      speed: number;
+      size: number;
+      alpha: number;
+      color: string;
+      length: number;
+    }
+
+    const COUNT = 140;
+    // Cyan, electric blue, soft amber
+    const COLORS = ["0, 240, 255", "100, 150, 255", "255, 170, 0"];
+
+    function spawn(): Stream {
+      return {
+        angle: Math.random() * Math.PI * 2,
+        r: Math.random() * 0.3, // start near centre
+        speed: 0.004 + Math.random() * 0.008,
+        size: 0.3 + Math.random() * 1.5,
+        alpha: 0.3 + Math.random() * 0.7,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        length: 5 + Math.random() * 20, // base trail length
+      };
+    }
+
+    const streams: Stream[] = Array.from({ length: COUNT }, spawn);
+
+    function resize() {
+      const dpr = devicePixelRatio || 1;
+      c.width  = c.offsetWidth  * dpr;
+      c.height = c.offsetHeight * dpr;
+    }
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(c);
+
+    let raf = 0;
+
+    function draw() {
+      const W  = c.width;
+      const H  = c.height;
+      // Centre vanishing point for dark theme cityscape
+      const cx = W * 0.5;
+      const cy = H * 0.5;
+      const maxR = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
+
+      ct.clearRect(0, 0, W, H);
+      // Screen composite for glowing neon overlaps
+      ct.globalCompositeOperation = "screen";
+
+      for (let i = 0; i < streams.length; i++) {
+        const s = streams[i];
+
+        // Accelerate as it gets closer
+        s.r += s.speed * (1 + s.r * s.r * 8);
+
+        if (s.r >= 1.2) {
+          streams[i] = spawn();
+          continue;
+        }
+
+        const dist = s.r * maxR;
+        const x    = cx + Math.cos(s.angle) * dist;
+        const y    = cy + Math.sin(s.angle) * dist;
+
+        const trailPx = s.length + s.r * s.r * 80;
+        const prevDist = Math.max(0, dist - trailPx);
+        const px = cx + Math.cos(s.angle) * prevDist;
+        const py = cy + Math.sin(s.angle) * prevDist;
+
+        const scale   = 0.1 + s.r * s.r * 5;
+        const radius  = Math.max(0.4, s.size * scale);
+        const opacity = Math.min(1, s.alpha * (0.2 + s.r * 1.5));
+
+        const grad = ct.createLinearGradient(px, py, x, y);
+        grad.addColorStop(0, `rgba(${s.color}, 0)`);
+        grad.addColorStop(1, `rgba(${s.color}, ${opacity.toFixed(3)})`);
+
+        ct.beginPath();
+        ct.strokeStyle = grad;
+        ct.lineWidth   = Math.max(0.6, radius);
+        ct.lineCap     = "round";
+        ct.moveTo(px, py);
+        ct.lineTo(x,  y);
+        ct.stroke();
+
+        // Tip glow
+        if (radius > 1.2) {
+          ct.beginPath();
+          ct.arc(x, y, radius * 0.6, 0, Math.PI * 2);
+          ct.fillStyle = `rgba(255,255,255,${(opacity * 0.9).toFixed(3)})`;
           ct.fill();
         }
       }
