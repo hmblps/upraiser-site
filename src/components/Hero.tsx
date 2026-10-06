@@ -96,7 +96,7 @@ function StatCard({ value, label, counted, accent, align = "center" }: { value: 
   const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
   const [ended, setEnded] = useState(false);
   const { mode } = useMode();
-  const isLight = mode === "light";
+  const isLight = mode === "growth";
 
   useEffect(() => {
     const onEnded = () => setEnded(true);
