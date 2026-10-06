@@ -431,13 +431,13 @@ function SimpleVideo({
     let raf = 0;
     const loop = () => {
       if (v.duration && !v.paused) {
-        // Reveal stats over the last 8 seconds of the video.
+        // Reveal stats over the last 14 seconds of the video.
         const timeLeft = v.duration - v.currentTime;
         let progress = 0;
-        if (timeLeft <= 8) {
-          // Linear map: timeLeft [8, 1.4] -> progress [0.18, 0.78]
-          // slope = (0.78 - 0.18) / (8 - 1.4) = 0.6 / 6.6 = 0.0909
-          progress = 0.18 + (8 - timeLeft) * (0.6 / 6.6);
+        if (timeLeft <= 14) {
+          // Linear map: timeLeft [14, 2] -> progress [0.18, 0.78]
+          // slope = (0.78 - 0.18) / (14 - 2) = 0.6 / 12 = 0.05
+          progress = 0.18 + (14 - timeLeft) * 0.05;
           if (progress > 1) progress = 1;
           if (progress < 0) progress = 0;
         }

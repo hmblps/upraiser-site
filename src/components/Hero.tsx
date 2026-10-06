@@ -80,7 +80,19 @@ function HeroStatsDots({
 }
 
 function StatCard({ value, label, counted, accent, align = "center" }: { value: string; label: string; counted: boolean; accent?: boolean; align?: "left" | "center" | "right" }) {
-  const ref = useCountUp(value, counted);
+  const durationRef = useRef<{ set: boolean; val: number }>({ set: false, val: 1400 });
+  
+  if (counted && !durationRef.current.set) {
+    if (typeof document !== "undefined") {
+      const v = document.getElementById("hero-idle-video") as HTMLVideoElement | null;
+      if (v && v.duration && !v.paused) {
+        durationRef.current.val = Math.max(1400, (v.duration - v.currentTime) * 1000);
+      }
+    }
+    durationRef.current.set = true;
+  }
+
+  const ref = useCountUp(value, counted, durationRef.current.val);
   const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
   const [ended, setEnded] = useState(false);
 
