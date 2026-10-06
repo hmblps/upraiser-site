@@ -82,11 +82,34 @@ function HeroStatsDots({
 function StatCard({ value, label, counted, accent, align = "center" }: { value: string; label: string; counted: boolean; accent?: boolean; align?: "left" | "center" | "right" }) {
   const ref = useCountUp(value, counted);
   const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
+  const [ended, setEnded] = useState(false);
+
+  useEffect(() => {
+    const onEnded = () => setEnded(true);
+    window.addEventListener('hero-video-ended', onEnded);
+    return () => window.removeEventListener('hero-video-ended', onEnded);
+  }, []);
 
   return (
     <article className={`hero-stat-ghost flex flex-col justify-center h-full ${alignClass} ${accent ? 'is-accent' : ''}`}>
-      <div className="hero-stat-ghost__value" ref={ref as any}>{value}</div>
-      <p className="hero-stat-ghost__label">{label}</p>
+      <motion.div 
+        className="hero-stat-ghost__value origin-center" 
+        ref={ref as any}
+        animate={ended ? { 
+          scale: [1, 1.08, 1], 
+          textShadow: ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 20px rgba(255,255,255,0.6)", "0px 0px 0px rgba(255,255,255,0)"] 
+        } : {}}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+      >
+        {value}
+      </motion.div>
+      <motion.p 
+        className="hero-stat-ghost__label"
+        animate={ended ? { opacity: [1, 0.5, 1] } : {}}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+      >
+        {label}
+      </motion.p>
     </article>
   );
 }

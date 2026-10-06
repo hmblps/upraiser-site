@@ -431,17 +431,27 @@ function SimpleVideo({
     let raf = 0;
     const loop = () => {
       if (v.duration && !v.paused) {
-        // Reveal stats in the last 4 seconds of the video.
-        // We want progress=0.18 at timeLeft=4, and progress=0.78 at timeLeft=1.4
-        // so the last count animation (1.4s) finishes exactly at timeLeft=0.
+        // Reveal stats over the last 8 seconds of the video.
         const timeLeft = v.duration - v.currentTime;
         let progress = 0;
-        if (timeLeft <= 4) {
-          progress = 0.18 + (4 - timeLeft) * (0.6 / 2.6);
+        if (timeLeft <= 8) {
+          // Linear map: timeLeft [8, 1.4] -> progress [0.18, 0.78]
+          // slope = (0.78 - 0.18) / (8 - 1.4) = 0.6 / 6.6 = 0.0909
+          progress = 0.18 + (8 - timeLeft) * (0.6 / 6.6);
           if (progress > 1) progress = 1;
           if (progress < 0) progress = 0;
         }
         window.dispatchEvent(new CustomEvent('hero-video-stats-progress', { detail: progress }));
+        
+        // Dispatch ended event for the triumphant gesture
+        if (v.ended || timeLeft <= 0.1) {
+          if (v.dataset.endedEmitted !== "true") {
+            v.dataset.endedEmitted = "true";
+            window.dispatchEvent(new CustomEvent('hero-video-ended'));
+          }
+        } else {
+          v.dataset.endedEmitted = "";
+        }
       }
       raf = requestAnimationFrame(loop);
     };
