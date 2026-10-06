@@ -97,7 +97,7 @@ function StatCard({ value, label, counted, accent, videoDriven, align = "center"
   }
 
   const ref = useCountUp(value, counted, durationRef.current.val);
-  const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
+  const alignClass = align === "left" ? "items-center text-center md:items-start md:text-left" : align === "right" ? "items-center text-center md:items-end md:text-right" : "items-center text-center";
   const [ended, setEnded] = useState(false);
   const { mode } = useMode();
   const isLight = mode === "growth";
@@ -247,46 +247,37 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={mode}
-                    className="hero-stats__track grid grid-cols-2 w-full"
+                    className="hero-stats__track flex md:grid md:grid-cols-2 gap-4 md:gap-y-6 lg:gap-y-10 w-full overflow-x-auto snap-x snap-mandatory md:overflow-visible no-scrollbar"
                     initial={reduced ? false : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={reduced ? undefined : { opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex flex-col gap-6 lg:gap-10 items-start">
-                      {highlights.filter((_, i) => i % 2 === 0).map((item, i) => {
-                        const originalIndex = i * 2;
-                        const revealed = !scrubCards || originalIndex < revealedCount;
-                        return (
-                          <motion.div
-                            key={`${mode}-left-${i}`}
-                            initial={reduced ? false : { opacity: 0, y: 28, scale: 0.96 }}
-                            animate={reduced ? false : revealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.96 }}
-                            transition={SPRING_SOFT}
-                            style={{ pointerEvents: revealed ? undefined : "none" }}
-                          >
-                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="left" videoDriven={isVideoDriven} />
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                    <div className="flex flex-col gap-6 lg:gap-10 items-end">
-                      {highlights.filter((_, i) => i % 2 !== 0).map((item, i) => {
-                        const originalIndex = i * 2 + 1;
-                        const revealed = !scrubCards || originalIndex < revealedCount;
-                        return (
-                          <motion.div
-                            key={`${mode}-right-${i}`}
-                            initial={reduced ? false : { opacity: 0, y: 28, scale: 0.96 }}
-                            animate={reduced ? false : revealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.96 }}
-                            transition={SPRING_SOFT}
-                            style={{ pointerEvents: revealed ? undefined : "none" }}
-                          >
-                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="right" videoDriven={isVideoDriven} />
-                          </motion.div>
-                        );
-                      })}
-                    </div>
+                    {highlights.map((item, i) => {
+                      const revealed = !scrubCards || i < revealedCount;
+                      const isLeft = i % 2 === 0;
+                      return (
+                        <motion.div
+                          key={`${mode}-${i}`}
+                          className={`hero-stats__cell snap-center shrink-0 w-[85vw] md:w-auto flex md:block ${isLeft ? 'justify-start md:justify-self-start' : 'justify-start md:justify-self-end'}`}
+                          initial={reduced ? false : { opacity: 0, y: 28, scale: 0.96 }}
+                          animate={reduced ? false : revealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.96 }}
+                          transition={SPRING_SOFT}
+                          style={{ pointerEvents: revealed ? undefined : "none" }}
+                        >
+                          <div className="w-full md:w-auto text-center md:text-left">
+                            <StatCard 
+                              value={item.value} 
+                              label={item.label} 
+                              counted={revealed} 
+                              accent={Boolean((item as any).accent)} 
+                              align={isLeft ? "left" : "right"} 
+                              videoDriven={isVideoDriven} 
+                            />
+                          </div>
+                        </motion.div>
+                      );
+                    })}
                   </motion.div>
                 </AnimatePresence>
               </div>

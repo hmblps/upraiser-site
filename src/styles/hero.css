@@ -360,9 +360,9 @@
   }
 
   /* Numbers carousel is desktop fly-rail only — drop it on phones */
-  .hero-stats-wrap {
+  /* .hero-stats-wrap {
     display: none;
-  }
+  } */
 }
 
 @media (max-width: 767px) {

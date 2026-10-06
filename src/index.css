@@ -160,3 +160,13 @@ body::after {
   opacity: 0.04;
   mix-blend-mode: overlay;
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
