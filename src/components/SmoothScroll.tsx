@@ -106,13 +106,14 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   }, []);
 
   const scrollToY = useCallback(
-    (top: number, opts?: { immediate?: boolean }) => {
+    (top: number, opts?: { immediate?: boolean; duration?: number; easing?: (t: number) => number }) => {
       const immediate = opts?.immediate ?? false;
       if (lenisRef.current && useLenis) {
         lenisRef.current.scrollTo(top, {
           immediate,
           force: true,
-          duration: immediate ? 0 : 0.95,
+          duration: immediate ? 0 : opts?.duration ?? 0.95,
+          easing: opts?.easing,
         });
         return;
       }

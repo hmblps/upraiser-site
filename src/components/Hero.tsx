@@ -159,8 +159,11 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
     const onEnded = () => {
       // If the user hasn't scrolled manually (or barely scrolled)
       if (window.scrollY < 50) {
-        // Step 1: Scroll to Lenovo pop-up dock (appears at ~0.55 progress)
-        scrollToY(window.innerHeight * 0.55);
+        // Cinematic ease-in-out for a "gliding" feel, not a jump
+        const glidingEase = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        
+        // Step 1: Scroll to Lenovo pop-up dock
+        scrollToY(window.innerHeight * 0.55, { duration: 1.8, easing: glidingEase });
         
         // Step 2: After a brief pause, scroll to the PartnersCarousel + Audience framing
         setTimeout(() => {
@@ -169,12 +172,12 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
             const partners = document.querySelector('.partners-strip--home');
             if (partners) {
               const top = partners.getBoundingClientRect().top + window.scrollY;
-              scrollToY(top - 72);
+              scrollToY(top - 72, { duration: 2.4, easing: glidingEase });
             } else {
-              scrollToY(window.innerHeight * 2 - 72);
+              scrollToY(window.innerHeight * 2 - 72, { duration: 2.4, easing: glidingEase });
             }
           }
-        }, 1800);
+        }, 2600); // 1.8s scroll + 0.8s hold
       }
     };
     window.addEventListener('hero-video-ended', onEnded);
