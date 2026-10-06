@@ -47,15 +47,15 @@ export function LenovoTrustStrip() {
             colorFrom="var(--theme-accent-light)"
             colorTo="var(--color-magenta)"
           />
-          <div className="relative z-[1] rail-strip__inner page-container flex flex-col items-start gap-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-5 antialiased [transform:translateZ(0)]">
-            <div className="flex items-center gap-4">
-              <LenovoPartnershipLogo className="h-9 w-auto shrink-0 sm:h-10" />
-              <div>
-                <p className="stat-label text-accent">{lenovoPartnership.badge}</p>
-                <p className="mt-0.5 card-title normal-case tracking-normal">{lenovoPartnership.title}</p>
+          <div className="relative z-[1] rail-strip__inner page-container flex items-center justify-center md:justify-between gap-4 py-3 sm:py-4 md:py-5 antialiased [transform:translateZ(0)]">
+            <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+              <LenovoPartnershipLogo className="h-7 w-auto shrink-0 sm:h-9 md:h-10" />
+              <div className="text-left">
+                <p className="stat-label text-[10px] sm:text-xs text-accent leading-none">{lenovoPartnership.badge}</p>
+                <p className="mt-1 card-title text-[13px] sm:text-sm md:text-base normal-case tracking-normal leading-none">{lenovoPartnership.title}</p>
               </div>
             </div>
-            <LenovoPartnershipCopy className="w-full max-w-xl sm:ml-auto sm:w-auto sm:pl-8 lg:max-w-lg xl:max-w-2xl" />
+            <LenovoPartnershipCopy className="hidden md:block w-full max-w-xl ml-auto pl-8 lg:max-w-lg xl:max-w-2xl" />
           </div>
         </div>
       </div>
