@@ -206,7 +206,7 @@
 .hero-stat-ghost__value {
   min-height: 1.05em;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: clamp(1.85rem, 3.25vw, 2.65rem);
+  font-size: clamp(1.25rem, 3.25vw, 2.65rem);
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1;

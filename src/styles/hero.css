@@ -494,11 +494,11 @@
 }
 
 /* Mobile carousel only — desktop shows the full 2×2 grid */
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .hero-stats-dots {
     display: flex;
   }
-}
+} */
 
 .hero-stats-dot {
   position: relative;

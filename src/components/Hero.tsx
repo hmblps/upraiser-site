@@ -98,7 +98,7 @@ function StatCard({ value, label, counted, accent, videoDriven, align = "center"
   }
 
   const ref = useCountUp(value, counted, durationRef.current.val);
-  const alignClass = align === "left" ? "items-center text-center md:items-start md:text-left" : align === "right" ? "items-center text-center md:items-end md:text-right" : "items-center text-center";
+  const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
   const [ended, setEnded] = useState(false);
   const { mode } = useMode();
   const isLight = mode === "growth";
@@ -261,7 +261,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={mode}
-                    className="hero-stats__track flex md:grid md:grid-cols-2 gap-4 md:gap-y-6 lg:gap-y-10 w-full overflow-x-auto snap-x snap-mandatory md:overflow-visible no-scrollbar"
+                    className="hero-stats__track grid grid-cols-2 gap-x-2 gap-y-4 md:gap-x-4 md:gap-y-6 lg:gap-y-10 w-full"
                     initial={reduced ? false : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={reduced ? undefined : { opacity: 0 }}
@@ -273,13 +273,13 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                       return (
                         <motion.div
                           key={`${mode}-${i}`}
-                          className={`hero-stats__cell snap-center shrink-0 w-[85vw] md:w-auto flex md:block ${isLeft ? 'justify-start md:justify-self-start' : 'justify-start md:justify-self-end'}`}
+                          className={`hero-stats__cell w-full flex ${isLeft ? 'justify-self-start' : 'justify-self-end'}`}
                           initial={reduced ? false : { opacity: 0, y: 28, scale: 0.96 }}
                           animate={reduced ? false : revealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.96 }}
                           transition={SPRING_SOFT}
                           style={{ pointerEvents: revealed ? undefined : "none" }}
                         >
-                          <div className="w-full md:w-auto text-center md:text-left">
+                          <div className="w-full">
                             <StatCard 
                               value={item.value} 
                               label={item.label} 
