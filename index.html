@@ -25,33 +25,16 @@
           if (document.documentElement) document.documentElement.scrollTop = 0;
           if (document.body) document.body.scrollTop = 0;
         }
-        // Desktop WebGL Everest — start GLB + Draco before React/idle work.
-        if (!mobile) {
-          var glb = t === "light" ? "/hero/everest-light.glb" : "/hero/everest.glb";
-          function preload(href, as) {
-            var l = document.createElement("link");
-            l.rel = "preload";
-            l.href = href;
-            l.as = as;
-            l.crossOrigin = "anonymous";
-            l.setAttribute("fetchpriority", "low"); // Changed from high to low so HTML/JS loads first
-            document.head.appendChild(l);
-          }
-          preload(glb, "fetch");
-          preload("/draco/gltf/draco_wasm_wrapper.js", "script");
-          preload("/draco/gltf/draco_decoder.wasm", "fetch");
-          // Channel device models — preload on all pages so they're ready when user scrolls to Routes
-          preload("/channels/oem/tv-draco.glb", "fetch");
-          preload("/channels/oem/tablet.glb", "fetch");
-          preload("/channels/oem/screens/ctv-spot.png", "image");
-          preload("/channels/oem/screens/native.png", "image");
-          preload("/channels/oem/screens/app-store.png", "image");
-        }
-        // Fallback frames preload (Windows or Mobile)
-        if (mobile || /Windows/i.test(navigator.userAgent)) {
-          var folder = mobile ? "home-mobile-" + t : "home-" + t;
-          preload("/hero/frames/" + folder + "/frame_0001.jpg", "image");
-        }
+        
+        // Preload the primary hero video for LCP
+        var v = t === "light" ? "/hero/home-light-idle.mp4" : "/hero/home-dark-idle.mp4";
+        var l = document.createElement("link");
+        l.rel = "preload";
+        l.href = v;
+        l.as = "video";
+        l.type = "video/mp4";
+        l.setAttribute("fetchpriority", "high");
+        document.head.appendChild(l);
 
       })();
     </script>
