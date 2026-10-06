@@ -91,30 +91,36 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
 
       // Headline glued to the sticky frame: floats with the flight, doesn't fly away.
       // Soft sine drift (~±1.1vh) tracks the climb; opacity only softens on runway exit.
-      const floatY = Math.sin(next * Math.PI) * 1.1;
+      const floatY = 0; // breathing effect removed
       stage.style.setProperty("--hero-title-y", floatY.toFixed(2));
       stage.style.setProperty("--hero-title-scale", (1 - next * 0.012).toFixed(4));
       stage.style.setProperty("--hero-title-opacity", (1 - exitEase * 0.35).toFixed(4));
 
       // Label arrives with the first ghost figure — establish stays quiet.
-      const labelIn = smoothstep(next, 0.14, 0.28);
+            const labelIn = smoothstep(next, 0.14, 0.28);
       stage.style.setProperty("--hero-label-opacity", labelIn.toFixed(4));
       stage.style.setProperty("--hero-label-y", ((1 - labelIn) * 28).toFixed(2));
+    };
 
-      const revealed = countRevealed(next);
+    // Publish in the same turn as Lenis scroll notify — no deferred rAF lag vs R3F.
+    const unsubscribe = registerScrollListener(publish);
+    publish();
+
+    // Listen to video progress for stats reveal (instead of scroll)
+    const onVideoProgress = (e: Event) => {
+      const customEvent = e as CustomEvent<number>;
+      const progress = customEvent.detail;
+      const revealed = countRevealed(progress);
       if (revealed !== lastRevealedRef.current) {
         lastRevealedRef.current = revealed;
         setRevealedCount(revealed);
       }
     };
-
-    // Publish in the same turn as Lenis scroll notify — no deferred rAF lag vs R3F.
-    const unsubscribe = registerScrollListener(publish);
-
-    publish();
+    window.addEventListener('hero-video-stats-progress', onVideoProgress);
 
     return () => {
       unsubscribe();
+      window.removeEventListener('hero-video-stats-progress', onVideoProgress);
     };
   }, [registerScrollListener]);
 
