@@ -399,8 +399,8 @@ export function HeroVideoFallback({
       )}
       {theme === "light" && (
         <PingPongVideo
-          srcFwd="/hero/home-light-idle.webm"
-          srcRev="/hero/home-light-idle-rev.webm"
+          srcFwd="/hero/home-light-idle.mp4"
+          srcRev="/hero/home-light-idle-rev.mp4"
           staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
