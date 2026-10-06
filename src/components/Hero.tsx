@@ -162,11 +162,17 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
         // Step 1: Scroll to Lenovo pop-up dock (appears at ~0.55 progress)
         scrollToY(window.innerHeight * 0.55);
         
-        // Step 2: After a brief pause, scroll to the PartnersCarousel + Audience framing (100vh)
+        // Step 2: After a brief pause, scroll to the PartnersCarousel + Audience framing
         setTimeout(() => {
           // Only proceed if the user hasn't manually scrolled away from the 0.55 zone
-          if (Math.abs(window.scrollY - window.innerHeight * 0.55) < 50) {
-            scrollToY(window.innerHeight);
+          if (Math.abs(window.scrollY - window.innerHeight * 0.55) < 150) {
+            const partners = document.querySelector('.partners-strip--home');
+            if (partners) {
+              const top = partners.getBoundingClientRect().top + window.scrollY;
+              scrollToY(top - 72);
+            } else {
+              scrollToY(window.innerHeight * 2 - 72);
+            }
           }
         }, 1800);
       }
