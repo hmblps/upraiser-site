@@ -78,9 +78,9 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
     openingRef.current = null;
     setActiveId(null);
     if (caseIdFromPath(pathname)) {
-      // Use native history.replaceState instead of navigate() so ScrollToTop
-      // is NOT triggered — the user stays exactly where they scrolled.
-      window.history.replaceState(null, "", "/");
+      // Use react-router navigate so state stays perfectly in sync.
+      // ScrollToTop already ignores /cases -> / transitions.
+      navigate("/", { replace: true, preventScrollReset: true });
     }
   }, [pathname]);
 
