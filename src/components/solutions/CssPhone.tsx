@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AD_W, AD_H } from "./PhoneConstants";
 import type { SiteMode } from "../../data/liveContent";
 import { FORMAT_HTML, FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
@@ -110,22 +111,59 @@ export function FormatGlass({ formatId }: { formatId: string }) {
   const still = FORMAT_STILL[formatId];
   const animated = isAnimatedTabletGlass(formatId);
 
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  const isTablet = formatId === "oem-store";
+  const intrinsicW = isTablet ? 768 : AD_W;
+  const intrinsicH = isTablet ? 1024 : AD_H;
+
+  useEffect(() => {
+    if (!html) return;
+    const el = wrapRef.current;
+    if (!el) return;
+    
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      if (width > 0) {
+        const scaleW = width / intrinsicW;
+        const scaleH = height > 0 ? height / intrinsicH : 1;
+        // Don't scale up past 1, but do scale down to fit small monitors
+        setScale(Math.min(1, scaleW, scaleH));
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [html, intrinsicW, intrinsicH]);
+
   return (
-    <div className="prog-format-glass">
+    <div className="prog-format-glass" ref={wrapRef}>
       <AnimatePresence mode="sync" initial={false}>
         {html ? (
-          <motion.iframe
-            key={`h-${formatId}`}
-            src={html}
-            title={formatId}
-            className="prog-css-phone__live-ad"
-            scrolling="no"
-            style={{ overflow: "hidden" }}
+          <motion.div
+            key={`hw-${formatId}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={GLASS_SPRING}
-          />
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              width: intrinsicW,
+              height: intrinsicH,
+              transformOrigin: "top center",
+              transform: `translateX(-50%) scale(${scale})`,
+              overflow: "hidden"
+            }}
+          >
+            <iframe
+              src={html}
+              title={formatId}
+              scrolling="no"
+              style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+            />
+          </motion.div>
         ) : animated && still ? (
           <AnimatedTabletGlass key={`a-${formatId}`} formatId={formatId} />
         ) : video ? (
