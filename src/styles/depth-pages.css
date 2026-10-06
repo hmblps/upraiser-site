@@ -1434,7 +1434,7 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 .partner-logo-slot--home {
-  height: 5rem;
+  height: 100%;
   padding-inline: 1.75rem;
 }
 
@@ -1450,13 +1450,10 @@ html.theme-light .depth-page--gear .gear-spec,
 }
 
 @media (min-width: 640px) {
-  .partners-strip--home {
-    padding-top: 2.5rem;
-    padding-bottom: 4.5rem;
-  }
+  /* Removed excessive padding */
 
   .partner-logo-slot--home {
-    height: 4.5rem;
+    height: 100%;
     padding-inline: 2.5rem; /* Large spacing (50px) between logos */
   }
 
