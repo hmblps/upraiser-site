@@ -15,9 +15,8 @@ import { useScroll } from "./ScrollContext";
 export const HERO_CARD_REVEAL_AT = [0.18, 0.38, 0.58, 0.78] as const;
 
 type HeroFlyContextValue = {
-  /** Discrete reveal count for React (cards) — avoids per-frame Hero re-renders. */
   revealedCount: number;
-  /** Continuous 0→1 for WebGL / imperative consumers. */
+  isVideoDriven: boolean;
   progressRef: MutableRefObject<number>;
 };
 
@@ -52,7 +51,9 @@ function countRevealed(progress: number) {
 export function HeroFlyProvider({ children }: { children: ReactNode }) {
   const { registerScrollListener } = useScroll();
   const progressRef = useRef(0);
-  const [revealedCount, setRevealedCount] = useState(0);
+  const [revealState, setRevealState] = useState({ count: 0, videoDriven: false });
+  const revealedCount = revealState.count;
+  const isVideoDriven = revealState.videoDriven;
   const stageRef = useRef<HTMLElement | null>(null);
   const lastRevealedRef = useRef(-1);
 
@@ -67,7 +68,7 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
         progressRef.current = 0;
         if (lastRevealedRef.current !== 0) {
           lastRevealedRef.current = 0;
-          setRevealedCount(0);
+          setRevealState({ count: 0, videoDriven: false });
         }
         return;
       }
@@ -105,7 +106,7 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
       const revealed = countRevealed(effectiveProgress);
       if (revealed !== lastRevealedRef.current) {
         lastRevealedRef.current = revealed;
-        setRevealedCount(revealed);
+        setRevealState({ count: revealed, videoDriven: videoProgress >= scrollProgress });
       }
     };
 
@@ -132,7 +133,7 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
     };
   }, [registerScrollListener]);
 
-  const value = useMemo(() => ({ revealedCount, progressRef }), [revealedCount]);
+  const value = useMemo(() => ({ revealedCount, isVideoDriven, progressRef }), [revealedCount, isVideoDriven]);
 
   return <HeroFlyContext.Provider value={value}>{children}</HeroFlyContext.Provider>;
 }
@@ -156,6 +157,6 @@ export function HeroFlyProgressBridge({
   progressRef: MutableRefObject<number>;
   children: ReactNode;
 }) {
-  const value = useMemo(() => ({ revealedCount: 0, progressRef }), [progressRef]);
+  const value = useMemo(() => ({ revealedCount: 0, isVideoDriven: false, progressRef }), [progressRef]);
   return <HeroFlyContext.Provider value={value}>{children}</HeroFlyContext.Provider>;
 }

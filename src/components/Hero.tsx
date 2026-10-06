@@ -79,15 +79,19 @@ function HeroStatsDots({
   );
 }
 
-function StatCard({ value, label, counted, accent, align = "center" }: { value: string; label: string; counted: boolean; accent?: boolean; align?: "left" | "center" | "right" }) {
+function StatCard({ value, label, counted, accent, videoDriven, align = "center" }: { value: string; label: string; counted: boolean; accent?: boolean; videoDriven: boolean; align?: "left" | "center" | "right" }) {
   const durationRef = useRef<{ set: boolean; val: number }>({ set: false, val: 1400 });
   
   if (counted && !durationRef.current.set) {
-    if (typeof document !== "undefined") {
-      const v = document.getElementById("hero-idle-video") as HTMLVideoElement | null;
-      if (v && v.duration && !v.paused) {
-        durationRef.current.val = Math.max(1400, (v.duration - v.currentTime) * 1000);
+    if (videoDriven) {
+      if (typeof document !== "undefined") {
+        const v = document.getElementById("hero-idle-video") as HTMLVideoElement | null;
+        if (v && v.duration && !v.paused) {
+          durationRef.current.val = Math.max(1400, (v.duration - v.currentTime) * 1000);
+        }
       }
+    } else {
+      durationRef.current.val = 0;
     }
     durationRef.current.set = true;
   }
@@ -141,7 +145,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
   const reduced = useReducedMotion();
   const { mode } = useMode();
   const { isActive } = useApplePreview();
-  const { revealedCount } = useHeroFly();
+  const { revealedCount, isVideoDriven } = useHeroFly();
   const statsScrollRef = useRef<HTMLDivElement>(null);
   const highlights = heroHighlightsByMode[mode];
   const activeStatIndex = useCarouselActiveIndex(statsScrollRef, highlights.length);
@@ -261,7 +265,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                             transition={SPRING_SOFT}
                             style={{ pointerEvents: revealed ? undefined : "none" }}
                           >
-                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="left" />
+                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="left" videoDriven={isVideoDriven} />
                           </motion.div>
                         );
                       })}
@@ -278,7 +282,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                             transition={SPRING_SOFT}
                             style={{ pointerEvents: revealed ? undefined : "none" }}
                           >
-                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="right" />
+                            <StatCard value={item.value} label={item.label} counted={revealed} accent={Boolean((item as any).accent)} align="right" videoDriven={isVideoDriven} />
                           </motion.div>
                         );
                       })}
