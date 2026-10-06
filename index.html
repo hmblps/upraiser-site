@@ -26,7 +26,7 @@
           if (document.body) document.body.scrollTop = 0;
         }
         
-        // Preload the primary hero video for LCP
+                // Preload the primary hero video for LCP
         var v = t === "light" ? "/hero/home-light-idle.mp4" : "/hero/home-dark-idle.mp4";
         var l = document.createElement("link");
         l.rel = "preload";
@@ -35,6 +35,15 @@
         l.type = "video/mp4";
         l.setAttribute("fetchpriority", "high");
         document.head.appendChild(l);
+
+        // Preload the poster image for instant first paint
+        var pImg = t === "light" ? "/hero/home-light-poster.jpg" : "/hero/home-dark-poster.jpg";
+        var pl = document.createElement("link");
+        pl.rel = "preload";
+        pl.href = pImg;
+        pl.as = "image";
+        pl.setAttribute("fetchpriority", "high");
+        document.head.appendChild(pl);
 
       })();
     </script>

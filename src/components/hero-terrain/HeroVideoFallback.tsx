@@ -390,12 +390,13 @@ export function HeroVideoFallback({
       />
       {theme === "dark" && (
         <>
-          <SimpleVideo src="/hero/home-dark-idle.mp4" />
+          <SimpleVideo src="/hero/home-dark-idle.mp4" poster="/hero/home-dark-poster.jpg" />
           </>
       )}
       {theme === "light" && (
         <SimpleVideo
           src="/hero/home-light-idle.mp4"
+          poster="/hero/home-light-poster.jpg"
           staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
@@ -408,9 +409,11 @@ export function HeroVideoFallback({
 // Plays forward once and stops on the last frame.
 function SimpleVideo({
   src,
+  poster,
   staticFilter = "",
 }: {
   src: string;
+  poster?: string;
   staticFilter?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -432,6 +435,7 @@ function SimpleVideo({
       ref={videoRef}
       id="hero-idle-video"
       src={src}
+      poster={poster}
       autoPlay
       muted
       playsInline
