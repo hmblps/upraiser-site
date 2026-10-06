@@ -36,7 +36,6 @@ export const FORMAT_STILL: Record<string, string> = {
 /** Live HTML — lite/mobile Rich + OEM store. Desktop Rich 3D uses FORMAT_STILL.rich. */
 export const FORMAT_HTML: Record<string, string> = {
   rich: "/rich-media-ad.html",
-  "oem-store": "/channels/oem/oem-store.html",
 };
 
 /** Open ING destination — 3D glass tap + live HTML CTA. */
