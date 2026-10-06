@@ -53,7 +53,7 @@ function AudienceAnimated() {
     <AccentScrollFold
       id="audience"
       remountKey={key}
-      runway="anchor"
+      runway="default"
       startLine={0.76}
       ambient={mode === "infrastructure" ? "fraud" : "chart"}
       className={`accent-scroll-section--fold-pair${mode === "infrastructure" ? " accent-scroll-section--split-copy" : ""}`.trim()}
