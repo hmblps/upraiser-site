@@ -236,10 +236,9 @@
   background-image: linear-gradient(
     135deg, 
     var(--logo-gold) 0%, 
-    var(--logo-gold) 45%, 
-    var(--logo-red) 85%,
     var(--logo-red) 100%
   );
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)) drop-shadow(0 4px 20px rgba(0,0,0,0.2));
 }
 
 .hero-stat-ghost.is-accent .hero-stat-ghost__value {
@@ -263,7 +262,7 @@
 }
 
 [data-theme="dark"] .hero-stat-ghost__value {
-  filter: drop-shadow(0 2px 30px color-mix(in srgb, var(--theme-accent-secondary-light) 30%, transparent));
+  filter: drop-shadow(0 2px 30px color-mix(in srgb, var(--theme-accent-secondary-light) 50%, transparent)) drop-shadow(0 0px 10px rgba(255,215,0,0.4));
 }
 
 .spec-strip > div {

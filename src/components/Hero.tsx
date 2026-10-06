@@ -95,6 +95,8 @@ function StatCard({ value, label, counted, accent, align = "center" }: { value: 
   const ref = useCountUp(value, counted, durationRef.current.val);
   const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
   const [ended, setEnded] = useState(false);
+  const { mode } = useMode();
+  const isLight = mode === "light";
 
   useEffect(() => {
     const onEnded = () => setEnded(true);
@@ -102,23 +104,32 @@ function StatCard({ value, label, counted, accent, align = "center" }: { value: 
     return () => window.removeEventListener('hero-video-ended', onEnded);
   }, []);
 
+  // Cinematic stop-frame gesture:
+  // Brightness flash and a sharp scale pop that settles down with a spring.
   return (
     <article className={`hero-stat-ghost flex flex-col justify-center h-full ${alignClass} ${accent ? 'is-accent' : ''}`}>
       <motion.div 
         className="hero-stat-ghost__value origin-center" 
         ref={ref as any}
         animate={ended ? { 
-          scale: [1, 1.08, 1], 
-          textShadow: ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 20px rgba(255,255,255,0.6)", "0px 0px 0px rgba(255,255,255,0)"] 
+          scale: [1, 1.15, 1],
+          filter: [
+            "brightness(1) contrast(1)", 
+            isLight ? "brightness(1.5) contrast(1.2) drop-shadow(0px 0px 20px rgba(255, 60, 0, 0.8))" : "brightness(1.5) contrast(1.2) drop-shadow(0px 0px 30px rgba(255, 200, 0, 0.8))", 
+            "brightness(1) contrast(1)"
+          ]
         } : {}}
-        transition={{ duration: 0.7, ease: "easeOut" }}
+        transition={{ duration: 1.2, type: "spring", bounce: 0.5 }}
       >
         {value}
       </motion.div>
       <motion.p 
         className="hero-stat-ghost__label"
-        animate={ended ? { opacity: [1, 0.5, 1] } : {}}
-        transition={{ duration: 0.7, ease: "easeOut" }}
+        animate={ended ? { 
+          opacity: [1, 0.3, 1],
+          scale: [1, 0.95, 1]
+        } : {}}
+        transition={{ duration: 1.2, type: "spring", bounce: 0.5 }}
       >
         {label}
       </motion.p>
