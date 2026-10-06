@@ -194,6 +194,7 @@ const PhoneMesh = memo(function PhoneMesh({
   rotY,
   entranceProgress,
   onReady,
+  flat = false,
 }: {
   url: string;
   formatId: string;
@@ -202,6 +203,7 @@ const PhoneMesh = memo(function PhoneMesh({
   rotY: { get: () => number };
   entranceProgress?: MotionValue<number>;
   onReady?: () => void;
+  flat?: boolean;
 }) {
   const { scene } = useGLTF(url, DRACO_PATH);
   // All stills once — format changes never re-suspend.
@@ -307,6 +309,14 @@ const PhoneMesh = memo(function PhoneMesh({
 
     const t = performance.now() / 1000;
     const p = entranceProgress ? Math.max(0, Math.min(1, entranceProgress.get())) : 1;
+
+        if (flat) {
+      group.current.rotation.x = rotX.get();
+      group.current.rotation.y = rotY.get();
+      group.current.position.y = 0;
+      group.current.position.z = 0;
+      return;
+    }
 
     // --- easing helpers (no allocations each frame) ---
     const easeOut3  = (x: number) => 1 - Math.pow(1 - x, 3);
@@ -460,7 +470,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
   }, []);
 
     const onPointerMove = (e: React.PointerEvent) => {
-    if (reduced) return;
+    if (reduced || flat) return;
     const el = stageRef.current;
     if (!el) return;
     
@@ -477,7 +487,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
   };
 
   const onPointerLeave = () => {
-    if (reduced) return;
+    if (reduced || flat) return;
     rotY.set(REST_Y);
     rotX.set(REST_X);
   };

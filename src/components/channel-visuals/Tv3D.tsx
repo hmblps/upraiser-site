@@ -493,7 +493,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
   }, []);
 
     const onPointerMove = (e: React.PointerEvent) => {
-    if (reduced) return;
+    if (reduced || flat) return;
     const el = stageRef.current;
     if (!el) return;
     
@@ -510,7 +510,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
   };
 
   const onPointerLeave = () => {
-    if (reduced) return;
+    if (reduced || flat) return;
     rotY.set(REST_Y);
     rotX.set(REST_X);
   };

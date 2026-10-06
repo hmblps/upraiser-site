@@ -447,7 +447,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
   }, []);
 
     const onPointerMove = (e: React.PointerEvent) => {
-    if (reduced) return;
+    if (reduced || flat) return;
     const el = stageRef.current;
     if (!el) return;
     
@@ -464,7 +464,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
   };
 
   const onPointerLeave = () => {
-    if (reduced) return;
+    if (reduced || flat) return;
     rotY.set(REST_Y);
     rotX.set(REST_X);
   };
