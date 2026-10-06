@@ -55,7 +55,7 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
     <AccentScrollFold
       id="promise"
       remountKey={key}
-      runway="default"
+      runway="anchor"
       ambient="bars"
       className="accent-scroll-section--fold-pair -mb-[14px]"
       scrollHeroWord={content.scrollHeroWord}

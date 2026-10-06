@@ -44,7 +44,7 @@
 @media (min-width: 768px) {
   .accent-scroll-section--lite.scroll-scene--fold {
     /* Compact runway — fold completes in the first ~¼ of sticky travel */
-    min-height: 160dvh;
+    min-height: 100dvh;
   }
 
   .accent-scroll-section--lite.scroll-scene--fold-compact {
