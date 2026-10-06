@@ -83,15 +83,15 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
   return (
     <>
       <section
-        className="partners-strip partners-strip--home relative overflow-hidden bg-transparent py-4"
+        className="partners-strip partners-strip--home relative overflow-hidden bg-transparent py-2 sm:py-4"
         aria-label="Trusted clients"
       >
-        <div className="section-inner mb-6">
+        <div className="section-inner mb-2 sm:mb-4">
           <SectionHeader label="Trusted by" title="Our Clients" animated={false} />
         </div>
 
         <div className="section-inner">
-          <div className="partners-marquee-viewport relative w-full overflow-hidden h-[100px] sm:h-[130px] flex items-center">
+          <div className="partners-marquee-viewport relative w-full overflow-hidden h-[64px] sm:h-[80px] flex items-center">
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 sm:w-32 bg-gradient-to-r from-bg to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 sm:w-32 bg-gradient-to-l from-bg to-transparent" />
 
