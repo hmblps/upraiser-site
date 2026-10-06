@@ -56,8 +56,11 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
   const stageRef = useRef<HTMLElement | null>(null);
   const lastRevealedRef = useRef(-1);
 
+  const videoProgressRef = useRef(0);
+  const scrollProgressRef = useRef(0);
+
   useEffect(() => {
-    const publish = () => {
+    const updateDOM = () => {
       const stage = resolveFlyStage(stageRef.current);
       stageRef.current = stage;
       if (!stage) {
@@ -69,12 +72,14 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const next = flyProgressForStage(stage);
-      progressRef.current = next;
-      stage.style.setProperty("--hero-fly", next.toFixed(3));
+      const scrollProgress = scrollProgressRef.current;
+      const videoProgress = videoProgressRef.current;
+      const effectiveProgress = Math.max(scrollProgress, videoProgress);
+      
+      progressRef.current = scrollProgress;
+      stage.style.setProperty("--hero-fly", effectiveProgress.toFixed(3));
 
-      // Lenovo popup: appears on scroll
-      const lenovoProgress = clamp((next - 0.3) / 0.25, 0, 1);
+      const lenovoProgress = clamp((scrollProgress - 0.3) / 0.25, 0, 1);
       const lenovoEase = lenovoProgress * lenovoProgress * (3 - 2 * lenovoProgress);
       
       stage.style.setProperty("--hero-lenovo-opacity", lenovoEase.toFixed(3));
@@ -84,37 +89,40 @@ export function HeroFlyProvider({ children }: { children: ReactNode }) {
         stage.dataset.lenovoDock = lenovoEase > 0.9 ? "1" : "0";
       }
 
-      // Soft handoff: only the last ~5% — after Lenovo is fully docked.
-      const exit = clamp((next - 0.95) / 0.05, 0, 1);
-      const exitEase = exit * exit * (3 - 2 * exit); // smoothstep
+      const exit = clamp((scrollProgress - 0.95) / 0.05, 0, 1);
+      const exitEase = exit * exit * (3 - 2 * exit);
       stage.style.setProperty("--hero-exit", exitEase.toFixed(4));
 
-      // Headline glued to the sticky frame: floats with the flight, doesn't fly away.
-      // Soft sine drift (~±1.1vh) tracks the climb; opacity only softens on runway exit.
-      const floatY = 0; // breathing effect removed
+      const floatY = 0;
       stage.style.setProperty("--hero-title-y", floatY.toFixed(2));
-      stage.style.setProperty("--hero-title-scale", (1 - next * 0.012).toFixed(4));
+      stage.style.setProperty("--hero-title-scale", (1 - scrollProgress * 0.012).toFixed(4));
       stage.style.setProperty("--hero-title-opacity", (1 - exitEase * 0.35).toFixed(4));
 
-      // Label arrives with the first ghost figure — establish stays quiet.
-            const labelIn = smoothstep(next, 0.14, 0.28);
+      const labelIn = smoothstep(effectiveProgress, 0.14, 0.28);
       stage.style.setProperty("--hero-label-opacity", labelIn.toFixed(4));
       stage.style.setProperty("--hero-label-y", ((1 - labelIn) * 28).toFixed(2));
-    };
 
-    // Publish in the same turn as Lenis scroll notify — no deferred rAF lag vs R3F.
-    const unsubscribe = registerScrollListener(publish);
-    publish();
-
-    // Listen to video progress for stats reveal (instead of scroll)
-    const onVideoProgress = (e: Event) => {
-      const customEvent = e as CustomEvent<number>;
-      const progress = customEvent.detail;
-      const revealed = countRevealed(progress);
+      const revealed = countRevealed(effectiveProgress);
       if (revealed !== lastRevealedRef.current) {
         lastRevealedRef.current = revealed;
         setRevealedCount(revealed);
       }
+    };
+
+    const onScroll = () => {
+      const stage = resolveFlyStage(stageRef.current);
+      if (stage) {
+        scrollProgressRef.current = flyProgressForStage(stage);
+        updateDOM();
+      }
+    };
+
+    const unsubscribe = registerScrollListener(onScroll);
+    onScroll();
+
+    const onVideoProgress = (e: Event) => {
+      videoProgressRef.current = (e as CustomEvent<number>).detail;
+      updateDOM();
     };
     window.addEventListener('hero-video-stats-progress', onVideoProgress);
 
