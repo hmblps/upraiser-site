@@ -12,6 +12,7 @@ import { HeroAtmosphere } from "./HeroAtmosphere";
 import { LenovoTrustStrip } from "./LenovoTrustStrip";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { useMode } from "./SectionHeader";
+import { useScroll } from "../context/ScrollContext";
 
 const HERO_SPRING = { type: "spring" as const, stiffness: 100, damping: 20, mass: 0.85 };
 
@@ -149,9 +150,22 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
   const statsScrollRef = useRef<HTMLDivElement>(null);
   const highlights = heroHighlightsByMode[mode];
   const activeStatIndex = useCarouselActiveIndex(statsScrollRef, highlights.length);
+  const { scrollToY } = useScroll();
   const [pinScroll, setPinScroll] = useState(() =>
     typeof window !== "undefined" ? window.matchMedia(DESKTOP_HERO_QUERY).matches : false,
   );
+
+  useEffect(() => {
+    const onEnded = () => {
+      // If the user hasn't scrolled manually (or barely scrolled)
+      if (window.scrollY < 50) {
+        // Auto scroll down by ~85vh to nudge them to the next section
+        scrollToY(window.innerHeight * 1.15);
+      }
+    };
+    window.addEventListener('hero-video-ended', onEnded);
+    return () => window.removeEventListener('hero-video-ended', onEnded);
+  }, [scrollToY]);
 
   useEffect(() => {
     const mq = window.matchMedia(DESKTOP_HERO_QUERY);
