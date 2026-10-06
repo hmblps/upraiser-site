@@ -390,17 +390,12 @@ export function HeroVideoFallback({
       />
       {theme === "dark" && (
         <>
-          <PingPongVideo
-            srcFwd="/hero/home-dark-idle.mp4"
-            srcRev="/hero/home-dark-idle-rev.mp4"
-          />
-          <DataStreamParticles />
-        </>
+          <SimpleVideo src="/hero/home-dark-idle.mp4" />
+          </>
       )}
       {theme === "light" && (
-        <PingPongVideo
-          srcFwd="/hero/home-light-idle.mp4"
-          srcRev="/hero/home-light-idle-rev.mp4"
+        <SimpleVideo
+          src="/hero/home-light-idle.mp4"
           staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
@@ -409,167 +404,49 @@ export function HeroVideoFallback({
   );
 }
 
-// ─── PingPong — canvas blend (zero flash, zero seek stutter) ─────────────────
-// Both video elements decode continuously (never paused).
-// A canvas RAF loop reads frames via drawImage and blends globalAlpha in JS.
-// No CSS opacity transitions → no reliance on CSS timing → frame-perfect.
-function PingPongVideo({
-  srcFwd,
-  srcRev,
+// ─── Simple Forward Video ────────────────────────────────────────────────────
+// Plays forward once and stops on the last frame.
+function SimpleVideo({
+  src,
   staticFilter = "",
 }: {
-  srcFwd: string;
-  srcRev: string;
+  src: string;
   staticFilter?: string;
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const fwdRef   = useRef<HTMLVideoElement>(null);
-  const revRef   = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const fwd    = fwdRef.current;
-    const rev    = revRef.current;
-    if (!canvas || !fwd || !rev) return;
-
-    const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) return;
-
-    // Non-null aliases for use inside closures (TS can't narrow across callbacks)
-    const c: HTMLCanvasElement = canvas;
-    const ct: CanvasRenderingContext2D = ctx;
-
-    // timeupdate fires ~250ms — need >> 250ms lead
-    const LEAD_S   = 2.0;
-    const FADE_MS  = 1600;
-
-    // Fit canvas pixels to container
-    function resize() {
-      const p = c.parentElement;
-      if (!p) return;
-      const dpr = devicePixelRatio || 1;
-      c.width  = Math.round(p.clientWidth  * dpr);
-      c.height = Math.round(p.clientHeight * dpr);
-    }
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(c.parentElement!);
-
-    // Crossfade state
-    let activeA: HTMLVideoElement = fwd; // outgoing (fades 1→0)
-    let activeB: HTMLVideoElement = rev; // incoming (fades 0→1)
-    let switching = false;
-    let fadeStart = -1; // performance.now() when fade began, -1 = idle
-
-    function draw(now: DOMHighResTimeStamp) {
-      const W = c.width;
-      const H = c.height;
-
-      // alpha = how visible the OUTGOING video is (1 = fully visible, 0 = gone)
-      let alpha = 1;
-      if (fadeStart >= 0) {
-        const t = Math.min(1, (now - fadeStart) / FADE_MS);
-        // smooth step: t²(3−2t)
-        const ease = t * t * (3 - 2 * t);
-        alpha = 1 - ease;
-
-        if (t >= 1) {
-          // Fade done — swap roles, reset state
-          [activeA, activeB] = [activeB, activeA];
-          alpha      = 1;
-          fadeStart  = -1;
-          switching  = false;
-        }
-      }
-
-      // Draw outgoing
-      if (activeA.readyState >= 2) {
-        ct.globalAlpha = alpha;
-        ct.drawImage(activeA, 0, 0, W, H);
-      }
-
-      // Draw incoming on top
-      if (alpha < 1 && activeB.readyState >= 2) {
-        ct.globalAlpha = 1 - alpha;
-        ct.drawImage(activeB, 0, 0, W, H);
-      }
-
-      ct.globalAlpha = 1;
-      requestAnimationFrame(draw);
-    }
-
-    function startCrossfade() {
-      if (switching) return;
-      switching = true;
-
-      // Seek incoming to its first frame while it's invisible.
-      // Decoder is warm (both have been playing since mount) → seek is fast.
-      activeB.currentTime = 0;
-
-      // Small settle window, then begin the alpha ramp
-      setTimeout(() => { fadeStart = performance.now(); }, 80);
-    }
-
-    const onTime = () => {
-      if (switching) return;
-      const active = activeA; // whichever is currently showing
-      if (active.duration > 0 && active.currentTime >= active.duration - LEAD_S) {
-        startCrossfade();
-      }
+    const v = videoRef.current;
+    if (!v) return;
+    v.play().catch(() => {});
+    // Resume after tab switch / iOS low-power pause if not ended
+    const onVis = () => {
+      if (!document.hidden && v.paused && !v.ended) v.play().catch(() => {});
     };
-
-    fwd.addEventListener("timeupdate", onTime);
-    rev.addEventListener("timeupdate", onTime);
-
-    // Both play from mount — decoders always hot, seek at crossfade is instant
-    fwd.play().catch(() => {});
-    rev.play().catch(() => {});
-
-    requestAnimationFrame(draw);
-
-    return () => {
-      ro.disconnect();
-      fwd.removeEventListener("timeupdate", onTime);
-      rev.removeEventListener("timeupdate", onTime);
-      fwd.pause();
-      rev.pause();
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [src]);
 
   return (
-    <div style={{ position: "absolute", inset: 0 }}>
-      {/* Videos decode invisibly — canvas reads them via drawImage */}
-      <video
-        ref={fwdRef}
-        id="hero-idle-video"
-        src={srcFwd}
-        muted
-        loop
-        playsInline
-        preload="auto"
-        style={{ position: "absolute", width: 1, height: 1, opacity: 0 }}
-      />
-      <video
-        ref={revRef}
-        src={srcRev}
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        style={{ position: "absolute", width: 1, height: 1, opacity: 0 }}
-      />
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          display: "block",
-          filter: staticFilter || undefined,
-        }}
-      />
-    </div>
+    <video
+      ref={videoRef}
+      id="hero-idle-video"
+      src={src}
+      autoPlay
+      muted
+      playsInline
+      preload="auto"
+      disablePictureInPicture
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        display: "block",
+        filter: staticFilter || undefined,
+      }}
+    />
   );
 }
 
@@ -711,138 +588,3 @@ function SnowParticles() {
   );
 }
 
-// ─── Cyber Data Streams (Dark Theme) ──────────────────────────────────────────
-// Glowing cyan/blue/amber streaks rushing toward the camera (cyberpunk style).
-function DataStreamParticles() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const c: HTMLCanvasElement = canvas;
-    const ct: CanvasRenderingContext2D = ctx;
-
-    interface Stream {
-      angle: number;
-      r: number;
-      speed: number;
-      size: number;
-      alpha: number;
-      color: string;
-      length: number;
-    }
-
-    const COUNT = 140;
-    // Cyan, electric blue, soft amber
-    const COLORS = ["0, 240, 255", "100, 150, 255", "255, 170, 0"];
-
-    function spawn(): Stream {
-      return {
-        angle: Math.random() * Math.PI * 2,
-        r: Math.random() * 0.3, // start near centre
-        speed: 0.004 + Math.random() * 0.008,
-        size: 0.3 + Math.random() * 1.5,
-        alpha: 0.3 + Math.random() * 0.7,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        length: 5 + Math.random() * 20, // base trail length
-      };
-    }
-
-    const streams: Stream[] = Array.from({ length: COUNT }, spawn);
-
-    function resize() {
-      const dpr = devicePixelRatio || 1;
-      c.width  = c.offsetWidth  * dpr;
-      c.height = c.offsetHeight * dpr;
-    }
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(c);
-
-    let raf = 0;
-
-    function draw() {
-      const W  = c.width;
-      const H  = c.height;
-      // Centre vanishing point for dark theme cityscape
-      const cx = W * 0.5;
-      const cy = H * 0.5;
-      const maxR = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
-
-      ct.clearRect(0, 0, W, H);
-      // Screen composite for glowing neon overlaps
-      ct.globalCompositeOperation = "screen";
-
-      for (let i = 0; i < streams.length; i++) {
-        const s = streams[i];
-
-        // Accelerate as it gets closer
-        s.r += s.speed * (1 + s.r * s.r * 8);
-
-        if (s.r >= 1.2) {
-          streams[i] = spawn();
-          continue;
-        }
-
-        const dist = s.r * maxR;
-        const x    = cx + Math.cos(s.angle) * dist;
-        const y    = cy + Math.sin(s.angle) * dist;
-
-        const trailPx = s.length + s.r * s.r * 80;
-        const prevDist = Math.max(0, dist - trailPx);
-        const px = cx + Math.cos(s.angle) * prevDist;
-        const py = cy + Math.sin(s.angle) * prevDist;
-
-        const scale   = 0.1 + s.r * s.r * 5;
-        const radius  = Math.max(0.4, s.size * scale);
-        const opacity = Math.min(1, s.alpha * (0.2 + s.r * 1.5));
-
-        const grad = ct.createLinearGradient(px, py, x, y);
-        grad.addColorStop(0, `rgba(${s.color}, 0)`);
-        grad.addColorStop(1, `rgba(${s.color}, ${opacity.toFixed(3)})`);
-
-        ct.beginPath();
-        ct.strokeStyle = grad;
-        ct.lineWidth   = Math.max(0.6, radius);
-        ct.lineCap     = "round";
-        ct.moveTo(px, py);
-        ct.lineTo(x,  y);
-        ct.stroke();
-
-        // Tip glow
-        if (radius > 1.2) {
-          ct.beginPath();
-          ct.arc(x, y, radius * 0.6, 0, Math.PI * 2);
-          ct.fillStyle = `rgba(255,255,255,${(opacity * 0.9).toFixed(3)})`;
-          ct.fill();
-        }
-      }
-
-      raf = requestAnimationFrame(draw);
-    }
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 2,
-      }}
-    />
-  );
-}
