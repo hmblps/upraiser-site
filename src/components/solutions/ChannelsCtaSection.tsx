@@ -50,11 +50,14 @@ const data = [
 ];
 
 const CustomDeviceBar = (props: any) => {
-  const { x, y, width, height, payload } = props;
-  if (!payload || !payload.device) return null;
-  const isPhone = payload.device === "phone";
-  const isTablet = payload.device === "tablet";
-  const isDesktop = payload.device === "desktop";
+  const { x = 0, y = 0, width = 0, height = 0, payload } = props;
+  if (!payload) return null;
+  const device = payload.device || payload.payload?.device;
+  if (!device) return null;
+  if (Number.isNaN(x) || Number.isNaN(y)) return null;
+  const isPhone = device === "phone";
+  const isTablet = device === "tablet";
+  const isDesktop = device === "desktop";
   
   // Create a device outline based on the bar's bounding box
   // We'll scale the device to fit inside the bar width/height
@@ -91,7 +94,7 @@ function InteractiveVisuals() {
   return (
     <div className="relative flex-1 w-full max-w-[800px] h-[400px] mx-auto lg:mx-0 pointer-events-none mode-line-chart">
       <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+        <svg width="0" height="0" style={{ position: 'absolute' }}>
           <defs>
             <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stopColor="#FBBF24" />
@@ -99,13 +102,15 @@ function InteractiveVisuals() {
               <stop offset="100%" stopColor="#F43F5E" />
             </linearGradient>
           </defs>
+        </svg>
+        <ComposedChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
           
           <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.55} vertical={false} strokeDasharray="3 6" />
           
           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "var(--theme-muted)", fontSize: 11, fontWeight: 500 }} dy={10} />
           
           {/* The Devices drawn as Bars */}
-          <Bar dataKey="value" shape={<CustomDeviceBar />} isAnimationActive={false} />
+          <Bar dataKey="value" shape={<CustomDeviceBar />} barSize={40} isAnimationActive={false} />
           
           {/* The Data Line drawn on top */}
           <Line 
