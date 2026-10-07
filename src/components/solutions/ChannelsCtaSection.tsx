@@ -33,18 +33,6 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
   );
 }
 
-function ChartBar({ h, i, scrollYProgress }: { h: number, i: number, scrollYProgress: MotionValue<number> }) {
-  return (
-    <motion.div 
-      className="flex-1 rounded-t-sm relative"
-      style={{
-        height: useTransform(scrollYProgress, [0.2 + i * 0.05, 0.6 + i * 0.05], ["0%", `${h}%`]),
-        background: 'linear-gradient(to top, var(--theme-accent-secondary), var(--theme-accent))',
-        boxShadow: "0 0 10px rgba(251, 191, 36, 0.3)",
-      }}
-    />
-  )
-}
 
 function InteractiveVisuals() {
   const { scrollYProgress } = useScroll();
