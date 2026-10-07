@@ -33,157 +33,147 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
   );
 }
 
+function ChartBar({ h, i, scrollYProgress }: { h: number, i: number, scrollYProgress: MotionValue<number> }) {
+  return (
+    <motion.div 
+      className="flex-1 rounded-t-sm relative"
+      style={{
+        height: useTransform(scrollYProgress, [0.2 + i * 0.05, 0.6 + i * 0.05], ["0%", `${h}%`]),
+        background: 'linear-gradient(to top, var(--theme-accent-secondary), var(--theme-accent))',
+        boxShadow: "0 0 10px rgba(251, 191, 36, 0.3)",
+      }}
+    />
+  )
+}
+
 function InteractiveVisuals() {
-  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll();
   const numRef = useRef<HTMLSpanElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 80%", "center 40%"]
-  });
 
-  // KPI Value
-  const kpiValue = useTransform(scrollYProgress, [0, 1], [40, 99.8]);
-
-  // Update number text safely
   useEffect(() => {
-    const unsub = kpiValue.on("change", (latest) => {
+    return scrollYProgress.on("change", (v) => {
       if (numRef.current) {
-        numRef.current.textContent = latest.toFixed(1);
+        const val = Math.min(98.0, Math.max(0, v * 2 * 98.0));
+        numRef.current.innerText = val.toFixed(1);
       }
     });
-    return unsub;
-  }, [kpiValue]);
+  }, [scrollYProgress]);
 
-  const bars = [20, 40, 30, 60, 50, 80, 100];
-  const wave = [40, 20, 60, 45, 80, 55, 90, 70, 100, 85, 40];
+  const bars = [25, 45, 35, 60, 50, 75, 95];
+
+  // The gradient used for outlines
+  const outlineGradient = "bg-gradient-to-br from-accent via-accent to-accent-secondary";
 
   return (
-    <div ref={ref} className="flex-1 relative w-full max-w-lg aspect-square flex items-center justify-center">
-      {/* Subtle brand glow behind the cards */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] opacity-40 dark:opacity-20 pointer-events-none">
-          <div className="absolute inset-0 bg-accent blur-[100px] rounded-full mix-blend-screen" />
-      </div>
+    <div className="relative flex-1 max-w-[500px] aspect-square mx-auto lg:mx-0 w-full flex items-center justify-center">
+      
+      {/* Glow aura */}
+      <div className="absolute inset-0 bg-accent/5 blur-[100px] rounded-full scale-110 pointer-events-none" />
 
-      {/* Main Dashboard / CTV View (Center-Back) */}
+      {/* Desktop / Web Window (Back) - WIREFRAME */}
       <motion.div
         style={{
           y: useTransform(scrollYProgress, [0, 1], [40, 0]),
           scale: useTransform(scrollYProgress, [0, 1], [0.95, 1]),
           opacity: useTransform(scrollYProgress, [0, 0.5], [0, 1]),
         }}
-        className="absolute w-[105%] aspect-video bg-bg-card/60 rounded-2xl border border-border/50 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col p-4"
+        className={`absolute w-[90%] aspect-[4/3] rounded-[2rem] p-[1px] ${outlineGradient} shadow-[0_0_30px_rgba(251,191,36,0.1)]`}
       >
-        {/* Header bar */}
-        <div className="w-full flex justify-between items-center mb-4">
-          <div className="w-1/4 h-3 bg-border/60 rounded-full" />
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-border/40" />
-            <div className="w-3 h-3 rounded-full bg-border/40" />
+        <div className="w-full h-full bg-bg rounded-[2rem] flex flex-col p-6 overflow-hidden relative">
+          
+          <div className="w-full flex justify-between items-center mb-8">
+            <div className="flex gap-2">
+              <div className={`w-3 h-3 rounded-full p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
+              <div className={`w-3 h-3 rounded-full p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
+            </div>
+          </div>
+          
+          <div className={`flex-1 rounded-2xl p-[1px] ${outlineGradient} flex flex-col items-center justify-center p-8 relative overflow-hidden`}>
+            <div className="w-full h-full bg-bg rounded-2xl flex flex-col items-center justify-center p-8 relative">
+              {/* grid lines */}
+              <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'linear-gradient(var(--theme-accent) 1px, transparent 1px), linear-gradient(90deg, var(--theme-accent) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+              <div className="w-[40%] h-[1px] bg-accent/60 mb-6 relative z-10" />
+              <div className={`w-[60%] h-[70%] rounded-xl p-[1px] ${outlineGradient} relative z-10`}><div className="w-full h-full bg-bg/80 backdrop-blur-sm rounded-xl"/></div>
+            </div>
           </div>
         </div>
-        
-        {/* Logo Watermark / Data Area */}
-        <div className="relative flex-1 bg-border/10 rounded-xl border border-border/20 flex flex-col p-3 overflow-hidden">
+      </motion.div>
+
+      {/* Tablet / Metric Card (Right) - WIREFRAME */}
+      <motion.div
+        style={{
+          x: useTransform(scrollYProgress, [0, 1], [80, 40]),
+          rotate: useTransform(scrollYProgress, [0, 1], [0, 6]),
+          opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
+        }}
+        className={`absolute right-0 w-[55%] aspect-[3/4] rounded-[2rem] p-[1px] ${outlineGradient} shadow-[0_0_30px_rgba(251,191,36,0.15)] z-10`}
+      >
+        <div className="w-full h-full bg-bg rounded-[2rem] flex flex-col p-6 sm:p-8 relative overflow-hidden">
+          {/* subtle grid */}
+          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(var(--theme-accent) 1px, transparent 1px), linear-gradient(90deg, var(--theme-accent) 1px, transparent 1px)', backgroundSize: '15px 15px' }} />
+
+          <div className={`w-10 h-10 rounded-full p-[1px] ${outlineGradient} flex items-center justify-center mb-6 relative z-10`}>
+             <div className="w-full h-full bg-bg rounded-full flex items-center justify-center">
+               <div className="w-2.5 h-2.5 bg-accent rounded-full shadow-[0_0_8px_var(--theme-accent)]" />
+             </div>
+          </div>
           
-          <div className="flex gap-3 h-full z-10 relative">
-            <div className="w-1/3 h-full bg-border/20 rounded-lg flex flex-col justify-end p-2 gap-2">
-              <div className="w-full h-12 bg-accent/10 rounded-md border border-accent/20 mb-auto" />
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="w-full h-2 bg-text-muted/20 rounded-full" />
+          <div className="text-[3rem] sm:text-[3.5rem] leading-none font-bold tracking-tight text-text mb-6 relative z-10">
+            <span ref={numRef}>98.0</span><span className="text-accent text-[2.5rem]">%</span>
+          </div>
+          
+          <div className="w-16 h-[1px] bg-accent/40 mb-8 relative z-10" />
+
+          <div className={`flex-1 w-full rounded-[1.5rem] p-[1px] ${outlineGradient} relative z-10`}>
+            <div className="w-full h-full bg-bg rounded-[1.5rem] p-4 sm:p-5 flex items-end gap-2 overflow-hidden">
+              {bars.map((h, i) => (
+                 <ChartBar key={i} h={h} i={i} scrollYProgress={scrollYProgress} />
               ))}
-              <div className="w-2/3 h-2 bg-text-muted/20 rounded-full" />
-            </div>
-            <div className="flex-1 flex flex-col gap-3">
-              <div className="flex-1 bg-border/10 rounded-lg flex items-center justify-center relative overflow-hidden">
-                 <div className="absolute inset-0 opacity-[0.03] dark:opacity-10 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 4px, var(--theme-accent) 4px, var(--theme-accent) 5px)' }} />
-                 <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center relative z-10">
-                   <div className="w-3 h-3 rounded-full bg-accent" />
-                 </div>
-              </div>
-              <div className="h-1/4 bg-border/10 rounded-lg flex items-center px-2">
-                <div className="w-1/2 h-1.5 bg-accent/40 rounded-full" />
-              </div>
             </div>
           </div>
+        </div>
+      </motion.div>
+
+      {/* Phone / Feed Card (Left) - WIREFRAME */}
+      <motion.div
+        style={{
+          x: useTransform(scrollYProgress, [0, 1], [-80, -40]),
+          y: useTransform(scrollYProgress, [0, 1], [40, 10]),
+          rotate: useTransform(scrollYProgress, [0, 1], [0, -8]),
+          opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
+        }}
+        className={`absolute left-0 bottom-4 w-[45%] aspect-[9/19] rounded-[2.5rem] p-[1px] ${outlineGradient} shadow-[0_0_30px_rgba(251,191,36,0.15)] z-20`}
+      >
+        <div className="w-full h-full bg-bg rounded-[2.5rem] flex flex-col p-4 sm:p-5 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(var(--theme-accent) 1px, transparent 1px), linear-gradient(90deg, var(--theme-accent) 1px, transparent 1px)', backgroundSize: '15px 15px' }} />
+
+          {/* Notch */}
+          <div className="w-14 h-[2px] bg-accent/40 mx-auto rounded-full mb-6 shrink-0 relative z-10" />
           
-          {/* Synthetic Data Wave at bottom */}
-          <div className="absolute bottom-0 left-0 w-full flex items-end justify-between px-4 gap-1 opacity-40 mix-blend-overlay">
-            {wave.map((h, i) => (
-              <WaveBar key={i} h={h} scrollYProgress={scrollYProgress} />
-            ))}
+          {/* Top Highlight Pill */}
+          <div className={`w-full rounded-[1.5rem] p-[1px] ${outlineGradient} mb-6 relative z-10`}>
+            <div className="w-full bg-bg rounded-[1.5rem] p-4 flex flex-col gap-4">
+              <div className="w-4 h-4 bg-accent/80 rounded-full shadow-[0_0_10px_var(--theme-accent)]" />
+              <div className={`w-full h-8 rounded-xl p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-xl"/></div>
+            </div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* Tablet / Metric Card (Right) */}
-      <motion.div
-        style={{
-          x: useTransform(scrollYProgress, [0, 1], [60, 25]),
-          rotate: useTransform(scrollYProgress, [0, 1], [0, 4]),
-          opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
-        }}
-        className="absolute right-0 w-[50%] aspect-[3/4] bg-bg-elevated/80 rounded-2xl border border-border/50 backdrop-blur-2xl shadow-2xl flex flex-col p-5 gap-5"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center shrink-0 border border-accent/30">
-            <div className="w-3 h-3 bg-accent rounded-full shadow-[0_0_10px_var(--theme-accent)]" />
-          </div>
-          <div className="flex-1 space-y-1.5">
-            <div className="w-2/3 h-2 bg-text rounded-full" />
-            <div className="w-1/3 h-2 bg-text-muted rounded-full" />
-          </div>
-        </div>
-        
-        {/* KPI Block tied to scroll */}
-        <div className="space-y-2 mt-2">
-          <div className="text-[2.5rem] leading-none font-bold tracking-tight font-mono text-text">
-            <span ref={numRef}>40.0</span><span className="text-accent text-xl">%</span>
-          </div>
-          <div className="w-4/5 h-2 bg-border/40 rounded-full" />
-        </div>
-
-        {/* Chart tied to scroll */}
-        <div className="relative flex-1 w-full bg-accent/5 rounded-xl border border-accent/10 flex items-end p-2 gap-1.5 mt-auto overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.04] dark:opacity-10 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 4px, var(--theme-accent) 4px, var(--theme-accent) 5px)' }} />
-          {bars.map((h, i) => (
-             <ChartBar key={i} h={h} i={i} scrollYProgress={scrollYProgress} />
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Phone / Feed Card (Left) */}
-      <motion.div
-        style={{
-          x: useTransform(scrollYProgress, [0, 1], [-60, -35]),
-          y: useTransform(scrollYProgress, [0, 1], [40, 20]),
-          rotate: useTransform(scrollYProgress, [0, 1], [0, -6]),
-          opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
-        }}
-        className="absolute left-0 bottom-6 w-[40%] aspect-[9/19] bg-bg-card/90 rounded-[2rem] border-4 border-border/40 backdrop-blur-2xl shadow-2xl flex flex-col p-3 gap-3 overflow-hidden"
-      >
-        {/* Notch */}
-        <div className="w-1/3 h-1.5 bg-border/50 mx-auto rounded-full mb-1 shrink-0" />
-        
-        {/* Feed Items */}
-        <div className="flex-1 flex flex-col gap-2 overflow-hidden">
-          {[1, 2, 3, 4, 5].map((_, i) => (
-            <div key={i} className={`w-full p-2.5 rounded-xl border border-border/30 flex flex-col gap-2 shrink-0 ${i === 0 ? 'bg-accent/10 border-accent/20' : 'bg-border/10'}`}>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-accent/40 shrink-0" />
-                <div className="flex-1 space-y-1">
-                   <div className="w-3/4 h-1.5 bg-text/60 rounded-full" />
-                   <div className="w-1/2 h-1.5 bg-text-muted/40 rounded-full" />
+          {/* Feed Items */}
+          <div className="flex-1 flex flex-col gap-4 relative z-10">
+            {[1, 2, 3, 4].map((_, i) => (
+              <div key={i} className={`w-full rounded-[1.25rem] p-[1px] ${outlineGradient}`}>
+                <div className="w-full h-full bg-bg rounded-[1.25rem] p-3.5 flex items-center gap-4">
+                  <div className="w-3.5 h-3.5 rounded-full p-[1px] bg-accent/60 shrink-0"><div className="w-full h-full bg-bg rounded-full"/></div>
+                  <div className="flex-1 h-[2px] bg-accent/30 rounded-full" />
                 </div>
               </div>
-              {i === 0 && <div className="w-full h-12 bg-accent/20 rounded-lg mt-1 border border-accent/10" />}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </motion.div>
     </div>
   );
 }
-
 export function ChannelsCtaSection() {
   const reduced = useReducedMotion();
 
