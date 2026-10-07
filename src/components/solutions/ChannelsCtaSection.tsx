@@ -38,94 +38,74 @@ function InteractiveVisuals() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 0.9", "center center"]
+    offset: ["start 0.8", "center center"]
   });
 
-  // A single, continuous draw animation for the main graph line
-  const drawLine = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
-  
-  // Opacity fade for the grid and axes
-  const opacityFade = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  // Draw progress for the bright gradient overlay
+  const drawDesktop = useTransform(scrollYProgress, [0.0, 0.6], [0, 1]);
+  const drawTablet  = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
+  const drawPhone   = useTransform(scrollYProgress, [0.4, 1.0], [0, 1]);
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-[700px] aspect-[16/9] mx-auto lg:mx-0 w-full flex items-center justify-center pointer-events-none">
-      <svg viewBox="0 0 700 400" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
+    <div ref={containerRef} className="relative flex-1 w-full max-w-[800px] aspect-[4/3] mx-auto lg:mx-0 flex items-center justify-center pointer-events-none">
+      <svg viewBox="0 0 800 600" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
         <defs>
-          <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
+          <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#FBBF24" />
+            <stop offset="50%" stopColor="#F97316" />
             <stop offset="100%" stopColor="#F43F5E" />
           </linearGradient>
           
-          <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#F43F5E" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.0" />
+          <linearGradient id="brandGradDark" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#F43F5E" stopOpacity="0.15" />
           </linearGradient>
         </defs>
 
-        <motion.g style={{ opacity: opacityFade }}>
-          {/* NOTEBOOK GRID (Тетрадка) */}
-          <g stroke="currentColor" strokeOpacity="0.06" strokeWidth="1">
-            {/* Horizontal Grid Lines */}
-            <line x1="0" y1="50" x2="700" y2="50" />
-            <line x1="0" y1="125" x2="700" y2="125" />
-            <line x1="0" y1="200" x2="700" y2="200" />
-            <line x1="0" y1="275" x2="700" y2="275" />
-            <line x1="0" y1="350" x2="700" y2="350" />
+        <g strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          
+          {/* --- DESKTOP (Back, Largest) --- */}
+          <g transform="translate(100, 60)">
+            {/* Base Outline (Always fully drawn, faint) */}
+            <rect x="0" y="0" width="600" height="400" rx="16" stroke="url(#brandGradDark)" />
+            <line x1="0" y1="50" x2="600" y2="50" stroke="url(#brandGradDark)" />
             
-            {/* Vertical Grid Lines */}
-            <line x1="100" y1="0" x2="100" y2="400" />
-            <line x1="225" y1="0" x2="225" y2="400" />
-            <line x1="350" y1="0" x2="350" y2="400" />
-            <line x1="475" y1="0" x2="475" y2="400" />
-            <line x1="600" y1="0" x2="600" y2="400" />
+            {/* Animated Highlight (Draws over the base) */}
+            <motion.rect x="0" y="0" width="600" height="400" rx="16" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
+            <motion.line x1="0" y1="50" x2="600" y2="50" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
+            
+            {/* Simple UI hints */}
+            <circle cx="30" cy="25" r="4" stroke="url(#brandGradDark)" />
+            <circle cx="50" cy="25" r="4" stroke="url(#brandGradDark)" />
+            <motion.circle cx="30" cy="25" r="4" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
+            <motion.circle cx="50" cy="25" r="4" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
           </g>
 
-          {/* DEVICES AS SCHEMATIC AXES (Very faint, clean) */}
-          <g stroke="currentColor" strokeOpacity="0.15" fill="none" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+          {/* --- TABLET (Right, Medium) --- */}
+          <g transform="translate(520, 180)">
+            {/* Base */}
+            <rect x="0" y="0" width="240" height="340" rx="20" stroke="url(#brandGradDark)" />
+            <rect x="20" y="20" width="200" height="300" rx="8" stroke="url(#brandGradDark)" strokeWidth="1.5" />
             
-            {/* Phone Schematic (Left) */}
-            <rect x="100" y="125" width="90" height="190" rx="16" />
-            <line x1="130" y1="135" x2="160" y2="135" strokeWidth="2" />
-            
-            {/* Tablet Schematic (Center) */}
-            <rect x="225" y="75" width="160" height="240" rx="12" />
-            <circle cx="305" cy="95" r="4" />
-            
-            {/* Desktop Schematic (Right) */}
-            <rect x="420" y="50" width="220" height="140" rx="8" />
-            <line x1="420" y1="70" x2="640" y2="70" />
-            <circle cx="435" cy="60" r="2" />
-            <circle cx="445" cy="60" r="2" />
+            {/* Animated */}
+            <motion.rect x="0" y="0" width="240" height="340" rx="20" stroke="url(#brandGrad)" style={{ pathLength: drawTablet }} />
+            <motion.rect x="20" y="20" width="200" height="300" rx="8" stroke="url(#brandGrad)" strokeWidth="1.5" style={{ pathLength: drawTablet }} />
           </g>
-        </motion.g>
 
-        {/* ONE CONTINUOUS, MASSIVE GRAPH LINE */}
-        <motion.path 
-          d="M 50 320 C 150 320, 180 250, 250 250 C 320 250, 360 120, 450 120 C 500 120, 550 60, 650 40" 
-          stroke="url(#chartGrad)" 
-          strokeWidth="5" 
-          fill="none"
-          strokeLinecap="round" 
-          style={{ pathLength: drawLine }} 
-        />
-        
-        {/* Glow fill under the line */}
-        <motion.path 
-          d="M 50 320 C 150 320, 180 250, 250 250 C 320 250, 360 120, 450 120 C 500 120, 550 60, 650 40 L 650 400 L 50 400 Z" 
-          fill="url(#chartGlow)" 
-          style={{ opacity: useTransform(scrollYProgress, [0.5, 0.9], [0, 1]) }} 
-        />
-
-        {/* Data Points / Markers */}
-        <motion.g style={{ opacity: useTransform(scrollYProgress, [0.8, 1], [0, 1]) }} fill="url(#chartGrad)">
-          {/* Point on Phone */}
-          <circle cx="145" cy="290" r="5" stroke="currentColor" strokeWidth="2" />
-          {/* Point on Tablet */}
-          <circle cx="305" cy="210" r="5" stroke="currentColor" strokeWidth="2" />
-          {/* Point on Desktop */}
-          <circle cx="530" cy="88" r="5" stroke="currentColor" strokeWidth="2" />
-        </motion.g>
-
+          {/* --- PHONE (Left, Tall) --- */}
+          <g transform="translate(30, 220)">
+            {/* Base */}
+            <rect x="0" y="0" width="180" height="360" rx="28" stroke="url(#brandGradDark)" />
+            <line x1="60" y1="20" x2="120" y2="20" stroke="url(#brandGradDark)" strokeWidth="4" />
+            <rect x="15" y="45" width="150" height="300" rx="12" stroke="url(#brandGradDark)" strokeWidth="1.5" />
+            
+            {/* Animated */}
+            <motion.rect x="0" y="0" width="180" height="360" rx="28" stroke="url(#brandGrad)" style={{ pathLength: drawPhone }} />
+            <motion.line x1="60" y1="20" x2="120" y2="20" stroke="url(#brandGrad)" strokeWidth="4" style={{ pathLength: drawPhone }} />
+            <motion.rect x="15" y="45" width="150" height="300" rx="12" stroke="url(#brandGrad)" strokeWidth="1.5" style={{ pathLength: drawPhone }} />
+          </g>
+          
+        </g>
       </svg>
     </div>
   );
