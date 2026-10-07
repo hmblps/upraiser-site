@@ -142,3 +142,10 @@
   content-visibility: visible;
   contain: none;
 }
+
+@media (min-width: 1024px) {
+  /* wheel sits 3rem lower; keep the same clearance above the next section */
+  #routes.section-band {
+    padding-bottom: calc(var(--section-y) + 3rem);
+  }
+}
