@@ -52,95 +52,103 @@ function InteractiveVisuals() {
   return (
     <div ref={containerRef} className="relative flex-1 max-w-[600px] aspect-[4/3] mx-auto lg:mx-0 w-full flex items-center justify-center pointer-events-none">
       
-      {/* Subtle Glow aura */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#FBBF24]/5 to-[#F43F5E]/5 blur-[80px] rounded-full scale-110 pointer-events-none" />
-
       <svg viewBox="0 0 600 450" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
         <defs>
+          {/* Thick, vibrant gradient for the main data lines */}
           <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#FBBF24" />
             <stop offset="50%" stopColor="#F97316" />
             <stop offset="100%" stopColor="#F43F5E" />
           </linearGradient>
           
-          <linearGradient id="brandGradFade" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#F43F5E" stopOpacity="0.4" />
+          {/* Very faint, thin gradient for the device outlines (like notebook grids/axes) */}
+          <linearGradient id="brandGradFaint" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#F43F5E" stopOpacity="0.25" />
           </linearGradient>
         </defs>
 
         {/* --- DESKTOP (Back) --- */}
         <motion.g 
           style={{ opacity: opacityFade, y: useTransform(scrollYProgress, [0, 1], [30, 0]) }}
-          stroke="url(#brandGradFade)" 
+          stroke="url(#brandGradFaint)" 
           fill="none" 
-          strokeWidth="1.5" 
+          strokeWidth="1" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
           {/* Main Desktop Frame */}
-          <motion.rect x="50" y="80" width="400" height="260" rx="20" style={{ pathLength: drawDesktop }} />
+          <motion.rect x="50" y="80" width="400" height="260" rx="12" style={{ pathLength: drawDesktop }} />
           {/* Header Line */}
-          <motion.line x1="50" y1="120" x2="450" y2="120" strokeWidth="1" style={{ pathLength: drawDesktop }} />
-          {/* Window controls */}
-          <motion.circle cx="80" cy="100" r="4" style={{ pathLength: drawDesktop }} />
-          <motion.circle cx="100" cy="100" r="4" style={{ pathLength: drawDesktop }} />
+          <motion.line x1="50" y1="110" x2="450" y2="110" style={{ pathLength: drawDesktop }} />
+          {/* Window controls (Tiny tick-like dots) */}
+          <motion.circle cx="70" cy="95" r="2" style={{ pathLength: drawDesktop }} />
+          <motion.circle cx="85" cy="95" r="2" style={{ pathLength: drawDesktop }} />
+          <motion.circle cx="100" cy="95" r="2" style={{ pathLength: drawDesktop }} />
           
-          {/* Desktop Content Graph Line (Thick & Bright) */}
-          <motion.path d="M90 280 C 150 270, 200 320, 250 200 C 300 80, 350 180, 410 160" strokeWidth="2.75" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
+          {/* Desktop Content Graph Line (Thick & Smooth) */}
+          <motion.path 
+            d="M50 280 C 150 280, 250 320, 300 200 C 350 80, 380 120, 450 160" 
+            strokeWidth="4.5" 
+            stroke="url(#brandGrad)" 
+            style={{ pathLength: drawDesktop }} 
+          />
         </motion.g>
 
         {/* --- TABLET (Right) --- */}
         <motion.g 
           style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [40, 20]), y: 20, rotate: 4 }}
-          stroke="url(#brandGradFade)" 
+          stroke="url(#brandGradFaint)" 
           fill="none" 
-          strokeWidth="1.5" 
+          strokeWidth="1" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
           {/* Tablet Frame */}
-          <motion.rect x="320" y="50" width="220" height="300" rx="24" style={{ pathLength: drawTablet }} />
-          {/* Inner Content Box */}
-          <motion.rect x="340" y="200" width="180" height="120" rx="16" strokeWidth="1" style={{ pathLength: drawTablet }} />
-          {/* Circle Graphic */}
-          <motion.circle cx="370" cy="100" r="12" style={{ pathLength: drawTablet }} />
-          <motion.circle cx="370" cy="100" r="4" fill="url(#brandGradFade)" stroke="none" style={{ pathLength: drawTablet }} />
+          <motion.rect x="320" y="50" width="220" height="300" rx="16" style={{ pathLength: drawTablet }} />
+          {/* Inner Content Box (like a chart area) */}
+          <motion.rect x="340" y="180" width="180" height="150" rx="8" style={{ pathLength: drawTablet }} />
+          {/* Circle Graphic (faint) */}
+          <motion.circle cx="360" cy="90" r="12" style={{ pathLength: drawTablet }} />
           
-          {/* Tablet Content Graph Line (Thick & Bright) */}
-          <motion.path d="M340 290 C 370 280, 400 310, 440 240 C 480 170, 500 250, 520 220" stroke="url(#brandGrad)" strokeWidth="2.75" style={{ pathLength: drawTablet }} />
+          {/* Tablet Content Graph Line (Thick & Smooth) */}
+          <motion.path 
+            d="M340 300 C 390 300, 410 210, 450 210 C 490 210, 500 250, 520 220" 
+            stroke="url(#brandGrad)" 
+            strokeWidth="4.5" 
+            style={{ pathLength: drawTablet }} 
+          />
         </motion.g>
 
         {/* --- PHONE (Left) --- */}
         <motion.g 
           style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [-20, 0]), y: 50, rotate: -6 }}
-          stroke="url(#brandGradFade)" 
+          stroke="url(#brandGradFaint)" 
           fill="none" 
-          strokeWidth="1.5" 
+          strokeWidth="1" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
           {/* Phone Frame */}
-          <motion.rect x="40" y="30" width="160" height="340" rx="32" style={{ pathLength: drawPhone }} />
+          <motion.rect x="40" y="30" width="160" height="340" rx="24" style={{ pathLength: drawPhone }} />
           {/* Notch */}
-          <motion.line x1="90" y1="50" x2="150" y2="50" strokeWidth="3" style={{ pathLength: drawPhone }} />
+          <motion.line x1="95" y1="45" x2="145" y2="45" strokeWidth="2" style={{ pathLength: drawPhone }} />
           
-          {/* Highlight pill */}
-          <motion.rect x="60" y="70" width="120" height="50" rx="25" strokeWidth="1" style={{ pathLength: drawPhone }} />
-          <motion.circle cx="85" cy="95" r="6" fill="url(#brandGradFade)" stroke="none" style={{ pathLength: drawPhone, opacity: drawPhone }} />
+          {/* Feed Highlight pill (Faint) */}
+          <motion.rect x="60" y="70" width="120" height="40" rx="12" style={{ pathLength: drawPhone }} />
+          <motion.circle cx="80" cy="90" r="4" style={{ pathLength: drawPhone }} />
           
-          {/* Feed Lines (Data) */}
-          <motion.line x1="70" y1="150" x2="170" y2="150" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
-          <motion.circle cx="60" cy="150" r="4" style={{ pathLength: drawPhone }} />
+          {/* Phone Content Graph Line (Thick & Smooth) */}
+          <motion.path 
+            d="M40 240 C 90 240, 110 160, 150 160 C 180 160, 190 200, 200 180" 
+            stroke="url(#brandGrad)" 
+            strokeWidth="4.5" 
+            style={{ pathLength: drawPhone }} 
+          />
           
-          <motion.line x1="70" y1="200" x2="170" y2="200" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
-          <motion.circle cx="60" cy="200" r="4" style={{ pathLength: drawPhone }} />
-          
-          <motion.line x1="70" y1="250" x2="170" y2="250" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
-          <motion.circle cx="60" cy="250" r="4" style={{ pathLength: drawPhone }} />
-          
-          <motion.line x1="70" y1="300" x2="170" y2="300" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
-          <motion.circle cx="60" cy="300" r="4" style={{ pathLength: drawPhone }} />
+          {/* Extra schematic lines at the bottom */}
+          <motion.line x1="60" y1="300" x2="180" y2="300" style={{ pathLength: drawPhone }} />
+          <motion.line x1="60" y1="320" x2="140" y2="320" style={{ pathLength: drawPhone }} />
         </motion.g>
 
       </svg>
