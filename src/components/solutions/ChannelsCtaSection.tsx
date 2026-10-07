@@ -33,7 +33,7 @@ function RotatingOmniChart() {
       <div className="absolute top-1/2 left-[10%] -translate-y-1/2 w-[50%] h-[50%] bg-gradient-to-tr from-[#FBBF24] via-[#F97316] to-[#F43F5E] rounded-full blur-[140px] opacity-10 mix-blend-screen pointer-events-none" />
 
       {/* TICK MARKS (DIAL SCALE) */}
-      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 150, ease: "linear" }} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0 opacity-40">
+      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 150, ease: "linear" }} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0 opacity-40">
         <svg className="w-full h-full" viewBox="-500 -500 1000 1000">
           {Array.from({ length: 72 }).map((_, i) => (
             <line
@@ -52,7 +52,7 @@ function RotatingOmniChart() {
       </motion.div>
 
       {/* COMPLEX RECHARTS WHEEL */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0">
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0">
         
         {/* OUTER ROTATING RING */}
         <motion.div style={{ rotate: rotateOuter }} className="absolute inset-0 w-full h-full">

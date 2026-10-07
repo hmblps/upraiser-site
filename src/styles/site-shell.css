@@ -134,3 +134,11 @@
     border-color: color-mix(in srgb, var(--theme-border) 80%, transparent);
   }
 }
+
+/* Channels wheel intentionally bleeds into neighbouring sections.
+   .section-band uses content-visibility:auto (implicit paint containment),
+   which would crop the wheel at the section edge. */
+#routes.section-band {
+  content-visibility: visible;
+  contain: none;
+}
