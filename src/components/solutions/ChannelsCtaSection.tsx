@@ -142,8 +142,8 @@ function RotatingOmniChart() {
                 data={[{ value: 1 }]}
                 cx="50%"
                 cy="50%"
-                innerRadius="53%"
-                outerRadius="53.5%"
+                innerRadius="50%"
+                outerRadius="50.2%"
                 dataKey="value"
                 fill="none"
                 stroke="var(--theme-fg)"
@@ -163,8 +163,28 @@ function RotatingOmniChart() {
                 data={[{ value: 1 }]}
                 cx="50%"
                 cy="50%"
-                innerRadius="48%"
-                outerRadius="48.2%"
+                innerRadius="35%"
+                outerRadius="35.2%"
+                dataKey="value"
+                fill="none"
+                stroke="var(--theme-fg)"
+                strokeWidth={1}
+                isAnimationActive={false}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      
+        {/* ULTRA INNER SOLID RING */}
+        <div className="absolute inset-0 w-full h-full opacity-5">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={[{ value: 1 }]}
+                cx="50%"
+                cy="50%"
+                innerRadius="20%"
+                outerRadius="20.1%"
                 dataKey="value"
                 fill="none"
                 stroke="var(--theme-fg)"
@@ -175,8 +195,7 @@ function RotatingOmniChart() {
           </ResponsiveContainer>
         </div>
       </div>
-
-      {/* ELEGANT SCATTERED GHOST LABELS (BUBBLING) */}
+{/* ELEGANT SCATTERED GHOST LABELS (BUBBLING) */}
       <div className="absolute left-[15%] lg:left-[22%] top-0 w-[300px] h-full pointer-events-none z-10">
         <GhostBubbleMotion left="10%" originY={40} drift={-15} duration={6} delay={0} peakOpacity={0.4}>
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
