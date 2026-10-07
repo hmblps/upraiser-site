@@ -51,14 +51,35 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 
 
 
+
 const data = [
-  { name: "Programmatic", value: 100, color: "#F43F5E" }, // Rose
-  { name: "Connected TV", value: 100, color: "#F97316" }, // Orange
-  { name: "Social Ads", value: 100, color: "#FBBF24" },   // Yellow
-  { name: "OEM & On-Device", value: 100, color: "#34D399" }, // Emerald
-  { name: "Search Ads", value: 100, color: "#3B82F6" },   // Blue
-  { name: "In-App Networks", value: 100, color: "#8B5CF6" }  // Violet
+  { name: "Programmatic", value: 100, color: "#F43F5E", opacity: 1 },
+  { name: "Connected TV", value: 100, color: "#F97316", opacity: 1 },
+  { name: "Social Ads", value: 100, color: "#FBBF24", opacity: 1 },
+  { name: "OEM / On-Device", value: 100, color: "var(--theme-fg)", opacity: 0.3 },
+  { name: "Search Ads", value: 100, color: "var(--theme-fg)", opacity: 0.15 },
+  { name: "In-App Networks", value: 100, color: "var(--theme-fg)", opacity: 0.05 }
 ];
+
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
+  const radius = outerRadius * 1.15;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text 
+      x={x} 
+      y={y} 
+      fill="var(--theme-fg)" 
+      textAnchor={x > cx ? 'start' : 'end'} 
+      dominantBaseline="central"
+      className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] opacity-30"
+    >
+      {data[index].name}
+    </text>
+  );
+};
 
 function RotatingOmniChart() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,15 +88,14 @@ function RotatingOmniChart() {
     offset: ["start end", "end start"],
   });
 
-  // Rotate 360 degrees as the user scrolls past the section
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  // A gentle rock so labels don't go upside down
+  const rotate = useTransform(scrollYProgress, [0, 1], [-30, 30]);
   
-  // The center text stays unrotated
   return (
-    <div ref={containerRef} className="relative flex-1 w-full max-w-[600px] aspect-square mx-auto lg:mx-0 flex items-center justify-center pointer-events-none lg:pointer-events-auto">
+    <div ref={containerRef} className="relative flex-1 w-full max-w-[700px] aspect-square mx-auto lg:mx-0 flex items-center justify-center pointer-events-none lg:pointer-events-auto">
       
       {/* BACKGROUND GLOW */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[var(--brand-orange)] to-[var(--brand-red)] rounded-full blur-[100px] opacity-15 mix-blend-screen pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[100px] opacity-10 mix-blend-screen pointer-events-none" />
 
       {/* ROTATING RECHARTS PIE */}
       <motion.div style={{ rotate }} className="absolute inset-0 w-full h-full">
@@ -90,8 +110,8 @@ function RotatingOmniChart() {
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius="50%"
-              outerRadius="90%"
+              innerRadius="40%"
+              outerRadius="75%"
               paddingAngle={4}
               cornerRadius={16}
               dataKey="value"
@@ -99,13 +119,15 @@ function RotatingOmniChart() {
               strokeWidth={4}
               isAnimationActive={true}
               animationDuration={1500}
+              label={renderCustomizedLabel}
+              labelLine={false}
             >
               {data.map((entry, index) => (
                 <Cell 
                   key={`cell-${index}`} 
                   fill={entry.color} 
-                  opacity={0.85} 
-                  style={{ filter: "drop-shadow(0px 8px 16px rgba(0,0,0,0.2))" }}
+                  opacity={entry.opacity} 
+                  style={{ filter: "drop-shadow(0px 8px 16px rgba(0,0,0,0.15))" }}
                 />
               ))}
             </Pie>
@@ -125,15 +147,10 @@ function RotatingOmniChart() {
       </motion.div>
 
       {/* STATIC CENTER TEXT */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-        <div className="w-[45%] h-[45%] bg-bg rounded-full shadow-[inset_0_4px_20px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center border-4 border-bg-elevated">
-          <span className="font-bold text-lg md:text-xl text-fg tracking-tight leading-tight">ONE SUPPLY</span>
-          <span className="font-bold text-lg md:text-xl text-muted tracking-tight leading-tight">PATH</span>
-        </div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center pointer-events-none w-[35%] h-[35%] bg-bg rounded-full shadow-[inset_0_4px_20px_rgba(0,0,0,0.05)] border-4 border-bg-elevated">
+        <span className="font-bold text-[clamp(0.7rem,1.5vw,1.2rem)] text-fg tracking-tight leading-tight">ONE SUPPLY</span>
+        <span className="font-bold text-[clamp(0.7rem,1.5vw,1.2rem)] text-muted tracking-tight leading-tight">PATH</span>
       </div>
-      
-      {/* FLOATING LABELS (We map them statically so they don't spin wildly, or let them spin) */}
-      {/* To keep it clean, Recharts Tooltip handles hover, and the core graphic spins. */}
     </div>
   );
 }
