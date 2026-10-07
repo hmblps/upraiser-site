@@ -114,9 +114,16 @@ export function AboutUsSection() {
         </svg>
       </motion.div>
 
-      <div className="page-container relative z-10 py-12">
-        <div className="relative z-10 bg-bg/60 backdrop-blur-lg border border-border/30 rounded-3xl p-8 lg:p-16 shadow-2xl">
-          <div className="section-header">
+      {/* Seamless Blur Layer (No Card) */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none backdrop-blur-md"
+        style={{
+          maskImage: "linear-gradient(to bottom, black 40%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 40%, transparent 100%)"
+        }}
+      />
+      <div className="page-container relative z-10 py-16">
+        <div className="section-header">
           <p className="section-label">The Expedition Crew</p>
           <h2 className="section-title max-w-4xl text-balance">
             Elevating Your business to the absolute summit
@@ -165,7 +172,6 @@ export function AboutUsSection() {
               </p>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </section>
