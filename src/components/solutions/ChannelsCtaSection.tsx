@@ -36,16 +36,7 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 
 function InteractiveVisuals() {
   const { scrollYProgress } = useScroll();
-  const numRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    return scrollYProgress.on("change", (v) => {
-      if (numRef.current) {
-        const val = Math.min(98.0, Math.max(0, v * 2 * 98.0));
-        numRef.current.innerText = val.toFixed(1);
-      }
-    });
-  }, [scrollYProgress]);
+  
 
   const bars = [25, 45, 35, 60, 50, 75, 95];
 
@@ -65,23 +56,23 @@ function InteractiveVisuals() {
           scale: useTransform(scrollYProgress, [0, 1], [0.95, 1]),
           opacity: useTransform(scrollYProgress, [0, 0.5], [0, 1]),
         }}
-        className={`absolute w-[90%] aspect-[4/3] rounded-[2rem] p-[2px] ${outlineGradient} shadow-[0_0_40px_rgba(244,63,94,0.15)]`}
+        className={`absolute w-[90%] aspect-[4/3] rounded-[2rem] p-[1px] ${outlineGradient} shadow-[0_0_40px_rgba(244,63,94,0.15)]`}
       >
         <div className="w-full h-full bg-bg rounded-[2rem] flex flex-col p-6 overflow-hidden relative">
           
           <div className="w-full flex justify-between items-center mb-8">
             <div className="flex gap-2">
-              <div className={`w-3 h-3 rounded-full p-[2px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
-              <div className={`w-3 h-3 rounded-full p-[2px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
+              <div className={`w-3 h-3 rounded-full p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
+              <div className={`w-3 h-3 rounded-full p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
             </div>
           </div>
           
-          <div className={`flex-1 rounded-2xl p-[2px] ${outlineGradient} flex flex-col items-center justify-center p-8 relative overflow-hidden`}>
+          <div className={`flex-1 rounded-2xl p-[1px] ${outlineGradient} flex flex-col items-center justify-center p-8 relative overflow-hidden`}>
             <div className="w-full h-full bg-bg rounded-2xl flex flex-col items-center justify-center p-8 relative">
               {/* grid lines */}
               <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(251,191,36,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(244,63,94,0.4) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
               <div className="w-[40%] h-[1px] bg-gradient-to-r from-[#FBBF24]/60 to-[#F43F5E]/60 mb-6 relative z-10" />
-              <div className={`w-[60%] h-[70%] rounded-xl p-[2px] ${outlineGradient} relative z-10`}><div className="w-full h-full bg-bg/80 backdrop-blur-sm rounded-xl"/></div>
+              <div className={`w-[60%] h-[70%] rounded-xl p-[1px] ${outlineGradient} relative z-10`}><div className="w-full h-full bg-bg/80 backdrop-blur-sm rounded-xl"/></div>
             </div>
           </div>
         </div>
@@ -94,29 +85,61 @@ function InteractiveVisuals() {
           rotate: useTransform(scrollYProgress, [0, 1], [0, 6]),
           opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
         }}
-        className={`absolute right-0 w-[55%] aspect-[3/4] rounded-[2rem] p-[2px] ${outlineGradient} shadow-[0_0_40px_rgba(251,191,36,0.15)] z-10`}
+        className={`absolute right-0 w-[55%] aspect-[3/4] rounded-[2rem] p-[1px] ${outlineGradient} shadow-[0_0_40px_rgba(251,191,36,0.15)] z-10`}
       >
         <div className="w-full h-full bg-bg rounded-[2rem] flex flex-col p-6 sm:p-8 relative overflow-hidden">
           {/* subtle grid */}
           <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(251,191,36,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(244,63,94,0.4) 1px, transparent 1px)', backgroundSize: '15px 15px' }} />
 
-          <div className={`w-10 h-10 rounded-full p-[2px] ${outlineGradient} flex items-center justify-center mb-6 relative z-10`}>
+          <div className={`w-10 h-10 rounded-full p-[1px] ${outlineGradient} flex items-center justify-center mb-6 relative z-10`}>
              <div className="w-full h-full bg-bg rounded-full flex items-center justify-center">
                <div className="w-2.5 h-2.5 bg-gradient-to-br from-[#FBBF24] to-[#F43F5E] rounded-full shadow-[0_0_12px_#F43F5E]" />
              </div>
           </div>
           
-          <div className="text-[3rem] sm:text-[3.5rem] leading-none font-bold tracking-tight text-text mb-6 relative z-10">
-            <span ref={numRef}>98.0</span><span className="text-transparent bg-clip-text bg-gradient-to-br from-[#FBBF24] to-[#F43F5E] text-[2.5rem]">%</span>
-          </div>
           
-          <div className="w-16 h-[1px] bg-gradient-to-r from-[#FBBF24]/40 to-[#F43F5E]/40 mb-8 relative z-10" />
+          
+          
 
-          <div className={`flex-1 w-full rounded-[1.5rem] p-[2px] ${outlineGradient} relative z-10`}>
+          <div className={`flex-1 w-full rounded-[1.5rem] p-[1px] ${outlineGradient} relative z-10`}>
             <div className="w-full h-full bg-bg rounded-[1.5rem] p-4 sm:p-5 flex items-end gap-2 overflow-hidden">
-              {bars.map((h, i) => (
-                 <ChartBar key={i} h={h} i={i} scrollYProgress={scrollYProgress} />
-              ))}
+              <div className="w-full h-full relative">
+  <svg viewBox="0 0 100 60" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+    {/* Background fill gradient */}
+    <defs>
+      <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#F43F5E" stopOpacity="0.4" />
+        <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.0" />
+      </linearGradient>
+    </defs>
+    <motion.path
+      d="M0 50 C 20 45, 30 55, 50 30 C 70 5, 80 15, 100 10 L 100 60 L 0 60 Z"
+      fill="url(#chartGlow)"
+      style={{
+        opacity: useTransform(scrollYProgress, [0.3, 0.8], [0, 1])
+      }}
+    />
+    {/* Line */}
+    <motion.path
+      d="M0 50 C 20 45, 30 55, 50 30 C 70 5, 80 15, 100 10"
+      fill="none"
+      stroke="url(#chartLineGrad)"
+      strokeWidth="2.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{
+        pathLength: useTransform(scrollYProgress, [0.1, 0.9], [0, 1]),
+        opacity: useTransform(scrollYProgress, [0.1, 0.3], [0, 1])
+      }}
+    />
+    <defs>
+      <linearGradient id="chartLineGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#FBBF24" />
+        <stop offset="100%" stopColor="#F43F5E" />
+      </linearGradient>
+    </defs>
+  </svg>
+</div>
             </div>
           </div>
         </div>
@@ -130,7 +153,7 @@ function InteractiveVisuals() {
           rotate: useTransform(scrollYProgress, [0, 1], [0, -8]),
           opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
         }}
-        className={`absolute left-0 bottom-4 w-[45%] aspect-[9/19] rounded-[2.5rem] p-[2px] ${outlineGradient} shadow-[0_0_40px_rgba(251,191,36,0.15)] z-20`}
+        className={`absolute left-0 bottom-4 w-[45%] aspect-[9/19] rounded-[2.5rem] p-[1px] ${outlineGradient} shadow-[0_0_40px_rgba(251,191,36,0.15)] z-20`}
       >
         <div className="w-full h-full bg-bg rounded-[2.5rem] flex flex-col p-4 sm:p-5 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(251,191,36,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(244,63,94,0.4) 1px, transparent 1px)', backgroundSize: '15px 15px' }} />
@@ -139,19 +162,19 @@ function InteractiveVisuals() {
           <div className="w-14 h-[2px] bg-gradient-to-r from-[#FBBF24]/40 to-[#F43F5E]/40 mx-auto rounded-full mb-6 shrink-0 relative z-10" />
           
           {/* Top Highlight Pill */}
-          <div className={`w-full rounded-[1.5rem] p-[2px] ${outlineGradient} mb-6 relative z-10`}>
+          <div className={`w-full rounded-[1.5rem] p-[1px] ${outlineGradient} mb-6 relative z-10`}>
             <div className="w-full bg-bg rounded-[1.5rem] p-4 flex flex-col gap-4">
               <div className="w-4 h-4 bg-gradient-to-br from-[#FBBF24] to-[#F43F5E] rounded-full shadow-[0_0_10px_#F43F5E]" />
-              <div className={`w-full h-8 rounded-xl p-[2px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-xl"/></div>
+              <div className={`w-full h-8 rounded-xl p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-xl"/></div>
             </div>
           </div>
 
           {/* Feed Items */}
           <div className="flex-1 flex flex-col gap-4 relative z-10">
             {[1, 2, 3, 4].map((_, i) => (
-              <div key={i} className={`w-full rounded-[1.25rem] p-[2px] ${outlineGradient}`}>
+              <div key={i} className={`w-full rounded-[1.25rem] p-[1px] ${outlineGradient}`}>
                 <div className="w-full h-full bg-bg rounded-[1.25rem] p-3.5 flex items-center gap-4">
-                  <div className="w-3.5 h-3.5 rounded-full p-[2px] bg-gradient-to-r from-[#FBBF24]/60 to-[#F43F5E]/60 shrink-0"><div className="w-full h-full bg-bg rounded-full"/></div>
+                  <div className="w-3.5 h-3.5 rounded-full p-[1px] bg-gradient-to-r from-[#FBBF24]/60 to-[#F43F5E]/60 shrink-0"><div className="w-full h-full bg-bg rounded-full"/></div>
                   <div className="flex-1 h-[2px] bg-gradient-to-r from-[#FBBF24]/30 to-[#F43F5E]/30 rounded-full" />
                 </div>
               </div>
