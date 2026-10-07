@@ -1,3 +1,12 @@
+import {
+  ComposedChart,
+  Line,
+  Bar,
+  XAxis,
+  ResponsiveContainer,
+  CartesianGrid,
+  Cell
+} from "recharts";
 import { useRef, useEffect } from "react";
 import { warmStage } from "../../lib/scrollPreload";
 
@@ -34,79 +43,81 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 }
 
 
-function InteractiveVisuals() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 0.8", "center center"]
-  });
+const data = [
+  { name: "Phone", value: 200, device: "phone" },
+  { name: "Tablet", value: 500, device: "tablet" },
+  { name: "Desktop", value: 800, device: "desktop" }
+];
 
-  // Draw progress for the bright gradient overlay
-  const drawDesktop = useTransform(scrollYProgress, [0.0, 0.6], [0, 1]);
-  const drawTablet  = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
-  const drawPhone   = useTransform(scrollYProgress, [0.4, 1.0], [0, 1]);
-
+const CustomDeviceBar = (props: any) => {
+  const { x, y, width, height, payload } = props;
+  const isPhone = payload.device === "phone";
+  const isTablet = payload.device === "tablet";
+  const isDesktop = payload.device === "desktop";
+  
+  // Create a device outline based on the bar's bounding box
+  // We'll scale the device to fit inside the bar width/height
+  const cx = x + width / 2;
+  const bottomY = y + height;
+  
   return (
-    <div ref={containerRef} className="relative flex-1 w-full max-w-[800px] aspect-[4/3] mx-auto lg:mx-0 flex items-center justify-center pointer-events-none">
-      <svg viewBox="0 0 800 600" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#FBBF24" />
-            <stop offset="50%" stopColor="#F97316" />
-            <stop offset="100%" stopColor="#F43F5E" />
-          </linearGradient>
-          
-          <linearGradient id="brandGradDark" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#F43F5E" stopOpacity="0.15" />
-          </linearGradient>
-        </defs>
-
-        <g strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round">
-          
-          {/* --- DESKTOP (Back, Largest) --- */}
-          <g transform="translate(100, 60)">
-            {/* Base Outline (Always fully drawn, faint) */}
-            <rect x="0" y="0" width="600" height="400" rx="16" stroke="url(#brandGradDark)" />
-            <line x1="0" y1="50" x2="600" y2="50" stroke="url(#brandGradDark)" />
-            
-            {/* Animated Highlight (Draws over the base) */}
-            <motion.rect x="0" y="0" width="600" height="400" rx="16" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
-            <motion.line x1="0" y1="50" x2="600" y2="50" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
-            
-            {/* Simple UI hints */}
-            <circle cx="30" cy="25" r="4" stroke="url(#brandGradDark)" />
-            <circle cx="50" cy="25" r="4" stroke="url(#brandGradDark)" />
-            <motion.circle cx="30" cy="25" r="4" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
-            <motion.circle cx="50" cy="25" r="4" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
-          </g>
-
-          {/* --- TABLET (Right, Medium) --- */}
-          <g transform="translate(520, 180)">
-            {/* Base */}
-            <rect x="0" y="0" width="240" height="340" rx="20" stroke="url(#brandGradDark)" />
-            <rect x="20" y="20" width="200" height="300" rx="8" stroke="url(#brandGradDark)" strokeWidth="1.5" />
-            
-            {/* Animated */}
-            <motion.rect x="0" y="0" width="240" height="340" rx="20" stroke="url(#brandGrad)" style={{ pathLength: drawTablet }} />
-            <motion.rect x="20" y="20" width="200" height="300" rx="8" stroke="url(#brandGrad)" strokeWidth="1.5" style={{ pathLength: drawTablet }} />
-          </g>
-
-          {/* --- PHONE (Left, Tall) --- */}
-          <g transform="translate(30, 220)">
-            {/* Base */}
-            <rect x="0" y="0" width="180" height="360" rx="28" stroke="url(#brandGradDark)" />
-            <line x1="60" y1="20" x2="120" y2="20" stroke="url(#brandGradDark)" strokeWidth="4" />
-            <rect x="15" y="45" width="150" height="300" rx="12" stroke="url(#brandGradDark)" strokeWidth="1.5" />
-            
-            {/* Animated */}
-            <motion.rect x="0" y="0" width="180" height="360" rx="28" stroke="url(#brandGrad)" style={{ pathLength: drawPhone }} />
-            <motion.line x1="60" y1="20" x2="120" y2="20" stroke="url(#brandGrad)" strokeWidth="4" style={{ pathLength: drawPhone }} />
-            <motion.rect x="15" y="45" width="150" height="300" rx="12" stroke="url(#brandGrad)" strokeWidth="1.5" style={{ pathLength: drawPhone }} />
-          </g>
-          
+    <g stroke="var(--theme-border)" strokeWidth="2" fill="none" opacity="0.4">
+      {isPhone && (
+        <g transform={`translate(${cx - 40}, ${bottomY - 160})`}>
+          <rect x="0" y="0" width="80" height="160" rx="12" />
+          <line x1="30" y1="10" x2="50" y2="10" />
         </g>
-      </svg>
+      )}
+      {isTablet && (
+        <g transform={`translate(${cx - 70}, ${bottomY - 200})`}>
+          <rect x="0" y="0" width="140" height="200" rx="16" />
+          <circle cx="70" cy="15" r="4" />
+        </g>
+      )}
+      {isDesktop && (
+        <g transform={`translate(${cx - 120}, ${bottomY - 240})`}>
+          <rect x="0" y="0" width="240" height="160" rx="12" />
+          <line x1="0" y1="20" x2="240" y2="20" />
+          <rect x="90" y="160" width="60" height="30" />
+          <line x1="60" y1="190" x2="180" y2="190" strokeWidth="4" />
+        </g>
+      )}
+    </g>
+  );
+};
+
+function InteractiveVisuals() {
+  return (
+    <div className="relative flex-1 w-full max-w-[800px] h-[400px] mx-auto lg:mx-0 pointer-events-none mode-line-chart">
+      <ResponsiveContainer width="100%" height="100%">
+        <ComposedChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+          <defs>
+            <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#FBBF24" />
+              <stop offset="50%" stopColor="#F97316" />
+              <stop offset="100%" stopColor="#F43F5E" />
+            </linearGradient>
+          </defs>
+          
+          <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.55} vertical={false} strokeDasharray="3 6" />
+          
+          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "var(--theme-muted)", fontSize: 11, fontWeight: 500 }} dy={10} />
+          
+          {/* The Devices drawn as Bars */}
+          <Bar dataKey="value" shape={<CustomDeviceBar />} isAnimationActive={false} />
+          
+          {/* The Data Line drawn on top */}
+          <Line 
+            type="monotone" 
+            dataKey="value" 
+            stroke="url(#chartGrad)" 
+            strokeWidth={4.5} 
+            dot={{ r: 6, fill: "var(--theme-bg)", stroke: "#F97316", strokeWidth: 2 }} 
+            activeDot={false}
+            isAnimationActive={false}
+          />
+        </ComposedChart>
+      </ResponsiveContainer>
     </div>
   );
 }
