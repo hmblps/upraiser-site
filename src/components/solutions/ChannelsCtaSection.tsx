@@ -61,25 +61,7 @@ const data = [
   { name: "In-App Networks", value: 100, color: "var(--theme-fg)", opacity: 0.05 }
 ];
 
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
-  const radius = outerRadius * 1.15;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
-    <text 
-      x={x} 
-      y={y} 
-      fill="var(--theme-fg)" 
-      textAnchor={x > cx ? 'start' : 'end'} 
-      dominantBaseline="central"
-      className="text-lg md:text-3xl font-bold uppercase tracking-[0.3em] opacity-40"
-    >
-      {data[index].name}
-    </text>
-  );
-};
 
 function RotatingOmniChart() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -88,51 +70,77 @@ function RotatingOmniChart() {
     offset: ["start end", "end start"],
   });
 
-  // A wide rotation so multiple labels sweep past
-  const rotate = useTransform(scrollYProgress, [0, 1], [-45, 135]);
+  // A wide rotation so multiple slices sweep past
+  const rotate = useTransform(scrollYProgress, [0, 1], [-60, 180]);
   
+  // Parallax for the floating ghost names
+  const labelsY = useTransform(scrollYProgress, [0, 1], [300, -300]);
+
   return (
-    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center pointer-events-none">
+    <div ref={containerRef} className="relative w-full h-full flex items-center pointer-events-none">
       
       {/* BACKGROUND GLOW */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[120px] opacity-15 mix-blend-screen pointer-events-none" />
+      <div className="absolute top-1/2 left-[10%] -translate-y-1/2 w-[50%] h-[50%] bg-gradient-to-tr from-[#FBBF24] via-[#F97316] to-[#F43F5E] rounded-full blur-[140px] opacity-10 mix-blend-screen pointer-events-none" />
 
-      {/* ROTATING RECHARTS PIE */}
-      <motion.div style={{ rotate }} className="absolute inset-0 w-full h-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <defs>
-              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="8" stdDeviation="12" floodOpacity="0.2" />
-              </filter>
-            </defs>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius="40%"
-              outerRadius="65%"
-              paddingAngle={2}
-              cornerRadius={24}
-              dataKey="value"
-              stroke="var(--theme-bg)"
-              strokeWidth={8}
-              isAnimationActive={false}
-              label={renderCustomizedLabel}
-              labelLine={false}
+      {/* THIN, LIGHTWEIGHT RECHARTS PIE (Further Left) */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0">
+        <motion.div style={{ rotate }} className="absolute inset-0 w-full h-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <defs>
+                <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="8" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius="68%"
+                outerRadius="70%"
+                paddingAngle={8}
+                cornerRadius={10}
+                dataKey="value"
+                stroke="none"
+                isAnimationActive={false}
+                labelLine={false}
+              >
+                {data.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={entry.color} 
+                    opacity={entry.opacity} 
+                    style={{ filter: "url(#neonGlow)" }}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </motion.div>
+      </div>
+
+      {/* FLOATING GHOST LABELS (Middle/Left edge) */}
+      <div className="absolute left-[20%] lg:left-[25%] top-1/2 -translate-y-1/2 h-full overflow-hidden pointer-events-none z-0">
+        <motion.div 
+          style={{ y: labelsY }} 
+          className="flex flex-col gap-12 pt-[50vh]"
+        >
+          {data.map((item, i) => (
+            <div 
+              key={i} 
+              className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-[0.2em] whitespace-nowrap opacity-10 text-transparent"
+              style={{ WebkitTextStroke: "2px var(--theme-fg)" }}
             >
-              {data.map((entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={entry.color} 
-                  opacity={entry.opacity} 
-                  style={{ filter: "drop-shadow(0px 12px 24px rgba(0,0,0,0.15))" }}
-                />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-      </motion.div>
+              {item.name}
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
     </div>
   );
 }
@@ -140,16 +148,16 @@ function RotatingOmniChart() {
 export function ChannelsCtaSection() {
   return (
     <section id="routes" className="section-band border-t border-border/30 relative overflow-hidden bg-bg">
-      <div className="relative flex flex-col lg:flex-row items-center w-full min-h-[60vh] lg:min-h-[90vh]">
+      <div className="relative flex flex-col lg:flex-row items-center w-full min-h-[70vh] lg:min-h-[100vh]">
         
-        {/* HALF WHEEL (LEFT) */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] pointer-events-none z-0">
+        {/* WHEEL & GHOST LABELS COMPONENT */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <RotatingOmniChart />
         </div>
 
         {/* TEXT (RIGHT) */}
-        <div className="page-container relative z-10 w-full flex justify-end items-center h-full py-24 lg:py-32">
-          <div className="w-full lg:w-[50%] text-left pl-0 lg:pl-10">
+        <div className="page-container relative z-10 w-full flex justify-end items-center h-full py-32 lg:py-48">
+          <div className="w-full lg:w-[45%] text-left pl-0 lg:pl-10">
             <div className="section-header">
               <p className="section-label">The Channels</p>
               <h2 className="section-title">
