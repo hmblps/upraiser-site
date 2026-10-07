@@ -74,7 +74,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
       fill="var(--theme-fg)" 
       textAnchor={x > cx ? 'start' : 'end'} 
       dominantBaseline="central"
-      className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] opacity-30"
+      className="text-lg md:text-3xl font-bold uppercase tracking-[0.3em] opacity-40"
     >
       {data[index].name}
     </text>
@@ -88,14 +88,14 @@ function RotatingOmniChart() {
     offset: ["start end", "end start"],
   });
 
-  // A gentle rock so labels don't go upside down
-  const rotate = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+  // A wide rotation so multiple labels sweep past
+  const rotate = useTransform(scrollYProgress, [0, 1], [-45, 135]);
   
   return (
-    <div ref={containerRef} className="relative flex-1 w-full max-w-[700px] aspect-square mx-auto lg:mx-0 flex items-center justify-center pointer-events-none lg:pointer-events-auto">
+    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center pointer-events-none">
       
       {/* BACKGROUND GLOW */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[100px] opacity-10 mix-blend-screen pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[120px] opacity-15 mix-blend-screen pointer-events-none" />
 
       {/* ROTATING RECHARTS PIE */}
       <motion.div style={{ rotate }} className="absolute inset-0 w-full h-full">
@@ -103,7 +103,7 @@ function RotatingOmniChart() {
           <PieChart>
             <defs>
               <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.3" />
+                <feDropShadow dx="0" dy="8" stdDeviation="12" floodOpacity="0.2" />
               </filter>
             </defs>
             <Pie
@@ -111,14 +111,13 @@ function RotatingOmniChart() {
               cx="50%"
               cy="50%"
               innerRadius="40%"
-              outerRadius="75%"
-              paddingAngle={4}
-              cornerRadius={16}
+              outerRadius="65%"
+              paddingAngle={2}
+              cornerRadius={24}
               dataKey="value"
               stroke="var(--theme-bg)"
-              strokeWidth={4}
-              isAnimationActive={true}
-              animationDuration={1500}
+              strokeWidth={8}
+              isAnimationActive={false}
               label={renderCustomizedLabel}
               labelLine={false}
             >
@@ -127,77 +126,55 @@ function RotatingOmniChart() {
                   key={`cell-${index}`} 
                   fill={entry.color} 
                   opacity={entry.opacity} 
-                  style={{ filter: "drop-shadow(0px 8px 16px rgba(0,0,0,0.15))" }}
+                  style={{ filter: "drop-shadow(0px 12px 24px rgba(0,0,0,0.15))" }}
                 />
               ))}
             </Pie>
-            
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'var(--theme-bg-elevated)', 
-                borderColor: 'var(--theme-border)',
-                borderRadius: '16px',
-                padding: '12px 20px',
-                fontWeight: 600
-              }} 
-              itemStyle={{ color: 'var(--theme-fg)' }}
-            />
           </PieChart>
         </ResponsiveContainer>
       </motion.div>
-
-      {/* STATIC CENTER TEXT */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center pointer-events-none w-[35%] h-[35%] bg-bg rounded-full shadow-[inset_0_4px_20px_rgba(0,0,0,0.05)] border-4 border-bg-elevated">
-        <span className="font-bold text-[clamp(0.7rem,1.5vw,1.2rem)] text-fg tracking-tight leading-tight">ONE SUPPLY</span>
-        <span className="font-bold text-[clamp(0.7rem,1.5vw,1.2rem)] text-muted tracking-tight leading-tight">PATH</span>
-      </div>
     </div>
   );
 }
 
-
 export function ChannelsCtaSection() {
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    warmStage("routes");
-    warmStage("routes-tablet");
-    warmStage("routes-tv");
-  }, []);
-
   return (
-    <section id="routes" className="section-band border-t border-border/30 relative overflow-hidden">
-      <div className="page-container relative z-10 flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-
-        {/* Left: Typography and CTA */}
-        <div className="flex-1 text-left">
-          <div className="section-header">
-            <p className="section-label">The Channels</p>
-            <h2 className="section-title">
-              Every Format.<br />
-              <span className="text-muted">One Supply Path.</span>
-            </h2>
-            <p className="section-description">
-              From Programmatic and Social to Connected TV and OEM. Explore our interactive channel visualizations and performance proofs.
-            </p>
-          </div>
-
-          <motion.div
-            className="mt-8 inline-block"
-            whileHover={reduced ? undefined : { scale: 1.02 }}
-            whileTap={reduced ? undefined : { scale: 0.97 }}
-            transition={{ type: "spring", bounce: 0.2, duration: 0.35 }}
-          >
-            <Link to="/channels" className="btn-caps btn-caps--primary inline-flex items-center gap-3 rounded-full px-8 py-3">
-              Explore All Channels
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </Link>
-          </motion.div>
+    <section id="routes" className="section-band border-t border-border/30 relative overflow-hidden bg-bg">
+      <div className="relative flex flex-col lg:flex-row items-center w-full min-h-[60vh] lg:min-h-[90vh]">
+        
+        {/* HALF WHEEL (LEFT) */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[40%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] pointer-events-none z-0">
+          <RotatingOmniChart />
         </div>
 
-        <RotatingOmniChart />
+        {/* TEXT (RIGHT) */}
+        <div className="page-container relative z-10 w-full flex justify-end items-center h-full py-24 lg:py-32">
+          <div className="w-full lg:w-[50%] text-left pl-0 lg:pl-10">
+            <div className="section-header">
+              <p className="section-label">The Channels</p>
+              <h2 className="section-title">
+                <span className="text-muted">Every Format.</span><br/>
+                One Supply Path.
+              </h2>
+              <p className="section-description text-lg">
+                From Programmatic and Social to Connected TV and OEM. Explore our interactive channel visualizations and see how we integrate fragmented traffic sources into one unified ecosystem with absolute attribution proof.
+              </p>
+            </div>
+            
+            <div className="mt-10 inline-block">
+              <Link 
+                to="/channels" 
+                className="btn-caps btn-caps--primary inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-bold tracking-widest"
+                onMouseEnter={warmStage}
+              >
+                <span>Explore All Channels</span>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
 
       </div>
     </section>
