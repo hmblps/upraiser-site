@@ -72,8 +72,6 @@ function RotatingOmniChart() {
 
   // Wheel rotation
   const rotateOuter = useTransform(scrollYProgress, [0, 1], [-60, 180]);
-  const rotateInner = useTransform(scrollYProgress, [0, 1], [90, -90]);
-
   // Parallax and fade for floating data nodes (behaving like ghost numbers everywhere else)
   const y1 = useTransform(scrollYProgress, [0, 1], [150, -50]);
   const y2 = useTransform(scrollYProgress, [0, 1], [200, 0]);
@@ -92,7 +90,7 @@ function RotatingOmniChart() {
       <div className="absolute top-1/2 left-[10%] -translate-y-1/2 w-[50%] h-[50%] bg-gradient-to-tr from-[#FBBF24] via-[#F97316] to-[#F43F5E] rounded-full blur-[140px] opacity-10 mix-blend-screen pointer-events-none" />
 
       {/* TICK MARKS (DIAL SCALE) */}
-      <motion.div style={{ rotate: rotateInner }} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0 opacity-40">
+      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 150, ease: "linear" }} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0 opacity-40">
         <svg className="w-full h-full" viewBox="-500 -500 1000 1000">
           {Array.from({ length: 72 }).map((_, i) => (
             <line
@@ -130,7 +128,7 @@ function RotatingOmniChart() {
                 data={data}
                 cx="50%"
                 cy="50%"
-                innerRadius="68%"
+                innerRadius="60%"
                 outerRadius="70%"
                 paddingAngle={8}
                 cornerRadius={10}
@@ -147,15 +145,15 @@ function RotatingOmniChart() {
         </motion.div>
 
         {/* INNER DASHED RING */}
-        <motion.div style={{ rotate: rotateInner }} className="absolute inset-0 w-full h-full opacity-30">
+        <motion.div animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 60, ease: "linear" }} className="absolute inset-0 w-full h-full opacity-30">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={[{ value: 1 }]}
                 cx="50%"
                 cy="50%"
-                innerRadius="60%"
-                outerRadius="60.5%"
+                innerRadius="53%"
+                outerRadius="53.5%"
                 dataKey="value"
                 fill="none"
                 stroke="var(--theme-fg)"
@@ -175,8 +173,8 @@ function RotatingOmniChart() {
                 data={[{ value: 1 }]}
                 cx="50%"
                 cy="50%"
-                innerRadius="53%"
-                outerRadius="53.2%"
+                innerRadius="48%"
+                outerRadius="48.2%"
                 dataKey="value"
                 fill="none"
                 stroke="var(--theme-fg)"
@@ -189,7 +187,7 @@ function RotatingOmniChart() {
       </div>
 
       {/* ELEGANT SCATTERED GHOST LABELS */}
-      <div className="absolute left-[30%] lg:left-[35%] top-0 w-[300px] h-full pointer-events-none z-10">
+      <div className="absolute left-[15%] lg:left-[22%] top-0 w-[300px] h-full pointer-events-none z-10">
         
         <motion.div style={{ y: y1, opacity: o1 }} className="absolute top-[20%] left-[10%]">
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
