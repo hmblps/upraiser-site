@@ -41,114 +41,89 @@ function InteractiveVisuals() {
     offset: ["start 0.9", "center center"]
   });
 
-  // Animation values for drawing the paths
-  const drawDesktop = useTransform(scrollYProgress, [0.0, 0.6], [0, 1]);
-  const drawTablet  = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
-  const drawPhone   = useTransform(scrollYProgress, [0.4, 1.0], [0, 1]);
+  // A single, continuous draw animation for the main graph line
+  const drawLine = useTransform(scrollYProgress, [0.1, 0.9], [0, 1]);
   
-  // Opacity fades
-  const opacityFade = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  // Opacity fade for the grid and axes
+  const opacityFade = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-[600px] aspect-[4/3] mx-auto lg:mx-0 w-full flex items-center justify-center pointer-events-none">
-      
-      <svg viewBox="0 0 600 450" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
+    <div ref={containerRef} className="relative flex-1 max-w-[700px] aspect-[16/9] mx-auto lg:mx-0 w-full flex items-center justify-center pointer-events-none">
+      <svg viewBox="0 0 700 400" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
         <defs>
-          {/* Thick, vibrant gradient for the main data lines */}
-          <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#FBBF24" />
-            <stop offset="50%" stopColor="#F97316" />
             <stop offset="100%" stopColor="#F43F5E" />
           </linearGradient>
           
-          {/* Very faint, thin gradient for the device outlines (like notebook grids/axes) */}
-          <linearGradient id="brandGradFaint" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#F43F5E" stopOpacity="0.25" />
+          <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#F43F5E" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.0" />
           </linearGradient>
         </defs>
 
-        {/* --- DESKTOP (Back) --- */}
-        <motion.g 
-          style={{ opacity: opacityFade, y: useTransform(scrollYProgress, [0, 1], [30, 0]) }}
-          stroke="url(#brandGradFaint)" 
-          fill="none" 
-          strokeWidth="1" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          {/* Main Desktop Frame */}
-          <motion.rect x="50" y="80" width="400" height="260" rx="12" style={{ pathLength: drawDesktop }} />
-          {/* Header Line */}
-          <motion.line x1="50" y1="110" x2="450" y2="110" style={{ pathLength: drawDesktop }} />
-          {/* Window controls (Tiny tick-like dots) */}
-          <motion.circle cx="70" cy="95" r="2" style={{ pathLength: drawDesktop }} />
-          <motion.circle cx="85" cy="95" r="2" style={{ pathLength: drawDesktop }} />
-          <motion.circle cx="100" cy="95" r="2" style={{ pathLength: drawDesktop }} />
-          
-          {/* Desktop Content Graph Line (Thick & Smooth) */}
-          <motion.path 
-            d="M50 280 C 150 280, 250 320, 300 200 C 350 80, 380 120, 450 160" 
-            strokeWidth="4.5" 
-            stroke="url(#brandGrad)" 
-            style={{ pathLength: drawDesktop }} 
-          />
+        <motion.g style={{ opacity: opacityFade }}>
+          {/* NOTEBOOK GRID (Тетрадка) */}
+          <g stroke="currentColor" strokeOpacity="0.06" strokeWidth="1">
+            {/* Horizontal Grid Lines */}
+            <line x1="0" y1="50" x2="700" y2="50" />
+            <line x1="0" y1="125" x2="700" y2="125" />
+            <line x1="0" y1="200" x2="700" y2="200" />
+            <line x1="0" y1="275" x2="700" y2="275" />
+            <line x1="0" y1="350" x2="700" y2="350" />
+            
+            {/* Vertical Grid Lines */}
+            <line x1="100" y1="0" x2="100" y2="400" />
+            <line x1="225" y1="0" x2="225" y2="400" />
+            <line x1="350" y1="0" x2="350" y2="400" />
+            <line x1="475" y1="0" x2="475" y2="400" />
+            <line x1="600" y1="0" x2="600" y2="400" />
+          </g>
+
+          {/* DEVICES AS SCHEMATIC AXES (Very faint, clean) */}
+          <g stroke="currentColor" strokeOpacity="0.15" fill="none" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+            
+            {/* Phone Schematic (Left) */}
+            <rect x="100" y="125" width="90" height="190" rx="16" />
+            <line x1="130" y1="135" x2="160" y2="135" strokeWidth="2" />
+            
+            {/* Tablet Schematic (Center) */}
+            <rect x="225" y="75" width="160" height="240" rx="12" />
+            <circle cx="305" cy="95" r="4" />
+            
+            {/* Desktop Schematic (Right) */}
+            <rect x="420" y="50" width="220" height="140" rx="8" />
+            <line x1="420" y1="70" x2="640" y2="70" />
+            <circle cx="435" cy="60" r="2" />
+            <circle cx="445" cy="60" r="2" />
+          </g>
         </motion.g>
 
-        {/* --- TABLET (Right) --- */}
-        <motion.g 
-          style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [40, 20]), y: 20, rotate: 4 }}
-          stroke="url(#brandGradFaint)" 
-          fill="none" 
-          strokeWidth="1" 
+        {/* ONE CONTINUOUS, MASSIVE GRAPH LINE */}
+        <motion.path 
+          d="M 50 320 C 150 320, 180 250, 250 250 C 320 250, 360 120, 450 120 C 500 120, 550 60, 650 40" 
+          stroke="url(#chartGrad)" 
+          strokeWidth="5" 
+          fill="none"
           strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          {/* Tablet Frame */}
-          <motion.rect x="320" y="50" width="220" height="300" rx="16" style={{ pathLength: drawTablet }} />
-          {/* Inner Content Box (like a chart area) */}
-          <motion.rect x="340" y="180" width="180" height="150" rx="8" style={{ pathLength: drawTablet }} />
-          {/* Circle Graphic (faint) */}
-          <motion.circle cx="360" cy="90" r="12" style={{ pathLength: drawTablet }} />
-          
-          {/* Tablet Content Graph Line (Thick & Smooth) */}
-          <motion.path 
-            d="M340 300 C 390 300, 410 210, 450 210 C 490 210, 500 250, 520 220" 
-            stroke="url(#brandGrad)" 
-            strokeWidth="4.5" 
-            style={{ pathLength: drawTablet }} 
-          />
-        </motion.g>
+          style={{ pathLength: drawLine }} 
+        />
+        
+        {/* Glow fill under the line */}
+        <motion.path 
+          d="M 50 320 C 150 320, 180 250, 250 250 C 320 250, 360 120, 450 120 C 500 120, 550 60, 650 40 L 650 400 L 50 400 Z" 
+          fill="url(#chartGlow)" 
+          style={{ opacity: useTransform(scrollYProgress, [0.5, 0.9], [0, 1]) }} 
+        />
 
-        {/* --- PHONE (Left) --- */}
-        <motion.g 
-          style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [-20, 0]), y: 50, rotate: -6 }}
-          stroke="url(#brandGradFaint)" 
-          fill="none" 
-          strokeWidth="1" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          {/* Phone Frame */}
-          <motion.rect x="40" y="30" width="160" height="340" rx="24" style={{ pathLength: drawPhone }} />
-          {/* Notch */}
-          <motion.line x1="95" y1="45" x2="145" y2="45" strokeWidth="2" style={{ pathLength: drawPhone }} />
-          
-          {/* Feed Highlight pill (Faint) */}
-          <motion.rect x="60" y="70" width="120" height="40" rx="12" style={{ pathLength: drawPhone }} />
-          <motion.circle cx="80" cy="90" r="4" style={{ pathLength: drawPhone }} />
-          
-          {/* Phone Content Graph Line (Thick & Smooth) */}
-          <motion.path 
-            d="M40 240 C 90 240, 110 160, 150 160 C 180 160, 190 200, 200 180" 
-            stroke="url(#brandGrad)" 
-            strokeWidth="4.5" 
-            style={{ pathLength: drawPhone }} 
-          />
-          
-          {/* Extra schematic lines at the bottom */}
-          <motion.line x1="60" y1="300" x2="180" y2="300" style={{ pathLength: drawPhone }} />
-          <motion.line x1="60" y1="320" x2="140" y2="320" style={{ pathLength: drawPhone }} />
+        {/* Data Points / Markers */}
+        <motion.g style={{ opacity: useTransform(scrollYProgress, [0.8, 1], [0, 1]) }} fill="url(#chartGrad)">
+          {/* Point on Phone */}
+          <circle cx="145" cy="290" r="5" stroke="currentColor" strokeWidth="2" />
+          {/* Point on Tablet */}
+          <circle cx="305" cy="210" r="5" stroke="currentColor" strokeWidth="2" />
+          {/* Point on Desktop */}
+          <circle cx="530" cy="88" r="5" stroke="currentColor" strokeWidth="2" />
         </motion.g>
 
       </svg>
