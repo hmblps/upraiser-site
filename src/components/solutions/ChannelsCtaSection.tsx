@@ -149,7 +149,7 @@ function RotatingOmniChart() {
         </div>
       </div>
 {/* ELEGANT SCATTERED GHOST LABELS (BUBBLING) */}
-      <div className="absolute left-[15%] lg:left-[22%] top-0 w-[300px] h-full pointer-events-none z-10">
+      <div className="absolute left-[15%] lg:left-[22%] top-0 lg:top-[90px] w-[300px] h-full pointer-events-none z-10">
         <GhostBubbleMotion left="10%" originY={40} drift={-15} duration={6} delay={0} peakOpacity={0.4}>
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Programmatic</div>
