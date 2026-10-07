@@ -144,8 +144,8 @@
 }
 
 @media (min-width: 1024px) {
-  /* wheel sits 3rem lower; keep the same clearance above the next section */
+  /* wheel sits 90px lower; keep the same clearance above the next section */
   #routes.section-band {
-    padding-bottom: calc(var(--section-y) + 3rem);
+    padding-bottom: calc(var(--section-y) + 90px);
   }
 }
