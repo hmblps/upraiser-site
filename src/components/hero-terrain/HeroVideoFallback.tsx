@@ -400,8 +400,30 @@ export function HeroVideoFallback({
           staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
+      {/* Магия цвета: перекрасит белые контуры (из инвертированного видео или после дизайнера) в цвета графиков */}
+      <div 
+        className="absolute inset-0 z-20 pointer-events-none mix-blend-multiply opacity-90"
+        style={{
+          background: 'linear-gradient(to bottom right, var(--theme-accent-secondary) 0%, var(--theme-accent) 100%)'
+        }}
+      />
+
+      {/* Дополнительное свечение (эффект неона) */}
+      <div className="absolute inset-0 z-30 pointer-events-none mix-blend-screen opacity-30 bg-gradient-to-tr from-accent to-transparent blur-2xl" />
+
       {theme === "light" && <SnowParticles />}
-    </div>
+    
+      {/* Магия цвета: перекрасит белые контуры (из инвертированного видео или после дизайнера) в цвета графиков */}
+      <div 
+        className="absolute inset-0 z-20 pointer-events-none mix-blend-multiply opacity-90"
+        style={{
+          background: 'linear-gradient(to bottom right, var(--theme-accent-secondary) 0%, var(--theme-accent) 100%)'
+        }}
+      />
+
+      {/* Дополнительное свечение (эффект неона) */}
+      <div className="absolute inset-0 z-30 pointer-events-none mix-blend-screen opacity-30 bg-gradient-to-tr from-accent to-transparent blur-2xl" />
+</div>
   );
 }
 
