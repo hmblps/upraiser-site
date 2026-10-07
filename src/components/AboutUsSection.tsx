@@ -9,12 +9,13 @@ export function AboutUsSection() {
   
   // Parallax to sync conceptually with the real mountain below
   // The real mountain moves [40%, 0%]. We move this wireframe up as well.
-  const y = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["-15%", "5%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "10%"]);
 
   return (
     <section ref={containerRef} className="section-band border-t border-border/30 relative overflow-hidden">
       {/* Schematic Ascent Decoration (Realistic Trace) */}
-      <motion.div style={{ y }} className="absolute top-0 left-0 w-full max-w-5xl opacity-40 pointer-events-none -translate-x-[5%]">
+      <motion.div style={{ x, y }} className="absolute top-0 left-0 w-full max-w-5xl opacity-40 pointer-events-none">
         <svg viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" className="font-sans uppercase font-semibold">
           
           <style>
