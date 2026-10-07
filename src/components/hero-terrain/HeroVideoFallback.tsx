@@ -400,10 +400,8 @@ export function HeroVideoFallback({
           staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
-      
       {theme === "light" && <SnowParticles />}
-    
-      </div>
+    </div>
   );
 }
 
