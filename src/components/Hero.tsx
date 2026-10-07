@@ -116,25 +116,13 @@ function StatCard({ value, label, counted, accent, videoDriven, align = "center"
       <motion.div 
         className="hero-stat-ghost__value origin-center" 
         ref={ref as any}
-        animate={ended ? { 
-          scale: [1, 1.15, 1],
-          filter: [
-            "brightness(1) contrast(1)", 
-            isLight ? "brightness(1.5) contrast(1.2) drop-shadow(0px 0px 20px rgba(255, 60, 0, 0.8))" : "brightness(1.5) contrast(1.2) drop-shadow(0px 0px 30px rgba(255, 200, 0, 0.8))", 
-            "brightness(1) contrast(1)"
-          ]
-        } : {}}
-        transition={{ duration: 1.2, type: "spring", bounce: 0.5 }}
+        
       >
         {value}
       </motion.div>
       <motion.p 
         className="hero-stat-ghost__label"
-        animate={ended ? { 
-          opacity: [1, 0.3, 1],
-          scale: [1, 0.95, 1]
-        } : {}}
-        transition={{ duration: 1.2, type: "spring", bounce: 0.5 }}
+        
       >
         {label}
       </motion.p>
@@ -166,9 +154,9 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
         const partners = document.querySelector('.partners-strip--home');
         if (partners) {
           const top = partners.getBoundingClientRect().top + window.scrollY;
-          scrollToY(top - 72, { duration: 4.2, easing: coastingEase });
+          scrollToY(top + 23, { duration: 4.2, easing: coastingEase });
         } else {
-          scrollToY(window.innerHeight * 2 - 72, { duration: 4.2, easing: coastingEase });
+          scrollToY(window.innerHeight * 2 + 23, { duration: 4.2, easing: coastingEase });
         }
       }
     };
