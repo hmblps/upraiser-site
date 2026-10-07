@@ -114,16 +114,9 @@ export function AboutUsSection() {
         </svg>
       </motion.div>
 
-      {/* Seamless Blur Layer (No Card) */}
-      <div 
-        className="absolute inset-0 z-0 pointer-events-none backdrop-blur-md"
-        style={{
-          maskImage: "linear-gradient(to bottom, black 40%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, black 40%, transparent 100%)"
-        }}
-      />
       <div className="page-container relative z-10 py-16">
-        <div className="section-header">
+        <div className="section-header relative">
+          <div className="absolute -inset-x-8 -inset-y-4 z-[-1] pointer-events-none backdrop-blur-md" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
           <p className="section-label">The Expedition Crew</p>
           <h2 className="section-title max-w-4xl text-balance">
             Elevating Your business to the absolute summit
@@ -131,7 +124,8 @@ export function AboutUsSection() {
         </div>
 
         <div className="grid md:grid-cols-[1fr_1.5fr] lg:grid-cols-[1fr_2fr] gap-10 lg:gap-16 items-start mt-8">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 relative">
+            <div className="absolute -inset-8 z-[-1] pointer-events-none backdrop-blur-md" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
             <p className="section-description !max-w-none text-body-lg leading-snug text-fg/80 text-balance">
               Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth.
             </p>
@@ -140,7 +134,8 @@ export function AboutUsSection() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6 lg:gap-x-12 lg:gap-y-8">
+          <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6 lg:gap-x-12 lg:gap-y-8 relative">
+            <div className="absolute -inset-8 z-[-1] pointer-events-none backdrop-blur-sm" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">The Engineering Basecamp</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
