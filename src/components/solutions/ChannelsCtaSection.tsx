@@ -44,9 +44,6 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 }
 
 
-import { useId } from "react";
-import { Area } from "recharts";
-
 const data = [
   { name: "Mobile", value: 300, device: "phone" },
   { name: "Tablet", value: 650, device: "tablet" },
