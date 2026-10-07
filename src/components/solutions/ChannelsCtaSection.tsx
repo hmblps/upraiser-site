@@ -35,21 +35,25 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 
 
 function InteractiveVisuals() {
-  const { scrollYProgress } = useScroll();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.9", "center center"]
+  });
 
   // Animation values for drawing the paths
-  const drawDesktop = useTransform(scrollYProgress, [0.0, 0.5], [0, 1]);
-  const drawTablet  = useTransform(scrollYProgress, [0.2, 0.7], [0, 1]);
-  const drawPhone   = useTransform(scrollYProgress, [0.4, 0.9], [0, 1]);
+  const drawDesktop = useTransform(scrollYProgress, [0.0, 0.6], [0, 1]);
+  const drawTablet  = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
+  const drawPhone   = useTransform(scrollYProgress, [0.4, 1.0], [0, 1]);
   
   // Opacity fades
   const opacityFade = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (
-    <div className="relative flex-1 max-w-[600px] aspect-[4/3] mx-auto lg:mx-0 w-full flex items-center justify-center pointer-events-none">
+    <div ref={containerRef} className="relative flex-1 max-w-[600px] aspect-[4/3] mx-auto lg:mx-0 w-full flex items-center justify-center pointer-events-none">
       
-      {/* Glow aura */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#FBBF24]/10 to-[#F43F5E]/10 blur-[100px] rounded-full scale-110 pointer-events-none" />
+      {/* Subtle Glow aura */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#FBBF24]/5 to-[#F43F5E]/5 blur-[80px] rounded-full scale-110 pointer-events-none" />
 
       <svg viewBox="0 0 600 450" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
         <defs>
@@ -63,87 +67,79 @@ function InteractiveVisuals() {
             <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.4" />
             <stop offset="100%" stopColor="#F43F5E" stopOpacity="0.4" />
           </linearGradient>
-
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
         </defs>
 
         {/* --- DESKTOP (Back) --- */}
         <motion.g 
           style={{ opacity: opacityFade, y: useTransform(scrollYProgress, [0, 1], [30, 0]) }}
-          stroke="url(#brandGrad)" 
+          stroke="url(#brandGradFade)" 
           fill="none" 
-          strokeWidth="2.75" 
+          strokeWidth="1.5" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
           {/* Main Desktop Frame */}
           <motion.rect x="50" y="80" width="400" height="260" rx="20" style={{ pathLength: drawDesktop }} />
           {/* Header Line */}
-          <motion.line x1="50" y1="120" x2="450" y2="120" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawDesktop }} />
+          <motion.line x1="50" y1="120" x2="450" y2="120" strokeWidth="1" style={{ pathLength: drawDesktop }} />
           {/* Window controls */}
           <motion.circle cx="80" cy="100" r="4" style={{ pathLength: drawDesktop }} />
           <motion.circle cx="100" cy="100" r="4" style={{ pathLength: drawDesktop }} />
           
-          {/* Desktop Content Graph Line */}
-          <motion.path d="M90 280 C 150 270, 200 320, 250 200 C 300 80, 350 180, 410 160" strokeWidth="2" stroke="url(#brandGradFade)" style={{ pathLength: drawDesktop }} />
+          {/* Desktop Content Graph Line (Thick & Bright) */}
+          <motion.path d="M90 280 C 150 270, 200 320, 250 200 C 300 80, 350 180, 410 160" strokeWidth="2.75" stroke="url(#brandGrad)" style={{ pathLength: drawDesktop }} />
         </motion.g>
 
         {/* --- TABLET (Right) --- */}
         <motion.g 
           style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [40, 20]), y: 20, rotate: 4 }}
-          stroke="url(#brandGrad)" 
+          stroke="url(#brandGradFade)" 
           fill="none" 
-          strokeWidth="2.75" 
+          strokeWidth="1.5" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
           {/* Tablet Frame */}
-          <motion.rect x="320" y="50" width="220" height="300" rx="24" filter="url(#glow)" style={{ pathLength: drawTablet }} />
+          <motion.rect x="320" y="50" width="220" height="300" rx="24" style={{ pathLength: drawTablet }} />
           {/* Inner Content Box */}
-          <motion.rect x="340" y="200" width="180" height="120" rx="16" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawTablet }} />
+          <motion.rect x="340" y="200" width="180" height="120" rx="16" strokeWidth="1" style={{ pathLength: drawTablet }} />
           {/* Circle Graphic */}
           <motion.circle cx="370" cy="100" r="12" style={{ pathLength: drawTablet }} />
-          <motion.circle cx="370" cy="100" r="4" fill="url(#brandGrad)" style={{ pathLength: drawTablet }} />
+          <motion.circle cx="370" cy="100" r="4" fill="url(#brandGradFade)" stroke="none" style={{ pathLength: drawTablet }} />
           
-          {/* Tablet Content Graph Line (Inside Box) */}
-          <motion.path d="M340 290 C 370 280, 400 310, 440 240 C 480 170, 500 250, 520 220" strokeWidth="2.75" style={{ pathLength: drawTablet }} />
+          {/* Tablet Content Graph Line (Thick & Bright) */}
+          <motion.path d="M340 290 C 370 280, 400 310, 440 240 C 480 170, 500 250, 520 220" stroke="url(#brandGrad)" strokeWidth="2.75" style={{ pathLength: drawTablet }} />
         </motion.g>
 
         {/* --- PHONE (Left) --- */}
         <motion.g 
           style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [-20, 0]), y: 50, rotate: -6 }}
-          stroke="url(#brandGrad)" 
+          stroke="url(#brandGradFade)" 
           fill="none" 
-          strokeWidth="2.75" 
+          strokeWidth="1.5" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
           {/* Phone Frame */}
-          <motion.rect x="40" y="30" width="160" height="340" rx="32" filter="url(#glow)" style={{ pathLength: drawPhone }} />
+          <motion.rect x="40" y="30" width="160" height="340" rx="32" style={{ pathLength: drawPhone }} />
           {/* Notch */}
-          <motion.line x1="90" y1="50" x2="150" y2="50" strokeWidth="4" style={{ pathLength: drawPhone }} />
+          <motion.line x1="90" y1="50" x2="150" y2="50" strokeWidth="3" style={{ pathLength: drawPhone }} />
           
           {/* Highlight pill */}
-          <motion.rect x="60" y="70" width="120" height="50" rx="25" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
-          <motion.circle cx="85" cy="95" r="6" fill="url(#brandGrad)" stroke="none" style={{ pathLength: drawPhone, opacity: drawPhone }} />
+          <motion.rect x="60" y="70" width="120" height="50" rx="25" strokeWidth="1" style={{ pathLength: drawPhone }} />
+          <motion.circle cx="85" cy="95" r="6" fill="url(#brandGradFade)" stroke="none" style={{ pathLength: drawPhone, opacity: drawPhone }} />
           
-          {/* Feed Lines */}
-          <motion.line x1="70" y1="150" x2="170" y2="150" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          {/* Feed Lines (Data) */}
+          <motion.line x1="70" y1="150" x2="170" y2="150" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
           <motion.circle cx="60" cy="150" r="4" style={{ pathLength: drawPhone }} />
           
-          <motion.line x1="70" y1="200" x2="170" y2="200" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.line x1="70" y1="200" x2="170" y2="200" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
           <motion.circle cx="60" cy="200" r="4" style={{ pathLength: drawPhone }} />
           
-          <motion.line x1="70" y1="250" x2="170" y2="250" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.line x1="70" y1="250" x2="170" y2="250" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
           <motion.circle cx="60" cy="250" r="4" style={{ pathLength: drawPhone }} />
           
-          <motion.line x1="70" y1="300" x2="170" y2="300" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.line x1="70" y1="300" x2="170" y2="300" stroke="url(#brandGrad)" strokeWidth="2.5" style={{ pathLength: drawPhone }} />
           <motion.circle cx="60" cy="300" r="4" style={{ pathLength: drawPhone }} />
         </motion.g>
 
@@ -151,7 +147,6 @@ function InteractiveVisuals() {
     </div>
   );
 }
-
 
 export function ChannelsCtaSection() {
   const reduced = useReducedMotion();
