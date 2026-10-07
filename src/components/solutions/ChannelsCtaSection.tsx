@@ -188,6 +188,13 @@ export function ChannelsCtaSection() {
         {/* TEXT (RIGHT) */}
         <div className="page-container relative z-10 w-full flex justify-end items-center h-full py-32 lg:py-48">
           <div className="w-full lg:w-[45%] text-left pl-0 lg:pl-10">
+            <div className="mb-8 flex items-center gap-3">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-40"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--accent)]"></span>
+              </span>
+              <span className="text-xs font-bold text-fg/50 uppercase tracking-widest">Live Ecosystem</span>
+            </div>
             <div className="section-header">
               <p className="section-label">The Channels</p>
               <h2 className="section-title">
@@ -210,6 +217,18 @@ export function ChannelsCtaSection() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </Link>
+            </div>
+
+            {/* Technical details to balance the massive chart */}
+            <div className="mt-16 pt-8 border-t border-border/20 w-full">
+              <p className="text-xs font-bold text-fg/40 uppercase tracking-widest mb-6">Supported Environments</p>
+              <div className="flex flex-wrap gap-2.5">
+                {['Programmatic', 'Social Ads', 'Connected TV', 'OEM & Direct', 'In-App', 'Web', 'DOOH'].map(tag => (
+                  <div key={tag} className="px-4 py-2 rounded-full border border-border/30 text-[10px] sm:text-xs font-semibold text-fg/60 tracking-wider uppercase backdrop-blur-sm bg-fg/[0.02]">
+                    {tag}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
