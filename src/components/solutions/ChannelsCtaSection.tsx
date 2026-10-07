@@ -36,155 +36,123 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 
 function InteractiveVisuals() {
   const { scrollYProgress } = useScroll();
+
+  // Animation values for drawing the paths
+  const drawDesktop = useTransform(scrollYProgress, [0.0, 0.5], [0, 1]);
+  const drawTablet  = useTransform(scrollYProgress, [0.2, 0.7], [0, 1]);
+  const drawPhone   = useTransform(scrollYProgress, [0.4, 0.9], [0, 1]);
   
-
-  const bars = [25, 45, 35, 60, 50, 75, 95];
-
-  // The gradient used for outlines
-  const outlineGradient = "bg-gradient-to-br from-[#FBBF24] via-[#F97316] to-[#F43F5E]";
+  // Opacity fades
+  const opacityFade = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (
-    <div className="relative flex-1 max-w-[500px] aspect-square mx-auto lg:mx-0 w-full flex items-center justify-center">
+    <div className="relative flex-1 max-w-[600px] aspect-[4/3] mx-auto lg:mx-0 w-full flex items-center justify-center pointer-events-none">
       
       {/* Glow aura */}
       <div className="absolute inset-0 bg-gradient-to-tr from-[#FBBF24]/10 to-[#F43F5E]/10 blur-[100px] rounded-full scale-110 pointer-events-none" />
 
-      {/* Desktop / Web Window (Back) - WIREFRAME */}
-      <motion.div
-        style={{
-          y: useTransform(scrollYProgress, [0, 1], [40, 0]),
-          scale: useTransform(scrollYProgress, [0, 1], [0.95, 1]),
-          opacity: useTransform(scrollYProgress, [0, 0.5], [0, 1]),
-        }}
-        className={`absolute w-[90%] aspect-[4/3] rounded-[2rem] p-[1px] ${outlineGradient} shadow-[0_0_40px_rgba(244,63,94,0.15)]`}
-      >
-        <div className="w-full h-full bg-bg rounded-[2rem] flex flex-col p-6 overflow-hidden relative">
+      <svg viewBox="0 0 600 450" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#FBBF24" />
+            <stop offset="50%" stopColor="#F97316" />
+            <stop offset="100%" stopColor="#F43F5E" />
+          </linearGradient>
           
-          <div className="w-full flex justify-between items-center mb-8">
-            <div className="flex gap-2">
-              <div className={`w-3 h-3 rounded-full p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
-              <div className={`w-3 h-3 rounded-full p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-full"/></div>
-            </div>
-          </div>
-          
-          <div className={`flex-1 rounded-2xl p-[1px] ${outlineGradient} flex flex-col items-center justify-center p-8 relative overflow-hidden`}>
-            <div className="w-full h-full bg-bg rounded-2xl flex flex-col items-center justify-center p-8 relative">
-              {/* grid lines */}
-              <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(251,191,36,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(244,63,94,0.4) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-              <div className="w-[40%] h-[1px] bg-gradient-to-r from-[#FBBF24]/60 to-[#F43F5E]/60 mb-6 relative z-10" />
-              <div className={`w-[60%] h-[70%] rounded-xl p-[1px] ${outlineGradient} relative z-10`}><div className="w-full h-full bg-bg/80 backdrop-blur-sm rounded-xl"/></div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+          <linearGradient id="brandGradFade" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#FBBF24" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#F43F5E" stopOpacity="0.4" />
+          </linearGradient>
 
-      {/* Tablet / Metric Card (Right) - WIREFRAME */}
-      <motion.div
-        style={{
-          x: useTransform(scrollYProgress, [0, 1], [80, 40]),
-          rotate: useTransform(scrollYProgress, [0, 1], [0, 6]),
-          opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
-        }}
-        className={`absolute right-0 w-[55%] aspect-[3/4] rounded-[2rem] p-[1px] ${outlineGradient} shadow-[0_0_40px_rgba(251,191,36,0.15)] z-10`}
-      >
-        <div className="w-full h-full bg-bg rounded-[2rem] flex flex-col p-6 sm:p-8 relative overflow-hidden">
-          {/* subtle grid */}
-          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(251,191,36,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(244,63,94,0.4) 1px, transparent 1px)', backgroundSize: '15px 15px' }} />
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
 
-          <div className={`w-10 h-10 rounded-full p-[1px] ${outlineGradient} flex items-center justify-center mb-6 relative z-10`}>
-             <div className="w-full h-full bg-bg rounded-full flex items-center justify-center">
-               <div className="w-2.5 h-2.5 bg-gradient-to-br from-[#FBBF24] to-[#F43F5E] rounded-full shadow-[0_0_12px_#F43F5E]" />
-             </div>
-          </div>
+        {/* --- DESKTOP (Back) --- */}
+        <motion.g 
+          style={{ opacity: opacityFade, y: useTransform(scrollYProgress, [0, 1], [30, 0]) }}
+          stroke="url(#brandGrad)" 
+          fill="none" 
+          strokeWidth="2.75" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+        >
+          {/* Main Desktop Frame */}
+          <motion.rect x="50" y="80" width="400" height="260" rx="20" style={{ pathLength: drawDesktop }} />
+          {/* Header Line */}
+          <motion.line x1="50" y1="120" x2="450" y2="120" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawDesktop }} />
+          {/* Window controls */}
+          <motion.circle cx="80" cy="100" r="4" style={{ pathLength: drawDesktop }} />
+          <motion.circle cx="100" cy="100" r="4" style={{ pathLength: drawDesktop }} />
           
-          
-          
-          
+          {/* Desktop Content Graph Line */}
+          <motion.path d="M90 280 C 150 270, 200 320, 250 200 C 300 80, 350 180, 410 160" strokeWidth="2" stroke="url(#brandGradFade)" style={{ pathLength: drawDesktop }} />
+        </motion.g>
 
-          <div className={`flex-1 w-full rounded-[1.5rem] p-[1px] ${outlineGradient} relative z-10`}>
-            <div className="w-full h-full bg-bg rounded-[1.5rem] p-4 sm:p-5 flex items-end gap-2 overflow-hidden">
-              <div className="w-full h-full relative">
-  <svg viewBox="0 0 100 60" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-    {/* Background fill gradient */}
-    <defs>
-      <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#F43F5E" stopOpacity="0.4" />
-        <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.0" />
-      </linearGradient>
-    </defs>
-    <motion.path
-      d="M0 50 C 20 45, 30 55, 50 30 C 70 5, 80 15, 100 10 L 100 60 L 0 60 Z"
-      fill="url(#chartGlow)"
-      style={{
-        opacity: useTransform(scrollYProgress, [0.3, 0.8], [0, 1])
-      }}
-    />
-    {/* Line */}
-    <motion.path
-      d="M0 50 C 20 45, 30 55, 50 30 C 70 5, 80 15, 100 10"
-      fill="none"
-      stroke="url(#chartLineGrad)"
-      strokeWidth="2.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={{
-        pathLength: useTransform(scrollYProgress, [0.1, 0.9], [0, 1]),
-        opacity: useTransform(scrollYProgress, [0.1, 0.3], [0, 1])
-      }}
-    />
-    <defs>
-      <linearGradient id="chartLineGrad" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#FBBF24" />
-        <stop offset="100%" stopColor="#F43F5E" />
-      </linearGradient>
-    </defs>
-  </svg>
-</div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+        {/* --- TABLET (Right) --- */}
+        <motion.g 
+          style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [40, 20]), y: 20, rotate: 4 }}
+          stroke="url(#brandGrad)" 
+          fill="none" 
+          strokeWidth="2.75" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+        >
+          {/* Tablet Frame */}
+          <motion.rect x="320" y="50" width="220" height="300" rx="24" filter="url(#glow)" style={{ pathLength: drawTablet }} />
+          {/* Inner Content Box */}
+          <motion.rect x="340" y="200" width="180" height="120" rx="16" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawTablet }} />
+          {/* Circle Graphic */}
+          <motion.circle cx="370" cy="100" r="12" style={{ pathLength: drawTablet }} />
+          <motion.circle cx="370" cy="100" r="4" fill="url(#brandGrad)" style={{ pathLength: drawTablet }} />
+          
+          {/* Tablet Content Graph Line (Inside Box) */}
+          <motion.path d="M340 290 C 370 280, 400 310, 440 240 C 480 170, 500 250, 520 220" strokeWidth="2.75" style={{ pathLength: drawTablet }} />
+        </motion.g>
 
-      {/* Phone / Feed Card (Left) - WIREFRAME */}
-      <motion.div
-        style={{
-          x: useTransform(scrollYProgress, [0, 1], [-80, -40]),
-          y: useTransform(scrollYProgress, [0, 1], [40, 10]),
-          rotate: useTransform(scrollYProgress, [0, 1], [0, -8]),
-          opacity: useTransform(scrollYProgress, [0, 0.7], [0, 1]),
-        }}
-        className={`absolute left-0 bottom-4 w-[45%] aspect-[9/19] rounded-[2.5rem] p-[1px] ${outlineGradient} shadow-[0_0_40px_rgba(251,191,36,0.15)] z-20`}
-      >
-        <div className="w-full h-full bg-bg rounded-[2.5rem] flex flex-col p-4 sm:p-5 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(251,191,36,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(244,63,94,0.4) 1px, transparent 1px)', backgroundSize: '15px 15px' }} />
-
+        {/* --- PHONE (Left) --- */}
+        <motion.g 
+          style={{ opacity: opacityFade, x: useTransform(scrollYProgress, [0, 1], [-20, 0]), y: 50, rotate: -6 }}
+          stroke="url(#brandGrad)" 
+          fill="none" 
+          strokeWidth="2.75" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+        >
+          {/* Phone Frame */}
+          <motion.rect x="40" y="30" width="160" height="340" rx="32" filter="url(#glow)" style={{ pathLength: drawPhone }} />
           {/* Notch */}
-          <div className="w-14 h-[2px] bg-gradient-to-r from-[#FBBF24]/40 to-[#F43F5E]/40 mx-auto rounded-full mb-6 shrink-0 relative z-10" />
+          <motion.line x1="90" y1="50" x2="150" y2="50" strokeWidth="4" style={{ pathLength: drawPhone }} />
           
-          {/* Top Highlight Pill */}
-          <div className={`w-full rounded-[1.5rem] p-[1px] ${outlineGradient} mb-6 relative z-10`}>
-            <div className="w-full bg-bg rounded-[1.5rem] p-4 flex flex-col gap-4">
-              <div className="w-4 h-4 bg-gradient-to-br from-[#FBBF24] to-[#F43F5E] rounded-full shadow-[0_0_10px_#F43F5E]" />
-              <div className={`w-full h-8 rounded-xl p-[1px] ${outlineGradient}`}><div className="w-full h-full bg-bg rounded-xl"/></div>
-            </div>
-          </div>
+          {/* Highlight pill */}
+          <motion.rect x="60" y="70" width="120" height="50" rx="25" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.circle cx="85" cy="95" r="6" fill="url(#brandGrad)" stroke="none" style={{ pathLength: drawPhone, opacity: drawPhone }} />
+          
+          {/* Feed Lines */}
+          <motion.line x1="70" y1="150" x2="170" y2="150" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.circle cx="60" cy="150" r="4" style={{ pathLength: drawPhone }} />
+          
+          <motion.line x1="70" y1="200" x2="170" y2="200" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.circle cx="60" cy="200" r="4" style={{ pathLength: drawPhone }} />
+          
+          <motion.line x1="70" y1="250" x2="170" y2="250" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.circle cx="60" cy="250" r="4" style={{ pathLength: drawPhone }} />
+          
+          <motion.line x1="70" y1="300" x2="170" y2="300" stroke="url(#brandGradFade)" strokeWidth="2" style={{ pathLength: drawPhone }} />
+          <motion.circle cx="60" cy="300" r="4" style={{ pathLength: drawPhone }} />
+        </motion.g>
 
-          {/* Feed Items */}
-          <div className="flex-1 flex flex-col gap-4 relative z-10">
-            {[1, 2, 3, 4].map((_, i) => (
-              <div key={i} className={`w-full rounded-[1.25rem] p-[1px] ${outlineGradient}`}>
-                <div className="w-full h-full bg-bg rounded-[1.25rem] p-3.5 flex items-center gap-4">
-                  <div className="w-3.5 h-3.5 rounded-full p-[1px] bg-gradient-to-r from-[#FBBF24]/60 to-[#F43F5E]/60 shrink-0"><div className="w-full h-full bg-bg rounded-full"/></div>
-                  <div className="flex-1 h-[2px] bg-gradient-to-r from-[#FBBF24]/30 to-[#F43F5E]/30 rounded-full" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
+      </svg>
     </div>
   );
 }
+
+
 export function ChannelsCtaSection() {
   const reduced = useReducedMotion();
 
