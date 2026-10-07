@@ -73,16 +73,6 @@ function RotatingOmniChart() {
   // Wheel rotation
   const rotateOuter = useTransform(scrollYProgress, [0, 1], [-60, 180]);
   // Parallax and fade for floating data nodes (behaving like ghost numbers everywhere else)
-  const y1 = useTransform(scrollYProgress, [0, 1], [150, -50]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [200, 0]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [250, -50]);
-
-  const o1 = useTransform(scrollYProgress, [0.1, 0.4, 0.8, 1], [0, 1, 1, 0]);
-  const o2 = useTransform(scrollYProgress, [0.2, 0.5, 0.8, 1], [0, 1, 1, 0]);
-  const o3 = useTransform(scrollYProgress, [0.3, 0.6, 0.9, 1], [0, 1, 1, 0]);
-  const o4 = useTransform(scrollYProgress, [0.4, 0.7, 0.9, 1], [0, 1, 1, 0]);
-
   return (
     <div ref={containerRef} className="relative w-full h-full flex items-center pointer-events-none">
       
@@ -186,29 +176,27 @@ function RotatingOmniChart() {
         </div>
       </div>
 
-      {/* ELEGANT SCATTERED GHOST LABELS */}
+      {/* ELEGANT SCATTERED GHOST LABELS (BUBBLING) */}
       <div className="absolute left-[15%] lg:left-[22%] top-0 w-[300px] h-full pointer-events-none z-10">
-        
-        <motion.div style={{ y: y1, opacity: o1 }} className="absolute top-[20%] left-[10%]">
+        <GhostBubbleMotion left="10%" originY={40} drift={-15} duration={6} delay={0} peakOpacity={0.4}>
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Programmatic</div>
-        </motion.div>
+        </GhostBubbleMotion>
 
-        <motion.div style={{ y: y2, opacity: o2 }} className="absolute top-[40%] left-[80%]">
+        <GhostBubbleMotion left="80%" originY={60} drift={20} duration={7.5} delay={1.2} peakOpacity={0.4}>
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">22%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Connected TV</div>
-        </motion.div>
+        </GhostBubbleMotion>
 
-        <motion.div style={{ y: y3, opacity: o3 }} className="absolute top-[65%] left-[20%]">
+        <GhostBubbleMotion left="20%" originY={80} drift={10} duration={6.8} delay={3.5} peakOpacity={0.3}>
           <div className="text-4xl lg:text-5xl font-bold text-fg/20 tracking-tight">18%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/30 uppercase tracking-widest mt-1">Social Ads</div>
-        </motion.div>
+        </GhostBubbleMotion>
 
-        <motion.div style={{ y: y4, opacity: o4 }} className="absolute top-[85%] left-[60%]">
+        <GhostBubbleMotion left="70%" originY={95} drift={-10} duration={8} delay={2.1} peakOpacity={0.2}>
           <div className="text-3xl lg:text-4xl font-bold text-fg/10 tracking-tight">15%</div>
           <div className="text-[10px] lg:text-xs font-semibold text-fg/20 uppercase tracking-widest mt-1">OEM & Direct</div>
-        </motion.div>
-
+        </GhostBubbleMotion>
       </div>
 
     </div>
