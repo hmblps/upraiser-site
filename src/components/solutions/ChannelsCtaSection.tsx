@@ -44,10 +44,11 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 }
 
 
+
 const data = [
   { name: "Mobile", value: 300, device: "phone" },
-  { name: "Tablet", value: 650, device: "tablet" },
-  { name: "Desktop", value: 950, device: "desktop" }
+  { name: "Tablet", value: 500, device: "tablet" },
+  { name: "Desktop", value: 850, device: "desktop" }
 ];
 
 const CustomDeviceBar = (props: any) => {
@@ -60,35 +61,57 @@ const CustomDeviceBar = (props: any) => {
   const bottomY = y + (height || 0);
   
   return (
-    <g className="transition-all duration-700 ease-out">
+    <g className="transition-all duration-700 ease-out" opacity="0.9">
       {device === "phone" && (
-        <g transform={`translate(${cx - 45}, ${bottomY - 180})`}>
-          <rect x="0" y="0" width="90" height="180" rx="16" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
-          <rect x="0" y="0" width="90" height="180" rx="16" fill="url(#chartGrad)" opacity="0.05" />
-          {/* Screen */}
-          <rect x="6" y="6" width="78" height="168" rx="10" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
-          <line x1="35" y1="12" x2="55" y2="12" stroke="var(--theme-muted)" strokeWidth="3" strokeLinecap="round" />
+        <g transform={`translate(${cx - 80}, ${bottomY - 140})`}>
+          {/* Standing up, slightly angled */}
+          <g transform="rotate(-15) skewY(15) scale(0.9)">
+            {/* Phone Base/Shadow */}
+            <rect x="5" y="5" width="90" height="180" rx="16" fill="var(--theme-border)" opacity="0.5" />
+            <rect x="0" y="0" width="90" height="180" rx="16" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
+            <rect x="6" y="6" width="78" height="168" rx="10" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
+            {/* Minimalist UI lines inside */}
+            <rect x="15" y="20" width="40" height="6" rx="3" fill="var(--theme-border)" />
+            <rect x="15" y="35" width="60" height="40" rx="6" fill="var(--theme-border)" opacity="0.2" />
+            <rect x="15" y="85" width="50" height="4" rx="2" fill="var(--theme-border)" />
+          </g>
         </g>
       )}
       {device === "tablet" && (
-        <g transform={`translate(${cx - 85}, ${bottomY - 220})`}>
-          <rect x="0" y="0" width="170" height="220" rx="20" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
-          <rect x="0" y="0" width="170" height="220" rx="20" fill="url(#chartGrad)" opacity="0.1" />
-          {/* Screen */}
-          <rect x="8" y="8" width="154" height="204" rx="12" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
-          <circle cx="85" cy="18" r="3" fill="var(--theme-muted)" />
+        <g transform={`translate(${cx - 100}, ${bottomY - 100})`}>
+          {/* Lying down flat isometric */}
+          <g transform="rotate(-45) skewX(50) scale(1.1)">
+            {/* Shadow/Thickness */}
+            <rect x="5" y="5" width="160" height="220" rx="12" fill="var(--theme-border)" opacity="0.4" />
+            <rect x="0" y="0" width="160" height="220" rx="12" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="1.5" />
+            {/* Screen */}
+            <rect x="8" y="8" width="144" height="204" rx="6" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
+            {/* Mock UI */}
+            <circle cx="25" cy="25" r="8" fill="var(--theme-border)" />
+            <rect x="40" y="22" width="60" height="6" rx="3" fill="var(--theme-border)" />
+            <rect x="20" y="50" width="120" height="80" rx="8" fill="var(--theme-border)" opacity="0.1" />
+          </g>
         </g>
       )}
       {device === "desktop" && (
-        <g transform={`translate(${cx - 150}, ${bottomY - 260})`}>
-          <rect x="0" y="0" width="300" height="190" rx="16" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
-          <rect x="0" y="0" width="300" height="190" rx="16" fill="url(#chartGrad)" opacity="0.15" />
-          {/* Screen */}
-          <rect x="8" y="8" width="284" height="154" rx="8" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
-          <circle cx="150" cy="16" r="3" fill="var(--theme-muted)" />
-          {/* Base */}
-          <path d="M120 190 L100 250 L200 250 L180 190 Z" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" strokeLinejoin="round" />
-          <rect x="80" y="250" width="140" height="10" rx="4" fill="var(--theme-border)" />
+        <g transform={`translate(${cx - 100}, ${bottomY - 260})`}>
+          {/* Desktop/Laptop open */}
+          <g transform="scale(1.1)">
+            {/* Screen part (standing) */}
+            <g transform="rotate(-10) skewY(10)">
+              <rect x="5" y="5" width="220" height="140" rx="8" fill="var(--theme-border)" opacity="0.3" />
+              <rect x="0" y="0" width="220" height="140" rx="8" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
+              <rect x="6" y="6" width="208" height="128" rx="4" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
+              <rect x="20" y="20" width="160" height="60" rx="6" fill="var(--theme-border)" opacity="0.1" />
+            </g>
+            {/* Keyboard base (lying flat) */}
+            <g transform="translate(-10, 150) rotate(-45) skewX(50)">
+              <rect x="0" y="0" width="220" height="140" rx="8" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
+              {/* Keyboard mock */}
+              <rect x="15" y="15" width="190" height="60" rx="4" fill="var(--theme-border)" opacity="0.2" />
+              <rect x="75" y="85" width="70" height="40" rx="4" fill="var(--theme-border)" opacity="0.3" />
+            </g>
+          </g>
         </g>
       )}
     </g>
@@ -99,12 +122,11 @@ function InteractiveVisuals() {
   const id = useId().replace(/:/g, "");
   
   return (
-    <div className="relative flex-1 w-full max-w-[800px] h-[450px] mx-auto lg:mx-0 pointer-events-none mode-line-chart">
-      {/* Decorative blurred glow behind the chart */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[100px] opacity-20 dark:opacity-30 mix-blend-screen" />
+    <div className="relative flex-1 w-full max-w-[900px] h-[550px] mx-auto lg:mx-0 pointer-events-none mode-line-chart mt-10">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[120px] opacity-15 mix-blend-screen" />
       
-      <ResponsiveContainer width="100%" height={450}>
-        <ComposedChart data={data} margin={{ top: 40, right: 30, left: 30, bottom: 20 }}>
+      <ResponsiveContainer width="100%" height={550}>
+        <ComposedChart data={data} margin={{ top: 80, right: 40, left: 40, bottom: 40 }}>
           <defs>
             <linearGradient id={`chartGrad-${id}`} x1={0} y1={0} x2={1} y2={0}>
               <stop offset="0%" stopColor="#FBBF24" />
@@ -112,23 +134,23 @@ function InteractiveVisuals() {
               <stop offset="100%" stopColor="#F43F5E" />
             </linearGradient>
             <linearGradient id={`areaGrad-${id}`} x1={0} y1={0} x2={0} y2={1}>
-              <stop offset="0%" stopColor="#F97316" stopOpacity={0.4} />
+              <stop offset="0%" stopColor="#F97316" stopOpacity={0.3} />
               <stop offset="100%" stopColor="#F43F5E" stopOpacity={0} />
             </linearGradient>
             <filter id={`glow-${id}`} x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="8" result="blur" />
+              <feGaussianBlur stdDeviation="6" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
           
-          <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.4} vertical={false} strokeDasharray="4 8" />
+          <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.3} vertical={false} strokeDasharray="3 9" />
           
           <XAxis 
             dataKey="name" 
             axisLine={false} 
             tickLine={false} 
-            tick={{ fill: "var(--theme-fg)", fontSize: 13, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }} 
-            dy={25} 
+            tick={{ fill: "var(--theme-fg)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }} 
+            dy={35} 
           />
           
           <Bar dataKey="value" shape={<CustomDeviceBar />} barSize={60} isAnimationActive={false} />
@@ -147,9 +169,9 @@ function InteractiveVisuals() {
             type="monotone" 
             dataKey="value" 
             stroke={`url(#chartGrad-${id})`} 
-            strokeWidth={5} 
-            dot={{ r: 8, fill: "var(--theme-bg)", stroke: "#F97316", strokeWidth: 3 }} 
-            activeDot={{ r: 12, fill: "#FBBF24", stroke: "var(--theme-bg)", strokeWidth: 4, filter: `url(#glow-${id})` }}
+            strokeWidth={4} 
+            dot={{ r: 7, fill: "var(--theme-bg)", stroke: "#F97316", strokeWidth: 3 }} 
+            activeDot={{ r: 10, fill: "#FBBF24", stroke: "var(--theme-bg)", strokeWidth: 3, filter: `url(#glow-${id})` }}
             isAnimationActive={true}
             animationDuration={1500}
             animationEasing="ease-out"
