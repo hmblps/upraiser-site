@@ -1,57 +1,9 @@
 import { GhostBubbleMotion } from "../GhostBubbleMotion";
-import {
-  PieChart,
-  Pie,
-  Tooltip,
-  ComposedChart,
-  Line,
-  Bar,
-  XAxis,
-  ResponsiveContainer,
-  CartesianGrid,
-  Cell,
-  Area
-} from "recharts";
-import { useRef, useEffect, useId } from "react";
+import { PieChart, Pie, ResponsiveContainer, Cell } from "recharts";
+import { useRef } from "react";
 import { warmStage } from "../../lib/scrollPreload";
-
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
-import type { MotionValue } from "framer-motion";
-
-function ChartBar({ h, i, scrollYProgress }: { h: number, i: number, scrollYProgress: MotionValue<number> }) {
-  const yOffset = useTransform(scrollYProgress, [0.3 + i * 0.05, 1], [100, 100 - h]);
-  return (
-    <motion.div 
-      className="flex-1 bg-gradient-to-t from-[#FBBF24] to-[#F43F5E] rounded-sm shadow-[0_0_8px_#F43F5E] origin-bottom" 
-      style={{ 
-        height: "100%",
-        y: useMotionTemplate`${yOffset}%`,
-        opacity: 0.4 + (h/100)*0.6 
-      }} 
-    />
-  );
-}
-
-function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionValue<number> }) {
-  const heightStr = useTransform(scrollYProgress, [0, 1], ["0%", h + "%"]);
-  return (
-    <motion.div 
-      className="w-full bg-accent rounded-t-sm" 
-      style={{ 
-        height: heightStr,
-        opacity: h / 100 
-      }} 
-    />
-  );
-}
-
-
-
-
-
-
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const data = [
   { name: "Programmatic", value: 100, color: "#F43F5E", opacity: 1 },
@@ -251,7 +203,7 @@ export function ChannelsCtaSection() {
               <Link 
                 to="/channels" 
                 className="btn-caps btn-caps--primary inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-bold tracking-widest"
-                onMouseEnter={warmStage}
+                onMouseEnter={() => warmStage("routes")}
               >
                 <span>Explore All Channels</span>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -99,9 +99,8 @@ function StatCard({ value, label, counted, accent, videoDriven, align = "center"
 
   const ref = useCountUp(value, counted, durationRef.current.val);
   const alignClass = align === "left" ? "items-start text-left" : align === "right" ? "items-end text-right" : "items-center text-center";
-  const [ended, setEnded] = useState(false);
-  const { mode } = useMode();
-  const isLight = mode === "growth";
+  const [, setEnded] = useState(false);
+  // const isLight = mode === "growth";
 
   useEffect(() => {
     const onEnded = () => setEnded(true);
