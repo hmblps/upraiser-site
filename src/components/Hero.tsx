@@ -27,12 +27,12 @@ const headlineLines = [
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.03, delayChildren: 0 },
+    transition: { staggerChildren: 0, delayChildren: 0, duration: 0 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 1, y: 0 },
   visible: { opacity: 1, y: 0, transition: HERO_SPRING },
 };
 
@@ -246,8 +246,8 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                 <motion.p
                   key={mode}
                   className="hero-lede mt-5 max-w-xl text-balance text-base leading-relaxed text-muted sm:text-lg"
-                  initial={reduced ? false : { opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={false}
+                  animate={false}
                   exit={reduced ? undefined : { opacity: 0, y: -6 }}
                   transition={HERO_SPRING}
                 >
