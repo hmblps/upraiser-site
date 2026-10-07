@@ -177,16 +177,16 @@ function RotatingOmniChart() {
 
 export function ChannelsCtaSection() {
   return (
-    <section id="routes" className="section-band border-t border-border/30 relative overflow-visible z-20 bg-bg">
+    <section id="routes" className="section-band border-t border-border/30 relative overflow-visible z-[100] bg-bg">
       <div className="relative flex flex-col lg:flex-row items-center w-full">
         
         {/* WHEEL & GHOST LABELS COMPONENT */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 z-50 pointer-events-none">
           <RotatingOmniChart />
         </div>
 
         {/* TEXT (RIGHT) */}
-        <div className="page-container relative z-10 w-full flex justify-end items-center h-full py-20 lg:py-32">
+        <div className="page-container relative z-10 w-full flex justify-end items-center h-full py-0">
           <div className="w-full lg:w-[45%] text-left pl-0 lg:pl-10">
             <div className="section-header">
               <p className="section-label">The Channels</p>
