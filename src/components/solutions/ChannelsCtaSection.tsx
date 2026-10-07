@@ -70,11 +70,15 @@ function RotatingOmniChart() {
     offset: ["start end", "end start"],
   });
 
-  // A wide rotation so multiple slices sweep past
-  const rotate = useTransform(scrollYProgress, [0, 1], [-60, 180]);
-  
-  // Parallax for the floating ghost names
-  const labelsY = useTransform(scrollYProgress, [0, 1], [300, -300]);
+  // Wheel rotation
+  const rotateOuter = useTransform(scrollYProgress, [0, 1], [-60, 180]);
+  const rotateInner = useTransform(scrollYProgress, [0, 1], [90, -90]);
+
+  // Parallax for floating data nodes
+  const y1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [150, -50]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [50, -150]);
+  const y4 = useTransform(scrollYProgress, [0, 1], [200, -100]);
 
   return (
     <div ref={containerRef} className="relative w-full h-full flex items-center pointer-events-none">
@@ -82,9 +86,11 @@ function RotatingOmniChart() {
       {/* BACKGROUND GLOW */}
       <div className="absolute top-1/2 left-[10%] -translate-y-1/2 w-[50%] h-[50%] bg-gradient-to-tr from-[#FBBF24] via-[#F97316] to-[#F43F5E] rounded-full blur-[140px] opacity-10 mix-blend-screen pointer-events-none" />
 
-      {/* THIN, LIGHTWEIGHT RECHARTS PIE (Further Left) */}
+      {/* COMPLEX RECHARTS WHEEL (Further Left) */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0">
-        <motion.div style={{ rotate }} className="absolute inset-0 w-full h-full">
+        
+        {/* OUTER ROTATING RING */}
+        <motion.div style={{ rotate: rotateOuter }} className="absolute inset-0 w-full h-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <defs>
@@ -107,38 +113,81 @@ function RotatingOmniChart() {
                 dataKey="value"
                 stroke="none"
                 isAnimationActive={false}
-                labelLine={false}
               >
                 {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={entry.color} 
-                    opacity={entry.opacity} 
-                    style={{ filter: "url(#neonGlow)" }}
-                  />
+                  <Cell key={`outer-${index}`} fill={entry.color} opacity={entry.opacity} style={{ filter: "url(#neonGlow)" }} />
                 ))}
               </Pie>
             </PieChart>
           </ResponsiveContainer>
         </motion.div>
+
+        {/* INNER DASHED RING (Counter-rotating) */}
+        <motion.div style={{ rotate: rotateInner }} className="absolute inset-0 w-full h-full opacity-30">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={[{ value: 1 }]}
+                cx="50%"
+                cy="50%"
+                innerRadius="60%"
+                outerRadius="60.5%"
+                dataKey="value"
+                fill="none"
+                stroke="var(--theme-fg)"
+                strokeWidth={2}
+                strokeDasharray="4 12"
+                isAnimationActive={false}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </motion.div>
+        
+        {/* INNERMOST SOLID RING */}
+        <div className="absolute inset-0 w-full h-full opacity-10">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={[{ value: 1 }]}
+                cx="50%"
+                cy="50%"
+                innerRadius="53%"
+                outerRadius="53.2%"
+                dataKey="value"
+                fill="none"
+                stroke="var(--theme-fg)"
+                strokeWidth={1}
+                isAnimationActive={false}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
       </div>
 
-      {/* FLOATING GHOST LABELS (Middle/Left edge) */}
-      <div className="absolute left-[20%] lg:left-[25%] top-1/2 -translate-y-1/2 h-full overflow-hidden pointer-events-none z-0">
-        <motion.div 
-          style={{ y: labelsY }} 
-          className="flex flex-col gap-12 pt-[50vh]"
-        >
-          {data.map((item, i) => (
-            <div 
-              key={i} 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-[0.2em] whitespace-nowrap opacity-10 text-transparent"
-              style={{ WebkitTextStroke: "2px var(--theme-fg)" }}
-            >
-              {item.name}
-            </div>
-          ))}
+      {/* ELEGANT SCATTERED GHOST LABELS (Like the reference image) */}
+      <div className="absolute left-[30%] lg:left-[35%] top-0 w-[300px] h-full pointer-events-none z-10">
+        
+        <motion.div style={{ y: y1 }} className="absolute top-[20%] left-[10%]">
+          <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
+          <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Programmatic</div>
         </motion.div>
+
+        <motion.div style={{ y: y2 }} className="absolute top-[40%] left-[80%]">
+          <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">22%</div>
+          <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Connected TV</div>
+        </motion.div>
+
+        <motion.div style={{ y: y3 }} className="absolute top-[65%] left-[20%]">
+          <div className="text-4xl lg:text-5xl font-bold text-fg/20 tracking-tight">18%</div>
+          <div className="text-xs lg:text-sm font-semibold text-fg/30 uppercase tracking-widest mt-1">Social Ads</div>
+        </motion.div>
+
+        <motion.div style={{ y: y4 }} className="absolute top-[85%] left-[60%]">
+          <div className="text-3xl lg:text-4xl font-bold text-fg/10 tracking-tight">15%</div>
+          <div className="text-[10px] lg:text-xs font-semibold text-fg/20 uppercase tracking-widest mt-1">OEM & Direct</div>
+        </motion.div>
+
       </div>
 
     </div>
