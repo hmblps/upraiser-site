@@ -1,3 +1,4 @@
+import { GhostBubbleMotion } from "../GhostBubbleMotion";
 import {
   PieChart,
   Pie,
