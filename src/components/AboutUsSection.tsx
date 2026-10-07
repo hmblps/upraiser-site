@@ -1,9 +1,20 @@
 
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+
 export function AboutUsSection() {
+
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
+  
+  // Parallax to sync conceptually with the real mountain below
+  // The real mountain moves [40%, 0%]. We move this wireframe up as well.
+  const y = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
+
   return (
-    <section className="section-band border-t border-border/30 relative overflow-hidden">
+    <section ref={containerRef} className="section-band border-t border-border/30 relative overflow-hidden">
       {/* Schematic Ascent Decoration (Realistic Trace) */}
-      <div className="absolute top-0 left-0 w-full max-w-5xl opacity-[0.15] pointer-events-none -translate-x-[10%] -translate-y-[5%]">
+      <motion.div style={{ y }} className="absolute top-0 left-0 w-full max-w-5xl opacity-40 pointer-events-none -translate-x-[5%]">
         <svg viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" className="font-sans uppercase font-semibold">
           
           <style>
@@ -101,10 +112,11 @@ export function AboutUsSection() {
             </g>
           </g>
         </svg>
-      </div>
+      </motion.div>
 
-      <div className="page-container relative z-10">
-        <div className="section-header">
+      <div className="page-container relative z-10 py-12">
+        <div className="relative z-10 bg-bg/60 backdrop-blur-lg border border-border/30 rounded-3xl p-8 lg:p-16 shadow-2xl">
+          <div className="section-header">
           <p className="section-label">The Expedition Crew</p>
           <h2 className="section-title max-w-4xl text-balance">
             Elevating Your business to the absolute summit
@@ -153,6 +165,7 @@ export function AboutUsSection() {
               </p>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>
