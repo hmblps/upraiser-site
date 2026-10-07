@@ -51,6 +51,7 @@ const data = [
 
 const CustomDeviceBar = (props: any) => {
   const { x, y, width, height, payload } = props;
+  if (!payload || !payload.device) return null;
   const isPhone = payload.device === "phone";
   const isTablet = payload.device === "tablet";
   const isDesktop = payload.device === "desktop";
