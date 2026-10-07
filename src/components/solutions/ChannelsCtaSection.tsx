@@ -1,4 +1,7 @@
 import {
+  PieChart,
+  Pie,
+  Tooltip,
   ComposedChart,
   Line,
   Bar,
@@ -45,143 +48,96 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 
 
 
+
+
+
 const data = [
-  { name: "Mobile", value: 300, device: "phone" },
-  { name: "Tablet", value: 500, device: "tablet" },
-  { name: "Desktop", value: 850, device: "desktop" }
+  { name: "Programmatic", value: 100, color: "#F43F5E" }, // Rose
+  { name: "Connected TV", value: 100, color: "#F97316" }, // Orange
+  { name: "Social Ads", value: 100, color: "#FBBF24" },   // Yellow
+  { name: "OEM & On-Device", value: 100, color: "#34D399" }, // Emerald
+  { name: "Search Ads", value: 100, color: "#3B82F6" },   // Blue
+  { name: "In-App Networks", value: 100, color: "#8B5CF6" }  // Violet
 ];
 
-const CustomDeviceBar = (props: any) => {
-  const { x = 0, y = 0, width = 0, height = 0, payload } = props;
-  
-  const device = payload?.device || payload?.payload?.device;
-  if (!device || Number.isNaN(x) || Number.isNaN(y)) return null;
+function RotatingOmniChart() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
 
-  const cx = x + (width || 0) / 2;
-  const bottomY = y + (height || 0);
+  // Rotate 360 degrees as the user scrolls past the section
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
   
+  // The center text stays unrotated
   return (
-    <g className="transition-all duration-700 ease-out" opacity="0.9">
-      {device === "phone" && (
-        <g transform={`translate(${cx - 80}, ${bottomY - 140})`}>
-          {/* Standing up, slightly angled */}
-          <g transform="rotate(-15) skewY(15) scale(0.9)">
-            {/* Phone Base/Shadow */}
-            <rect x="5" y="5" width="90" height="180" rx="16" fill="var(--theme-border)" opacity="0.5" />
-            <rect x="0" y="0" width="90" height="180" rx="16" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
-            <rect x="6" y="6" width="78" height="168" rx="10" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
-            {/* Minimalist UI lines inside */}
-            <rect x="15" y="20" width="40" height="6" rx="3" fill="var(--theme-border)" />
-            <rect x="15" y="35" width="60" height="40" rx="6" fill="var(--theme-border)" opacity="0.2" />
-            <rect x="15" y="85" width="50" height="4" rx="2" fill="var(--theme-border)" />
-          </g>
-        </g>
-      )}
-      {device === "tablet" && (
-        <g transform={`translate(${cx - 100}, ${bottomY - 100})`}>
-          {/* Lying down flat isometric */}
-          <g transform="rotate(-45) skewX(50) scale(1.1)">
-            {/* Shadow/Thickness */}
-            <rect x="5" y="5" width="160" height="220" rx="12" fill="var(--theme-border)" opacity="0.4" />
-            <rect x="0" y="0" width="160" height="220" rx="12" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="1.5" />
-            {/* Screen */}
-            <rect x="8" y="8" width="144" height="204" rx="6" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
-            {/* Mock UI */}
-            <circle cx="25" cy="25" r="8" fill="var(--theme-border)" />
-            <rect x="40" y="22" width="60" height="6" rx="3" fill="var(--theme-border)" />
-            <rect x="20" y="50" width="120" height="80" rx="8" fill="var(--theme-border)" opacity="0.1" />
-          </g>
-        </g>
-      )}
-      {device === "desktop" && (
-        <g transform={`translate(${cx - 100}, ${bottomY - 260})`}>
-          {/* Desktop/Laptop open */}
-          <g transform="scale(1.1)">
-            {/* Screen part (standing) */}
-            <g transform="rotate(-10) skewY(10)">
-              <rect x="5" y="5" width="220" height="140" rx="8" fill="var(--theme-border)" opacity="0.3" />
-              <rect x="0" y="0" width="220" height="140" rx="8" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
-              <rect x="6" y="6" width="208" height="128" rx="4" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
-              <rect x="20" y="20" width="160" height="60" rx="6" fill="var(--theme-border)" opacity="0.1" />
-            </g>
-            {/* Keyboard base (lying flat) */}
-            <g transform="translate(-10, 150) rotate(-45) skewX(50)">
-              <rect x="0" y="0" width="220" height="140" rx="8" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
-              {/* Keyboard mock */}
-              <rect x="15" y="15" width="190" height="60" rx="4" fill="var(--theme-border)" opacity="0.2" />
-              <rect x="75" y="85" width="70" height="40" rx="4" fill="var(--theme-border)" opacity="0.3" />
-            </g>
-          </g>
-        </g>
-      )}
-    </g>
-  );
-};
-
-function InteractiveVisuals() {
-  const id = useId().replace(/:/g, "");
-  
-  return (
-    <div className="relative flex-1 w-full max-w-[900px] h-[550px] mx-auto lg:mx-0 pointer-events-none mode-line-chart mt-10">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[120px] opacity-15 mix-blend-screen" />
+    <div ref={containerRef} className="relative flex-1 w-full max-w-[600px] aspect-square mx-auto lg:mx-0 flex items-center justify-center pointer-events-none lg:pointer-events-auto">
       
-      <ResponsiveContainer width="100%" height={550}>
-        <ComposedChart data={data} margin={{ top: 80, right: 40, left: 40, bottom: 40 }}>
-          <defs>
-            <linearGradient id={`chartGrad-${id}`} x1={0} y1={0} x2={1} y2={0}>
-              <stop offset="0%" stopColor="#FBBF24" />
-              <stop offset="50%" stopColor="#F97316" />
-              <stop offset="100%" stopColor="#F43F5E" />
-            </linearGradient>
-            <linearGradient id={`areaGrad-${id}`} x1={0} y1={0} x2={0} y2={1}>
-              <stop offset="0%" stopColor="#F97316" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="#F43F5E" stopOpacity={0} />
-            </linearGradient>
-            <filter id={`glow-${id}`} x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
-          
-          <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.3} vertical={false} strokeDasharray="3 9" />
-          
-          <XAxis 
-            dataKey="name" 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fill: "var(--theme-fg)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }} 
-            dy={35} 
-          />
-          
-          <Bar dataKey="value" shape={<CustomDeviceBar />} barSize={60} isAnimationActive={false} />
-          
-          <Area 
-            type="monotone" 
-            dataKey="value" 
-            stroke="none" 
-            fill={`url(#areaGrad-${id})`} 
-            isAnimationActive={true}
-            animationDuration={1500}
-            animationEasing="ease-out"
-          />
-          
-          <Line 
-            type="monotone" 
-            dataKey="value" 
-            stroke={`url(#chartGrad-${id})`} 
-            strokeWidth={4} 
-            dot={{ r: 7, fill: "var(--theme-bg)", stroke: "#F97316", strokeWidth: 3 }} 
-            activeDot={{ r: 10, fill: "#FBBF24", stroke: "var(--theme-bg)", strokeWidth: 3, filter: `url(#glow-${id})` }}
-            isAnimationActive={true}
-            animationDuration={1500}
-            animationEasing="ease-out"
-            filter={`url(#glow-${id})`}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
+      {/* BACKGROUND GLOW */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gradient-to-tr from-[var(--brand-orange)] to-[var(--brand-red)] rounded-full blur-[100px] opacity-15 mix-blend-screen pointer-events-none" />
+
+      {/* ROTATING RECHARTS PIE */}
+      <motion.div style={{ rotate }} className="absolute inset-0 w-full h-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <defs>
+              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.3" />
+              </filter>
+            </defs>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius="50%"
+              outerRadius="90%"
+              paddingAngle={4}
+              cornerRadius={16}
+              dataKey="value"
+              stroke="var(--theme-bg)"
+              strokeWidth={4}
+              isAnimationActive={true}
+              animationDuration={1500}
+            >
+              {data.map((entry, index) => (
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={entry.color} 
+                  opacity={0.85} 
+                  style={{ filter: "drop-shadow(0px 8px 16px rgba(0,0,0,0.2))" }}
+                />
+              ))}
+            </Pie>
+            
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: 'var(--theme-bg-elevated)', 
+                borderColor: 'var(--theme-border)',
+                borderRadius: '16px',
+                padding: '12px 20px',
+                fontWeight: 600
+              }} 
+              itemStyle={{ color: 'var(--theme-fg)' }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </motion.div>
+
+      {/* STATIC CENTER TEXT */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+        <div className="w-[45%] h-[45%] bg-bg rounded-full shadow-[inset_0_4px_20px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center border-4 border-bg-elevated">
+          <span className="font-bold text-lg md:text-xl text-fg tracking-tight leading-tight">ONE SUPPLY</span>
+          <span className="font-bold text-lg md:text-xl text-muted tracking-tight leading-tight">PATH</span>
+        </div>
+      </div>
+      
+      {/* FLOATING LABELS (We map them statically so they don't spin wildly, or let them spin) */}
+      {/* To keep it clean, Recharts Tooltip handles hover, and the core graphic spins. */}
     </div>
   );
 }
+
 
 export function ChannelsCtaSection() {
   const reduced = useReducedMotion();
@@ -224,7 +180,7 @@ export function ChannelsCtaSection() {
           </motion.div>
         </div>
 
-        <InteractiveVisuals />
+        <RotatingOmniChart />
 
       </div>
     </section>
