@@ -27,7 +27,7 @@ const headlineLines = [
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.18 },
+    transition: { staggerChildren: 0.03, delayChildren: 0 },
   },
 };
 
