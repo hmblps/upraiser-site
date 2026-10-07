@@ -74,11 +74,16 @@ function RotatingOmniChart() {
   const rotateOuter = useTransform(scrollYProgress, [0, 1], [-60, 180]);
   const rotateInner = useTransform(scrollYProgress, [0, 1], [90, -90]);
 
-  // Parallax for floating data nodes
-  const y1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [150, -50]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [50, -150]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [200, -100]);
+  // Parallax and fade for floating data nodes (behaving like ghost numbers everywhere else)
+  const y1 = useTransform(scrollYProgress, [0, 1], [150, -50]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [200, 0]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y4 = useTransform(scrollYProgress, [0, 1], [250, -50]);
+
+  const o1 = useTransform(scrollYProgress, [0.1, 0.4, 0.8, 1], [0, 1, 1, 0]);
+  const o2 = useTransform(scrollYProgress, [0.2, 0.5, 0.8, 1], [0, 1, 1, 0]);
+  const o3 = useTransform(scrollYProgress, [0.3, 0.6, 0.9, 1], [0, 1, 1, 0]);
+  const o4 = useTransform(scrollYProgress, [0.4, 0.7, 0.9, 1], [0, 1, 1, 0]);
 
   return (
     <div ref={containerRef} className="relative w-full h-full flex items-center pointer-events-none">
@@ -86,7 +91,26 @@ function RotatingOmniChart() {
       {/* BACKGROUND GLOW */}
       <div className="absolute top-1/2 left-[10%] -translate-y-1/2 w-[50%] h-[50%] bg-gradient-to-tr from-[#FBBF24] via-[#F97316] to-[#F43F5E] rounded-full blur-[140px] opacity-10 mix-blend-screen pointer-events-none" />
 
-      {/* COMPLEX RECHARTS WHEEL (Further Left) */}
+      {/* TICK MARKS (DIAL SCALE) */}
+      <motion.div style={{ rotate: rotateInner }} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0 opacity-40">
+        <svg className="w-full h-full" viewBox="-500 -500 1000 1000">
+          {Array.from({ length: 72 }).map((_, i) => (
+            <line
+              key={i}
+              x1="0"
+              y1="-440"
+              x2="0"
+              y2={i % 6 === 0 ? "-460" : "-450"}
+              stroke="var(--brand-yellow)"
+              strokeWidth={i % 6 === 0 ? "2" : "1"}
+              strokeOpacity={i % 6 === 0 ? 0.6 : 0.2}
+              transform={`rotate(${i * 5})`}
+            />
+          ))}
+        </svg>
+      </motion.div>
+
+      {/* COMPLEX RECHARTS WHEEL */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1400px] lg:h-[1400px] z-0">
         
         {/* OUTER ROTATING RING */}
@@ -122,7 +146,7 @@ function RotatingOmniChart() {
           </ResponsiveContainer>
         </motion.div>
 
-        {/* INNER DASHED RING (Counter-rotating) */}
+        {/* INNER DASHED RING */}
         <motion.div style={{ rotate: rotateInner }} className="absolute inset-0 w-full h-full opacity-30">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -162,28 +186,27 @@ function RotatingOmniChart() {
             </PieChart>
           </ResponsiveContainer>
         </div>
-
       </div>
 
-      {/* ELEGANT SCATTERED GHOST LABELS (Like the reference image) */}
+      {/* ELEGANT SCATTERED GHOST LABELS */}
       <div className="absolute left-[30%] lg:left-[35%] top-0 w-[300px] h-full pointer-events-none z-10">
         
-        <motion.div style={{ y: y1 }} className="absolute top-[20%] left-[10%]">
+        <motion.div style={{ y: y1, opacity: o1 }} className="absolute top-[20%] left-[10%]">
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Programmatic</div>
         </motion.div>
 
-        <motion.div style={{ y: y2 }} className="absolute top-[40%] left-[80%]">
+        <motion.div style={{ y: y2, opacity: o2 }} className="absolute top-[40%] left-[80%]">
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">22%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Connected TV</div>
         </motion.div>
 
-        <motion.div style={{ y: y3 }} className="absolute top-[65%] left-[20%]">
+        <motion.div style={{ y: y3, opacity: o3 }} className="absolute top-[65%] left-[20%]">
           <div className="text-4xl lg:text-5xl font-bold text-fg/20 tracking-tight">18%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/30 uppercase tracking-widest mt-1">Social Ads</div>
         </motion.div>
 
-        <motion.div style={{ y: y4 }} className="absolute top-[85%] left-[60%]">
+        <motion.div style={{ y: y4, opacity: o4 }} className="absolute top-[85%] left-[60%]">
           <div className="text-3xl lg:text-4xl font-bold text-fg/10 tracking-tight">15%</div>
           <div className="text-[10px] lg:text-xs font-semibold text-fg/20 uppercase tracking-widest mt-1">OEM & Direct</div>
         </motion.div>
