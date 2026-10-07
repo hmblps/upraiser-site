@@ -10,13 +10,15 @@ export function AboutUsSection() {
   // Parallax to sync conceptually with the real mountain below
   // The real mountain moves [40%, 0%]. We move this wireframe up as well.
   const x = useTransform(scrollYProgress, [0, 1], ["-15%", "5%"]);
-  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "10%"]);
+  // Schematic is sized to 80% of the section height and only travels down by the remaining ~16%,
+  // so neither the summit/EVEREST label (top) nor the glaciers (bottom) are cropped by the section edges.
+  const y = useTransform(scrollYProgress, [0, 1], ["2%", "16%"]);
 
   return (
     <section ref={containerRef} className="section-band border-t border-border/30 relative overflow-hidden">
       {/* Schematic Ascent Decoration (Realistic Trace) */}
-      <motion.div style={{ x, y }} className="absolute top-0 left-0 w-full max-w-5xl opacity-40 pointer-events-none">
-        <svg viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" className="font-sans uppercase font-semibold">
+      <motion.div style={{ x, y }} className="absolute top-0 left-0 h-[80%] opacity-40 pointer-events-none">
+        <svg viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-auto font-sans uppercase font-semibold overflow-visible">
           
           <style>
             {`

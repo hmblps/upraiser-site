@@ -20,11 +20,13 @@ function RotatingOmniChart() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"],
+    // The wheel (≈1100px) bleeds ~400px into neighbouring sections, far beyond this 300px box.
+    // Widen the scroll window so rotation keeps tracking while the overflowing part is on screen.
+    offset: ["start 1.7", "end -0.7"],
   });
 
-  // Wheel rotation
-  const rotateOuter = useTransform(scrollYProgress, [0, 1], [-60, 180]);
+  // Wheel rotation — same ~0.2°/px speed, same orientation at the section centre (60°)
+  const rotateOuter = useTransform(scrollYProgress, [0, 1], [-186, 306]);
   // Parallax and fade for floating data nodes (behaving like ghost numbers everywhere else)
   return (
     <div ref={containerRef} className="relative w-full h-full flex items-center pointer-events-none">
