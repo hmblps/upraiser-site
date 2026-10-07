@@ -5,9 +5,10 @@ import {
   XAxis,
   ResponsiveContainer,
   CartesianGrid,
-  Cell
+  Cell,
+  Area
 } from "recharts";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useId } from "react";
 import { warmStage } from "../../lib/scrollPreload";
 
 import { Link } from "react-router-dom";
@@ -43,16 +44,18 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 }
 
 
+import { useId } from "react";
+import { Area } from "recharts";
+
 const data = [
-  { name: "Phone", value: 300, device: "phone" },
-  { name: "Tablet", value: 600, device: "tablet" },
-  { name: "Desktop", value: 900, device: "desktop" }
+  { name: "Mobile", value: 300, device: "phone" },
+  { name: "Tablet", value: 650, device: "tablet" },
+  { name: "Desktop", value: 950, device: "desktop" }
 ];
 
 const CustomDeviceBar = (props: any) => {
   const { x = 0, y = 0, width = 0, height = 0, payload } = props;
   
-  // Safe extraction
   const device = payload?.device || payload?.payload?.device;
   if (!device || Number.isNaN(x) || Number.isNaN(y)) return null;
 
@@ -60,25 +63,35 @@ const CustomDeviceBar = (props: any) => {
   const bottomY = y + (height || 0);
   
   return (
-    <g stroke="var(--theme-border)" strokeWidth="2" fill="none" opacity="0.4">
+    <g className="transition-all duration-700 ease-out">
       {device === "phone" && (
-        <g transform={`translate(${cx - 40}, ${bottomY - 160})`}>
-          <rect x="0" y="0" width="80" height="160" rx="12" />
-          <line x1="30" y1="10" x2="50" y2="10" />
+        <g transform={`translate(${cx - 45}, ${bottomY - 180})`}>
+          <rect x="0" y="0" width="90" height="180" rx="16" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
+          <rect x="0" y="0" width="90" height="180" rx="16" fill="url(#chartGrad)" opacity="0.05" />
+          {/* Screen */}
+          <rect x="6" y="6" width="78" height="168" rx="10" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
+          <line x1="35" y1="12" x2="55" y2="12" stroke="var(--theme-muted)" strokeWidth="3" strokeLinecap="round" />
         </g>
       )}
       {device === "tablet" && (
-        <g transform={`translate(${cx - 70}, ${bottomY - 200})`}>
-          <rect x="0" y="0" width="140" height="200" rx="16" />
-          <circle cx="70" cy="15" r="4" />
+        <g transform={`translate(${cx - 85}, ${bottomY - 220})`}>
+          <rect x="0" y="0" width="170" height="220" rx="20" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
+          <rect x="0" y="0" width="170" height="220" rx="20" fill="url(#chartGrad)" opacity="0.1" />
+          {/* Screen */}
+          <rect x="8" y="8" width="154" height="204" rx="12" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
+          <circle cx="85" cy="18" r="3" fill="var(--theme-muted)" />
         </g>
       )}
       {device === "desktop" && (
-        <g transform={`translate(${cx - 120}, ${bottomY - 240})`}>
-          <rect x="0" y="0" width="240" height="160" rx="12" />
-          <line x1="0" y1="20" x2="240" y2="20" />
-          <rect x="90" y="160" width="60" height="30" />
-          <line x1="60" y1="190" x2="180" y2="190" strokeWidth="4" />
+        <g transform={`translate(${cx - 150}, ${bottomY - 260})`}>
+          <rect x="0" y="0" width="300" height="190" rx="16" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" />
+          <rect x="0" y="0" width="300" height="190" rx="16" fill="url(#chartGrad)" opacity="0.15" />
+          {/* Screen */}
+          <rect x="8" y="8" width="284" height="154" rx="8" fill="var(--theme-bg-elevated)" stroke="var(--theme-border)" strokeOpacity="0.5" />
+          <circle cx="150" cy="16" r="3" fill="var(--theme-muted)" />
+          {/* Base */}
+          <path d="M120 190 L100 250 L200 250 L180 190 Z" fill="var(--theme-bg)" stroke="var(--theme-border)" strokeWidth="2" strokeLinejoin="round" />
+          <rect x="80" y="250" width="140" height="10" rx="4" fill="var(--theme-border)" />
         </g>
       )}
     </g>
@@ -86,33 +99,64 @@ const CustomDeviceBar = (props: any) => {
 };
 
 function InteractiveVisuals() {
+  const id = useId().replace(/:/g, "");
+  
   return (
-    <div className="relative flex-1 w-full max-w-[800px] h-[400px] mx-auto lg:mx-0 pointer-events-none mode-line-chart">
-      <ResponsiveContainer width="100%" height={400}>
-        <ComposedChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+    <div className="relative flex-1 w-full max-w-[800px] h-[450px] mx-auto lg:mx-0 pointer-events-none mode-line-chart">
+      {/* Decorative blurred glow behind the chart */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-gradient-to-tr from-[#F97316] to-[#F43F5E] rounded-full blur-[100px] opacity-20 dark:opacity-30 mix-blend-screen" />
+      
+      <ResponsiveContainer width="100%" height={450}>
+        <ComposedChart data={data} margin={{ top: 40, right: 30, left: 30, bottom: 20 }}>
           <defs>
-            <linearGradient id="chartGrad" x1={0} y1={0} x2={0} y2={1}>
+            <linearGradient id={`chartGrad-${id}`} x1={0} y1={0} x2={1} y2={0}>
               <stop offset="0%" stopColor="#FBBF24" />
               <stop offset="50%" stopColor="#F97316" />
               <stop offset="100%" stopColor="#F43F5E" />
             </linearGradient>
+            <linearGradient id={`areaGrad-${id}`} x1={0} y1={0} x2={0} y2={1}>
+              <stop offset="0%" stopColor="#F97316" stopOpacity={0.4} />
+              <stop offset="100%" stopColor="#F43F5E" stopOpacity={0} />
+            </linearGradient>
+            <filter id={`glow-${id}`} x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="8" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
           </defs>
           
-          <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.55} vertical={false} strokeDasharray="3 6" />
+          <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.4} vertical={false} strokeDasharray="4 8" />
           
-          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "var(--theme-muted)", fontSize: 11, fontWeight: 500 }} dy={10} />
+          <XAxis 
+            dataKey="name" 
+            axisLine={false} 
+            tickLine={false} 
+            tick={{ fill: "var(--theme-fg)", fontSize: 13, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }} 
+            dy={25} 
+          />
           
-          {/* Bar with explicit barSize so width is never 0 */}
           <Bar dataKey="value" shape={<CustomDeviceBar />} barSize={60} isAnimationActive={false} />
+          
+          <Area 
+            type="monotone" 
+            dataKey="value" 
+            stroke="none" 
+            fill={`url(#areaGrad-${id})`} 
+            isAnimationActive={true}
+            animationDuration={1500}
+            animationEasing="ease-out"
+          />
           
           <Line 
             type="monotone" 
             dataKey="value" 
-            stroke="url(#chartGrad)" 
-            strokeWidth={4.5} 
-            dot={{ r: 6, fill: "var(--theme-bg)", stroke: "#F97316", strokeWidth: 2 }} 
-            activeDot={false}
-            isAnimationActive={false}
+            stroke={`url(#chartGrad-${id})`} 
+            strokeWidth={5} 
+            dot={{ r: 8, fill: "var(--theme-bg)", stroke: "#F97316", strokeWidth: 3 }} 
+            activeDot={{ r: 12, fill: "#FBBF24", stroke: "var(--theme-bg)", strokeWidth: 4, filter: `url(#glow-${id})` }}
+            isAnimationActive={true}
+            animationDuration={1500}
+            animationEasing="ease-out"
+            filter={`url(#glow-${id})`}
           />
         </ComposedChart>
       </ResponsiveContainer>
