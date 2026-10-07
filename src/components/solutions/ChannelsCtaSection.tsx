@@ -44,41 +44,36 @@ function WaveBar({ h, scrollYProgress }: { h: number, scrollYProgress: MotionVal
 
 
 const data = [
-  { name: "Phone", value: 200, device: "phone" },
-  { name: "Tablet", value: 500, device: "tablet" },
-  { name: "Desktop", value: 800, device: "desktop" }
+  { name: "Phone", value: 300, device: "phone" },
+  { name: "Tablet", value: 600, device: "tablet" },
+  { name: "Desktop", value: 900, device: "desktop" }
 ];
 
 const CustomDeviceBar = (props: any) => {
   const { x = 0, y = 0, width = 0, height = 0, payload } = props;
-  if (!payload) return null;
-  const device = payload.device || payload.payload?.device;
-  if (!device) return null;
-  if (Number.isNaN(x) || Number.isNaN(y)) return null;
-  const isPhone = device === "phone";
-  const isTablet = device === "tablet";
-  const isDesktop = device === "desktop";
   
-  // Create a device outline based on the bar's bounding box
-  // We'll scale the device to fit inside the bar width/height
-  const cx = x + width / 2;
-  const bottomY = y + height;
+  // Safe extraction
+  const device = payload?.device || payload?.payload?.device;
+  if (!device || Number.isNaN(x) || Number.isNaN(y)) return null;
+
+  const cx = x + (width || 0) / 2;
+  const bottomY = y + (height || 0);
   
   return (
     <g stroke="var(--theme-border)" strokeWidth="2" fill="none" opacity="0.4">
-      {isPhone && (
+      {device === "phone" && (
         <g transform={`translate(${cx - 40}, ${bottomY - 160})`}>
           <rect x="0" y="0" width="80" height="160" rx="12" />
           <line x1="30" y1="10" x2="50" y2="10" />
         </g>
       )}
-      {isTablet && (
+      {device === "tablet" && (
         <g transform={`translate(${cx - 70}, ${bottomY - 200})`}>
           <rect x="0" y="0" width="140" height="200" rx="16" />
           <circle cx="70" cy="15" r="4" />
         </g>
       )}
-      {isDesktop && (
+      {device === "desktop" && (
         <g transform={`translate(${cx - 120}, ${bottomY - 240})`}>
           <rect x="0" y="0" width="240" height="160" rx="12" />
           <line x1="0" y1="20" x2="240" y2="20" />
@@ -93,26 +88,23 @@ const CustomDeviceBar = (props: any) => {
 function InteractiveVisuals() {
   return (
     <div className="relative flex-1 w-full max-w-[800px] h-[400px] mx-auto lg:mx-0 pointer-events-none mode-line-chart">
-      <ResponsiveContainer width="100%" height="100%">
-        <svg width="0" height="0" style={{ position: 'absolute' }}>
+      <ResponsiveContainer width="100%" height={400}>
+        <ComposedChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
           <defs>
-            <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
+            <linearGradient id="chartGrad" x1={0} y1={0} x2={0} y2={1}>
               <stop offset="0%" stopColor="#FBBF24" />
               <stop offset="50%" stopColor="#F97316" />
               <stop offset="100%" stopColor="#F43F5E" />
             </linearGradient>
           </defs>
-        </svg>
-        <ComposedChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
           
           <CartesianGrid stroke="var(--theme-border)" strokeOpacity={0.55} vertical={false} strokeDasharray="3 6" />
           
           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "var(--theme-muted)", fontSize: 11, fontWeight: 500 }} dy={10} />
           
-          {/* The Devices drawn as Bars */}
-          <Bar dataKey="value" shape={<CustomDeviceBar />} barSize={40} isAnimationActive={false} />
+          {/* Bar with explicit barSize so width is never 0 */}
+          <Bar dataKey="value" shape={<CustomDeviceBar />} barSize={60} isAnimationActive={false} />
           
-          {/* The Data Line drawn on top */}
           <Line 
             type="monotone" 
             dataKey="value" 
