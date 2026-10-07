@@ -22,7 +22,7 @@ const segments = [
 const radii = [168, 138, 108, 78];
 
 const fraudGhostLayout = [
-  { left: "58%", mobileLeft: "15%", originY: 76, mobileOriginY: 89, drift: 10, duration: 7.2, delay: 0 },
+  { left: "67%", mobileLeft: "15%", originY: 64, mobileOriginY: 89, drift: 10, duration: 7.2, delay: 0 },
   { left: "68%", mobileLeft: "35%", originY: 84, mobileOriginY: 95, drift: -8, duration: 7.8, delay: 1.1 },
   { left: "76%", mobileLeft: "55%", originY: 70, mobileOriginY: 85, drift: 12, duration: 8.1, delay: 2.0 },
   { left: "84%", mobileLeft: "75%", originY: 80, mobileOriginY: 91, drift: -8, duration: 6.6, delay: 2.8 },
