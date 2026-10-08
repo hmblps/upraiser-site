@@ -9,9 +9,7 @@ import { InfrastructureGrid } from "./InfrastructureGrid";
 
 const FoldChart = lazy(() => import("./ModeChart").then((m) => ({ default: m.FoldChart })));
 const FoldAreaMass = lazy(() => import("./FoldAreaMass").then((m) => ({ default: m.FoldAreaMass })));
-const FraudScrollChart = lazy(() =>
-  import("./FraudScrollChart").then((m) => ({ default: m.FraudScrollChart })),
-);
+
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -91,17 +89,17 @@ export function AccentScrollFold({
   const bodyOpacity = useTransform(progress, [0.64, 0.76], [0, 1]);
   const bodyX = useTransform(progress, [0.64, 0.76], [-14, 0]);
   const scale = useTransform(progress, (value) => {
-    const t = clamp((value - 0.06) / 0.62, 0, 1);
+    const t = clamp((value - 0.20) / 0.48, 0, 1);
     return lerp(1, endScaleRef.current, t);
   });
   const x = useTransform(progress, (value) => {
     if (!points) return 0;
-    const t = clamp((value - 0.08) / 0.58, 0, 1);
+    const t = clamp((value - 0.22) / 0.44, 0, 1);
     return lerp(points.start.x, points.end.x, t) - points.start.x;
   });
   const y = useTransform(progress, (value) => {
     if (!points) return 0;
-    const t = clamp((value - 0.08) / 0.58, 0, 1);
+    const t = clamp((value - 0.22) / 0.44, 0, 1);
     return lerp(points.start.y, points.end.y, t) - points.start.y;
   });
 
@@ -137,7 +135,7 @@ export function AccentScrollFold({
         ) : null}
         {ambient === "fraud" ? (
           <Suspense fallback={null}>
-            <FraudScrollChart progress={progress} />
+            <FoldChart progress={progress} forceMode="fraud" />
           </Suspense>
         ) : null}
 

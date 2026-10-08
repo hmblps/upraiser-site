@@ -748,19 +748,19 @@ html[data-os="windows"] .parity-water__lake {
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    transparent 34%,
-    rgba(0, 0, 0, 0.12) 40%,
-    rgba(0, 0, 0, 0.45) 46%,
-    black 52%,
+    transparent 15%,
+    rgba(0, 0, 0, 0.12) 22%,
+    rgba(0, 0, 0, 0.45) 28%,
+    black 35%,
     black 100%
   );
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    transparent 34%,
-    rgba(0, 0, 0, 0.12) 40%,
-    rgba(0, 0, 0, 0.45) 46%,
-    black 52%,
+    transparent 15%,
+    rgba(0, 0, 0, 0.12) 22%,
+    rgba(0, 0, 0, 0.45) 28%,
+    black 35%,
     black 100%
   );
 }
@@ -898,3 +898,69 @@ html[data-os="windows"] .parity-water__lake {
     left: 33%;
   }
 }
+
+/* Specific layout for Fraud Filter chart to look like a right-side dashboard */
+@media (min-width: 768px) {
+  .fold-chart--infrastructure {
+    /* Keep 100vw coordinate space so ghosts map correctly, just lift it higher */
+    top: 5%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .fold-chart--infrastructure {
+    top: 2%;
+  }
+}
+
+/* Do not clip ghosts for fraud chart on tablet, as it does not have the same layout collision */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .fold-chart--fraud .fold-chart-ghosts, .fold-chart--infrastructure .fold-chart-ghosts {
+    clip-path: none;
+  }
+}
+
+/* Override the split-copy clip for the fraud chart so ghosts are fully visible across the chart */
+@media (min-width: 768px) {
+  .accent-scroll-section--split-copy .fold-chart--fraud .fold-chart-ghosts, .fold-chart--infrastructure .fold-chart-ghosts {
+    clip-path: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+
+/* Override ghost color to RED for Fraud mode (infrastructure mode) */
+.fold-chart--infrastructure .fold-chart-ghost-value[data-ghost-theme="red"],
+.fold-chart--fraud .fold-chart-ghost-value[data-ghost-theme="red"],
+.fold-chart--infrastructure .fold-chart-ghost-value:not([data-ghost-theme="gold"]),
+.fold-chart--fraud .fold-chart-ghost-value:not([data-ghost-theme="gold"]) {
+  color: color-mix(in srgb, var(--theme-accent-secondary) 85%, var(--theme-fg) 15%) !important;
+}
+
+.fold-chart--infrastructure .fold-chart-ghost-label[data-ghost-theme="red"],
+.fold-chart--fraud .fold-chart-ghost-label[data-ghost-theme="red"],
+.fold-chart--infrastructure .fold-chart-ghost-label:not([data-ghost-theme="gold"]),
+.fold-chart--fraud .fold-chart-ghost-label:not([data-ghost-theme="gold"]) {
+  color: color-mix(in srgb, var(--theme-accent-secondary) 65%, var(--theme-muted) 35%) !important;
+}
+
+/* Force GOLD color for positive ghosts in Fraud mode */
+.fold-chart--infrastructure .fold-chart-ghost-value[data-ghost-theme="gold"],
+.fold-chart--fraud .fold-chart-ghost-value[data-ghost-theme="gold"] {
+  color: color-mix(in srgb, var(--theme-accent) 85%, var(--theme-fg) 15%) !important;
+}
+
+.fold-chart--infrastructure .fold-chart-ghost-label[data-ghost-theme="gold"],
+.fold-chart--fraud .fold-chart-ghost-label[data-ghost-theme="gold"] {
+  color: color-mix(in srgb, var(--theme-accent) 65%, var(--theme-muted) 35%) !important;
+}
+
+
+
+
+
+
+
+
+

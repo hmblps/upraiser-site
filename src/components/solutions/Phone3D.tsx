@@ -22,7 +22,6 @@ import {
   type Group,
   type Material,
   type Mesh,
-  type MeshStandardMaterial,
   type Object3D,
   type Texture,
 } from "three";
@@ -142,27 +141,57 @@ function applyScreenTexture(root: Object3D, map: Texture) {
     const apply = (mat: Material) => {
       const name = mat.name || "";
 
-      if (/glass/i.test(name) && !/screen/i.test(name)) {
-        // Already patched on a prior pass — don't clone forever.
-        if ((mat as MeshStandardMaterial & { userData: { upraiserGlass?: boolean } }).userData?.upraiserGlass) {
-          return mat;
+      if (!/screen/i.test(name)) {
+        // Fix for weak Windows/GPUs where PMREM environment map or transmission fails.
+        // Pure metals (metalness=1) with no env map render completely black.
+        // Transmission (refraction) often crashes or turns black on old drivers.
+        if ('metalness' in mat) {
+          const m = mat as any; // Cast to access standard/physical properties
+          let needsClone = false;
+          
+          if (m.metalness > 0.75) needsClone = true;
+          if (m.transmission > 0) needsClone = true;
+          
+          // The old 'glass' detection for the front cover
+          if (/glass/i.test(name) && !m.userData?.upraiserGlass) {
+            const glass = mat.clone() as any;
+            glass.transparent = true;
+            glass.opacity = 0.06;
+            glass.depthWrite = false;
+            glass.roughness = 0.12;
+            glass.metalness = 0;
+            glass.color = new Color("#ffffff");
+            glass.envMapIntensity = 0.3;
+            glass.userData = { ...glass.userData, upraiserGlass: true };
+            glass.needsUpdate = true;
+            return glass;
+          }
+
+          if (needsClone) {
+            if (m.userData?.upraiserDowngraded) return m;
+            const patched = mat.clone() as any;
+            
+            // Downgrade mirror to 75% so diffuse lighting still works if env map fails
+            if (patched.metalness > 0.75) patched.metalness = 0.75;
+            
+            // Remove heavy refraction, replace with simple alpha transparency
+            if (patched.transmission > 0) {
+              patched.transmission = 0;
+              patched.transparent = true;
+              patched.opacity = 0.15;
+              patched.roughness = Math.max(0.2, patched.roughness);
+              patched.metalness = Math.min(0.5, patched.metalness);
+            }
+            
+            patched.userData = { ...patched.userData, upraiserDowngraded: true };
+            patched.needsUpdate = true;
+            return patched;
+          }
         }
-        const glass = mat.clone() as MeshStandardMaterial;
-        glass.transparent = true;
-        glass.opacity = 0.06;
-        glass.depthWrite = false;
-        glass.roughness = 0.12;
-        glass.metalness = 0;
-        glass.color = new Color("#ffffff");
-        glass.envMapIntensity = 0.3;
-        glass.userData = { ...glass.userData, upraiserGlass: true };
-        glass.needsUpdate = true;
-        return glass;
+        return mat;
       }
 
-      if (!/screen/i.test(name)) return mat;
-
-      const screen = mat as MeshStandardMaterial;
+      const screen = mat as any;
     
       screen.map = map;
       screen.emissiveMap = map;

@@ -1,3 +1,4 @@
+import { FraudScrollChart } from "./FraudScrollChart";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -147,10 +148,12 @@ function smoothLine(points: { x: number; y: number }[]): string {
 
 type FoldChartProps = {
   progress: MotionValue<number>;
+  forceMode?: "fraud" | "growth";
 };
 
-export function FoldChart({ progress }: FoldChartProps) {
-  const { mode } = useMode();
+export function FoldChart({ progress, forceMode }: FoldChartProps) {
+  const { mode: contextMode } = useMode();
+  const mode = forceMode || contextMode;
   const reduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
 
@@ -206,14 +209,18 @@ export function FoldChart({ progress }: FoldChartProps) {
       style={{ opacity }} 
       aria-hidden
     >
-      <div className="fold-chart-ghosts">
-        {ghosts.map((g) => (
-          <GhostBubble key={g.id} metric={g} morph={morph} />
-        ))}
-      </div>
+      {!isGrowth ? (
+        <FraudScrollChart progress={progress} />
+      ) : (
+        <>
+          <div className="fold-chart-ghosts">
+            {ghosts.map((g) => (
+              <GhostBubble key={g.id} metric={g} morph={morph} />
+            ))}
+          </div>
 
-      <div className="absolute inset-0 w-full h-full pointer-events-none">
-        <svg 
+          <div className="absolute inset-0 w-full h-full pointer-events-none">
+            <svg 
           className="w-full h-full overflow-visible" 
           viewBox={`0 0 ${chartWidth} ${chartHeight}`}
           preserveAspectRatio="none"
@@ -259,7 +266,9 @@ export function FoldChart({ progress }: FoldChartProps) {
             style={{ filter: "drop-shadow(0 4px 16px var(--theme-accent-dim))" }}
           />
         </svg>
-      </div>
+          </div>
+        </>
+      )}
     </motion.div>
   );
 }
