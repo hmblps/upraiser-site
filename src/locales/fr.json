@@ -18,5 +18,12 @@
     "soon": "Prochainement",
     "on": "Actif",
     "soonBadge": "Bientôt"
+  },
+  "hero": {
+    "line1": "Nous voyons à quel point",
+    "line2": "impressionnante",
+    "line3": "Ton ascension",
+    "line4": "vers le sommet",
+    "line5": "peut être."
   }
 }

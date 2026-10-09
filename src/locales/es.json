@@ -18,5 +18,12 @@
     "soon": "Próximamente",
     "on": "Activo",
     "soonBadge": "Pronto"
+  },
+  "hero": {
+    "line1": "Vemos lo",
+    "line2": "impresionante",
+    "line3": "Tu ascenso",
+    "line4": "a la cima",
+    "line5": "puede ser."
   }
 }

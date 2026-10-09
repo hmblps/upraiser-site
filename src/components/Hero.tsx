@@ -13,16 +13,10 @@ import { LenovoTrustStrip } from "./LenovoTrustStrip";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
 import { useMode } from "./SectionHeader";
 import { useScroll } from "../context/ScrollContext";
+import { useTranslation } from "react-i18next";
 
 const HERO_SPRING = { type: "spring" as const, stiffness: 100, damping: 20, mass: 0.85 };
 
-const headlineLines = [
-  { text: "We see how" },
-  { text: "stunning" },
-  { text: "Your rise", accent: true as const },
-  { text: "to the top" },
-  { text: "can be." },
-] as const;
 
 const containerVariants = {
   hidden: {},
@@ -138,6 +132,16 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
   const highlights = heroHighlightsByMode[mode];
   const activeStatIndex = useCarouselActiveIndex(statsScrollRef, highlights.length);
   const { scrollToY } = useScroll();
+  const { t } = useTranslation();
+
+  const localizedLines = [
+    { text: t("hero.line1", "We see how") },
+    { text: t("hero.line2", "stunning") },
+    { text: t("hero.line3", "Your rise"), accent: true },
+    { text: t("hero.line4", "to the top") },
+    { text: t("hero.line5", "can be.") },
+  ];
+
   const [pinScroll, setPinScroll] = useState(() =>
     typeof window !== "undefined" ? window.matchMedia(DESKTOP_HERO_QUERY).matches : false,
   );
@@ -241,13 +245,13 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
               }}
             >
               <h1 className="hero-title hero-title--fly hero-title--hero font-extrabold tracking-tighter">
-                {headlineLines.map((line) => (
+                {localizedLines.map((line, idx) => (
                   <motion.span
-                    key={line.text}
+                    key={idx}
                     variants={reduced ? undefined : itemVariants}
                     className="block"
                     onAnimationComplete={
-                      line.text === "Your rise"
+                      "accent" in line && line.accent
                         ? () => {
                             if (typeof window !== "undefined") {
                               (window as any).scaleReady = true;
