@@ -1,17 +1,20 @@
 {
   "nav": {
-    "formats": "광고 형식",
-    "performance": "성과",
+    "formats": "포맷",
+    "performance": "퍼포먼스",
     "studio": "스튜디오",
-    "contact": "브리핑 시작"
+    "contact": "브리핑 시작",
+    "agency": "에이전시"
   },
   "footer": {
-    "tagline": "글로벌 브랜드를 위한 최고의 알고리즘 성장 파트너.",
-    "legal": "모든 권리 보유. UPRAISER 이름과 로고는 등록 상표입니다.",
+    "tagline": "글로벌 브랜드를 위한 독보적인 알고리즘 그로스 파트너.",
+    "legal": "All rights reserved. UPRAISER 이름 및 로고는 등록 상표입니다.",
     "privacy": "개인정보 처리방침",
-    "terms": "서비스 약관",
+    "terms": "이용약관",
     "contact": "문의하기",
-    "social": "소셜"
+    "social": "소셜",
+    "explore": "둘러보기",
+    "company": "회사 소개"
   },
   "switcher": {
     "current": "현재 언어",
@@ -20,19 +23,86 @@
     "soonBadge": "예정"
   },
   "hero": {
-    "line1": "우리는 지켜봅니다",
-    "line2": "눈부신",
+    "line1": "우리는 봅니다",
+    "line2": "얼마나 눈부신",
     "line3": "당신의 비상이",
     "line4": "정상을 향해",
-    "line5": "얼마나 놀라운지."
-  },
-  "formats": {
-    "label": "경로",
-    "title": "모든 형식. 단일 공급 경로."
+    "line5": "펼쳐질 수 있는지.",
+    "founded": "2017년 7월 17일 런던 설립",
+    "ledeGrowth": "우리는 완벽한 어트리뷰션 검증을 바탕으로 글로벌 퍼포먼스 캠페인을 집행합니다.",
+    "ledeInfra": "우리는 완벽한 어트리뷰션 검증을 갖춘 투명한 인프라를 제공합니다.",
+    "hlGrowth1": "활성 GEOs",
+    "hlGrowth2": "OEM 디바이스 도달 범위",
+    "hlGrowth3": "SLA 구축",
+    "hlGrowth4": "최적화된 미디어 집행액",
+    "hlInfra1": "입찰 전 프로드 차단",
+    "hlInfra2": "캠페인 종료 후 로그 오차",
+    "hlInfra3": "p99 입찰 스코어링",
+    "hlInfra4": "디바이스 시그널"
   },
   "audience": {
     "title": "서비스 대상",
     "scale": "규모",
-    "proof": "증명"
+    "proof": "증명",
+    "growthLabel": "ROAS 목표를 실제 현금 흐름으로 전환해야 하는 팀",
+    "growthLine1": "시장이 성숙해질수록, 하이퍼 그로스에는 새로운 유닛 이코노믹스 모델이 필요합니다.",
+    "growthLine2Prefix": "타깃",
+    "growthDesc": "귀하는 유닛 이코노믹스를 훼손하지 않으면서 활성 플레이어 규모를 확장해야 하는 UA 리드 또는 마케팅 디렉터입니다. 귀하의 캠페인은 레벨 완료부터 첫 결제에 이르기까지 깊이 있는 인앱 전환을 목표로 합니다.\n\n우리는 플레이어의 실제 고객 생애 가치(LTV)를 바탕으로 미디어를 구매하며, 정적 배너 광고보다 전환율이 월등한 온디맨드 Creator-Generated Content(CGC)를 투입합니다. 실질적인 수익을 창출하는 경로만을 확장합니다.\n\n모든 캠페인을 귀하의 정확한 재무 목표에 맞춰 조율합니다. 복잡하고 힘든 실행 작업은 저희가 전담하되, 성장 전략의 통제권은 온전히 귀하에게 머무릅니다.",
+    "infraLabel": "캠페인 지표와 미디어 인보이스가 정확히 일치해야 하는 팀",
+    "infraLine1": "귀하의 MMP와 미디어 청구서가 불일치할 때, 우리는 데이터 파이프라인을 처음부터 다시 구축합니다.",
+    "infraLine2Prefix": "실행 기반",
+    "infraDesc": "귀하는 이해관계자들에게 어트리뷰션 오차를 수없이 설명해야 했던 Ad Ops 매니저, 재무 책임자, 또는 UA 디렉터입니다. 귀하의 프로그래매틱 및 OEM 캠페인은 Adjust, AppsFlyer, Singular, 또는 Kochava를 기반으로 운영됩니다.\n\n귀하는 모든 KPI 이벤트가 기기의 로우 데이터 로그로 명확히 추적되는 직접적인 공급 경로를 원합니다. 불투명한 PDF 보고서는 기존 벤더들의 방식일 뿐입니다.\n\n우리는 깨끗하고 검증된 공급망을 구축하여, 귀하가 어떤 재무 감사에서도 미디어 집행 비용을 당당하게 증명할 수 있도록 지원합니다."
+  },
+  "formats": {
+    "label": "경로",
+    "title": "모든 포맷. 단일 공급 경로.",
+    "descPhone": "TikTok, Reels 및 다이렉트 인앱 지면에 맞춤 설계된 세로형 비디오와 플레이어블 유닛. 첫 3초를 정밀 최적화하여 전환으로 이어지는 확실한 스크롤 정지율을 보장합니다.",
+    "descTablet": "더 넓은 화면에서 깊은 몰입감을 이끌어내도록 설계된 고임팩트 리치 미디어와 스플릿 스크린 경험. 전략 게임과 복합적인 내러티브에 완벽합니다.",
+    "descTv": "가정 내 가장 큰 스크린에 퍼포먼스 마케팅을 실현하는 Connected TV 및 OTT 지면. 화면 노출부터 설치까지 어트리뷰션을 직접 추적합니다."
+  },
+  "values": {
+    "growthHeroKicker": "이벤트 가중 바잉",
+    "growthHeroTitle": "이사회가 주목하는 핵심 이벤트를 구매하십시오",
+    "growthHeroDesc": "첫 임프레션이 체결되기도 전에 예산 캡을 수익 이벤트에 직접 연동하여, 귀하의 목표와 완벽하게 일치시킵니다.",
+    "growthMetric1": "옥션 마감 전 프로드 차단",
+    "growthMetric2": "브리프 접수부터 라이브 입찰까지",
+    "growthFeature1Title": "철저한 검증 속에서도 확장되는 집행",
+    "growthFeature1Desc": "모든 입찰은 체결 전에 스코어링됩니다. 악성 트래픽은 즉시 제외되며, 정밀한 기기 로그가 우리의 완벽한 투명성을 증명합니다.",
+    "growthFeature2Title": "규모가 커져도 유지되는 CPA",
+    "growthFeature2Desc": "예산이 두 배로 늘어나도 유닛 이코노믹스는 흔들리지 않습니다. 정밀한 코호트 LTV가 입찰 전략을 온전히 주도합니다.",
+    "growthBrandBadge": "공식 Lenovo 에이전시 파트너",
+    "growthBrandTitle": "글로벌 일일 단위 규모의 공장 출고 다이렉트 프리인스톨.",
+    "growthBrandDesc": "우리는 최초 기기 활성화 순간 프리미엄 Android 디바이스에 귀하의 애플리케이션을 직접 설치합니다. 공식 Lenovo 에이전시 파트너로서, 우리는 Tier-1, GCC 및 글로벌 시장 전역에서 프리인스톨 및 Pre-Activated Install (PAI) 캠페인을 확보합니다. 귀하의 팀은 리셀러 마진 없이 공장 제조 레벨의 다이렉트 배치를 보장받습니다.",
+    "infraHeroKicker": "로그 네이티브 바잉",
+    "infraHeroTitle": "이사회가 주목하는 핵심 이벤트를 검증하십시오",
+    "infraHeroDesc": "월말 정산 전 서버 로그가 Adjust 및 AppsFlyer에 직접 연동되어, 귀하의 데이터와 완벽한 일치를 보장합니다.",
+    "infraMetric1": "캠페인 종료 후 로그 오차",
+    "infraMetric2": "p99 입찰 스코어링",
+    "infraFeature1Title": "감사를 통과하는 무결점 트래픽",
+    "infraFeature1Desc": "옥션 마감 전 무효 트래픽이 완벽하게 차단됩니다. Ad Ops는 마감 직전의 번거로운 정산 없이도 재무 감사에서 모든 집행 비용을 자신 있게 입증할 수 있습니다.",
+    "infraFeature2Title": "정확히 일치하는 데이터",
+    "infraFeature2Desc": "로우 데이터 로그를 통해 MMP 지표와 미디어 청구서가 정확히 일치합니다. Ad Ops와 재무 부서가 완벽한 신뢰 속에서 함께 움직입니다.",
+    "infraBrandBadge": "공식 Lenovo 에이전시 파트너",
+    "infraBrandTitle": "인증된 SDK 트레일로 보장되는 조달 등급의 OEM 접근 권한.",
+    "infraBrandDesc": "우리는 Lenovo ROM 및 PAI 경로를 귀하의 Adjust, AppsFlyer, Singular 또는 Kochava 엔드포인트에 직접 연결합니다. 당사 엔지니어는 첫 임프레션을 구매하기 전에 기술적 추적 경로 전체를 문서화하고 검증합니다. 귀하는 인보이스를 결제하기 전에 로우 하드웨어 로그를 직접 감사하여 모든 설치를 검증할 수 있습니다."
+  },
+  "cases": {
+    "title": "검증된 성공 사례",
+    "desc": "알고리즘 기반의 압도적 성과를 입증하는 검증된 기록.",
+    "heroicTag": "게이밍",
+    "heroicTitle": "Heroic: 전술적 스케일",
+    "heroicDesc": "플래그십 전략 게임 타이틀을 위해 35개 GEOs 전역에서 알고리즘 기반 UA를 전개했습니다. 단순 설치 수가 아닌 Day-7 ROAS에 입찰 가중치를 대폭 부여함으로써, CPA를 목표치 이하로 엄격히 유지하면서도 고가치(High-LTV) 플레이어의 대규모 유입을 달성했습니다.",
+    "heroicMetric1": "D7 ROAS 상승률",
+    "heroicMetric2": "활성 GEOs",
+    "lenovoTag": "OEM / 팩토리",
+    "lenovoTitle": "Lenovo PAI 활성화",
+    "lenovoDesc": "공식 Lenovo 에이전시 파트너로서 공장 출고 프로비저닝 워크플로에 직접 연동했습니다. 글로벌 프리미엄 Android 디바이스 전반에 걸쳐 중간 마진 없는 대규모 프리인스톨을 확보하여, 사용자가 기기를 개봉하는 첫 순간부터 앱이 준비되도록 했습니다.",
+    "lenovoMetric1": "프리인스톨",
+    "lenovoMetric2": "로그 오차",
+    "fintechTag": "FinTech",
+    "fintechTitle": "Neobank 고객 획득",
+    "fintechDesc": "탑티어 Neobank를 위해 불투명한 공급망을 전면 배제하고 철저히 로그 네이티브 데이터를 기반으로 매체를 구매했습니다. 모든 KYC 완료 내역을 원시 입찰 요청 로그까지 역추적함으로써, 단 한 건의 어트리뷰션 프로드 없이 첫 예치금 규모를 대폭 확대했습니다.",
+    "fintechMetric1": "CPA 절감",
+    "fintechMetric2": "검증된 예치금"
   }
 }

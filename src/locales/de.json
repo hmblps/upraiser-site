@@ -1,9 +1,10 @@
 {
   "nav": {
     "formats": "Formate",
-    "performance": "Leistung",
+    "performance": "Performance",
     "studio": "Studio",
-    "contact": "Briefing starten"
+    "contact": "Briefing starten",
+    "agency": "Die Agentur"
   },
   "footer": {
     "tagline": "Der definitive algorithmische Wachstumspartner für globale Marken.",
@@ -11,7 +12,9 @@
     "privacy": "Datenschutzerklärung",
     "terms": "Nutzungsbedingungen",
     "contact": "Kontakt",
-    "social": "Sozial"
+    "social": "Social",
+    "explore": "Entdecken",
+    "company": "Unternehmen"
   },
   "switcher": {
     "current": "Aktuelle Sprache",
@@ -24,15 +27,82 @@
     "line2": "beeindruckend",
     "line3": "Dein Aufstieg",
     "line4": "an die Spitze",
-    "line5": "sein kann."
-  },
-  "formats": {
-    "label": "Lanes",
-    "title": "Jedes Format. Ein Lieferweg."
+    "line5": "sein kann.",
+    "founded": "Gegründet am 17. Juli 2017 mit Sitz in London",
+    "ledeGrowth": "Wir steuern globale Performance-Kampagnen mit absolutem Attributionsbeweis.",
+    "ledeInfra": "Wir liefern transparente Infrastruktur mit absolutem Attributionsbeweis.",
+    "hlGrowth1": "Aktive GEOs",
+    "hlGrowth2": "OEM-Gerätereichweite",
+    "hlGrowth3": "SLA-Setup",
+    "hlGrowth4": "Optimierter Media Spend",
+    "hlInfra1": "Pre-Bid Fraud geblockt",
+    "hlInfra2": "Post-Flight Log Drift",
+    "hlInfra3": "p99 Bid Scoring",
+    "hlInfra4": "Gerätesignale"
   },
   "audience": {
     "title": "Für wen wir arbeiten",
     "scale": "SKALIERUNG",
-    "proof": "BEWEIS"
+    "proof": "BEWEIS",
+    "growthLabel": "Teams, die ROAS-Ziele in echten Cashflow verwandeln müssen",
+    "growthLine1": "Wenn der Markt reift, erfordert Hyperwachstum ein neues Unit-Economics-Modell.",
+    "growthLine2Prefix": "Fokus auf",
+    "growthDesc": "Du bist der User-Acquisition-Lead oder Marketing Director, der aktive Spielerbasen skalieren muss, ohne die Unit Economics zu gefährden. Deine Kampagnen zielen auf tiefe In-App-Conversions ab – vom Levelabschluss bis zur ersten Einzahlung.\n\nWir kaufen Media auf Basis des echten Player-Lifetime-Value ein und setzen auf Creator-Generated Content (CGC) on demand, der statische Banner-Ads deutlich übertrifft. Wir skalieren nur die Wege, die echten Umsatz liefern.\n\nWir stimmen jede Kampagne exakt auf Deine finanziellen Ziele ab. So behältst Du die volle Kontrolle über Deine Wachstumsstrategie, während wir die schwere Arbeit erledigen.",
+    "infraLabel": "Teams, deren Kampagnen-Metriken exakt mit der Media-Rechnung übereinstimmen müssen",
+    "infraLine1": "Wenn Dein MMP und Deine Media-Rechnungen auseinanderdriften, bauen wir Deine Daten-Pipelines neu auf.",
+    "infraLine2Prefix": "Setze auf",
+    "infraDesc": "Du bist der Ad Ops Manager, Finance Controller oder UA Director, der Stakeholdern schon zu oft Attributionsdrift erklären musste. Deine programmatischen und OEM-Kampagnen laufen über Adjust, AppsFlyer, Singular oder Kochava.\n\nDu verlangst einen direkten Supply Path, bei dem sich jedes KPI-Event bis zum Rohdaten-Geräte-Log zurückverfolgen lässt. Undurchsichtige PDF-Reports überlassen wir traditionellen Anbietern.\n\nWir bauen saubere, verifizierte Lieferwege auf, damit Du Deinen Media Spend in jedem Finanz-Audit souverän verteidigen kannst."
+  },
+  "formats": {
+    "label": "Lanes",
+    "title": "Jedes Format. Ein Lieferweg.",
+    "descPhone": "Vertikale Videos und Playable Ads, maßgeschneidert für TikTok, Reels und direkte In-App-Platzierungen. Wir optimieren die ersten 3 Sekunden, um Thumb-Stop-Raten zu garantieren, die konvertieren.",
+    "descTablet": "High-Impact Rich Media und Split-Screen-Erlebnisse, entwickelt für tiefere Interaktion auf größeren Bildschirmen. Perfekt für Strategiespiele und komplexe Narrativen.",
+    "descTv": "Connected TV- und OTT-Platzierungen, die Performance-Marketing auf den größten Bildschirm im Haus bringen. Wir tracken die Attribution direkt vom Screen bis zum Install."
+  },
+  "values": {
+    "growthHeroKicker": "Event-gewichteter Einkauf",
+    "growthHeroTitle": "Kaufe das Event, das Dein Board trackt",
+    "growthHeroDesc": "Caps koppeln direkt an Umsatz-Events, bevor die erste Impression abgerechnet wird – für absolute Übereinstimmung mit Deinen Zielen.",
+    "growthMetric1": "Fraud vor Auktionsende eliminiert",
+    "growthMetric2": "Vom Briefing zu Live-Bids",
+    "growthFeature1Title": "Spend, der jeder Prüfung standhält",
+    "growthFeature1Desc": "Jedes Gebot wird vor dem Clearing bewertet. Mangelhafter Traffic wird sofort verworfen, und das exakte Geräte-Log belegt unsere absolute Transparenz.",
+    "growthFeature2Title": "CPA, der bei Skalierung stabil bleibt",
+    "growthFeature2Desc": "Unit Economics bleiben stabil, selbst wenn sich das Budget verdoppelt. Präziser Kohorten-LTV steuert die Gebotsstrategie vollständig.",
+    "growthBrandBadge": "Offizieller Lenovo Agenturpartner",
+    "growthBrandTitle": "Direkte Vorinstallationen ab Werk bei globaler täglicher Skalierung.",
+    "growthBrandDesc": "Wir platzieren Deine Applikation direkt auf Premium-Android-Geräten im Moment der ersten Aktivierung. Als offizieller Lenovo Agenturpartner sichern wir Vorinstallationen und Pre-Activated Install (PAI)-Kampagnen in Tier-1-, GCC- und weltweiten Märkten. Dein Team sichert sich direkte Platzierungen auf Werksebene – ohne Reseller-Aufschläge.",
+    "infraHeroKicker": "Log-nativer Einkauf",
+    "infraHeroTitle": "Verifiziere das Event, das Dein Board trackt",
+    "infraHeroDesc": "Server-Logs übertragen sich vor Monatsabschluss direkt an Adjust und AppsFlyer – für absolute Übereinstimmung mit Deinen Daten.",
+    "infraMetric1": "Post-Flight Log Drift",
+    "infraMetric2": "p99 Bid Scoring",
+    "infraFeature1Title": "Traffic, der jedem Audit standhält",
+    "infraFeature1Desc": "Ungültige Anfragen werden vor Auktionsende zuverlässig verworfen. Ad Ops verteidigt jeden Dollar im Finanz-Audit souverän – ohne Abstimmungen in letzter Minute.",
+    "infraFeature2Title": "Zahlen, die übereinstimmen",
+    "infraFeature2Desc": "MMP und Media-Rechnung erzählen durch Rohdaten-Logs exakt dieselbe Geschichte. Ad Ops und Finance agieren in absoluter Übereinstimmung.",
+    "infraBrandBadge": "Offizieller Lenovo Agenturpartner",
+    "infraBrandTitle": "OEM-Zugang auf Procurement-Niveau, gestützt durch zertifizierte SDK-Pfade.",
+    "infraBrandDesc": "Wir verbinden Lenovo ROM- und PAI-Lanes direkt mit Deinen Endpunkten bei Adjust, AppsFlyer, Singular oder Kochava. Unsere Engineers dokumentieren und verifizieren die gesamte technische Kette, bevor wir die erste Impression einkaufen. Du auditierst die unverfälschten Hardware-Logs, um jede Installation zu verifizieren, bevor Du die Rechnung begleichst."
+  },
+  "cases": {
+    "title": "Ausgewählte Nachweise",
+    "desc": "Eine verifizierte Bilanz algorithmischer Spitzenleistung.",
+    "heroicTag": "Gaming",
+    "heroicTitle": "Heroic: Taktische Skalierung",
+    "heroicDesc": "Wir haben algorithmische UA über 35 GEOs für einen Flaggschiff-Strategietitel ausgerollt. Indem wir Gebote stark auf den Day-7 ROAS statt auf reine Installs gewichtet haben, erzielten wir einen massiven Zustrom von High-LTV-Spielern, während der CPA strikt unter dem Zielwert blieb.",
+    "heroicMetric1": "D7-ROAS-Steigerung",
+    "heroicMetric2": "Aktive GEOs",
+    "lenovoTag": "OEM / Factory",
+    "lenovoTitle": "Lenovo PAI-Aktivierung",
+    "lenovoDesc": "Als offizieller Lenovo Agenturpartner haben wir uns direkt in den Bereitstellungsprozess ab Werk integriert. Wir sicherten hochvolumige Vorinstallationen ohne Reseller-Aufschläge auf Premium-Android-Geräten weltweit – damit Apps exakt im Moment des Auspackens einsatzbereit sind.",
+    "lenovoMetric1": "Vorinstallationen",
+    "lenovoMetric2": "Log Drift",
+    "fintechTag": "FinTech",
+    "fintechTitle": "Neobank-Akquise",
+    "fintechDesc": "Für eine führende Neobank haben wir undurchsichtige Lieferwege eliminiert und ausschließlich auf Basis log-nativer Daten eingekauft. Durch die lückenlose Rückverfolgung jedes KYC-Abschlusses bis zum ursprünglichen Bid-Request skalierten wir Ersteinzahlungen massiv – ohne einen einzigen Fall von Attributionsbetrug.",
+    "fintechMetric1": "CPA-Senkung",
+    "fintechMetric2": "Verifizierte Einzahlungen"
   }
 }

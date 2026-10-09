@@ -1,17 +1,20 @@
 {
   "nav": {
     "formats": "广告格式",
-    "performance": "绩效",
-    "studio": "工作室",
-    "contact": "开始简报"
+    "performance": "效果营销",
+    "studio": "创意工作室",
+    "contact": "提交需求简报",
+    "agency": "关于机构"
   },
   "footer": {
     "tagline": "全球品牌权威的算法增长合作伙伴。",
-    "legal": "保留所有权利。UPRAISER 名称和徽标是注册商标。",
+    "legal": "保留所有权利。UPRAISER 名称及标志均为注册商标。",
     "privacy": "隐私政策",
     "terms": "服务条款",
     "contact": "联系我们",
-    "social": "社交媒体"
+    "social": "社交平台",
+    "explore": "探索",
+    "company": "公司"
   },
   "switcher": {
     "current": "当前语言",
@@ -20,19 +23,86 @@
     "soonBadge": "即将"
   },
   "hero": {
-    "line1": "我们看到了",
-    "line2": "惊人的",
+    "line1": "我们深知",
+    "line2": "何其震撼——",
     "line3": "您的崛起",
-    "line4": "登峰造极",
-    "line5": "是多么耀眼。"
+    "line4": "直达巅峰，",
+    "line5": "无可限量。",
+    "founded": "2017 年 7 月 17 日创立于伦敦",
+    "ledeGrowth": "我们开展全球效果营销战役，提供确凿无误的归因佐证。",
+    "ledeInfra": "我们构建透明底层基建，提供确凿无误的归因佐证。",
+    "hlGrowth1": "活跃 GEOs",
+    "hlGrowth2": "OEM 设备触达",
+    "hlGrowth3": "SLA 响应交付",
+    "hlGrowth4": "已优化媒介支出",
+    "hlInfra1": "竞价前作弊拦截",
+    "hlInfra2": "投放后日志偏差",
+    "hlInfra3": "p99 竞价评分",
+    "hlInfra4": "设备底层信号"
+  },
+  "audience": {
+    "title": "服务对象",
+    "scale": "规模",
+    "proof": "证明",
+    "growthLabel": "必须将 ROAS 目标转化为真实净现金流的团队",
+    "growthLine1": "当市场步入成熟期，超高速增长亟需重塑单体经济模型。",
+    "growthLine2Prefix": "锚定",
+    "growthDesc": "您是买量负责人或营销总监，肩负着在守住单体经济底线的同时快速扩张活跃玩家规模的重任。您的营销活动瞄准应用内深度转化，从关卡通关到首充付费。\n\n我们基于真实玩家生命周期价值（LTV）采买媒介，按需投放转化率远超静态横幅广告的创作者生成内容（CGC）。我们只对能带来真金白银收入的路径全力放量。\n\n我们让每一场战役精准契合您的财务目标，在替您扛起重负的同时，确保增长战略始终完全在您的掌控之中。",
+    "infraLabel": "要求战役指标与媒介账单分毫不差的团队",
+    "infraLine1": "当您的 MMP 与媒介账单出现分歧，我们为您重构数据管道。",
+    "infraLine2Prefix": "依托",
+    "infraDesc": "您是广告运营（Ad Ops）经理、财务主控或买量总监，已向利益相关方解释过太多次归因偏差。您的程序化和 OEM 营销活动依托 Adjust、AppsFlyer、Singular 或 Kochava 运行。\n\n您需要一条直接的供应路径，确保每一个 KPI 事件都能溯源至原始设备日志。我们将含糊不清的 PDF 报表留给传统供应商。\n\n我们构建清晰、经过验证的供应通路，让您在任何财务审计中都能从容捍卫每一笔媒介支出。"
   },
   "formats": {
     "label": "赛道",
-    "title": "所有格式。一条供应路径。"
+    "title": "全格式覆盖。唯一直供路径。",
+    "descPhone": "专为 TikTok、Reels 及应用内直投量身定制的竖屏视频与可玩广告。我们极致优化黄金前 3 秒，确保极高吸睛率与有效转化。",
+    "descTablet": "高冲击力富媒体与分屏互动体验，专为大屏设备的深度沉浸而生。完美契合策略类游戏与复杂叙事产品。",
+    "descTv": "Connected TV 与 OTT 优质点位，将效果营销带入家庭最大的核心屏幕。我们实现从大屏曝光到最终安装的全链路直接归因追踪。"
   },
-  "audience": {
-    "title": "我们服务的对象",
-    "scale": "规模",
-    "proof": "证明"
+  "values": {
+    "growthHeroKicker": "核心事件加权采买",
+    "growthHeroTitle": "只为您董事会紧盯的核心事件买单",
+    "growthHeroDesc": "在首个展示曝光结算前，预算上限已直接锚定收入转化事件，确保与您的目标绝对同频。",
+    "growthMetric1": "竞价结算前作弊拦截",
+    "growthMetric2": "从需求简报到竞价上线",
+    "growthFeature1Title": "经得起严苛审视的规模化支出",
+    "growthFeature1Desc": "每一次竞价在结算前均经过严格评分。劣质流量即刻剔除，精准的底层设备日志证明我们的绝对透明。",
+    "growthFeature2Title": "规模扩张下依然稳固的 CPA",
+    "growthFeature2Desc": "预算翻倍，单体经济模型依然稳健。精准的同群（Cohort）LTV 全面主导竞价策略。",
+    "growthBrandBadge": "Lenovo 官方代理合作伙伴",
+    "growthBrandTitle": "全球每日大规模出厂级直装预装。",
+    "growthBrandDesc": "在设备首次激活的瞬间，我们将您的应用直接送达高端 Android 设备。作为 Lenovo 官方代理合作伙伴，我们在 Tier-1、GCC 及全球市场锁定出厂预装与预激活安装（PAI）战役。您的团队将获得零渠道中间加价的出厂级直投点位。",
+    "infraHeroKicker": "原生日志级采买",
+    "infraHeroTitle": "确证您董事会紧盯的核心事件",
+    "infraHeroDesc": "在月末结算前，服务器日志直接对接 Adjust 与 AppsFlyer，确保与您内部数据绝对一致。",
+    "infraMetric1": "投放后日志偏差",
+    "infraMetric2": "p99 竞价评分",
+    "infraFeature1Title": "经得起财务审计的真实流量",
+    "infraFeature1Desc": "无效请求在竞价结算前被彻底过滤。广告运营（Ad Ops）团队在财务复核中从容捍卫每一分钱，告别月末紧急对账。",
+    "infraFeature2Title": "分毫不差的数据账目",
+    "infraFeature2Desc": "原始日志让 MMP 归因与媒介账单口径完全吻合。广告运营与财务团队步调绝对一致。",
+    "infraBrandBadge": "Lenovo 官方代理合作伙伴",
+    "infraBrandTitle": "经权威 SDK 链路认证的采购级 OEM 专属通道。",
+    "infraBrandDesc": "我们将 Lenovo ROM 与 PAI 链路直接对接至您的 Adjust、AppsFlyer、Singular 或 Kochava 端点。在采买首个展示曝光前，我们的工程师已完成全链路技术归因记录与验证。您可在支付账单前审计底层硬件原始日志，亲自核验每一次安装真实有效。"
+  },
+  "cases": {
+    "title": "精选实证",
+    "desc": "算法驱动超越基准的真实履约记录。",
+    "heroicTag": "游戏",
+    "heroicTitle": "Heroic：战术级规模放量",
+    "heroicDesc": "我们为一款策略类头部大作在 35 个 GEOs 部署算法买量。通过将竞价权重极大幅度倾斜至 Day-7 ROAS 而非单纯安装量，我们在将 CPA 严密锁定在目标线以下的同时，实现了高 LTV 玩家的海量涌入。",
+    "heroicMetric1": "D7 ROAS 增幅",
+    "heroicMetric2": "活跃 GEOs",
+    "lenovoTag": "OEM / 出厂直装",
+    "lenovoTitle": "Lenovo PAI 激活",
+    "lenovoDesc": "作为 Lenovo 官方代理合作伙伴，我们直连工厂出厂配置流。我们在全球高端 Android 设备上锁定了海量、零溢价出厂预装，确保应用在用户开箱激活的第一时间就已就绪。",
+    "lenovoMetric1": "出厂预装量",
+    "lenovoMetric2": "日志偏差",
+    "fintechTag": "FinTech",
+    "fintechTitle": "数字银行（Neobank）获客",
+    "fintechDesc": "我们为一家顶尖数字银行（Neobank）清除了不透明的供应链路，完全依托原生日志数据采买。通过将每一次 KYC 认证完成精准溯源至原始竞价请求，我们在实现首充存款规模爆发式增长的同时，彻底杜绝了任何归因作弊。",
+    "fintechMetric1": "CPA 降幅",
+    "fintechMetric2": "核验真实存款"
   }
 }

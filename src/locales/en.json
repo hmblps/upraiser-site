@@ -3,7 +3,8 @@
     "formats": "Formats",
     "performance": "Performance",
     "studio": "Studio",
-    "contact": "Start Briefing"
+    "contact": "Start Briefing",
+    "agency": "The Agency"
   },
   "footer": {
     "tagline": "The definitive algorithmic growth partner for global brands.",
@@ -11,7 +12,9 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "contact": "Contact",
-    "social": "Social"
+    "social": "Social",
+    "explore": "Explore",
+    "company": "Company"
   },
   "switcher": {
     "current": "Current language",
@@ -24,15 +27,82 @@
     "line2": "stunning",
     "line3": "Your rise",
     "line4": "to the top",
-    "line5": "can be."
-  },
-  "formats": {
-    "label": "Lanes",
-    "title": "Every Format. One Supply Path."
+    "line5": "can be.",
+    "founded": "Founded 17 July 2017 based in London",
+    "ledeGrowth": "We run global performance campaigns with absolute attribution proof.",
+    "ledeInfra": "We provide transparent infrastructure with absolute attribution proof.",
+    "hlGrowth1": "Active GEOs",
+    "hlGrowth2": "OEM Device Reach",
+    "hlGrowth3": "SLA Setup",
+    "hlGrowth4": "Media Spend Optimized",
+    "hlInfra1": "Fraud Blocked Pre-Bid",
+    "hlInfra2": "Post-Flight Log Drift",
+    "hlInfra3": "p99 Bid Scoring",
+    "hlInfra4": "Device Signals"
   },
   "audience": {
     "title": "Who We Serve",
     "scale": "SCALE",
-    "proof": "PROOF"
+    "proof": "PROOF",
+    "growthLabel": "Teams who must convert ROAS goals into real cash flow",
+    "growthLine1": "When the market matures, hyper-growth requires a new unit economics model.",
+    "growthLine2Prefix": "Target",
+    "growthDesc": "You are the user acquisition lead or marketing director who needs to scale active player bases without breaking unit economics. Your campaigns target deep in-app conversions, from level completions to first deposits.\n\nWe buy media based on real player lifetime value, deploying on-demand Creator-Generated Content (CGC) that out-converts static banner ads. We scale only the routes that deliver real revenue.\n\nWe align every campaign with your exact financial targets, ensuring your growth strategy remains entirely in your control while we execute the heavy lifting.",
+    "infraLabel": "Teams who require campaign metrics to match the media invoice",
+    "infraLine1": "When Your MMP and media bills diverge, we rebuild Your data pipelines.",
+    "infraLine2Prefix": "Run on",
+    "infraDesc": "You are the Ad Ops manager, finance controller, or UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava.\n\nYou require a direct supply path where every KPI event traces back to a raw device log. We leave opaque PDF reporting to traditional vendors.\n\nWe build clean, verified supply lines so You can defend Your media spend in any financial review."
+  },
+  "formats": {
+    "label": "Lanes",
+    "title": "Every Format. One Supply Path.",
+    "descPhone": "Vertical video and playable units engineered for TikTok, Reels, and direct in-app placements. We optimize for the first 3 seconds to guarantee thumb-stop rates that convert.",
+    "descTablet": "High-impact rich media and split-screen experiences designed for deeper engagement on larger glass. Perfect for strategy games and complex narratives.",
+    "descTv": "Connected TV and OTT placements that bring performance marketing to the biggest screen in the house. We track attribution directly from screen to install."
+  },
+  "values": {
+    "growthHeroKicker": "Event-weighted buying",
+    "growthHeroTitle": "Buy the event Your board tracks",
+    "growthHeroDesc": "Caps wire directly to revenue events before the first impression clears, ensuring absolute alignment with Your goals.",
+    "growthMetric1": "Fraud killed before auction close",
+    "growthMetric2": "Brief to live bids",
+    "growthFeature1Title": "Spend that scales under scrutiny",
+    "growthFeature1Desc": "Every bid is scored before it clears. Bad traffic drops instantly, and the exact device log proves our absolute transparency.",
+    "growthFeature2Title": "CPA that holds at scale",
+    "growthFeature2Desc": "Unit economics stay flat when budget doubles. Precise cohort LTV entirely drives the bid strategy.",
+    "growthBrandBadge": "Official Lenovo Agency Partner",
+    "growthBrandTitle": "Direct factory pre-installs at global daily scale.",
+    "growthBrandDesc": "We place Your application directly onto premium Android devices at the moment of first activation. As an official Lenovo agency partner, we secure pre-installs and Pre-Activated Install (PAI) campaigns across Tier-1, GCC, and global markets. Your team secures direct, factory-level placement with zero reseller markups.",
+    "infraHeroKicker": "Log-native buying",
+    "infraHeroTitle": "Verify the event Your board tracks",
+    "infraHeroDesc": "Server logs wire directly to Adjust and AppsFlyer before the month closes, ensuring absolute alignment with Your data.",
+    "infraMetric1": "Post-flight log drift",
+    "infraMetric2": "p99 bid scoring",
+    "infraFeature1Title": "Traffic that passes audit",
+    "infraFeature1Desc": "Invalid requests drop flawlessly before auction close. Ad Ops confidently defends every dollar in a finance review without last-minute reconciliation.",
+    "infraFeature2Title": "Numbers that match",
+    "infraFeature2Desc": "The MMP and media bill tell exactly the same story through raw logs. Ad Ops and finance operate in absolute alignment.",
+    "infraBrandBadge": "Official Lenovo Agency Partner",
+    "infraBrandTitle": "Procurement-grade OEM access backed by certified SDK trails.",
+    "infraBrandDesc": "We wire Lenovo ROM and PAI lanes directly to Your Adjust, AppsFlyer, Singular, or Kochava endpoints. Our engineers document and verify the entire technical trail before we buy the first impression. You audit the raw hardware logs to verify every installation before You pay the invoice."
+  },
+  "cases": {
+    "title": "Selected Evidence",
+    "desc": "A verified record of algorithmic outperformance.",
+    "heroicTag": "Gaming",
+    "heroicTitle": "Heroic: Tactical Scale",
+    "heroicDesc": "We deployed algorithmic UA across 35 GEOs for a flagship strategy title. By weighting bids heavily toward Day-7 ROAS rather than mere installs, we drove a massive influx of high-LTV players while holding CPA strictly beneath target.",
+    "heroicMetric1": "D7 ROAS Lift",
+    "heroicMetric2": "Active GEOs",
+    "lenovoTag": "OEM / Factory",
+    "lenovoTitle": "Lenovo PAI Activation",
+    "lenovoDesc": "As an official Lenovo agency partner, we integrated directly into the factory provisioning flow. We secured high-volume, zero-markup pre-installs across premium Android devices globally, ensuring apps were present at the exact moment of device unboxing.",
+    "lenovoMetric1": "Pre-installs",
+    "lenovoMetric2": "Log Drift",
+    "fintechTag": "FinTech",
+    "fintechTitle": "Neobank Acquisition",
+    "fintechDesc": "For a top-tier Neobank, we eliminated opaque supply paths and bought entirely on log-native data. By tracing every KYC completion back to the raw bid request, we scaled first-deposits massively without a single instance of attribution fraud.",
+    "fintechMetric1": "CPA Reduction",
+    "fintechMetric2": "Verified Deposits"
   }
 }

@@ -3,7 +3,8 @@
     "formats": "Formats",
     "performance": "Performance",
     "studio": "Studio",
-    "contact": "Commencer le briefing"
+    "contact": "Démarrer le briefing",
+    "agency": "L'Agence"
   },
   "footer": {
     "tagline": "Le partenaire de croissance algorithmique de référence pour les marques mondiales.",
@@ -11,28 +12,97 @@
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
     "contact": "Contact",
-    "social": "Social"
+    "social": "Social",
+    "explore": "Explorer",
+    "company": "Entreprise"
   },
   "switcher": {
     "current": "Langue actuelle",
-    "soon": "Prochainement",
+    "soon": "Bientôt disponible",
     "on": "Actif",
     "soonBadge": "Bientôt"
   },
   "hero": {
     "line1": "Nous voyons à quel point",
     "line2": "impressionnante",
-    "line3": "Ton ascension",
+    "line3": "Votre ascension",
     "line4": "vers le sommet",
-    "line5": "peut être."
+    "line5": "peut être.",
+    "founded": "Fondé le 17 juillet 2017, basé à Londres",
+    "ledeGrowth": "Nous pilotons des campagnes de performance mondiales avec une preuve d'attribution absolue.",
+    "ledeInfra": "Nous fournissons une infrastructure transparente avec une preuve d'attribution absolue.",
+    "hlGrowth1": "GEOs actifs",
+    "hlGrowth2": "Portée des appareils OEM",
+    "hlGrowth3": "Configuration SLA",
+    "hlGrowth4": "Dépenses médias optimisées",
+    "hlInfra1": "Fraude bloquée pre-bid",
+    "hlInfra2": "Dérive des logs post-flight",
+    "hlInfra3": "Scoring d'enchères p99",
+    "hlInfra4": "Signaux d'appareils"
+  },
+  "audience": {
+    "title": "Qui nous accompagnons",
+    "scale": "ÉCHELLE",
+    "proof": "PREUVE",
+    "growthLabel": "Les équipes qui doivent convertir leurs objectifs de ROAS en cash-flow réel",
+    "growthLine1": "Quand le marché arrive à maturité, l'hyper-croissance exige un nouveau modèle d'unit economics.",
+    "growthLine2Prefix": "Cibler",
+    "growthDesc": "Vous êtes responsable de l'acquisition d'utilisateurs ou directeur marketing et devez développer des bases de joueurs actifs sans dégrader vos unit economics. Vos campagnes ciblent des conversions in-app profondes, de la complétion de niveaux aux premiers dépôts.\n\nNous achetons l'espace média selon la valeur vie réelle des joueurs, en déployant à la demande du Creator-Generated Content (CGC) qui convertit bien mieux que les bannières statiques. Nous ne développons que les leviers générateurs de revenus réels.\n\nNous alignons chaque campagne sur vos objectifs financiers exacts, garantissant que votre stratégie de croissance reste entièrement sous votre contrôle pendant que nous prenons en charge l'exécution complexe.",
+    "infraLabel": "Les équipes qui exigent que les métriques de campagne correspondent à la facture média",
+    "infraLine1": "Quand votre MMP et vos factures médias divergent, nous reconstruisons vos pipelines de données.",
+    "infraLine2Prefix": "Opérer sur la",
+    "infraDesc": "Vous êtes Ad Ops manager, contrôleur financier ou directeur UA et avez expliqué trop souvent les dérives d'attribution à vos parties prenantes. Vos campagnes programmatiques et OEM tournent sur Adjust, AppsFlyer, Singular ou Kochava.\n\nVous exigez une chaîne d'approvisionnement directe où chaque événement clé remonte à un log d'appareil brut. Nous laissons les rapports PDF opaques aux prestataires traditionnels.\n\nNous bâtissons des flux d'approvisionnement vérifiés et transparents afin que vous puissiez défendre vos dépenses médias lors de n'importe quel audit financier."
   },
   "formats": {
     "label": "Voies",
-    "title": "Chaque format. Un seul chemin d'approvisionnement."
+    "title": "Chaque format. Un seul chemin d'approvisionnement.",
+    "descPhone": "Vidéos verticales et formats jouables conçus pour TikTok, Reels et les intégrations directes in-app. Nous optimisons les 3 premières secondes pour garantir un arrêt net du défilement et maximiser la conversion.",
+    "descTablet": "Formats rich media à fort impact et expériences en écran partagé, conçus pour un engagement accru sur grands écrans. Idéal pour les jeux de stratégie et les narrations complexes.",
+    "descTv": "Emplacements TV connectée et OTT qui portent le marketing de performance sur le plus grand écran du foyer. Nous suivons l'attribution directement de l'écran à l'installation."
   },
-  "audience": {
-    "title": "À qui nous servons",
-    "scale": "ÉCHELLE",
-    "proof": "PREUVE"
+  "values": {
+    "growthHeroKicker": "Achat pondéré par événement",
+    "growthHeroTitle": "Achetez l'événement que votre conseil d'administration suit",
+    "growthHeroDesc": "Les plafonds sont directement reliés aux événements de revenus avant même la première impression, assurant un alignement parfait avec vos objectifs.",
+    "growthMetric1": "Fraude éliminée avant la clôture de l'enchère",
+    "growthMetric2": "Du brief aux enchères en direct",
+    "growthFeature1Title": "Des investissements qui résistent à tout contrôle",
+    "growthFeature1Desc": "Chaque enchère est notée avant d'être validée. Le trafic non qualifié est immédiatement rejeté, et le log exact de l'appareil prouve notre transparence absolue.",
+    "growthFeature2Title": "Un CPA qui tient à grande échelle",
+    "growthFeature2Desc": "Les unit economics restent stables quand le budget double. La LTV précise des cohortes pilote entièrement la stratégie d'enchères.",
+    "growthBrandBadge": "Partenaire d'agence officiel Lenovo",
+    "growthBrandTitle": "Pré-installations directes en usine à échelle mondiale quotidienne.",
+    "growthBrandDesc": "Nous installons votre application directement sur des appareils Android haut de gamme dès leur première activation. En tant qu'agence partenaire officielle Lenovo, nous sécurisons des pré-installations et des campagnes Pre-Activated Install (PAI) sur les marchés Tier-1, GCC et mondiaux. Votre équipe bénéficie d'un positionnement direct en usine, sans aucune marge d'intermédiaire.",
+    "infraHeroKicker": "Achat natif basé sur les logs",
+    "infraHeroTitle": "Vérifiez l'événement que votre conseil d'administration suit",
+    "infraHeroDesc": "Les logs serveur sont directement connectés à Adjust et AppsFlyer avant la clôture du mois, garantissant un alignement total avec vos données.",
+    "infraMetric1": "Dérive des logs post-flight",
+    "infraMetric2": "Scoring d'enchères p99",
+    "infraFeature1Title": "Un trafic conforme à tout audit",
+    "infraFeature1Desc": "Les requêtes non valides sont rejetées sans faille avant la clôture de l'enchère. Les Ad Ops défendent sereinement chaque dollar en revue financière, sans réconciliation de dernière minute.",
+    "infraFeature2Title": "Des chiffres qui concordent",
+    "infraFeature2Desc": "Le MMP et la facture média racontent exactement la même histoire grâce aux logs bruts. Ad Ops et finance fonctionnent en alignement absolu.",
+    "infraBrandBadge": "Partenaire d'agence officiel Lenovo",
+    "infraBrandTitle": "Accès OEM de niveau procurement, appuyé par des traces SDK certifiées.",
+    "infraBrandDesc": "Nous connectons les flux Lenovo ROM et PAI directement à vos endpoints Adjust, AppsFlyer, Singular ou Kochava. Nos ingénieurs documentent et vérifient l'intégralité du parcours technique avant d'acheter la moindre impression. Vous auditez les logs matériels bruts pour vérifier chaque installation avant de régler la facture."
+  },
+  "cases": {
+    "title": "Preuves sélectionnées",
+    "desc": "Un historique vérifié de surperformance algorithmique.",
+    "heroicTag": "Gaming",
+    "heroicTitle": "Heroic : Échelle tactique",
+    "heroicDesc": "Nous avons déployé une acquisition utilisateur algorithmique sur 35 GEOs pour un jeu de stratégie de premier plan. En pondérant fortement les enchères vers le ROAS à J7 plutôt que sur les simples installations, nous avons attiré un flux massif de joueurs à forte LTV tout en maintenant le CPA strictement sous le seuil fixé.",
+    "heroicMetric1": "Hausse du ROAS J7",
+    "heroicMetric2": "GEOs actifs",
+    "lenovoTag": "OEM / Usine",
+    "lenovoTitle": "Activation Lenovo PAI",
+    "lenovoDesc": "En tant qu'agence partenaire officielle Lenovo, nous nous sommes intégrés directement au flux de configuration en usine. Nous avons obtenu des volumes élevés de pré-installations sans marge d'intermédiaire sur des appareils Android haut de gamme dans le monde entier, garantissant la présence des applications dès le premier déballage de l'appareil.",
+    "lenovoMetric1": "Pré-installations",
+    "lenovoMetric2": "Dérive des logs",
+    "fintechTag": "FinTech",
+    "fintechTitle": "Acquisition Néobanque",
+    "fintechDesc": "Pour une néobanque de premier plan, nous avons éliminé les chaînes d'approvisionnement opaques pour acheter exclusivement à partir de données issues des logs bruts. En rattachant chaque validation KYC à la requête d'enchère brute, nous avons démultiplié les premiers dépôts sans le moindre cas de fraude à l'attribution.",
+    "fintechMetric1": "Réduction du CPA",
+    "fintechMetric2": "Dépôts vérifiés"
   }
 }
