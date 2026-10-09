@@ -21,6 +21,8 @@ function AudienceStatic() {
   const ref = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
   const progress = useMobileChartProgress(ref, chartRef);
+  const { t } = useTranslation();
+  const tTitle = t("audience.title", content.title);
   const chartY = useTransform(progress, [0, 0.38], [72, 0]);
 
   return (
@@ -49,6 +51,10 @@ function AudienceAnimated() {
   const { mode } = useMode();
   const content = audienceByMode[mode];
   const key = `${mode}-${content.inlineWord}-${content.line2Prefix}`;
+  const { t } = useTranslation();
+  const tTitle = t("audience.title", content.title);
+  const tScale = t("audience.scale", content.scrollHeroWord);
+  const tProof = t("audience.proof", content.scrollHeroWord);
 
   return (
     <AccentScrollFold
