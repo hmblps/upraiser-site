@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "formats": "Formate",
+    "performance": "Leistung",
+    "studio": "Studio",
+    "contact": "Briefing starten"
+  },
+  "footer": {
+    "tagline": "Der definitive algorithmische Wachstumspartner für globale Marken.",
+    "legal": "Alle Rechte vorbehalten. Der Name und das Logo von UPRAISER sind eingetragene Marken.",
+    "privacy": "Datenschutzerklärung",
+    "terms": "Nutzungsbedingungen",
+    "contact": "Kontakt",
+    "social": "Sozial"
+  },
+  "switcher": {
+    "current": "Aktuelle Sprache",
+    "soon": "Demnächst",
+    "on": "Ein",
+    "soonBadge": "Bald"
+  }
+}

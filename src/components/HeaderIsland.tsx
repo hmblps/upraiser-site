@@ -6,6 +6,7 @@ import { ScrollLink } from "./ScrollLink";
 import { useTheme } from "../context/ThemeContext";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useTranslation } from "react-i18next";
 
 function navIsActive(pathname: string, href: string) {
   if (href === "/") {
@@ -19,6 +20,7 @@ export function HeaderIsland() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
   const reduced = useReducedMotion();
+  const { t } = useTranslation();
 
   return (
     <motion.div 

@@ -1,8 +1,10 @@
 import { memo } from "react";
 import { footerLinks } from "../data/liveContent";
 import { ScrollLink } from "./ScrollLink";
+import { useTranslation } from "react-i18next";
 
 export const Footer = memo(function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="bg-bg md:bg-bg-elevated pb-[max(2rem,env(safe-area-inset-bottom))]">
       <div className="section-inner pt-12">

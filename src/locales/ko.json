@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "formats": "광고 형식",
+    "performance": "성과",
+    "studio": "스튜디오",
+    "contact": "브리핑 시작"
+  },
+  "footer": {
+    "tagline": "글로벌 브랜드를 위한 최고의 알고리즘 성장 파트너.",
+    "legal": "모든 권리 보유. UPRAISER 이름과 로고는 등록 상표입니다.",
+    "privacy": "개인정보 처리방침",
+    "terms": "서비스 약관",
+    "contact": "문의하기",
+    "social": "소셜"
+  },
+  "switcher": {
+    "current": "현재 언어",
+    "soon": "곧 제공 예정",
+    "on": "켜짐",
+    "soonBadge": "예정"
+  }
+}

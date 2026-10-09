@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "formats": "フォーマット",
+    "performance": "パフォーマンス",
+    "studio": "スタジオ",
+    "contact": "ブリーフィングを開始"
+  },
+  "footer": {
+    "tagline": "グローバルブランドの決定的なアルゴリズム成長パートナー。",
+    "legal": "無断転載を禁じます。UPRAISERの名称およびロゴは登録商標です。",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "contact": "お問い合わせ",
+    "social": "ソーシャル"
+  },
+  "switcher": {
+    "current": "現在の言語",
+    "soon": "近日公開",
+    "on": "オン",
+    "soonBadge": "近日"
+  }
+}

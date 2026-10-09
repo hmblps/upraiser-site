@@ -1,10 +1,10 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Languages } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { cn } from "../lib/cn";
 
-/** Future i18n locales — UI stub only (no routing / dictionaries yet). */
 export const localeOptions = [
   { code: "en", label: "English", native: "English" },
   { code: "zh", label: "Chinese", native: "中文" },
@@ -17,13 +17,16 @@ export const localeOptions = [
 
 export type LocaleCode = (typeof localeOptions)[number]["code"];
 
-/** Header language control — English active; others marked Coming soon. */
 export function LocaleSwitcher({ className = "" }: { className?: string }) {
+  const { i18n, t } = useTranslation();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const reduced = useReducedMotion();
-  const current = localeOptions[0];
+  
+  // Extract language without region (e.g. en-US -> en)
+  const currentLang = i18n.language ? i18n.language.split('-')[0] : 'en';
+  const current = localeOptions.find(l => l.code === currentLang) || localeOptions[0];
 
   useEffect(() => {
     if (!open) return;
@@ -49,7 +52,7 @@ export function LocaleSwitcher({ className = "" }: { className?: string }) {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
-        aria-label={`Language: ${current.label}. Localization coming soon.`}
+        aria-label={`Language: ${current.label}`}
         whileHover={reduced ? undefined : { scale: 1.04 }}
         whileTap={reduced ? undefined : { scale: 0.96 }}
         transition={{ type: "spring", stiffness: 420, damping: 28 }}
@@ -80,11 +83,11 @@ export function LocaleSwitcher({ className = "" }: { className?: string }) {
                 <li key={locale.code} role="option" aria-selected={active}>
                   <button
                     type="button"
-                    disabled={!active}
                     className={cn("locale-switcher__item", active && "locale-switcher__item--active")}
-                    title={active ? "Current language" : "Coming soon"}
+                    title={active ? t("switcher.current") : locale.label}
                     onClick={() => {
-                      if (active) setOpen(false);
+                      i18n.changeLanguage(locale.code);
+                      setOpen(false);
                     }}
                   >
                     <span>
@@ -92,7 +95,7 @@ export function LocaleSwitcher({ className = "" }: { className?: string }) {
                       <span className="text-micro text-muted">{locale.label}</span>
                     </span>
                     <span className="text-micro shrink-0 uppercase tracking-wide text-muted">
-                      {active ? "On" : "Soon"}
+                      {active ? t("switcher.on", "On") : ""}
                     </span>
                   </button>
                 </li>

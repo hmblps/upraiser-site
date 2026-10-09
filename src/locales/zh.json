@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "formats": "广告格式",
+    "performance": "绩效",
+    "studio": "工作室",
+    "contact": "开始简报"
+  },
+  "footer": {
+    "tagline": "全球品牌权威的算法增长合作伙伴。",
+    "legal": "保留所有权利。UPRAISER 名称和徽标是注册商标。",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "contact": "联系我们",
+    "social": "社交媒体"
+  },
+  "switcher": {
+    "current": "当前语言",
+    "soon": "即将推出",
+    "on": "开启",
+    "soonBadge": "即将"
+  }
+}

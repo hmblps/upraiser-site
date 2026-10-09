@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "formats": "Formats",
+    "performance": "Performance",
+    "studio": "Studio",
+    "contact": "Start Briefing"
+  },
+  "footer": {
+    "tagline": "The definitive algorithmic growth partner for global brands.",
+    "legal": "All rights reserved. The UPRAISER name and logo are registered trademarks.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact",
+    "social": "Social"
+  },
+  "switcher": {
+    "current": "Current language",
+    "soon": "Coming soon",
+    "on": "On",
+    "soonBadge": "Soon"
+  }
+}
