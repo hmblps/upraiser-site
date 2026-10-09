@@ -104,5 +104,422 @@
     "fintechDesc": "탑티어 Neobank를 위해 불투명한 공급망을 전면 배제하고 철저히 로그 네이티브 데이터를 기반으로 매체를 구매했습니다. 모든 KYC 완료 내역을 원시 입찰 요청 로그까지 역추적함으로써, 단 한 건의 어트리뷰션 프로드 없이 첫 예치금 규모를 대폭 확대했습니다.",
     "fintechMetric1": "CPA 절감",
     "fintechMetric2": "검증된 예치금"
+  },
+  "casesDetails": {
+    "fanatics": {
+      "client": "Fanatics",
+      "headline": "검증된 기기 활성화 트레일 기반의 규제 준수 스포츠북 스케일",
+      "channels": [
+        "프로그래매틱",
+        "고의도 디스플레이",
+        "행동 타겟팅"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fanatics.png",
+        "accent": "#E31837",
+        "surface": "#1a0508"
+      },
+      "metrics": [
+        {
+          "value": "$25M+",
+          "label": "매출"
+        },
+        {
+          "value": "50K",
+          "label": "FTDs"
+        },
+        {
+          "value": "800K",
+          "label": "인스톨"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "보너스 프로모션이 과열된 미국 시장의 리얼 머니 스포츠북. 18세 이상 연령 제한 및 주(State)별 규정을 엄격히 준수하면서 정밀한 MMP 트래킹과 S2S 포스트백이 요구되었습니다.",
+        "approach": "1초 미만 레이턴시 제한의 화이트리스트 성인 인벤토리, 주(State) 단위 타겟팅, 단순 인스톨 볼륨이 아닌 FTD 페이로드에 직접 연동된 크리에이티브 QA를 적용했습니다.",
+        "result": "80만 건의 인스톨, 5만 건의 FTDs, 2,500만 달러 이상의 매출 달성. 베터당 7회의 추가 베팅 기록. FTD당 평균 500달러 이상의 매출 창출."
+      },
+      "optimizationFocus": {
+        "challenge": "TikTok 및 Snapchat 집행이 불가능한 18세 이상 게이밍. 모든 광고 지면에서 규정 준수 영수증과 오차 없는 이벤트 매핑이 필수적이었습니다.",
+        "approach": "지역 규정을 준수하는 화이트리스트만 집행. 예산 캡이 소진되기 전 일일 지면 감사 및 SDK 포스트백 검증을 전면 실시했습니다.",
+        "result": "월말 기준 분쟁 인벤토리 0건. MMP 로그, 서버 이벤트 및 UA 데이터를 주(State)별로 감사 가능한 단일 기록으로 완전 일치시켰습니다."
+      }
+    },
+    "block-blast-pai": {
+      "client": "Block Blast",
+      "headline": "글로벌 일일 단위 규모의 공장 출고 프리인스톨",
+      "channels": [
+        "OEM 프리인스톨",
+        "PAI",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/block-blast.png",
+        "accent": "#7C3AED",
+        "surface": "#1a1030"
+      },
+      "metrics": [
+        {
+          "value": "32K+",
+          "label": "일일 인스톨"
+        },
+        {
+          "value": "0%",
+          "label": "어트리뷰션 오차"
+        },
+        {
+          "value": "50%",
+          "label": "Day-7 리텐션"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "글로벌 CPI 규모 확장과 설치 후 품질 리텐션 확보가 필수적이었던 퍼즐 타이틀.",
+        "approach": "전 세계 대상 Lenovo PAI 배포. 엄격한 리텐션 하한선(D1 40%, D7 25%, D30 10%)을 기준으로 모든 입찰가 인상을 제어했습니다.",
+        "result": "폴란드, 영국, 독일 및 12개 이상의 추가 GEOs 전역에서 일일 32,000건 이상의 인스톨 달성. D1 ROAS 20%, D7 리텐션 50% 기록."
+      },
+      "optimizationFocus": {
+        "challenge": "공장 설치에 대한 오픈 익스체인지의 불투명성. 재무 부서에서는 패키지 레벨의 확실한 증명이 필요했습니다.",
+        "approach": "모든 인스톨을 공장 로그에 직접 연동. 저리텐션 코호트는 MMP 수집 전에 즉시 차단했습니다.",
+        "result": "MMP 수치가 Lenovo 공급 실적과 완벽히 일치. 인보이스 발행 시 프로드나 리텐션 왜곡 0건 달성."
+      }
+    },
+    "fiverr": {
+      "client": "Fiverr",
+      "headline": "미국 PoC 검증 이후 GCC 앱 확장",
+      "channels": [
+        "프로그래매틱",
+        "게이밍 버티컬",
+        "크리에이티브 테스팅"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fiverr.png",
+        "accent": "#1DBF73",
+        "surface": "#081a12"
+      },
+      "metrics": [
+        {
+          "value": "1B+",
+          "label": "노출 수"
+        },
+        {
+          "value": "10M",
+          "label": "클릭 수"
+        },
+        {
+          "value": "0.2%",
+          "label": "CVR"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "쿠웨이트, 사우디아라비아, UAE로 확장하는 프리랜서 마켓플레이스. 새로운 문화적 환경과 새로운 CPI 기준선 직면.",
+        "approach": "지역별 20개 플랫폼을 테스트하여 상위 3개 성과 플랫폼을 확정. 프리랜서 수요 견인을 위한 게임 산업 특화 크리에이티브 전개.",
+        "result": "완벽한 원장 정산과 함께 10억 회 이상의 노출 달성. 볼륨과 유저 퀄리티 모두 초기 지역 벤치마크를 상회."
+      },
+      "optimizationFocus": {
+        "challenge": "초기 GCC 입찰을 왜곡했던 미국 퍼포먼스 데이터. 지역 네이티브 테스트 전까지는 겉보기에만 전환율이 양호해 보였습니다.",
+        "approach": "지역별 플랫폼 화이트리스트 적용. 게이밍 및 전문 서비스 세그먼트를 정밀 분리하여 크리에이티브 변형 타겟팅 실행.",
+        "result": "예산 증액 전 지역별 플랫폼 단위 CVR 검증 완료. 지역 간 예산 낭비를 완벽히 차단했습니다."
+      }
+    },
+    "shopee": {
+      "client": "Shopee",
+      "headline": "동남아 및 중남미 전역의 인스톨-주문 퍼널 최적화",
+      "channels": [
+        "앱 그로스",
+        "인앱",
+        "OEM"
+      ],
+      "brand": {
+        "icon": "/cases/logos/shopee.png",
+        "accent": "#EE4D2D",
+        "surface": "#2a0f0a"
+      },
+      "metrics": [
+        {
+          "value": "7.2%",
+          "label": "주문 전환율 · PH"
+        },
+        {
+          "value": "250K+",
+          "label": "인스톨 · PH"
+        },
+        {
+          "value": "10.7%",
+          "label": "주문 전환율 · BR"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "단순 설치 CPI 대신 정밀한 MMP 포스트백을 통해 가입(Register) 및 주문 완료(OrderPlaced)를 최우선으로 삼는 마켓플레이스 UA.",
+        "approach": "com.shopee.ph 및 com.shopee.br의 OrderPlaced에 예산 캡 직접 연동. 입찰 루프 내 퍼널 이벤트 레이턴시 최소화.",
+        "result": "PH: 인스톨 25만 건 이상, 가입률 22%, 주문율 7.2%. BR: 인스톨 8만 건 이상, 주문율 10.7%."
+      },
+      "optimizationFocus": {
+        "challenge": "필리핀 내 75만 건 이상의 전환에 대해 정산 보호를 위한 SDK 검증 기반 봇 및 하이재킹 차단 필수.",
+        "approach": "MMP 로그 대비 reject_bots, reject_install_hijacking, reject_ctit_anomalies에 대한 프리비드 필터 적용.",
+        "result": "예산 소진 전 악성 인스톨 사전 차단. 대규모 필리핀 트래픽에서 신뢰할 수 있는 0.08% CVR 확보."
+      }
+    },
+    "banco-azteca": {
+      "client": "Banco Azteca",
+      "headline": "멕시코 전 금융 포트폴리오 판매에 걸친 프로그래매틱 ROAS 달성",
+      "channels": [
+        "DSP",
+        "프로그래매틱",
+        "크리에이티브 최적화"
+      ],
+      "brand": {
+        "icon": "/cases/logos/banco-azteca.png",
+        "accent": "#00843D",
+        "surface": "#061a0e"
+      },
+      "metrics": [
+        {
+          "value": "500%",
+          "label": "ROAS · 10개월 차"
+        },
+        {
+          "value": "200%",
+          "label": "ROAS · 6개월 차"
+        },
+        {
+          "value": "MX",
+          "label": "타깃 시장"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "멕시코 소매 은행의 유저 획득 및 전 금융 포트폴리오 교차 판매 과제. 장기적 MAU 확장을 위해 DSP 로그를 통한 단기 ROAS 검증이 필수적이었습니다.",
+        "approach": "프로그래매틱 DSP 기반 세그먼트별 맞춤형 크리에이티브 집행. 알고리즘 입찰 최적화를 통해 최고 성과 SSP 지면에 예산을 동적으로 집중 투입했습니다.",
+        "result": "6개월 차에 200% ROAS, 10개월 차에 500% ROAS 검증 완료. 서버 사이드 이벤트 핑을 기반으로 허수 MAU 지표에 의존하지 않는 실질적 포트폴리오 매출 및 인지도 확장을 실현했습니다."
+      },
+      "optimizationFocus": {
+        "challenge": "광범위한 계층에 걸친 금융 포용 오디언스. 범용 크리에이티브는 MMP에서 엄격히 매핑되지 않을 경우 도달률을 낭비하고 코호트별 ROAS를 왜곡합니다.",
+        "approach": "세그먼트별 개인화 프로모션 전개. 매주 예산이 집행되기 전 S2S 포스트백을 통해 지면 단위 ROAS 기준선 검증.",
+        "result": "모든 크리에이티브 에셋을 검증된 ROAS 순으로 랭킹화. 재무 부서는 혼합 평균값이 아닌 특정 지면 ID와 포스트백 페이로드로 집행 비용을 직접 추적했습니다."
+      }
+    },
+    "azar": {
+      "client": "Azar",
+      "headline": "오가닉 인스톨 품질을 위한 TikTok 크리에이터 스케일링",
+      "channels": [
+        "TikTok",
+        "인플루언서",
+        "UGC"
+      ],
+      "brand": {
+        "icon": "/cases/logos/azar.png",
+        "accent": "#FF4D6D",
+        "surface": "#1a0810"
+      },
+      "metrics": [
+        {
+          "value": "150M+",
+          "label": "노출 수"
+        },
+        {
+          "value": "1.2M",
+          "label": "인터랙션"
+        },
+        {
+          "value": "180",
+          "label": "크리에이터"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "EU 시장 내 브랜드 인지도 상승과 고품질 오가닉 인스톨이 필요했던 Match Group의 비디오 채팅 앱.",
+        "approach": "영국, 독일, 프랑스, 스페인, 네덜란드, 이탈리아 전역의 180명 매크로/미드/마이크로 크리에이터 투입. 3개월간 TikTok에서 #funwithazar 캠페인 전개.",
+        "result": "1억 5천만 회 이상의 노출, 120만 건의 인터랙션, 110만 개의 좋아요 달성. 타깃 GEOs 전역에서 오가닉 다운로드 품질 개선."
+      },
+      "optimizationFocus": {
+        "challenge": "콘텐츠 포맷이 인스톨 코호트와 연계 추적되지 않을 경우 크리에이터 캠페인은 예산 낭비로 이어집니다.",
+        "approach": "인게이지먼트 품질에 따른 플랫폼 믹스 스코어링. 성과가 미흡한 크리에이터 티어는 캠페인 진행 중 즉각 정리했습니다.",
+        "result": "모든 크리에이터 집행 항목을 도달 및 인터랙션 로그에 직접 매핑. 불투명한 인플루언서 지출을 원천 차단했습니다."
+      }
+    },
+    "vantage": {
+      "client": "Vantage",
+      "headline": "Lenovo OEM 트래픽을 첫 예치금(FTDs)으로 전환",
+      "channels": [
+        "Lenovo Exchange",
+        "OEM 프리인스톨",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/vantage.png",
+        "accent": "#F97316",
+        "surface": "#0a2e2a"
+      },
+      "metrics": [
+        {
+          "value": "15K+",
+          "label": "FTDs"
+        },
+        {
+          "value": "$150+",
+          "label": "평균 유저 가치"
+        },
+        {
+          "value": "1–2d",
+          "label": "라이브 소요 기간"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "경쟁이 치열한 시장에서 단순 익명 설치 볼륨 대신 MMP로 엄격하게 매핑된 FTDs 확보가 절실했던 Android 트레이딩 앱.",
+        "approach": "Lenovo Exchange OEM 경로 활용. 예산 캡이 승인되기 전 S2S 포스트백을 통해 deposit_crm_ftd를 알고리즘 입찰에 직접 연결.",
+        "result": "평균 유저 가치 150달러 이상에서 15,000건 이상의 FTDs 확보. 공장 제조 레벨 배포 및 정교한 API 핸드셰이크를 통해 1~2일 만에 라이브 완료."
+      },
+      "optimizationFocus": {
+        "challenge": "120개 이상의 GEOs에 걸친 OEM 공급망. 레이턴시와 CVR에 기반하여 오픈 익스체인지 경로의 부실 코호트에 대한 알고리즘 필터링 필수.",
+        "approach": "기기 모델 단위 타겟팅. 집행 전 SDK 감사를 통해 deposit_crm_ftd 및 watch_amount_click의 이벤트 패리티 검증.",
+        "result": "결정론적 추적을 통해 월말 기준 Lenovo 실적과 대시보드 리포팅 간의 완전한 일치 달성."
+      }
+    },
+    "snoop": {
+      "client": "Snoop",
+      "headline": "설치 후 계좌 연동까지 견인하는 CTV 인스톨",
+      "channels": [
+        "CTV",
+        "Roku",
+        "리타겟팅"
+      ],
+      "brand": {
+        "icon": "/cases/logos/snoop.png",
+        "accent": "#0E7C86",
+        "surface": "#0c2a2e"
+      },
+      "metrics": [
+        {
+          "value": "150K+",
+          "label": "인스톨"
+        },
+        {
+          "value": "45K+",
+          "label": "연동 계좌 수"
+        },
+        {
+          "value": "32%",
+          "label": "활성화율"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "iOS 기반 영국 금융 앱. 단순 설치 단가는 낮았으나, 계좌 연결이 성패를 가르는 핵심 KPI였습니다.",
+        "approach": "골든 타임 시청 시간대 Roku CTV 광고 집행. first_account_connected 달성을 위한 설치 후 리타겟팅 프롬프트 실행.",
+        "result": "4개월간 15만 건 이상의 인스톨 및 4만 5천 건 이상의 계좌 연동 달성. 30% 이상의 활성화율 유지."
+      },
+      "optimizationFocus": {
+        "challenge": "영국 외 지역의 CTV 예산 누수는 활성화율 개선 없이 CPI만 가중시킵니다.",
+        "approach": "영국 타깃 지역 집중 집행. 예산 캡이 가동되기 전 MMP에서 활성화 이벤트 사전 매핑 완료.",
+        "result": "투명한 활성화 트레일을 갖춘 15만 건 이상의 영국 인스톨. 월말 정산 데이터가 Roku 집행 로그와 완벽히 일치."
+      }
+    },
+    "autodoc": {
+      "client": "AutoDoc",
+      "headline": "유럽 전역에서 CPI 규모로 창출한 구매 이벤트",
+      "channels": [
+        "앱 그로스",
+        "CPI",
+        "프로그래매틱"
+      ],
+      "brand": {
+        "icon": "/cases/logos/autodoc.png",
+        "accent": "#F97316",
+        "surface": "#1c1208"
+      },
+      "metrics": [
+        {
+          "value": "25K+",
+          "label": "일일 인스톨"
+        },
+        {
+          "value": ">2%",
+          "label": "설치 대비 구매율"
+        },
+        {
+          "value": "5",
+          "label": "EU 시장 수"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "단순 대리 클릭이 아닌 실질적 결제 수익 이벤트 기준의 규모 확장이 필요했던 자동차 부품 마켓플레이스.",
+        "approach": "설치 대비 구매율 2% 초과 하한선을 설정한 유럽 CPI 집행. 입찰 루프에 af_purchase 및 af_add_to_cart 반영.",
+        "result": "영국, 프랑스, 스페인, 이탈리아, 독일 전역에서 일일 25,000건 이상의 인스톨 달성. 최종 결제액에 직접 연동된 확실한 ROAS 확보."
+      },
+      "optimizationFocus": {
+        "challenge": "adxreportwa_int의 인보이스 항목과 AppsFlyer 클래식 어트리뷰션 데이터의 완벽한 일치 필요.",
+        "approach": "캠페인 개시 전 af_search부터 af_purchase까지 전 구간 이벤트 사전 매핑. 주간 정산 프로세스 확립.",
+        "result": "언제든 감사 가능한 투명한 구매 트레일 구축. 오차 없는 무결점 월말 리포팅 달성."
+      }
+    }
+  },
+  "process": {
+    "growth": [
+      {
+        "step": "01",
+        "title": "퍼널 매핑",
+        "description": "당사의 트레이더가 귀하의 타깃 오디언스를 정의하고, 다운퍼널 KPI 이벤트를 매핑하며, 목표 획득 단가를 정밀하게 수립합니다."
+      },
+      {
+        "step": "02",
+        "title": "믹스 배포",
+        "description": "다이렉트 OEM 프리인스톨, 이벤트 가중 프로그래매틱 바잉, 네이티브 크리에이터 콘텐츠를 결합한 맞춤형 믹스를 가동합니다."
+      },
+      {
+        "step": "03",
+        "title": "캠페인 스케일링",
+        "description": "자체 크리에이티브 스튜디오에서 매주 새로운 영상 변형을 제작합니다. 긍정적인 ROAS를 창출하는 에셋과 트래픽 경로만을 정밀하게 확장합니다."
+      }
+    ],
+    "infrastructure": [
+      {
+        "step": "01",
+        "title": "스택 매핑",
+        "description": "캠페인을 시작하기 전 당사 오퍼레이터가 귀하의 MMP 엔드포인트, 로우 데이터 로그 파이프라인, 잠재적 프로드 경로를 철저히 문서화합니다."
+      },
+      {
+        "step": "02",
+        "title": "연결 및 구축",
+        "description": "첫 번째 임프레션을 구매하기 전, 디바이스의 원시 로그를 귀하의 측정 엔드포인트에 직접 연결하고 완벽한 데이터 대조를 검증합니다."
+      },
+      {
+        "step": "03",
+        "title": "배포 및 모니터링",
+        "description": "검증된 SDK 규정 준수 하에 프로그래매틱 및 OEM 경로를 가동합니다. 지속적인 실시간 모니터링으로 어트리뷰션 오차를 철저히 방지합니다."
+      }
+    ]
+  },
+  "promise": {
+    "growth": {
+      "label": "언제든 감사 가능한 원시 디바이스 로그",
+      "title": "우리의 약속",
+      "scrollHeroWord": "투명성",
+      "line1": "우리는 모든 미디어 인보이스 청구 항목을 기기의 원시 이벤트까지 역추적합니다.",
+      "line2Prefix": "우리가 실현하는",
+      "inlineWord": "투명성",
+      "titleLead": "우리가 실현하는 ",
+      "accentWord": "투명성",
+      "description": "귀하의 팀은 언제든지 데이터세트를 추출하고 검증할 수 있습니다. 당사의 원시 로그 검증은 트레이더가 캠페인을 시작하기도 전에 어트리뷰션 분쟁을 사전에 해결합니다. 원시 로그, 실시간 대조, 프리비드 필터링을 제공하여 미디어 바이어와 재무 책임자가 완전히 동일한 데이터를 기반으로 일하도록 지원합니다. 귀하의 정산 프로세스는 완벽하게 무결점을 유지합니다. 집행된 모든 비용이 투명하게 입증되므로, 숨겨진 마진이나 보이지 않는 프로드에 대한 우려 없이 확신을 갖고 공격적으로 예산을 확장할 수 있습니다."
+    },
+    "infrastructure": {
+      "label": "언제든 감사 가능한 원시 디바이스 로그",
+      "title": "우리의 약속",
+      "scrollHeroWord": "일치성",
+      "line1": "우리는 모든 미디어 인보이스 청구 항목을 기기의 원시 로그와 직접 대조합니다.",
+      "line2Prefix": "우리가 보장하는",
+      "inlineWord": "일치성",
+      "titleLead": "우리가 보장하는 ",
+      "accentWord": "일치성",
+      "description": "귀하의 팀은 언제든지 데이터세트를 추출하고 검증할 수 있습니다. 당사의 원시 로그 검증은 트레이더가 캠페인을 시작하기도 전에 어트리뷰션 분쟁을 사전에 해결합니다. 원시 로그, 실시간 대조, 프리비드 필터링을 제공하여 미디어 바이어와 재무 책임자가 완전히 동일한 데이터를 기반으로 일하도록 지원합니다. 귀하의 정산 프로세스는 완벽하게 무결점을 유지합니다."
+    }
+  },
+  "lenovo": {
+    "badge": "공식 에이전시 파트너",
+    "logo": "/partners/lenovo-logo.png",
+    "logoAlt": "Lenovo",
+    "title": "Lenovo PC HK LTD",
+    "stripLine": "검증된 직접 경로를 제공하는 공장 출고 ROM 및 Google PAI.",
+    "descriptionIntro": "UPRAISER는 공식 Lenovo 에이전시 파트너입니다. 당사는 프로그래매틱 인프라를 OEM 공장 인벤토리에 직접 연결합니다.",
+    "descriptionLead": "귀하는 검증된 퍼포먼스를 확보하고 글로벌 성장을 위한 즉각적인 도약의 기회를 확보합니다."
+  },
+  "cta": {
+    "label": "파일럿 요청",
+    "href": "/contact"
   }
 }

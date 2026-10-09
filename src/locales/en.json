@@ -104,5 +104,422 @@
     "fintechDesc": "For a top-tier Neobank, we eliminated opaque supply paths and bought entirely on log-native data. By tracing every KYC completion back to the raw bid request, we scaled first-deposits massively without a single instance of attribution fraud.",
     "fintechMetric1": "CPA Reduction",
     "fintechMetric2": "Verified Deposits"
+  },
+  "casesDetails": {
+    "fanatics": {
+      "client": "Fanatics",
+      "headline": "Compliant sportsbook scale with verified device activation trails",
+      "channels": [
+        "Programmatic",
+        "High-intent display",
+        "Behavioral targeting"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fanatics.png",
+        "accent": "#E31837",
+        "surface": "#1a0508"
+      },
+      "metrics": [
+        {
+          "value": "$25M+",
+          "label": "Revenue"
+        },
+        {
+          "value": "50K",
+          "label": "FTDs"
+        },
+        {
+          "value": "800K",
+          "label": "Installs"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Real-money sportsbook in a bonus-saturated US market. Required strict MMP tracking and S2S postbacks without breaching 18+ or state geo rules.",
+        "approach": "Whitelisted adult inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.",
+        "result": "800K installs, 50K FTDs, $25M+ revenue. Seven additional bets per bettor. $500+ revenue per FTD on average."
+      },
+      "optimizationFocus": {
+        "challenge": "TikTok and Snapchat off-limits for 18+ gaming. Every placement needed a compliance receipt and clean event mapping.",
+        "approach": "Geo-compliant whitelists only. Daily placement audit and SDK postback validation before spend cleared your cap.",
+        "result": "Zero disputed inventory at month-end. MMP logs, server events, and UA data aligned into one auditable record per state."
+      }
+    },
+    "block-blast-pai": {
+      "client": "Block Blast",
+      "headline": "Factory-side pre-install at global daily scale",
+      "channels": [
+        "OEM Pre-install",
+        "PAI",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/block-blast.png",
+        "accent": "#7C3AED",
+        "surface": "#1a1030"
+      },
+      "metrics": [
+        {
+          "value": "32K+",
+          "label": "Daily installs"
+        },
+        {
+          "value": "0%",
+          "label": "Attribution drift"
+        },
+        {
+          "value": "50%",
+          "label": "Day-7 retention"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Puzzle title needed global CPI scale and post-install quality retention.",
+        "approach": "Lenovo PAI worldwide. Retention floors (D1 40%, D7 25%, D30 10%) gated every bid increase.",
+        "result": "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%."
+      },
+      "optimizationFocus": {
+        "challenge": "Open-exchange ambiguity on factory installs. Finance needed package-level proof.",
+        "approach": "Every install tied to factory log. Low-retention cohorts cut before MMP ingest.",
+        "result": "MMP counts matched Lenovo delivery. Zero fraud or retention surprises at invoice."
+      }
+    },
+    "fiverr": {
+      "client": "Fiverr",
+      "headline": "GCC app scale after US proof-of-concept",
+      "channels": [
+        "Programmatic",
+        "Gaming vertical",
+        "Creative testing"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fiverr.png",
+        "accent": "#1DBF73",
+        "surface": "#081a12"
+      },
+      "metrics": [
+        {
+          "value": "1B+",
+          "label": "Impressions"
+        },
+        {
+          "value": "10M",
+          "label": "Clicks"
+        },
+        {
+          "value": "0.2%",
+          "label": "CVR"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Freelance marketplace expanding into Kuwait, Saudi Arabia, and UAE. New cultures and new CPI baselines.",
+        "approach": "Tested 20 platforms per geo and locked top three performers. Gaming-industry creatives for freelancer demand.",
+        "result": "Generated 1B+ impressions with perfect ledger reconciliation. Volumes and user quality exceeded initial geo benchmarks."
+      },
+      "optimizationFocus": {
+        "challenge": "US performance data misled early GCC bids. Conversion rates looked fine until geo-native tests ran.",
+        "approach": "Geo-specific platform whitelists. Creative variants targeted gaming and pro-services segments separately.",
+        "result": "Platform-level CVR proof per geo before caps increased. Eliminated cross-region budget bleed."
+      }
+    },
+    "shopee": {
+      "client": "Shopee",
+      "headline": "Install-to-order funnel across SEA and LATAM",
+      "channels": [
+        "App Growth",
+        "In-App",
+        "OEM"
+      ],
+      "brand": {
+        "icon": "/cases/logos/shopee.png",
+        "accent": "#EE4D2D",
+        "surface": "#2a0f0a"
+      },
+      "metrics": [
+        {
+          "value": "7.2%",
+          "label": "Order rate · PH"
+        },
+        {
+          "value": "250K+",
+          "label": "Installs · PH"
+        },
+        {
+          "value": "10.7%",
+          "label": "Order rate · BR"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Marketplace UA prioritizing Register and OrderPlaced over raw install CPI via granular MMP postbacks.",
+        "approach": "Caps tied to OrderPlaced on com.shopee.ph and com.shopee.br. Funnel event latency minimized in the bid loop.",
+        "result": "PH: 250K+ installs, 22% register, 7.2% order rate. BR: 80K+ installs, 10.7% order rate."
+      },
+      "optimizationFocus": {
+        "challenge": "750K+ conversions on PH required bot and hijacking mitigation via SDK checks to protect billing.",
+        "approach": "Pre-bid filter on reject_bots, reject_install_hijacking, reject_ctit_anomalies against MMP logs.",
+        "result": "Bad installs cut before cap cleared. Defensible 0.08% CVR on high-volume PH traffic."
+      }
+    },
+    "banco-azteca": {
+      "client": "Banco Azteca",
+      "headline": "Programmatic ROAS on full portfolio sales in Mexico",
+      "channels": [
+        "DSP",
+        "Programmatic",
+        "Creative optimization"
+      ],
+      "brand": {
+        "icon": "/cases/logos/banco-azteca.png",
+        "accent": "#00843D",
+        "surface": "#061a0e"
+      },
+      "metrics": [
+        {
+          "value": "500%",
+          "label": "ROAS · month 10"
+        },
+        {
+          "value": "200%",
+          "label": "ROAS · month 6"
+        },
+        {
+          "value": "MX",
+          "label": "Market"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Retail bank in Mexico needed to acquire users and cross-sell across its full product portfolio. Long-term MAU ambition required near-term proof on ROAS via DSP logs.",
+        "approach": "Segment-level creative via programmatic DSPs. Spend dynamically concentrated on best-performing SSP placements through algorithmic bidding optimization.",
+        "result": "Verified 200% ROAS by month six and 500% ROAS by month ten. Portfolio sales and awareness scaled independently of vanity MAU numbers based on server-side event pings."
+      },
+      "optimizationFocus": {
+        "challenge": "Financial inclusion audiences span wide segments. Generic creatives burn reach and distort ROAS by cohort unless mapped strictly in the MMP.",
+        "approach": "Personalized promotion per segment. Placement-level ROAS gates verified via S2S postbacks before budget cleared each week.",
+        "result": "Every creative asset ranked by verified ROAS. Finance traced spend to specific placement IDs and postback payloads instead of blended averages."
+      }
+    },
+    "azar": {
+      "client": "Azar",
+      "headline": "TikTok creator scale for organic install quality",
+      "channels": [
+        "TikTok",
+        "Influencer",
+        "UGC"
+      ],
+      "brand": {
+        "icon": "/cases/logos/azar.png",
+        "accent": "#FF4D6D",
+        "surface": "#1a0810"
+      },
+      "metrics": [
+        {
+          "value": "150M+",
+          "label": "Impressions"
+        },
+        {
+          "value": "1.2M",
+          "label": "Interactions"
+        },
+        {
+          "value": "180",
+          "label": "Creators"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Match Group video-chat app needed EU brand lift and quality organic installs.",
+        "approach": "180 macro/mid/micro creators across UK, DE, FR, ES, NL, IT. #funwithazar on TikTok over three months.",
+        "result": "150M+ impressions, 1.2M interactions, 1.1M likes. Organic download quality improved in target GEOs."
+      },
+      "optimizationFocus": {
+        "challenge": "Creator campaigns bleed budget when content formats lack tracking to install cohorts.",
+        "approach": "Platform mix scored by engagement quality. Underperforming creator tiers cut mid-flight.",
+        "result": "Every creator line item mapped to reach and interaction logs. Eliminated black-box influencer spend."
+      }
+    },
+    "vantage": {
+      "client": "Vantage",
+      "headline": "Lenovo OEM traffic into first-time deposits",
+      "channels": [
+        "Lenovo Exchange",
+        "OEM Pre-install",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/vantage.png",
+        "accent": "#F97316",
+        "surface": "#0a2e2a"
+      },
+      "metrics": [
+        {
+          "value": "15K+",
+          "label": "FTDs"
+        },
+        {
+          "value": "$150+",
+          "label": "Avg user value"
+        },
+        {
+          "value": "1–2d",
+          "label": "Go-live"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Android trading app in a crowded market needed FTDs over anonymous install volume mapped strictly via MMP.",
+        "approach": "Lenovo Exchange OEM lanes. deposit_crm_ftd wired into the algorithmic bid via S2S postbacks before caps cleared.",
+        "result": "15K+ FTDs at $150+ average user value. Live in 1–2 days via factory-side distribution and clean API handshakes."
+      },
+      "optimizationFocus": {
+        "challenge": "OEM supply spans 120+ GEOs. Bad cohorts required algorithmic filtering from open-exchange lanes based on latency and CVR.",
+        "approach": "Model-level targeting. Event parity on deposit_crm_ftd and watch_amount_click pre-flight verified through SDK audits.",
+        "result": "Maintained absolute alignment between Lenovo delivery and dashboard reporting at month-end via deterministic tracking."
+      }
+    },
+    "snoop": {
+      "client": "Snoop",
+      "headline": "CTV installs with post-install account activation",
+      "channels": [
+        "CTV",
+        "Roku",
+        "Retargeting"
+      ],
+      "brand": {
+        "icon": "/cases/logos/snoop.png",
+        "accent": "#0E7C86",
+        "surface": "#0c2a2e"
+      },
+      "metrics": [
+        {
+          "value": "150K+",
+          "label": "Installs"
+        },
+        {
+          "value": "45K+",
+          "label": "Accounts linked"
+        },
+        {
+          "value": "32%",
+          "label": "Activation rate"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "UK finance app on iOS. Installs were cheap, but account connections remained the critical KPI.",
+        "approach": "Roku CTV at peak viewing windows. Retargeted post-install prompts for first_account_connected.",
+        "result": "150K+ installs and 45K+ account links over four months. Activation rate held above 30%."
+      },
+      "optimizationFocus": {
+        "challenge": "CTV waste in non-UK regions inflates CPI without moving activation.",
+        "approach": "UK geo concentration enforced. Activation event mapped in MMP before cap went live.",
+        "result": "150K+ UK installs with a clean activation trail. Month-end matched the Roku delivery log."
+      }
+    },
+    "autodoc": {
+      "client": "AutoDoc",
+      "headline": "Purchase events at CPI scale across the EU",
+      "channels": [
+        "App Growth",
+        "CPI",
+        "Programmatic"
+      ],
+      "brand": {
+        "icon": "/cases/logos/autodoc.png",
+        "accent": "#F97316",
+        "surface": "#1c1208"
+      },
+      "metrics": [
+        {
+          "value": "25K+",
+          "label": "Daily installs"
+        },
+        {
+          "value": ">2%",
+          "label": "Purchase / install"
+        },
+        {
+          "value": "5",
+          "label": "EU markets"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Automotive parts marketplace requiring scale on revenue events instead of proxy clicks.",
+        "approach": "EU CPI with purchase/install floor >2%. af_purchase and af_add_to_cart in the bid loop.",
+        "result": "25K+ daily installs across UK, FR, ES, IT, DE. ROAS tied directly to checkout."
+      },
+      "optimizationFocus": {
+        "challenge": "AppsFlyer classic attribution had to match invoice lines on adxreportwa_int.",
+        "approach": "af_search through af_purchase mapped pre-flight. Weekly reconciliation cadence.",
+        "result": "Purchase trail auditable on demand. Month-end reporting executed flawlessly."
+      }
+    }
+  },
+  "process": {
+    "growth": [
+      {
+        "step": "01",
+        "title": "Map the Funnel",
+        "description": "Our traders define Your target audience, map Your down-funnel KPI events, and establish Your target acquisition cost."
+      },
+      {
+        "step": "02",
+        "title": "Deploy the Mix",
+        "description": "We launch a custom mix of direct OEM pre-installs, event-weighted programmatic buying, and native creator content."
+      },
+      {
+        "step": "03",
+        "title": "Scale the Flight",
+        "description": "Our creative studio produces video variations weekly. We scale only the assets and traffic routes that drive positive ROAS."
+      }
+    ],
+    "infrastructure": [
+      {
+        "step": "01",
+        "title": "Map the Stack",
+        "description": "Our operators document Your MMP endpoints, raw log pipelines, and fraud vectors before we launch Your campaigns."
+      },
+      {
+        "step": "02",
+        "title": "Connect and Wire",
+        "description": "We connect raw device logs directly to Your measurement endpoints, verifying reconciliation before buying the first impression."
+      },
+      {
+        "step": "03",
+        "title": "Deploy and Monitor",
+        "description": "We launch programmatic and OEM lanes with verified SDK compliance. Our continuous monitoring prevents attribution drift."
+      }
+    ]
+  },
+  "promise": {
+    "growth": {
+      "label": "Raw logs Your team can audit on demand",
+      "title": "Our Commitment",
+      "scrollHeroWord": "CLARITY",
+      "line1": "We trace every media invoice line item back to a raw device event.",
+      "line2Prefix": "We bring",
+      "inlineWord": "CLARITY",
+      "titleLead": "We bring ",
+      "accentWord": "CLARITY",
+      "description": "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets aggressively without fear of hidden markups or invisible fraud."
+    },
+    "infrastructure": {
+      "label": "Raw logs Your team can audit on demand",
+      "title": "Our Commitment",
+      "scrollHeroWord": "PARITY",
+      "line1": "We match every media invoice line item directly against raw device logs.",
+      "line2Prefix": "We guarantee",
+      "inlineWord": "PARITY",
+      "titleLead": "We guarantee ",
+      "accentWord": "PARITY",
+      "description": "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean."
+    }
+  },
+  "lenovo": {
+    "badge": "Official Agency Partner",
+    "logo": "/partners/lenovo-logo.png",
+    "logoAlt": "Lenovo",
+    "title": "Lenovo PC HK LTD",
+    "stripLine": "Factory ROM and Google PAI delivering direct verified lanes.",
+    "descriptionIntro": "Upraiser is the official Lenovo agency partner. We wire our programmatic infrastructure directly into OEM factory inventory.",
+    "descriptionLead": "You secure verified performance and unlock immediate space for Your global growth."
+  },
+  "cta": {
+    "label": "Request Pilot",
+    "href": "/contact"
   }
 }

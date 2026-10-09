@@ -104,5 +104,422 @@
     "fintechDesc": "Para un neobanco líder, eliminamos las rutas opacas de suministro y compramos exclusivamente sobre datos nativos en logs. Al rastrear cada registro KYC completado hasta la solicitud de puja original, escalamos los primeros depósitos de forma masiva sin un solo caso de fraude de atribución.",
     "fintechMetric1": "Reducción de CPA",
     "fintechMetric2": "Depósitos verificados"
+  },
+  "casesDetails": {
+    "fanatics": {
+      "client": "Fanatics",
+      "headline": "Escala regulada de apuestas deportivas con trazabilidad verificada de activación en dispositivos",
+      "channels": [
+        "Programática",
+        "Display de alta intención",
+        "Segmentación por comportamiento"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fanatics.png",
+        "accent": "#E31837",
+        "surface": "#1a0508"
+      },
+      "metrics": [
+        {
+          "value": "$25M+",
+          "label": "Ingresos"
+        },
+        {
+          "value": "50K",
+          "label": "FTDs"
+        },
+        {
+          "value": "800K",
+          "label": "Instalaciones"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Apuestas deportivas con dinero real en un mercado de EE. UU. saturado de bonos. Requería un riguroso rastreo de MMP y postbacks S2S sin infringir las normativas para mayores de 18 años ni las regulaciones geográficas estatales.",
+        "approach": "Inventario para adultos en lista blanca con límites de latencia por debajo del segundo, segmentación a nivel estatal y control de calidad creativo vinculado directamente al payload de FTD en lugar del volumen de instalaciones.",
+        "result": "800K instalaciones, 50K FTDs, más de $25M en ingresos. Siete apuestas adicionales por apostador. Promedio de más de $500 en ingresos por FTD."
+      },
+      "optimizationFocus": {
+        "challenge": "TikTok y Snapchat vetados para apuestas 18+. Cada emplazamiento requería un comprobante de cumplimiento normativo y un mapeo limpio de eventos.",
+        "approach": "Exclusivamente listas blancas con cumplimiento geográfico. Auditoría diaria de emplazamientos y validación de postbacks de SDK antes de consumir el límite de gasto.",
+        "result": "Cero inventario en disputa a fin de mes. Logs de MMP, eventos de servidor y datos de UA unificados en un registro auditable por estado."
+      }
+    },
+    "block-blast-pai": {
+      "client": "Block Blast",
+      "headline": "Preinstalación directa de fábrica a escala global diaria",
+      "channels": [
+        "Preinstalación OEM",
+        "PAI",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/block-blast.png",
+        "accent": "#7C3AED",
+        "surface": "#1a1030"
+      },
+      "metrics": [
+        {
+          "value": "32K+",
+          "label": "Instalaciones diarias"
+        },
+        {
+          "value": "0%",
+          "label": "Desviación de atribución"
+        },
+        {
+          "value": "50%",
+          "label": "Retención día 7"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Título de puzles requería escala global de CPI y retención de calidad postinstalación.",
+        "approach": "Lenovo PAI a nivel mundial. Umbrales mínimos de retención (D1 40%, D7 25%, D30 10%) condicionaron cada incremento de puja.",
+        "result": "Más de 32.000 instalaciones diarias en PL, UK, DE y 12 GEOs adicionales. ROAS D1 del 20%, retención D7 del 50%."
+      },
+      "optimizationFocus": {
+        "challenge": "Ambigüedad en open-exchange sobre instalaciones de fábrica. Finanzas requería pruebas a nivel de paquete.",
+        "approach": "Cada instalación vinculada al log de fábrica. Cohortes de baja retención eliminadas antes de la ingesta en el MMP.",
+        "result": "Los recuentos del MMP coincidieron con la entrega de Lenovo. Cero fraude o sorpresas de retención en la factura."
+      }
+    },
+    "fiverr": {
+      "client": "Fiverr",
+      "headline": "Escalado de app en el GCC tras prueba de concepto en EE. UU.",
+      "channels": [
+        "Programática",
+        "Vertical de gaming",
+        "Testing creativo"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fiverr.png",
+        "accent": "#1DBF73",
+        "surface": "#081a12"
+      },
+      "metrics": [
+        {
+          "value": "1B+",
+          "label": "Impresiones"
+        },
+        {
+          "value": "10M",
+          "label": "Clics"
+        },
+        {
+          "value": "0.2%",
+          "label": "CVR"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Marketplace de freelancers en expansión hacia Kuwait, Arabia Saudí y EAU. Nuevas culturas y nuevos puntos de referencia de CPI.",
+        "approach": "Se probaron 20 plataformas por territorio, asegurando las tres mejores. Creatividades del sector gaming para impulsar la demanda de freelancers.",
+        "result": "Más de 1.000M de impresiones generadas con conciliación contable perfecta. Los volúmenes y la calidad de usuarios superaron los puntos de referencia geográficos iniciales."
+      },
+      "optimizationFocus": {
+        "challenge": "Los datos de rendimiento de EE. UU. distorsionaron las primeras pujas en el GCC. Las tasas de conversión parecían correctas hasta ejecutar pruebas nativas por región.",
+        "approach": "Listas blancas de plataformas específicas por territorio. Variantes creativas dirigidas por separado a los segmentos de gaming y servicios profesionales.",
+        "result": "Comprobación de CVR a nivel de plataforma en cada territorio antes de aumentar los límites. Eliminación de fugas presupuestarias entre regiones."
+      }
+    },
+    "shopee": {
+      "client": "Shopee",
+      "headline": "Embudo de instalación a pedido en SEA y LATAM",
+      "channels": [
+        "Crecimiento de apps",
+        "In-App",
+        "OEM"
+      ],
+      "brand": {
+        "icon": "/cases/logos/shopee.png",
+        "accent": "#EE4D2D",
+        "surface": "#2a0f0a"
+      },
+      "metrics": [
+        {
+          "value": "7.2%",
+          "label": "Tasa de pedidos · PH"
+        },
+        {
+          "value": "250K+",
+          "label": "Instalaciones · PH"
+        },
+        {
+          "value": "10.7%",
+          "label": "Tasa de pedidos · BR"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "UA de marketplace priorizando Register y OrderPlaced sobre el CPI de instalación bruta mediante postbacks detallados de MMP.",
+        "approach": "Límites vinculados a OrderPlaced en com.shopee.ph y com.shopee.br. Latencia de eventos del embudo minimizada en el ciclo de puja.",
+        "result": "PH: más de 250K instalaciones, 22% de registro, 7,2% de tasa de pedidos. BR: más de 80K instalaciones, 10,7% de tasa de pedidos."
+      },
+      "optimizationFocus": {
+        "challenge": "Más de 750K conversiones en PH exigieron mitigación de bots y secuestro de atribución mediante verificaciones de SDK para proteger la facturación.",
+        "approach": "Filtro pre-bid para reject_bots, reject_install_hijacking y reject_ctit_anomalies contrastado con logs de MMP.",
+        "result": "Instalaciones fraudulentas eliminadas antes de liberar el tope. CVR defendible del 0,08% en tráfico masivo de PH."
+      }
+    },
+    "banco-azteca": {
+      "client": "Banco Azteca",
+      "headline": "ROAS programático en ventas de cartera completa en México",
+      "channels": [
+        "DSP",
+        "Programática",
+        "Optimización creativa"
+      ],
+      "brand": {
+        "icon": "/cases/logos/banco-azteca.png",
+        "accent": "#00843D",
+        "surface": "#061a0e"
+      },
+      "metrics": [
+        {
+          "value": "500%",
+          "label": "ROAS · mes 10"
+        },
+        {
+          "value": "200%",
+          "label": "ROAS · mes 6"
+        },
+        {
+          "value": "MX",
+          "label": "Mercado"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Banco minorista en México necesitaba adquirir usuarios y realizar venta cruzada de toda su cartera de productos. Su ambición de MAU a largo plazo requería pruebas de ROAS a corto plazo mediante logs de DSP.",
+        "approach": "Creatividades a nivel de segmento mediante DSPs programáticos. Inversión concentrada dinámicamente en los emplazamientos de SSP con mejor rendimiento a través de optimización algorítmica de pujas.",
+        "result": "ROAS verificado del 200% al mes seis y del 500% al mes diez. Ventas de cartera y notoriedad escaladas sin depender de métricas vanidosas de MAU, basadas en pings de eventos de servidor."
+      },
+      "optimizationFocus": {
+        "challenge": "Las audiencias de inclusión financiera abarcan amplios segmentos. Creatividades genéricas desgastan el alcance y distorsionan el ROAS por cohorte salvo que se mapeen estrictamente en el MMP.",
+        "approach": "Promoción personalizada por segmento. Controles de ROAS a nivel de emplazamiento verificados mediante postbacks S2S antes de liberar presupuesto cada semana.",
+        "result": "Cada activo creativo clasificado por ROAS verificado. Finanzas rastreó la inversión hasta IDs de emplazamiento específicos y payloads de postback en lugar de promedios combinados."
+      }
+    },
+    "azar": {
+      "client": "Azar",
+      "headline": "Escalado con creadores de TikTok para calidad de instalación orgánica",
+      "channels": [
+        "TikTok",
+        "Influencers",
+        "UGC"
+      ],
+      "brand": {
+        "icon": "/cases/logos/azar.png",
+        "accent": "#FF4D6D",
+        "surface": "#1a0810"
+      },
+      "metrics": [
+        {
+          "value": "150M+",
+          "label": "Impresiones"
+        },
+        {
+          "value": "1.2M",
+          "label": "Interacciones"
+        },
+        {
+          "value": "180",
+          "label": "Creadores"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "App de videochat de Match Group requería brand lift en la UE e instalaciones orgánicas de calidad.",
+        "approach": "180 creadores macro, mid y micro en UK, DE, FR, ES, NL e IT. #funwithazar en TikTok a lo largo de tres meses.",
+        "result": "Más de 150M de impresiones, 1,2M de interacciones y 1,1M de likes. La calidad de descargas orgánicas mejoró en los GEOs objetivo."
+      },
+      "optimizationFocus": {
+        "challenge": "Las campañas con creadores consumen presupuesto innecesariamente cuando los formatos de contenido carecen de trazabilidad hacia cohortes de instalación.",
+        "approach": "Mix de plataformas valorado por calidad de engagement. Niveles de creadores con bajo rendimiento cancelados durante la campaña.",
+        "result": "Cada partida de creadores mapeada a logs de alcance e interacción. Eliminación del gasto opaco en influencers."
+      }
+    },
+    "vantage": {
+      "client": "Vantage",
+      "headline": "Tráfico OEM de Lenovo convertido en primeros depósitos",
+      "channels": [
+        "Lenovo Exchange",
+        "Preinstalación OEM",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/vantage.png",
+        "accent": "#F97316",
+        "surface": "#0a2e2a"
+      },
+      "metrics": [
+        {
+          "value": "15K+",
+          "label": "FTDs"
+        },
+        {
+          "value": "$150+",
+          "label": "Valor medio por usuario"
+        },
+        {
+          "value": "1–2d",
+          "label": "Puesta en marcha"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "App de trading en Android en un mercado saturado requería FTDs sobre volumen anónimo de instalaciones, mapeado estrictamente mediante MMP.",
+        "approach": "Rutas OEM de Lenovo Exchange. deposit_crm_ftd integrado en la puja algorítmica mediante postbacks S2S antes de liberar los límites.",
+        "result": "Más de 15K FTDs con más de $150 de valor medio por usuario. Operativo en 1–2 días mediante distribución directa de fábrica e integraciones limpias de API."
+      },
+      "optimizationFocus": {
+        "challenge": "El suministro OEM abarca más de 120 GEOs. Las cohortes deficientes requirieron filtrado algorítmico en rutas de open-exchange según latencia y CVR.",
+        "approach": "Segmentación por modelo de dispositivo. Paridad de eventos en deposit_crm_ftd y watch_amount_click verificada antes del vuelo mediante auditorías de SDK.",
+        "result": "Alineación absoluta entre la entrega de Lenovo y los reportes del panel a fin de mes mediante rastreo determinista."
+      }
+    },
+    "snoop": {
+      "client": "Snoop",
+      "headline": "Instalaciones en CTV con activación de cuenta postinstalación",
+      "channels": [
+        "CTV",
+        "Roku",
+        "Retargeting"
+      ],
+      "brand": {
+        "icon": "/cases/logos/snoop.png",
+        "accent": "#0E7C86",
+        "surface": "#0c2a2e"
+      },
+      "metrics": [
+        {
+          "value": "150K+",
+          "label": "Instalaciones"
+        },
+        {
+          "value": "45K+",
+          "label": "Cuentas vinculadas"
+        },
+        {
+          "value": "32%",
+          "label": "Tasa de activación"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "App financiera del Reino Unido en iOS. Las instalaciones eran económicas, pero la vinculación de cuentas continuaba siendo el KPI crítico.",
+        "approach": "CTV en Roku durante las horas de mayor audiencia. Notificaciones de retargeting postinstalación para first_account_connected.",
+        "result": "Más de 150K instalaciones y más de 45K cuentas vinculadas en cuatro meses. Tasa de activación sostenida por encima del 30%."
+      },
+      "optimizationFocus": {
+        "challenge": "El desperdicio en CTV fuera del Reino Unido infla el CPI sin impulsar la activación.",
+        "approach": "Concentración geográfica estricta en el Reino Unido. Evento de activación mapeado en el MMP antes de liberar el presupuesto.",
+        "result": "Más de 150K instalaciones en el Reino Unido con un rastro limpio de activación. El cierre de mes coincidió con el log de entrega de Roku."
+      }
+    },
+    "autodoc": {
+      "client": "AutoDoc",
+      "headline": "Eventos de compra a escala de CPI en toda la UE",
+      "channels": [
+        "Crecimiento de apps",
+        "CPI",
+        "Programática"
+      ],
+      "brand": {
+        "icon": "/cases/logos/autodoc.png",
+        "accent": "#F97316",
+        "surface": "#1c1208"
+      },
+      "metrics": [
+        {
+          "value": "25K+",
+          "label": "Instalaciones diarias"
+        },
+        {
+          "value": ">2%",
+          "label": "Compra / instalación"
+        },
+        {
+          "value": "5",
+          "label": "Mercados de la UE"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Marketplace de recambios de automóviles que requería escala en eventos de ingresos, no en clics intermedios.",
+        "approach": "CPI en la UE con un umbral de compra/instalación >2%. af_purchase y af_add_to_cart integrados en el ciclo de puja.",
+        "result": "Más de 25K instalaciones diarias en UK, FR, ES, IT y DE. ROAS vinculado directamente al checkout."
+      },
+      "optimizationFocus": {
+        "challenge": "La atribución clásica de AppsFlyer debía coincidir con las líneas de facturación en adxreportwa_int.",
+        "approach": "Mapeo previo desde af_search hasta af_purchase antes del vuelo. Conciliación con frecuencia semanal.",
+        "result": "Rastro de compras auditable bajo demanda. Informes de cierre de mes impecables."
+      }
+    }
+  },
+  "process": {
+    "growth": [
+      {
+        "step": "01",
+        "title": "Mapear el embudo",
+        "description": "Nuestros traders definen su público objetivo, mapean los eventos KPI del fondo del embudo y establecen su coste de adquisición objetivo."
+      },
+      {
+        "step": "02",
+        "title": "Desplegar el mix",
+        "description": "Lanzamos un mix personalizado de preinstalaciones OEM directas, compra programática ponderada por eventos y contenido nativo de creadores."
+      },
+      {
+        "step": "03",
+        "title": "Escalar la campaña",
+        "description": "Nuestro estudio creativo produce variaciones de vídeo semanalmente. Escalamos únicamente los activos y rutas de tráfico que generan ROAS positivo."
+      }
+    ],
+    "infrastructure": [
+      {
+        "step": "01",
+        "title": "Mapear el stack",
+        "description": "Nuestros operadores documentan sus endpoints de MMP, pipelines de logs brutos y vectores de fraude antes de lanzar sus campañas."
+      },
+      {
+        "step": "02",
+        "title": "Conectar e integrar",
+        "description": "Conectamos los logs brutos de dispositivos directamente a sus endpoints de medición, verificando la conciliación antes de comprar la primera impresión."
+      },
+      {
+        "step": "03",
+        "title": "Desplegar y monitorizar",
+        "description": "Lanzamos rutas programáticas y OEM con cumplimiento verificado de SDK. Nuestra monitorización continua evita la desviación de atribución."
+      }
+    ]
+  },
+  "promise": {
+    "growth": {
+      "label": "Logs brutos que su equipo puede auditar bajo demanda",
+      "title": "Nuestro compromiso",
+      "scrollHeroWord": "CLARIDAD",
+      "line1": "Rastreamos cada partida de la factura de medios hasta un evento de dispositivo sin procesar.",
+      "line2Prefix": "Aportamos",
+      "inlineWord": "CLARIDAD",
+      "titleLead": "Aportamos ",
+      "accentWord": "CLARIDAD",
+      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio. Garantizamos que cada dólar invertido esté plenamente justificado, dándole total confianza para escalar presupuestos con agresividad sin temor a márgenes ocultos ni fraude invisible."
+    },
+    "infrastructure": {
+      "label": "Logs brutos que su equipo puede auditar bajo demanda",
+      "title": "Nuestro compromiso",
+      "scrollHeroWord": "PARIDAD",
+      "line1": "Contrastamos cada partida de la factura de medios directamente con logs brutos de dispositivos.",
+      "line2Prefix": "Garantizamos",
+      "inlineWord": "PARIDAD",
+      "titleLead": "Garantizamos ",
+      "accentWord": "PARIDAD",
+      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio."
+    }
+  },
+  "lenovo": {
+    "badge": "Partner oficial de agencia",
+    "logo": "/partners/lenovo-logo.png",
+    "logoAlt": "Lenovo",
+    "title": "Lenovo PC HK LTD",
+    "stripLine": "ROM de fábrica y Google PAI ofreciendo rutas directas y verificadas.",
+    "descriptionIntro": "UPRAISER es el partner oficial de agencia Lenovo. Conectamos nuestra infraestructura programática directamente con el inventario de fábrica OEM.",
+    "descriptionLead": "Usted asegura un rendimiento verificado y desbloquea espacio inmediato para su crecimiento global."
+  },
+  "cta": {
+    "label": "Solicitar piloto",
+    "href": "/contact"
   }
 }

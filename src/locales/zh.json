@@ -104,5 +104,422 @@
     "fintechDesc": "我们为一家顶尖数字银行（Neobank）清除了不透明的供应链路，完全依托原生日志数据采买。通过将每一次 KYC 认证完成精准溯源至原始竞价请求，我们在实现首充存款规模爆发式增长的同时，彻底杜绝了任何归因作弊。",
     "fintechMetric1": "CPA 降幅",
     "fintechMetric2": "核验真实存款"
+  },
+  "casesDetails": {
+    "fanatics": {
+      "client": "Fanatics",
+      "headline": "具备已核验设备激活链路的合规体育博彩规模化放量",
+      "channels": [
+        "程序化",
+        "高意向展示广告",
+        "行为定向"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fanatics.png",
+        "accent": "#E31837",
+        "surface": "#1a0508"
+      },
+      "metrics": [
+        {
+          "value": "$25M+",
+          "label": "总收入"
+        },
+        {
+          "value": "50K",
+          "label": "FTDs"
+        },
+        {
+          "value": "800K",
+          "label": "安装量"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "在优惠红利泛滥的美国真金体育博彩市场中突围。需在严守 18+ 及各州属地规则的前提下，实现严苛的 MMP 追踪与 S2S postbacks 回传。",
+        "approach": "锁定具备亚秒级延迟限制的白名单成人流量，实施州级精准定向，并将素材 QA 质检直接锚定 FTD 数据载荷而非单纯的安装量。",
+        "result": "达成 800K 安装、50K 笔 FTDs 及超 2,500 万美元收入。每位玩家平均额外下注 7 次，单个 FTD 平均创收逾 500 美元。"
+      },
+      "optimizationFocus": {
+        "challenge": "TikTok 与 Snapchat 严禁投放 18+ 博彩游戏。每一个广告点位都必须具备合规凭证与清晰的事件映射。",
+        "approach": "仅采买完全符合属地合规要求的白名单。每日在预算消耗结算前执行点位审计与 SDK postback 验证。",
+        "result": "月末实现争议流量清零。MMP 日志、服务器事件与 UA 买量数据统一对齐为各州可审计的精准账目。"
+      }
+    },
+    "block-blast-pai": {
+      "client": "Block Blast",
+      "headline": "全球日级规模的出厂级直装预装",
+      "channels": [
+        "OEM 出厂预装",
+        "PAI",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/block-blast.png",
+        "accent": "#7C3AED",
+        "surface": "#1a1030"
+      },
+      "metrics": [
+        {
+          "value": "32K+",
+          "label": "每日安装量"
+        },
+        {
+          "value": "0%",
+          "label": "归因偏差"
+        },
+        {
+          "value": "50%",
+          "label": "Day-7 留存率"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "消除益智类爆款游戏亟需全球 CPI 规模化扩张及高质量的安装后留存。",
+        "approach": "在全球范围部署 Lenovo PAI。设定严苛的留存底线（D1 40%、D7 25%、D30 10%），作为每一次竞价提额的前置条件。",
+        "result": "覆盖波兰、英国、德国及其他 12 个 GEOs，日均新增 32,000+ 次安装。D1 ROAS 达 20%，D7 留存率达 50%。"
+      },
+      "optimizationFocus": {
+        "challenge": "公开竞价市场在出厂预装数据上含糊不清，而财务部门需要应用包级别的确凿凭证。",
+        "approach": "将每一次安装与硬件出厂日志强关联。在数据接入 MMP 之前即刻剔除低留存同群。",
+        "result": "MMP 统计数据与 Lenovo 实际交付分毫不差。账单结算时实现零作弊、留存表现完全符合预期。"
+      }
+    },
+    "fiverr": {
+      "client": "Fiverr",
+      "headline": "美区概念验证落地后，海湾（GCC）市场规模化扩张",
+      "channels": [
+        "程序化",
+        "游戏垂直赛道",
+        "素材测试"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fiverr.png",
+        "accent": "#1DBF73",
+        "surface": "#081a12"
+      },
+      "metrics": [
+        {
+          "value": "1B+",
+          "label": "展示曝光"
+        },
+        {
+          "value": "10M",
+          "label": "点击量"
+        },
+        {
+          "value": "0.2%",
+          "label": "CVR"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "自由职业交易平台拓展至科威特、沙特阿拉伯与阿联酋市场，面临全新的文化语境与重塑的 CPI 基准线。",
+        "approach": "在每个地区测试 20 个平台并锁定表现前三甲。针对自由职业者需求定制游戏行业专属创意素材。",
+        "result": "创造超 10 亿次展示曝光，账目完全平账吻合。买量规模与用户质量均远超预设的区域基准。"
+      },
+      "optimizationFocus": {
+        "challenge": "美区效果数据误导了早期的 GCC 竞价策略。在开展本地化原生测试之前，转化率看似正常但并未反映真实表现。",
+        "approach": "建立针对特定地区的平台白名单。对游戏与专业服务细分客群分别投放针对性创意变体。",
+        "result": "在提高预算上限前先获取各地区平台级 CVR 实证，彻底杜绝跨区域预算损耗。"
+      }
+    },
+    "shopee": {
+      "client": "Shopee",
+      "headline": "东南亚与拉美全域“安装至下单”转化漏斗",
+      "channels": [
+        "应用增长",
+        "应用内直投",
+        "OEM"
+      ],
+      "brand": {
+        "icon": "/cases/logos/shopee.png",
+        "accent": "#EE4D2D",
+        "surface": "#2a0f0a"
+      },
+      "metrics": [
+        {
+          "value": "7.2%",
+          "label": "下单转化率 · 菲律宾"
+        },
+        {
+          "value": "250K+",
+          "label": "安装量 · 菲律宾"
+        },
+        {
+          "value": "10.7%",
+          "label": "下单转化率 · 巴西"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "电商平台 UA 买量通过细颗粒度 MMP postbacks，将“注册”和“下单完成”（OrderPlaced）置于单纯安装 CPI 之上。",
+        "approach": "将预算上限直接绑定 com.shopee.ph 和 com.shopee.br 上的 OrderPlaced 事件，并将竞价闭环中的漏斗事件延迟降至极致。",
+        "result": "菲律宾市场：250K+ 安装量，22% 注册率，7.2% 下单转化率。巴西市场：80K+ 安装量，10.7% 下单转化率。"
+      },
+      "optimizationFocus": {
+        "challenge": "菲律宾市场超 750K 次转化需要通过 SDK 校验防范机器流量与安装劫持，以捍卫账单真实性。",
+        "approach": "对照 MMP 日志，在竞价前全面过滤 reject_bots、reject_install_hijacking 与 reject_ctit_anomalies。",
+        "result": "在预算扣除前切除劣质安装。在高容量的菲律宾流量中，实现经得起推敲的 0.08% 真实 CVR。"
+      }
+    },
+    "banco-azteca": {
+      "client": "Banco Azteca",
+      "headline": "墨西哥全系金融产品销售的程序化 ROAS 突破",
+      "channels": [
+        "DSP",
+        "程序化",
+        "素材优化"
+      ],
+      "brand": {
+        "icon": "/cases/logos/banco-azteca.png",
+        "accent": "#00843D",
+        "surface": "#061a0e"
+      },
+      "metrics": [
+        {
+          "value": "500%",
+          "label": "ROAS · 第 10 个月"
+        },
+        {
+          "value": "200%",
+          "label": "ROAS · 第 6 个月"
+        },
+        {
+          "value": "MX",
+          "label": "市场"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "墨西哥零售银行亟需获取新客并在其全系产品矩阵中实现交叉销售。长远的 MAU 扩张诉求必须依托 DSP 日志展现近期的 ROAS 确凿实证。",
+        "approach": "依托程序化 DSP 投放客群细分级创意素材。借助算法竞价优化，将预算动态集中至转化最优的 SSP 点位。",
+        "result": "经核验证明，第 6 个月 ROAS 达 200%，第 10 个月 ROAS 达 500%。基于服务端事件请求，产品销售与品牌声量实现了真正放量，摆脱虚假 MAU 数据的干扰。"
+      },
+      "optimizationFocus": {
+        "challenge": "普惠金融目标受众跨度极广。通用素材会空耗触达率；若不在 MMP 中严格映射，更会严重扭曲各同群的真实 ROAS。",
+        "approach": "按受众细分实施个性化推广。每周在预算结算前，均通过 S2S postbacks 验证点位级别的 ROAS 准入门槛。",
+        "result": "所有创意资产均按已核验 ROAS 进行排序。财务部门可将每一笔支出精准溯源至具体点位 ID 与 postback 数据载荷，杜绝含糊的综合均值。"
+      }
+    },
+    "azar": {
+      "client": "Azar",
+      "headline": "依托 TikTok 创作者矩阵撬动高品质自然安装",
+      "channels": [
+        "TikTok",
+        "达人营销",
+        "UGC"
+      ],
+      "brand": {
+        "icon": "/cases/logos/azar.png",
+        "accent": "#FF4D6D",
+        "surface": "#1a0810"
+      },
+      "metrics": [
+        {
+          "value": "150M+",
+          "label": "展示曝光"
+        },
+        {
+          "value": "1.2M",
+          "label": "互动量"
+        },
+        {
+          "value": "180",
+          "label": "合作创作者"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Match Group 旗下视频社交应用亟需在欧洲市场实现品牌声量提升与高品质自然量转化。",
+        "approach": "在英国、德国、法国、西班牙、荷兰与意大利联动 180 位头部/中腰部/微型创作者，在 TikTok 展开为期三个月的 #funwithazar 话题战役。",
+        "result": "收获超 1.5 亿次展示曝光、120 万次互动与 110 万次点赞。目标 GEOs 内的自然下载质量显著提高。"
+      },
+      "optimizationFocus": {
+        "challenge": "当内容形式缺乏对安装同群的追踪链路时，创作者营销往往会造成严重的预算浪费。",
+        "approach": "按互动质量对各平台组合评分，在投放中期果断淘汰表现不达标的创作者层级。",
+        "result": "每一笔创作者支出明细均精准映射至触达与互动日志，彻底消除红人营销的黑盒支出。"
+      }
+    },
+    "vantage": {
+      "client": "Vantage",
+      "headline": "将 Lenovo OEM 流量高效转化为首充入金（FTDs）",
+      "channels": [
+        "Lenovo Exchange",
+        "OEM 出厂预装",
+        "CPI"
+      ],
+      "brand": {
+        "icon": "/cases/logos/vantage.png",
+        "accent": "#F97316",
+        "surface": "#0a2e2a"
+      },
+      "metrics": [
+        {
+          "value": "15K+",
+          "label": "FTDs"
+        },
+        {
+          "value": "$150+",
+          "label": "平均用户价值"
+        },
+        {
+          "value": "1–2天",
+          "label": "快速上线"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "处于高度内卷赛道的 Android 交易应用亟需获取 FTDs，而非通过 MMP 粗放映射的匿名安装量。",
+        "approach": "开辟 Lenovo Exchange OEM 专属通道。在预算扣除前，通过 S2S postbacks 将 deposit_crm_ftd 深度接入算法竞价逻辑。",
+        "result": "斩获 15K+ 笔 FTDs，平均用户价值超 150 美元。依托出厂端分发与清晰的 API 握手，1–2 天内即可极速上线。"
+      },
+      "optimizationFocus": {
+        "challenge": "OEM 流量供给覆盖超 120 个 GEOs。必须基于延迟与 CVR 指标，通过算法过滤公开竞价通道中的劣质同群。",
+        "approach": "实施设备机型级精准定向。上线前通过 SDK 审计，严格核验 deposit_crm_ftd 与 watch_amount_click 的事件一致性。",
+        "result": "通过确定性追踪机制，确保月末 Lenovo 实际交付与仪表板报表数据分毫不差、绝对一致。"
+      }
+    },
+    "snoop": {
+      "client": "Snoop",
+      "headline": "CTV 安装与安装后账户关联的全链路激活",
+      "channels": [
+        "CTV",
+        "Roku",
+        "重定向投放"
+      ],
+      "brand": {
+        "icon": "/cases/logos/snoop.png",
+        "accent": "#0E7C86",
+        "surface": "#0c2a2e"
+      },
+      "metrics": [
+        {
+          "value": "150K+",
+          "label": "安装量"
+        },
+        {
+          "value": "45K+",
+          "label": "已关联账户"
+        },
+        {
+          "value": "32%",
+          "label": "激活率"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "英国 iOS 财务应用。虽然安装成本较低，但账户关联始终是决定生死的关键 KPI。",
+        "approach": "在黄金收视时段投放 Roku CTV，并在安装后向用户精准重定向促推 first_account_connected 事件。",
+        "result": "历时 4 个月实现 150K+ 次安装与 45K+ 个账户关联，激活率稳稳保持在 30% 以上。"
+      },
+      "optimizationFocus": {
+        "challenge": "非英国地区的 CTV 流量浪费会推高 CPI，却无法推动任何实际激活。",
+        "approach": "强制锁定英国本土地域流量。在预算上限生效前，于 MMP 中严格映射激活事件。",
+        "result": "交付具备清晰激活链路的 150K+ 笔英国安装，月末数据与 Roku 投放日志完美吻合。"
+      }
+    },
+    "autodoc": {
+      "client": "AutoDoc",
+      "headline": "在欧洲全境以 CPI 规模驱动真实购买事件",
+      "channels": [
+        "应用增长",
+        "CPI",
+        "程序化"
+      ],
+      "brand": {
+        "icon": "/cases/logos/autodoc.png",
+        "accent": "#F97316",
+        "surface": "#1c1208"
+      },
+      "metrics": [
+        {
+          "value": "25K+",
+          "label": "每日安装量"
+        },
+        {
+          "value": ">2%",
+          "label": "购买/安装比率"
+        },
+        {
+          "value": "5",
+          "label": "欧洲市场"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "汽配交易平台亟需在真实收入转化事件上放量，而非追求虚假的代理点击量。",
+        "approach": "投放欧洲 CPI 并设定 >2% 的购买/安装底线，将 af_purchase 和 af_add_to_cart 深度纳入竞价闭环。",
+        "result": "覆盖英、法、西、意、德五国，每日新增 25K+ 次安装。ROAS 与结账转化直接绑定。"
+      },
+      "optimizationFocus": {
+        "challenge": "AppsFlyer 经典归因数据必须与 adxreportwa_int 的账单明细分毫不差地吻合。",
+        "approach": "投放前完成从 af_search 到 af_purchase 的全链路映射，并按周执行对账节奏。",
+        "result": "购买转化链路支持随时按需审计，月末报表核对零瑕疵交付。"
+      }
+    }
+  },
+  "process": {
+    "growth": [
+      {
+        "step": "01",
+        "title": "构建转化漏斗",
+        "description": "我们的操盘手精准定义您的目标受众，映射漏斗深层的 KPI 转化事件，并确立您的目标获客成本。"
+      },
+      {
+        "step": "02",
+        "title": "部署组合投放",
+        "description": "我们量身定制并启动整合投放矩阵：涵盖直接 OEM 出厂预装、核心事件加权的程序化采买，以及原生创作者内容。"
+      },
+      {
+        "step": "03",
+        "title": "全力放量扩盘",
+        "description": "我们的创意工作室每周产出多版本视频素材。我们仅对能带来正向 ROAS 的优质资产与流量通路全力放量。"
+      }
+    ],
+    "infrastructure": [
+      {
+        "step": "01",
+        "title": "梳理技术架构",
+        "description": "在启动战役之前，我们的运营专家已梳理并记录您的 MMP 端点、原始日志数据管道与反作弊向量。"
+      },
+      {
+        "step": "02",
+        "title": "打通数据管网",
+        "description": "我们将底层硬件原始日志直连至您的衡量端点，在采买首个展示曝光前已核验证明账目对齐。"
+      },
+      {
+        "step": "03",
+        "title": "上线实时监控",
+        "description": "我们在通过 SDK 合规验证的前提下上线程序化与 OEM 通道，依托不间断的实时监测彻底杜绝归因偏差。"
+      }
+    ]
+  },
+  "promise": {
+    "growth": {
+      "label": "支持您团队随时按需审计的原始日志",
+      "title": "我们的承诺",
+      "scrollHeroWord": "透明",
+      "line1": "我们将媒介账单上的每一项支出，均精准溯源至原始设备事件。",
+      "line2Prefix": "我们带来",
+      "inlineWord": "透明",
+      "titleLead": "我们带来 ",
+      "accentWord": "透明",
+      "description": "您的团队可以随时提取并核验证实您的数据集。我们的原始日志验证在操盘手开启投放前便已彻底消除归因争议。我们提供原生日志、实时对账与竞价前过滤，确保媒介采买与财务主管始终基于同一套真实数据协同决策。您的对账流程始终保持分毫不差。我们确保支出的每一分钱都账目分明，让您在积极扩大预算时拥有绝对底气，告别隐性溢价与隐蔽欺诈。"
+    },
+    "infrastructure": {
+      "label": "支持您团队随时按需审计的原始日志",
+      "title": "我们的承诺",
+      "scrollHeroWord": "一致",
+      "line1": "我们将媒介账单上的每一笔支出明细，直接与原始设备日志逐一核对。",
+      "line2Prefix": "我们确保",
+      "inlineWord": "一致",
+      "titleLead": "我们确保 ",
+      "accentWord": "一致",
+      "description": "您的团队可以随时提取并核验证实您的数据集。我们的原始日志验证在操盘手开启投放前便已彻底消除归因争议。我们提供原生日志、实时对账与竞价前过滤，确保媒介采买与财务主管始终基于同一套真实数据协同决策。您的对账流程始终保持分毫不差。"
+    }
+  },
+  "lenovo": {
+    "badge": "官方代理合作伙伴",
+    "logo": "/partners/lenovo-logo.png",
+    "logoAlt": "Lenovo",
+    "title": "Lenovo PC HK LTD",
+    "stripLine": "出厂 ROM 与 Google PAI 提供经核验的直达专属通道。",
+    "descriptionIntro": "UPRAISER 是 Lenovo 官方代理合作伙伴。我们将程序化底层基建直连至 OEM 硬件出厂库存。",
+    "descriptionLead": "助您锁定经核验的高效表现，即刻为您的全球增长开拓全新空间。"
+  },
+  "cta": {
+    "label": "申请试点",
+    "href": "/contact"
   }
 }
