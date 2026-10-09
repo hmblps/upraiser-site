@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, memo } from "react";
-import { useScrollContext } from "../context/ScrollContext";
+import { useScroll } from "../context/ScrollContext";
 import { useMode } from "./SectionHeader";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useEnvironment } from "../lib/environmentState";
@@ -22,7 +22,7 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
   const snowEnabled = useEnvironment((s) => s.snowEnabled);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { registerScrollListener } = useScrollContext();
+  const { registerScrollListener } = useScroll();
 
   const [flakes, setFlakes] = useState<Flake[]>([]);
   const scrollYRef = useRef(0);
