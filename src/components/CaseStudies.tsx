@@ -21,6 +21,7 @@ function CaseCarouselDeck({
   /** Home embed: false so page scroll continues; viewport page uses default. */
   mapVertical?: boolean | "viewport-locked";
 }) {
+  const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { activeIndex, scrollByCard, scrollToIndex } = useInfiniteCaseCarousel(scrollRef, {
@@ -114,6 +115,7 @@ function CaseCarouselDeck({
 
 /** Full Peaks deck — home embed or legacy viewport page. */
 export function CaseStudies({ variant = "home" }: CaseStudiesProps) {
+  const { t } = useTranslation();
   const { mode } = useMode();
   const section = sectionsByMode.cases[mode];
 
@@ -124,9 +126,9 @@ export function CaseStudies({ variant = "home" }: CaseStudiesProps) {
           <header className="viewport-page__intro shrink-0">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div className="min-w-0">
-                <p className="section-label">{casesPage.label}</p>
-                <h1 className="section-title">{casesPage.title}</h1>
-                <p className="section-description">{casesPage.description}</p>
+                <p className="section-label">{t("casesPage.label", casesPage.label)}</p>
+                <h1 className="section-title">{t("casesPage.title", casesPage.title)}</h1>
+                <p className="section-description">{t("casesPage.subtitle", casesPage.description)}</p>
               </div>
               <p className="shrink-0 font-mono text-caption font-bold tabular-nums text-muted">
                 <span className="text-accent">{caseStudies.length}</span> cases
@@ -146,7 +148,7 @@ export function CaseStudies({ variant = "home" }: CaseStudiesProps) {
       <ModeContentTransition mode={mode} className="section-inner">
         <SectionHeader
           animated={false}
-          label={casesPage.label}
+          label={t("casesPage.label", casesPage.label)}
           title={section.title}
           description={
             mode === "growth"
