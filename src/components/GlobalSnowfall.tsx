@@ -46,7 +46,7 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
   // Track scroll delta
   useEffect(() => {
     if (reduced) return;
-    return registerScrollListener(({ y }) => {
+    return registerScrollListener((y) => {
       scrollYRef.current = y;
     });
   }, [registerScrollListener, reduced]);
