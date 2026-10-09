@@ -160,7 +160,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
             scrollToY(window.innerHeight * 2 + 23, { duration: 4.2, easing: coastingEase });
           }
         }
-      }, 2500);
+      }, 400); // reduced from 2.5s
     };
     window.addEventListener('hero-video-ended', onEnded);
     return () => window.removeEventListener('hero-video-ended', onEnded);
