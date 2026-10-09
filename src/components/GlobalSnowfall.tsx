@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState} from "react";
 
+import { useLocation } from "react-router-dom";
 import { useScroll } from "../context/ScrollContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -22,7 +23,7 @@ function useIsLightTheme() {
 }
 
 export function GlobalSnowfall() {
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
   const isLight = useIsLightTheme();
   const reducedMotion = useReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -172,7 +173,7 @@ export function GlobalSnowfall() {
     };
   }, [isLight, reducedMotion, isVisible]);
 
-  if (!isLight) return null;
+  if (!isLight || pathname === "/craft") return null;
 
   return (
     <div

@@ -1,20 +1,18 @@
-import { UnderConstruction } from "../components/UnderConstruction";
 import { useMode } from "../components/SectionHeader";
 import { ModeContentTransition } from "../components/motion/ModeContentTransition";
+import { CreativeStudioVideo } from "../components/CreativeStudioVideo";
 
 export function CraftPage() {
   const { mode } = useMode();
 
   return (
-    <main className="site-main pt-[var(--site-header-height)]">
+    <main className="site-main">
       <ModeContentTransition mode={mode}>
-        <UnderConstruction
-          label={mode === "infrastructure" ? "The Assets" : "The Craft"}
-          title={mode === "infrastructure" ? "Transparent asset pipelines under rigging" : "Creative lab under rigging"}
-          description={mode === "infrastructure" ? "Verifiable creator networks and raw asset supply chains are being wired. The workshop opens soon." : "Full-spectrum creative and proprietary pipelines are being wired into the ascent line. The workshop opens soon."}
-          backHref="/"
-          backLabel="Return to The Agency"
-        />
+        {mode === "growth" ? (
+          <CreativeStudioVideo videoSrc="/creative/light-loop.mp4" theme="light" />
+        ) : (
+          <CreativeStudioVideo videoSrc="/creative/dark-loop.mp4" theme="dark" />
+        )}
       </ModeContentTransition>
     </main>
   );
