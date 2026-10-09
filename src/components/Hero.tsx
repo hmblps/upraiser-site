@@ -124,6 +124,7 @@ function StatCard({ value, label, counted, accent, videoDriven, align = "center"
 }
 
 const HeroPinnedScene = memo(function HeroPinnedScene() {
+  const { t } = useTranslation();
   const reduced = useReducedMotion();
   const { mode } = useMode();
   const { isActive } = useApplePreview();
@@ -138,7 +139,6 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
     
   const activeStatIndex = useCarouselActiveIndex(statsScrollRef, highlights.length);
   const { scrollToY } = useScroll();
-  const { t } = useTranslation();
 
   const localizedLines = [
     { text: t("hero.line1", "We see how") },
