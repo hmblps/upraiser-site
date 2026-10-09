@@ -7,7 +7,6 @@ import { AscentBird } from "./AscentBird";
 import { AscentHalo } from "./AscentHalo";
 import { AscentRoute } from "./AscentRoute";
 import { BrandHazeSky } from "./BrandHazeSky";
-import { FloatingVoyager } from "./FloatingVoyager";
 import { HeroCamera } from "./HeroCamera";
 import { NightStars } from "./NightStars";
 import { ScrollBeams } from "./ScrollBeams";
@@ -85,7 +84,6 @@ export function Scene({
       </Suspense>
       <Suspense fallback={null}>
         {(!lite || (typeof window !== "undefined" && window.location.pathname.includes("hero-capture"))) && !isLight && voyager ? (
-          <FloatingVoyager />
         ) : null}
       </Suspense>
       {isLight ? <SeaOfClouds theme={theme} lite={lite} /> : null}
