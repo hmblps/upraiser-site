@@ -204,7 +204,7 @@ export function ProgrammaticScrollSection({
   const reduced = useReducedMotion();
   const { t } = useTranslation();
   const tLabel = t("formats.label", headerLabel);
-  const tTitle = t("formats.title", headerTitle);
+  const tTitle = t("formats.title", typeof headerTitle === "string" ? headerTitle : "Every Format. One Supply Path.");
   const tier = useHardwareTier();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(() =>

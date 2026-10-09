@@ -27,7 +27,7 @@ export function ProgrammaticScrollSectionMobile({
 }: ProgrammaticScrollSectionMobileProps) {
   const { t } = useTranslation();
   const tLabel = t("formats.label", headerLabel);
-  const tTitle = t("formats.title", headerTitle);
+  const tTitle = t("formats.title", typeof headerTitle === "string" ? headerTitle : "Every Format. One Supply Path.");
   const [activeIndex, setActiveIndex] = useState(0);
   const laneRef = useRef(lane);
   const format = formats[activeIndex] ?? formats[0]!;
