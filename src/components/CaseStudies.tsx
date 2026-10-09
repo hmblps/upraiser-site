@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useRef } from "react";
 import { caseStudies } from "../data/cases";
 import { casesPage, sectionsByMode } from "../data/liveContent";
@@ -78,7 +79,7 @@ function CaseCarouselDeck({
       </div>
 
       <div className="mt-4 flex shrink-0 items-center justify-between gap-3">
-        <p className="scroll-hint hidden text-caption text-muted opacity-70 sm:block">Swipe or ← → · tap to open</p>
+        <p className="scroll-hint hidden text-caption text-muted opacity-70 sm:block">{t("casesPage.swipe", "Swipe or ← → · tap to open")}</p>
         <div className="cases-chrome-nav ml-auto flex items-center gap-1">
           <button
             type="button"

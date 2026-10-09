@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { GhostBubbleMotion } from "../GhostBubbleMotion";
 import { PieChart, Pie, ResponsiveContainer, Cell } from "recharts";
 import { useRef } from "react";
@@ -178,6 +179,7 @@ function RotatingOmniChart() {
 }
 
 export function ChannelsCtaSection() {
+  const { t } = useTranslation();
   return (
     <section id="routes" className="section-band border-t border-border/30 relative overflow-visible z-[100] bg-bg">
       <div className="relative flex flex-col lg:flex-row items-center w-full">
@@ -191,13 +193,13 @@ export function ChannelsCtaSection() {
         <div className="page-container relative z-10 w-full flex justify-end items-center h-full py-0">
           <div className="w-full lg:w-[45%] text-left pl-0 lg:pl-10">
             <div className="section-header">
-              <p className="section-label">The Channels</p>
+              <p className="section-label">{t("channelsCta.label", "The Channels")}</p>
               <h2 className="section-title">
-                <span className="text-muted">Every Format.</span><br/>
-                One Supply Path.
+                <span className="text-muted">{t("channelsCta.title1", "Every Format.")}</span><br/>
+                {t("channelsCta.title2", "One Supply Path.")}
               </h2>
               <p className="section-description text-lg">
-                From Programmatic and Social to Connected TV and OEM. Explore our interactive channel visualizations and see how we integrate fragmented traffic sources into one unified ecosystem with absolute attribution proof.
+                {t("channelsCta.desc", "From Programmatic and Social to Connected TV and OEM. Explore our interactive channel visualizations and see how we integrate fragmented traffic sources into one unified ecosystem with absolute attribution proof.")}
               </p>
             </div>
             
@@ -207,7 +209,7 @@ export function ChannelsCtaSection() {
                 className="btn-caps btn-caps--primary inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-bold tracking-widest"
                 onMouseEnter={() => warmStage("routes")}
               >
-                <span>Explore All Channels</span>
+                <span>{t("channelsCta.cta", "Explore All Channels")}</span>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>

@@ -23,22 +23,8 @@
     "soonBadge": "Soon"
   },
   "hero": {
-    "line1": "We see how",
-    "line2": "stunning",
-    "line3": "Your rise",
-    "line4": "to the top",
-    "line5": "can be.",
-    "founded": "Founded 17 July 2017 based in London",
-    "ledeGrowth": "We run global performance campaigns with absolute attribution proof.",
-    "ledeInfra": "We provide transparent infrastructure with absolute attribution proof.",
-    "hlGrowth1": "Active GEOs",
-    "hlGrowth2": "OEM Device Reach",
-    "hlGrowth3": "SLA Setup",
-    "hlGrowth4": "Media Spend Optimized",
-    "hlInfra1": "Fraud Blocked Pre-Bid",
-    "hlInfra2": "Post-Flight Log Drift",
-    "hlInfra3": "p99 Bid Scoring",
-    "hlInfra4": "Device Signals"
+    "chartingAscent": "UPRAISER · CHARTING THE ASCENT",
+    "securingBase": "UPRAISER · SECURING THE BASE"
   },
   "audience": {
     "title": "Who We Serve",
@@ -918,5 +904,54 @@
       "accentWord": "Upraised"
     }
   },
-  "heroFounded": "Founded 17 July 2017 based in London"
+  "heroFounded": "Founded 17 July 2017 based in London",
+  "chart": {
+    "g1": {
+      "label": "Q3 Run Rate"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "Gross Margin"
+    },
+    "g4": {
+      "label": "Active Users"
+    },
+    "i1": {
+      "label": "Fraud Blocked"
+    },
+    "i2": {
+      "label": "Data Lag"
+    },
+    "i3": {
+      "label": "Uptime"
+    },
+    "i4": {
+      "label": "API Limit"
+    }
+  },
+  "casesPage": {
+    "label": "THE PEAKS",
+    "title": "WE CONQUER THESE PEAKS REPEATEDLY.",
+    "subtitle": "Killer outcomes from live flights — tap any card for the full story.",
+    "swipe": "Swipe or ← → · tap to open"
+  },
+  "caseCard": {
+    "readCase": "Read the case →",
+    "volumeIndex": "VOLUME INDEX",
+    "scale": "12W SCALE",
+    "kpiEvent": "KPI EVENT"
+  },
+  "channelsCta": {
+    "label": "The Channels",
+    "title1": "Every Format.",
+    "title2": "One Supply Path.",
+    "desc": "From Programmatic and Social to Connected TV and OEM. Explore our interactive channel visualizations and see how we integrate fragmented traffic sources into one unified ecosystem with absolute attribution proof.",
+    "cta": "Explore All Channels",
+    "g1": "Programmatic",
+    "g2": "Connected TV",
+    "g3": "Social Ads",
+    "g4": "OEM & Direct"
+  }
 }

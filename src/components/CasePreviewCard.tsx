@@ -115,7 +115,7 @@ export function CasePreviewCard({
       data-case-id={item.id}
       data-case-index={caseIndex}
       data-case-copy={copy}
-      aria-label={`${client} case study. ${ctaLabel}`}
+      aria-label={`${client} case study. ${t("caseCard.readCase", ctaLabel)}`}
       aria-hidden={isReplica || undefined}
       tabIndex={isReplica ? -1 : 0}
       layoutId={!isReplica ? `case-card-${item.id}` : undefined}
@@ -146,12 +146,12 @@ export function CasePreviewCard({
 
         {isCarousel ? (
           <div className="case-preview-metrics case-preview-metrics--secondary mt-3 shrink-0" aria-hidden={secondary.length === 0}>
-            {secondary.slice(0, 2).map((metric) => (
+            {secondary.slice(0, 2).map((metric, i) => (
               <div key={metric.label} className="case-preview-metrics__cell">
-                <p className="case-preview-metrics__value">{metric.value}</p>
+                <p className="case-preview-metrics__value">{t(`casesDetails.${item.id}.metrics.${i + 1}.value`, metric.value)}</p>
                 <p className="case-teaser-metric-label" title={metric.label}>
-                  {metric.label}
-                </p>
+  {t(`casesDetails.${item.id}.metrics.${i + 1}.label`, metric.label)}
+</p>
               </div>
             ))}
           </div>

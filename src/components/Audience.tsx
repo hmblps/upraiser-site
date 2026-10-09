@@ -28,7 +28,7 @@ function AudienceStatic() {
   return (
     <section ref={ref} id="audience" className="section-band section-band--quiet min-h-screen">
       <ModeContentTransition mode={mode} className="section-inner">
-        <SectionHeader label={content.label} title={tTitle} animated={false} />
+        <SectionHeader label={t(`audience.${mode}.label`, content.label)} title={tTitle} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-4">
           <p className="section-lead">{content.line1}</p>
           <p className="section-lead">
@@ -65,7 +65,7 @@ function AudienceAnimated() {
       ambient={mode === "infrastructure" ? "fraud" : "chart"}
       className={`accent-scroll-section--fold-pair${mode === "infrastructure" ? " accent-scroll-section--split-copy" : ""}`.trim()}
       scrollHeroWord={mode === "infrastructure" ? tProof : tScale}
-      label={<SectionHeader label={content.label} title={tTitle} animated={false} />}
+      label={<SectionHeader label={t(`audience.${mode}.label`, content.label)} title={tTitle} animated={false} />}
     >
       {({ inlineRef, lineOpacity, lineX, bodyOpacity, bodyX, inlineOpacity }) => (
         <>

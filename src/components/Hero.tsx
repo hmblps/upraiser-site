@@ -285,7 +285,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                   exit={reduced ? undefined : { opacity: 0, y: -6 }}
                   transition={HERO_SPRING}
                 >
-                  {heroLedeByMode[mode]}
+                  {t(`heroLede.${mode}`, heroLedeByMode[mode])}
                 </motion.p>
               </AnimatePresence>
 
