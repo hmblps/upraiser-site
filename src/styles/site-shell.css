@@ -3,7 +3,7 @@
 .site-grain {
   opacity: var(--theme-grain-opacity);
   mix-blend-mode: overlay;
-  z-index: 30;
+  z-index: var(--z-grain);
 }
 
 .site-grain svg {
@@ -138,14 +138,15 @@
 /* Channels wheel intentionally bleeds into neighbouring sections.
    .section-band uses content-visibility:auto (implicit paint containment),
    which would crop the wheel at the section edge. */
-#routes.section-band {
+#routes.section-band,
+#about-us.section-band {
   content-visibility: visible;
   contain: none;
 }
 
 @media (min-width: 1024px) {
-  /* wheel sits 90px lower; keep the same clearance above the next section */
+  /* wheel sits 42px lower; keep the same clearance above the next section */
   #routes.section-band {
-    padding-bottom: calc(var(--section-y) + 90px);
+    padding-bottom: calc(var(--section-y) + 42px);
   }
 }

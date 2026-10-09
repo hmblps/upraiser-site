@@ -15,19 +15,19 @@ export function AboutUsSection() {
   const y = useTransform(scrollYProgress, [0, 1], ["2%", "16%"]);
 
   return (
-    <section ref={containerRef} className="section-band border-t border-border/30 relative overflow-hidden">
+    <section id="about-us" ref={containerRef} className="section-band border-t border-border/30 relative">
       {/* Schematic Ascent Decoration (Realistic Trace) */}
-      <motion.div style={{ x, y }} className="absolute top-0 left-0 h-[80%] opacity-40 pointer-events-none">
+      <motion.div style={{ x, y }} className="absolute top-[10%] left-0 h-[80%] opacity-80 pointer-events-none">
         <svg viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-auto font-sans uppercase font-semibold overflow-visible">
           
           <style>
             {`
-              .mountain-line { stroke: currentColor; stroke-width: 4px; opacity: 0.25; stroke-linejoin: round; stroke-linecap: round; }
-              .route-line { stroke: var(--accent); stroke-width: 6px; opacity: 0.7; stroke-linejoin: round; stroke-linecap: round; }
+              .mountain-line { stroke: currentColor; stroke-width: 4px; opacity: 0.4; stroke-linejoin: round; stroke-linecap: round; }
+              .route-line { stroke: var(--accent); stroke-width: 6px; opacity: 0.9; stroke-linejoin: round; stroke-linecap: round; }
               .node-circle { fill: var(--accent); }
               .node-text { fill: var(--bg); font-size: 16px; font-weight: bold; text-anchor: middle; dominant-baseline: central; font-family: ui-sans-serif, system-ui, sans-serif; }
-              .label-text { fill: currentColor; font-size: 11px; opacity: 0.4; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
-              .label-title { fill: currentColor; font-size: 14px; font-weight: bold; opacity: 0.5; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
+              .label-text { fill: currentColor; font-size: 11px; opacity: 0.6; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
+              .label-title { fill: currentColor; font-size: 14px; font-weight: bold; opacity: 0.8; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
             `}
           </style>
 

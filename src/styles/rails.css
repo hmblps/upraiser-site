@@ -48,7 +48,7 @@
   position: absolute;
   inset-inline-end: 0;
   top: calc(100% + 0.4rem);
-  z-index: 120;
+  z-index: var(--z-header);
   max-height: min(70dvh, 22rem);
   width: 14rem;
   overflow-y: auto;
@@ -229,7 +229,7 @@
 .site-menu-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 109;
+  z-index: calc(var(--z-header) - 11);
   border: none;
   background: color-mix(in srgb, var(--theme-bg) 18%, transparent);
   cursor: default;
@@ -237,7 +237,7 @@
 
 .site-menu {
   position: fixed;
-  z-index: 110;
+  z-index: calc(var(--z-header) - 10);
   top: calc(var(--site-header-height) + 0.65rem);
   right: max(1rem, env(safe-area-inset-right, 0px));
   width: min(20.5rem, calc(100vw - 2rem));

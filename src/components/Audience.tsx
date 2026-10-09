@@ -7,7 +7,7 @@ import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { formatEventNames } from "../lib/formatEventNames";
 import { FoldChart } from "./ModeChart";
-import { FraudScrollChart } from "./FraudScrollChart";
+
 
 function GrowthWordInline({ word }: { word: string }) {
   return <span className="growth-word-inline">{word}</span>;
@@ -36,7 +36,7 @@ function AudienceStatic() {
 
         <div ref={chartRef} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-28 pt-6 overflow-visible pointer-events-none flex items-center justify-center">
           <motion.div className="w-full h-full flex items-center justify-center" style={{ y: chartY }}>
-             {isFraud ? <FraudScrollChart progress={progress} /> : <FoldChart progress={progress} />}
+             <FoldChart progress={progress} forceMode={isFraud ? "fraud" : "growth"} />
           </motion.div>
         </div>
       </ModeContentTransition>

@@ -144,20 +144,23 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
 
   useEffect(() => {
     const onEnded = () => {
-      // If the user hasn't scrolled manually (or barely scrolled)
-      if (window.scrollY < 50) {
-        // A single, continuous, slow cinematic glide (no pauses)
-        // easeInOutSine gives a long, steady coasting speed in the middle
-        const coastingEase = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
-        
-        const partners = document.querySelector('.partners-strip--home');
-        if (partners) {
-          const top = partners.getBoundingClientRect().top + window.scrollY;
-          scrollToY(top + 23, { duration: 4.2, easing: coastingEase });
-        } else {
-          scrollToY(window.innerHeight * 2 + 23, { duration: 4.2, easing: coastingEase });
+      // Delay auto-scroll by 2.5 seconds to give user time to read the Lenovo badge
+      window.setTimeout(() => {
+        // If the user hasn't scrolled manually (or barely scrolled) during the delay
+        if (window.scrollY < 50) {
+          // A single, continuous, slow cinematic glide (no pauses)
+          // easeInOutSine gives a long, steady coasting speed in the middle
+          const coastingEase = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
+          
+          const partners = document.querySelector('.partners-strip--home');
+          if (partners) {
+            const top = partners.getBoundingClientRect().top + window.scrollY;
+            scrollToY(top + 23, { duration: 4.2, easing: coastingEase });
+          } else {
+            scrollToY(window.innerHeight * 2 + 23, { duration: 4.2, easing: coastingEase });
+          }
         }
-      }
+      }, 2500);
     };
     window.addEventListener('hero-video-ended', onEnded);
     return () => window.removeEventListener('hero-video-ended', onEnded);
@@ -232,7 +235,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
               <AnimatePresence mode="wait" initial={false}>
                 <motion.p
                   key={mode}
-                  className="hero-lede mt-5 max-w-xl text-balance text-base leading-relaxed text-muted sm:text-lg"
+                  className="hero-lede mt-5 max-w-xl text-balance text-base leading-relaxed text-fg font-medium sm:text-lg"
                   initial={false}
                   animate={false}
                   exit={reduced ? undefined : { opacity: 0, y: -6 }}

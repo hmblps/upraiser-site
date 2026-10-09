@@ -22,11 +22,11 @@ function RotatingOmniChart() {
     target: containerRef,
     // The wheel (≈1100px) bleeds ~400px into neighbouring sections, far beyond this 300px box.
     // Widen the scroll window so rotation keeps tracking while the overflowing part is on screen.
-    offset: ["start 1.7", "end -0.7"],
+    offset: ["start 2.5", "end -2.5"],
   });
 
   // Wheel rotation — same ~0.2°/px speed, same orientation at the section centre (60°)
-  const rotateOuter = useTransform(scrollYProgress, [0, 1], [-186, 306]);
+  const rotateOuter = useTransform(scrollYProgress, [0, 1], [-300, 725]);
   // Parallax and fade for floating data nodes (behaving like ghost numbers everywhere else)
   return (
     <div ref={containerRef} className="relative w-full h-full flex items-center pointer-events-none">
@@ -35,7 +35,7 @@ function RotatingOmniChart() {
       <div className="absolute top-1/2 left-[10%] -translate-y-1/2 w-[50%] h-[50%] bg-gradient-to-tr from-[#FBBF24] via-[#F97316] to-[#F43F5E] rounded-full blur-[140px] opacity-10 mix-blend-screen pointer-events-none" />
 
       {/* TICK MARKS (DIAL SCALE) */}
-      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 150, ease: "linear" }} className="absolute left-0 top-1/2 lg:top-[calc(50%+90px)] -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0 opacity-40">
+      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 150, ease: "linear" }} className="absolute left-0 top-1/2 lg:top-[calc(50%+42px)] -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0 opacity-40">
         <svg className="w-full h-full" viewBox="-500 -500 1000 1000">
           {Array.from({ length: 72 }).map((_, i) => (
             <line
@@ -54,7 +54,7 @@ function RotatingOmniChart() {
       </motion.div>
 
       {/* COMPLEX RECHARTS WHEEL */}
-      <div className="absolute left-0 top-1/2 lg:top-[calc(50%+90px)] -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0">
+      <div className="absolute left-0 top-1/2 lg:top-[calc(50%+42px)] -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0">
         
         {/* OUTER ROTATING RING */}
         <motion.div style={{ rotate: rotateOuter }} className="absolute inset-0 w-full h-full">
@@ -151,7 +151,7 @@ function RotatingOmniChart() {
         </div>
       </div>
 {/* ELEGANT SCATTERED GHOST LABELS (BUBBLING) */}
-      <div className="absolute left-[15%] lg:left-[22%] top-0 lg:top-[90px] w-[300px] h-full pointer-events-none z-10">
+      <div className="absolute left-[15%] lg:left-[22%] top-0 lg:top-[42px] w-[300px] h-full pointer-events-none z-10">
         <GhostBubbleMotion left="10%" originY={40} drift={-15} duration={6} delay={0} peakOpacity={0.4}>
           <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
           <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">Programmatic</div>

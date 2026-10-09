@@ -1,199 +1,125 @@
-import { useEffect, useRef, useState} from "react";
-
-import { useLocation } from "react-router-dom";
-import { useScroll } from "../context/ScrollContext";
+import { useEffect, useRef, useState, memo } from "react";
+import { useScrollContext } from "../context/ScrollContext";
+import { useMode } from "./SectionHeader";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useEnvironment } from "../lib/environmentState";
 
-function useIsLightTheme() {
-  const [isLight, setIsLight] = useState(() => {
-    if (typeof document === "undefined") return false;
-    return document.documentElement.getAttribute("data-theme") === "light";
-  });
+const SNOW_SPEED = 0.35;
+const WIND_SPEED = 0.08;
 
-  useEffect(() => {
-    const update = () =>
-      setIsLight(document.documentElement.getAttribute("data-theme") === "light");
-    const obs = new MutationObserver(update);
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    update();
-    return () => obs.disconnect();
-  }, []);
+type Flake = {
+  x: number;
+  y: number;
+  size: number;
+  speed: number;
+  wobble: number;
+  wobbleSpeed: number;
+};
 
-  return isLight;
-}
+export const GlobalSnowfall = memo(function GlobalSnowfall() {
+  const { mode } = useMode();
+  const reduced = useReducedMotion();
+  const snowEnabled = useEnvironment((s) => s.snowEnabled);
 
-export function GlobalSnowfall() {
-  const { pathname } = useLocation();
-  const isLight = useIsLightTheme();
-  const reducedMotion = useReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { registerScrollListener } = useScrollContext();
 
-  // Enable globally for all pages as requested, but keep it lightweight 2D
-  // If we only wanted it on home: const onHome = pathname === "/";
-  // Removing onHome restriction so snow falls everywhere!
+  const [flakes, setFlakes] = useState<Flake[]>([]);
+  const scrollYRef = useRef(0);
+  const lastScrollYRef = useRef(0);
 
-  const [isVisible, setIsVisible] = useState(() => {
-    if (typeof document === "undefined") return true;
-    return !document.hidden;
-  });
-
+  // Initialize flakes once
   useEffect(() => {
-    if (typeof document === "undefined") return;
-    const handleVisibilityChange = () => setIsVisible(!document.hidden);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, []);
+    if (reduced) return;
+    const count = window.innerWidth < 768 ? 40 : 120;
+    const initialFlakes: Flake[] = Array.from({ length: count }).map(() => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      size: Math.random() * 2 + 0.5,
+      speed: Math.random() * 0.8 + 0.2,
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: Math.random() * 0.02 + 0.01,
+    }));
+    setFlakes(initialFlakes);
+  }, [reduced]);
 
-  const { registerScrollListener } = useScroll();
-  const prevScrollY = useRef(0);
-  const scrollVelocity = useRef(0);
-
+  // Track scroll delta
   useEffect(() => {
-    return registerScrollListener((scrollY) => {
-      if (reducedMotion) return;
-      const delta = scrollY - prevScrollY.current;
-      scrollVelocity.current = delta;
-      prevScrollY.current = scrollY;
+    if (reduced) return;
+    return registerScrollListener(({ y }) => {
+      scrollYRef.current = y;
     });
-  }, [registerScrollListener, reducedMotion]);
+  }, [registerScrollListener, reduced]);
 
+  // Main render loop
   useEffect(() => {
+    if (reduced || flakes.length === 0 || !snowEnabled || mode !== "growth") return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
+
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    const handleResize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+    let rAF: number;
+    
+    // Size canvas properly
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
-    window.addEventListener("resize", handleResize);
+    resize();
+    window.addEventListener("resize", resize);
 
-    // Optimized particle count for 3D projection
-    const count = window.innerWidth < 768 ? 800 : 2500;
-    const particles = new Float32Array(count * 5); // x, y, z, speed, phase
+    const render = () => {
+      const scrollY = scrollYRef.current;
+      const scrollDelta = scrollY - lastScrollYRef.current;
+      lastScrollYRef.current = scrollY;
 
-    // Initialize 3D space
-    for (let i = 0; i < count; i++) {
-      particles[i * 5 + 0] = (Math.random() - 0.5) * 3000; // x spread
-      particles[i * 5 + 1] = (Math.random() - 0.5) * 3000; // y spread
-      particles[i * 5 + 2] = Math.random() * 1000 + 10;    // z depth
-      particles[i * 5 + 3] = Math.random() * 0.8 + 0.4;    // speed
-      particles[i * 5 + 4] = Math.random() * Math.PI * 2;  // phase
-    }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.beginPath();
 
-    let animationId: number;
-    let lastTime = performance.now();
-
-    const render = (time: number) => {
-      if (reducedMotion || !isVisible) {
-        animationId = requestAnimationFrame(render);
-        return;
-      }
-      
-      const delta = (time - lastTime) / 1000;
-      lastTime = time;
-
-      ctx.clearRect(0, 0, width, height);
-      
-      const baseColor = isLight ? "255, 255, 255" : "255, 255, 255";
-      const baseOpacity = isLight ? 0.6 : 0.6;
-      
-      scrollVelocity.current *= 0.92;
-      const scrollOffset = scrollVelocity.current * 0.5;
-      
-      const cx = width / 2;
-      const cy = height / 2;
-
-      for (let i = 0; i < count; i++) {
-        const pIdx = i * 5;
-        let x = particles[pIdx + 0];
-        let y = particles[pIdx + 1];
-        let z = particles[pIdx + 2];
-        const speed = particles[pIdx + 3];
-        const phase = particles[pIdx + 4];
-
-        // 3D backward flight: particles fly TOWARDS the camera (Z decreases)
-        z -= (speed * 400 * delta) + (scrollOffset * 0.5); 
-        y += (speed * 100 * delta); // natural falling gravity
-        x += Math.sin(time * 0.002 + phase) * 0.5; // slight wind drift
-
-        if (z < 1 || z > 1500) {
-          z = 1000 + Math.random() * 200;
-          x = (Math.random() - 0.5) * 3000;
-          y = (Math.random() - 0.5) * 3000 - 500;
-        }
-
-        particles[pIdx + 0] = x;
-        particles[pIdx + 1] = y;
-        particles[pIdx + 2] = z;
-
-        const fov = 400;
-        const scale = fov / z;
-        const screenX = cx + x * scale;
-        const screenY = cy + y * scale;
+      flakes.forEach((f) => {
+        // Fall down naturally
+        f.y += f.speed * SNOW_SPEED;
         
-        if (screenX < -50 || screenX > width + 50 || screenY < -50 || screenY > height + 50) {
-           continue;
-        }
+        // Add scroll delta influence (parallax effect)
+        f.y -= scrollDelta * f.speed * 0.2;
 
-        // Slightly smaller, "dust-like" size for sunny spindrift
-        const size = Math.max(0.5, (isLight ? 2.5 : 1.5) * scale);
-        
-        const depthAlpha = Math.min(1, Math.max(0.05, 1 - (z / 1000)));
-        
-        // Soft gradient to prevent tiny particles from looking like hard squares
-        const grad = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size);
-        grad.addColorStop(0, `rgba(${baseColor}, ${baseOpacity * depthAlpha})`);
-        grad.addColorStop(0.5, `rgba(${baseColor}, ${baseOpacity * depthAlpha * 0.6})`);
-        grad.addColorStop(1, `rgba(${baseColor}, 0)`);
-        
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1.0; // reset
+        // Wind/Wobble
+        f.wobble += f.wobbleSpeed;
+        f.x += Math.sin(f.wobble) * 0.5 + WIND_SPEED;
 
-      animationId = requestAnimationFrame(render);
+        // Wrap around
+        if (f.y > canvas.height) f.y = -10;
+        if (f.y < -50) f.y = canvas.height + 10;
+        if (f.x > canvas.width) f.x = -10;
+        if (f.x < -10) f.x = canvas.width;
+
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+      });
+
+      ctx.fill();
+      rAF = requestAnimationFrame(render);
     };
 
-    animationId = requestAnimationFrame(render);
+    rAF = requestAnimationFrame(render);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(rAF);
+      window.removeEventListener("resize", resize);
     };
-  }, [isLight, reducedMotion, isVisible]);
+  }, [flakes, reduced, snowEnabled, mode]);
 
-  if (!isLight || pathname === "/craft") return null;
+  if (reduced || mode !== "growth" || !snowEnabled) return null;
 
   return (
-    <div
-      className="global-snowfall"
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 40,
-        pointerEvents: "none",
-        opacity: "var(--global-snow-opacity, 1)",
-        transition: "opacity 0.25s linear",
-        maskImage: "linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)",
-      }}
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none fixed inset-0 z-20 mix-blend-screen opacity-70"
       aria-hidden="true"
-    >
-      <canvas
-        ref={canvasRef}
-        style={{ width: "100%", height: "100%", pointerEvents: "none", display: "block" }}
-      />
-    </div>
+    />
   );
-}
+});

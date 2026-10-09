@@ -1,5 +1,5 @@
 import { DESKTOP_HERO_QUERY } from "./heroDesktop";
-import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL, VOYAGER_URL } from "./heroModel";
+import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "./heroModel";
 
 const preloaded = new Set<string>();
 
@@ -38,8 +38,7 @@ export function preloadHeroTerrain(theme: "light" | "dark") {
     preloadFetch(SNOW_NORMAL_URL, "fetch", "low");
     preloadFetch(SNOW_ROUGH_URL, "fetch", "low");
   } else {
-    preloadFetch(VOYAGER_URL, "fetch", "low");
-  }
+      }
 }
 
 /** Resolves when the mountain GLB is in cache. Voyager must not block first paint. */

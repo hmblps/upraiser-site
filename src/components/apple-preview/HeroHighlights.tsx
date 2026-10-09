@@ -20,7 +20,7 @@ export function HeroHighlights() {
       transition={{ ...SPRING_SOFT, delay: 0.2 }}
       className="mt-10 border-t border-border/60 pt-8"
     >
-      <p className="mb-3 text-kicker text-muted">
+      <p className="mb-3 text-kicker font-bold text-fg">
         Explore
       </p>
       <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -28,7 +28,7 @@ export function HeroHighlights() {
           <ScrollLink
             key={chip.label}
             href={chip.href}
-            className="hero-highlight-chip shrink-0 rounded-full border border-border bg-bg-card/60 px-4 py-2 text-kicker text-muted-light transition-colors"
+            className="hero-highlight-chip shrink-0 rounded-full border border-border bg-bg-card/60 px-4 py-2 text-kicker font-bold text-fg transition-colors"
           >
             {chip.label}
           </ScrollLink>

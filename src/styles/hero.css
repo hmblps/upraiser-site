@@ -693,19 +693,9 @@
 }
 
 /* Brand homogeneity for the video fallback */
-@keyframes hero-breathe {
-  0%, 100% {
-    transform: scale(1.00);
-  }
-  50% {
-    transform: scale(1.035);
-  }
-}
-
 .hero-video-canvas {
   /* Subtle cinematic desaturation to make it look like a branded asset, not raw video */
   filter: contrast(1.1) saturate(0.8) sepia(0.05);
-  animation: hero-breathe 10s ease-in-out infinite;
   transform-origin: center center;
   will-change: transform;
 }
