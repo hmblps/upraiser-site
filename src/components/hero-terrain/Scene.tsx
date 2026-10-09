@@ -83,8 +83,7 @@ export function Scene({
         {lite ? <AscentRoute /> : null}
       </Suspense>
       <Suspense fallback={null}>
-        {(!lite || (typeof window !== "undefined" && window.location.pathname.includes("hero-capture"))) && !isLight && voyager ? (
-        ) : null}
+        
       </Suspense>
       {isLight ? <SeaOfClouds theme={theme} lite={lite} /> : null}
       {isLight ? <MistSheets lite={lite} /> : null}
