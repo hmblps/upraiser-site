@@ -5,6 +5,7 @@ import { CasePreviewCard } from "./CasePreviewCard";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { Reveal } from "./motion/Reveal";
 import { SectionHeader, useMode } from "./SectionHeader";
+import { useTranslation } from "react-i18next";
 import { Magnetic } from "./motion-preview/Magnetic";
 import { Stagger, StaggerItem } from "./motion/Stagger";
 import { SPRING_SOFT } from "../lib/motion";
@@ -21,14 +22,17 @@ export function CasesTeaser() {
   const { mode } = useMode();
   const section = sectionsByMode.cases[mode];
   const items = caseStudies.slice(0, TEASER_COUNT);
+  const { t } = useTranslation();
+  const casesLabel = t("cases.title", casesPage.label); // "Selected Evidence" etc
+  const casesTitle = t("cases.desc", section.title);
 
   return (
     <section id="cases" className="section-band section-band--dense">
       <ModeContentTransition mode={mode} className="section-inner">
         <SectionHeader
           animated={false}
-          label={casesPage.label}
-          title={section.title}
+          label={casesLabel}
+          title={casesTitle}
           description={
             mode === "growth"
               ? "Killer outcomes from live flights. Block Blast and more under The Peaks."
