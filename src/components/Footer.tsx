@@ -93,7 +93,7 @@ export const Footer = memo(function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-caption text-muted-light">
-            © {new Date().getFullYear()} UPRAISER Agency LLP. All rights reserved.
+            © {new Date().getFullYear()} UPRAISER Agency LLP. {t("footer.legal", "All rights reserved.")}
           </p>
           <div className="flex gap-6">
             {footerLinks.legal.map((link) => (

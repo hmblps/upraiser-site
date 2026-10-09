@@ -56,7 +56,7 @@ export function HeaderIsland() {
                         active ? "text-on-accent" : "text-fg-muted font-semibold"
                       }`}
                     >
-                      {link.label}
+                      {link.href === "/" ? "The Agency" : t("nav.studio", link.label)}
                       {link.underConstruction && (
                         <span className="ml-1 text-[8px] uppercase tracking-wider opacity-60">Soon</span>
                       )}
