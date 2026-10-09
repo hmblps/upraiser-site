@@ -521,5 +521,402 @@
   "cta": {
     "label": "Pilotprojekt anfragen",
     "href": "/contact"
-  }
+  },
+  "heroHighlights": {
+    "growth": [
+      {
+        "value": "35+",
+        "label": "Aktive GEOs"
+      },
+      {
+        "value": "800M+",
+        "label": "OEM-Gerätereichweite"
+      },
+      {
+        "value": "48h",
+        "label": "SLA-Setup"
+      },
+      {
+        "value": "$75M+",
+        "label": "Optimierter Media Spend",
+        "accent": true
+      }
+    ],
+    "infrastructure": [
+      {
+        "value": "97.3%",
+        "label": "Pre-Bid Fraud geblockt"
+      },
+      {
+        "value": "0%",
+        "label": "Post-Flight Log Drift"
+      },
+      {
+        "value": "0.4ms",
+        "label": "p99 Bid Scoring"
+      },
+      {
+        "value": "180+",
+        "label": "Gerätesignale"
+      }
+    ]
+  },
+  "trafficChannels": {
+    "growth": [
+      {
+        "id": "oem",
+        "title": "OEM & On-Device Discovery",
+        "tagline": "Vorinstallationen bei Erstaktivierung direkt auf Factory-ROMs.",
+        "teaser": "Starte Kampagnen auf neuen Android-Geräten direkt im Moment der Erstaktivierung.",
+        "description": "Wir platzieren Deine App bereits bei der Fertigung direkt auf globalen Premium-Android-Geräten. Deine App startet bei der Ersteinrichtung des Geräts – und erreicht kaufkräftige Nutzer direkt bei der ersten Konfiguration.",
+        "bestFor": "Direkter Zugang · Factory-ROM · Verifizierte Logs",
+        "points": [
+          "Lenovo Agenturpartner",
+          "Vorinstallationen",
+          "SDK-Pfade"
+        ]
+      },
+      {
+        "id": "programmatic",
+        "title": "Programmatic Media Buying",
+        "tagline": "Event-optimierte Kampagnen auf globalen Premium-Exchanges.",
+        "teaser": "Erreiche kaufkräftige Zielgruppen mit prädiktiver Event-Optimierung.",
+        "description": "Unsere Demand-Side-Platform (DSP) optimiert Gebote in Echtzeit: Budgets fließen gezielt zu Nutzern mit höchster Wahrscheinlichkeit für Registrierungen, Ersteinzahlungen (EFTD) oder In-Game-Transaktionen.",
+        "bestFor": "Kuratierte Exchanges · ROI-Fokus · Event-Optimierung",
+        "points": [
+          "Prädiktive Optimierung",
+          "Downstream-Events",
+          "Lifetime-Value-Bidding"
+        ]
+      },
+      {
+        "id": "performance",
+        "title": "CGC Studio & Paid Distribution",
+        "tagline": "Creator-Generated Content, entwickelt für die Conversion komplexer Verticals.",
+        "teaser": "Verwandle Nutzeraufmerksamkeit durch authentische Creator in messbaren Umsatz.",
+        "description": "Unser Creative Studio produziert High-Performance-Video-Assets speziell für wettbewerbsintensive Nischen (iGaming, FinTech). Wir testen hunderte Hooks und skalieren Paid Distribution über TikTok, YouTube und Meta.",
+        "bestFor": "Authentische Creator · iGaming & FinTech · Messbarer Umsatz",
+        "points": [
+          "Algorithmische Distribution",
+          "High-Volume-Testing",
+          "LTV-Skalierung"
+        ]
+      }
+    ],
+    "infrastructure": [
+      {
+        "id": "oem",
+        "title": "OEM & On-Device Discovery",
+        "tagline": "Geprüfte PAI-Lanes mit verifizierten Belegen auf Hardware-Ebene.",
+        "teaser": "Auditiere jede Factory-Vorinstallation bis ins unformatierte Hardware-Log.",
+        "description": "Wir sichern direkte Lenovo ROM- und PAI-Lanes mit zertifizierten SDK-Pfaden. Wir umgehen zwischengeschaltete Werbenetzwerke, sodass Deine Entwickler Installations-Footprints direkt anhand nativer Hardware-Logs verifizieren können.",
+        "bestFor": "Absolute Compliance · Raw-Hardware-Logs · SDK-Pfade",
+        "points": [
+          "Lenovo ROM & PAI",
+          "Adjust/AppsFlyer-Endpunkte",
+          "Schutz vor Reseller-Fraud"
+        ]
+      },
+      {
+        "id": "programmatic",
+        "title": "Programmatic Media Buying",
+        "tagline": "Pre-Bid Fraud-Filterung in 0,4 Millisekunden.",
+        "teaser": "Filtere Bot-Traffic in 0,4 Millisekunden heraus – noch bevor das Gebot abgegeben wird.",
+        "description": "Unsere proprietary Scoring-Engine analysiert 180 Gerätesignale in 0,4 Millisekunden und blockiert Bot-Traffic noch vor dem Gebot. Wir garantieren einen geprüften Supply Path und schützen Dein Programmatic-Budget vor gefälschtem Inventar.",
+        "bestFor": "Sauberer Supply Path · 0,4ms-Filterung · Transparente Daten",
+        "points": [
+          "180 Gerätesignale",
+          "Direkte Exchange-Safelist",
+          "Ledger-Abgleich"
+        ]
+      },
+      {
+        "id": "performance",
+        "title": "CGC Studio & Paid Distribution",
+        "tagline": "Rückverfolgbare Creative-Performance, gemappt auf Installationsbelege.",
+        "teaser": "Verknüpfe jedes visuelle Asset direkt mit einem nativen Gerätebeleg.",
+        "description": "Wir begreifen Creative-Produktion als Data Science. Unsere Trader verfolgen jedes Creative-Asset lückenlos bis in Deine Raw-Install-Logs zurück und zeigen Dir exakt, welche Videovariante echten Lifetime Value generiert.",
+        "bestFor": "Data Science · Install-Logs · Spend-Rückverfolgung",
+        "points": [
+          "Raw-Gerätebelege",
+          "Performance-Mapping",
+          "Ledger-Verifizierung"
+        ]
+      }
+    ]
+  },
+  "bridge": {
+    "growth": {
+      "eyebrow": "Alternative Ansicht",
+      "lead": "Die Infrastruktur-Perspektive entdecken",
+      "preview": "Direkte Leitungen, lückenlose Nachweise und auditfähiges OEM: So schließt Ad Ops den Monat ab.",
+      "cta": "Zu Infrastruktur wechseln"
+    },
+    "infrastructure": {
+      "eyebrow": "Alternative Ansicht",
+      "lead": "Die Growth-Perspektive entdecken",
+      "preview": "Wachstumstempo mit OEM-Skalierung und event-gewichteter Einkauf ohne Gefährdung der Unit Economics.",
+      "cta": "Zu Growth wechseln"
+    }
+  },
+  "aboutPage": {
+    "label": "Die Expedition",
+    "title": "Wir haben das Terrain der mobilen Werbung mitgeprägt.",
+    "chapter": {
+      "scrollHeroWord": "AUFSTIEG",
+      "line1": "Wir haben das Terrain der mobilen Werbung mitgeprägt.",
+      "line2Prefix": "Wir vereinten Spezialisten aus",
+      "inlineWord": "verschiedenen Technologiewelten",
+      "description": "UPRAISER agiert von unserem Basecamp in London aus. 2017 führten wir Experten aus unterschiedlichen Technologiewelten zusammen, um diesen Performance-Desk aufzubauen. Unser Team vereint Systems Engineers, Software-Entwickler, Finanzökonomen und Conversion-Creatives. Jeder von uns hat in der AdTech-Branche proprietäre Tools entwickelt und Traffic-Pipelines gesteuert. Diese Konvergenz der Disziplinen ist unsere Stärke."
+    },
+    "positioningLead": "Aus Logs gebaut.",
+    "positioningAccent": "Für Vertrauen geschaffen.",
+    "description": "Performance-Boutique mit Sitz in London. Wir steuern und verifizieren mobiles Wachstum, damit Ad Ops und Finance dieselbe Datei teilen.",
+    "storySegments": [
+      {
+        "mark": "Konvergenz",
+        "title": "Expertise aus vier Disziplinen, vereint in einem Team",
+        "body": "Wir verzichten auf Account Manager und zwischengeschaltete Service-Ebenen, um Deinen Weg direkt zu halten. Wenn Du mit UPRAISER zusammenarbeitest, sprichst Du unmittelbar mit den Machern, die Deine Tracking-Infrastruktur aufgebaut haben und Deine Media-Budgets steuern.\n\nUnsere Systems Engineers entwickeln die Pre-Bid-Scoring-Engines. Unsere Software-Entwickler verantworten das SDK-Log-Tracing. Unsere Ökonomen sichern Deine Unit Economics. Unsere Creatives konzipieren die visuellen Hooks. Diese Synergie verschafft uns absolute Klarheit im Datenterrain. Deine UA- und Finance-Teams zeichnen dieselben Zahlen ab, noch bevor die Rechnung gestellt wird."
+      },
+      {
+        "mark": "Terrain",
+        "title": "Wir haben die Spielregeln dieser Branche von Anfang an mitgestaltet",
+        "body": "Wir wählen direkte, verifizierte Pfade statt öffentlicher Exchanges und überfüllter Auktionsbörsen. Unsere frühe Arbeit in der AdTech-Branche ermöglichte es uns, maßgeschneiderte Methoden zur Datenverifizierung von Grund auf neu zu entwickeln. Weil wir Fraud-Vektoren und Attributionssysteme bis ins Detail verstehen, haben wir unsere eigene Pre-Bid-Scoring-Engine gebaut.\n\nWir haben die Pipelines geschaffen, die unformatierte Log-Dateien direkt mit Deinen Mess-Endpunkten verbinden. Wir haben nicht darauf gewartet, dass die Branche Transparenz bietet. Wir haben eigene Verifizierungs-Tools gebaut, um sie zu garantieren."
+      },
+      {
+        "mark": "Code",
+        "title": "Datentransparenz und gelebte Compliance als Prinzip",
+        "body": "Technische Präzision erfordert Vertrauen. UPRAISER folgt den Richtlinien der European Digital Advertising Alliance. Wir verzichten auf aggregierte PDF-Reports, die Diskrepanzen verschleiern.\n\nAuf Wunsch liefern wir unformatierte, unbearbeitete Geräte-Logs, damit Dein Team jeden Install bis zum physischen Gerät zurückverfolgen kann. Dein Buchhaltungs-Ledger stimmt bis auf den Cent mit Deiner Media-Rechnung überein."
+      }
+    ],
+    "facts": [
+      {
+        "label": "Gegründet",
+        "value": "2017"
+      },
+      {
+        "label": "Standort",
+        "value": "London"
+      },
+      {
+        "label": "ICO",
+        "value": "ZC000436"
+      },
+      {
+        "label": "Rechtsform",
+        "value": "LLP"
+      }
+    ],
+    "teamLabel": "Rechtsträger",
+    "teamLead": "UPRAISER Agency LLP hat ihren Sitz in 128 City Road, London EC1V 2NX, United Kingdom.",
+    "testimonialsHeading": "Was Teams über uns sagen",
+    "faqHeading": "FAQ",
+    "faq": [
+      {
+        "question": "Ist UPRAISER darauf ausgelegt, In-House-Media-Teams zu unterstützen?",
+        "answer": "Ja. Wir stärken Dein In-House-Team, statt Deinen Media-Managern die Kontrolle zu entziehen. Wir binden SDK-Pfade an und bereinigen Daten-Pipelines, damit Dein Team Kampagnen auf Basis sauberer, revisionssicherer Logs steuern kann. Wir sichern die Schnittstellen und sorgen dafür, dass die Daten-Pipeline exakt mit Deiner Tracking-Plattform übereinstimmt."
+      },
+      {
+        "question": "Wie garantiert UPRAISER Datentransparenz ohne Attributionsdrift?",
+        "answer": "Wir auditieren Deine MMP-Endpunkte und synchronisieren Log-Pipelines noch vor dem Go-Live. Jede Kampagne stimmt centgenau mit Deinen MMP-Daten überein. Durch die Attributionsprüfung direkt zum Gebotszeitpunkt garantieren wir 0 % Post-Flight Log Drift. Deine Finanzverantwortlichen und UA-Trader lesen stets dieselben Zahlen."
+      },
+      {
+        "question": "Wie blockiert Ihr Mobile Fraud noch vor der Gebotsabgabe?",
+        "answer": "Unsere proprietäre Pre-Bid-Scoring-Engine analysiert 180 Gerätesignale in 0,4 Millisekunden. Wir filtern betrügerischen Traffic direkt an der Quelle heraus – so zahlst Du niemals für Bot-Installationen."
+      },
+      {
+        "question": "Was ist CGC und wie fügt es sich in Eure Routen ein?",
+        "answer": "Creator-Generated Content (CGC) ist ein Performance-Asset. Wir beschaffen authentischen Creator-Content und skalieren ihn über Programmatic-, Social- und OEM-Routen. Unsere Trader verfolgen jedes Creative-Asset bis ins native Install-Log zurück und optimieren auf den Nutzer-LTV statt auf bloße Klicks."
+      },
+      {
+        "question": "Seid Ihr ein SaaS-Tool oder ein Full-Service-Performance-Desk?",
+        "answer": "Wir sind ein Premium-Boutique-Performance-Desk. Wir schreiben den Code, verknüpfen die Pipelines und kaufen die Media-Inventare ein. Du arbeitest direkt mit den Experten, die Deine Tools entwickelt haben und Deine Budgets steuern. Keine Account Manager, keine Blackboxes."
+      }
+    ],
+    "ctaLabel": "Pilotprojekt anfragen",
+    "closeTitle": "Lerne das Team im Pilotprojekt kennen",
+    "closeDescription": "Übermittle Vertical, GEO und KPI-Event. Wir erstellen sofort einen präzise abgestimmten, maßgeschneiderten Pfad."
+  },
+  "solutionsPage": {
+    "label": "Die Routen",
+    "title": "Wir bauen vier Einkaufsrouten.",
+    "chapter": {
+      "scrollHeroWord": "PFADE",
+      "line1": "Wir bauen vier Einkaufsrouten.",
+      "line2Prefix": "Jede Route liefert genau eine",
+      "inlineWord": "Abstimmungsdatei",
+      "description": "App Growth, OEM, Creator und Programmatic-Kanäle laufen über verifizierte MMP-Belege – für lückenlose Transparenz."
+    },
+    "description": "App Growth, OEM, Creator und Programmatic-Kanäle laufen über verifizierte MMP-Belege – für lückenlose Transparenz.",
+    "ctaLabel": "Pilotprojekt anfragen",
+    "closeTitle": "Briefe den Pfad, den Du brauchst",
+    "closeDescription": "Teile Dein Vertical, GEO und entscheidendes KPI-Event. Wir leiten Dich umgehend in die optimale Einkaufs-Lane."
+  },
+  "contactPage": {
+    "label": "[ UPRAISER Briefing Room ]",
+    "title": "Intake & Pilot-Briefing",
+    "titleLead": "Intake & Pilot-",
+    "accentWord": "Briefing",
+    "description": "Übermittle Deine Kampagnenparameter. Unsere Experten prüfen Deine Anfrage und richten Deine Daten-Pipelines innerhalb von 24 Stunden ein. Wir umgehen klassische Sales-Funnel und setzen auf direkte Abstimmung auf Augenhöhe.",
+    "subline": "1 bis 2 Werktage. Übermittle Dein Markenbriefing, OEM-Inventaranfragen oder Deine Bewerbung – wir leiten alles direkt an die richtige Stelle.",
+    "office": "128 City Road, London EC1V 2NX, United Kingdom",
+    "email": "info@upraiser.co.uk",
+    "ctaLabel": "[ PILOTPROJEKT ANFRAGEN ]"
+  },
+  "contactVerticals": [
+    {
+      "value": "app-growth",
+      "label": "App Growth / Media"
+    },
+    {
+      "value": "oem",
+      "label": "OEM / Lenovo"
+    },
+    {
+      "value": "studio",
+      "label": "The Craft / Creatives"
+    },
+    {
+      "value": "brand",
+      "label": "Markenpartnerschaft"
+    },
+    {
+      "value": "advertising-partner",
+      "label": "Werbepartner"
+    },
+    {
+      "value": "app-web-owner",
+      "label": "App- / Website-Betreiber"
+    },
+    {
+      "value": "direct-publisher",
+      "label": "Direkt-Publisher"
+    },
+    {
+      "value": "careers",
+      "label": "Karriere bei UPRAISER"
+    },
+    {
+      "value": "other",
+      "label": "Sonstiges"
+    }
+  ],
+  "caseStudyMeta": {
+    "structureLabel": "Aufbau einer Case Study",
+    "structureSteps": [
+      {
+        "title": "Ergebnisse",
+        "description": "Drei prägnante Leitkennzahlen führen die Case Study an und liefern exakt die Daten, die das Finanzteam verlangt."
+      },
+      {
+        "title": "Metadaten",
+        "description": "Marke, Vertical, GEO, KPI-Event und Abrechnungsmodelle – strukturiert für die Prüfung durch das Procurement."
+      },
+      {
+        "title": "Story",
+        "description": "Herausforderung, Ansatz und Ergebnis in kompakten Abschnitten – direkt verknüpft mit einem verifizierbaren Geräte-Event."
+      }
+    ]
+  },
+  "testimonials": [
+    {
+      "quote": "Wir mussten der Finanzabteilung keine Attributionsdrift mehr erklären, sondern teilen jetzt eine perfekt abgestimmte Datei.",
+      "name": "UA Director",
+      "role": "FinTech-App UK",
+      "company": "Mittelständische Consumer-Finance",
+      "href": "/cases/snoop"
+    },
+    {
+      "quote": "Die Lenovo-Lane lieferte echte werkseitige Belege statt umverpacktes Exchange-Inventar.",
+      "name": "Growth Lead",
+      "role": "Android Trading-App Global",
+      "company": "High-Frequency-Finanzen",
+      "href": "/cases/vantage"
+    },
+    {
+      "quote": "Wir haben von wöchentlichen Abstimmungs-Calls auf einen direkten monatlichen Dateiabruf umgestellt. Das ist ein gewaltiger operativer Gewinn.",
+      "name": "Ad Ops Lead",
+      "role": "Media Buyer EU",
+      "company": "Programmatic Accounts",
+      "href": "/cases/autodoc"
+    },
+    {
+      "quote": "Die Pre-Bid-Filterung stellte sicher, dass jeder investierte Dollar einen lückenlosen Geräte-Check fehlerfrei bestand.",
+      "name": "Growth Lead",
+      "role": "Marketplace GCC",
+      "company": "E-Commerce-Expansion",
+      "href": "/cases/fiverr"
+    }
+  ],
+  "sections": {
+    "value": {
+      "label": "Was wir tun",
+      "growth": {
+        "title": "Wachstum für Apps, die mehr als nur reine Installs fordern",
+        "description": "Pre-Bid-Schutz, event-gewichteter Einkauf und direkte OEM-Distribution verbinden Dein Budget unmittelbar mit verifiziertem Umsatz."
+      },
+      "infrastructure": {
+        "title": "Infrastruktur für Teams, die mehr als nur reine Installs fordern",
+        "description": "Pre-Bid-Filterung, lückenlose Log-Parität und direkte OEM-Distribution schützen Dein Budget zuverlässig vor Ad Fraud."
+      }
+    },
+    "channels": {
+      "label": "Tools für Höhenflüge",
+      "growth": {
+        "title": "Equipment für über 30.000 tägliche Installs.",
+        "description": "Direktes Inventar, robuste event-gewichtete Optimierung und verifizierte Routen treiben massives Wachstum in allen Zielmärkten voran."
+      },
+      "infrastructure": {
+        "title": "Equipment für transparentes Media Buying.",
+        "description": "Direktes Inventar, robuste Pre-Bid-Filterung und verifizierte Routen sichern maximale Performance in allen Zielmärkten."
+      }
+    },
+    "cases": {
+      "label": "Erreichte Gipfel",
+      "growth": {
+        "title": "Wir bezwingen diese Gipfel immer wieder."
+      },
+      "infrastructure": {
+        "title": "Wir sichern diese Gipfel immer wieder."
+      }
+    },
+    "technology": {
+      "label": "Die Ausrüstung",
+      "growth": {
+        "title": "Jedes Gebot trägt einen verifizierten Beleg"
+      },
+      "infrastructure": {
+        "title": "Jeder Posten trägt einen verifizierten Beleg"
+      }
+    },
+    "about": {
+      "label": "Die Expedition",
+      "growth": {
+        "title": "Wir sind UPRAISER",
+        "description": "Mit festem Sitz in London. Offizieller Lenovo Agenturpartner. Wir entwickeln Pre-Bid-Fraud-Filterung, erstklassige OEM-Distribution und event-verifizierten Einkauf – maßgeschneidert für iGaming und FinTech."
+      },
+      "infrastructure": {
+        "title": "Wir sind UPRAISER",
+        "description": "Mit festem Sitz in London. Offizieller Lenovo Agenturpartner. Wir entwickeln Log-Abstimmung, direkte ROM-Deployments und robuste Pre-Bid-Schutzmechanismen – maßgeschneidert für transparentes Media Buying."
+      }
+    },
+    "process": {
+      "label": "Die Karte. Die Leitung. Der Beweis.",
+      "growth": {
+        "title": "Karte. Route. Gipfel.",
+        "cta": "Pilotprojekt anfragen"
+      },
+      "infrastructure": {
+        "title": "Planen. Verbinden. Verifizieren.",
+        "cta": "Pilotprojekt anfragen"
+      }
+    },
+    "contact": {
+      "label": "Kontakt",
+      "title": "Bereit für UPRAISER?",
+      "titleLead": "Bereit für ",
+      "accentWord": "UPRAISER"
+    }
+  },
+  "heroFounded": "Gegründet am 17. Juli 2017 mit Sitz in London"
 }

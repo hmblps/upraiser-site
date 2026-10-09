@@ -521,5 +521,402 @@
   "cta": {
     "label": "申请试点",
     "href": "/contact"
-  }
+  },
+  "heroHighlights": {
+    "growth": [
+      {
+        "value": "35+",
+        "label": "活跃 GEOs"
+      },
+      {
+        "value": "800M+",
+        "label": "OEM 设备触达"
+      },
+      {
+        "value": "48h",
+        "label": "SLA 交付上线"
+      },
+      {
+        "value": "$75M+",
+        "label": "已优化媒介支出",
+        "accent": true
+      }
+    ],
+    "infrastructure": [
+      {
+        "value": "97.3%",
+        "label": "竞价前作弊拦截"
+      },
+      {
+        "value": "0%",
+        "label": "投放后日志偏差"
+      },
+      {
+        "value": "0.4ms",
+        "label": "p99 竞价评分"
+      },
+      {
+        "value": "180+",
+        "label": "设备底层信号"
+      }
+    ]
+  },
+  "trafficChannels": {
+    "growth": [
+      {
+        "id": "oem",
+        "title": "OEM & 设备端直发",
+        "tagline": "基于出厂原生 ROM 的首发预装。",
+        "teaser": "在全新 Android 设备首次开机激活的瞬间启动投放战役。",
+        "description": "我们在设备生产制造阶段，将您的应用直接植入全球优质 Android 设备。应用在设备初次配置时即刻启动，在用户开箱激活的关键时刻精准捕获高意向用户。",
+        "bestFor": "直连通道 · 出厂 ROM · 验证日志",
+        "points": [
+          "Lenovo 代理合作伙伴",
+          "出厂预装",
+          "SDK 追踪链路"
+        ]
+      },
+      {
+        "id": "programmatic",
+        "title": "程序化媒介采买",
+        "tagline": "贯通全球优质 Exchange 的核心事件加权投放。",
+        "teaser": "利用预测性事件优化，精准锁定高消费受众。",
+        "description": "我们的需求方平台（DSP）实时优化竞价策略，将预算全量聚焦于预测将完成注册、首次充值（EFTD）或完成应用内交易的高价值用户。",
+        "bestFor": "精选 Exchange · 聚焦 ROI · 深度事件优化",
+        "points": [
+          "预测性优化",
+          "深层转化事件",
+          "生命周期价值竞价"
+        ]
+      },
+      {
+        "id": "performance",
+        "title": "CGC 工作室 & 付费分发",
+        "tagline": "专为复杂垂直赛道转化打造的创作者生成内容。",
+        "teaser": "借助真实创作者的力量，将用户注意力转化为可量化的真金白银。",
+        "description": "我们的创意工作室专门为高竞争壁垒赛道（iGaming、FinTech）量身定制高转化视频资产。我们测试数百个创意吸睛点，并在 TikTok、YouTube 和 Meta 上快速放量付费分发。",
+        "bestFor": "真实创作者 · iGaming & FinTech · 可量化收入",
+        "points": [
+          "算法分发",
+          "高频变量测试",
+          "LTV 放量扩展"
+        ]
+      }
+    ],
+    "infrastructure": [
+      {
+        "id": "oem",
+        "title": "OEM & 设备端触达",
+        "tagline": "经权威认证、附带硬件级回执凭证的 PAI 专属通道。",
+        "teaser": "将每一次出厂预装审计溯源至底层硬件原始日志。",
+        "description": "我们直连具有权威认证 SDK 链路的 Lenovo ROM 与 PAI 通道。绕过所有中间广告网络，让您的技术团队能够直接从设备硬件日志中核验每一次安装足迹。",
+        "bestFor": "绝对合规 · 底层硬件日志 · SDK 追踪链路",
+        "points": [
+          "Lenovo ROM & PAI",
+          "Adjust/AppsFlyer 端点",
+          "转售作弊防护"
+        ]
+      },
+      {
+        "id": "programmatic",
+        "title": "程序化媒介采买",
+        "tagline": "0.4 毫秒内完成的竞价前作弊过滤。",
+        "teaser": "在竞价发生前的 0.4 毫秒内彻底过滤虚假机器人流量。",
+        "description": "我们的专有评分引擎在 0.4 毫秒内分析 180 个设备底层信号，在竞价发生前精准拦截作弊流量。我们维持纯净严审的供应路径，全力保护您的程序化预算免受虚假流量侵蚀。",
+        "bestFor": "纯净供应路径 · 0.4ms 实时过滤 · 数据透明无欺",
+        "points": [
+          "180 个设备底层信号",
+          "交易所直连白名单",
+          "账目底册对齐"
+        ]
+      },
+      {
+        "id": "performance",
+        "title": "CGC 工作室 & 付费分发",
+        "tagline": "可精准映射至安装回执的可追溯创意素材效果。",
+        "teaser": "将每一个视觉素材精准关联到底层设备安装回执。",
+        "description": "我们以数据科学的严谨对待创意制作。操盘手将每一个创意资产直接映射至您的原始安装日志，清晰向您证明具体哪一个视频变体在创造真正的生命周期价值。",
+        "bestFor": "数据科学 · 安装日志 · 广告支出追踪",
+        "points": [
+          "原始设备回执",
+          "效果数据映射",
+          "底册账目核验"
+        ]
+      }
+    ]
+  },
+  "bridge": {
+    "growth": {
+      "eyebrow": "切换视角",
+      "lead": "查看底层基建全景",
+      "preview": "稳固链路、铁证级数据与审计就绪的 OEM，让 Ad Ops 轻松完成月末对账。",
+      "cta": "切换至底层基建"
+    },
+    "infrastructure": {
+      "eyebrow": "切换视角",
+      "lead": "查看效果增长全景",
+      "preview": "依托 OEM 规模与深度事件加权采买加速前行，守死单体经济模型底线。",
+      "cta": "切换至效果增长"
+    }
+  },
+  "aboutPage": {
+    "label": "远征历程",
+    "title": "我们参与塑造了移动广告的版图。",
+    "chapter": {
+      "scrollHeroWord": "攀登",
+      "line1": "我们参与塑造了移动广告的版图。",
+      "line2Prefix": "我们汇聚了来自",
+      "inlineWord": "不同技术领域的操盘手",
+      "description": "UPRAISER 以伦敦为大本营展开运营。2017 年，我们汇聚了来自不同技术领域的实战操盘手，创立了这支效果营销专家团队。我们的成员包括系统工程师、软件开发人员、金融经济学家与高转化创意师。每一位操盘手都在 AdTech 行业亲手构建过专有工具并管理过海量流量管线。多学科的深度融合，正是我们的核心力量。"
+    },
+    "positioningLead": "生于底层日志。",
+    "positioningAccent": "立于纯粹信任。",
+    "description": "立足伦敦的精品效果营销机构。我们执行并对齐移动端增长，让 Ad Ops 与财务共享同一份对账文件。",
+    "storySegments": [
+      {
+        "mark": "融合",
+        "title": "四大专业领域汇聚为一支实战团队",
+        "body": "我们剔除了客户经理与中间层级的客情沟通，确保您的沟通路径直达核心。当您与 UPRAISER 合作时，您是直接与亲手打造归因追踪工具并亲自操盘媒介预算的专业操盘手共事。\n\n我们的系统工程师编写竞价前评分引擎；软件开发人员维护 SDK 日志溯源；经济学家平衡您的单体经济模型；创意师设计精准吸睛切入点。这种协同让我们能洞悉整个数据版图。在账单开出之前，您的 UA 团队与财务团队签署核验的永远是同一份分毫不差的数据。"
+      },
+      {
+        "mark": "版图",
+        "title": "我们从行业初期便参与确立了行业规则",
+        "body": "相比公开交易市场与拥挤的竞价拍卖，我们选择直连且经过严格验证的通路。早年在 AdTech 领域的深耕，让我们能够从零构建定制化数据验证方法。正因为深刻洞悉作弊手段与归因系统的运作机制，我们自主研发了专属的竞价前评分引擎。\n\n我们搭建了将原始日志文件直连至您衡量端点的数据管线。我们从不等待行业施舍透明度，而是直接研发自己的验证工具来给予铁证。"
+      },
+      {
+        "mark": "代码",
+        "title": "始于底层的透明数据与自觉合规",
+        "body": "技术精度离不开信任基石。UPRAISER 严格遵循欧洲数字广告联盟（European Digital Advertising Alliance）指引。我们彻底摒弃那些掩盖数据差异的笼统 PDF 报表。\n\n我们按需提供未经任何修改的原始设备日志，让您的团队能够将每一次安装精确溯源至真实的物理设备。让您的财务账簿与媒介账单口径分毫不差。"
+      }
+    ],
+    "facts": [
+      {
+        "label": "创立年份",
+        "value": "2017"
+      },
+      {
+        "label": "大本营",
+        "value": "London"
+      },
+      {
+        "label": "ICO",
+        "value": "ZC000436"
+      },
+      {
+        "label": "法定实体",
+        "value": "LLP"
+      }
+    ],
+    "teamLabel": "法定实体",
+    "teamLead": "UPRAISER Agency LLP 地址位于 128 City Road, London EC1V 2NX, United Kingdom。",
+    "testimonialsHeading": "合作团队的真实评价",
+    "faqHeading": "FAQ",
+    "faq": [
+      {
+        "question": "UPRAISER 是否支持企业自建（In-house）媒介团队？",
+        "answer": "是的。我们为您的自建团队深度赋能，绝不剥夺您内部操盘手的控制权。我们梳理 SDK 链路并打通数据管道，让您的团队能够依托纯净、审计就绪的日志执行投放。我们筑牢链路底线，确保数据管线与您的追踪归因平台完美吻合。"
+      },
+      {
+        "question": "UPRAISER 如何确保零偏差的数据透明度？",
+        "answer": "在正式上线前，我们会审计您的 MMP 端点并对齐日志管线。每场投放的数据均与您的 MMP 记录分毫不差。通过在竞价时核验归因，我们确保 0% 投放后日志偏差。让您的财务总监与 UA 操盘手始终手握同一份精准对账单。"
+      },
+      {
+        "question": "你们如何在竞价发生前拦截移动端作弊？",
+        "answer": "我们的专有竞价前评分引擎在 0.4 毫秒内分析 180 个设备底层信号。我们从源头过滤作弊流量，确保您绝不会为虚假机器人的刷量安装支付一分钱。"
+      },
+      {
+        "question": "什么是 CGC，它如何融入你们的采买路径？",
+        "answer": "创作者生成内容（CGC）是一种高效的效果资产。我们采购真实的创作者素材，并在程序化、社交及 OEM 路径上放量扩推。操盘手将每一个创意资产向下溯源至原始安装日志，以用户真实 LTV 而非单纯点击量为导向进行深度优化。"
+      },
+      {
+        "question": "你们是 SaaS 工具还是全链路效果营销操盘团队？",
+        "answer": "我们是一支高端精品效果营销操盘团队。我们编写底层代码、铺设数据管道，并亲自操盘媒介采买。您将直接与打造追踪工具并操盘您预算的核心人员共事。拒绝客户经理传话，告别黑盒操作。"
+      }
+    ],
+    "ctaLabel": "申请试点测试",
+    "closeTitle": "开启试点测试，与团队直面交流",
+    "closeDescription": "提交垂直赛道、GEO 与核心 KPI 事件。我们将立即为您量身定制一条清晰精准的采买路径。"
+  },
+  "solutionsPage": {
+    "label": "核心赛道",
+    "title": "我们构筑四条采买路径。",
+    "chapter": {
+      "scrollHeroWord": "路径",
+      "line1": "我们构筑四条采买路径。",
+      "line2Prefix": "每条路径均交付一份",
+      "inlineWord": "统一对账底册",
+      "description": "应用增长、OEM、创作者及程序化渠道均基于经核验的 MMP 回执凭证运行，确保绝对透明。"
+    },
+    "description": "应用增长、OEM、创作者及程序化渠道均基于经核验的 MMP 回执凭证运行，确保绝对透明。",
+    "ctaLabel": "申请试点测试",
+    "closeTitle": "明确您所需的采买路径",
+    "closeDescription": "告知我们您的垂直赛道、GEO 及核心 KPI 事件。我们将立即引导您接入最契合的采买通道。"
+  },
+  "contactPage": {
+    "label": "[ UPRAISER 需求接入室 ]",
+    "title": "需求接入 & 试点简报",
+    "titleLead": "需求接入 & 试点 ",
+    "accentWord": "简报",
+    "description": "请提供您的生产环境参数。我们的操盘手将在 24 小时内审核您的申请并配置专属数据管道。我们摒弃繁琐无效的传统销售漏斗，直接建立高效的合作伙伴协同。",
+    "subline": "1 至 2 个工作日内响应。请提供您的品牌需求简报、OEM 供应申请或求职意向，我们将精准为您分派路径。",
+    "office": "128 City Road, London EC1V 2NX, United Kingdom",
+    "email": "info@upraiser.co.uk",
+    "ctaLabel": "[ 申请试点测试 ]"
+  },
+  "contactVerticals": [
+    {
+      "value": "app-growth",
+      "label": "应用增长 / 媒介"
+    },
+    {
+      "value": "oem",
+      "label": "OEM / Lenovo"
+    },
+    {
+      "value": "studio",
+      "label": "匠心工坊 / 创意素材"
+    },
+    {
+      "value": "brand",
+      "label": "品牌合作"
+    },
+    {
+      "value": "advertising-partner",
+      "label": "广告合作伙伴"
+    },
+    {
+      "value": "app-web-owner",
+      "label": "App / 网站主"
+    },
+    {
+      "value": "direct-publisher",
+      "label": "直签媒体主"
+    },
+    {
+      "value": "careers",
+      "label": "加入 UPRAISER / 招贤纳士"
+    },
+    {
+      "value": "other",
+      "label": "其他"
+    }
+  ],
+  "caseStudyMeta": {
+    "structureLabel": "如何解读案例",
+    "structureSteps": [
+      {
+        "title": "成果",
+        "description": "以三大核心高光数据领衔，直接呈现财务部门严查的精确指标。"
+      },
+      {
+        "title": "元数据",
+        "description": "涵盖品牌、垂直赛道、GEO、KPI 事件及结算模式，条分缕析，专为采购审计而生。"
+      },
+      {
+        "title": "实战叙事",
+        "description": "将挑战、应对方案与成效凝练为简短板块，全部精准绑定至可验证的设备级事件。"
+      }
+    ]
+  },
+  "testimonials": [
+    {
+      "quote": "我们再也不用向财务解释归因偏差了，现在双方直接共享同一份分毫不差的对账文件。",
+      "name": "UA 总监",
+      "role": "英国 FinTech 应用",
+      "company": "中型消费金融机构",
+      "href": "/cases/snoop"
+    },
+    {
+      "quote": "Lenovo 通道交付的是真正出厂级的硬核铁证，绝非公开交易所包装转售的二道流量。",
+      "name": "增长负责人",
+      "role": "全球 Android 交易应用",
+      "company": "高频金融科技",
+      "href": "/cases/vantage"
+    },
+    {
+      "quote": "我们从每周一次的对账焦头烂额，跃升至每月直接调取底册文件。这对运营效率而言是一场巨大的胜利。",
+      "name": "Ad Ops 负责人",
+      "role": "欧洲媒介采买商",
+      "company": "程序化采买客户",
+      "href": "/cases/autodoc"
+    },
+    {
+      "quote": "竞价前过滤机制确保我们投入的每一美元，都能毫无悬念地通过严格的设备层级校验。",
+      "name": "增长负责人",
+      "role": "GCC 海湾地区撮合交易平台",
+      "company": "跨境电商扩张",
+      "href": "/cases/fiverr"
+    }
+  ],
+  "sections": {
+    "value": {
+      "label": "业务范畴",
+      "growth": {
+        "title": "专为追求超越单纯安装量的应用打造的高效增长",
+        "description": "竞价前防护、深层事件加权采买与直接 OEM 分发，将您的预算与真实收入即刻相连。"
+      },
+      "infrastructure": {
+        "title": "专为追求超越单纯安装量的团队构建的底层基建",
+        "description": "竞价前过滤、严密日志对齐与直接 OEM 分发，为您的预算构筑抵御广告作弊的坚固防线。"
+      }
+    },
+    "channels": {
+      "label": "登顶利器",
+      "growth": {
+        "title": "赋能每日 30K+ 真实安装的硬核装备。",
+        "description": "直连供应、深层事件加权优化与核验通路，为所有目标市场的爆发式增长注入强劲动力。"
+      },
+      "infrastructure": {
+        "title": "赋能透明媒介采买的硬核装备。",
+        "description": "直连供应、毫秒级竞价前过滤与核验通路，为所有目标市场的卓越表现保驾护航。"
+      }
+    },
+    "cases": {
+      "label": "实战峰顶",
+      "growth": {
+        "title": "我们一次次征服这些险峰。"
+      },
+      "infrastructure": {
+        "title": "我们一次次守住这些险峰。"
+      }
+    },
+    "technology": {
+      "label": "核心装备",
+      "growth": {
+        "title": "每一次竞价，皆有核验回执"
+      },
+      "infrastructure": {
+        "title": "每一个账目行项，皆有核验回执"
+      }
+    },
+    "about": {
+      "label": "远征历程",
+      "growth": {
+        "title": "我们是 UPRAISER",
+        "description": "总部稳健立足于伦敦。Lenovo 官方代理合作伙伴。我们构建竞价前作弊过滤、优质 OEM 分发与事件验证采买，专为 iGaming 与 FinTech 量身定制。"
+      },
+      "infrastructure": {
+        "title": "我们是 UPRAISER",
+        "description": "总部稳健立足于伦敦。Lenovo 官方代理合作伙伴。我们构建日志对齐架构、出厂 ROM 直接部署与严密竞价前护栏，专为透明媒介采买量身定制。"
+      }
+    },
+    "process": {
+      "label": "规划 · 铺设 · 验证",
+      "growth": {
+        "title": "勘测 · 筑路 · 登峰。",
+        "cta": "申请试点测试"
+      },
+      "infrastructure": {
+        "title": "规划 · 铺设 · 验证。",
+        "cta": "申请试点测试"
+      }
+    },
+    "contact": {
+      "label": "联系我们",
+      "title": "准备好与 UPRAISER 一同跃升？",
+      "titleLead": "准备好与 UPRAISER ",
+      "accentWord": "一同跃升？"
+    }
+  },
+  "heroFounded": "2017 年 7 月 17 日创立于伦敦"
 }
