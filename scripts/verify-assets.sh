@@ -6,9 +6,6 @@ cd "$ROOT"
 
 REQUIRED=(
   "public/hero/everest.glb"
-  "public/hero/everest-light.glb"
-  "public/hero/mountain-light.glb"
-  "public/hero/voyager-nasa.glb"
   "public/hero/light-mountains-loop.mp4"
   
   
@@ -45,7 +42,6 @@ if ((${#missing[@]} > 0)); then
   echo
   echo "Deploy media: source in assets/, synced to public/ before build."
   echo "Hero 3D: assets/hero/everest.glb → public/hero/everest.glb"
-  echo "Hero 3D light: assets/hero/everest-light.glb → public/hero/everest-light.glb"
   exit 1
 fi
 
