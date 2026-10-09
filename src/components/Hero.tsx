@@ -144,40 +144,57 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
 
   useEffect(() => {
     const onEnded = () => {
-      // Delay auto-scroll by 2.5 seconds to give user time to read the Lenovo badge
+      // Delay auto-scroll slightly so user can absorb the final frame
       window.setTimeout(() => {
-        // If the user hasn't scrolled manually (or barely scrolled) during the delay
+        // If the user hasn't scrolled manually (or barely scrolled)
         if (window.scrollY < 50) {
-          // A single, continuous, slow cinematic glide (no pauses)
-          // easeInOutSine gives a long, steady coasting speed in the middle
-          const coastingEase = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
-          
           const stage = document.querySelector('.hero-stage') as HTMLElement;
           const partners = document.querySelector('.partners-strip--home');
           
-          if (stage) {
+          if (stage && partners) {
+            const startY = window.scrollY;
             const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
+            
+            // Where the Lenovo popup is fully visible
             const lenovoProgress = 0.65; 
-            const targetY1 = stage.getBoundingClientRect().top + window.scrollY + (runway * lenovoProgress);
+            const targetY1 = stage.getBoundingClientRect().top + startY + (runway * lenovoProgress);
+            const finalY = partners.getBoundingClientRect().top + startY + 23;
             
-            // Phase 1: Scroll to reveal Lenovo popup
-            scrollToY(targetY1, { duration: 2.2, easing: coastingEase });
+            // Calculate what percentage of the total scroll distance the Lenovo popup represents
+            const totalDist = finalY - startY;
+            const p = Math.max(0, Math.min(1, (targetY1 - startY) / totalDist));
             
-            // Phase 2: Pause for 2s to read, then finish the scroll
-            window.setTimeout(() => {
-              if (partners) {
-                const top = partners.getBoundingClientRect().top + window.scrollY;
-                scrollToY(top + 23, { duration: 2.0, easing: coastingEase });
+            // Custom Plateau Easing (6 seconds total duration):
+            // 0% -> 40% time: ease in-out to the Lenovo popup
+            // 40% -> 70% time: extreme slow-mo (plateau) to read the badge
+            // 70% -> 100% time: ease in-out to the end
+            const plateauEase = (t: number) => {
+              if (t < 0.4) {
+                // Scale t to [0, 1], apply easeInOutSine, then scale to [0, p]
+                const norm = t / 0.4;
+                const ease = -(Math.cos(Math.PI * norm) - 1) / 2;
+                return ease * p;
+              } else if (t < 0.7) {
+                // Micro-movement during the "pause" to keep it feeling alive (moves 2% of distance)
+                const norm = (t - 0.4) / 0.3;
+                return p + (norm * 0.02);
               } else {
-                scrollToY(window.innerHeight * 2 + 23, { duration: 2.0, easing: coastingEase });
+                // Scale t to [0, 1], apply easeInOutSine, then scale from [p + 0.02, 1]
+                const norm = (t - 0.7) / 0.3;
+                const ease = -(Math.cos(Math.PI * norm) - 1) / 2;
+                return (p + 0.02) + (ease * (1 - (p + 0.02)));
               }
-            }, 2200 + 2000); // Wait for phase 1 to finish + 2 seconds pause
+            };
+
+            // A single, continuous scroll command so the momentum is never broken by the browser
+            scrollToY(finalY, { duration: 5.5, easing: Math.abs(p) > 0 ? plateauEase : undefined });
           } else if (partners) {
             const top = partners.getBoundingClientRect().top + window.scrollY;
+            const coastingEase = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
             scrollToY(top + 23, { duration: 4.2, easing: coastingEase });
           }
         }
-      }, 400); // reduced from 2.5s
+      }, 400); 
     };
     window.addEventListener('hero-video-ended', onEnded);
     return () => window.removeEventListener('hero-video-ended', onEnded);
