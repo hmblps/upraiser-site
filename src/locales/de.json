@@ -25,5 +25,14 @@
     "line3": "Dein Aufstieg",
     "line4": "an die Spitze",
     "line5": "sein kann."
+  },
+  "formats": {
+    "label": "Lanes",
+    "title": "Jedes Format. Ein Lieferweg."
+  },
+  "audience": {
+    "title": "Für wen wir arbeiten",
+    "scale": "SKALIERUNG",
+    "proof": "BEWEIS"
   }
 }

@@ -25,5 +25,14 @@
     "line3": "Tu ascenso",
     "line4": "a la cima",
     "line5": "puede ser."
+  },
+  "formats": {
+    "label": "Carriles",
+    "title": "Cada formato. Una ruta de suministro."
+  },
+  "audience": {
+    "title": "A quién servimos",
+    "scale": "ESCALA",
+    "proof": "PRUEBA"
   }
 }

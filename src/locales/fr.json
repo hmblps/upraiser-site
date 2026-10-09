@@ -25,5 +25,14 @@
     "line3": "Ton ascension",
     "line4": "vers le sommet",
     "line5": "peut être."
+  },
+  "formats": {
+    "label": "Voies",
+    "title": "Chaque format. Un seul chemin d'approvisionnement."
+  },
+  "audience": {
+    "title": "À qui nous servons",
+    "scale": "ÉCHELLE",
+    "proof": "PREUVE"
   }
 }

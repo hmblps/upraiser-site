@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { SiteMode } from "../../data/liveContent";
 import { SectionHeader } from "../SectionHeader";
@@ -24,6 +25,9 @@ export function ProgrammaticScrollSectionMobile({
   headerTitle,
   headerDescription,
 }: ProgrammaticScrollSectionMobileProps) {
+  const { t } = useTranslation();
+  const tLabel = t("formats.label", headerLabel);
+  const tTitle = t("formats.title", headerTitle);
   const [activeIndex, setActiveIndex] = useState(0);
   const laneRef = useRef(lane);
   const format = formats[activeIndex] ?? formats[0]!;
@@ -88,7 +92,7 @@ export function ProgrammaticScrollSectionMobile({
 
       {/* Header */}
       <div className="prog-mobile-headline section-inner relative z-30">
-        <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
+        <SectionHeader label={tLabel} title={tTitle} description={headerDescription} />
       </div>
       {laneSwitcher ? (
         <div className="prog-mobile-switcher section-inner mb-4 z-30 relative pointer-events-auto">

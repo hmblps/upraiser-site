@@ -1,5 +1,6 @@
 import { motion, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { audienceByMode } from "../data/liveContent";
 import { useMobileChartProgress, useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
@@ -25,7 +26,7 @@ function AudienceStatic() {
   return (
     <section ref={ref} id="audience" className="section-band section-band--quiet min-h-screen">
       <ModeContentTransition mode={mode} className="section-inner">
-        <SectionHeader label={content.label} title={content.title} animated={false} />
+        <SectionHeader label={content.label} title={tTitle} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-4">
           <p className="section-lead">{content.line1}</p>
           <p className="section-lead">
@@ -57,8 +58,8 @@ function AudienceAnimated() {
       startLine={0.76}
       ambient={mode === "infrastructure" ? "fraud" : "chart"}
       className={`accent-scroll-section--fold-pair${mode === "infrastructure" ? " accent-scroll-section--split-copy" : ""}`.trim()}
-      scrollHeroWord={content.scrollHeroWord}
-      label={<SectionHeader label={content.label} title={content.title} animated={false} />}
+      scrollHeroWord={mode === "infrastructure" ? tProof : tScale}
+      label={<SectionHeader label={content.label} title={tTitle} animated={false} />}
     >
       {({ inlineRef, lineOpacity, lineX, bodyOpacity, bodyX, inlineOpacity }) => (
         <>

@@ -25,5 +25,14 @@
     "line3": "Your rise",
     "line4": "to the top",
     "line5": "can be."
+  },
+  "formats": {
+    "label": "Lanes",
+    "title": "Every Format. One Supply Path."
+  },
+  "audience": {
+    "title": "Who We Serve",
+    "scale": "SCALE",
+    "proof": "PROOF"
   }
 }

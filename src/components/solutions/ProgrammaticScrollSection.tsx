@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useFormatScrollSection } from "../../hooks/useFormatScrollSection";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
@@ -201,6 +202,9 @@ export function ProgrammaticScrollSection({
   headerDescription,
 }: ProgrammaticScrollSectionProps) {
   const reduced = useReducedMotion();
+  const { t } = useTranslation();
+  const tLabel = t("formats.label", headerLabel);
+  const tTitle = t("formats.title", headerTitle);
   const tier = useHardwareTier();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(() =>
@@ -322,7 +326,7 @@ export function ProgrammaticScrollSection({
 
         <div className="prog-scroll-sticky-inner">
           <div className="prog-scroll-headline">
-            <SectionHeader label={headerLabel} title={headerTitle} description={headerDescription} />
+            <SectionHeader label={tLabel} title={tTitle} description={headerDescription} />
           </div>
           <div className="prog-scroll-layout">
             {/* Optical spacer — mirrors lifted device column for copy alignment */}
