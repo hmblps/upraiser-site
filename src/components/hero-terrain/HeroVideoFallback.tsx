@@ -5,7 +5,12 @@ import { useTheme } from "../../context/ThemeContext";
 // The legacy scroll-driven frame sequence was removed to save ~600 lines of dead code.
 export const VIDEO_ONLY_MODE = true;
 
-export function HeroVideoFallback() {
+interface HeroVideoFallbackProps {
+  variant?: "home" | "expedition" | string;
+  forceMobile?: boolean;
+}
+
+export function HeroVideoFallback(_props: HeroVideoFallbackProps) {
   const { theme } = useTheme();
 
   return (
