@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
 import { flyProgressForStage, useHeroFlyOptional } from "../../context/HeroFlyContext";
 import { useScroll } from "../../context/ScrollContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -117,6 +118,21 @@ export function HeroVideoFallback({
     ctx.fillStyle = folder.includes("light") ? "#ffffff" : "#050504";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
+
+  
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    // If user returns to the hero section and video was finished, play it again
+    if (isInView && v.ended) {
+      v.currentTime = 0;
+      v.play().catch(() => {});
+    } else if (!isInView && !v.paused) {
+      // Optional: pause video when out of view to save resources?
+      // Not strictly necessary since the browser handles off-screen videos, 
+      // but re-starting it feels more alive.
+    }
+  }, [isInView]);
 
   useEffect(() => {
     let cancelled = false;
@@ -417,6 +433,7 @@ function SimpleVideo({
   staticFilter?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const isInView = useInView(videoRef, { margin: "0px 0px 500px 0px" });
 
   useEffect(() => {
     const v = videoRef.current;
