@@ -947,5 +947,9 @@
     "volumeIndex": "ÍNDICE DE VOLUMEN",
     "scale": "ESCALA 12W",
     "kpiEvent": "EVENTO KPI"
+  },
+  "heroLede": {
+    "growth": "Ejecutamos campañas globales de performance con prueba absoluta de atribución.",
+    "infrastructure": "Construimos pipelines transparentes de compra de medios para apps y agencias con prueba absoluta de atribución."
   }
 }

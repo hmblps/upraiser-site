@@ -947,5 +947,9 @@
     "volumeIndex": "INDICE DE VOLUME",
     "scale": "ÉCHELLE 12S",
     "kpiEvent": "ÉVÉNEMENT KPI"
+  },
+  "heroLede": {
+    "growth": "Nous pilotons des campagnes de performance mondiales avec une preuve absolue d'attribution.",
+    "infrastructure": "Nous bâtissons des pipelines d'achat média transparents pour les applications et les agences avec une preuve absolue d'attribution."
   }
 }

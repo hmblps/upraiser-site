@@ -947,5 +947,9 @@
     "volumeIndex": "VOLUMEN-INDEX",
     "scale": "12W-SKALIERUNG",
     "kpiEvent": "KPI-EVENT"
+  },
+  "heroLede": {
+    "growth": "Wir steuern globale Performance-Kampagnen mit absolutem Attributionsnachweis.",
+    "infrastructure": "Wir bauen transparente Media-Buying-Pipelines für Apps und Agenturen mit absolutem Attributionsnachweis."
   }
 }

@@ -947,5 +947,9 @@
     "volumeIndex": "放量指数",
     "scale": "12 周规模",
     "kpiEvent": "KPI 事件"
+  },
+  "heroLede": {
+    "growth": "我们操盘全球效果战役，提供绝对确凿的归因证据。",
+    "infrastructure": "我们为应用与代理机构构建透明的媒介采买管道，提供绝对确凿的归因证据。"
   }
 }
