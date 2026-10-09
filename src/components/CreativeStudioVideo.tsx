@@ -16,14 +16,14 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         muted 
         playsInline
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-          theme === "light" 
-            ? "opacity-90 contrast-125 saturate-150 sepia-[.1] hue-rotate-[-10deg]" 
-            : "opacity-80 contrast-[1.1] saturate-[0.8]"
+          theme === "light"
+            ? "opacity-90 contrast-125 saturate-150 sepia-[.1] hue-rotate-[-10deg]"
+            : "opacity-100 contrast-[1.15] saturate-[0.8]"
         }`}
         style={{
-          filter: theme === "light" 
-            ? "contrast(1.15) saturate(1.1) brightness(1.1)" 
-            : "contrast(1.1) saturate(0.9) brightness(0.8)"
+          filter: theme === "light"
+            ? "contrast(1.15) saturate(1.1) brightness(1.1)"
+            : "contrast(1.1) saturate(0.95) brightness(1.0)"
         }}
       />
       
@@ -32,7 +32,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         className={`absolute inset-0 pointer-events-none mix-blend-overlay ${
           theme === "light" 
             ? "bg-gradient-to-b from-[#e0eaf5]/40 to-[#c8d6e5]/40" 
-            : "bg-gradient-to-b from-[#0a1118]/60 to-[#020508]/80"
+            : "bg-gradient-to-b from-[#111a24]/40 to-[#080d14]/60"
         }`} 
       />
       
@@ -41,7 +41,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
       <div className="site-grain absolute inset-0 z-10 opacity-60" />
 
       {/* Dark overlay for text contrast (stronger in dark theme) */}
-      <div className={`absolute inset-0 pointer-events-none ${theme === 'dark' ? 'bg-black/50' : 'bg-black/20'}`} />
+      <div className={`absolute inset-0 pointer-events-none ${theme === 'dark' ? 'bg-black/30' : 'bg-black/20'}`} />
 
       {/* Typography */}
       <motion.div 
