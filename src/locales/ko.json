@@ -23,22 +23,8 @@
     "soonBadge": "예정"
   },
   "hero": {
-    "line1": "우리는 봅니다",
-    "line2": "얼마나 눈부신",
-    "line3": "당신의 비상이",
-    "line4": "정상을 향해",
-    "line5": "펼쳐질 수 있는지.",
-    "founded": "2017년 7월 17일 런던 설립",
-    "ledeGrowth": "우리는 완벽한 어트리뷰션 검증을 바탕으로 글로벌 퍼포먼스 캠페인을 집행합니다.",
-    "ledeInfra": "우리는 완벽한 어트리뷰션 검증을 갖춘 투명한 인프라를 제공합니다.",
-    "hlGrowth1": "활성 GEOs",
-    "hlGrowth2": "OEM 디바이스 도달 범위",
-    "hlGrowth3": "SLA 구축",
-    "hlGrowth4": "최적화된 미디어 집행액",
-    "hlInfra1": "입찰 전 프로드 차단",
-    "hlInfra2": "캠페인 종료 후 로그 오차",
-    "hlInfra3": "p99 입찰 스코어링",
-    "hlInfra4": "디바이스 시그널"
+    "chartingAscent": "UPRAISER · 비상의 설계",
+    "securingBase": "UPRAISER · 기반의 수호"
   },
   "audience": {
     "title": "서비스 대상",
@@ -918,5 +904,43 @@
       "accentWord": "비상할 준비가 되셨습니까?"
     }
   },
-  "heroFounded": "2017년 7월 17일 런던 설립"
+  "heroFounded": "2017년 7월 17일 런던 설립",
+  "chart": {
+    "g1": {
+      "label": "Q3 런레이트"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "매출총이익"
+    },
+    "g4": {
+      "label": "활성 유저"
+    },
+    "i1": {
+      "label": "프로드 차단"
+    },
+    "i2": {
+      "label": "데이터 지연"
+    },
+    "i3": {
+      "label": "가동률"
+    },
+    "i4": {
+      "label": "API 한도"
+    }
+  },
+  "casesPage": {
+    "label": "정상",
+    "title": "우리는 이 정상을 반복해서 정복합니다.",
+    "subtitle": "실제 라이브 캠페인에서 거둔 압도적 성과 — 카드를 탭하여 전체 스토리를 확인하십시오.",
+    "swipe": "스와이프 또는 ← → · 탭하여 열기"
+  },
+  "caseCard": {
+    "readCase": "사례 보기 →",
+    "volumeIndex": "볼륨 인덱스",
+    "scale": "12주 스케일",
+    "kpiEvent": "KPI 이벤트"
+  }
 }

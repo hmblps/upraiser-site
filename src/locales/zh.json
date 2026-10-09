@@ -23,22 +23,8 @@
     "soonBadge": "即将"
   },
   "hero": {
-    "line1": "我们深知",
-    "line2": "何其震撼——",
-    "line3": "您的崛起",
-    "line4": "直达巅峰，",
-    "line5": "无可限量。",
-    "founded": "2017 年 7 月 17 日创立于伦敦",
-    "ledeGrowth": "我们开展全球效果营销战役，提供确凿无误的归因佐证。",
-    "ledeInfra": "我们构建透明底层基建，提供确凿无误的归因佐证。",
-    "hlGrowth1": "活跃 GEOs",
-    "hlGrowth2": "OEM 设备触达",
-    "hlGrowth3": "SLA 响应交付",
-    "hlGrowth4": "已优化媒介支出",
-    "hlInfra1": "竞价前作弊拦截",
-    "hlInfra2": "投放后日志偏差",
-    "hlInfra3": "p99 竞价评分",
-    "hlInfra4": "设备底层信号"
+    "chartingAscent": "UPRAISER · 擘画攀升",
+    "securingBase": "UPRAISER · 筑牢根基"
   },
   "audience": {
     "title": "服务对象",
@@ -918,5 +904,43 @@
       "accentWord": "一同跃升？"
     }
   },
-  "heroFounded": "2017 年 7 月 17 日创立于伦敦"
+  "heroFounded": "2017 年 7 月 17 日创立于伦敦",
+  "chart": {
+    "g1": {
+      "label": "Q3 运行率"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "毛利率"
+    },
+    "g4": {
+      "label": "活跃用户"
+    },
+    "i1": {
+      "label": "作弊拦截"
+    },
+    "i2": {
+      "label": "数据延迟"
+    },
+    "i3": {
+      "label": "正常运行时间"
+    },
+    "i4": {
+      "label": "API 限额"
+    }
+  },
+  "casesPage": {
+    "label": "实战峰顶",
+    "title": "我们一次次征服这些险峰。",
+    "subtitle": "来自实盘战役的硬核战果——轻点任意卡片，查看完整实录。",
+    "swipe": "滑动或 ← → · 轻点打开"
+  },
+  "caseCard": {
+    "readCase": "查阅案例 →",
+    "volumeIndex": "放量指数",
+    "scale": "12 周规模",
+    "kpiEvent": "KPI 事件"
+  }
 }

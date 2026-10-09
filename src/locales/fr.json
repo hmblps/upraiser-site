@@ -23,22 +23,8 @@
     "soonBadge": "Bientôt"
   },
   "hero": {
-    "line1": "Nous voyons à quel point",
-    "line2": "impressionnante",
-    "line3": "Votre ascension",
-    "line4": "vers le sommet",
-    "line5": "peut être.",
-    "founded": "Fondé le 17 juillet 2017, basé à Londres",
-    "ledeGrowth": "Nous pilotons des campagnes de performance mondiales avec une preuve d'attribution absolue.",
-    "ledeInfra": "Nous fournissons une infrastructure transparente avec une preuve d'attribution absolue.",
-    "hlGrowth1": "GEOs actifs",
-    "hlGrowth2": "Portée des appareils OEM",
-    "hlGrowth3": "Configuration SLA",
-    "hlGrowth4": "Dépenses médias optimisées",
-    "hlInfra1": "Fraude bloquée pre-bid",
-    "hlInfra2": "Dérive des logs post-flight",
-    "hlInfra3": "Scoring d'enchères p99",
-    "hlInfra4": "Signaux d'appareils"
+    "chartingAscent": "UPRAISER · TRACER L'ASCENSION",
+    "securingBase": "UPRAISER · SÉCURISER LA BASE"
   },
   "audience": {
     "title": "Qui nous accompagnons",
@@ -918,5 +904,43 @@
       "accentWord": "Upraised"
     }
   },
-  "heroFounded": "Fondé le 17 juillet 2017, basé à Londres"
+  "heroFounded": "Fondé le 17 juillet 2017, basé à Londres",
+  "chart": {
+    "g1": {
+      "label": "Run Rate Q3"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "Marge brute"
+    },
+    "g4": {
+      "label": "Utilisateurs actifs"
+    },
+    "i1": {
+      "label": "Fraude bloquée"
+    },
+    "i2": {
+      "label": "Latence des données"
+    },
+    "i3": {
+      "label": "Disponibilité"
+    },
+    "i4": {
+      "label": "Limite API"
+    }
+  },
+  "casesPage": {
+    "label": "LES SOMMETS",
+    "title": "NOUS CONQUÉRONS CES SOMMETS AVEC RÉGULARITÉ.",
+    "subtitle": "Des résultats percutants issus de campagnes réelles — touchez une carte pour découvrir toute l'histoire.",
+    "swipe": "Balayez ou ← → · touchez pour ouvrir"
+  },
+  "caseCard": {
+    "readCase": "Lire l'étude →",
+    "volumeIndex": "INDICE DE VOLUME",
+    "scale": "ÉCHELLE 12S",
+    "kpiEvent": "ÉVÉNEMENT KPI"
+  }
 }

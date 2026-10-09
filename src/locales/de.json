@@ -23,22 +23,8 @@
     "soonBadge": "Bald"
   },
   "hero": {
-    "line1": "Wir sehen, wie",
-    "line2": "beeindruckend",
-    "line3": "Dein Aufstieg",
-    "line4": "an die Spitze",
-    "line5": "sein kann.",
-    "founded": "Gegründet am 17. Juli 2017 mit Sitz in London",
-    "ledeGrowth": "Wir steuern globale Performance-Kampagnen mit absolutem Attributionsbeweis.",
-    "ledeInfra": "Wir liefern transparente Infrastruktur mit absolutem Attributionsbeweis.",
-    "hlGrowth1": "Aktive GEOs",
-    "hlGrowth2": "OEM-Gerätereichweite",
-    "hlGrowth3": "SLA-Setup",
-    "hlGrowth4": "Optimierter Media Spend",
-    "hlInfra1": "Pre-Bid Fraud geblockt",
-    "hlInfra2": "Post-Flight Log Drift",
-    "hlInfra3": "p99 Bid Scoring",
-    "hlInfra4": "Gerätesignale"
+    "chartingAscent": "UPRAISER · DEN AUFSTIEG KARTIEREN",
+    "securingBase": "UPRAISER · DIE BASIS SICHERN"
   },
   "audience": {
     "title": "Für wen wir arbeiten",
@@ -918,5 +904,43 @@
       "accentWord": "UPRAISER"
     }
   },
-  "heroFounded": "Gegründet am 17. Juli 2017 mit Sitz in London"
+  "heroFounded": "Gegründet am 17. Juli 2017 mit Sitz in London",
+  "chart": {
+    "g1": {
+      "label": "Q3 Run Rate"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "Bruttomarge"
+    },
+    "g4": {
+      "label": "Aktive Nutzer"
+    },
+    "i1": {
+      "label": "Fraud geblockt"
+    },
+    "i2": {
+      "label": "Datenverzögerung"
+    },
+    "i3": {
+      "label": "Verfügbarkeit"
+    },
+    "i4": {
+      "label": "API-Limit"
+    }
+  },
+  "casesPage": {
+    "label": "DIE GIPFEL",
+    "title": "WIR BEZWINGEN DIESE GIPFEL IMMER WIEDER.",
+    "subtitle": "Überragende Ergebnisse aus Live-Flights — Karte antippen für die ganze Geschichte.",
+    "swipe": "Wischen oder ← → · Antippen zum Öffnen"
+  },
+  "caseCard": {
+    "readCase": "Case lesen →",
+    "volumeIndex": "VOLUMEN-INDEX",
+    "scale": "12W-SKALIERUNG",
+    "kpiEvent": "KPI-EVENT"
+  }
 }

@@ -23,22 +23,8 @@
     "soonBadge": "Pronto"
   },
   "hero": {
-    "line1": "Vemos cuán",
-    "line2": "imponente",
-    "line3": "Su ascenso",
-    "line4": "a la cima",
-    "line5": "puede ser.",
-    "founded": "Fundada el 17 de julio de 2017 con sede en Londres",
-    "ledeGrowth": "Ejecutamos campañas globales de performance con prueba absoluta de atribución.",
-    "ledeInfra": "Proporcionamos infraestructura transparente con prueba absoluta de atribución.",
-    "hlGrowth1": "GEOs activas",
-    "hlGrowth2": "Alcance de dispositivos OEM",
-    "hlGrowth3": "Configuración de SLA",
-    "hlGrowth4": "Inversión en medios optimizada",
-    "hlInfra1": "Fraude bloqueado pre-bid",
-    "hlInfra2": "Desviación de logs post-flight",
-    "hlInfra3": "Scoring de pujas p99",
-    "hlInfra4": "Señales de dispositivo"
+    "chartingAscent": "UPRAISER · TRAZANDO EL ASCENSO",
+    "securingBase": "UPRAISER · ASEGURANDO LA BASE"
   },
   "audience": {
     "title": "A quién servimos",
@@ -918,5 +904,43 @@
       "accentWord": "UPRAISER?"
     }
   },
-  "heroFounded": "Fundada el 17 de julio de 2017 con sede en Londres"
+  "heroFounded": "Fundada el 17 de julio de 2017 con sede en Londres",
+  "chart": {
+    "g1": {
+      "label": "Run Rate Q3"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "Margen bruto"
+    },
+    "g4": {
+      "label": "Usuarios activos"
+    },
+    "i1": {
+      "label": "Fraude bloqueado"
+    },
+    "i2": {
+      "label": "Latencia de datos"
+    },
+    "i3": {
+      "label": "Disponibilidad"
+    },
+    "i4": {
+      "label": "Límite de API"
+    }
+  },
+  "casesPage": {
+    "label": "LAS CUMBRES",
+    "title": "CONQUISTAMOS ESTAS CUMBRES UNA Y OTRA VEZ.",
+    "subtitle": "Resultados demoledores en campañas activas — toque cualquier tarjeta para ver la historia completa.",
+    "swipe": "Deslice o ← → · toque para abrir"
+  },
+  "caseCard": {
+    "readCase": "Leer el caso →",
+    "volumeIndex": "ÍNDICE DE VOLUMEN",
+    "scale": "ESCALA 12W",
+    "kpiEvent": "EVENTO KPI"
+  }
 }

@@ -23,22 +23,8 @@
     "soonBadge": "近日"
   },
   "hero": {
-    "line1": "私たちは見ています",
-    "line2": "驚くべき",
-    "line3": "あなたの飛躍が",
-    "line4": "頂点へと",
-    "line5": "どれほど美しいかを。",
-    "founded": "2017年7月17日設立、ロンドン拠点",
-    "ledeGrowth": "確固たるアトリビューション証明とともに、グローバルパフォーマンスキャンペーンを展開します。",
-    "ledeInfra": "完全なアトリビューション証明を備えた、透明性の高いインフラストラクチャを提供します。",
-    "hlGrowth1": "アクティブGEOs",
-    "hlGrowth2": "OEMデバイスリーチ",
-    "hlGrowth3": "SLAセットアップ",
-    "hlGrowth4": "最適化された広告費",
-    "hlInfra1": "入札前に不正を遮断",
-    "hlInfra2": "配信後のログ乖離",
-    "hlInfra3": "p99入札スコアリング",
-    "hlInfra4": "デバイスシグナル"
+    "chartingAscent": "UPRAISER · 頂点への軌跡を描く",
+    "securingBase": "UPRAISER · 盤石な基盤を固める"
   },
   "audience": {
     "title": "サービス対象",
@@ -918,5 +904,43 @@
       "accentWord": "整いましたか？"
     }
   },
-  "heroFounded": "2017年7月17日設立、ロンドン拠点"
+  "heroFounded": "2017年7月17日設立、ロンドン拠点",
+  "chart": {
+    "g1": {
+      "label": "Q3 ランレート"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "粗利益率"
+    },
+    "g4": {
+      "label": "アクティブユーザー"
+    },
+    "i1": {
+      "label": "不正遮断"
+    },
+    "i2": {
+      "label": "データ遅延"
+    },
+    "i3": {
+      "label": "稼働率"
+    },
+    "i4": {
+      "label": "API上限"
+    }
+  },
+  "casesPage": {
+    "label": "最高峰",
+    "title": "私たちはこの頂を、幾度となく制覇する。",
+    "subtitle": "実稼働キャンペーンが生んだ圧倒的な成果 — カードをタップして全貌を確認。",
+    "swipe": "スワイプまたは ← → · タップして開く"
+  },
+  "caseCard": {
+    "readCase": "事例を読む →",
+    "volumeIndex": "ボリューム指数",
+    "scale": "12週スケール",
+    "kpiEvent": "KPIイベント"
+  }
 }
