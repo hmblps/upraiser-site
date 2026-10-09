@@ -1,10 +1,10 @@
 {
   "nav": {
-    "formats": "Formats",
-    "performance": "Performance",
-    "studio": "Studio",
-    "contact": "Start Briefing",
-    "agency": "The Agency"
+    "agency": "The Agency",
+    "studio": "Creative Studio",
+    "soon": "Soon",
+    "theGrowth": "The Growth",
+    "theAgency": "The Agency"
   },
   "footer": {
     "tagline": "The definitive algorithmic growth partner for global brands.",
@@ -24,7 +24,12 @@
   },
   "hero": {
     "chartingAscent": "UPRAISER · CHARTING THE ASCENT",
-    "securingBase": "UPRAISER · SECURING THE BASE"
+    "securingBase": "UPRAISER · SECURING THE BASE",
+    "line1": "WE SEE HOW",
+    "line2": "STUNNING",
+    "line3": "YOUR RISE",
+    "line4": "TO THE TOP",
+    "line5": "CAN BE."
   },
   "audience": {
     "title": "Who We Serve",

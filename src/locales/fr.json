@@ -1,10 +1,10 @@
 {
   "nav": {
-    "formats": "Formats",
-    "performance": "Performance",
-    "studio": "Studio",
-    "contact": "Démarrer le briefing",
-    "agency": "L'Agence"
+    "agency": "L'Agence",
+    "studio": "Studio Créatif",
+    "soon": "Bientôt",
+    "theGrowth": "La Croissance",
+    "theAgency": "L'Agence"
   },
   "footer": {
     "tagline": "Le partenaire de croissance algorithmique de référence pour les marques mondiales.",
@@ -24,7 +24,12 @@
   },
   "hero": {
     "chartingAscent": "UPRAISER · TRACER L'ASCENSION",
-    "securingBase": "UPRAISER · SÉCURISER LA BASE"
+    "securingBase": "UPRAISER · SÉCURISER LA BASE",
+    "line1": "NOUS VOYONS",
+    "line2": "À QUEL POINT",
+    "line3": "VOTRE ASCENSION",
+    "line4": "VERS LE SOMMET",
+    "line5": "PEUT ÊTRE FULGURANTE."
   },
   "audience": {
     "title": "Qui nous accompagnons",

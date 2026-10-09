@@ -1,10 +1,10 @@
 {
   "nav": {
-    "formats": "Formatos",
-    "performance": "Performance",
-    "studio": "Studio",
-    "contact": "Iniciar Briefing",
-    "agency": "La Agencia"
+    "agency": "La Agencia",
+    "studio": "Estudio Creativo",
+    "soon": "Pronto",
+    "theGrowth": "El Crecimiento",
+    "theAgency": "La Agencia"
   },
   "footer": {
     "tagline": "El socio definitivo de crecimiento algorítmico para marcas globales.",
@@ -24,7 +24,12 @@
   },
   "hero": {
     "chartingAscent": "UPRAISER · TRAZANDO EL ASCENSO",
-    "securingBase": "UPRAISER · ASEGURANDO LA BASE"
+    "securingBase": "UPRAISER · ASEGURANDO LA BASE",
+    "line1": "VEMOS CUÁN",
+    "line2": "IMPONENTE",
+    "line3": "SU ASCENSO",
+    "line4": "A LA CIMA",
+    "line5": "PUEDE SER."
   },
   "audience": {
     "title": "A quién servimos",

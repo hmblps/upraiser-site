@@ -1,10 +1,10 @@
 {
   "nav": {
-    "formats": "Formate",
-    "performance": "Performance",
-    "studio": "Studio",
-    "contact": "Briefing starten",
-    "agency": "Die Agentur"
+    "agency": "Die Agentur",
+    "studio": "Creative Studio",
+    "soon": "Bald",
+    "theGrowth": "Das Wachstum",
+    "theAgency": "Die Agentur"
   },
   "footer": {
     "tagline": "Der definitive algorithmische Wachstumspartner für globale Marken.",
@@ -24,7 +24,12 @@
   },
   "hero": {
     "chartingAscent": "UPRAISER · DEN AUFSTIEG KARTIEREN",
-    "securingBase": "UPRAISER · DIE BASIS SICHERN"
+    "securingBase": "UPRAISER · DIE BASIS SICHERN",
+    "line1": "WIR SEHEN, WIE",
+    "line2": "ATEMBERAUBEND",
+    "line3": "DEIN AUFSTIEG",
+    "line4": "AN DIE SPITZE",
+    "line5": "SEIN KANN."
   },
   "audience": {
     "title": "Für wen wir arbeiten",

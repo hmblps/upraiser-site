@@ -1,10 +1,10 @@
 {
   "nav": {
-    "formats": "フォーマット",
-    "performance": "パフォーマンス",
-    "studio": "スタジオ",
-    "contact": "ブリーフィングを開始",
-    "agency": "エージェンシー"
+    "agency": "エージェンシー",
+    "studio": "クリエイティブスタジオ",
+    "soon": "近日公開",
+    "theGrowth": "グロース",
+    "theAgency": "エージェンシー"
   },
   "footer": {
     "tagline": "グローバルブランドの決定的なアルゴリズム成長パートナー。",
@@ -24,7 +24,12 @@
   },
   "hero": {
     "chartingAscent": "UPRAISER · 頂点への軌跡を描く",
-    "securingBase": "UPRAISER · 盤石な基盤を固める"
+    "securingBase": "UPRAISER · 盤石な基盤を固める",
+    "line1": "私たちには見えている",
+    "line2": "頂点へと駆け上がる",
+    "line3": "貴社の飛躍が",
+    "line4": "どれほど圧倒的な",
+    "line5": "ものになり得るかを。"
   },
   "audience": {
     "title": "サービス対象",

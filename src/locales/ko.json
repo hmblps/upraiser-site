@@ -1,10 +1,10 @@
 {
   "nav": {
-    "formats": "포맷",
-    "performance": "퍼포먼스",
-    "studio": "스튜디오",
-    "contact": "브리핑 시작",
-    "agency": "에이전시"
+    "agency": "에이전시",
+    "studio": "크리에이티브 스튜디오",
+    "soon": "곧 공개",
+    "theGrowth": "그로스",
+    "theAgency": "에이전시"
   },
   "footer": {
     "tagline": "글로벌 브랜드를 위한 독보적인 알고리즘 그로스 파트너.",
@@ -24,7 +24,12 @@
   },
   "hero": {
     "chartingAscent": "UPRAISER · 비상의 설계",
-    "securingBase": "UPRAISER · 기반의 수호"
+    "securingBase": "UPRAISER · 기반의 수호",
+    "line1": "우리는 봅니다",
+    "line2": "정상을 향한",
+    "line3": "귀하의 비상이",
+    "line4": "얼마나 눈부실 수",
+    "line5": "있는지를."
   },
   "audience": {
     "title": "서비스 대상",

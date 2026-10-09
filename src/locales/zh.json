@@ -1,10 +1,10 @@
 {
   "nav": {
-    "formats": "广告格式",
-    "performance": "效果营销",
+    "agency": "关于机构",
     "studio": "创意工作室",
-    "contact": "提交需求简报",
-    "agency": "关于机构"
+    "soon": "即将推出",
+    "theGrowth": "效果增长",
+    "theAgency": "关于机构"
   },
   "footer": {
     "tagline": "全球品牌权威的算法增长合作伙伴。",
@@ -24,7 +24,12 @@
   },
   "hero": {
     "chartingAscent": "UPRAISER · 擘画攀升",
-    "securingBase": "UPRAISER · 筑牢根基"
+    "securingBase": "UPRAISER · 筑牢根基",
+    "line1": "我们深知",
+    "line2": "何其壮阔",
+    "line3": "您的崛起",
+    "line4": "问鼎巅峰",
+    "line5": "势不可挡。"
   },
   "audience": {
     "title": "服务对象",
