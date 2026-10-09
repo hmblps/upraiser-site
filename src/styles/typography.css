@@ -416,9 +416,11 @@ header nav .nav-link:focus-visible::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  @media (hover: hover) and (pointer: fine) {
   .btn-caps:hover,
   .btn-caps:active {
     transform: none;
+  }
   }
 }
 

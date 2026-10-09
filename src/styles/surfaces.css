@@ -786,8 +786,10 @@
   background-color: color-mix(in srgb, var(--theme-muted) 30%, transparent);
   border-radius: 10px;
 }
+@media (hover: hover) and (pointer: fine) {
 .case-detail-modal__body::-webkit-scrollbar-thumb:hover {
   background-color: color-mix(in srgb, var(--theme-muted) 50%, transparent);
+}
 }
 
 .case-detail-modal__body {

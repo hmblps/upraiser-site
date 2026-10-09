@@ -1443,8 +1443,11 @@ html.is-scrolling .cv-float {
     transform 0.2s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
+
 .cv-prog-stack__dots button:hover {
   transform: scale(1.15);
+}
 }
 
 .cv-prog-stack__dots button:focus-visible {

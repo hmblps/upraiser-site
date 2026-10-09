@@ -1773,8 +1773,11 @@ html.theme-light .depth-page--gear .gear-spec,
   transition: background 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@media (hover: hover) and (pointer: fine) {
+
 .case-dossier__row:hover {
   background: color-mix(in srgb, var(--theme-accent) 4%, transparent);
+}
 }
 
 .case-dossier__index {

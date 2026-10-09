@@ -650,9 +650,12 @@
     background 0.2s ease;
 }
 
+@media (hover: hover) and (pointer: fine) {
+
 .apple-preview-panel-options button:hover {
   border-color: color-mix(in srgb, var(--theme-accent) 35%, transparent);
   background: color-mix(in srgb, var(--theme-accent) 6%, transparent);
+}
 }
 
 .apple-preview-panel-options button.is-active {

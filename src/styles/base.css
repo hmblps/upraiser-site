@@ -909,18 +909,24 @@ main [id] {
     transform: none;
   }
 
+  @media (hover: hover) and (pointer: fine) {
+
   .value-bento-tile--feature:hover .value-bento-icon,
   .value-bento-tile--metric:hover .value-bento-ring,
   .value-bento-tile--brand:hover .value-bento-brand-mark {
     transform: none;
+  }
   }
 
   .proximity-surface::before {
     display: none;
   }
 
+  @media (hover: hover) and (pointer: fine) {
+
   .card-lift:hover {
     transform: none;
+  }
   }
 }
 
@@ -946,6 +952,8 @@ html::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   background-clip: padding-box;
 }
+@media (hover: hover) and (pointer: fine) {
 html::-webkit-scrollbar-thumb:hover {
   background-color: color-mix(in srgb, var(--theme-fg-muted) 60%, transparent);
+}
 }
