@@ -152,12 +152,29 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
           // easeInOutSine gives a long, steady coasting speed in the middle
           const coastingEase = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
           
+          const stage = document.querySelector('.hero-stage') as HTMLElement;
           const partners = document.querySelector('.partners-strip--home');
-          if (partners) {
+          
+          if (stage) {
+            const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
+            const lenovoProgress = 0.65; 
+            const targetY1 = stage.getBoundingClientRect().top + window.scrollY + (runway * lenovoProgress);
+            
+            // Phase 1: Scroll to reveal Lenovo popup
+            scrollToY(targetY1, { duration: 2.2, easing: coastingEase });
+            
+            // Phase 2: Pause for 2s to read, then finish the scroll
+            window.setTimeout(() => {
+              if (partners) {
+                const top = partners.getBoundingClientRect().top + window.scrollY;
+                scrollToY(top + 23, { duration: 2.0, easing: coastingEase });
+              } else {
+                scrollToY(window.innerHeight * 2 + 23, { duration: 2.0, easing: coastingEase });
+              }
+            }, 2200 + 2000); // Wait for phase 1 to finish + 2 seconds pause
+          } else if (partners) {
             const top = partners.getBoundingClientRect().top + window.scrollY;
             scrollToY(top + 23, { duration: 4.2, easing: coastingEase });
-          } else {
-            scrollToY(window.innerHeight * 2 + 23, { duration: 4.2, easing: coastingEase });
           }
         }
       }, 400); // reduced from 2.5s

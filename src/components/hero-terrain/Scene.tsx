@@ -51,7 +51,6 @@ export function Scene({
   scrollRef,
   path,
   onModelReady,
-  voyager = false,
   lite = false,
 }: {
   theme: ThemeMode;

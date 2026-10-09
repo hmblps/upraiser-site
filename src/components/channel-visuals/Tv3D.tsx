@@ -435,8 +435,8 @@ function WarmupRenderer({ meshReady }: { meshReady: boolean }) {
   useEffect(() => {
     if (meshReady) {
       const warmup = async () => {
-        const restored: { obj: THREE.Mesh; mat: THREE.Material }[] = [];
-        scene.traverse((o: THREE.Object3D) => {
+        const restored: any[] = [];
+        scene.traverse((o: any) => {
           if (!o.isMesh && !o.isSkinnedMesh) return;
           restored.push([o, o.visible, o.frustumCulled]);
           o.visible = true;
