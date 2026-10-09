@@ -7,7 +7,7 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SPRING_SOFT } from "../lib/motion";
 import { HeroFlyProvider, useHeroFly } from "../context/HeroFlyContext";
 import { HeroHighlights } from "./apple-preview/HeroHighlights";
-import { heroHighlightsByMode, heroLedeByMode } from "../data/liveContent";
+import { heroHighlightsByMode, heroLedeByMode, } from "../data/liveContent";
 import { HeroAtmosphere } from "./HeroAtmosphere";
 import { LenovoTrustStrip } from "./LenovoTrustStrip";
 import { DESKTOP_HERO_QUERY } from "../lib/heroDesktop";
@@ -130,6 +130,12 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
   const { revealedCount, isVideoDriven } = useHeroFly();
   const statsScrollRef = useRef<HTMLDivElement>(null);
   const highlights = heroHighlightsByMode[mode];
+    const translatedHighlights = highlights.map((h, i) => ({
+      value: t(`heroHighlights.${mode}.${i}.value`, h.value),
+      label: t(`heroHighlights.${mode}.${i}.label`, h.label),
+      accent: (h as any).accent
+    }));
+    
   const activeStatIndex = useCarouselActiveIndex(statsScrollRef, highlights.length);
   const { scrollToY } = useScroll();
   const { t } = useTranslation();
@@ -304,7 +310,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                     exit={reduced ? undefined : { opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {highlights.map((item, i) => {
+                    {translatedHighlights.map((item, i) => {
                       const revealed = !scrubCards || i < revealedCount;
                       const isLeft = i % 2 === 0;
                       return (
@@ -332,7 +338,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
                   </motion.div>
                 </AnimatePresence>
               </div>
-              <HeroStatsDots containerRef={statsScrollRef} labels={highlights.map(h => h.label)} activeIndex={activeStatIndex} />
+              <HeroStatsDots containerRef={statsScrollRef} labels={translatedHighlights.map(h => h.label)} activeIndex={activeStatIndex} />
             </div>
           </div>
         </div>

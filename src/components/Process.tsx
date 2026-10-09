@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { processByMode, sectionsByMode } from "../data/liveContent";
+import { useTranslation } from "react-i18next";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useScrollScene } from "../hooks/useScrollScene";
 import { clamp } from "../lib/clamp";
@@ -79,6 +80,7 @@ function ProcessStep({
 }
 
 export function Process() {
+  const { t } = useTranslation();
   const { mode } = useMode();
   const section = sectionsByMode.process[mode];
   const steps = processByMode[mode];
@@ -93,7 +95,7 @@ export function Process() {
       className="section-band relative overflow-hidden"
     >
       <div className="section-inner relative z-[1]">
-        <SectionHeader animated={false} label={sectionsByMode.process.label} title={section.title} />
+        <SectionHeader animated={false} label={t("sections.process.label", sectionsByMode.process.label)} title={section.title} />
 
         <div className="process-rail section-stack">
           {steps.map((item, index) => (

@@ -1,6 +1,7 @@
 import { motion, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { promiseByMode, type SiteMode } from "../data/liveContent";
+import { useTranslation } from "react-i18next";
 import { useMobileChartProgress, useScrollRunwayEnabled } from "../hooks/useScrollScene";
 import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
@@ -14,6 +15,7 @@ function GrowthWordInline({ word }: { word: string }) {
 }
 
 function PromiseClean() {
+  const { t } = useTranslation();
   const { mode } = useMode();
   const content = promiseByMode[mode];
   const isParityDark = mode === "infrastructure";
@@ -25,13 +27,13 @@ function PromiseClean() {
   return (
     <section ref={ref} id="promise" className="section-band section-band--quiet min-h-screen">
       <ModeContentTransition mode={mode} className="section-inner">
-        <SectionHeader label={content.label} title={content.title} animated={false} />
+        <SectionHeader label={t(`promise.${mode}.label`, content.label)} title={t(`promise.${mode}.title`, content.title)} animated={false} />
         <div className="section-stack flex max-w-3xl flex-col gap-5">
-          <p className="section-lead">{content.line1}</p>
+          <p className="section-lead">{t(`promise.${mode}.line1`, content.line1)}</p>
           <p className="section-lead">
-            {content.line2Prefix} <GrowthWordInline word={content.inlineWord} />.
+            {t(`promise.${mode}.line2Prefix`, content.line2Prefix)} <GrowthWordInline word={t(`promise.${mode}.inlineWord`, content.inlineWord)} />.
           </p>
-          <p className="section-description max-w-2xl mt-4 mb-6">{formatEventNames(content.description)}</p>
+          <p className="section-description max-w-2xl mt-4 mb-6">{formatEventNames(t(`promise.${mode}.description`, content.description))}</p>
         </div>
         
         <div
@@ -48,8 +50,9 @@ function PromiseClean() {
 }
 
 function PromiseFold({ mode }: { mode: SiteMode }) {
+  const { t } = useTranslation();
   const content = promiseByMode[mode];
-  const key = `${mode}-${content.inlineWord}-${content.line2Prefix}`;
+  const key = `${mode}-${t(`promise.${mode}.inlineWord`, content.inlineWord)}-${t(`promise.${mode}.line2Prefix`, content.line2Prefix)}`;
 
   return (
     <AccentScrollFold
@@ -58,21 +61,21 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
       runway="anchor"
       ambient="bars"
       className="accent-scroll-section--fold-pair -mb-[14px]"
-      scrollHeroWord={content.scrollHeroWord}
-      label={<SectionHeader label={content.label} title={content.title} animated={false} />}
+      scrollHeroWord={t(`promise.${mode}.scrollHeroWord`, content.scrollHeroWord)}
+      label={<SectionHeader label={t(`promise.${mode}.label`, content.label)} title={t(`promise.${mode}.title`, content.title)} animated={false} />}
     >
       {({ inlineRef, lineOpacity, lineX, bodyOpacity, bodyX, inlineOpacity }) => (
         <>
           <motion.p className="section-lead relative z-[2]" style={{ opacity: lineOpacity, x: lineX }}>
-            {content.line1}
+            {t(`promise.${mode}.line1`, content.line1)}
           </motion.p>
           <p className="section-lead accent-scroll-inline-line relative z-[2]">
             <motion.span style={{ opacity: bodyOpacity, x: bodyX }} className="inline">
-              {content.line2Prefix}{" "}
+              {t(`promise.${mode}.line2Prefix`, content.line2Prefix)}{" "}
             </motion.span>
             <span ref={inlineRef} className="relative inline-block align-baseline" style={{ minWidth: inlineWordWidth(content.inlineWord) }}>
               <motion.span style={{ opacity: inlineOpacity }} className="inline">
-                <GrowthWordInline word={content.inlineWord} />
+                <GrowthWordInline word={t(`promise.${mode}.inlineWord`, content.inlineWord)} />
               </motion.span>
             </span>
             <motion.span style={{ opacity: bodyOpacity, x: bodyX }} className="inline">
@@ -80,7 +83,7 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
             </motion.span>
           </p>
           <motion.p className="section-description relative z-[2] mt-4 mb-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
-            {formatEventNames(content.description)}
+            {formatEventNames(t(`promise.${mode}.description`, content.description))}
           </motion.p>
         </>
       )}

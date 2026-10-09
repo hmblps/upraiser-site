@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState, useEffect, useRef, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -40,6 +41,7 @@ const initialForm: FormState = {
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
 
 export function Contact() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [form, setForm] = useState<FormState>(initialForm);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
@@ -290,7 +292,7 @@ export function Contact() {
                         </ContactFormField>
                       </div>
 
-                      <ContactFormField label="Average Monthly Media Spend" id="monthlyBudget" disabled={status === "loading"}>
+                      <ContactFormField label={t("contactPage.form.spend", "Average Monthly Media Spend")} id="monthlyBudget" disabled={status === "loading"}>
                         <select value={form.monthlyBudget} onChange={(e) => setForm({ ...form, monthlyBudget: e.target.value })}>
                           <option value="pilot">Under $25,000 (Pilot Testing Only)</option>
                           <option value="growth">$25,000 to $100,000</option>

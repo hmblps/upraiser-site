@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
 import { motion } from "framer-motion";
 import type { CaseStudy } from "../data/cases";
@@ -72,6 +74,9 @@ export function CasePreviewCard({
   copy = 0,
   variant = "teaser",
 }: CasePreviewCardProps) {
+  const { t } = useTranslation();
+  const headline = t(`casesDetails.${item.id}.headline`, item.headline);
+  const client = t(`casesDetails.${item.id}.client`, item.client);
   const { openCase } = useCaseModal();
   const primary = item.metrics[0];
   const secondary = item.metrics.slice(1);
@@ -110,7 +115,7 @@ export function CasePreviewCard({
       data-case-id={item.id}
       data-case-index={caseIndex}
       data-case-copy={copy}
-      aria-label={`${item.client} case study. ${ctaLabel}`}
+      aria-label={`${client} case study. ${ctaLabel}`}
       aria-hidden={isReplica || undefined}
       tabIndex={isReplica ? -1 : 0}
       layoutId={!isReplica ? `case-card-${item.id}` : undefined}
@@ -152,8 +157,8 @@ export function CasePreviewCard({
           </div>
         ) : null}
 
-        <p className="case-preview-card__headline" title={item.headline}>
-          {item.headline}
+        <p className="case-preview-card__headline" title={headline}>
+          {headline}
         </p>
 
         <p className="mt-2.5 text-[0.78rem] leading-relaxed text-fg line-clamp-2">

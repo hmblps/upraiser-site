@@ -30,3 +30,11 @@ i18n
   });
 
 export default i18n;
+
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.lang = lng;
+});
+// Set initial lang
+if (typeof document !== 'undefined') {
+  document.documentElement.lang = i18n.language || 'en';
+}

@@ -1,4 +1,5 @@
 import { lenovoPartnership } from "../data/liveContent";
+import { useTranslation } from "react-i18next";
 import { GradientTraceBorder } from "./GradientTraceBorder";
 import { LenovoPartnershipCopy } from "./LenovoPartnershipCopy";
 import { LenovoPartnershipLogo } from "./LenovoPartnershipLogo";
@@ -9,6 +10,7 @@ import { useEffect, useRef } from "react";
  * Reveal is driven by HeroFly CSS vars (--hero-lenovo-*), not whileInView.
  */
 export function LenovoTrustStrip() {
+  const { t } = useTranslation();
   const dockRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -51,8 +53,8 @@ export function LenovoTrustStrip() {
             <div className="flex items-center gap-3 sm:gap-4 shrink-0">
               <LenovoPartnershipLogo className="h-7 w-auto shrink-0 sm:h-9 md:h-8 lg:h-10" />
               <div className="text-left">
-                <p className="stat-label text-[10px] sm:text-xs text-accent leading-none">{lenovoPartnership.badge}</p>
-                <p className="mt-1 card-title text-[13px] sm:text-sm md:text-sm lg:text-base normal-case tracking-normal leading-none">{lenovoPartnership.title}</p>
+                <p className="stat-label text-[10px] sm:text-xs text-accent leading-none">{t("lenovo.badge", lenovoPartnership.badge)}</p>
+                <p className="mt-1 card-title text-[13px] sm:text-sm md:text-sm lg:text-base normal-case tracking-normal leading-none">{t("lenovo.title", lenovoPartnership.title)}</p>
               </div>
             </div>
             <LenovoPartnershipCopy 
