@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
@@ -17,6 +18,7 @@ type PartnersCarouselProps = {
 
 /** Partners/Clients marquee — same component; maps to Clients on homepage runway, Partners in chrome. */
 export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const [params] = useSearchParams();
   const setId = partnerSetForRoute(pathname, params.get("pillar"));
@@ -160,7 +162,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                   </svg>
                 </button>
 
-                <h2 className="text-3xl font-bold mb-10 text-center tracking-tight">Our Clients</h2>
+                <h2 className="text-3xl font-bold mb-10 text-center tracking-tight">{t("ghosts.ourClients", "Our Clients")}</h2>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-12 items-center justify-items-center">
                   {clientBrands.map((brand) => (

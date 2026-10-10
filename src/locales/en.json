@@ -962,5 +962,44 @@
   "heroLede": {
     "growth": "We run global performance campaigns with absolute attribution proof.",
     "infrastructure": "We build transparent media buying pipelines for apps and agencies with absolute attribution proof."
+  },
+  "misc": {
+    "results": "Results",
+    "volumeIndex": "Volume Index",
+    "kpiEvent": "KPI event",
+    "programmatic": "Programmatic",
+    "ctv": "Connected TV",
+    "social": "Social Ads",
+    "oem": "OEM & Direct",
+    "nextStep": "Next step",
+    "readyUpraised": "Ready to be Upraised?",
+    "briefRoute": "Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.",
+    "explore": "Explore",
+    "company": "Company",
+    "basecamp": "Basecamp London",
+    "uk": "United Kingdom",
+    "directComm": "Direct Communications",
+    "verifiedComp": "Verified Compliance & Partners",
+    "agencyPartner": "Agency Partner",
+    "expeditionCrew": "The Expedition Crew",
+    "engBasecamp": "The Engineering Basecamp",
+    "marketingNav": "The Marketing Navigators",
+    "visArch": "The Visual Architects",
+    "dataScouts": "The Data Scouts",
+    "expGuides": "The Expedition Guides"
+  },
+  "ghosts": {
+    "q3RunRate": "Q3 Run Rate",
+    "ltvCac": "LTV / CAC",
+    "grossMargin": "Gross Margin",
+    "activeUsers": "Active Users",
+    "botTraffic": "Bot Traffic",
+    "chargebacks": "Chargebacks",
+    "spamSignups": "Spam Signups",
+    "botsFarms": "Bots & Farms",
+    "verifiedRoas": "Verified ROAS",
+    "recoveredSpend": "Recovered Spend",
+    "ourClients": "Our Clients",
+    "renderingTerrain": "Rendering Terrain"
   }
 }

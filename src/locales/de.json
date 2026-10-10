@@ -951,5 +951,44 @@
   "heroLede": {
     "growth": "Wir steuern globale Performance-Kampagnen mit absolutem Attributionsnachweis.",
     "infrastructure": "Wir bauen transparente Media-Buying-Pipelines für Apps und Agenturen mit absolutem Attributionsnachweis."
+  },
+  "misc": {
+    "results": "Ergebnisse",
+    "volumeIndex": "Volumen-Index",
+    "kpiEvent": "KPI-Event",
+    "programmatic": "Programmatic",
+    "ctv": "Connected TV",
+    "social": "Social Ads",
+    "oem": "OEM & Direkt",
+    "nextStep": "Nächster Schritt",
+    "readyUpraised": "Bereit für UPRAISER?",
+    "briefRoute": "Briefe die Route: Vertical, GEO, KPI-Event – wir antworten mit einem präzisen Pfad, nicht mit einem Deck.",
+    "explore": "Entdecken",
+    "company": "Unternehmen",
+    "basecamp": "Basecamp London",
+    "uk": "United Kingdom",
+    "directComm": "Direkte Kommunikation",
+    "verifiedComp": "Verifizierte Compliance & Partner",
+    "agencyPartner": "Agenturpartner",
+    "expeditionCrew": "Die Expeditions-Crew",
+    "engBasecamp": "Das Engineering-Basecamp",
+    "marketingNav": "Die Marketing-Navigatoren",
+    "visArch": "Die visuellen Architekten",
+    "dataScouts": "Die Daten-Scouts",
+    "expGuides": "Die Expeditions-Guides"
+  },
+  "ghosts": {
+    "q3RunRate": "Q3-Run-Rate",
+    "ltvCac": "LTV / CAC",
+    "grossMargin": "Bruttomarge",
+    "activeUsers": "Aktive Nutzer",
+    "botTraffic": "Bot-Traffic",
+    "chargebacks": "Rückbuchungen",
+    "spamSignups": "Spam-Registrierungen",
+    "botsFarms": "Bots & Farmen",
+    "verifiedRoas": "Verifizierter ROAS",
+    "recoveredSpend": "Rückgewonnener Spend",
+    "ourClients": "Unsere Kunden",
+    "renderingTerrain": "Terrain wird gerendert"
   }
 }

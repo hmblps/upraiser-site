@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useTransform, MotionValue } from "framer-motion";
@@ -8,6 +9,7 @@ interface FraudParticleFilterProps {
 }
 
 export function FraudParticleFilter({ progress }: FraudParticleFilterProps) {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isReducedMotion = useReducedMotion();
@@ -229,7 +231,7 @@ export function FraudParticleFilter({ progress }: FraudParticleFilterProps) {
           className="fold-chart-ghost fold-chart-ghost--float"
           style={{ opacity: opacityGhost1, top: '25%', left: '15%' }}
         >
-          <span className="fold-chart-ghost-label" data-ghost-theme="red">Bots & Farms</span>
+          <span className="fold-chart-ghost-label" data-ghost-theme="red">{t("ghosts.botsFarms", "Bots & Farms")}</span>
           <span className="fold-chart-ghost-value" data-ghost-theme="red">47.0%</span>
         </motion.div>
 
@@ -237,7 +239,7 @@ export function FraudParticleFilter({ progress }: FraudParticleFilterProps) {
           className="fold-chart-ghost fold-chart-ghost--float"
           style={{ opacity: opacityGhost2, top: '65%', left: '22%', animationDelay: '1s' }}
         >
-          <span className="fold-chart-ghost-label" data-ghost-theme="red">Spam Signups</span>
+          <span className="fold-chart-ghost-label" data-ghost-theme="red">{t("ghosts.spamSignups", "Spam Signups")}</span>
           <span className="fold-chart-ghost-value" data-ghost-theme="red">35.0%</span>
         </motion.div>
 
@@ -245,7 +247,7 @@ export function FraudParticleFilter({ progress }: FraudParticleFilterProps) {
           className="fold-chart-ghost fold-chart-ghost--float fraud-ghost-toned"
           style={{ opacity: opacityGhost1, top: '35%', left: '60%', animationDelay: '0.5s' }}
         >
-          <span className="fold-chart-ghost-label" data-ghost-theme="gold">Verified ROAS</span>
+          <span className="fold-chart-ghost-label" data-ghost-theme="gold">{t("ghosts.verifiedRoas", "Verified ROAS")}</span>
           <span className="fold-chart-ghost-value" data-ghost-theme="gold">100%</span>
         </motion.div>
         
@@ -253,7 +255,7 @@ export function FraudParticleFilter({ progress }: FraudParticleFilterProps) {
           className="fold-chart-ghost fold-chart-ghost--float fraud-ghost-toned"
           style={{ opacity: opacityGhost2, top: '70%', left: '70%', animationDelay: '1.5s' }}
         >
-          <span className="fold-chart-ghost-label" data-ghost-theme="gold">Recovered Spend</span>
+          <span className="fold-chart-ghost-label" data-ghost-theme="gold">{t("ghosts.recoveredSpend", "Recovered Spend")}</span>
           <span className="fold-chart-ghost-value" data-ghost-theme="gold">18.5%</span>
         </motion.div>
       </div>

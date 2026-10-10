@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function AboutUsSection() {
+  const { t } = useTranslation();
 
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
@@ -120,7 +122,7 @@ export function AboutUsSection() {
       <div className="page-container relative z-10 py-16">
         <div className="section-header relative">
           <div className="absolute -inset-x-8 -inset-y-4 z-[-1] pointer-events-none backdrop-blur-md" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
-          <p className="section-label">The Expedition Crew</p>
+          <p className="section-label">{t("misc.expeditionCrew", "The Expedition Crew")}</p>
           <h2 className="section-title max-w-4xl text-balance">
             Elevating Your business to the absolute summit
           </h2>
@@ -140,31 +142,31 @@ export function AboutUsSection() {
           <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6 lg:gap-x-12 lg:gap-y-8 relative">
             <div className="absolute -inset-8 z-[-1] pointer-events-none backdrop-blur-sm" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
             <div>
-              <h3 className="font-semibold text-fg text-sm mb-1">The Engineering Basecamp</h3>
+              <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.engBasecamp", "The Engineering Basecamp")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
                 Anti-fraud and tracking architects securing Your path, ensuring absolute data integrity and clean traffic.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-fg text-sm mb-1">The Marketing Navigators</h3>
+              <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.marketingNav", "The Marketing Navigators")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
                 Media veterans plotting the optimal, verified route to Your exact audience across complex digital terrains.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-fg text-sm mb-1">The Visual Architects</h3>
+              <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.visArch", "The Visual Architects")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
                 UX/UI designers translating complex strategies into high-converting assets that actively drive user action.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-fg text-sm mb-1">The Data Scouts</h3>
+              <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.dataScouts", "The Data Scouts")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
                 Analysts uncovering hidden growth vectors, monitoring metrics, and optimizing Your budgets in real-time.
               </p>
             </div>
             <div className="sm:col-span-2">
-              <h3 className="font-semibold text-fg text-sm mb-1">The Expedition Guides</h3>
+              <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.expGuides", "The Expedition Guides")}</h3>
               <p className="text-muted text-sm leading-relaxed max-w-xl text-balance">
                 Dedicated account managers ensuring transparent communication, seamless workflow, and steady momentum at every stage of the climb.
               </p>

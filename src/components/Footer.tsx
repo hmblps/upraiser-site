@@ -25,7 +25,7 @@ export const Footer = memo(function Footer() {
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             <div>
-              <h4 className="footer-heading">Explore</h4>
+              <h4 className="footer-heading">{t("misc.explore", "Explore")}</h4>
               <ul className="mt-4 space-y-2">
                 {footerLinks.explore.map((link) => (
                   <li key={link.href}>
@@ -37,7 +37,7 @@ export const Footer = memo(function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="footer-heading">Company</h4>
+              <h4 className="footer-heading">{t("misc.company", "Company")}</h4>
               <ul className="mt-4 space-y-2">
                 {footerLinks.company.map((link) => (
                   <li key={`${link.label}-${link.href}`}>

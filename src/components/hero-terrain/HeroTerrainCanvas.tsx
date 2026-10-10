@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState , useMemo } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
@@ -18,6 +19,7 @@ import { HERO_ASCENT_DEFAULTS, type AscentPath, type ScrollState, type ThemeMode
 export { HERO_ASCENT_DEFAULTS, EXPEDITION_ASCENT } from "./shared";
 
 function HeroLoadingPortal({ show }: { show: boolean }) {
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   
@@ -48,7 +50,7 @@ function HeroLoadingPortal({ show }: { show: boolean }) {
                 <Navigation className="h-6 w-6 md:h-12 md:w-12 text-accent" strokeWidth={2} />
               </div>
             </motion.div>
-            <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg/70 animate-pulse">Rendering Terrain</span>
+            <span className="text-xs font-medium uppercase tracking-[0.3em] text-fg/70 animate-pulse">{t("ghosts.renderingTerrain", "Rendering Terrain")}</span>
           </div>
         </motion.div>
       ) : null}

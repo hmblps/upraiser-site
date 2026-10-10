@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { primaryCta } from "../data/liveContent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -15,6 +16,7 @@ import { Reveal } from "./motion/Reveal";
  * • theme-switch hint ("See the other story") rendered beside it
  */
 export function HomePilotCta() {
+  const { t } = useTranslation();
   const { toggleTheme, theme } = useTheme();
   const { scrollTo } = useScroll();
   const containerRef = useRef<HTMLElement>(null);
@@ -57,10 +59,10 @@ export function HomePilotCta() {
         <Reveal>
           <div className="flex flex-col items-start gap-8 border-t border-border/70 pt-8 max-w-xl">
             <div>
-              <p className="section-label">Next step</p>
-              <h2 className="section-heading">Ready to be Upraised?</h2>
+              <p className="section-label">{t("misc.nextStep", "Next step")}</p>
+              <h2 className="section-heading">{t("misc.readyUpraised", "Ready to be Upraised?")}</h2>
               <p className="copy mt-3">
-                Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.
+                {t("misc.briefRoute", "Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.")}
               </p>
             </div>
 

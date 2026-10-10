@@ -99,7 +99,7 @@ export function CaseDetailArticle({ item, showCta = false, className = "" }: Cas
       </div>
 
       <div ref={resultsRef} className="case-detail-results case-detail-results--hero mt-8">
-        <p className="section-label">Results</p>
+        <p className="section-label">{t("misc.results", "Results")}</p>
         <h2 className="case-detail-hero-title">{headline}</h2>
         <div className="case-detail-results__grid">
           

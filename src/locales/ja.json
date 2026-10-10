@@ -951,5 +951,44 @@
   "heroLede": {
     "growth": "私たちは、絶対的なアトリビューション証明を持つグローバルなパフォーマンスキャンペーンを実行します。",
     "infrastructure": "私たちは、絶対的なアトリビューション証明を持つアプリやエージェンシー向けに、透明性の高いメディアバイイングパイプラインを構築します。"
+  },
+  "misc": {
+    "results": "実績",
+    "volumeIndex": "ボリューム指数",
+    "kpiEvent": "KPIイベント",
+    "programmatic": "プログラマティック",
+    "ctv": "コネクテッドTV",
+    "social": "ソーシャル広告",
+    "oem": "OEM & ダイレクト",
+    "nextStep": "次のステップ",
+    "readyUpraised": "UPRAISERで飛躍する準備はできていますか？",
+    "briefRoute": "ルートの概要をお知らせください：業種、GEO、KPIイベント。机上のスライドではなく、緻密に策定された実行ルートでお応えします。",
+    "explore": "探索",
+    "company": "企業情報",
+    "basecamp": "Basecamp London",
+    "uk": "United Kingdom",
+    "directComm": "ダイレクトコミュニケーション",
+    "verifiedComp": "認証済みコンプライアンス & パートナー",
+    "agencyPartner": "エージェンシーパートナー",
+    "expeditionCrew": "遠征クルー",
+    "engBasecamp": "エンジニアリング・ベースキャンプ",
+    "marketingNav": "マーケティング・ナビゲーター",
+    "visArch": "ビジュアル・アーキテクト",
+    "dataScouts": "データ・スカウト",
+    "expGuides": "遠征ガイド"
+  },
+  "ghosts": {
+    "q3RunRate": "Q3ランレート",
+    "ltvCac": "LTV / CAC",
+    "grossMargin": "粗利益率",
+    "activeUsers": "アクティブユーザー",
+    "botTraffic": "ボットトラフィック",
+    "chargebacks": "チャージバック",
+    "spamSignups": "スパム登録",
+    "botsFarms": "ボット & ファーム",
+    "verifiedRoas": "検証済みROAS",
+    "recoveredSpend": "回収済み広告費",
+    "ourClients": "クライアント企業",
+    "renderingTerrain": "地形をレンダリング中"
   }
 }

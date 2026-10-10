@@ -169,7 +169,7 @@ export function CasePreviewCard({
         <div className="mt-auto pt-4 mb-2 shrink-0 w-full">
           <Sparkline trend={item.trend} accent={item.brand.accent} id={item.id} />
           <div className="flex justify-between items-center mt-1 text-[0.5625rem] text-muted tracking-wider uppercase font-bold">
-            <span>Volume Index</span>
+            <span>{t("misc.volumeIndex", "Volume Index")}</span>
             <span>12W Scale</span>
           </div>
         </div>

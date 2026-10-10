@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { CSSProperties } from "react";
 
 import type { CaseStudy } from "../data/cases";
@@ -9,6 +10,7 @@ type CaseBrandHeaderProps = {
 };
 
 export function CaseBrandHeader({ item, compact = false }: CaseBrandHeaderProps) {
+  const { t } = useTranslation();
   const { brand } = item;
   const meta = [item.vertical, item.paymentModel, item.geos].join(" · ");
 
@@ -44,7 +46,7 @@ export function CaseBrandHeader({ item, compact = false }: CaseBrandHeaderProps)
             <p className="case-brand-header__headline">{item.headline}</p>
           ) : null}
           <p className="case-brand-header__event">
-            <span className="case-brand-header__event-label">KPI event</span>
+            <span className="case-brand-header__event-label">{t("misc.kpiEvent", "KPI event")}</span>
             <code className="case-brand-header__event-value">{item.kpiEvent}</code>
           </p>
         </div>

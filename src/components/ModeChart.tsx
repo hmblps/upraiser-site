@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { FraudScrollChart } from "./FraudScrollChart";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
@@ -61,19 +62,20 @@ type GhostMetric = {
 };
 
 const GROWTH_GHOSTS: GhostMetric[] = [
-  { id: "g1", label: "Q3 Run Rate", left: "28%", mobileLeft: "10%", originY: 62, mobileOriginY: 65, drift: 24, duration: 6, delay: 0, format: (t) => `$${(lerp(2.1, 14.4, t)).toFixed(1)}M` },
-  { id: "g2", label: "LTV / CAC", left: "45%", mobileLeft: "35%", originY: 34, mobileOriginY: 55, drift: -18, duration: 8, delay: 1.5, format: (t) => `${(lerp(1.2, 3.8, t)).toFixed(1)}x` },
-  { id: "g3", label: "Gross Margin", left: "62%", mobileLeft: "60%", originY: 48, mobileOriginY: 75, drift: 20, duration: 7, delay: 0.8, format: (t) => `${Math.round(lerp(24, 78, t))}%` },
-  { id: "g4", label: "Active Users", left: "75%", mobileLeft: "80%", originY: 22, mobileOriginY: 45, drift: -22, duration: 6.5, delay: 2, format: (t) => `${(lerp(12, 145, t)).toFixed(0)}K` },
+  { id: "q3RunRate", label: "Q3 Run Rate", left: "28%", mobileLeft: "10%", originY: 62, mobileOriginY: 65, drift: 24, duration: 6, delay: 0, format: (t) => `$${(lerp(2.1, 14.4, t)).toFixed(1)}M` },
+  { id: "ltvCac", label: "LTV / CAC", left: "45%", mobileLeft: "35%", originY: 34, mobileOriginY: 55, drift: -18, duration: 8, delay: 1.5, format: (t) => `${(lerp(1.2, 3.8, t)).toFixed(1)}x` },
+  { id: "grossMargin", label: "Gross Margin", left: "62%", mobileLeft: "60%", originY: 48, mobileOriginY: 75, drift: 20, duration: 7, delay: 0.8, format: (t) => `${Math.round(lerp(24, 78, t))}%` },
+  { id: "activeUsers", label: "Active Users", left: "75%", mobileLeft: "80%", originY: 22, mobileOriginY: 45, drift: -22, duration: 6.5, delay: 2, format: (t) => `${(lerp(12, 145, t)).toFixed(0)}K` },
 ];
 
 const FRAUD_GHOSTS: GhostMetric[] = [
-  { id: "f1", label: "Bot Traffic", left: "32%", mobileLeft: "12%", originY: 28, mobileOriginY: 50, drift: 20, duration: 6.5, delay: 0, format: (t) => `${(lerp(48, 2, t)).toFixed(1)}%` },
-  { id: "f2", label: "Chargebacks", left: "48%", mobileLeft: "45%", originY: 42, mobileOriginY: 65, drift: -16, duration: 7.5, delay: 1.2, format: (t) => `$${(lerp(120, 14, t)).toFixed(0)}K` },
-  { id: "f3", label: "Spam Signups", left: "66%", mobileLeft: "75%", originY: 25, mobileOriginY: 45, drift: 22, duration: 8, delay: 0.5, format: (t) => `${Math.round(lerp(8500, 120, t))}` },
+  { id: "botTraffic", label: "Bot Traffic", left: "32%", mobileLeft: "12%", originY: 28, mobileOriginY: 50, drift: 20, duration: 6.5, delay: 0, format: (t) => `${(lerp(48, 2, t)).toFixed(1)}%` },
+  { id: "chargebacks", label: "Chargebacks", left: "48%", mobileLeft: "45%", originY: 42, mobileOriginY: 65, drift: -16, duration: 7.5, delay: 1.2, format: (t) => `$${(lerp(120, 14, t)).toFixed(0)}K` },
+  { id: "spamSignups", label: "Spam Signups", left: "66%", mobileLeft: "75%", originY: 25, mobileOriginY: 45, drift: 22, duration: 8, delay: 0.5, format: (t) => `${Math.round(lerp(8500, 120, t))}` },
 ];
 
 function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: MotionValue<number> }) {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLSpanElement>(null);
   
   const [isMobile, setIsMobile] = useState(false);
@@ -124,7 +126,7 @@ function GhostBubble({ metric, morph }: { metric: GhostMetric; morph: MotionValu
       <span className="fold-chart-ghost-value">
         <span ref={containerRef}></span>
       </span>
-      <span className="fold-chart-ghost-label">{metric.label}</span>
+      <span className="fold-chart-ghost-label">{t(`ghosts.${metric.id}`, metric.label)}</span>
     </GhostBubbleMotion>
   );
 }

@@ -172,15 +172,15 @@ export function Contact() {
 
                   <div className="contact-sidebar hidden md:flex flex-col">
                     <div>
-                      <h2 className="contact-sidebar__title">Basecamp London</h2>
+                      <h2 className="contact-sidebar__title">{t("misc.basecamp", "Basecamp London")}</h2>
                       <address className="copy mt-2 space-y-1 not-italic">
                         <p className="font-medium text-fg">Upraiser Agency LLP</p>
                         <p>128 City Road, London EC1V 2NX</p>
-                        <p>United Kingdom</p>
+                        <p>{t("misc.uk", "United Kingdom")}</p>
                       </address>
                     </div>
                     <div>
-                      <h2 className="contact-sidebar__title">Direct Communications</h2>
+                      <h2 className="contact-sidebar__title">{t("misc.directComm", "Direct Communications")}</h2>
                       <p className="copy mt-2">
                         Direct Operator Contact:{" "}
                         <a href="mailto:info@upraiser.co.uk" className="text-fg underline hover:text-accent">
@@ -189,7 +189,7 @@ export function Contact() {
                       </p>
                     </div>
                     <div>
-                      <h2 className="contact-sidebar__title">Verified Compliance & Partners</h2>
+                      <h2 className="contact-sidebar__title">{t("misc.verifiedComp", "Verified Compliance & Partners")}</h2>
                       <ul className="copy mt-2 space-y-3">
                         <li>
                           <strong className="font-medium text-fg">Official Lenovo Partner:</strong> We work directly
@@ -276,7 +276,7 @@ export function Contact() {
                         <ContactFormField label="Company Type" id="companyType" disabled={status === "loading"}>
                           <select value={form.companyType} onChange={(e) => setForm({ ...form, companyType: e.target.value })}>
                             <option value="brand">App Brand / Developer</option>
-                            <option value="agency">Agency Partner</option>
+                            <option value="agency">{t("misc.agencyPartner", "Agency Partner")}</option>
                             <option value="vendor">Ad Tech Platform / Vendor</option>
                           </select>
                         </ContactFormField>
