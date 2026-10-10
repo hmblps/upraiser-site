@@ -299,7 +299,7 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
           <div className="w-full grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10 xl:gap-14">
             <div className="hidden lg:block" />
             <div className="hero-stats-wrap flex flex-col w-full pointer-events-auto">
-              <p className="section-label hero-fly-label text-left w-full block mb-6">UPRAISER · Charting the Ascent</p>
+              <p className="section-label hero-fly-label text-left w-full block mb-6">{t("hero.chartingAscent", "UPRAISER · Charting the Ascent")}</p>
               <div ref={setStatsRef} className="hero-stats overflow-visible px-0 pb-1">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
