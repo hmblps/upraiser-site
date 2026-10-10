@@ -951,5 +951,44 @@
   "heroLede": {
     "growth": "我们操盘全球效果战役，提供绝对确凿的归因证据。",
     "infrastructure": "我们为应用与代理机构构建透明的媒介采买管道，提供绝对确凿的归因证据。"
+  },
+  "misc": {
+    "results": "结果",
+    "volumeIndex": "体量指数",
+    "kpiEvent": "KPI事件",
+    "programmatic": "程序化",
+    "ctv": "互联电视 (CTV)",
+    "social": "社交广告",
+    "oem": "OEM 与 直投",
+    "nextStep": "下一步",
+    "readyUpraised": "准备好跃升了吗？",
+    "briefRoute": "概述路线：垂直领域、GEO、KPI事件 —— 我们会回复一份定制方案，而不是千篇一律的PPT。",
+    "explore": "探索",
+    "company": "公司",
+    "basecamp": "Basecamp London",
+    "uk": "United Kingdom",
+    "directComm": "直接沟通",
+    "verifiedComp": "合规与合作伙伴认证",
+    "agencyPartner": "代理商合作伙伴",
+    "expeditionCrew": "探险队成员",
+    "engBasecamp": "工程大本营",
+    "marketingNav": "营销领航员",
+    "visArch": "视觉架构师",
+    "dataScouts": "数据侦察员",
+    "expGuides": "探险向导"
+  },
+  "ghosts": {
+    "q3RunRate": "Q3 Run Rate",
+    "ltvCac": "LTV / CAC",
+    "grossMargin": "毛利率",
+    "activeUsers": "活跃用户",
+    "botTraffic": "机器人流量",
+    "chargebacks": "拒付退款",
+    "spamSignups": "垃圾注册",
+    "botsFarms": "机器人与刷量农场",
+    "verifiedRoas": "真实 ROAS",
+    "recoveredSpend": "挽回预算",
+    "ourClients": "我们的客户",
+    "renderingTerrain": "渲染地形中"
   }
 }

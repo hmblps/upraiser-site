@@ -951,5 +951,44 @@
   "heroLede": {
     "growth": "Nous pilotons des campagnes de performance mondiales avec une preuve absolue d'attribution.",
     "infrastructure": "Nous bâtissons des pipelines d'achat média transparents pour les applications et les agences avec une preuve absolue d'attribution."
+  },
+  "misc": {
+    "results": "Résultats",
+    "volumeIndex": "Indice de Volume",
+    "kpiEvent": "Événement KPI",
+    "programmatic": "Programmatique",
+    "ctv": "Télévision Connectée",
+    "social": "Publicités Sociales",
+    "oem": "OEM & Direct",
+    "nextStep": "Prochaine étape",
+    "readyUpraised": "Prêt à être Upraised ?",
+    "briefRoute": "Décrivez la route : verticale, GEO, événement KPI — nous vous répondrons avec un plan sur mesure, pas une présentation générique.",
+    "explore": "Explorer",
+    "company": "Entreprise",
+    "basecamp": "Basecamp London",
+    "uk": "United Kingdom",
+    "directComm": "Communications Directes",
+    "verifiedComp": "Conformité et Partenaires Vérifiés",
+    "agencyPartner": "Partenaire Agence",
+    "expeditionCrew": "L'Équipage de l'Expédition",
+    "engBasecamp": "Le Camp de Base Ingénierie",
+    "marketingNav": "Les Navigateurs Marketing",
+    "visArch": "Les Architectes Visuels",
+    "dataScouts": "Les Éclaireurs de Données",
+    "expGuides": "Les Guides d'Expédition"
+  },
+  "ghosts": {
+    "q3RunRate": "Q3 Run Rate",
+    "ltvCac": "LTV / CAC",
+    "grossMargin": "Marge Brute",
+    "activeUsers": "Utilisateurs Actifs",
+    "botTraffic": "Trafic de Bots",
+    "chargebacks": "Rétrofacturations",
+    "spamSignups": "Inscriptions Indésirables",
+    "botsFarms": "Bots & Fermes",
+    "verifiedRoas": "ROAS Vérifié",
+    "recoveredSpend": "Dépenses Récupérées",
+    "ourClients": "Nos Clients",
+    "renderingTerrain": "Rendu du Terrain"
   }
 }
