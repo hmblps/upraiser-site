@@ -951,5 +951,44 @@
   "heroLede": {
     "growth": "우리는 완벽한 어트리뷰션 증명을 바탕으로 글로벌 퍼포먼스 캠페인을 집행합니다.",
     "infrastructure": "우리는 완벽한 어트리뷰션 증명을 바탕으로 앱 및 에이전시를 위한 투명한 미디어 바잉 파이프라인을 구축합니다."
+  },
+  "misc": {
+    "results": "성과",
+    "volumeIndex": "볼륨 인덱스",
+    "kpiEvent": "KPI 이벤트",
+    "programmatic": "프로그래매틱",
+    "ctv": "커넥티드 TV",
+    "social": "소셜 광고",
+    "oem": "OEM & 다이렉트",
+    "nextStep": "다음 단계",
+    "readyUpraised": "UPRAISER와 함께 비상할 준비가 되셨습니까?",
+    "briefRoute": "루트를 브리핑하십시오: 버티컬, GEO, KPI 이벤트 — 단순한 제안서 덱이 아닌, 정밀하게 설계된 실행 경로로 답합니다.",
+    "explore": "둘러보기",
+    "company": "회사 소개",
+    "basecamp": "Basecamp London",
+    "uk": "United Kingdom",
+    "directComm": "다이렉트 커뮤니케이션",
+    "verifiedComp": "검증된 컴플라이언스 & 파트너",
+    "agencyPartner": "에이전시 파트너",
+    "expeditionCrew": "원정 크루",
+    "engBasecamp": "엔지니어링 베이스캠프",
+    "marketingNav": "마케팅 내비게이터",
+    "visArch": "비주얼 아키텍트",
+    "dataScouts": "데이터 스카우트",
+    "expGuides": "원정 가이드"
+  },
+  "ghosts": {
+    "q3RunRate": "Q3 런레이트",
+    "ltvCac": "LTV / CAC",
+    "grossMargin": "매출총이익",
+    "activeUsers": "활성 유저",
+    "botTraffic": "봇 트래픽",
+    "chargebacks": "차지백",
+    "spamSignups": "스팸 가입",
+    "botsFarms": "봇 & 팜",
+    "verifiedRoas": "검증된 ROAS",
+    "recoveredSpend": "회수된 광고비",
+    "ourClients": "고객사",
+    "renderingTerrain": "지형 렌더링 중"
   }
 }
