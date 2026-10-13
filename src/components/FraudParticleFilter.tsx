@@ -231,7 +231,7 @@ export function FraudParticleFilter({ progress }: FraudParticleFilterProps) {
           className="fold-chart-ghost fold-chart-ghost--float"
           style={{ opacity: opacityGhost1, top: '25%', left: '15%' }}
         >
-          <span className="fold-chart-ghost-label" data-ghost-theme="red">{t("ghosts.botsFarms", "Bots & Farms")}</span>
+          <span className="fold-chart-ghost-label" data-ghost-theme="red">{t("ghosts.botsFarms", "Bots & Farms Eliminated")}</span>
           <span className="fold-chart-ghost-value" data-ghost-theme="red">47.0%</span>
         </motion.div>
 
@@ -239,7 +239,7 @@ export function FraudParticleFilter({ progress }: FraudParticleFilterProps) {
           className="fold-chart-ghost fold-chart-ghost--float"
           style={{ opacity: opacityGhost2, top: '65%', left: '22%', animationDelay: '1s' }}
         >
-          <span className="fold-chart-ghost-label" data-ghost-theme="red">{t("ghosts.spamSignups", "Spam Signups")}</span>
+          <span className="fold-chart-ghost-label" data-ghost-theme="red">{t("ghosts.spamSignups", "Spam Signups Blocked")}</span>
           <span className="fold-chart-ghost-value" data-ghost-theme="red">35.0%</span>
         </motion.div>
 

@@ -987,12 +987,13 @@
     "activeUsers": "Aktive Nutzer",
     "botTraffic": "Bot-Traffic",
     "chargebacks": "Rückbuchungen",
-    "spamSignups": "Spam-Registrierungen",
-    "botsFarms": "Bots & Farmen",
+    "spamSignups": "Spam-Registrierungen blockiert",
+    "botsFarms": "Bots & Farmen eliminiert",
     "verifiedRoas": "Verifizierter ROAS",
     "recoveredSpend": "Rückgewonnener Spend",
     "ourClients": "Unsere Kunden",
-    "renderingTerrain": "Terrain wird gerendert"
+    "renderingTerrain": "Terrain wird gerendert",
+    "clickFlood": "Click Flood blockiert"
   },
   "channelsCta": {
     "label": "Die Kanäle",

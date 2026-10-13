@@ -998,11 +998,12 @@
     "activeUsers": "Active Users",
     "botTraffic": "Bot Traffic",
     "chargebacks": "Chargebacks",
-    "spamSignups": "Spam Signups",
-    "botsFarms": "Bots & Farms",
+    "spamSignups": "Spam Signups Blocked",
+    "botsFarms": "Bots & Farms Eliminated",
     "verifiedRoas": "Verified ROAS",
     "recoveredSpend": "Recovered Spend",
     "ourClients": "Our Clients",
-    "renderingTerrain": "Rendering Terrain"
+    "renderingTerrain": "Rendering Terrain",
+    "clickFlood": "Click Flood Blocked"
   }
 }

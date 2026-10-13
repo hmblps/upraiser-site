@@ -987,12 +987,13 @@
     "activeUsers": "활성 유저",
     "botTraffic": "봇 트래픽",
     "chargebacks": "차지백",
-    "spamSignups": "스팸 가입",
-    "botsFarms": "봇 & 팜",
+    "spamSignups": "스팸 가입 차단",
+    "botsFarms": "봇 & 팜 제거",
     "verifiedRoas": "검증된 ROAS",
     "recoveredSpend": "회수된 광고비",
     "ourClients": "고객사",
-    "renderingTerrain": "지형 렌더링 중"
+    "renderingTerrain": "지형 렌더링 중",
+    "clickFlood": "클릭 플러드 차단"
   },
   "channelsCta": {
     "label": "채널",

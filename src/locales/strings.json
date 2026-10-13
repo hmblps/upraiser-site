@@ -1,36 +1,4 @@
 {
-  "· Required": {
-    "zh": "· 必填",
-    "ja": "· 必須",
-    "ko": "· 필수",
-    "es": "· Obligatorio",
-    "de": "· Erforderlich",
-    "fr": "· Requis"
-  },
-  "[ REQUEST PILOT ]": {
-    "zh": "[ 申请试点测试 ]",
-    "ja": "[ パイロット配信をリクエスト ]",
-    "ko": "[ 파일럿 요청 ]",
-    "es": "[ SOLICITAR PILOTO ]",
-    "de": "[ PILOTPROJEKT ANFRAGEN ]",
-    "fr": "[ DEMANDER UN PILOTE ]"
-  },
-  "[ Upraiser Briefing Room ]": {
-    "zh": "[ UPRAISER 需求接入室 ]",
-    "ja": "[ UPRAISER ブリーフィングルーム ]",
-    "ko": "[ UPRAISER 브리핑 룸 ]",
-    "es": "[ Sala de Briefing UPRAISER ]",
-    "de": "[ UPRAISER Briefing Room ]",
-    "fr": "[ Briefing Room UPRAISER ]"
-  },
-  "% drift": {
-    "zh": "% 偏差率",
-    "ja": "% 乖離",
-    "ko": "% 오차",
-    "es": "% de desviación",
-    "de": "% Abweichung",
-    "fr": "% de dérive"
-  },
   "$100,000 to $500,000": {
     "zh": "$100,000 至 $500,000",
     "ja": "$100,000〜$500,000",
@@ -54,6 +22,14 @@
     "es": "$500,000+",
     "de": "$500,000+",
     "fr": "$500,000+"
+  },
+  "% drift": {
+    "zh": "% 偏差率",
+    "ja": "% 乖離",
+    "ko": "% 오차",
+    "es": "% de desviación",
+    "de": "% Abweichung",
+    "fr": "% de dérive"
   },
   "1 to 15 employees": {
     "zh": "1 至 15 名员工",
@@ -95,14 +71,6 @@
     "de": "128 City Road, London EC1V 2NX, United Kingdom",
     "fr": "128 City Road, London EC1V 2NX, United Kingdom"
   },
-  "12W Scale": {
-    "zh": "12W 规模化",
-    "ja": "12W スケール",
-    "ko": "12주 스케일",
-    "es": "Escala en 12 semanas",
-    "de": "12W-Skalierung",
-    "fr": "Scale en 12 semaines"
-  },
   "12W SCALE": {
     "zh": "12 周规模",
     "ja": "12週スケール",
@@ -110,6 +78,14 @@
     "es": "ESCALA 12W",
     "de": "12W-SKALIERUNG",
     "fr": "ÉCHELLE 12S"
+  },
+  "12W Scale": {
+    "zh": "12W 规模化",
+    "ja": "12W スケール",
+    "ko": "12주 스케일",
+    "es": "Escala en 12 semanas",
+    "de": "12W-Skalierung",
+    "fr": "Scale en 12 semaines"
   },
   "15 to 50 employees": {
     "zh": "15 至 50 名员工",
@@ -119,14 +95,6 @@
     "de": "15 bis 50 Mitarbeiter",
     "fr": "15 à 50 employés"
   },
-  "150K+ installs and 45K+ account links over four months. Activation rate held above 30%.": {
-    "zh": "历时 4 个月实现 150K+ 次安装与 45K+ 个账户关联，激活率稳稳保持在 30% 以上。",
-    "ja": "4ヶ月間で15万件以上のインストールと45,000件以上の口座連携を達成。アクティベーション率30%超を維持。",
-    "ko": "4개월간 15만 건 이상의 인스톨 및 4만 5천 건 이상의 계좌 연동 달성. 30% 이상의 활성화율 유지.",
-    "es": "Más de 150K instalaciones y más de 45K cuentas vinculadas en cuatro meses. Tasa de activación sostenida por encima del 30%.",
-    "de": "Über 150K Installs und über 45K verknüpfte Konten in vier Monaten. Aktivierungsrate stabil über 30 % gehalten.",
-    "fr": "Plus de 150K installations et plus de 45K comptes connectés en quatre mois. Taux d'activation maintenu au-dessus de 30 %."
-  },
   "150K+ UK installs with a clean activation trail. Month-end matched the Roku delivery log.": {
     "zh": "交付具备清晰激活链路的 150K+ 笔英国安装，月末数据与 Roku 投放日志完美吻合。",
     "ja": "明確なアクティベーション履歴を伴う15万件以上の英国インストールを達成。月末実績はRokuの配信ログと完全に一致。",
@@ -134,6 +102,14 @@
     "es": "Más de 150K instalaciones en el Reino Unido con un rastro limpio de activación. El cierre de mes coincidió con el log de entrega de Roku.",
     "de": "Über 150K UK-Installs mit lückenloser Aktivierungskette. Monatsabschluss stimmte exakt mit dem Roku-Auslieferungs-Log überein.",
     "fr": "Plus de 150K installations au Royaume-Uni avec une traçabilité d'activation irréprochable. Clôture mensuelle parfaitement alignée sur les logs de diffusion Roku."
+  },
+  "150K+ installs and 45K+ account links over four months. Activation rate held above 30%.": {
+    "zh": "历时 4 个月实现 150K+ 次安装与 45K+ 个账户关联，激活率稳稳保持在 30% 以上。",
+    "ja": "4ヶ月間で15万件以上のインストールと45,000件以上の口座連携を達成。アクティベーション率30%超を維持。",
+    "ko": "4개월간 15만 건 이상의 인스톨 및 4만 5천 건 이상의 계좌 연동 달성. 30% 이상의 활성화율 유지.",
+    "es": "Más de 150K instalaciones y más de 45K cuentas vinculadas en cuatro meses. Tasa de activación sostenida por encima del 30%.",
+    "de": "Über 150K Installs und über 45K verknüpfte Konten in vier Monaten. Aktivierungsrate stabil über 30 % gehalten.",
+    "fr": "Plus de 150K installations et plus de 45K comptes connectés en quatre mois. Taux d'activation maintenu au-dessus de 30 %."
   },
   "150M+ impressions, 1.2M interactions, 1.1M likes. Organic download quality improved in target GEOs.": {
     "zh": "收获超 1.5 亿次展示曝光、120 万次互动与 110 万次点赞。目标 GEOs 内的自然下载质量显著提高。",
@@ -183,14 +159,6 @@
     "de": "Über 25K tägliche Installs in UK, FR, ES, IT und DE. ROAS direkt an den Checkout gekoppelt.",
     "fr": "Plus de 25K installations quotidiennes au Royaume-Uni, en France, en Espagne, en Italie et en Allemagne. ROAS directement indexé sur le panier d'achat."
   },
-  "3–5× engagement vs standard display": {
-    "zh": "3–5× 互动率 vs 标准展示广告",
-    "ja": "標準ディスプレイ広告比で3–5×のエンゲージメント",
-    "ko": "표준 디스플레이 대비 3–5× 참여도",
-    "es": "3–5× más engagement vs. display estándar",
-    "de": "3–5× Engagement vs. Standard-Display",
-    "fr": "3–5× plus d'engagement vs display standard"
-  },
   "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%.": {
     "zh": "覆盖波兰、英国、德国及其他 12 个 GEOs，日均新增 32,000+ 次安装。D1 ROAS 达 20%，D7 留存率达 50%。",
     "ja": "ポーランド、英国、ドイツを含む15以上のGEOsで日次32,000件以上のインストールを達成。D1 ROAS 20%、D7継続率50%を記録。",
@@ -198,6 +166,14 @@
     "es": "Más de 32.000 instalaciones diarias en PL, UK, DE y 12 GEOs adicionales. ROAS D1 del 20%, retención D7 del 50%.",
     "de": "Über 32.000 tägliche Installs in PL, UK, DE und 12 weiteren GEOs. D1-ROAS 20 %, D7-Retention 50 %.",
     "fr": "Plus de 32 000 installations quotidiennes en PL, UK, DE et 12 autres GEOs. ROAS J1 de 20 %, rétention J7 de 50 %."
+  },
+  "3–5× engagement vs standard display": {
+    "zh": "3–5× 互动率 vs 标准展示广告",
+    "ja": "標準ディスプレイ広告比で3–5×のエンゲージメント",
+    "ko": "표준 디스플레이 대비 3–5× 참여도",
+    "es": "3–5× más engagement vs. display estándar",
+    "de": "3–5× Engagement vs. Standard-Display",
+    "fr": "3–5× plus d'engagement vs display standard"
   },
   "50 to 200 employees": {
     "zh": "50 至 200 名员工",
@@ -238,6 +214,30 @@
     "es": "Un historial verificado de rendimiento algorítmico superior.",
     "de": "Eine verifizierte Bilanz algorithmischer Spitzenleistung.",
     "fr": "Un historique vérifié de surperformance algorithmique."
+  },
+  "API Limit": {
+    "zh": "API 限额",
+    "ja": "API上限",
+    "ko": "API 한도",
+    "es": "Límite de API",
+    "de": "API-Limit",
+    "fr": "Limite API"
+  },
+  "ARPU LIFT": {
+    "zh": "ARPU 提升",
+    "ja": "ARPU向上",
+    "ko": "ARPU 상승",
+    "es": "INCREMENTO DE ARPU",
+    "de": "ARPU-STEIGERUNG",
+    "fr": "HAUSSE DE L'ARPU"
+  },
+  "ASCENT": {
+    "zh": "攀登",
+    "ja": "上昇",
+    "ko": "도약",
+    "es": "ASCENSO",
+    "de": "AUFSTIEG",
+    "fr": "ASCENSION"
   },
   "Absolute Compliance · Raw Hardware Logs · SDK Trails": {
     "zh": "绝对合规 · 底层硬件日志 · SDK 追踪链路",
@@ -287,6 +287,21 @@
     "de": "Aktive Nutzer",
     "fr": "Utilisateurs actifs"
   },
+  "Ad Ops Lead": {
+    "zh": "Ad Ops 负责人",
+    "ja": "Ad Ops リード",
+    "ko": "Ad Ops 리드",
+    "es": "Responsable de Ad Ops",
+    "fr": "Responsable Ad Ops"
+  },
+  "Ad Tech Platform / Vendor": {
+    "zh": "Ad Tech 平台 / 服务商",
+    "ja": "アドテクプラットフォーム / ベンダー",
+    "ko": "Ad Tech 플랫폼 / 벤더",
+    "es": "Plataforma / Proveedor de Ad Tech",
+    "de": "Ad-Tech-Plattform / Anbieter",
+    "fr": "Plateforme / Fournisseur Ad Tech"
+  },
   "Ad closed": {
     "zh": "广告已关闭",
     "ja": "広告を閉じました",
@@ -311,21 +326,6 @@
     "de": "Werbeformate",
     "fr": "Formats publicitaires"
   },
-  "Ad Ops Lead": {
-    "zh": "Ad Ops 负责人",
-    "ja": "Ad Ops リード",
-    "ko": "Ad Ops 리드",
-    "es": "Responsable de Ad Ops",
-    "fr": "Responsable Ad Ops"
-  },
-  "Ad Tech Platform / Vendor": {
-    "zh": "Ad Tech 平台 / 服务商",
-    "ja": "アドテクプラットフォーム / ベンダー",
-    "ko": "Ad Tech 플랫폼 / 벤더",
-    "es": "Plataforma / Proveedor de Ad Tech",
-    "de": "Ad-Tech-Plattform / Anbieter",
-    "fr": "Plateforme / Fournisseur Ad Tech"
-  },
   "Adjust/AppsFlyer endpoints": {
     "zh": "Adjust/AppsFlyer 端点",
     "ja": "Adjust/AppsFlyer エンドポイント",
@@ -341,22 +341,6 @@
     "es": "Partner publicitario",
     "de": "Werbepartner",
     "fr": "Partenaire publicitaire"
-  },
-  "af_purchase": {
-    "zh": "af_purchase",
-    "ja": "af_purchase",
-    "ko": "af_purchase",
-    "es": "af_purchase",
-    "de": "af_purchase",
-    "fr": "af_purchase"
-  },
-  "af_search through af_purchase mapped pre-flight. Weekly reconciliation cadence.": {
-    "zh": "投放前完成从 af_search 到 af_purchase 的全链路映射，并按周执行对账节奏。",
-    "ja": "配信前にaf_searchからaf_purchaseまでのイベントをマッピング。週次の照合サイクルを確立。",
-    "ko": "캠페인 개시 전 af_search부터 af_purchase까지 전 구간 이벤트 사전 매핑. 주간 정산 프로세스 확립.",
-    "es": "Mapeo previo desde af_search hasta af_purchase antes del vuelo. Conciliación con frecuencia semanal.",
-    "de": "af_search bis af_purchase vor Kampagnenstart gemappt. Wöchentlicher Abstimmungsrhythmus.",
-    "fr": "Mapping complet de af_search à af_purchase avant diffusion. Cadence de réconciliation hebdomadaire."
   },
   "Agency Partner": {
     "zh": "代理商合作伙伴",
@@ -398,14 +382,6 @@
     "de": "Analysten, die versteckte Wachstumsvektoren aufdecken, Metriken überwachen und Deine Budgets in Echtzeit optimieren.",
     "fr": "Des analystes qui révèlent les vecteurs de croissance cachés, surveillent les métriques et optimisent Vos budgets en temps réel."
   },
-  "and": {
-    "zh": "与",
-    "ja": "および",
-    "ko": "및",
-    "es": "y",
-    "de": "und",
-    "fr": "et"
-  },
   "Android trading app Global": {
     "zh": "全球 Android 交易应用",
     "ja": "Android トレーディングアプリ（グローバル）",
@@ -429,14 +405,6 @@
     "es": "Arquitectos de antifraude y tracking que aseguran su camino, garantizando una integridad absoluta de datos y tráfico limpio.",
     "de": "Anti-Fraud- und Tracking-Architekten, die Deinen Weg sichern und für absolute Datenintegrität sowie sauberen Traffic sorgen.",
     "fr": "Des architectes de l'anti-fraude et du tracking qui sécurisent Votre parcours, garantissant une intégrité absolue des données et un trafic irréprochable."
-  },
-  "API Limit": {
-    "zh": "API 限额",
-    "ja": "API上限",
-    "ko": "API 한도",
-    "es": "Límite de API",
-    "de": "API-Limit",
-    "fr": "Limite API"
   },
   "App / Web Owner": {
     "zh": "App / 网站主",
@@ -494,14 +462,6 @@
     "de": "Seid Ihr ein SaaS-Tool oder ein Full-Service-Performance-Desk?",
     "fr": "Êtes-vous un outil SaaS ou un desk de performance complet ?"
   },
-  "ARPU LIFT": {
-    "zh": "ARPU 提升",
-    "ja": "ARPU向上",
-    "ko": "ARPU 상승",
-    "es": "INCREMENTO DE ARPU",
-    "de": "ARPU-STEIGERUNG",
-    "fr": "HAUSSE DE L'ARPU"
-  },
   "Arvanix": {
     "zh": "Arvanix",
     "ja": "Arvanix",
@@ -517,14 +477,6 @@
     "es": "Como partner oficial de agencia Lenovo, nos integramos directamente en el flujo de aprovisionamiento de fábrica. Aseguramos preinstalaciones de alto volumen y sin sobrecostes en dispositivos Android premium a nivel mundial, garantizando la presencia de las apps en el momento exacto del desempaquetado del dispositivo.",
     "de": "Als offizieller Lenovo Agenturpartner haben wir uns direkt in den Bereitstellungsprozess ab Werk integriert. Wir sicherten hochvolumige Vorinstallationen ohne Reseller-Aufschläge auf Premium-Android-Geräten weltweit – damit Apps exakt im Moment des Auspackens einsatzbereit sind.",
     "fr": "En tant qu'agence partenaire officielle Lenovo, nous nous sommes intégrés directement au flux de configuration en usine. Nous avons obtenu des volumes élevés de pré-installations sans marge d'intermédiaire sur des appareils Android haut de gamme dans le monde entier, garantissant la présence des applications dès le premier déballage de l'appareil."
-  },
-  "ASCENT": {
-    "zh": "攀登",
-    "ja": "上昇",
-    "ko": "도약",
-    "es": "ASCENSO",
-    "de": "AUFSTIEG",
-    "fr": "ASCENSION"
   },
   "Attach brief (.pdf, .jpg, .png) | max 5MB": {
     "zh": "附加需求简报 (.pdf, .jpg, .png) | 最大 5MB",
@@ -734,6 +686,14 @@
     "de": "Bots & Farmen",
     "fr": "Bots & Fermes"
   },
+  "Bots & Farms Eliminated": {
+    "zh": "机器人与刷量农场已清除",
+    "ja": "ボット & ファーム排除",
+    "ko": "봇 & 팜 제거",
+    "es": "Bots y Granjas Eliminados",
+    "de": "Bots & Farmen eliminiert",
+    "fr": "Bots & Fermes éliminés"
+  },
   "Brand": {
     "zh": "品牌",
     "ja": "ブランド",
@@ -750,14 +710,6 @@
     "de": "Markenpartnerschaft",
     "fr": "Partenariats de marque"
   },
-  "Brand-safe whitelist inventory": {
-    "zh": "品牌安全白名单广告位",
-    "ja": "ブランドセーフなホワイトリスト在庫",
-    "ko": "브랜드 안전 화이트리스트 인벤토리",
-    "es": "Inventario de lista blanca seguro para la marca",
-    "de": "Brand-safe Whitelist-Inventar",
-    "fr": "Inventaire whitelist garanti brand-safe"
-  },
   "Brand, vertical, GEO, KPI event, and payment models structured brilliantly for procurement review.": {
     "zh": "涵盖品牌、垂直赛道、GEO、KPI 事件及结算模式，条分缕析，专为采购审计而生。",
     "ja": "ブランド、業種バーティカル、GEO、KPIイベント、支払いモデルを調達監査向けに明確に構造化。",
@@ -765,6 +717,14 @@
     "es": "Marca, vertical, GEO, evento KPI y modelos de pago estructurados con precisión para revisión de compras.",
     "de": "Marke, Vertical, GEO, KPI-Event und Abrechnungsmodelle – strukturiert für die Prüfung durch das Procurement.",
     "fr": "Marque, vertical, GEOs, événement KPI et modèles de rémunération clairement structurés pour l'analyse des achats."
+  },
+  "Brand-safe whitelist inventory": {
+    "zh": "品牌安全白名单广告位",
+    "ja": "ブランドセーフなホワイトリスト在庫",
+    "ko": "브랜드 안전 화이트리스트 인벤토리",
+    "es": "Inventario de lista blanca seguro para la marca",
+    "de": "Brand-safe Whitelist-Inventar",
+    "fr": "Inventaire whitelist garanti brand-safe"
   },
   "Brief received": {
     "zh": "已收到需求简报",
@@ -846,6 +806,117 @@
     "de": "SEIN KANN.",
     "fr": "PEUT ÊTRE FULGURANTE."
   },
+  "CGC Studio & Paid Distribution": {
+    "zh": "CGC 工作室 & 付费分发",
+    "ja": "CGCスタジオ & ペイド配信",
+    "ko": "CGC 스튜디오 & 유료 배포",
+    "es": "CGC Studio y distribución de pago",
+    "fr": "Studio CGC & distribution payante"
+  },
+  "CLARITY": {
+    "zh": "透明",
+    "ja": "透明性",
+    "ko": "투명성",
+    "es": "CLARIDAD",
+    "de": "KLARHEIT",
+    "fr": "CLARTÉ"
+  },
+  "COHORT LTV": {
+    "zh": "同期群 LTV",
+    "ja": "コホートLTV",
+    "ko": "코호트 LTV",
+    "es": "LTV POR COHORTE",
+    "de": "KOHORTEN-LTV",
+    "fr": "LTV PAR COHORTE"
+  },
+  "CPA HELD": {
+    "zh": "保持目标 CPA",
+    "ja": "CPA維持",
+    "ko": "CPA 유지",
+    "es": "CPA MANTENIDO",
+    "de": "CPA GEHALTEN",
+    "fr": "CPA MAINTENU"
+  },
+  "CPA Reduction": {
+    "zh": "CPA 降幅",
+    "ja": "CPA削減率",
+    "ko": "CPA 절감",
+    "es": "Reducción de CPA",
+    "de": "CPA-Senkung",
+    "fr": "Réduction du CPA"
+  },
+  "CPA that holds at scale": {
+    "zh": "规模扩张下依然稳固的 CPA",
+    "ja": "規模拡大時にも崩れないCPA",
+    "ko": "규모가 커져도 유지되는 CPA",
+    "es": "CPA que se mantiene a escala",
+    "de": "CPA, der bei Skalierung stabil bleibt",
+    "fr": "Un CPA qui tient à grande échelle"
+  },
+  "CPC / CPM with MMP conversion attribution": {
+    "zh": "配备 MMP 转化归因的 CPC / CPM",
+    "ja": "MMPコンバージョンアトリビューション対応のCPC / CPM",
+    "ko": "MMP 전환 기여 기반 CPC / CPM",
+    "es": "CPC / CPM con atribución de conversiones por MMP",
+    "de": "CPC / CPM mit MMP-Conversion-Attribution",
+    "fr": "CPC / CPM avec attribution des conversions MMP"
+  },
+  "CPI": {
+    "zh": "CPI",
+    "ja": "CPI",
+    "ko": "CPI",
+    "es": "CPI",
+    "de": "CPI",
+    "fr": "CPI"
+  },
+  "CTV Spot": {
+    "zh": "CTV 贴片广告",
+    "ja": "CTVスポット",
+    "ko": "CTV 스팟",
+    "es": "Spot de CTV",
+    "de": "CTV-Spot",
+    "fr": "Spot CTV"
+  },
+  "CTV Video": {
+    "zh": "CTV 视频广告",
+    "ja": "CTV動画",
+    "ko": "CTV 비디오",
+    "es": "Video CTV",
+    "de": "CTV-Video",
+    "fr": "Vidéo CTV"
+  },
+  "CTV installs with post-install account activation": {
+    "zh": "CTV 安装与安装后账户关联的全链路激活",
+    "ja": "CTV経由のインストールとインストール後の口座連携アクティベーション",
+    "ko": "설치 후 계좌 연동까지 견인하는 CTV 인스톨",
+    "es": "Instalaciones en CTV con activación de cuenta postinstalación",
+    "de": "CTV-Installs mit nachgelagerter Kontoaktivierung",
+    "fr": "Installations CTV avec activation de compte post-installation"
+  },
+  "CTV video bought to the same outcome stack as OEM. Activation trails and month-end that close cleanly.": {
+    "zh": "按 OEM 同等成效标准采购的 CTV 视频。激活链路清晰，月末对账严谨闭环。",
+    "ja": "OEMと同等の成果スタックで買い付けるCTV動画。確実に追跡可能なアクティベーションと、正確に完了する月末処理。",
+    "ko": "OEM과 동일한 성과 스택 기준으로 집행되는 CTV 비디오. 명확한 활성화 추적 경로와 깔끔한 월말 정산.",
+    "es": "Video CTV adquirido bajo el mismo stack de resultados que OEM. Registros de activación y cierres de mes impecables.",
+    "de": "CTV-Video, eingekauft nach demselben Outcome-Stack wie OEM. Aktivierungs-Trails und Monatsabschlüsse, die sauber aufgehen.",
+    "fr": "Vidéo CTV achetée selon le même modèle de résultats que l'OEM. Pistes d'activation et clôtures de fin de mois parfaitement nettes."
+  },
+  "CTV waste in non-UK regions inflates CPI without moving activation.": {
+    "zh": "非英国地区的 CTV 流量浪费会推高 CPI，却无法推动任何实际激活。",
+    "ja": "英国外地域へのCTV配信の無駄は、アクティベーションを向上させることなくCPIを高騰させます。",
+    "ko": "영국 외 지역의 CTV 예산 누수는 활성화율 개선 없이 CPI만 가중시킵니다.",
+    "es": "El desperdicio en CTV fuera del Reino Unido infla el CPI sin impulsar la activación.",
+    "de": "CTV-Streuverluste außerhalb Großbritanniens treiben den CPI in die Höhe, ohne Aktivierungen zu steigern.",
+    "fr": "La déperdition CTV hors du Royaume-Uni gonfle le CPI sans générer d'activations."
+  },
+  "CVR": {
+    "zh": "CVR",
+    "ja": "CVR",
+    "ko": "CVR",
+    "es": "CVR",
+    "de": "CVR",
+    "fr": "CVR"
+  },
   "Caps tied to OrderPlaced on com.shopee.ph and com.shopee.br. Funnel event latency minimized in the bid loop.": {
     "zh": "将预算上限直接绑定 com.shopee.ph 和 com.shopee.br 上的 OrderPlaced 事件，并将竞价闭环中的漏斗事件延迟降至极致。",
     "ja": "com.shopee.phおよびcom.shopee.brにおけるOrderPlacedイベントに予算上限を連動。入札ループ内でのファネルイベント遅延を極小化。",
@@ -886,29 +957,6 @@
     "de": "Case Studies",
     "fr": "Études de cas"
   },
-  "case study": {
-    "zh": "案例研究",
-    "ja": "導入事例",
-    "ko": "성공 사례",
-    "es": "caso de estudio",
-    "de": "Case Study",
-    "fr": "étude de cas"
-  },
-  "cases": {
-    "zh": "案例",
-    "ja": "事例",
-    "ko": "사례",
-    "es": "casos",
-    "de": "Cases",
-    "fr": "études de cas"
-  },
-  "CGC Studio & Paid Distribution": {
-    "zh": "CGC 工作室 & 付费分发",
-    "ja": "CGCスタジオ & ペイド配信",
-    "ko": "CGC 스튜디오 & 유료 배포",
-    "es": "CGC Studio y distribución de pago",
-    "fr": "Studio CGC & distribution payante"
-  },
   "Challenge, approach, and result organized into short blocks tied purely to a verifiable device-level event.": {
     "zh": "将挑战、应对方案与成效凝练为简短板块，全部精准绑定至可验证的设备级事件。",
     "ja": "課題、アプローチ、成果を、デバイスレベルで検証可能な実イベントに直結した端的な構成で整理。",
@@ -941,13 +989,13 @@
     "de": "Karte. Route. Gipfel.",
     "fr": "Tracer. Déployer. Conquérir."
   },
-  "CLARITY": {
-    "zh": "透明",
-    "ja": "透明性",
-    "ko": "투명성",
-    "es": "CLARIDAD",
-    "de": "KLARHEIT",
-    "fr": "CLARTÉ"
+  "Clean Supply Path · 0.4ms Filtration · Transparent Data": {
+    "zh": "纯净供应路径 · 0.4ms 实时过滤 · 数据透明无欺",
+    "ja": "クリーンなサプライパス · 0.4msフィルタリング · 透明性の高いデータ",
+    "ko": "투명한 공급 경로 · 0.4ms 필터링 · 투명한 데이터",
+    "es": "Ruta de suministro limpia · Filtrado en 0,4 ms · Datos transparentes",
+    "de": "Sauberer Supply Path · 0,4ms-Filterung · Transparente Daten",
+    "fr": "Supply path vérifié · Filtrage en 0,4 ms · Données transparentes"
   },
   "Clean spend": {
     "zh": "纯净投放支出",
@@ -957,14 +1005,6 @@
     "de": "Sauberer Spend",
     "fr": "Dépenses assainies"
   },
-  "Clean Supply Path · 0.4ms Filtration · Transparent Data": {
-    "zh": "纯净供应路径 · 0.4ms 实时过滤 · 数据透明无欺",
-    "ja": "クリーンなサプライパス · 0.4msフィルタリング · 透明性の高いデータ",
-    "ko": "투명한 공급 경로 · 0.4ms 필터링 · 투명한 데이터",
-    "es": "Ruta de suministro limpia · Filtrado en 0,4 ms · Datos transparentes",
-    "de": "Sauberer Supply Path · 0,4ms-Filterung · Transparente Daten",
-    "fr": "Supply path vérifié · Filtrage en 0,4 ms · Données transparentes"
-  },
   "Click Flood": {
     "zh": "Click Flood",
     "ja": "Click Flood",
@@ -972,6 +1012,14 @@
     "es": "Click Flood",
     "de": "Click Flood",
     "fr": "Click Flood"
+  },
+  "Click Flood Blocked": {
+    "zh": "点击洪泛已拦截",
+    "ja": "クリックフラッド遮断",
+    "ko": "클릭 플러드 차단",
+    "es": "Click Flood Bloqueado",
+    "de": "Click Flood blockiert",
+    "fr": "Click Flood bloqué"
   },
   "Clicks": {
     "zh": "点击量",
@@ -1018,14 +1066,6 @@
     "ja": "コード",
     "ko": "코드",
     "es": "Código"
-  },
-  "COHORT LTV": {
-    "zh": "同期群 LTV",
-    "ja": "コホートLTV",
-    "ko": "코호트 LTV",
-    "es": "LTV POR COHORTE",
-    "de": "KOHORTEN-LTV",
-    "fr": "LTV PAR COHORTE"
   },
   "Coming soon": {
     "zh": "即将推出",
@@ -1169,46 +1209,6 @@
     "de": "Geschäftliche E-Mail-Adresse *",
     "fr": "E-mail professionnel *"
   },
-  "CPA HELD": {
-    "zh": "保持目标 CPA",
-    "ja": "CPA維持",
-    "ko": "CPA 유지",
-    "es": "CPA MANTENIDO",
-    "de": "CPA GEHALTEN",
-    "fr": "CPA MAINTENU"
-  },
-  "CPA Reduction": {
-    "zh": "CPA 降幅",
-    "ja": "CPA削減率",
-    "ko": "CPA 절감",
-    "es": "Reducción de CPA",
-    "de": "CPA-Senkung",
-    "fr": "Réduction du CPA"
-  },
-  "CPA that holds at scale": {
-    "zh": "规模扩张下依然稳固的 CPA",
-    "ja": "規模拡大時にも崩れないCPA",
-    "ko": "규모가 커져도 유지되는 CPA",
-    "es": "CPA que se mantiene a escala",
-    "de": "CPA, der bei Skalierung stabil bleibt",
-    "fr": "Un CPA qui tient à grande échelle"
-  },
-  "CPC / CPM with MMP conversion attribution": {
-    "zh": "配备 MMP 转化归因的 CPC / CPM",
-    "ja": "MMPコンバージョンアトリビューション対応のCPC / CPM",
-    "ko": "MMP 전환 기여 기반 CPC / CPM",
-    "es": "CPC / CPM con atribución de conversiones por MMP",
-    "de": "CPC / CPM mit MMP-Conversion-Attribution",
-    "fr": "CPC / CPM avec attribution des conversions MMP"
-  },
-  "CPI": {
-    "zh": "CPI",
-    "ja": "CPI",
-    "ko": "CPI",
-    "es": "CPI",
-    "de": "CPI",
-    "fr": "CPI"
-  },
   "Creative Lab": {
     "zh": "创意实验室",
     "ja": "クリエイティブラボ",
@@ -1217,14 +1217,6 @@
     "de": "Creative Lab",
     "fr": "Creative Lab"
   },
-  "Creative optimization": {
-    "zh": "素材优化",
-    "ja": "クリエイティブ最適化",
-    "ko": "크리에이티브 최적화",
-    "es": "Optimización creativa",
-    "de": "Creative-Optimierung",
-    "fr": "Optimisation créative"
-  },
   "Creative Studio": {
     "zh": "创意工作室",
     "ja": "クリエイティブスタジオ",
@@ -1232,6 +1224,14 @@
     "es": "Creative Studio",
     "fr": "Studio créatif",
     "de": "Creative Studio"
+  },
+  "Creative optimization": {
+    "zh": "素材优化",
+    "ja": "クリエイティブ最適化",
+    "ko": "크리에이티브 최적화",
+    "es": "Optimización creativa",
+    "de": "Creative-Optimierung",
+    "fr": "Optimisation créative"
   },
   "Creative testing": {
     "zh": "素材测试",
@@ -1273,46 +1273,6 @@
     "de": "Creator",
     "fr": "Créateurs"
   },
-  "CTV installs with post-install account activation": {
-    "zh": "CTV 安装与安装后账户关联的全链路激活",
-    "ja": "CTV経由のインストールとインストール後の口座連携アクティベーション",
-    "ko": "설치 후 계좌 연동까지 견인하는 CTV 인스톨",
-    "es": "Instalaciones en CTV con activación de cuenta postinstalación",
-    "de": "CTV-Installs mit nachgelagerter Kontoaktivierung",
-    "fr": "Installations CTV avec activation de compte post-installation"
-  },
-  "CTV Spot": {
-    "zh": "CTV 贴片广告",
-    "ja": "CTVスポット",
-    "ko": "CTV 스팟",
-    "es": "Spot de CTV",
-    "de": "CTV-Spot",
-    "fr": "Spot CTV"
-  },
-  "CTV Video": {
-    "zh": "CTV 视频广告",
-    "ja": "CTV動画",
-    "ko": "CTV 비디오",
-    "es": "Video CTV",
-    "de": "CTV-Video",
-    "fr": "Vidéo CTV"
-  },
-  "CTV video bought to the same outcome stack as OEM. Activation trails and month-end that close cleanly.": {
-    "zh": "按 OEM 同等成效标准采购的 CTV 视频。激活链路清晰，月末对账严谨闭环。",
-    "ja": "OEMと同等の成果スタックで買い付けるCTV動画。確実に追跡可能なアクティベーションと、正確に完了する月末処理。",
-    "ko": "OEM과 동일한 성과 스택 기준으로 집행되는 CTV 비디오. 명확한 활성화 추적 경로와 깔끔한 월말 정산.",
-    "es": "Video CTV adquirido bajo el mismo stack de resultados que OEM. Registros de activación y cierres de mes impecables.",
-    "de": "CTV-Video, eingekauft nach demselben Outcome-Stack wie OEM. Aktivierungs-Trails und Monatsabschlüsse, die sauber aufgehen.",
-    "fr": "Vidéo CTV achetée selon le même modèle de résultats que l'OEM. Pistes d'activation et clôtures de fin de mois parfaitement nettes."
-  },
-  "CTV waste in non-UK regions inflates CPI without moving activation.": {
-    "zh": "非英国地区的 CTV 流量浪费会推高 CPI，却无法推动任何实际激活。",
-    "ja": "英国外地域へのCTV配信の無駄は、アクティベーションを向上させることなくCPIを高騰させます。",
-    "ko": "영국 외 지역의 CTV 예산 누수는 활성화율 개선 없이 CPI만 가중시킵니다.",
-    "es": "El desperdicio en CTV fuera del Reino Unido infla el CPI sin impulsar la activación.",
-    "de": "CTV-Streuverluste außerhalb Großbritanniens treiben den CPI in die Höhe, ohne Aktivierungen zu steigern.",
-    "fr": "La déperdition CTV hors du Royaume-Uni gonfle le CPI sans générer d'activations."
-  },
   "Curated Exchanges · ROI Focus · Event Optimization": {
     "zh": "精选 Exchange · 聚焦 ROI · 深度事件优化",
     "ja": "厳選エクスチェンジ · ROIフォーカス · イベント最適化",
@@ -1329,14 +1289,6 @@
     "de": "Aktuelle Sprache",
     "fr": "Langue actuelle"
   },
-  "CVR": {
-    "zh": "CVR",
-    "ja": "CVR",
-    "ko": "CVR",
-    "es": "CVR",
-    "de": "CVR",
-    "fr": "CVR"
-  },
   "D7 ROAS Lift": {
     "zh": "D7 ROAS 增幅",
     "ja": "D7 ROAS向上",
@@ -1345,14 +1297,6 @@
     "de": "D7-ROAS-Steigerung",
     "fr": "Hausse du ROAS J7"
   },
-  "Daily installs": {
-    "zh": "每日安装量",
-    "ja": "日次インストール数",
-    "ko": "일일 인스톨",
-    "es": "Instalaciones diarias",
-    "de": "Tägliche Installs",
-    "fr": "Installations quotidiennes"
-  },
   "DAILY INSTALLS": {
     "zh": "每日安装量",
     "ja": "日次インストール数",
@@ -1360,6 +1304,30 @@
     "es": "INSTALACIONES DIARIAS",
     "de": "TÄGLICHE INSTALLS",
     "fr": "INSTALLATIONS QUOTIDIENNES"
+  },
+  "DAY 7 ROAS": {
+    "zh": "第 7 天 ROAS",
+    "ja": "7日目ROAS",
+    "ko": "7일차 ROAS",
+    "es": "ROAS DÍA 7",
+    "de": "TAG 7 ROAS",
+    "fr": "ROAS JOUR 7"
+  },
+  "DSP": {
+    "zh": "DSP",
+    "ja": "DSP",
+    "ko": "DSP",
+    "es": "DSP",
+    "de": "DSP",
+    "fr": "DSP"
+  },
+  "Daily installs": {
+    "zh": "每日安装量",
+    "ja": "日次インストール数",
+    "ko": "일일 인스톨",
+    "es": "Instalaciones diarias",
+    "de": "Tägliche Installs",
+    "fr": "Installations quotidiennes"
   },
   "Data Audit Protocols:": {
     "zh": "数据审计协议：",
@@ -1393,14 +1361,6 @@
     "de": "Datentransparenz und gelebte Compliance als Prinzip",
     "fr": "Transparence des données et conformité native"
   },
-  "DAY 7 ROAS": {
-    "zh": "第 7 天 ROAS",
-    "ja": "7日目ROAS",
-    "ko": "7일차 ROAS",
-    "es": "ROAS DÍA 7",
-    "de": "TAG 7 ROAS",
-    "fr": "ROAS JOUR 7"
-  },
   "Day-7 retention": {
     "zh": "Day-7 留存率",
     "ja": "7日目継続率",
@@ -1432,14 +1392,6 @@
     "es": "Desplegar el mix",
     "de": "Mix ausrollen",
     "fr": "Déployer le mix"
-  },
-  "deposit_crm_ftd": {
-    "zh": "deposit_crm_ftd",
-    "ja": "deposit_crm_ftd",
-    "ko": "deposit_crm_ftd",
-    "es": "deposit_crm_ftd",
-    "de": "deposit_crm_ftd",
-    "fr": "deposit_crm_ftd"
   },
   "Details": {
     "zh": "详情",
@@ -1473,14 +1425,6 @@
     "de": "Frequenzsteuerung auf Geräteebene",
     "fr": "Contrôle de la répétition au niveau de l'appareil"
   },
-  "different technical worlds": {
-    "zh": "不同技术领域的操盘手",
-    "ja": "スペシャリストを結集しました",
-    "ko": "서로 다른 기술 영역에서 왔습니다",
-    "es": "distintos mundos técnicos",
-    "de": "verschiedenen Technologiewelten",
-    "fr": "différents univers techniques"
-  },
   "Direct Access · Factory ROM · Verified Logs": {
     "zh": "直连通道 · 出厂 ROM · 验证日志",
     "ja": "ダイレクトアクセス · 工場ROM · 検証済みログ",
@@ -1497,6 +1441,14 @@
     "de": "Direkte Kommunikation",
     "fr": "Communications Directes"
   },
+  "Direct Operator Contact:": {
+    "zh": "直连运营团队：",
+    "ja": "担当オペレーター直通:",
+    "ko": "담당 운영자 직통 연락처:",
+    "es": "Contacto directo con el operador:",
+    "de": "Direkter Operator-Kontakt:",
+    "fr": "Contact direct avec les opérateurs :"
+  },
   "Direct exchange safelist": {
     "zh": "交易所直连白名单",
     "ja": "ダイレクトエクスチェンジ・セーフリスト",
@@ -1512,14 +1464,6 @@
     "es": "Preinstalaciones directas de fábrica a escala global diaria.",
     "de": "Direkte Vorinstallationen ab Werk bei globaler täglicher Skalierung.",
     "fr": "Pré-installations directes en usine à échelle mondiale quotidienne."
-  },
-  "Direct Operator Contact:": {
-    "zh": "直连运营团队：",
-    "ja": "担当オペレーター直通:",
-    "ko": "담당 운영자 직통 연락처:",
-    "es": "Contacto directo con el operador:",
-    "de": "Direkter Operator-Kontakt:",
-    "fr": "Contact direct avec les opérateurs :"
   },
   "Direct publisher": {
     "zh": "直签媒体主",
@@ -1553,13 +1497,13 @@
     "de": "Downstream-Events",
     "fr": "Événements post-install"
   },
-  "DSP": {
-    "zh": "DSP",
-    "ja": "DSP",
-    "ko": "DSP",
-    "es": "DSP",
-    "de": "DSP",
-    "fr": "DSP"
+  "E-commerce expansion": {
+    "zh": "跨境电商扩张",
+    "ja": "Eコマース事業拡大",
+    "ko": "이커머스 확장",
+    "es": "Expansión e-commerce",
+    "de": "E-Commerce-Expansion",
+    "fr": "Expansion e-commerce"
   },
   "E-commerce · CPI · EU · 5 markets": {
     "zh": "电商 · CPI · EU · 5 个市场",
@@ -1569,14 +1513,6 @@
     "de": "E-commerce · CPI · EU · 5 Märkte",
     "fr": "E-commerce · CPI · EU · 5 marchés"
   },
-  "E-commerce expansion": {
-    "zh": "跨境电商扩张",
-    "ja": "Eコマース事業拡大",
-    "ko": "이커머스 확장",
-    "es": "Expansión e-commerce",
-    "de": "E-Commerce-Expansion",
-    "fr": "Expansion e-commerce"
-  },
   "EDAA Alignment:": {
     "zh": "EDAA 标准对齐：",
     "ja": "EDAA準拠:",
@@ -1584,6 +1520,22 @@
     "es": "Alineación con EDAA:",
     "de": "EDAA-Konformität:",
     "fr": "Alignement EDAA :"
+  },
+  "EU CPI with purchase/install floor >2%. af_purchase and af_add_to_cart in the bid loop.": {
+    "zh": "投放欧洲 CPI 并设定 >2% 的购买/安装底线，将 af_purchase 和 af_add_to_cart 深度纳入竞价闭环。",
+    "ja": "購入／インストール比率2%以上を最低基準とする欧州CPI配信。入札ループにaf_purchaseおよびaf_add_to_cartを組み込み。",
+    "ko": "설치 대비 구매율 2% 초과 하한선을 설정한 유럽 CPI 집행. 입찰 루프에 af_purchase 및 af_add_to_cart 반영.",
+    "es": "CPI en la UE con un umbral de compra/instalación >2%. af_purchase y af_add_to_cart integrados en el ciclo de puja.",
+    "de": "EU-weiter CPI mit Kauf/Install-Untergrenze von >2 %. af_purchase und af_add_to_cart direkt im Bid-Loop.",
+    "fr": "Campagnes CPI en Europe avec seuil d'achat/installation > 2 %. Intégration de af_purchase et af_add_to_cart dans la boucle d'enchères."
+  },
+  "EU markets": {
+    "zh": "欧洲市场",
+    "ja": "欧州市場数",
+    "ko": "EU 시장 수",
+    "es": "Mercados de la UE",
+    "de": "EU-Märkte",
+    "fr": "Marchés UE"
   },
   "Elevating Your business to the absolute summit": {
     "zh": "助您的业务登顶绝对巅峰",
@@ -1617,22 +1569,6 @@
     "de": "Equipment für transparentes Media Buying.",
     "fr": "L'infrastructure d'un achat média d'une transparence absolue."
   },
-  "EU CPI with purchase/install floor >2%. af_purchase and af_add_to_cart in the bid loop.": {
-    "zh": "投放欧洲 CPI 并设定 >2% 的购买/安装底线，将 af_purchase 和 af_add_to_cart 深度纳入竞价闭环。",
-    "ja": "購入／インストール比率2%以上を最低基準とする欧州CPI配信。入札ループにaf_purchaseおよびaf_add_to_cartを組み込み。",
-    "ko": "설치 대비 구매율 2% 초과 하한선을 설정한 유럽 CPI 집행. 입찰 루프에 af_purchase 및 af_add_to_cart 반영.",
-    "es": "CPI en la UE con un umbral de compra/instalación >2%. af_purchase y af_add_to_cart integrados en el ciclo de puja.",
-    "de": "EU-weiter CPI mit Kauf/Install-Untergrenze von >2 %. af_purchase und af_add_to_cart direkt im Bid-Loop.",
-    "fr": "Campagnes CPI en Europe avec seuil d'achat/installation > 2 %. Intégration de af_purchase et af_add_to_cart dans la boucle d'enchères."
-  },
-  "EU markets": {
-    "zh": "欧洲市场",
-    "ja": "欧州市場数",
-    "ko": "EU 시장 수",
-    "es": "Mercados de la UE",
-    "de": "EU-Märkte",
-    "fr": "Marchés UE"
-  },
   "Event-optimized campaigns across premium global exchanges.": {
     "zh": "贯通全球优质 Exchange 的核心事件加权投放。",
     "ja": "世界の上位エクスチェンジを網羅する、イベント最適化キャンペーン。",
@@ -1648,6 +1584,30 @@
     "es": "Compra ponderada por eventos",
     "de": "Event-gewichteter Einkauf",
     "fr": "Achat pondéré par événement"
+  },
+  "Every Format": {
+    "zh": "全广告形式",
+    "ja": "あらゆるフォーマット",
+    "ko": "모든 포맷",
+    "es": "Cada Formato",
+    "de": "Jedes Format",
+    "fr": "Chaque format"
+  },
+  "Every Format.": {
+    "zh": "全广告形式。",
+    "ja": "あらゆるフォーマット。",
+    "ko": "모든 포맷.",
+    "es": "Cada formato.",
+    "de": "Jedes Format.",
+    "fr": "Chaque format."
+  },
+  "Every Format. One Supply Path.": {
+    "zh": "全格式覆盖。唯一直供路径。",
+    "ja": "あらゆるフォーマット。単一のサプライパス。",
+    "ko": "모든 포맷. 단일 공급 경로.",
+    "es": "Cada formato. Una sola ruta de suministro.",
+    "de": "Jedes Format. Ein Lieferweg.",
+    "fr": "Chaque format. Un seul chemin d'approvisionnement."
   },
   "Every bid carries a verified receipt": {
     "zh": "每一次竞价，皆有核验回执",
@@ -1680,30 +1640,6 @@
     "es": "Cada partida de creadores mapeada a logs de alcance e interacción. Eliminación del gasto opaco en influencers.",
     "de": "Jeder Creator-Posten mit Reichweiten- und Interaktions-Logs abgeglichen. Intransparenter Influencer-Spend vollständig eliminiert.",
     "fr": "Chaque ligne budgétaire créateur rattachée aux logs de portée et d'interaction. Élimination des dépenses d'influence opaques."
-  },
-  "Every Format": {
-    "zh": "全广告形式",
-    "ja": "あらゆるフォーマット",
-    "ko": "모든 포맷",
-    "es": "Cada Formato",
-    "de": "Jedes Format",
-    "fr": "Chaque format"
-  },
-  "Every Format.": {
-    "zh": "全广告形式。",
-    "ja": "あらゆるフォーマット。",
-    "ko": "모든 포맷.",
-    "es": "Cada formato.",
-    "de": "Jedes Format.",
-    "fr": "Chaque format."
-  },
-  "Every Format. One Supply Path.": {
-    "zh": "全格式覆盖。唯一直供路径。",
-    "ja": "あらゆるフォーマット。単一のサプライパス。",
-    "ko": "모든 포맷. 단일 공급 경로.",
-    "es": "Cada formato. Una sola ruta de suministro.",
-    "de": "Jedes Format. Ein Lieferweg.",
-    "fr": "Chaque format. Un seul chemin d'approvisionnement."
   },
   "Every install tied to factory log. Low-retention cohorts cut before MMP ingest.": {
     "zh": "将每一次安装与硬件出厂日志强关联。在数据接入 MMP 之前即刻剔除低留存同群。",
@@ -1777,6 +1713,25 @@
     "de": "Alle Kanäle erkunden",
     "fr": "Explorer tous les canaux"
   },
+  "FAQ": {
+    "es": "Preguntas frecuentes"
+  },
+  "FTD": {
+    "zh": "FTD",
+    "ja": "FTD",
+    "ko": "FTD",
+    "es": "FTD",
+    "de": "FTD",
+    "fr": "FTD"
+  },
+  "FTDs": {
+    "ja": "FTDs",
+    "zh": "FTDs",
+    "ko": "FTDs",
+    "es": "FTDs",
+    "de": "FTDs",
+    "fr": "FTDs"
+  },
   "Factory / first-boot placement inventory": {
     "zh": "出厂预装 / 首次开机广告位资源",
     "ja": "出荷時・初回起動時のプレイスメント在庫",
@@ -1808,9 +1763,6 @@
     "es": "Ícono de la app Fanatics",
     "de": "Fanatics App-Icon",
     "fr": "Icône de l'application Fanatics"
-  },
-  "FAQ": {
-    "es": "Preguntas frecuentes"
   },
   "Featured and recommended slots inside OEM app stores. Intent already high, fraud filtered before delivery.": {
     "zh": "OEM 应用商店内的精选与推荐位。用户意向高，投放前已过滤虚假流量。",
@@ -1852,6 +1804,14 @@
     "de": "Zielgruppen für Financial Inclusion umfassen breite Segmente. Generische Creatives verbrennen Reichweite und verzerren den Kohorten-ROAS ohne striktes Mapping im MMP.",
     "fr": "L'inclusion financière touche des segments très variés. Les créations génériques gaspillent la portée et faussent le ROAS par cohorte si elles ne sont pas strictement associées dans le MMP."
   },
+  "Fintech app UK": {
+    "zh": "英国 FinTech 应用",
+    "ja": "FinTech アプリ（英国）",
+    "ko": "FinTech 앱 UK",
+    "es": "App FinTech UK",
+    "de": "FinTech-App UK",
+    "fr": "App FinTech Royaume-Uni"
+  },
   "Fintech · CPI · Global · OEM": {
     "zh": "Fintech · CPI · 全球 · OEM",
     "ja": "Fintech · CPI · Global · OEM",
@@ -1875,22 +1835,6 @@
     "es": "Fintech · Programática · MX",
     "de": "Fintech · Programmatic · MX",
     "fr": "Fintech · Programmatique · MX"
-  },
-  "Fintech app UK": {
-    "zh": "英国 FinTech 应用",
-    "ja": "FinTech アプリ（英国）",
-    "ko": "FinTech 앱 UK",
-    "es": "App FinTech UK",
-    "de": "FinTech-App UK",
-    "fr": "App FinTech Royaume-Uni"
-  },
-  "first_account_connected": {
-    "zh": "first_account_connected",
-    "ja": "first_account_connected",
-    "ko": "first_account_connected",
-    "es": "first_account_connected",
-    "de": "first_account_connected",
-    "fr": "first_account_connected"
   },
   "First-activation pre-installs on direct factory ROMs.": {
     "zh": "基于出厂原生 ROM 的首发预装。",
@@ -1972,14 +1916,6 @@
     "de": "Freelance-Marktplatz expandiert nach Kuwait, Saudi-Arabien und in die VAE. Neue Kulturen und neue CPI-Baselines.",
     "fr": "Marketplace de freelancing en expansion au Koweït, en Arabie saoudite et aux Émirats arabes unis. Nouvelles cultures et nouveaux repères CPI."
   },
-  "From in-app display to living-room CTV. Equipment for altitude on a direct supply path you can defend.": {
-    "zh": "从应用内展示广告到客厅 CTV。在无可挑剔的直达供应路径上，为您配备冲顶巅峰的专业装备。",
-    "ja": "アプリ内ディスプレイからリビングルームのCTVまで。正当性を証明できる直接のサプライパスで、高みを目指すための装備を提供します。",
-    "ko": "인앱 디스플레이부터 거실 CTV까지. 명확히 입증 가능한 직접 공급 경로를 통해 더 높은 도약에 필요한 역량을 제공합니다.",
-    "es": "Desde display in-app hasta CTV en la sala. Equipamiento para la altitud en una ruta directa de suministro que puede defender.",
-    "de": "Vom In-App-Display bis zum CTV im Wohnzimmer. Höhenausrüstung auf einem direkten Supply-Pfad, den Du verteidigen kannst.",
-    "fr": "Du display in-app à la CTV du salon. Un équipement taillé pour l'altitude sur un supply path direct que vous pouvez défendre."
-  },
   "From Programmatic and Social to Connected TV and OEM. Explore our interactive channel visualizations and see how we integrate fragmented traffic sources into one unified ecosystem with absolute attribution proof.": {
     "zh": "从程序化与社交广告到联网电视与 OEM。探索我们的互动渠道可视化图表，见证我们如何将碎片化的流量来源整合为具备绝对归因凭据的统一生态。",
     "ja": "プログラマティックやソーシャルからコネクテッドTV、OEMまで。インタラクティブなチャネル可視化を通じて、分断されたトラフィックを確実なアトリビューション検証を備えた単一のエコシステムへと統合する手法をご覧ください。",
@@ -1988,21 +1924,13 @@
     "de": "Von Programmatic und Social bis Connected TV und OEM. Erkunde unsere interaktiven Kanal-Visualisierungen und erlebe, wie wir fragmentierte Traffic-Quellen in ein einheitliches Ökosystem mit lückenlosem Attributionsnachweis integrieren.",
     "fr": "Du Programmatique et Social à la Télévision connectée et l'OEM. Explorez nos visualisations interactives de canaux et découvrez comment nous intégrons des sources de trafic fragmentées dans un écosystème unifié avec une preuve d'attribution absolue."
   },
-  "FTD": {
-    "zh": "FTD",
-    "ja": "FTD",
-    "ko": "FTD",
-    "es": "FTD",
-    "de": "FTD",
-    "fr": "FTD"
-  },
-  "FTDs": {
-    "ja": "FTDs",
-    "zh": "FTDs",
-    "ko": "FTDs",
-    "es": "FTDs",
-    "de": "FTDs",
-    "fr": "FTDs"
+  "From in-app display to living-room CTV. Equipment for altitude on a direct supply path you can defend.": {
+    "zh": "从应用内展示广告到客厅 CTV。在无可挑剔的直达供应路径上，为您配备冲顶巅峰的专业装备。",
+    "ja": "アプリ内ディスプレイからリビングルームのCTVまで。正当性を証明できる直接のサプライパスで、高みを目指すための装備を提供します。",
+    "ko": "인앱 디스플레이부터 거실 CTV까지. 명확히 입증 가능한 직접 공급 경로를 통해 더 높은 도약에 필요한 역량을 제공합니다.",
+    "es": "Desde display in-app hasta CTV en la sala. Equipamiento para la altitud en una ruta directa de suministro que puede defender.",
+    "de": "Vom In-App-Display bis zum CTV im Wohnzimmer. Höhenausrüstung auf einem direkten Supply-Pfad, den Du verteidigen kannst.",
+    "fr": "Du display in-app à la CTV du salon. Un équipement taillé pour l'altitude sur un supply path direct que vous pouvez défendre."
   },
   "Full-screen at natural breaks like level load, article end, or checkout. Scored pre-bid so high-bounce slots never clear the cap.": {
     "zh": "在关卡加载、文章结尾或结算等自然停顿处全屏呈现。竞价前即进行评分，确保高跳出率广告位绝不超限消耗。",
@@ -2020,26 +1948,13 @@
     "de": "Vollbild-Impact bei natürlichen Pausen",
     "fr": "Impact plein écran lors des pauses naturelles"
   },
-  "Gaming": {
-    "zh": "游戏",
-    "ja": "ゲーム",
-    "ko": "게이밍"
-  },
-  "Gaming · CPI · WW · 15 GEOs": {
-    "zh": "游戏 · CPI · WW · 15 个 GEOs",
-    "ja": "Gaming · CPI · WW · 15 GEOs",
-    "ko": "Gaming · CPI · WW · 15 GEOs",
-    "es": "Gaming · CPI · WW · 15 GEOs",
-    "de": "Gaming · CPI · WW · 15 GEOs",
-    "fr": "Gaming · CPI · WW · 15 GEOs"
-  },
-  "Gaming vertical": {
-    "zh": "游戏垂直赛道",
-    "ja": "ゲームバーティカル",
-    "ko": "게이밍 버티컬",
-    "es": "Vertical de gaming",
-    "de": "Gaming-Vertikale",
-    "fr": "Verticale gaming"
+  "GCC app scale after US proof-of-concept": {
+    "zh": "美区概念验证落地后，海湾（GCC）市场规模化扩张",
+    "ja": "米国での概念実証を経て、GCC市場におけるアプリ規模拡大を実現",
+    "ko": "미국 PoC 검증 이후 GCC 앱 확장",
+    "es": "Escalado de app en el GCC tras prueba de concepto en EE. UU.",
+    "de": "App-Skalierung in der GCC-Region nach US-Proof-of-Concept",
+    "fr": "Montée en échelle sur la région GCC après preuve de concept aux États-Unis"
   },
   "GCash": {
     "zh": "GCash",
@@ -2049,13 +1964,26 @@
     "de": "GCash",
     "fr": "GCash"
   },
-  "GCC app scale after US proof-of-concept": {
-    "zh": "美区概念验证落地后，海湾（GCC）市场规模化扩张",
-    "ja": "米国での概念実証を経て、GCC市場におけるアプリ規模拡大を実現",
-    "ko": "미국 PoC 검증 이후 GCC 앱 확장",
-    "es": "Escalado de app en el GCC tras prueba de concepto en EE. UU.",
-    "de": "App-Skalierung in der GCC-Region nach US-Proof-of-Concept",
-    "fr": "Montée en échelle sur la région GCC après preuve de concept aux États-Unis"
+  "Gaming": {
+    "zh": "游戏",
+    "ja": "ゲーム",
+    "ko": "게이밍"
+  },
+  "Gaming vertical": {
+    "zh": "游戏垂直赛道",
+    "ja": "ゲームバーティカル",
+    "ko": "게이밍 버티컬",
+    "es": "Vertical de gaming",
+    "de": "Gaming-Vertikale",
+    "fr": "Verticale gaming"
+  },
+  "Gaming · CPI · WW · 15 GEOs": {
+    "zh": "游戏 · CPI · WW · 15 个 GEOs",
+    "ja": "Gaming · CPI · WW · 15 GEOs",
+    "ko": "Gaming · CPI · WW · 15 GEOs",
+    "es": "Gaming · CPI · WW · 15 GEOs",
+    "de": "Gaming · CPI · WW · 15 GEOs",
+    "fr": "Gaming · CPI · WW · 15 GEOs"
   },
   "Generated 1B+ impressions with perfect ledger reconciliation. Volumes and user quality exceeded initial geo benchmarks.": {
     "zh": "创造超 10 亿次展示曝光，账目完全平账吻合。买量规模与用户质量均远超预设的区域基准。",
@@ -2169,6 +2097,13 @@
     "de": "Bruttomarge",
     "fr": "Marge brute"
   },
+  "Growth Lead": {
+    "zh": "增长负责人",
+    "ja": "グロースリード",
+    "ko": "그로스 리드",
+    "es": "Responsable de Growth",
+    "fr": "Lead Growth"
+  },
   "Growth designed for apps demanding more than installs": {
     "zh": "专为追求超越单纯安装量的应用打造的高效增长",
     "ja": "インストール以上の成果を求めるアプリのためのグロース",
@@ -2176,13 +2111,6 @@
     "es": "Crecimiento diseñado para apps que exigen más que instalaciones",
     "de": "Wachstum für Apps, die mehr als nur reine Installs fordern",
     "fr": "Une croissance pensée pour les apps qui exigent bien plus que des installations"
-  },
-  "Growth Lead": {
-    "zh": "增长负责人",
-    "ja": "グロースリード",
-    "ko": "그로스 리드",
-    "es": "Responsable de Growth",
-    "fr": "Lead Growth"
   },
   "Growth story →": {
     "zh": "增长历程 →",
@@ -2296,21 +2224,13 @@
     "de": "Ich akzeptiere die",
     "fr": "J'accepte les"
   },
-  "iGaming": {
-    "zh": "iGaming",
-    "ja": "iGaming",
-    "ko": "iGaming",
-    "es": "iGaming",
-    "de": "iGaming",
-    "fr": "iGaming"
-  },
-  "iGaming · CPI · US legal states": {
-    "zh": "iGaming · CPI · 美国合法州",
-    "ja": "iGaming · CPI · 米国合法州",
-    "ko": "iGaming · CPI · 미국 합법 주",
-    "es": "iGaming · CPI · US legal states",
-    "de": "iGaming · CPI · US legal states",
-    "fr": "iGaming · CPI · États américains autorisés"
+  "IQ Options": {
+    "zh": "IQ Options",
+    "ja": "IQ Options",
+    "ko": "IQ Options",
+    "es": "IQ Options",
+    "de": "IQ Options",
+    "fr": "IQ Options"
   },
   "Impressions": {
     "zh": "展示曝光",
@@ -2438,6 +2358,22 @@
     "es": "Interacciones",
     "de": "Interaktionen"
   },
+  "Interactive Macbook mockup — drag to rotate": {
+    "zh": "交互式 Macbook 模型 — 拖拽以旋转",
+    "ja": "インタラクティブなMacbookモックアップ — ドラッグして回転",
+    "ko": "인터랙티브 Macbook 목업 — 드래그하여 회전",
+    "es": "Mockup interactivo de Macbook — arrastre para rotar",
+    "de": "Interaktives Macbook-Mockup — Ziehen zum Drehen",
+    "fr": "Mockup interactif de Macbook — faites glisser pour faire pivoter"
+  },
+  "Interactive TV mockup — hover to rotate": {
+    "zh": "交互式 TV 模型 — 悬停以旋转",
+    "ja": "インタラクティブなTVモックアップ — ホバーして回転",
+    "ko": "인터랙티브 TV 목업 — 마우스를 올려 회전",
+    "es": "Mockup interactivo de TV — pase el cursor para rotar",
+    "de": "Interaktives TV-Mockup — Hovern zum Drehen",
+    "fr": "Mockup interactif de TV — survolez pour faire pivoter"
+  },
   "Interactive formats that earn attention": {
     "zh": "赢得受众注意力的交互式广告形式",
     "ja": "確かなアテンションを獲得するインタラクティブフォーマット",
@@ -2454,14 +2390,6 @@
     "de": "Interaktives iPad-Mockup — Hovern zum Drehen",
     "fr": "Mockup interactif d'iPad — survolez pour faire pivoter"
   },
-  "Interactive Macbook mockup — drag to rotate": {
-    "zh": "交互式 Macbook 模型 — 拖拽以旋转",
-    "ja": "インタラクティブなMacbookモックアップ — ドラッグして回転",
-    "ko": "인터랙티브 Macbook 목업 — 드래그하여 회전",
-    "es": "Mockup interactivo de Macbook — arrastre para rotar",
-    "de": "Interaktives Macbook-Mockup — Ziehen zum Drehen",
-    "fr": "Mockup interactif de Macbook — faites glisser pour faire pivoter"
-  },
   "Interactive phone mockup — hover to rotate": {
     "zh": "交互式手机模型 — 悬停以旋转",
     "ja": "インタラクティブなスマートフォンモックアップ — ホバーして回転",
@@ -2469,14 +2397,6 @@
     "es": "Mockup interactivo de teléfono — pase el cursor para rotar",
     "de": "Interaktives Smartphone-Mockup — Hovern zum Drehen",
     "fr": "Mockup interactif de téléphone — survolez pour faire pivoter"
-  },
-  "Interactive TV mockup — hover to rotate": {
-    "zh": "交互式 TV 模型 — 悬停以旋转",
-    "ja": "インタラクティブなTVモックアップ — ホバーして回転",
-    "ko": "인터랙티브 TV 목업 — 마우스를 올려 회전",
-    "es": "Mockup interactivo de TV — pase el cursor para rotar",
-    "de": "Interaktives TV-Mockup — Hovern zum Drehen",
-    "fr": "Mockup interactif de TV — survolez pour faire pivoter"
   },
   "Interstitial": {
     "zh": "插屏广告",
@@ -2502,14 +2422,6 @@
     "de": "Ungültige Anfragen werden vor Auktionsende zuverlässig verworfen. Ad Ops verteidigt jeden Dollar im Finanz-Audit souverän – ohne Abstimmungen in letzter Minute.",
     "fr": "Les requêtes non valides sont rejetées sans faille avant la clôture de l'enchère. Les Ad Ops défendent sereinement chaque dollar en revue financière, sans réconciliation de dernière minute."
   },
-  "IQ Options": {
-    "zh": "IQ Options",
-    "ja": "IQ Options",
-    "ko": "IQ Options",
-    "es": "IQ Options",
-    "de": "IQ Options",
-    "fr": "IQ Options"
-  },
   "Is Upraiser built to support in-house media teams?": {
     "zh": "UPRAISER 是否支持企业自建（In-house）媒介团队？",
     "ja": "UPRAISERはインハウスのメディアチームを支援するために設計されていますか？",
@@ -2518,13 +2430,13 @@
     "de": "Ist UPRAISER darauf ausgelegt, In-House-Media-Teams zu unterstützen?",
     "fr": "UPRAISER est-il conçu pour épauler les équipes médias internes ?"
   },
-  "Killer outcomes from live flights — tap any card for the full story.": {
-    "zh": "来自实盘战役的硬核战果——轻点任意卡片，查看完整实录。",
-    "ja": "実稼働キャンペーンが生んだ圧倒的な成果 — カードをタップして全貌を確認。",
-    "ko": "실제 라이브 캠페인에서 거둔 압도적 성과 — 카드를 탭하여 전체 스토리를 확인하십시오.",
-    "es": "Resultados demoledores en campañas activas — toque cualquier tarjeta para ver la historia completa.",
-    "de": "Überragende Ergebnisse aus Live-Flights — Karte antippen für die ganze Geschichte.",
-    "fr": "Des résultats percutants issus de campagnes réelles — touchez une carte pour découvrir toute l'histoire."
+  "KPI EVENT": {
+    "zh": "KPI 事件",
+    "ja": "KPIイベント",
+    "ko": "KPI 이벤트",
+    "es": "EVENTO KPI",
+    "de": "KPI-EVENT",
+    "fr": "ÉVÉNEMENT KPI"
   },
   "KPI event": {
     "zh": "KPI事件",
@@ -2534,13 +2446,29 @@
     "de": "KPI-Event",
     "fr": "Événement KPI"
   },
-  "KPI EVENT": {
-    "zh": "KPI 事件",
-    "ja": "KPIイベント",
-    "ko": "KPI 이벤트",
-    "es": "EVENTO KPI",
-    "de": "KPI-EVENT",
-    "fr": "ÉVÉNEMENT KPI"
+  "Killer outcomes from live flights — tap any card for the full story.": {
+    "zh": "来自实盘战役的硬核战果——轻点任意卡片，查看完整实录。",
+    "ja": "実稼働キャンペーンが生んだ圧倒的な成果 — カードをタップして全貌を確認。",
+    "ko": "실제 라이브 캠페인에서 거둔 압도적 성과 — 카드를 탭하여 전체 스토리를 확인하십시오.",
+    "es": "Resultados demoledores en campañas activas — toque cualquier tarjeta para ver la historia completa.",
+    "de": "Überragende Ergebnisse aus Live-Flights — Karte antippen für die ganze Geschichte.",
+    "fr": "Des résultats percutants issus de campagnes réelles — touchez une carte pour découvrir toute l'histoire."
+  },
+  "LTV / CAC": {
+    "zh": "LTV / CAC",
+    "ja": "LTV / CAC",
+    "ko": "LTV / CAC",
+    "es": "LTV / CAC",
+    "de": "LTV / CAC",
+    "fr": "LTV / CAC"
+  },
+  "LTV scaling": {
+    "zh": "LTV 放量扩展",
+    "ja": "LTVスケーリング",
+    "ko": "LTV 스케일링",
+    "es": "Escalado de LTV",
+    "de": "LTV-Skalierung",
+    "fr": "Passage à l'échelle de la LTV"
   },
   "Lanes": {
     "zh": "专属通道",
@@ -2590,22 +2518,6 @@
     "de": "Rechtsträger",
     "fr": "Entité juridique"
   },
-  "Lenovo agency partner": {
-    "zh": "Lenovo 代理合作伙伴",
-    "ja": "Lenovo エージェンシーパートナー",
-    "ko": "Lenovo 에이전시 파트너",
-    "es": "Partner oficial de agencia Lenovo",
-    "de": "Lenovo Agenturpartner",
-    "fr": "Partenaire d'agence Lenovo"
-  },
-  "Lenovo and partner storefronts": {
-    "zh": "Lenovo 及合作伙伴应用商店",
-    "ja": "Lenovoおよびパートナーのストアフロント",
-    "ko": "Lenovo 및 파트너 스토어",
-    "es": "Tiendas de Lenovo y socios",
-    "de": "Lenovo- und Partner-Storefronts",
-    "fr": "Boutiques Lenovo et partenaires"
-  },
   "Lenovo Exchange": {
     "zh": "Lenovo Exchange",
     "ja": "Lenovo Exchange",
@@ -2646,14 +2558,6 @@
     "de": "Lenovo PAI weltweit. Retention-Untergrenzen (D1 40 %, D7 25 %, D30 10 %) steuerten jede Gebotserhöhung.",
     "fr": "Lenovo PAI à l'échelle mondiale. Des seuils minimaux de rétention (J1 40 %, J7 25 %, J30 10 %) ont conditionné chaque hausse d'enchère."
   },
-  "Lenovo partnership": {
-    "zh": "Lenovo 合作伙伴关系",
-    "ja": "Lenovoとのパートナーシップ",
-    "ko": "Lenovo 파트너십",
-    "es": "Alianza con Lenovo",
-    "de": "Lenovo-Partnerschaft",
-    "fr": "Partenariat Lenovo"
-  },
   "Lenovo PC HK LTD": {
     "zh": "Lenovo PC HK LTD",
     "ja": "Lenovo PC HK LTD",
@@ -2665,6 +2569,30 @@
   "Lenovo ROM & PAI": {
     "es": "ROM y PAI de Lenovo",
     "fr": "ROM & PAI Lenovo"
+  },
+  "Lenovo agency partner": {
+    "zh": "Lenovo 代理合作伙伴",
+    "ja": "Lenovo エージェンシーパートナー",
+    "ko": "Lenovo 에이전시 파트너",
+    "es": "Partner oficial de agencia Lenovo",
+    "de": "Lenovo Agenturpartner",
+    "fr": "Partenaire d'agence Lenovo"
+  },
+  "Lenovo and partner storefronts": {
+    "zh": "Lenovo 及合作伙伴应用商店",
+    "ja": "Lenovoおよびパートナーのストアフロント",
+    "ko": "Lenovo 및 파트너 스토어",
+    "es": "Tiendas de Lenovo y socios",
+    "de": "Lenovo- und Partner-Storefronts",
+    "fr": "Boutiques Lenovo et partenaires"
+  },
+  "Lenovo partnership": {
+    "zh": "Lenovo 合作伙伴关系",
+    "ja": "Lenovoとのパートナーシップ",
+    "ko": "Lenovo 파트너십",
+    "es": "Alianza con Lenovo",
+    "de": "Lenovo-Partnerschaft",
+    "fr": "Partenariat Lenovo"
   },
   "Lifetime value bidding": {
     "zh": "生命周期价值竞价",
@@ -2705,14 +2633,6 @@
     "es": "Cargando",
     "de": "Wird geladen",
     "fr": "Chargement"
-  },
-  "localStorage": {
-    "zh": "localStorage",
-    "ja": "localStorage",
-    "ko": "localStorage",
-    "es": "localStorage",
-    "de": "localStorage",
-    "fr": "localStorage"
   },
   "Log Drift": {
     "zh": "日志偏差",
@@ -2774,21 +2694,37 @@
     "de": "Karriere bei UPRAISER",
     "fr": "Rejoindre l'équipe UPRAISER"
   },
-  "LTV / CAC": {
-    "zh": "LTV / CAC",
-    "ja": "LTV / CAC",
-    "ko": "LTV / CAC",
-    "es": "LTV / CAC",
-    "de": "LTV / CAC",
-    "fr": "LTV / CAC"
+  "MBS": {
+    "zh": "MBS",
+    "ja": "MBS",
+    "ko": "MBS",
+    "es": "MBS",
+    "de": "MBS",
+    "fr": "MBS"
   },
-  "LTV scaling": {
-    "zh": "LTV 放量扩展",
-    "ja": "LTVスケーリング",
-    "ko": "LTV 스케일링",
-    "es": "Escalado de LTV",
-    "de": "LTV-Skalierung",
-    "fr": "Passage à l'échelle de la LTV"
+  "MMP counts matched Lenovo delivery. Zero fraud or retention surprises at invoice.": {
+    "zh": "MMP 统计数据与 Lenovo 实际交付分毫不差。账单结算时实现零作弊、留存表现完全符合预期。",
+    "ja": "MMPの数値がLenovoの配信実績と完全に一致。請求時における不正や継続率の想定外の低下を完全排除。",
+    "ko": "MMP 수치가 Lenovo 공급 실적과 완벽히 일치. 인보이스 발행 시 프로드나 리텐션 왜곡 0건 달성.",
+    "es": "Los recuentos del MMP coincidieron con la entrega de Lenovo. Cero fraude o sorpresas de retención en la factura.",
+    "de": "MMP-Zahlen stimmten exakt mit der Lenovo-Auslieferung überein. Null Fraud und keine bösen Überraschungen bei der Rechnungsstellung.",
+    "fr": "Concordance parfaite entre les volumes MMP et la livraison Lenovo. Zéro fraude et aucune surprise de rétention à la facturation."
+  },
+  "MMP match": {
+    "zh": "MMP 匹配",
+    "ja": "MMP照合",
+    "ko": "MMP 일치",
+    "es": "Coincidencia con MMP",
+    "de": "MMP-Abgleich",
+    "fr": "Match MMP"
+  },
+  "MMP-aligned activation events": {
+    "zh": "与 MMP 对齐的激活事件",
+    "ja": "MMPに連動したアクティベーションイベント",
+    "ko": "MMP 연동 활성화 이벤트",
+    "es": "Eventos de activación alineados con MMP",
+    "de": "MMP-abgestimmte Aktivierungs-Events",
+    "fr": "Événements d'activation alignés sur le MMP"
   },
   "Maintained absolute alignment between Lenovo delivery and dashboard reporting at month-end via deterministic tracking.": {
     "zh": "通过确定性追踪机制，确保月末 Lenovo 实际交付与仪表板报表数据分毫不差、绝对一致。",
@@ -2830,6 +2766,19 @@
     "de": "Markt",
     "fr": "Marché"
   },
+  "Marketplace GCC": {
+    "zh": "GCC 海湾地区撮合交易平台",
+    "ja": "マーケットプレイス（GCC）",
+    "ko": "마켓플레이스 GCC"
+  },
+  "Marketplace UA prioritizing Register and OrderPlaced over raw install CPI via granular MMP postbacks.": {
+    "zh": "电商平台 UA 买量通过细颗粒度 MMP postbacks，将“注册”和“下单完成”（OrderPlaced）置于单纯安装 CPI 之上。",
+    "ja": "詳細なMMPポストバックにより、単なるインストールCPIではなく会員登録（Register）と注文完了（OrderPlaced）を最優先するマーケットプレイスUA。",
+    "ko": "단순 설치 CPI 대신 정밀한 MMP 포스트백을 통해 가입(Register) 및 주문 완료(OrderPlaced)를 최우선으로 삼는 마켓플레이스 UA.",
+    "es": "UA de marketplace priorizando Register y OrderPlaced sobre el CPI de instalación bruta mediante postbacks detallados de MMP.",
+    "de": "Marktplatz-UA priorisiert Register und OrderPlaced gegenüber reinem Installations-CPI über granulare MMP-Postbacks.",
+    "fr": "Acquisition marketplace privilégiant Register et OrderPlaced au simple CPI d'installation grâce à des postbacks MMP granulaires."
+  },
   "Marketplace · CPI · KW · SA · AE": {
     "zh": "电商平台 · CPI · KW · SA · AE",
     "ja": "マーケットプレイス · CPI · KW · SA · AE",
@@ -2846,19 +2795,6 @@
     "de": "Marketplace · CPI · PH · BR",
     "fr": "Marketplace · CPI · PH · BR"
   },
-  "Marketplace GCC": {
-    "zh": "GCC 海湾地区撮合交易平台",
-    "ja": "マーケットプレイス（GCC）",
-    "ko": "마켓플레이스 GCC"
-  },
-  "Marketplace UA prioritizing Register and OrderPlaced over raw install CPI via granular MMP postbacks.": {
-    "zh": "电商平台 UA 买量通过细颗粒度 MMP postbacks，将“注册”和“下单完成”（OrderPlaced）置于单纯安装 CPI 之上。",
-    "ja": "詳細なMMPポストバックにより、単なるインストールCPIではなく会員登録（Register）と注文完了（OrderPlaced）を最優先するマーケットプレイスUA。",
-    "ko": "단순 설치 CPI 대신 정밀한 MMP 포스트백을 통해 가입(Register) 및 주문 완료(OrderPlaced)를 최우선으로 삼는 마켓플레이스 UA.",
-    "es": "UA de marketplace priorizando Register y OrderPlaced sobre el CPI de instalación bruta mediante postbacks detallados de MMP.",
-    "de": "Marktplatz-UA priorisiert Register und OrderPlaced gegenüber reinem Installations-CPI über granulare MMP-Postbacks.",
-    "fr": "Acquisition marketplace privilégiant Register et OrderPlaced au simple CPI d'installation grâce à des postbacks MMP granulaires."
-  },
   "Match Group video-chat app needed EU brand lift and quality organic installs.": {
     "zh": "Match Group 旗下视频社交应用亟需在欧洲市场实现品牌声量提升与高品质自然量转化。",
     "ja": "Match Group傘下のビデオチャットアプリにおいて、欧州でのブランドリフトと高品質なオーガニックインストールの獲得が急務でした。",
@@ -2867,13 +2803,13 @@
     "de": "Video-Chat-App der Match Group benötigte Brand Lift in der EU und hochwertige organische Installs.",
     "fr": "L'application de chat vidéo de Match Group devait renforcer sa notoriété en Europe et générer des installations organiques de qualité."
   },
-  "MBS": {
-    "zh": "MBS",
-    "ja": "MBS",
-    "ko": "MBS",
-    "es": "MBS",
-    "de": "MBS",
-    "fr": "MBS"
+  "Media Spend Optimized": {
+    "zh": "已优化媒介支出",
+    "ja": "最適化された広告費",
+    "ko": "최적화된 미디어 집행액",
+    "es": "Inversión en medios optimizada",
+    "de": "Optimierter Media Spend",
+    "fr": "Dépenses médias optimisées"
   },
   "Media buyer EU": {
     "zh": "欧洲媒介采买商",
@@ -2882,14 +2818,6 @@
     "es": "Comprador de medios UE",
     "de": "Media Buyer EU",
     "fr": "Acheteur média UE"
-  },
-  "Media Spend Optimized": {
-    "zh": "已优化媒介支出",
-    "ja": "最適化された広告費",
-    "ko": "최적화된 미디어 집행액",
-    "es": "Inversión en medios optimizada",
-    "de": "Optimierter Media Spend",
-    "fr": "Dépenses médias optimisées"
   },
   "Media veterans plotting the optimal, verified route to Your exact audience across complex digital terrains.": {
     "zh": "媒介资深专家在复杂的数字领域中，为您精准触达目标受众规划出已验证的最佳路径。",
@@ -2923,38 +2851,6 @@
     "de": "Mittelständische Consumer-Finance",
     "fr": "Finance grand public intermédiaire"
   },
-  "minimal": {
-    "zh": "极简",
-    "ja": "ミニマル",
-    "ko": "미니멀",
-    "es": "minimalista",
-    "de": "minimal",
-    "fr": "minimal"
-  },
-  "MMP counts matched Lenovo delivery. Zero fraud or retention surprises at invoice.": {
-    "zh": "MMP 统计数据与 Lenovo 实际交付分毫不差。账单结算时实现零作弊、留存表现完全符合预期。",
-    "ja": "MMPの数値がLenovoの配信実績と完全に一致。請求時における不正や継続率の想定外の低下を完全排除。",
-    "ko": "MMP 수치가 Lenovo 공급 실적과 완벽히 일치. 인보이스 발행 시 프로드나 리텐션 왜곡 0건 달성.",
-    "es": "Los recuentos del MMP coincidieron con la entrega de Lenovo. Cero fraude o sorpresas de retención en la factura.",
-    "de": "MMP-Zahlen stimmten exakt mit der Lenovo-Auslieferung überein. Null Fraud und keine bösen Überraschungen bei der Rechnungsstellung.",
-    "fr": "Concordance parfaite entre les volumes MMP et la livraison Lenovo. Zéro fraude et aucune surprise de rétention à la facturation."
-  },
-  "MMP match": {
-    "zh": "MMP 匹配",
-    "ja": "MMP照合",
-    "ko": "MMP 일치",
-    "es": "Coincidencia con MMP",
-    "de": "MMP-Abgleich",
-    "fr": "Match MMP"
-  },
-  "MMP-aligned activation events": {
-    "zh": "与 MMP 对齐的激活事件",
-    "ja": "MMPに連動したアクティベーションイベント",
-    "ko": "MMP 연동 활성화 이벤트",
-    "es": "Eventos de activación alineados con MMP",
-    "de": "MMP-abgestimmte Aktivierungs-Events",
-    "fr": "Événements d'activation alignés sur le MMP"
-  },
   "Model": {
     "zh": "模式",
     "ja": "モデル",
@@ -2978,6 +2874,14 @@
     "es": "Moneycat",
     "de": "Moneycat",
     "fr": "Moneycat"
+  },
+  "NIRA": {
+    "zh": "NIRA",
+    "ja": "NIRA",
+    "ko": "NIRA",
+    "es": "NIRA",
+    "de": "NIRA",
+    "fr": "NIRA"
   },
   "Name & Title *": {
     "zh": "姓名与职位 *",
@@ -3051,22 +2955,6 @@
     "de": "Nächster Schritt",
     "fr": "Prochaine étape"
   },
-  "NIRA": {
-    "zh": "NIRA",
-    "ja": "NIRA",
-    "ko": "NIRA",
-    "es": "NIRA",
-    "de": "NIRA",
-    "fr": "NIRA"
-  },
-  "not": {
-    "zh": "非",
-    "ja": "not",
-    "ko": "아님",
-    "es": "no",
-    "de": "nicht",
-    "fr": "non"
-  },
   "Numbers that match": {
     "zh": "分毫不差的数据账目",
     "ja": "完全に一致する数値",
@@ -3074,21 +2962,6 @@
     "es": "Cifras que coinciden",
     "de": "Zahlen, die übereinstimmen",
     "fr": "Des chiffres qui concordent"
-  },
-  "Object": {
-    "zh": "标的",
-    "ja": "オブジェクト",
-    "ko": "오브젝트",
-    "es": "Objeto",
-    "de": "Objekt",
-    "fr": "Objet"
-  },
-  "OEM / Factory": {
-    "zh": "OEM / 出厂直装",
-    "ja": "OEM / ファクトリー",
-    "ko": "OEM / 팩토리",
-    "es": "OEM / Fábrica",
-    "fr": "OEM / Usine"
   },
   "OEM & Direct": {
     "zh": "OEM 与 直投",
@@ -3102,6 +2975,13 @@
     "ja": "OEM & オンデバイス・ディスカバリー",
     "ko": "OEM & 온디바이스 디스커버리"
   },
+  "OEM / Factory": {
+    "zh": "OEM / 出厂直装",
+    "ja": "OEM / ファクトリー",
+    "ko": "OEM / 팩토리",
+    "es": "OEM / Fábrica",
+    "fr": "OEM / Usine"
+  },
   "OEM Device Reach": {
     "zh": "OEM 设备触达",
     "ja": "OEMデバイスリーチ",
@@ -3109,14 +2989,6 @@
     "es": "Alcance de dispositivos OEM",
     "de": "OEM-Gerätereichweite",
     "fr": "Portée d'appareils OEM"
-  },
-  "OEM placements reach devices at unboxing and first boot. Install trails that survive procurement questions.": {
-    "zh": "OEM 广告位在开箱与首次开机时触达设备。安装链路完全经得起采购端的严格质询。",
-    "ja": "開封時や初回起動時にデバイスへ直接届くOEMプレイスメント。調達部門の厳しい精査にも耐えうるインストール追跡記録。",
-    "ko": "언박싱 및 첫 부팅 시점에 기기에 도달하는 OEM 지면. 조달 및 감사 검토에서도 완벽히 입증되는 설치 추적 경로.",
-    "es": "Las ubicaciones OEM llegan a los dispositivos al desempacar y en el primer encendido. Registros de instalación que superan cualquier auditoría de compras.",
-    "de": "OEM-Placements erreichen Geräte direkt beim Unboxing und ersten Start. Install-Trails, die jeder Procurement-Prüfung standhalten.",
-    "fr": "Les placements OEM atteignent les appareils dès le déballage et le premier démarrage. Des pistes d'installation qui résistent aux exigences des achats."
   },
   "OEM Pre-install": {
     "zh": "OEM 出厂预装",
@@ -3134,6 +3006,14 @@
     "de": "OEM-Store",
     "fr": "Store OEM"
   },
+  "OEM placements reach devices at unboxing and first boot. Install trails that survive procurement questions.": {
+    "zh": "OEM 广告位在开箱与首次开机时触达设备。安装链路完全经得起采购端的严格质询。",
+    "ja": "開封時や初回起動時にデバイスへ直接届くOEMプレイスメント。調達部門の厳しい精査にも耐えうるインストール追跡記録。",
+    "ko": "언박싱 및 첫 부팅 시점에 기기에 도달하는 OEM 지면. 조달 및 감사 검토에서도 완벽히 입증되는 설치 추적 경로.",
+    "es": "Las ubicaciones OEM llegan a los dispositivos al desempacar y en el primer encendido. Registros de instalación que superan cualquier auditoría de compras.",
+    "de": "OEM-Placements erreichen Geräte direkt beim Unboxing und ersten Start. Install-Trails, die jeder Procurement-Prüfung standhalten.",
+    "fr": "Les placements OEM atteignent les appareils dès le déballage et le premier démarrage. Des pistes d'installation qui résistent aux exigences des achats."
+  },
   "OEM supply spans 120+ GEOs. Bad cohorts required algorithmic filtering from open-exchange lanes based on latency and CVR.": {
     "zh": "OEM 流量供给覆盖超 120 个 GEOs。必须基于延迟与 CVR 指标，通过算法过滤公开竞价通道中的劣质同群。",
     "ja": "120以上のGEOsに及ぶOEMサプライ。オープンエクスチェンジレーンから、遅延とCVRに基づいて低品質コホートをアルゴリズムで除外する必要がありました。",
@@ -3141,6 +3021,30 @@
     "es": "El suministro OEM abarca más de 120 GEOs. Las cohortes deficientes requirieron filtrado algorítmico en rutas de open-exchange según latencia y CVR.",
     "de": "OEM-Inventar erstreckt sich über 120+ GEOs. Mangelhafte Kohorten erforderten algorithmische Filterung aus Open-Exchange-Lanes anhand von Latenz und CVR.",
     "fr": "L'inventaire OEM couvre plus de 120 GEOs. Les cohortes non qualifiées exigeaient un filtrage algorithmique sur les flux open exchange basé sur la latence et le CVR."
+  },
+  "OKX": {
+    "zh": "OKX",
+    "ja": "OKX",
+    "ko": "OKX",
+    "es": "OKX",
+    "de": "OKX",
+    "fr": "OKX"
+  },
+  "OS-level moments that convert": {
+    "zh": "驱动转化的操作系统级契机",
+    "ja": "コンバージョンを生むOSレベルの瞬間",
+    "ko": "전환을 이끄는 OS 수준의 모먼트",
+    "es": "Momentos a nivel del SO que convierten",
+    "de": "Momente auf OS-Ebene, die konvertieren",
+    "fr": "Des moments au niveau de l'OS qui convertissent"
+  },
+  "Object": {
+    "zh": "标的",
+    "ja": "オブジェクト",
+    "ko": "오브젝트",
+    "es": "Objeto",
+    "de": "Objekt",
+    "fr": "Objet"
   },
   "Official Agency Partner": {
     "zh": "官方代理合作伙伴",
@@ -3166,14 +3070,6 @@
     "de": "Offizieller Lenovo-Partner:",
     "fr": "Partenaire officiel Lenovo :"
   },
-  "OKX": {
-    "zh": "OKX",
-    "ja": "OKX",
-    "ko": "OKX",
-    "es": "OKX",
-    "de": "OKX",
-    "fr": "OKX"
-  },
   "On": {
     "zh": "开启",
     "ja": "オン",
@@ -3190,14 +3086,6 @@
     "de": "Auf dem Gerät, noch vor dem Store",
     "fr": "Sur l'appareil avant même le store"
   },
-  "One finance-readable reconciliation": {
-    "zh": "财务清晰可读的统一对账",
-    "ja": "財務部門が精査できる単一の照合データ",
-    "ko": "재무팀이 즉시 검토 가능한 단일 정산 내역",
-    "es": "Una sola conciliación comprensible para finanzas",
-    "de": "Eine Finance-lesbare Reconciliation",
-    "fr": "Une réconciliation lisible pour la finance"
-  },
   "One Supply Path": {
     "zh": "单一供应路径",
     "ja": "単一のサプライパス",
@@ -3213,6 +3101,14 @@
     "es": "Una sola ruta de suministro.",
     "de": "Ein einziger Supply-Pfad.",
     "fr": "Un supply path unique."
+  },
+  "One finance-readable reconciliation": {
+    "zh": "财务清晰可读的统一对账",
+    "ja": "財務部門が精査できる単一の照合データ",
+    "ko": "재무팀이 즉시 검토 가능한 단일 정산 내역",
+    "es": "Una sola conciliación comprensible para finanzas",
+    "de": "Eine Finance-lesbare Reconciliation",
+    "fr": "Une réconciliation lisible pour la finance"
   },
   "Open-exchange ambiguity on factory installs. Finance needed package-level proof.": {
     "zh": "公开竞价市场在出厂预装数据上含糊不清，而财务部门需要应用包级别的确凿凭证。",
@@ -3261,14 +3157,6 @@
     "es": "OrderPlaced",
     "de": "OrderPlaced",
     "fr": "OrderPlaced"
-  },
-  "OS-level moments that convert": {
-    "zh": "驱动转化的操作系统级契机",
-    "ja": "コンバージョンを生むOSレベルの瞬間",
-    "ko": "전환을 이끄는 OS 수준의 모먼트",
-    "es": "Momentos a nivel del SO que convierten",
-    "de": "Momente auf OS-Ebene, die konvertieren",
-    "fr": "Des moments au niveau de l'OS qui convertissent"
   },
   "Other": {
     "zh": "其他",
@@ -3358,22 +3246,6 @@
     "de": "Unsere Trader definieren Deine Zielgruppe, mappen Deine Down-Funnel-KPI-Events und legen Deine Ziel-Akquisitionskosten fest.",
     "fr": "Nos traders définissent votre audience cible, cartographient vos événements KPI en bas de funnel et établissent votre coût d'acquisition cible."
   },
-  "p99 bid scoring": {
-    "zh": "p99 竞价评分",
-    "ja": "p99入札スコアリング",
-    "ko": "p99 입찰 스코어링",
-    "es": "Scoring de pujas p99",
-    "de": "p99 Bid Scoring",
-    "fr": "Scoring d'enchères p99"
-  },
-  "p99 Bid Scoring": {
-    "zh": "p99 竞价评分",
-    "ja": "p99入札スコアリング",
-    "ko": "p99 입찰 스코어링",
-    "es": "Scoring de pujas p99",
-    "fr": "Scoring d'enchères p99",
-    "de": "p99 Bid-Scoring"
-  },
   "PARITY": {
     "zh": "一致",
     "ja": "完全一致",
@@ -3382,14 +3254,6 @@
     "de": "PARITÄT",
     "fr": "PARITÉ"
   },
-  "Partner storefront featured slots": {
-    "zh": "合作伙伴商店精选推荐位",
-    "ja": "パートナーストアフロントの注目枠",
-    "ko": "파트너 스토어 추천 슬롯",
-    "es": "Espacios destacados en tiendas de socios",
-    "de": "Featured-Slots in Partner-Storefronts",
-    "fr": "Emplacements mis en avant sur les boutiques partenaires"
-  },
   "PATHS": {
     "zh": "路径",
     "ja": "経路",
@@ -3397,6 +3261,30 @@
     "es": "RUTAS",
     "de": "PFADE",
     "fr": "CIRCUITS"
+  },
+  "PH: 250K+ installs, 22% register, 7.2% order rate. BR: 80K+ installs, 10.7% order rate.": {
+    "zh": "菲律宾市场：250K+ 安装量，22% 注册率，7.2% 下单转化率。巴西市场：80K+ 安装量，10.7% 下单转化率。",
+    "ja": "フィリピン：25万件以上のインストール、登録率22%、注文率7.2%。ブラジル：8万件以上のインストール、注文率10.7%を達成。",
+    "ko": "PH: 인스톨 25만 건 이상, 가입률 22%, 주문율 7.2%. BR: 인스톨 8만 건 이상, 주문율 10.7%.",
+    "es": "PH: más de 250K instalaciones, 22% de registro, 7,2% de tasa de pedidos. BR: más de 80K instalaciones, 10,7% de tasa de pedidos.",
+    "de": "PH: 250K+ Installs, 22 % Registrierungen, 7,2 % Bestellrate. BR: 80K+ Installs, 10,7 % Bestellrate.",
+    "fr": "PH : 250K+ installations, 22 % d'inscriptions, taux de commande de 7,2 %. BR : 80K+ installations, taux de commande de 10,7 %."
+  },
+  "PROOF": {
+    "zh": "证明",
+    "ja": "証明",
+    "ko": "증명",
+    "es": "PRUEBA",
+    "de": "BEWEIS",
+    "fr": "PREUVE"
+  },
+  "Partner storefront featured slots": {
+    "zh": "合作伙伴商店精选推荐位",
+    "ja": "パートナーストアフロントの注目枠",
+    "ko": "파트너 스토어 추천 슬롯",
+    "es": "Espacios destacados en tiendas de socios",
+    "de": "Featured-Slots in Partner-Storefronts",
+    "fr": "Emplacements mis en avant sur les boutiques partenaires"
   },
   "Performance mapping": {
     "zh": "效果数据映射",
@@ -3413,14 +3301,6 @@
     "es": "Promoción personalizada por segmento. Controles de ROAS a nivel de emplazamiento verificados mediante postbacks S2S antes de liberar presupuesto cada semana.",
     "de": "Personalisierte Kampagnenansprache pro Segment. Platzierungsbezogene ROAS-Schwellen vor der wöchentlichen Budgetfreigabe über S2S-Postbacks verifiziert.",
     "fr": "Promotion personnalisée par segment. Seuils de ROAS par emplacement vérifiés par postbacks S2S avant validation hebdomadaire du budget."
-  },
-  "PH: 250K+ installs, 22% register, 7.2% order rate. BR: 80K+ installs, 10.7% order rate.": {
-    "zh": "菲律宾市场：250K+ 安装量，22% 注册率，7.2% 下单转化率。巴西市场：80K+ 安装量，10.7% 下单转化率。",
-    "ja": "フィリピン：25万件以上のインストール、登録率22%、注文率7.2%。ブラジル：8万件以上のインストール、注文率10.7%を達成。",
-    "ko": "PH: 인스톨 25만 건 이상, 가입률 22%, 주문율 7.2%. BR: 인스톨 8만 건 이상, 주문율 10.7%.",
-    "es": "PH: más de 250K instalaciones, 22% de registro, 7,2% de tasa de pedidos. BR: más de 80K instalaciones, 10,7% de tasa de pedidos.",
-    "de": "PH: 250K+ Installs, 22 % Registrierungen, 7,2 % Bestellrate. BR: 80K+ Installs, 10,7 % Bestellrate.",
-    "fr": "PH : 250K+ installations, 22 % d'inscriptions, taux de commande de 7,2 %. BR : 80K+ installations, taux de commande de 10,7 %."
   },
   "Placement quality scored before bid": {
     "zh": "竞价前即完成广告位质量评分",
@@ -3462,6 +3342,14 @@
     "de": "Playwing",
     "fr": "Playwing"
   },
+  "Post-Flight Log Drift": {
+    "zh": "投放后日志偏差",
+    "ja": "配信後ログの乖離",
+    "ko": "캠페인 사후 로그 오차",
+    "es": "Desviación de logs post-campaña",
+    "fr": "Dérive des logs post-flight",
+    "de": "Post-Flight-Log-Abweichung"
+  },
   "Post-flight file for finance review": {
     "zh": "供财务审查的投放后对账文件",
     "ja": "財務精査用の配信後レポートファイル",
@@ -3477,14 +3365,6 @@
     "es": "Desviación de logs post-flight",
     "de": "Post-Flight Log Drift",
     "fr": "Dérive des logs post-flight"
-  },
-  "Post-Flight Log Drift": {
-    "zh": "投放后日志偏差",
-    "ja": "配信後ログの乖離",
-    "ko": "캠페인 사후 로그 오차",
-    "es": "Desviación de logs post-campaña",
-    "fr": "Dérive des logs post-flight",
-    "de": "Post-Flight-Log-Abweichung"
   },
   "Pre-bid filter on reject_bots, reject_install_hijacking, reject_ctit_anomalies against MMP logs.": {
     "zh": "对照 MMP 日志，在竞价前全面过滤 reject_bots、reject_install_hijacking 与 reject_ctit_anomalies。",
@@ -3638,14 +3518,6 @@
     "fr": "Programmatique",
     "de": "Programmatic"
   },
-  "Programmatic accounts": {
-    "zh": "程序化采买客户",
-    "ja": "プログラマティック運用",
-    "ko": "프로그래매틱 어카운트",
-    "es": "Cuentas programáticas",
-    "de": "Programmatic Accounts",
-    "fr": "Comptes programmatiques"
-  },
   "Programmatic Media Buying": {
     "zh": "程序化媒介采买",
     "ja": "プログラマティック・メディアバイイング",
@@ -3661,6 +3533,14 @@
     "de": "Programmatic-ROAS auf Portfolio-Verkäufe in Mexiko",
     "fr": "ROAS programmatique sur l'ensemble du portefeuille de produits au Mexique"
   },
+  "Programmatic accounts": {
+    "zh": "程序化采买客户",
+    "ja": "プログラマティック運用",
+    "ko": "프로그래매틱 어카운트",
+    "es": "Cuentas programáticas",
+    "de": "Programmatic Accounts",
+    "fr": "Comptes programmatiques"
+  },
   "Proof": {
     "zh": "验证凭据",
     "ja": "検証",
@@ -3668,14 +3548,6 @@
     "es": "Respaldo",
     "de": "Nachweis",
     "fr": "Preuve"
-  },
-  "PROOF": {
-    "zh": "证明",
-    "ja": "証明",
-    "ko": "증명",
-    "es": "PRUEBA",
-    "de": "BEWEIS",
-    "fr": "PREUVE"
   },
   "Proven Summits": {
     "zh": "实战峰顶",
@@ -3741,6 +3613,22 @@
     "de": "Q3-Run-Rate",
     "fr": "Run Rate Q3"
   },
+  "ROAS · month 10": {
+    "zh": "ROAS · 第 10 个月",
+    "ja": "ROAS · 10ヶ月目",
+    "ko": "ROAS · 10개월 차",
+    "es": "ROAS · mes 10",
+    "de": "ROAS · Monat 10",
+    "fr": "ROAS · mois 10"
+  },
+  "ROAS · month 6": {
+    "zh": "ROAS · 第 6 个月",
+    "ja": "ROAS · 6ヶ月目",
+    "ko": "ROAS · 6개월 차",
+    "es": "ROAS · mes 6",
+    "de": "ROAS · Monat 6",
+    "fr": "ROAS · mois 6"
+  },
   "Rapiplata": {
     "zh": "Rapiplata",
     "ja": "Rapiplata",
@@ -3804,14 +3692,6 @@
     "es": "Apuestas deportivas con dinero real en un mercado de EE. UU. saturado de bonos. Requería un riguroso rastreo de MMP y postbacks S2S sin infringir las normativas para mayores de 18 años ni las regulaciones geográficas estatales.",
     "de": "Echtgeld-Sportsbook in einem bonusgesättigten US-Markt. Erforderte striktes MMP-Tracking und S2S-Postbacks ohne Verletzung von 18+- oder bundesstaatlichen Vorgaben.",
     "fr": "Paris sportifs en argent réel sur un marché américain saturé de bonus. Suivi MMP rigoureux et postbacks S2S requis sans enfreindre les règles 18+ ou les restrictions géographiques des États."
-  },
-  "reconciliation file": {
-    "zh": "统一对账底册",
-    "ja": "照合ファイルを納品",
-    "ko": "통합 정산 장부를 제공합니다",
-    "es": "archivo de conciliación",
-    "de": "Abstimmungsdatei",
-    "fr": "fichier de réconciliation"
   },
   "Reconciliation file finance can read": {
     "zh": "财务清晰可读的对账文件",
@@ -3925,14 +3805,6 @@
     "de": "Rewarded: Opt-in, nahezu 100% Completion",
     "fr": "Rewarded : avec consentement, complétion proche de 100 %"
   },
-  "rich": {
-    "zh": "详尽",
-    "ja": "リッチ",
-    "ko": "리치",
-    "es": "completo",
-    "de": "detailliert",
-    "fr": "riche"
-  },
   "Rich Media": {
     "zh": "富媒体",
     "ja": "リッチメディア",
@@ -3956,22 +3828,6 @@
     "es": "Riesgo",
     "de": "Risiko",
     "fr": "Risque"
-  },
-  "ROAS · month 10": {
-    "zh": "ROAS · 第 10 个月",
-    "ja": "ROAS · 10ヶ月目",
-    "ko": "ROAS · 10개월 차",
-    "es": "ROAS · mes 10",
-    "de": "ROAS · Monat 10",
-    "fr": "ROAS · mois 10"
-  },
-  "ROAS · month 6": {
-    "zh": "ROAS · 第 6 个月",
-    "ja": "ROAS · 6ヶ月目",
-    "ko": "ROAS · 6개월 차",
-    "es": "ROAS · mes 6",
-    "de": "ROAS · Monat 6",
-    "fr": "ROAS · mois 6"
   },
   "Roku": {
     "zh": "Roku",
@@ -4005,30 +3861,6 @@
     "de": "SKALIERUNG",
     "fr": "ÉCHELLE"
   },
-  "Scale inside 100K+ apps": {
-    "zh": "在 100K+ 应用内实现规模化扩张",
-    "ja": "100K+のアプリ内でスケール",
-    "ko": "100K+ 앱 기반 확장",
-    "es": "Escala dentro de más de 100K apps",
-    "de": "Skalieren in 100K+ Apps",
-    "fr": "Passez à l'échelle au sein de 100K+ applications"
-  },
-  "Scale the Flight": {
-    "zh": "全力放量扩盘",
-    "ja": "配信規模の拡大",
-    "ko": "캠페인 스케일링",
-    "es": "Escalar la campaña",
-    "de": "Kampagne skalieren",
-    "fr": "Déployer à l'échelle"
-  },
-  "Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth.": {
-    "zh": "攀登数字领域的巅峰，需要一支紧密协作的复合型专家团队。在 Upraiser，我们将各自独特的专业技能凝聚于同一罗盘指向：引领您的业务登顶增长的最顶峰。",
-    "ja": "デジタル領域の頂点を極めるには、多様なオペレーターからなる結束力の高いチームが必要です。Upraiserでは、独自の専門性をひとつの方位磁針のもとに結集し、貴社のビジネスを成長の絶対的な頂点へと導きます。",
-    "ko": "디지털 지형의 정상을 정복하려면 긴밀히 결속된 다양한 운영팀이 필요합니다. Upraiser의 독보적인 역량은 단 하나의 나침반을 향해 정렬되어 있습니다. 귀사의 비즈니스를 성장의 절대적 정점으로 안내하는 것입니다.",
-    "es": "Escalar las alturas del panorama digital requiere un equipo cohesionado de diversos especialistas. En Upraiser, nuestras habilidades únicas se unen hacia un solo norte: guiar su negocio hacia la cima absoluta del crecimiento.",
-    "de": "Die Höhen der digitalen Landschaft zu erklimmen, erfordert ein eingespieltes Team spezialisierter Operators. Bei Upraiser bündeln wir unsere Fähigkeiten auf einen einzigen Kompasspunkt: Dein Business an die absolute Spitze des Wachstums zu führen.",
-    "fr": "Atteindre les sommets de l'univers digital exige une équipe soudée d'opérateurs aux expertises complémentaires. Chez Upraiser, nos compétences uniques convergent vers un seul point cardinal : guider Votre entreprise vers le pic absolu de sa croissance."
-  },
   "SDK trails": {
     "zh": "SDK 追踪链路",
     "ja": "SDKトレイル",
@@ -4052,6 +3884,62 @@
     "es": "SECURE_02",
     "de": "SECURE_02",
     "fr": "SECURE_02"
+  },
+  "SLA Setup": {
+    "zh": "SLA 交付上线",
+    "ja": "SLAセットアップ",
+    "ko": "SLA 구축",
+    "es": "Configuración de SLA",
+    "de": "SLA-Setup",
+    "fr": "Déploiement SLA"
+  },
+  "STUNNING": {
+    "zh": "何其壮阔",
+    "ja": "頂点へと駆け上がる",
+    "ko": "정상을 향한",
+    "es": "IMPONENTE",
+    "de": "ATEMBERAUBEND",
+    "fr": "À QUEL POINT"
+  },
+  "SYS_ERR_01": {
+    "zh": "SYS_ERR_01",
+    "ja": "SYS_ERR_01",
+    "ko": "SYS_ERR_01",
+    "es": "SYS_ERR_01",
+    "de": "SYS_ERR_01",
+    "fr": "SYS_ERR_01"
+  },
+  "SYS_ERR_02": {
+    "zh": "SYS_ERR_02",
+    "ja": "SYS_ERR_02",
+    "ko": "SYS_ERR_02",
+    "es": "SYS_ERR_02",
+    "de": "SYS_ERR_02",
+    "fr": "SYS_ERR_02"
+  },
+  "Scale inside 100K+ apps": {
+    "zh": "在 100K+ 应用内实现规模化扩张",
+    "ja": "100K+のアプリ内でスケール",
+    "ko": "100K+ 앱 기반 확장",
+    "es": "Escala dentro de más de 100K apps",
+    "de": "Skalieren in 100K+ Apps",
+    "fr": "Passez à l'échelle au sein de 100K+ applications"
+  },
+  "Scale the Flight": {
+    "zh": "全力放量扩盘",
+    "ja": "配信規模の拡大",
+    "ko": "캠페인 스케일링",
+    "es": "Escalar la campaña",
+    "de": "Kampagne skalieren",
+    "fr": "Déployer à l'échelle"
+  },
+  "Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth.": {
+    "zh": "攀登数字领域的巅峰，需要一支紧密协作的复合型专家团队。在 Upraiser，我们将各自独特的专业技能凝聚于同一罗盘指向：引领您的业务登顶增长的最顶峰。",
+    "ja": "デジタル領域の頂点を極めるには、多様なオペレーターからなる結束力の高いチームが必要です。Upraiserでは、独自の専門性をひとつの方位磁針のもとに結集し、貴社のビジネスを成長の絶対的な頂点へと導きます。",
+    "ko": "디지털 지형의 정상을 정복하려면 긴밀히 결속된 다양한 운영팀이 필요합니다. Upraiser의 독보적인 역량은 단 하나의 나침반을 향해 정렬되어 있습니다. 귀사의 비즈니스를 성장의 절대적 정점으로 안내하는 것입니다.",
+    "es": "Escalar las alturas del panorama digital requiere un equipo cohesionado de diversos especialistas. En Upraiser, nuestras habilidades únicas se unen hacia un solo norte: guiar su negocio hacia la cima absoluta del crecimiento.",
+    "de": "Die Höhen der digitalen Landschaft zu erklimmen, erfordert ein eingespieltes Team spezialisierter Operators. Bei Upraiser bündeln wir unsere Fähigkeiten auf einen einzigen Kompasspunkt: Dein Business an die absolute Spitze des Wachstums zu führen.",
+    "fr": "Atteindre les sommets de l'univers digital exige une équipe soudée d'opérateurs aux expertises complémentaires. Chez Upraiser, nos compétences uniques convergent vers un seul point cardinal : guider Votre entreprise vers le pic absolu de sa croissance."
   },
   "See Cases": {
     "zh": "查看案例",
@@ -4165,14 +4053,6 @@
     "de": "Skippable Pre-Roll mit Qualitätskontrollen",
     "fr": "Pré-roll skippable avec contrôles de qualité"
   },
-  "SLA Setup": {
-    "zh": "SLA 交付上线",
-    "ja": "SLAセットアップ",
-    "ko": "SLA 구축",
-    "es": "Configuración de SLA",
-    "de": "SLA-Setup",
-    "fr": "Déploiement SLA"
-  },
   "Snoop app icon": {
     "zh": "Snoop 应用图标",
     "ja": "Snoop アプリアイコン",
@@ -4186,14 +4066,6 @@
     "ja": "ソーシャル",
     "ko": "소셜"
   },
-  "Social · CPE · UK · DE · FR · ES": {
-    "zh": "社交广告 · CPE · UK · DE · FR · ES",
-    "ja": "ソーシャル · CPE · UK · DE · FR · ES",
-    "ko": "Social · CPE · UK · DE · FR · ES",
-    "es": "Social · CPE · UK · DE · FR · ES",
-    "de": "Social · CPE · UK · DE · FR · ES",
-    "fr": "Social · CPE · UK · DE · FR · ES"
-  },
   "Social Ads": {
     "zh": "社交广告",
     "ja": "ソーシャル広告",
@@ -4201,6 +4073,14 @@
     "es": "Social Ads",
     "fr": "Social Ads",
     "de": "Social Ads"
+  },
+  "Social · CPE · UK · DE · FR · ES": {
+    "zh": "社交广告 · CPE · UK · DE · FR · ES",
+    "ja": "ソーシャル · CPE · UK · DE · FR · ES",
+    "ko": "Social · CPE · UK · DE · FR · ES",
+    "es": "Social · CPE · UK · DE · FR · ES",
+    "de": "Social · CPE · UK · DE · FR · ES",
+    "fr": "Social · CPE · UK · DE · FR · ES"
   },
   "SolPrestado": {
     "zh": "SolPrestado",
@@ -4226,6 +4106,14 @@
     "de": "Spam-Registrierungen",
     "fr": "Inscriptions Indésirables"
   },
+  "Spam Signups Blocked": {
+    "zh": "垃圾注册已拦截",
+    "ja": "スパム登録遮断",
+    "ko": "스팸 가입 차단",
+    "es": "Registros Spam Bloqueados",
+    "de": "Spam-Registrierungen blockiert",
+    "fr": "Inscriptions Spam bloquées"
+  },
   "Spend that scales under scrutiny": {
     "zh": "经得起严苛审视的规模化支出",
     "ja": "厳格な精査に耐えうる支出拡大",
@@ -4248,14 +4136,6 @@
     "ko": "스토리",
     "es": "Historia",
     "fr": "Récit"
-  },
-  "STUNNING": {
-    "zh": "何其壮阔",
-    "ja": "頂点へと駆け上がる",
-    "ko": "정상을 향한",
-    "es": "IMPONENTE",
-    "de": "ATEMBERAUBEND",
-    "fr": "À QUEL POINT"
   },
   "Submit vertical, GEO, and KPI event. We instantly construct a beautifully scoped exact path.": {
     "zh": "提交垂直赛道、GEO 与核心 KPI 事件。我们将立即为您量身定制一条清晰精准的采买路径。",
@@ -4297,14 +4177,6 @@
     "de": "Inhaltsmodus wechseln",
     "fr": "Changer de mode de contenu"
   },
-  "Switch to dark mode": {
-    "zh": "切换至深色模式",
-    "ja": "ダークモードに切り替え",
-    "ko": "다크 모드로 전환",
-    "es": "Cambiar a modo oscuro",
-    "de": "Zum Dark Mode wechseln",
-    "fr": "Passer en mode sombre"
-  },
   "Switch to Growth": {
     "zh": "切换至效果增长",
     "ja": "グロースへ切り替え",
@@ -4321,6 +4193,14 @@
     "de": "Zu Infrastruktur wechseln",
     "fr": "Passer à l'Infrastructure"
   },
+  "Switch to dark mode": {
+    "zh": "切换至深色模式",
+    "ja": "ダークモードに切り替え",
+    "ko": "다크 모드로 전환",
+    "es": "Cambiar a modo oscuro",
+    "de": "Zum Dark Mode wechseln",
+    "fr": "Passer en mode sombre"
+  },
   "Switch to light mode": {
     "zh": "切换至浅色模式",
     "ja": "ライトモードに切り替え",
@@ -4328,30 +4208,6 @@
     "es": "Cambiar a modo claro",
     "de": "Zum Light Mode wechseln",
     "fr": "Passer en mode clair"
-  },
-  "SYS_ERR_01": {
-    "zh": "SYS_ERR_01",
-    "ja": "SYS_ERR_01",
-    "ko": "SYS_ERR_01",
-    "es": "SYS_ERR_01",
-    "de": "SYS_ERR_01",
-    "fr": "SYS_ERR_01"
-  },
-  "SYS_ERR_02": {
-    "zh": "SYS_ERR_02",
-    "ja": "SYS_ERR_02",
-    "ko": "SYS_ERR_02",
-    "es": "SYS_ERR_02",
-    "de": "SYS_ERR_02",
-    "fr": "SYS_ERR_02"
-  },
-  "System ready": {
-    "zh": "系统已就绪",
-    "ja": "システム準備完了",
-    "ko": "시스템 준비 완료",
-    "es": "Sistema listo",
-    "de": "System bereit",
-    "fr": "Système prêt"
   },
   "System Status: Online": {
     "zh": "系统状态: 在线",
@@ -4361,6 +4217,22 @@
     "de": "Systemstatus: Online",
     "fr": "Statut du système : En ligne"
   },
+  "System UI": {
+    "zh": "系统界面",
+    "ja": "システムUI",
+    "ko": "시스템 UI",
+    "es": "System UI",
+    "de": "System-UI",
+    "fr": "System UI"
+  },
+  "System ready": {
+    "zh": "系统已就绪",
+    "ja": "システム準備完了",
+    "ko": "시스템 준비 완료",
+    "es": "Sistema listo",
+    "de": "System bereit",
+    "fr": "Système prêt"
+  },
   "System surfaces at natural device moments like setup complete or update done. Without random interrupt spam.": {
     "zh": "在设备设置完成或更新结束等自然契机呈现系统界面。杜绝随机打扰与垃圾广告。",
     "ja": "初期設定完了やアップデート完了など、自然なデバイス操作の瞬間にシステム画面でアプローチ。無作為な割り込みスパムを排除。",
@@ -4369,13 +4241,21 @@
     "de": "System-Surfaces in natürlichen Gerätemomenten wie Einrichtungsabschluss oder fertigem Update. Ohne störenden Unterbrechungs-Spam.",
     "fr": "Surfaces système lors des moments naturels de l'appareil : configuration terminée ou mise à jour effectuée. Sans interruptions publicitaires intempestives."
   },
-  "System UI": {
-    "zh": "系统界面",
-    "ja": "システムUI",
-    "ko": "시스템 UI",
-    "es": "System UI",
-    "de": "System-UI",
-    "fr": "System UI"
+  "THE PEAKS": {
+    "zh": "实战峰顶",
+    "ja": "最高峰",
+    "ko": "정상",
+    "es": "LAS CUMBRES",
+    "de": "DIE GIPFEL",
+    "fr": "LES SOMMETS"
+  },
+  "TO THE TOP": {
+    "zh": "问鼎巅峰",
+    "ja": "どれほど圧倒的な",
+    "ko": "얼마나 눈부실 수",
+    "es": "A LA CIMA",
+    "de": "AN DIE SPITZE",
+    "fr": "VERS LE SOMMET"
   },
   "Tablet Space": {
     "zh": "Tablet Space",
@@ -4511,14 +4391,6 @@
     "de": "Die Daten-Scouts",
     "fr": "Les Éclaireurs de Données"
   },
-  "The definitive algorithmic growth partner for global brands.": {
-    "zh": "全球品牌权威的算法增长合作伙伴。",
-    "ja": "グローバルブランドの決定的なアルゴリズム成長パートナー。",
-    "ko": "글로벌 브랜드를 위한 독보적인 알고리즘 그로스 파트너.",
-    "es": "El socio definitivo de crecimiento algorítmico para marcas globales.",
-    "de": "Der definitive algorithmische Wachstumspartner für globale Marken.",
-    "fr": "Le partenaire de croissance algorithmique de référence pour les marques mondiales."
-  },
   "The Engineering Basecamp": {
     "zh": "工程大本营",
     "ja": "エンジニアリング・ベースキャンプ",
@@ -4583,6 +4455,14 @@
     "de": "Die Lenovo-Lane lieferte echte werkseitige Belege statt umverpacktes Exchange-Inventar.",
     "fr": "Le canal Lenovo nous a apporté de véritables preuves d'usine au lieu d'inventaires d'exchanges recyclés."
   },
+  "The MMP and media bill tell exactly the same story through raw logs. Ad Ops and finance operate in absolute alignment.": {
+    "zh": "原始日志让 MMP 归因与媒介账单口径完全吻合。广告运营与财务团队步调绝对一致。",
+    "ja": "生のログを通じて、MMPとメディア請求書が寸分違わず同じ実態を示します。Ad Opsと財務部門は完全な整合性のもとで機能します。",
+    "ko": "로우 데이터 로그를 통해 MMP 지표와 미디어 청구서가 정확히 일치합니다. Ad Ops와 재무 부서가 완벽한 신뢰 속에서 함께 움직입니다.",
+    "es": "El MMP y la factura de medios reflejan exactamente la misma historia mediante logs brutos. Ad Ops y finanzas operan en perfecta alineación.",
+    "de": "MMP und Media-Rechnung erzählen durch Rohdaten-Logs exakt dieselbe Geschichte. Ad Ops und Finance agieren in absoluter Übereinstimmung.",
+    "fr": "Le MMP et la facture média racontent exactement la même histoire grâce aux logs bruts. Ad Ops et finance fonctionnent en alignement absolu."
+  },
   "The Map. The Wire. The Verify.": {
     "zh": "规划 · 铺设 · 验证",
     "ja": "設計。配線。検証。",
@@ -4599,14 +4479,6 @@
     "de": "Die Marketing-Navigatoren",
     "fr": "Les Navigateurs Marketing"
   },
-  "The MMP and media bill tell exactly the same story through raw logs. Ad Ops and finance operate in absolute alignment.": {
-    "zh": "原始日志让 MMP 归因与媒介账单口径完全吻合。广告运营与财务团队步调绝对一致。",
-    "ja": "生のログを通じて、MMPとメディア請求書が寸分違わず同じ実態を示します。Ad Opsと財務部門は完全な整合性のもとで機能します。",
-    "ko": "로우 데이터 로그를 통해 MMP 지표와 미디어 청구서가 정확히 일치합니다. Ad Ops와 재무 부서가 완벽한 신뢰 속에서 함께 움직입니다.",
-    "es": "El MMP y la factura de medios reflejan exactamente la misma historia mediante logs brutos. Ad Ops y finanzas operan en perfecta alineación.",
-    "de": "MMP und Media-Rechnung erzählen durch Rohdaten-Logs exakt dieselbe Geschichte. Ad Ops und Finance agieren in absoluter Übereinstimmung.",
-    "fr": "Le MMP et la facture média racontent exactement la même histoire grâce aux logs bruts. Ad Ops et finance fonctionnent en alignement absolu."
-  },
   "The Peaks": {
     "zh": "巅峰矩阵",
     "ja": "最高峰",
@@ -4614,22 +4486,6 @@
     "es": "Las Cumbres",
     "de": "Die Gipfel",
     "fr": "Les Sommets"
-  },
-  "THE PEAKS": {
-    "zh": "实战峰顶",
-    "ja": "最高峰",
-    "ko": "정상",
-    "es": "LAS CUMBRES",
-    "de": "DIE GIPFEL",
-    "fr": "LES SOMMETS"
-  },
-  "The route may have moved. Head home, or jump to The Routes on the pitch.": {
-    "zh": "路线或许已调整。返回首页，或跳转至方案中的路线专区。",
-    "ja": "ルートが変更された可能性があります。ホームに戻るか、ピッチのルート一覧へ移動してください。",
-    "ko": "경로가 변경되었을 수 있습니다. 홈으로 이동하거나, 피치의 The Routes 섹션으로 바로 이동하세요.",
-    "es": "Es posible que la ruta haya cambiado. Vuelva al inicio o diríjase a Las Rutas en la propuesta.",
-    "de": "Die Route wurde möglicherweise verlegt. Zurück zur Startseite oder direkt zu Die Routen im Pitch.",
-    "fr": "L'itinéraire a peut-être changé. Retournez à l'accueil ou passez directement à The Routes sur la présentation."
   },
   "The Routes": {
     "zh": "核心赛道",
@@ -4646,6 +4502,22 @@
     "es": "Los Arquitectos Visuales",
     "de": "Die visuellen Architekten",
     "fr": "Les Architectes Visuels"
+  },
+  "The definitive algorithmic growth partner for global brands.": {
+    "zh": "全球品牌权威的算法增长合作伙伴。",
+    "ja": "グローバルブランドの決定的なアルゴリズム成長パートナー。",
+    "ko": "글로벌 브랜드를 위한 독보적인 알고리즘 그로스 파트너.",
+    "es": "El socio definitivo de crecimiento algorítmico para marcas globales.",
+    "de": "Der definitive algorithmische Wachstumspartner für globale Marken.",
+    "fr": "Le partenaire de croissance algorithmique de référence pour les marques mondiales."
+  },
+  "The route may have moved. Head home, or jump to The Routes on the pitch.": {
+    "zh": "路线或许已调整。返回首页，或跳转至方案中的路线专区。",
+    "ja": "ルートが変更された可能性があります。ホームに戻るか、ピッチのルート一覧へ移動してください。",
+    "ko": "경로가 변경되었을 수 있습니다. 홈으로 이동하거나, 피치의 The Routes 섹션으로 바로 이동하세요.",
+    "es": "Es posible que la ruta haya cambiado. Vuelva al inicio o diríjase a Las Rutas en la propuesta.",
+    "de": "Die Route wurde möglicherweise verlegt. Zurück zur Startseite oder direkt zu Die Routen im Pitch.",
+    "fr": "L'itinéraire a peut-être changé. Retournez à l'accueil ou passez directement à The Routes sur la présentation."
   },
   "This page is not on the map": {
     "zh": "此页面不在路线图上",
@@ -4686,14 +4558,6 @@
     "es": "Disponible próximamente",
     "de": "Demnächst verfügbar",
     "fr": "Bientôt disponible"
-  },
-  "TO THE TOP": {
-    "zh": "问鼎巅峰",
-    "ja": "どれほど圧倒的な",
-    "ko": "얼마나 눈부실 수",
-    "es": "A LA CIMA",
-    "de": "AN DIE SPITZE",
-    "fr": "VERS LE SOMMET"
   },
   "Tools for Altitude": {
     "zh": "登顶利器",
@@ -4782,6 +4646,78 @@
     "de": "Strikte GEO-Konzentration auf UK. Aktivierungs-Event im MMP gemappt, bevor das Cap live ging.",
     "fr": "Concentration géographique stricte sur le Royaume-Uni. Événement d'activation intégré dans le MMP avant l'ouverture des plafonds."
   },
+  "UPRAISER Agency LLP": {
+    "zh": "UPRAISER Agency LLP",
+    "ja": "UPRAISER Agency LLP",
+    "ko": "UPRAISER Agency LLP",
+    "es": "UPRAISER Agency LLP",
+    "de": "UPRAISER Agency LLP",
+    "fr": "UPRAISER Agency LLP"
+  },
+  "UPRAISER Agency LLP is located at 128 City Road, London EC1V 2NX, United Kingdom.": {
+    "zh": "UPRAISER Agency LLP 地址位于 128 City Road, London EC1V 2NX, United Kingdom。",
+    "ja": "UPRAISER Agency LLPは、英国ロンドンの 128 City Road, London EC1V 2NX に拠点を置いています。",
+    "ko": "UPRAISER Agency LLP는 영국 런던 128 City Road, London EC1V 2NX에 위치하고 있습니다.",
+    "es": "UPRAISER Agency LLP está ubicada en 128 City Road, London EC1V 2NX, Reino Unido.",
+    "de": "UPRAISER Agency LLP hat ihren Sitz in 128 City Road, London EC1V 2NX, United Kingdom.",
+    "fr": "UPRAISER Agency LLP est située au 128 City Road, London EC1V 2NX, Royaume-Uni."
+  },
+  "UPRAISER Agency LLP.": {
+    "zh": "UPRAISER Agency LLP.",
+    "ja": "UPRAISER Agency LLP.",
+    "ko": "UPRAISER Agency LLP.",
+    "es": "UPRAISER Agency LLP.",
+    "de": "UPRAISER Agency LLP.",
+    "fr": "UPRAISER Agency LLP."
+  },
+  "UPRAISER · CHARTING THE ASCENT": {
+    "zh": "UPRAISER · 擘画攀升",
+    "ja": "UPRAISER · 頂点への軌跡を描く",
+    "ko": "UPRAISER · 비상의 설계",
+    "es": "UPRAISER · TRAZANDO EL ASCENSO",
+    "de": "UPRAISER · DEN AUFSTIEG KARTIEREN",
+    "fr": "UPRAISER · TRACER L'ASCENSION"
+  },
+  "UPRAISER · SECURING THE BASE": {
+    "zh": "UPRAISER · 筑牢根基",
+    "ja": "UPRAISER · 盤石な基盤を固める",
+    "ko": "UPRAISER · 기반의 수호",
+    "es": "UPRAISER · ASEGURANDO LA BASE",
+    "de": "UPRAISER · DIE BASIS SICHERN",
+    "fr": "UPRAISER · SÉCURISER LA BASE"
+  },
+  "UPRAISER — The Agency": {
+    "zh": "UPRAISER — 代理机构",
+    "ja": "UPRAISER — エージェンシー",
+    "ko": "UPRAISER — The Agency",
+    "es": "UPRAISER — The Agency",
+    "de": "UPRAISER — Die Agentur",
+    "fr": "UPRAISER — L'Agence"
+  },
+  "US legal states": {
+    "zh": "美国合法州",
+    "ja": "米国合法州",
+    "ko": "미국 합법 주",
+    "es": "US legal states",
+    "de": "US legal states",
+    "fr": "États américains autorisés"
+  },
+  "US performance data misled early GCC bids. Conversion rates looked fine until geo-native tests ran.": {
+    "zh": "美区效果数据误导了早期的 GCC 竞价策略。在开展本地化原生测试之前，转化率看似正常但并未反映真实表现。",
+    "ja": "米国の成果データが初期GCC入札の誤認を誘発。現地ネイティブ検証を行うまで、一見順調に見えたコンバージョン率に潜む課題が浮き彫りに。",
+    "ko": "초기 GCC 입찰을 왜곡했던 미국 퍼포먼스 데이터. 지역 네이티브 테스트 전까지는 겉보기에만 전환율이 양호해 보였습니다.",
+    "es": "Los datos de rendimiento de EE. UU. distorsionaron las primeras pujas en el GCC. Las tasas de conversión parecían correctas hasta ejecutar pruebas nativas por región.",
+    "de": "US-Performancedaten führten bei anfänglichen GCC-Geboten in die Irre. Conversion-Raten schienen solide, bis GEO-native Tests liefen.",
+    "fr": "Les données de performance américaines ont faussé les premières enchères GCC. Les taux de conversion semblaient solides jusqu'aux tests géographiques natifs."
+  },
+  "UX/UI designers translating complex strategies into high-converting assets that actively drive user action.": {
+    "zh": "UX/UI 设计师将复杂策略转化为高转化率素材，强力驱动用户转化行动。",
+    "ja": "複雑な戦略を、ユーザーアクションを促す高コンバージョンなアセットへと昇華させるUX/UIデザイナー。",
+    "ko": "복잡한 전략을 유저 액션을 적극적으로 유도하는 고효율 전환 애셋으로 구현하는 UX/UI 디자이너.",
+    "es": "Diseñadores de UX/UI que traducen estrategias complejas en activos de alta conversión que impulsan activamente la acción del usuario.",
+    "de": "UX/UI-Designer, die komplexe Strategien in konversionsstarke Assets verwandeln, die Nutzer gezielt aktivieren.",
+    "fr": "Des designers UX/UI traduisant des stratégies complexes en créations à fort taux de conversion, incitant directement à l'action de l'utilisateur."
+  },
   "Unable to send message. Please try again.": {
     "zh": "无法发送信息，请重试。",
     "ja": "メッセージを送信できませんでした。もう一度お試しください。",
@@ -4829,30 +4765,6 @@
     "es": "UPRAISER?",
     "de": "UPRAISER"
   },
-  "UPRAISER — The Agency": {
-    "zh": "UPRAISER — 代理机构",
-    "ja": "UPRAISER — エージェンシー",
-    "ko": "UPRAISER — The Agency",
-    "es": "UPRAISER — The Agency",
-    "de": "UPRAISER — Die Agentur",
-    "fr": "UPRAISER — L'Agence"
-  },
-  "UPRAISER · CHARTING THE ASCENT": {
-    "zh": "UPRAISER · 擘画攀升",
-    "ja": "UPRAISER · 頂点への軌跡を描く",
-    "ko": "UPRAISER · 비상의 설계",
-    "es": "UPRAISER · TRAZANDO EL ASCENSO",
-    "de": "UPRAISER · DEN AUFSTIEG KARTIEREN",
-    "fr": "UPRAISER · TRACER L'ASCENSION"
-  },
-  "UPRAISER · SECURING THE BASE": {
-    "zh": "UPRAISER · 筑牢根基",
-    "ja": "UPRAISER · 盤石な基盤を固める",
-    "ko": "UPRAISER · 기반의 수호",
-    "es": "UPRAISER · ASEGURANDO LA BASE",
-    "de": "UPRAISER · DIE BASIS SICHERN",
-    "fr": "UPRAISER · SÉCURISER LA BASE"
-  },
   "Upraiser Agency LLP": {
     "zh": "Upraiser Agency LLP",
     "ja": "Upraiser Agency LLP",
@@ -4860,30 +4772,6 @@
     "es": "Upraiser Agency LLP",
     "de": "Upraiser Agency LLP",
     "fr": "Upraiser Agency LLP"
-  },
-  "UPRAISER Agency LLP": {
-    "zh": "UPRAISER Agency LLP",
-    "ja": "UPRAISER Agency LLP",
-    "ko": "UPRAISER Agency LLP",
-    "es": "UPRAISER Agency LLP",
-    "de": "UPRAISER Agency LLP",
-    "fr": "UPRAISER Agency LLP"
-  },
-  "UPRAISER Agency LLP is located at 128 City Road, London EC1V 2NX, United Kingdom.": {
-    "zh": "UPRAISER Agency LLP 地址位于 128 City Road, London EC1V 2NX, United Kingdom。",
-    "ja": "UPRAISER Agency LLPは、英国ロンドンの 128 City Road, London EC1V 2NX に拠点を置いています。",
-    "ko": "UPRAISER Agency LLP는 영국 런던 128 City Road, London EC1V 2NX에 위치하고 있습니다.",
-    "es": "UPRAISER Agency LLP está ubicada en 128 City Road, London EC1V 2NX, Reino Unido.",
-    "de": "UPRAISER Agency LLP hat ihren Sitz in 128 City Road, London EC1V 2NX, United Kingdom.",
-    "fr": "UPRAISER Agency LLP est située au 128 City Road, London EC1V 2NX, Royaume-Uni."
-  },
-  "UPRAISER Agency LLP.": {
-    "zh": "UPRAISER Agency LLP.",
-    "ja": "UPRAISER Agency LLP.",
-    "ko": "UPRAISER Agency LLP.",
-    "es": "UPRAISER Agency LLP.",
-    "de": "UPRAISER Agency LLP.",
-    "fr": "UPRAISER Agency LLP."
   },
   "Upraiser is the official Lenovo agency partner. We wire our programmatic infrastructure directly into OEM factory inventory.": {
     "zh": "UPRAISER 是 Lenovo 官方代理合作伙伴。我们将程序化底层基建直连至 OEM 硬件出厂库存。",
@@ -4909,14 +4797,6 @@
     "de": "Upraiser setzt die Selbstregulierungs-Empfehlungen der European Digital Advertising Alliance für globales Targeting freiwillig um.",
     "fr": "Upraiser applique volontairement les recommandations d'autorégulation de l'European Digital Advertising Alliance pour le ciblage mondial."
   },
-  "upraiser-theme": {
-    "zh": "upraiser-theme",
-    "ja": "upraiser-theme",
-    "ko": "upraiser-theme",
-    "es": "upraiser-theme",
-    "de": "upraiser-theme",
-    "fr": "upraiser-theme"
-  },
   "Uptime": {
     "zh": "正常运行时间",
     "ja": "稼働率",
@@ -4925,29 +4805,13 @@
     "de": "Verfügbarkeit",
     "fr": "Disponibilité"
   },
-  "US legal states": {
-    "zh": "美国合法州",
-    "ja": "米国合法州",
-    "ko": "미국 합법 주",
-    "es": "US legal states",
-    "de": "US legal states",
-    "fr": "États américains autorisés"
-  },
-  "US performance data misled early GCC bids. Conversion rates looked fine until geo-native tests ran.": {
-    "zh": "美区效果数据误导了早期的 GCC 竞价策略。在开展本地化原生测试之前，转化率看似正常但并未反映真实表现。",
-    "ja": "米国の成果データが初期GCC入札の誤認を誘発。現地ネイティブ検証を行うまで、一見順調に見えたコンバージョン率に潜む課題が浮き彫りに。",
-    "ko": "초기 GCC 입찰을 왜곡했던 미국 퍼포먼스 데이터. 지역 네이티브 테스트 전까지는 겉보기에만 전환율이 양호해 보였습니다.",
-    "es": "Los datos de rendimiento de EE. UU. distorsionaron las primeras pujas en el GCC. Las tasas de conversión parecían correctas hasta ejecutar pruebas nativas por región.",
-    "de": "US-Performancedaten führten bei anfänglichen GCC-Geboten in die Irre. Conversion-Raten schienen solide, bis GEO-native Tests liefen.",
-    "fr": "Les données de performance américaines ont faussé les premières enchères GCC. Les taux de conversion semblaient solides jusqu'aux tests géographiques natifs."
-  },
-  "UX/UI designers translating complex strategies into high-converting assets that actively drive user action.": {
-    "zh": "UX/UI 设计师将复杂策略转化为高转化率素材，强力驱动用户转化行动。",
-    "ja": "複雑な戦略を、ユーザーアクションを促す高コンバージョンなアセットへと昇華させるUX/UIデザイナー。",
-    "ko": "복잡한 전략을 유저 액션을 적극적으로 유도하는 고효율 전환 애셋으로 구현하는 UX/UI 디자이너.",
-    "es": "Diseñadores de UX/UI que traducen estrategias complejas en activos de alta conversión que impulsan activamente la acción del usuario.",
-    "de": "UX/UI-Designer, die komplexe Strategien in konversionsstarke Assets verwandeln, die Nutzer gezielt aktivieren.",
-    "fr": "Des designers UX/UI traduisant des stratégies complexes en créations à fort taux de conversion, incitant directement à l'action de l'utilisateur."
+  "VOLUME INDEX": {
+    "zh": "放量指数",
+    "ja": "ボリューム指数",
+    "ko": "볼륨 인덱스",
+    "es": "ÍNDICE DE VOLUMEN",
+    "de": "VOLUMEN-INDEX",
+    "fr": "INDICE DE VOLUME"
   },
   "Vantage app icon": {
     "zh": "Vantage 应用图标",
@@ -4997,14 +4861,6 @@
     "de": "Verifizierte Einzahlungen",
     "fr": "Dépôts vérifiés"
   },
-  "Verified events": {
-    "zh": "已验证事件",
-    "ja": "検証済みイベント",
-    "ko": "검증된 이벤트",
-    "es": "Eventos verificados",
-    "de": "Verifizierte Events",
-    "fr": "Événements vérifiés"
-  },
   "Verified ROAS": {
     "zh": "真实 ROAS",
     "ja": "検証済みROAS",
@@ -5012,6 +4868,14 @@
     "es": "ROAS verificado",
     "de": "Verifizierter ROAS",
     "fr": "ROAS Vérifié"
+  },
+  "Verified events": {
+    "zh": "已验证事件",
+    "ja": "検証済みイベント",
+    "ko": "검증된 이벤트",
+    "es": "Eventos verificados",
+    "de": "Verifizierte Events",
+    "fr": "Événements vérifiés"
   },
   "Verify the event Your board tracks": {
     "zh": "确证您董事会紧盯的核心事件",
@@ -5069,21 +4933,21 @@
     "de": "Volumen-Index",
     "fr": "Indice de Volume"
   },
-  "VOLUME INDEX": {
-    "zh": "放量指数",
-    "ja": "ボリューム指数",
-    "ko": "볼륨 인덱스",
-    "es": "ÍNDICE DE VOLUMEN",
-    "de": "VOLUMEN-INDEX",
-    "fr": "INDICE DE VOLUME"
+  "WE CONQUER THESE PEAKS REPEATEDLY.": {
+    "zh": "我们一次次征服这些险峰。",
+    "ja": "私たちはこの頂を、幾度となく制覇する。",
+    "ko": "우리는 이 정상을 반복해서 정복합니다.",
+    "es": "CONQUISTAMOS ESTAS CUMBRES UNA Y OTRA VEZ.",
+    "de": "WIR BEZWINGEN DIESE GIPFEL IMMER WIEDER.",
+    "fr": "NOUS CONQUÉRONS CES SOMMETS AVEC RÉGULARITÉ."
   },
-  "We are a premium boutique performance desk. We write the code, wire the pipelines, and buy the media. You work directly with the operators who built Your gear and trade Your budgets. No account managers, no black boxes.": {
-    "zh": "我们是一支高端精品效果营销操盘团队。我们编写底层代码、铺设数据管道，并亲自操盘媒介采买。您将直接与打造追踪工具并操盘您预算的核心人员共事。拒绝客户经理传话，告别黑盒操作。",
-    "ja": "私たちはプレミアムなパフォーマンス・ブティックです。コードを書き、パイプラインを構築し、メディアを買い付けます。貴社は自社の基盤を構築し予算を直接運用するオペレーターと直に対話できます。アカウントマネージャーもブラックボックスも存在しません。",
-    "ko": "우리는 프리미엄 부티크 퍼포먼스 데스크입니다. 코드를 직접 작성하고, 파이프라인을 연결하며, 미디어를 직접 바잉합니다. 귀하는 트래킹 장비를 직접 구축하고 예산을 운용하는 오퍼레이터와 다이렉트로 협업합니다. 어카운트 매니저도, 불투명한 블랙박스도 없습니다.",
-    "es": "Somos una boutique de performance integral de primer nivel. Escribimos el código, conectamos los pipelines y compramos los medios. Usted trabaja directamente con los operadores que construyeron sus herramientas y gestionan sus presupuestos. Sin gestores de cuentas ni cajas negras.",
-    "de": "Wir sind ein Premium-Boutique-Performance-Desk. Wir schreiben den Code, verknüpfen die Pipelines und kaufen die Media-Inventare ein. Du arbeitest direkt mit den Experten, die Deine Tools entwickelt haben und Deine Budgets steuern. Keine Account Manager, keine Blackboxes.",
-    "fr": "Nous sommes une boutique de performance haut de gamme. Nous écrivons le code, raccordons les pipelines et achetons les espaces médias. Vous collaborez directement avec les experts qui ont développé vos outils et pilotent vos budgets. Zéro intermédiaire, zéro boîte noire."
+  "WE SEE HOW": {
+    "zh": "我们深知",
+    "ja": "私たちには見えている",
+    "ko": "우리는 봅니다",
+    "es": "VEMOS CUÁN",
+    "de": "WIR SEHEN, WIE",
+    "fr": "NOUS VOYONS"
   },
   "We are UPRAISER": {
     "zh": "我们是 UPRAISER",
@@ -5092,6 +4956,14 @@
     "es": "Somos UPRAISER",
     "de": "Wir sind UPRAISER",
     "fr": "Nous sommes UPRAISER"
+  },
+  "We are a premium boutique performance desk. We write the code, wire the pipelines, and buy the media. You work directly with the operators who built Your gear and trade Your budgets. No account managers, no black boxes.": {
+    "zh": "我们是一支高端精品效果营销操盘团队。我们编写底层代码、铺设数据管道，并亲自操盘媒介采买。您将直接与打造追踪工具并操盘您预算的核心人员共事。拒绝客户经理传话，告别黑盒操作。",
+    "ja": "私たちはプレミアムなパフォーマンス・ブティックです。コードを書き、パイプラインを構築し、メディアを買い付けます。貴社は自社の基盤を構築し予算を直接運用するオペレーターと直に対話できます。アカウントマネージャーもブラックボックスも存在しません。",
+    "ko": "우리는 프리미엄 부티크 퍼포먼스 데스크입니다. 코드를 직접 작성하고, 파이프라인을 연결하며, 미디어를 직접 바잉합니다. 귀하는 트래킹 장비를 직접 구축하고 예산을 운용하는 오퍼레이터와 다이렉트로 협업합니다. 어카운트 매니저도, 불투명한 블랙박스도 없습니다.",
+    "es": "Somos una boutique de performance integral de primer nivel. Escribimos el código, conectamos los pipelines y compramos los medios. Usted trabaja directamente con los operadores que construyeron sus herramientas y gestionan sus presupuestos. Sin gestores de cuentas ni cajas negras.",
+    "de": "Wir sind ein Premium-Boutique-Performance-Desk. Wir schreiben den Code, verknüpfen die Pipelines und kaufen die Media-Inventare ein. Du arbeitest direkt mit den Experten, die Deine Tools entwickelt haben und Deine Budgets steuern. Keine Account Manager, keine Blackboxes.",
+    "fr": "Nous sommes une boutique de performance haut de gamme. Nous écrivons le code, raccordons les pipelines et achetons les espaces médias. Vous collaborez directement avec les experts qui ont développé vos outils et pilotent vos budgets. Zéro intermédiaire, zéro boîte noire."
   },
   "We audit Your MMP endpoints and align log pipelines before going live. Every campaign matches Your MMP data to the penny. By verifying attribution at bid-time, we guarantee 0% post-flight log drift. Your finance directors and UA traders always read the same invoice.": {
     "zh": "在正式上线前，我们会审计您的 MMP 端点并对齐日志管线。每场投放的数据均与您的 MMP 记录分毫不差。通过在竞价时核验归因，我们确保 0% 投放后日志偏差。让您的财务总监与 UA 操盘手始终手握同一份精准对账单。",
@@ -5156,14 +5028,6 @@
     "es": "Conquistamos estas cumbres una y otra vez.",
     "de": "Wir bezwingen diese Gipfel immer wieder.",
     "fr": "Des sommets que nous gravissons avec régularité."
-  },
-  "WE CONQUER THESE PEAKS REPEATEDLY.": {
-    "zh": "我们一次次征服这些险峰。",
-    "ja": "私たちはこの頂を、幾度となく制覇する。",
-    "ko": "우리는 이 정상을 반복해서 정복합니다.",
-    "es": "CONQUISTAMOS ESTAS CUMBRES UNA Y OTRA VEZ.",
-    "de": "WIR BEZWINGEN DIESE GIPFEL IMMER WIEDER.",
-    "fr": "NOUS CONQUÉRONS CES SOMMETS AVEC RÉGULARITÉ."
   },
   "We deployed algorithmic UA across 35 GEOs for a flagship strategy title. By weighting bids heavily toward Day-7 ROAS rather than mere installs, we drove a massive influx of high-LTV players while holding CPA strictly beneath target.": {
     "zh": "我们为一款策略类头部大作在 35 个 GEOs 部署算法买量。通过将竞价权重极大幅度倾斜至 Day-7 ROAS 而非单纯安装量，我们在将 CPA 严密锁定在目标线以下的同时，实现了高 LTV 玩家的海量涌入。",
@@ -5285,14 +5149,6 @@
     "de": "Wir sichern diese Gipfel immer wieder.",
     "fr": "Des positions que nous sécurisons sans relâche."
   },
-  "WE SEE HOW": {
-    "zh": "我们深知",
-    "ja": "私たちには見えている",
-    "ko": "우리는 봅니다",
-    "es": "VEMOS CUÁN",
-    "de": "WIR SEHEN, WIE",
-    "fr": "NOUS VOYONS"
-  },
   "We stopped explaining attribution drift to finance and started sharing one perfectly aligned file.": {
     "zh": "我们再也不用向财务解释归因偏差了，现在双方直接共享同一份分毫不差的对账文件。",
     "ja": "財務部門へアトリビューションの乖離を釈明する日々は終わり、完全に一致した単一のファイルを共有できるようになりました。",
@@ -5341,6 +5197,14 @@
     "de": "Wir arbeiten direkt mit Lenovo PC HK LTD zusammen, um procurement-fähige OEM-ROM- und PAI-Lanes zu sichern und kompetitives Ad-Re-Selling zu vermeiden.",
     "fr": "Nous travaillons directement avec Lenovo PC HK LTD pour sécuriser des flux OEM ROM et PAI conformes aux standards des achats, en évitant toute revente publicitaire concurrentielle."
   },
+  "What We Do": {
+    "zh": "业务范畴",
+    "ja": "提供価値",
+    "ko": "우리가 하는 일",
+    "es": "Qué hacemos",
+    "de": "Was wir tun",
+    "fr": "Ce que nous faisons"
+  },
   "What is CGC and how does it fit into Your routes?": {
     "zh": "什么是 CGC，它如何融入你们的采买路径？",
     "ja": "CGCとは何ですか？また、貴社の配信ルートにどのように組み込まれていますか？",
@@ -5357,13 +5221,13 @@
     "de": "Was Teams über uns sagen",
     "fr": "Ce que disent nos partenaires"
   },
-  "What We Do": {
-    "zh": "业务范畴",
-    "ja": "提供価値",
-    "ko": "우리가 하는 일",
-    "es": "Qué hacemos",
-    "de": "Was wir tun",
-    "fr": "Ce que nous faisons"
+  "When Your MMP and media bills diverge, we rebuild Your data pipelines.": {
+    "zh": "当您的 MMP 与媒介账单出现分歧，我们为您重构数据管道。",
+    "ja": "MMPとメディア請求書の数値に乖離が生じたとき、私たちはデータパイプラインを再構築します。",
+    "ko": "귀하의 MMP와 미디어 청구서가 불일치할 때, 우리는 데이터 파이프라인을 처음부터 다시 구축합니다.",
+    "es": "Cuando su MMP y las facturas de medios divergen, reconstruimos sus pipelines de datos.",
+    "de": "Wenn Dein MMP und Deine Media-Rechnungen auseinanderdriften, bauen wir Deine Daten-Pipelines neu auf.",
+    "fr": "Quand votre MMP et vos factures médias divergent, nous reconstruisons vos pipelines de données."
   },
   "When the market matures, hyper-growth requires a new unit economics model.": {
     "zh": "当市场步入成熟期，超高速增长亟需重塑单体经济模型。",
@@ -5372,14 +5236,6 @@
     "es": "Cuando el mercado madura, el hipercrecimiento exige un nuevo modelo de unit economics.",
     "de": "Wenn der Markt reift, erfordert Hyperwachstum ein neues Unit-Economics-Modell.",
     "fr": "Quand le marché arrive à maturité, l'hyper-croissance exige un nouveau modèle d'unit economics."
-  },
-  "When Your MMP and media bills diverge, we rebuild Your data pipelines.": {
-    "zh": "当您的 MMP 与媒介账单出现分歧，我们为您重构数据管道。",
-    "ja": "MMPとメディア請求書の数値に乖離が生じたとき、私たちはデータパイプラインを再構築します。",
-    "ko": "귀하의 MMP와 미디어 청구서가 불일치할 때, 우리는 데이터 파이프라인을 처음부터 다시 구축합니다.",
-    "es": "Cuando su MMP y las facturas de medios divergen, reconstruimos sus pipelines de datos.",
-    "de": "Wenn Dein MMP und Deine Media-Rechnungen auseinanderdriften, bauen wir Deine Daten-Pipelines neu auf.",
-    "fr": "Quand votre MMP et vos factures médias divergent, nous reconstruisons vos pipelines de données."
   },
   "Whitelist-only, MRAID-compliant supply": {
     "zh": "仅限白名单、合规兼容 MRAID 的广告资源",
@@ -5404,6 +5260,14 @@
     "es": "A quién servimos",
     "de": "Für wen wir arbeiten",
     "fr": "Qui nous accompagnons"
+  },
+  "YOUR RISE": {
+    "zh": "您的崛起",
+    "ja": "貴社の飛躍が",
+    "ko": "귀하의 비상이",
+    "es": "SU ASCENSO",
+    "de": "DEIN AUFSTIEG",
+    "fr": "VOTRE ASCENSION"
   },
   "Yes. We empower Your in-house team. We do not take ownership away from Your operators. We wire the SDK trails and clear the data pipelines so Your team can execute campaigns on clean, audit-ready logs. We secure the lines and ensure the data pipeline matches Your tracking platform perfectly.": {
     "zh": "是的。我们为您的自建团队深度赋能，绝不剥夺您内部操盘手的控制权。我们梳理 SDK 链路并打通数据管道，让您的团队能够依托纯净、审计就绪的日志执行投放。我们筑牢链路底线，确保数据管线与您的追踪归因平台完美吻合。",
@@ -5437,14 +5301,6 @@
     "de": "Du sicherst Dir verifizierte Performance und schaffst sofortigen Raum für Dein globales Wachstum.",
     "fr": "Vous sécurisez des performances vérifiées et débloquez un potentiel immédiat pour votre croissance mondiale."
   },
-  "YOUR RISE": {
-    "zh": "您的崛起",
-    "ja": "貴社の飛躍が",
-    "ko": "귀하의 비상이",
-    "es": "SU ASCENSO",
-    "de": "DEIN AUFSTIEG",
-    "fr": "VOTRE ASCENSION"
-  },
   "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean.": {
     "zh": "您的团队可以随时提取并核验证实您的数据集。我们的原始日志验证在操盘手开启投放前便已彻底消除归因争议。我们提供原生日志、实时对账与竞价前过滤，确保媒介采买与财务主管始终基于同一套真实数据协同决策。您的对账流程始终保持分毫不差。",
     "ja": "貴社チームはいつでもデータセットを抽出して検証可能です。生のログ検証により、トレーダーが配信を開始する前にアトリビューションの不一致を解決します。生ログ、リアルタイム照合、事前入札フィルタリングを提供し、メディアバイヤーと財務責任者が同一のデータに基づいて業務を遂行できるようにします。照合プロセスは常に完全にクリーンな状態を維持します。",
@@ -5476,5 +5332,173 @@
     "es": "Ampliar dispositivo",
     "de": "Gerät vergrößern",
     "fr": "Zoomer sur l'appareil"
+  },
+  "[ REQUEST PILOT ]": {
+    "zh": "[ 申请试点测试 ]",
+    "ja": "[ パイロット配信をリクエスト ]",
+    "ko": "[ 파일럿 요청 ]",
+    "es": "[ SOLICITAR PILOTO ]",
+    "de": "[ PILOTPROJEKT ANFRAGEN ]",
+    "fr": "[ DEMANDER UN PILOTE ]"
+  },
+  "[ Upraiser Briefing Room ]": {
+    "zh": "[ UPRAISER 需求接入室 ]",
+    "ja": "[ UPRAISER ブリーフィングルーム ]",
+    "ko": "[ UPRAISER 브리핑 룸 ]",
+    "es": "[ Sala de Briefing UPRAISER ]",
+    "de": "[ UPRAISER Briefing Room ]",
+    "fr": "[ Briefing Room UPRAISER ]"
+  },
+  "af_purchase": {
+    "zh": "af_purchase",
+    "ja": "af_purchase",
+    "ko": "af_purchase",
+    "es": "af_purchase",
+    "de": "af_purchase",
+    "fr": "af_purchase"
+  },
+  "af_search through af_purchase mapped pre-flight. Weekly reconciliation cadence.": {
+    "zh": "投放前完成从 af_search 到 af_purchase 的全链路映射，并按周执行对账节奏。",
+    "ja": "配信前にaf_searchからaf_purchaseまでのイベントをマッピング。週次の照合サイクルを確立。",
+    "ko": "캠페인 개시 전 af_search부터 af_purchase까지 전 구간 이벤트 사전 매핑. 주간 정산 프로세스 확립.",
+    "es": "Mapeo previo desde af_search hasta af_purchase antes del vuelo. Conciliación con frecuencia semanal.",
+    "de": "af_search bis af_purchase vor Kampagnenstart gemappt. Wöchentlicher Abstimmungsrhythmus.",
+    "fr": "Mapping complet de af_search à af_purchase avant diffusion. Cadence de réconciliation hebdomadaire."
+  },
+  "and": {
+    "zh": "与",
+    "ja": "および",
+    "ko": "및",
+    "es": "y",
+    "de": "und",
+    "fr": "et"
+  },
+  "case study": {
+    "zh": "案例研究",
+    "ja": "導入事例",
+    "ko": "성공 사례",
+    "es": "caso de estudio",
+    "de": "Case Study",
+    "fr": "étude de cas"
+  },
+  "cases": {
+    "zh": "案例",
+    "ja": "事例",
+    "ko": "사례",
+    "es": "casos",
+    "de": "Cases",
+    "fr": "études de cas"
+  },
+  "deposit_crm_ftd": {
+    "zh": "deposit_crm_ftd",
+    "ja": "deposit_crm_ftd",
+    "ko": "deposit_crm_ftd",
+    "es": "deposit_crm_ftd",
+    "de": "deposit_crm_ftd",
+    "fr": "deposit_crm_ftd"
+  },
+  "different technical worlds": {
+    "zh": "不同技术领域的操盘手",
+    "ja": "スペシャリストを結集しました",
+    "ko": "서로 다른 기술 영역에서 왔습니다",
+    "es": "distintos mundos técnicos",
+    "de": "verschiedenen Technologiewelten",
+    "fr": "différents univers techniques"
+  },
+  "first_account_connected": {
+    "zh": "first_account_connected",
+    "ja": "first_account_connected",
+    "ko": "first_account_connected",
+    "es": "first_account_connected",
+    "de": "first_account_connected",
+    "fr": "first_account_connected"
+  },
+  "iGaming": {
+    "zh": "iGaming",
+    "ja": "iGaming",
+    "ko": "iGaming",
+    "es": "iGaming",
+    "de": "iGaming",
+    "fr": "iGaming"
+  },
+  "iGaming · CPI · US legal states": {
+    "zh": "iGaming · CPI · 美国合法州",
+    "ja": "iGaming · CPI · 米国合法州",
+    "ko": "iGaming · CPI · 미국 합법 주",
+    "es": "iGaming · CPI · US legal states",
+    "de": "iGaming · CPI · US legal states",
+    "fr": "iGaming · CPI · États américains autorisés"
+  },
+  "localStorage": {
+    "zh": "localStorage",
+    "ja": "localStorage",
+    "ko": "localStorage",
+    "es": "localStorage",
+    "de": "localStorage",
+    "fr": "localStorage"
+  },
+  "minimal": {
+    "zh": "极简",
+    "ja": "ミニマル",
+    "ko": "미니멀",
+    "es": "minimalista",
+    "de": "minimal",
+    "fr": "minimal"
+  },
+  "not": {
+    "zh": "非",
+    "ja": "not",
+    "ko": "아님",
+    "es": "no",
+    "de": "nicht",
+    "fr": "non"
+  },
+  "p99 Bid Scoring": {
+    "zh": "p99 竞价评分",
+    "ja": "p99入札スコアリング",
+    "ko": "p99 입찰 스코어링",
+    "es": "Scoring de pujas p99",
+    "fr": "Scoring d'enchères p99",
+    "de": "p99 Bid-Scoring"
+  },
+  "p99 bid scoring": {
+    "zh": "p99 竞价评分",
+    "ja": "p99入札スコアリング",
+    "ko": "p99 입찰 스코어링",
+    "es": "Scoring de pujas p99",
+    "de": "p99 Bid Scoring",
+    "fr": "Scoring d'enchères p99"
+  },
+  "reconciliation file": {
+    "zh": "统一对账底册",
+    "ja": "照合ファイルを納品",
+    "ko": "통합 정산 장부를 제공합니다",
+    "es": "archivo de conciliación",
+    "de": "Abstimmungsdatei",
+    "fr": "fichier de réconciliation"
+  },
+  "rich": {
+    "zh": "详尽",
+    "ja": "リッチ",
+    "ko": "리치",
+    "es": "completo",
+    "de": "detailliert",
+    "fr": "riche"
+  },
+  "upraiser-theme": {
+    "zh": "upraiser-theme",
+    "ja": "upraiser-theme",
+    "ko": "upraiser-theme",
+    "es": "upraiser-theme",
+    "de": "upraiser-theme",
+    "fr": "upraiser-theme"
+  },
+  "· Required": {
+    "zh": "· 必填",
+    "ja": "· 必須",
+    "ko": "· 필수",
+    "es": "· Obligatorio",
+    "de": "· Erforderlich",
+    "fr": "· Requis"
   }
 }

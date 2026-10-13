@@ -987,12 +987,13 @@
     "activeUsers": "アクティブユーザー",
     "botTraffic": "ボットトラフィック",
     "chargebacks": "チャージバック",
-    "spamSignups": "スパム登録",
-    "botsFarms": "ボット & ファーム",
+    "spamSignups": "スパム登録遮断",
+    "botsFarms": "ボット & ファーム排除",
     "verifiedRoas": "検証済みROAS",
     "recoveredSpend": "回収済み広告費",
     "ourClients": "クライアント企業",
-    "renderingTerrain": "地形をレンダリング中"
+    "renderingTerrain": "地形をレンダリング中",
+    "clickFlood": "クリックフラッド遮断"
   },
   "channelsCta": {
     "label": "チャネル",

@@ -2,14 +2,15 @@
 import { motion, useTransform, MotionValue, useMotionValueEvent } from "framer-motion";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface FraudScrollChartProps {
   progress: MotionValue<number>;
 }
 
 const metrics = [
-  { label: "Bots & Farms", value: 47.0, theme: "red", color: "rgba(239, 68, 68, 1)", id: "SYS_ERR_01" },
-  { label: "Click Flood", value: 35.0, theme: "red", color: "rgba(239, 68, 68, 0.8)", id: "SYS_ERR_02" },
+  { label: "Bots & Farms Eliminated", value: 47.0, theme: "red", color: "rgba(239, 68, 68, 1)", id: "SYS_ERR_01" },
+  { label: "Click Flood Blocked", value: 35.0, theme: "red", color: "rgba(239, 68, 68, 0.8)", id: "SYS_ERR_02" },
   { label: "Verified ROAS", value: 100.0, theme: "gold", color: "rgba(212, 175, 55, 1)", id: "SECURE_01" },
   { label: "Recovered Spend", value: 18.5, theme: "gold", color: "rgba(212, 175, 55, 0.8)", id: "SECURE_02" },
 ] as const;
@@ -102,6 +103,7 @@ function TrackParticles({ color, isFraud }: { color: string, isFraud: boolean })
 }
 
 export function FraudScrollChart({ progress }: FraudScrollChartProps) {
+  const { t } = useTranslation();
   const isReducedMotion = useReducedMotion();
   const chartOpacity = useTransform(progress, [0.32, 0.38], [0, 1]);
 
@@ -140,7 +142,7 @@ export function FraudScrollChart({ progress }: FraudScrollChartProps) {
               <div className="flex justify-between items-end border-b border-white/10 pb-1">
                 <div className="flex gap-4 items-baseline">
                   <span className="font-mono text-[9px] text-white/30 tracking-widest">{m.id}</span>
-                  <span className="fold-chart-ghost-label tracking-[0.15em]" data-ghost-theme={m.theme}>{m.label}</span>
+                  <span className="fold-chart-ghost-label tracking-[0.15em]" data-ghost-theme={m.theme}>{t(m.label, m.label)}</span>
                 </div>
                 <span className="fold-chart-ghost-value text-2xl inline-block min-w-[4ch] text-right" data-ghost-theme={m.theme}>
                   <AnimatedNumber value={numValue} isReducedMotion={isReducedMotion} finalValue={m.value} />

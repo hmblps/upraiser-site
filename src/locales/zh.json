@@ -987,12 +987,13 @@
     "activeUsers": "活跃用户",
     "botTraffic": "机器人流量",
     "chargebacks": "拒付退款",
-    "spamSignups": "垃圾注册",
-    "botsFarms": "机器人与刷量农场",
+    "spamSignups": "垃圾注册已拦截",
+    "botsFarms": "机器人与刷量农场已清除",
     "verifiedRoas": "真实 ROAS",
     "recoveredSpend": "挽回预算",
     "ourClients": "我们的客户",
-    "renderingTerrain": "渲染地形中"
+    "renderingTerrain": "渲染地形中",
+    "clickFlood": "点击洪泛已拦截"
   },
   "channelsCta": {
     "label": "渠道矩阵",
