@@ -18,7 +18,7 @@ export function ChannelsPage() {
       <div className="fixed top-6 left-6 z-[200]">
         <Link 
           to="/#routes"
-          className="flex items-center gap-2 px-4 py-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 backdrop-blur-md rounded-full text-sm font-bold transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 min-h-[44px] bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 backdrop-blur-md rounded-full text-sm font-bold transition-colors"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -27,7 +27,7 @@ export function ChannelsPage() {
         </Link>
       </div>
 
-      <div className="channels-page__stage" style={{paddingTop: "4.5rem"}}>
+      <div className="channels-page__stage">
         <ProgrammaticScrollSection 
           sectionId="channels-scroll"
           lane={lane}

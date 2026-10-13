@@ -31,8 +31,8 @@ import { FORMAT_STILL, FORMAT_VIDEO } from "../../data/deviceScreens";
 
 const MODEL_PATH = "/channels/oem/tv-draco.glb";
 
-const REST_Y = 0.04;
-const REST_X = 0.008;
+const REST_Y = 0;
+const REST_X = 0;
 
 // Larger living-room read — still leave frustum room for Plastic bezel + stand.
 function getTargetHeight() {
@@ -356,19 +356,15 @@ function TvMesh({
     }
 
     const t = performance.now() / 1000;
-    const floatRotX = Math.sin(t * 0.8) * 0.03;
-    const floatRotY = Math.cos(t * 0.6) * 0.04;
-    const floatPosY = Math.sin(t * 1.2) * 0.04;
+    const floatPosY = Math.sin(t * 1.2) * 0.02;
 
-    outerRef.current.rotation.x = rotX.get() + floatRotX;
-    outerRef.current.rotation.y = rotY.get() + floatRotY;
-    /* Снять лишний подъем по Y, который выталкивал верх телевизора за срез */
+    outerRef.current.rotation.x = rotX.get();
+    outerRef.current.rotation.y = rotY.get();
     outerRef.current.position.y = 0.0 + floatPosY;
-    
   });
 
   return (
-    <group ref={outerRef} rotation={flat ? [0, 0, 0] : [0.06, 0, 0]}>
+    <group ref={outerRef} rotation={[0, 0, 0]}>
       {/* Корпус телевизора */}
       <group scale={xf.scale} rotation={[0, Math.PI, 0]}>
         <group position={[-xf.cx, -xf.cy, -xf.cz]}>

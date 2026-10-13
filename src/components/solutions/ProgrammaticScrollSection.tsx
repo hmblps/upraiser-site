@@ -98,7 +98,7 @@ function DeviceCarousel3({
                   formatId={formatId}
                   active={scene === "phone"}
                   className={className}
-                  flat={false}
+                  flat={flat}
                 />
               ) : (
                 <CssPhone mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />
@@ -128,7 +128,7 @@ function DeviceCarousel3({
                     formatId={formatId}
                     className={className}
                     active={scene === "tablet"}
-                    flat={false}
+                    flat={flat}
                   />
                 )
               ) : (
@@ -160,7 +160,7 @@ function DeviceCarousel3({
                     formatId={formatId}
                     className={className}
                     active={scene === "tv"}
-                    flat={false}
+                    flat={flat}
                   />
                 )
               ) : (

@@ -14,10 +14,10 @@
   padding-top: 0;
 }
 
-/* channels-page: no site header — sticky-inner starts from top.
-   Use var to match the back button height so "THE ROUTES" label clears the button. */
+/* channels-page: ensure sticky-inner headline starts comfortably below the fixed back button
+   (top: 1.5rem + 44px hit = ~68px) so "LANES" and title never overlap the pill on any screen. */
 .channels-page .prog-scroll-sticky-inner {
-  padding-top: 1rem;
+  padding-top: calc(var(--site-header-height, 72px) + 0.5rem);
 }
 
 .prog-scroll-outer {
@@ -636,7 +636,7 @@
   height: 100%;
   max-height: min(82dvh, var(--prog-phone-budget, 82dvh));
   width: auto;
-  max-width: min(35%, 15rem);
+  max-width: min(42%, 18.5rem);
   aspect-ratio: 9 / 19.5;
 }
 
@@ -728,20 +728,13 @@
 }
 
 .prog-device-slot .tablet-glb-canvas,
-.prog-device-slot .phone-glb-canvas {
-  width: 150% !important;
+.prog-device-slot .phone-glb-canvas,
+.prog-device-slot .tv-glb-canvas {
+  width: 100% !important;
   height: 100% !important;
   max-width: none !important;
   max-height: none !important;
   flex-shrink: 0 !important;
-  margin: 0 !important;
-}
-
-.prog-device-slot .tv-glb-canvas {
-  width: 110% !important; flex-shrink: 0  !important;
-  height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
   margin: 0 !important;
 }
 
@@ -766,7 +759,7 @@
 .prog-device-load__placeholder,
 .prog-device-load__canvas {
   position: absolute;
-  inset: 0.35rem; border-radius: 1.8rem;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
