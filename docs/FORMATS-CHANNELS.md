@@ -1,7 +1,7 @@
 # Formats page — `/channels`
 
 > **SOT for the live Formats experience.**  
-> Last synced: **11 Sep 2026** — Antigravity pass `dc8f65a` + local Rich inset tweak (`height: 80%`).  
+> Last synced: **13 Oct 2026** — 3D device upright normalization (REST 0/0), canvas 100% aspect ratio fix, floating back-button clearance, and snowfall disabled on channels.  
 > Brand / IA / deploy: `docs/UPRAISER-MASTER.md` (§4, §5, §10, §25).  
 > When MASTER §10/§25 lag, **this file + the source paths below win**.
 
@@ -184,13 +184,16 @@ We deliberately **decouple** texture loading from React's `<Suspense>` boundary 
 ### Optical slots (CSS)
 
 - **Grid:** `1fr 1fr` perfectly balanced layout. Text column is padded (`padding-inline-start: clamp(2rem, 4vw, 4.5rem)`) to give devices breathing room without breaking balance.
-- **WebGL Clipping Fix:** The 3D canvases for Phone and Tablet have `width: 150%` + `flex-shrink: 0`. Because their slots are narrow, this safely widens the WebGL aspect ratio to prevent clipping without overlapping the text. TV canvas has `width: 110%` for the same purpose.
+- **Canvas Sizing & Geometry:** Replaced former 150%/110% canvas width hacks with standard `width: 100%` and `inset: 0` on `.prog-device-load__canvas`. Slot width and camera FOV (`fov: 36, z: 3.52`) are mathematically calibrated to provide a safe margin preventing any mesh edge clipping while preserving undistorted WebGL aspect ratios on Windows high-DPI displays (125%/150%).
+- **Upright Presentation:** Rest angles normalized to `REST_Y = 0` and `REST_X = 0` across Phone, Tablet, and TV. Static tilts and rotational floating wobble (`floatRotX`, `floatRotY`) removed; devices remain clean, symmetrical, and face-forward in resting state, while keeping full interactive 3D rotation on pointer drag/hover.
+- **Header Clearance:** `.channels-page .prog-scroll-sticky-inner` has `padding-top: calc(var(--site-header-height, 72px) + 0.5rem)` so the section header starts safely below the fixed Back button.
+- **Snowfall:** `<GlobalSnowfall />` is completely disabled on `/channels` to eliminate unnecessary rAF rendering and maximize 60 FPS GPU performance for the 3D device stage.
 
-| Slot | CSS Width | Aspect | Canvas Width Hack |
-| --- | --- | --- | --- |
-| Phone | `max-width: min(35%, 15rem)` | 9 / 19.5 | 150% |
-| Tablet | `max-width: min(60%, 23rem)` | 3 / 4 | 150% |
-| TV | `max-width: min(100%, 54rem)` | 16 / 12 | 110% |
+| Slot | CSS Width | Aspect | Canvas Width | Rest Pose |
+| --- | --- | --- | --- | --- |
+| Phone | `max-width: min(42%, 18.5rem)` | 9 / 19.5 | 100% | `REST_Y = 0, REST_X = 0` |
+| Tablet | `max-width: min(60%, 23rem)` | 3 / 4 | 100% | `REST_Y = 0, REST_X = 0` |
+| TV | `max-width: min(100%, 54rem)` | 16 / 12 | 100% | `REST_Y = 0, REST_X = 0` |
 
 ### Phone3D
 
@@ -198,8 +201,8 @@ We deliberately **decouple** texture loading from React's `<Suspense>` boundary 
 | --- | --- |
 | File | `src/components/solutions/Phone3D.tsx` |
 | Growth / Infra | `/phones/deep-blue.glb` · `/phones/orange.glb` |
-| Default REST | `REST_Y ≈ 0.36`, `REST_X ≈ -0.08` |
-| **Rich pose** | `rotY = 0.12` (~6.87°), `rotX = -0.05` (~−2.86°) |
+| Default REST | `REST_Y = 0`, `REST_X = 0` (clean upright, interactive on hover/drag) |
+| Camera | `fov: 36`, `position: [0, -0.05, 3.52]` |
 | Rich glass | Dark material + HTML overlay (not VideoTexture) |
 
 ### `.phone-rich-on-glb` (current — post-Antigravity tweak)
