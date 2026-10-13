@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { GhostBubbleMotion } from "../GhostBubbleMotion";
+import { ChartGhostValue } from "../ChartGhostValue";
 import { PieChart, Pie, ResponsiveContainer, Cell } from "recharts";
 import { useRef } from "react";
 import { warmStage } from "../../lib/scrollPreload";
@@ -154,24 +155,24 @@ function RotatingOmniChart() {
       </div>
 {/* ELEGANT SCATTERED GHOST LABELS (BUBBLING) */}
       <div className="absolute left-[15%] lg:left-[22%] top-0 lg:top-[42px] w-[300px] h-full pointer-events-none z-10">
-        <GhostBubbleMotion left="10%" originY={40} drift={-15} duration={6} delay={0} peakOpacity={0.4}>
-          <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">45%</div>
-          <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">{t("misc.programmatic", "Programmatic")}</div>
+        <GhostBubbleMotion left="10%" originY={40} drift={-15} duration={6} delay={0} peakOpacity={0.78}>
+          <ChartGhostValue value="45%" />
+          <span className="fold-chart-ghost-label">{t("misc.programmatic", "Programmatic")}</span>
         </GhostBubbleMotion>
 
-        <GhostBubbleMotion left="80%" originY={60} drift={20} duration={7.5} delay={1.2} peakOpacity={0.4}>
-          <div className="text-4xl lg:text-5xl font-bold text-fg/30 tracking-tight">22%</div>
-          <div className="text-xs lg:text-sm font-semibold text-fg/40 uppercase tracking-widest mt-1">{t("misc.ctv", "Connected TV")}</div>
+        <GhostBubbleMotion left="80%" originY={60} drift={20} duration={7.5} delay={1.2} peakOpacity={0.78}>
+          <ChartGhostValue value="22%" />
+          <span className="fold-chart-ghost-label">{t("misc.ctv", "Connected TV")}</span>
         </GhostBubbleMotion>
 
-        <GhostBubbleMotion left="20%" originY={80} drift={10} duration={6.8} delay={3.5} peakOpacity={0.3}>
-          <div className="text-4xl lg:text-5xl font-bold text-fg/20 tracking-tight">18%</div>
-          <div className="text-xs lg:text-sm font-semibold text-fg/30 uppercase tracking-widest mt-1">{t("misc.social", "Social Ads")}</div>
+        <GhostBubbleMotion left="20%" originY={80} drift={10} duration={6.8} delay={3.5} peakOpacity={0.78}>
+          <ChartGhostValue value="18%" />
+          <span className="fold-chart-ghost-label">{t("misc.social", "Social Ads")}</span>
         </GhostBubbleMotion>
 
-        <GhostBubbleMotion left="70%" originY={95} drift={-10} duration={8} delay={2.1} peakOpacity={0.2}>
-          <div className="text-3xl lg:text-4xl font-bold text-fg/10 tracking-tight">15%</div>
-          <div className="text-[10px] lg:text-xs font-semibold text-fg/20 uppercase tracking-widest mt-1">{t("misc.oem", "OEM & Direct")}</div>
+        <GhostBubbleMotion left="70%" originY={95} drift={-10} duration={8} delay={2.1} peakOpacity={0.78}>
+          <ChartGhostValue value="15%" />
+          <span className="fold-chart-ghost-label">{t("misc.oem", "OEM & Direct")}</span>
         </GhostBubbleMotion>
       </div>
 
