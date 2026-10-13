@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, memo } from "react";
+import { useLocation } from "react-router-dom";
 import { useScroll } from "../context/ScrollContext";
 import { useMode } from "./SectionHeader";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -20,6 +21,8 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
   const { mode } = useMode();
   const reduced = useReducedMotion();
   const snowEnabled = useEnvironment((s) => s.snowEnabled);
+  const { pathname } = useLocation();
+  const isChannelsPage = pathname === "/channels" || pathname.startsWith("/channels/");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { registerScrollListener } = useScroll();
@@ -30,7 +33,7 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
 
   // Initialize flakes once
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || isChannelsPage) return;
     const count = window.innerWidth < 768 ? 40 : 120;
     const initialFlakes: Flake[] = Array.from({ length: count }).map(() => ({
       x: Math.random() * window.innerWidth,
@@ -41,19 +44,19 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       wobbleSpeed: Math.random() * 0.02 + 0.01,
     }));
     setFlakes(initialFlakes);
-  }, [reduced]);
+  }, [reduced, isChannelsPage]);
 
   // Track scroll delta
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || isChannelsPage) return;
     return registerScrollListener((y) => {
       scrollYRef.current = y;
     });
-  }, [registerScrollListener, reduced]);
+  }, [registerScrollListener, reduced, isChannelsPage]);
 
   // Main render loop
   useEffect(() => {
-    if (reduced || flakes.length === 0 || !snowEnabled || mode !== "growth") return;
+    if (reduced || flakes.length === 0 || !snowEnabled || mode !== "growth" || isChannelsPage) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -111,9 +114,9 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       cancelAnimationFrame(rAF);
       window.removeEventListener("resize", resize);
     };
-  }, [flakes, reduced, snowEnabled, mode]);
+  }, [flakes, reduced, snowEnabled, mode, isChannelsPage]);
 
-  if (reduced || mode !== "growth" || !snowEnabled) return null;
+  if (reduced || mode !== "growth" || !snowEnabled || isChannelsPage) return null;
 
   return (
     <canvas

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Header } from "../components/Header";
 import { PageMeta } from "../components/PageMeta";
 import { SmoothScroll } from "../components/SmoothScroll";
@@ -132,6 +132,8 @@ export function LazySection({
 export function SiteLayout() {
   const { isPreviewMode: applePreview, features: appleFeatures } = useApplePreview();
   const viewportRoute = useViewportRoute();
+  const { pathname } = useLocation();
+  const isChannelsPage = pathname === "/channels" || pathname.startsWith("/channels/");
 
   return (
     <SmoothScroll>
@@ -148,7 +150,7 @@ export function SiteLayout() {
           <Outlet />
           {viewportRoute ? <ViewportChrome /> : null}
         </div>
-        <GlobalSnowfall />
+        {!isChannelsPage && <GlobalSnowfall />}
         {!viewportRoute ? (
           <LazySection minHeight="20dvh">
             <Footer />
