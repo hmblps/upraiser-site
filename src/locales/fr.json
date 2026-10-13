@@ -752,7 +752,10 @@
     "subline": "1 à 2 jours ouvrés. Transmettez le brief de votre marque, vos demandes OEM ou vos candidatures : nous les traitons dans les meilleurs délais.",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ DEMANDER UN PILOTE ]"
+    "ctaLabel": "[ DEMANDER UN PILOTE ]",
+    "form": {
+      "spend": "Dépenses médias mensuelles moyennes"
+    }
   },
   "contactVerticals": [
     {
@@ -990,5 +993,16 @@
     "recoveredSpend": "Dépenses Récupérées",
     "ourClients": "Nos Clients",
     "renderingTerrain": "Rendu du Terrain"
+  },
+  "channelsCta": {
+    "label": "Les Canaux",
+    "title1": "Chaque format.",
+    "title2": "Un supply path unique.",
+    "desc": "Du Programmatique et Social à la Télévision connectée et l'OEM. Explorez nos visualisations interactives de canaux et découvrez comment nous intégrons des sources de trafic fragmentées dans un écosystème unifié avec une preuve d'attribution absolue.",
+    "cta": "Explorer tous les canaux",
+    "g1": "Programmatique",
+    "g2": "Télévision connectée",
+    "g3": "Social Ads",
+    "g4": "OEM & Direct"
   }
 }

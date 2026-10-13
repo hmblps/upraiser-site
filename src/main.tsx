@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import "./styles/andy-kowalski.css";
 import "./i18n";
+import "./lib/domTranslate";
 import App from "./App.tsx";
 import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "./context/ThemeContext.tsx";

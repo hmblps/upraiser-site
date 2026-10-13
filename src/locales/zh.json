@@ -752,7 +752,10 @@
     "subline": "1 至 2 个工作日内响应。请提供您的品牌需求简报、OEM 供应申请或求职意向，我们将精准为您分派路径。",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ 申请试点测试 ]"
+    "ctaLabel": "[ 申请试点测试 ]",
+    "form": {
+      "spend": "月均媒介支出"
+    }
   },
   "contactVerticals": [
     {
@@ -990,5 +993,16 @@
     "recoveredSpend": "挽回预算",
     "ourClients": "我们的客户",
     "renderingTerrain": "渲染地形中"
+  },
+  "channelsCta": {
+    "label": "渠道矩阵",
+    "title1": "全广告形式。",
+    "title2": "单一供应路径。",
+    "desc": "从程序化与社交广告到联网电视与 OEM。探索我们的互动渠道可视化图表，见证我们如何将碎片化的流量来源整合为具备绝对归因凭据的统一生态。",
+    "cta": "探索全部渠道",
+    "g1": "程序化广告",
+    "g2": "联网电视",
+    "g3": "社交广告",
+    "g4": "OEM 与 直投"
   }
 }

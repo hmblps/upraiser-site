@@ -31,7 +31,7 @@ function LegalDocument({ src }: { src: string }) {
         <div className="section-inner">
           {html ? (
             <>
-              <article className="legal-doc" dangerouslySetInnerHTML={{ __html: html }} />
+              <article className="legal-doc" lang="en" data-no-translate dangerouslySetInnerHTML={{ __html: html }} />
               <div className="mt-12">
                 <Magnetic>
                   <Link

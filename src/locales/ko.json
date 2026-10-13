@@ -752,7 +752,10 @@
     "subline": "영업일 기준 1~2일 소요. 브랜드 브리프, OEM 공급 요청, 또는 채용 지원서를 전달해 주시면 최적의 담당자에게 정확히 연결해 드립니다.",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ 파일럿 요청 ]"
+    "ctaLabel": "[ 파일럿 요청 ]",
+    "form": {
+      "spend": "월평균 미디어 집행액"
+    }
   },
   "contactVerticals": [
     {
@@ -990,5 +993,16 @@
     "recoveredSpend": "회수된 광고비",
     "ourClients": "고객사",
     "renderingTerrain": "지형 렌더링 중"
+  },
+  "channelsCta": {
+    "label": "채널",
+    "title1": "모든 포맷.",
+    "title2": "단일 공급 경로.",
+    "desc": "프로그래매틱과 소셜부터 커넥티드 TV와 OEM까지. 인터랙티브 채널 시각화를 통해 파편화된 트래픽 소스를 완벽한 기여 검증을 갖춘 단일 생태계로 통합하는 방식을 확인해 보세요.",
+    "cta": "모든 채널 탐색",
+    "g1": "프로그래매틱",
+    "g2": "커넥티드 TV",
+    "g3": "소셜 광고",
+    "g4": "OEM & 다이렉트"
   }
 }
