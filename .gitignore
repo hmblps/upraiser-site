@@ -129,3 +129,4 @@ public/hero/expedition-mobile-light/
 # Expedition frame sequences (keep locally, not in git)
 public/hero/frames/
 scripts/.i18n-missing.json
+preview-windows/

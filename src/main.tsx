@@ -12,11 +12,17 @@ import { preloadHeroTerrain } from "./lib/heroBoot.ts";
 
 if (typeof document !== "undefined") {
   // OS Detection for Typography fixes
-  const ua = navigator.userAgent.toLowerCase();
-  if (ua.includes("win")) {
-    document.documentElement.dataset.os = "windows";
-  } else if (ua.includes("mac")) {
-    document.documentElement.dataset.os = "mac";
+  const urlParams = new URLSearchParams(window.location.search);
+  const osOverride = urlParams.get("os");
+  if (osOverride === "windows" || osOverride === "mac") {
+    document.documentElement.dataset.os = osOverride;
+  } else {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes("win")) {
+      document.documentElement.dataset.os = "windows";
+    } else if (ua.includes("mac")) {
+      document.documentElement.dataset.os = "mac";
+    }
   }
 
   const theme = document.documentElement.dataset.theme === "light" ? "light" : "dark";

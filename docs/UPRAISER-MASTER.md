@@ -1324,4 +1324,7 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   1. Adding `prevPathRef` to `SmoothScroll.tsx` to strictly bypass scroll resetting on `/cases` transitions (`pathname.startsWith("/cases") || (prevPath.startsWith("/cases") && pathname === "/")`).
   2. Adding `savedScrollYRef` in `CaseModalContext.tsx` to capture the exact background page scroll before modal opening and restore it upon closing.
   3. Specifying `preventScrollReset: true` on both `openCase` and `closeCase` router navigation calls.
+- **Windows Emulation & Preview Tooling (14 Oct 2026):** Implemented automated multi-viewport verification tooling for Windows devices without needing physical Windows hardware:
+  - Added URL parameter support: `?os=windows` and `?os=mac` (enables `html[data-os="windows"]` and Windows ClearType styles in any browser), plus `?tier=lite` and `?tier=high` (toggles flat CSS mockups vs 3D WebGL).
+  - Shipped `npm run preview:windows` (`scripts/preview-windows.mjs`), which automatically launches headless Chromium emulating Windows NT 10.0, captures 1080p 125% display scaling (1536×864, DPR 1.25), 150% scaling (1280×720, DPR 1.5), and Intel GPU Lite fallback, saving inspection PNGs to `preview-windows/`.
 

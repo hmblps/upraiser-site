@@ -13,7 +13,11 @@
             : "dark";
         document.documentElement.dataset.theme = t;
         document.documentElement.style.colorScheme = t;
-        if (/Windows/i.test(navigator.userAgent)) {
+        var urlParams = new URLSearchParams(window.location.search);
+        var osParam = urlParams.get("os");
+        if (osParam === "windows" || osParam === "mac") {
+          document.documentElement.dataset.os = osParam;
+        } else if (/Windows/i.test(navigator.userAgent)) {
           document.documentElement.dataset.os = "windows";
         }
         var meta = document.querySelector('meta[name="theme-color"]');

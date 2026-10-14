@@ -32,7 +32,8 @@ function detectHardwareTier(): HardwareTier {
   if (typeof window === "undefined") return "high";
 
   const params = new URLSearchParams(window.location.search);
-  if (params.get("lite") === "1" || params.get("mode") === "lite") return "lite";
+  if (params.get("lite") === "1" || params.get("mode") === "lite" || params.get("tier") === "lite") return "lite";
+  if (params.get("tier") === "high") return "high";
 
   let renderer = "";
   try {
