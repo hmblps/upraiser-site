@@ -89,14 +89,58 @@ async function captureWindowsPreview() {
   // 4. Lite tier (Intel GPU / weak Windows laptop fallback)
   console.log('\n💻 Testing Windows Intel GPU / Lite fallback (?tier=lite)...');
   await page.goto('http://localhost:5173/channels?os=windows&tier=lite', { waitUntil: 'networkidle2' });
-  await new Promise((r) => setTimeout(r, 800));
-  const litePhonePath = path.join(OUTPUT_DIR, 'windows-lite-01-phone.png');
-  await page.screenshot({ path: litePhonePath });
-  console.log(`   Saved: ${litePhonePath}`);
+  await new Promise((r) => setTimeout(r, 1000));
+  
+  // 4a. Lite Phone: Banner
+  const liteBannerPath = path.join(OUTPUT_DIR, 'windows-lite-01-banner.png');
+  await page.screenshot({ path: liteBannerPath });
+  console.log(`   Saved Banner: ${liteBannerPath}`);
+
+  // 4b. Lite Phone: Native
+  console.log('📸 Scrolling to Native format...');
+  await page.evaluate(() => {
+    const section = document.getElementById('channels-scroll');
+    if (section) {
+      const scrollable = section.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: scrollable * 0.14, behavior: 'instant' });
+    }
+  });
+  await new Promise((r) => setTimeout(r, 1000));
+  const liteNativePath = path.join(OUTPUT_DIR, 'windows-lite-02-native.png');
+  await page.screenshot({ path: liteNativePath });
+  console.log(`   Saved Native: ${liteNativePath}`);
+
+  // 4c. Lite Phone: Video
+  console.log('📸 Scrolling to Video format...');
+  await page.evaluate(() => {
+    const section = document.getElementById('channels-scroll');
+    if (section) {
+      const scrollable = section.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: scrollable * 0.24, behavior: 'instant' });
+    }
+  });
+  await new Promise((r) => setTimeout(r, 1000));
+  const liteVideoPath = path.join(OUTPUT_DIR, 'windows-lite-03-video.png');
+  await page.screenshot({ path: liteVideoPath });
+  console.log(`   Saved Video: ${liteVideoPath}`);
+
+  // 4d. Lite TV: CTV Video
+  console.log('📸 Scrolling to TV format...');
+  await page.evaluate(() => {
+    const section = document.getElementById('channels-scroll');
+    if (section) {
+      const scrollable = section.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: scrollable * 0.95, behavior: 'instant' });
+    }
+  });
+  await new Promise((r) => setTimeout(r, 1200));
+  const liteTvPath = path.join(OUTPUT_DIR, 'windows-lite-04-tv.png');
+  await page.screenshot({ path: liteTvPath });
+  console.log(`   Saved Lite TV: ${liteTvPath}`);
 
   // 5. Also test 150% scaling (1280x720, popular on 13"-14" compact laptops)
   console.log('\n🔍 Testing compact Windows laptop (1280x720, 150% scale)...');
-  await page.goto('http://localhost:5173/channels?os=windows', { waitUntil: 'networkidle2' });
+  await page.goto('http://localhost:5173/channels?os=windows&tier=lite', { waitUntil: 'networkidle2' });
   await page.setViewport({
     width: 1280,
     height: 720,

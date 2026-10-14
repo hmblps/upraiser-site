@@ -300,15 +300,15 @@
   width: auto;
   max-width: 100%;
   aspect-ratio: 9 / 19.5;
-  border-radius: 2.35rem;
-  padding: 0.55rem;
+  border-radius: 2.2rem;
+  padding: 0.28rem;
   box-shadow:
-    0 28px 56px rgba(0, 0, 0, 0.28),
-    0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+    0 24px 48px rgba(0, 0, 0, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.16) inset;
 }
 
 .prog-css-phone--slot {
-  padding: 0.55rem;
+  padding: 0.28rem;
 }
 
 .prog-css-phone--deepblue {
@@ -362,30 +362,17 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 2.15rem;
+  border-radius: 2rem;
   overflow: hidden;
   background: #050505;
-  border: 2px solid rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.9);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .prog-css-phone__notch,
 .prog-css-phone__island {
-  position: absolute;
-  top: 0.72rem;
-  left: 50%;
-  z-index: 6;
-  width: 32%;
-  height: 1.05rem;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: #050505;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 0.5px 1px rgba(0, 0, 0, 0.55);
-  pointer-events: none;
+  display: none;
 }
 
 .prog-css-phone__speaker,
@@ -394,22 +381,13 @@
 }
 
 .prog-css-phone__home-glow {
-  position: absolute;
-  left: 50%;
-  bottom: 0.35rem;
-  z-index: 5;
-  width: 28%;
-  height: 0.22rem;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.28);
-  opacity: 0.55;
-  pointer-events: none;
+  display: none;
 }
 
 .prog-css-phone__screen {
   position: absolute;
-  inset: 0.35rem; border-radius: 1.8rem;
+  inset: 0;
+  border-radius: 1.95rem;
   overflow: hidden;
   background: #000;
   container-type: inline-size;
@@ -438,7 +416,8 @@
 
 .prog-css-phone__ad-closed {
   position: absolute;
-  inset: 0.35rem; border-radius: 1.8rem;
+  inset: 0;
+  border-radius: 1.95rem;
   background: #0a0a0a;
   color: rgba(255, 255, 255, 0.45);
   font-size: 0.7rem;
@@ -562,13 +541,12 @@
 .prog-css-tv__screen {
   display: block;
   position: absolute;
-  inset: 0.35rem; border-radius: 1.8rem;
+  inset: 0;
+  border-radius: 0.25rem;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Bleed past any baked edge / GLB glass margin */
-  transform: scale(1.04);
-  transform-origin: center;
+  transform: none;
 }
 
 .prog-css-tv__foot {
