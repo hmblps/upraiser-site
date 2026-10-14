@@ -49,7 +49,7 @@
   inset-inline-end: 0;
   top: calc(100% + 0.4rem);
   z-index: var(--z-header);
-  max-height: min(70dvh, 22rem);
+  max-height: min(85dvh, 28rem);
   width: 14rem;
   overflow-y: auto;
   overscroll-behavior: contain;

@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 14, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v1.2.4-phone-amplitude-parity`
+**Tag:** `v1.2.5-locale-menu-full-height`
 
 ---
 
@@ -57,6 +57,10 @@ The visual sizes, hierarchies, and physical pixel dimensions across Mac and Wind
    - Phone slot: `width: min(34%, 12.5rem, calc(min(62dvh, budget * 0.72) * (9 / 19.5)))`.
    - Tablet slot: `width: min(60%, 22.25rem, calc(min(68dvh, budget * 0.79) * (3 / 4)))`.
    - TV slot: `width: min(100%, 36.5rem, calc(min(72dvh, budget) * (16 / 10)))`.
+
+### F. Navigation & Locale Menu Full-Height Fit
+- Expanded `.locale-switcher__menu` in `rails.css` from `max-height: min(70dvh, 22rem)` to `max-height: min(85dvh, 28rem)`.
+- The full list of 7 languages (English, 中文, 한국어, 日本語, Español, Deutsch, Français) now fits comfortably ($394\text{px}$ content height within $448\text{px}$ container), eliminating internal scrolling and vertical cutoff.
 
 ---
 
