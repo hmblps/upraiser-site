@@ -60,13 +60,18 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
     if (item) setPanelItem(item);
   }, [item]);
 
+  const savedScrollYRef = useRef<number | null>(null);
+
   const openCase = useCallback(
     (id: string) => {
       if (!getCaseById(id)) return;
+      if (savedScrollYRef.current === null && typeof window !== "undefined") {
+        savedScrollYRef.current = window.scrollY;
+      }
       openingRef.current = id;
       setActiveId(id);
       if (pathname !== `/cases/${id}`) {
-        navigate(`/cases/${id}`, { replace: pathname.startsWith("/cases") });
+        navigate(`/cases/${id}`, { replace: pathname.startsWith("/cases"), preventScrollReset: true });
       } else {
         openingRef.current = null;
       }
@@ -77,12 +82,24 @@ export function CaseModalProvider({ children }: { children: ReactNode }) {
   const closeCase = useCallback(() => {
     openingRef.current = null;
     setActiveId(null);
+    const targetScrollY = savedScrollYRef.current;
+    savedScrollYRef.current = null;
+
     if (caseIdFromPath(pathname)) {
       // Use react-router navigate so state stays perfectly in sync.
-      // ScrollToTop already ignores /cases -> / transitions.
+      // ScrollToTop and SmoothScroll already ignore /cases -> / transitions.
       navigate("/", { replace: true, preventScrollReset: true });
     }
-  }, [pathname]);
+
+    if (targetScrollY !== null && typeof window !== "undefined") {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, targetScrollY);
+      });
+      window.setTimeout(() => {
+        window.scrollTo(0, targetScrollY);
+      }, 30);
+    }
+  }, [navigate, pathname]);
 
   const navigateCase = useCallback(
     (direction: -1 | 1) => {

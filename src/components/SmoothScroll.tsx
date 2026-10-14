@@ -281,8 +281,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
   }, [viewportRoute, notifyScroll]);
 
+  const prevPathRef = useRef(pathname);
+
   // Handle cross-page hash links and automatic scroll-to-top on route changes
   useEffect(() => {
+    const prevPath = prevPathRef.current;
+    prevPathRef.current = pathname;
+
     if (hash) {
       const t = window.setTimeout(() => {
         const id = hash.replace("#", "");
@@ -297,6 +302,11 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       }, 100);
       return () => window.clearTimeout(t);
     } else {
+      // Do not reset scroll on case study modal open/close/switch
+      if (pathname.startsWith("/cases") || (prevPath.startsWith("/cases") && pathname === "/")) {
+        return;
+      }
+
       // Standard route change without a hash -> scroll to very top
       if (lenisRef.current && useLenis) {
         lenisRef.current.scrollTo(0, { immediate: true, force: true });
