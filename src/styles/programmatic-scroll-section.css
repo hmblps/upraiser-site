@@ -665,9 +665,7 @@
 
 .prog-device-slot .phone-glb-stage,
 .prog-device-slot .prog-device-load,
-.prog-device-slot .prog-css-phone,
 .prog-device-slot .prog-css-tablet,
-.prog-css-phone--slot,
 .prog-css-tablet--slot,
 .prog-css-tv--slot {
   width: 100% !important;
@@ -675,6 +673,19 @@
   max-width: none !important;
   max-height: none !important;
   margin: 0 !important;
+}
+
+/* Phone CSS chassis on Windows: calibrated to match 3D phone resting mesh height (~89.5% of canvas),
+   excluding the 3D float/levitation amplitude margin so visible physical size matches Mac 1:1 */
+.prog-device-slot .prog-css-phone,
+.prog-css-phone--slot {
+  width: auto !important;
+  height: 89.5% !important;
+  aspect-ratio: 9 / 19.5 !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  margin: auto !important;
+  align-self: center;
 }
 
 .prog-device-slot .prog-css-tv {
