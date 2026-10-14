@@ -45,23 +45,29 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
       <div className={`absolute inset-0 pointer-events-none ${theme === 'dark' ? 'bg-black/30' : 'bg-black/20'}`} />
 
       
-      {/* Back Button */}
-      <motion.div 
-        className="absolute top-8 left-8 z-50"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.8 }}
-      >
-        <Link 
-          to="/" 
-          className="group flex items-center gap-3 px-5 py-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white font-mono text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors duration-300"
-        >
-          <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Explore
-        </Link>
-      </motion.div>
+      {/* Back Button — mirrors the header island: same row, same capsule, same type */}
+      <div className="absolute inset-x-0 top-0 z-50 pointer-events-none">
+        <div className="page-container flex items-center h-[var(--site-header-bar)] w-full mt-2 max-lg:mt-[calc(var(--site-header-bar)+0.75rem)]">
+          <motion.div
+            className="pointer-events-auto flex items-center bg-bg-elevated/70 backdrop-blur-xl rounded-full border border-border/40 shadow-sm"
+            style={{ padding: "0.15rem" }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.8 }}
+          >
+            <Link
+              to="/"
+              className="island-nav-link group relative inline-flex items-center gap-1.5 h-8 pl-2.5 pr-3 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap text-fg-muted after:absolute after:inset-x-0 after:-inset-y-1.5 after:content-['']"
+            >
+              <svg className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Explore
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+
 
       {/* Typography */}
       <motion.div 
