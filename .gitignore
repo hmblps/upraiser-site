@@ -52,7 +52,8 @@ assets/channels/oem/*.src.glb
 _local_drafts/
 .cursor/
 .hermes/
-repomix-output.xml
+repomix-output.*
+project_code.txt
 import_skills.py
 
 # skills CLI --all agent dumps (canonical skills live in .agents/skills)
