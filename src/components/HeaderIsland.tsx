@@ -56,7 +56,7 @@ export function HeaderIsland() {
                         active ? "text-on-accent" : "text-fg-muted font-semibold"
                       }`}
                     >
-                      {link.href === "/" ? t("nav.agency", "The Agency") : t("nav.studio", "Creative Studio")}
+                      {link.href === "/" ? t("nav.agency", "The Agency") : t("nav.studio", "The Craft")}
                       {link.underConstruction && (
                         <span className="ml-1 text-[8px] uppercase tracking-wider opacity-60">{t("nav.soon", "Soon")}</span>
                       )}
@@ -91,7 +91,7 @@ export function HeaderIsland() {
           >
             {isDark ? <Sun className="w-3.5 h-3.5" strokeWidth={2.5} /> : <Moon className="w-3.5 h-3.5" strokeWidth={2.5} />}
           </motion.span>
-          <span>{isDark ? 'The Infrastructure' : 'The Growth'}</span>
+          <span className="hidden sm:inline">{isDark ? 'The Infrastructure' : 'The Growth'}</span>
         </motion.button>
 
         {/* Divider */}

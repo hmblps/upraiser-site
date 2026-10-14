@@ -57,7 +57,7 @@ function RotatingOmniChart() {
       </motion.div>
 
       {/* COMPLEX RECHARTS WHEEL */}
-      <div className="absolute left-0 top-1/2 lg:top-[calc(50%+42px)] -translate-y-1/2 -translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0">
+      <div className="absolute left-0 top-1/2 lg:top-[calc(50%+42px)] -translate-y-1/2 -translate-x-[65%] sm:-translate-x-[55%] w-[800px] h-[800px] lg:w-[1100px] lg:h-[1100px] z-0 max-lg:opacity-40">
         
         {/* OUTER ROTATING RING */}
         <motion.div style={{ rotate: rotateOuter }} className="absolute inset-0 w-full h-full">
@@ -187,7 +187,7 @@ export function ChannelsCtaSection() {
       <div className="relative flex flex-col lg:flex-row items-center w-full">
         
         {/* WHEEL & GHOST LABELS COMPONENT */}
-        <div className="absolute inset-0 z-50 pointer-events-none">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <RotatingOmniChart />
         </div>
 
@@ -205,7 +205,7 @@ export function ChannelsCtaSection() {
               </p>
             </div>
             
-            <div className="mt-10 inline-block">
+            <div className="mt-10 inline-block relative z-20">
               <Link 
                 to="/channels" 
                 className="btn-caps btn-caps--primary inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-bold tracking-widest"

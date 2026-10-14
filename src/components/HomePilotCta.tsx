@@ -55,7 +55,7 @@ export function HomePilotCta() {
         style={reduced ? {} : { y, scale, transformOrigin: "bottom center" }}
       />
 
-      <div className="section-inner relative z-10 pb-[60vw] sm:pb-0">
+      <div className="section-inner relative z-10 pb-[85vw] sm:pb-0">
         <Reveal>
           <div className="flex flex-col items-start gap-8 border-t border-border/70 pt-8 max-w-xl">
             <div>
@@ -77,7 +77,7 @@ export function HomePilotCta() {
                   <ScrollLink
                     href={primaryCta.href}
                     data-cursor="cta"
-                    className="btn-caps btn-caps--primary flex w-full justify-center rounded-full px-8 py-3.5"
+                    className="btn-caps btn-caps--primary flex w-full justify-center rounded-full px-8 py-3.5 min-h-[44px]"
                   >
                     {primaryCta.label}
                   </ScrollLink>
@@ -91,7 +91,7 @@ export function HomePilotCta() {
                 whileHover={reduced ? undefined : { scale: 1.02 }}
                 whileTap={reduced ? undefined : { scale: 0.95 }}
                 transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-                className="pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-sm font-medium text-fg-muted px-6 py-2.5 rounded-full border border-border/40 bg-fg/[0.02] cursor-pointer"
+                className="pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-sm font-medium text-fg-muted hover:text-fg px-6 py-2.5 min-h-[44px] rounded-full border border-border/60 bg-bg-elevated/90 backdrop-blur-md shadow-xs cursor-pointer relative z-20"
               >
                 {switchLabel}
               </motion.button>

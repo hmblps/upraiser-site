@@ -86,8 +86,8 @@ export function preloadPhone3DAssets(mode: SiteMode = "growth") {
   void useTexture.preload([SCREEN_STILL.banner!]);
 }
 
-const REST_Y = 0;   // Face-forward upright presentation
-const REST_X = 0;   // Level without crooked tilt
+const REST_Y = 0.07;   // ~4° — subtle depth hint, phone stays face-forward
+const REST_X = -0.04;  // slight backward tilt for 3D feel
 
 type Phone3DProps = {
   active?: boolean;
@@ -357,9 +357,11 @@ const PhoneMesh = memo(function PhoneMesh({
       c + (d - c) * e(rangeCl(v, a, b));
 
     // Float amplitude: zero while phone is flying, fades in on settle (p 0.72→1.0)
-    // Float fades in as phone settles (p: 0.60 → 0.90) — pure vertical gentle breathing
+    // Float fades in as phone settles (p: 0.60 → 0.90)
     const floatAmp  = mr(p, 0.60, 0.90, 0, 1, easeOut3);
-    const floatPosY = Math.sin(t * 1.2) * 0.02 * floatAmp;
+    const floatRotX = Math.sin(t * 0.8) * 0.03 * floatAmp;
+    const floatRotY = Math.cos(t * 0.6) * 0.04 * floatAmp;
+    const floatPosY = Math.sin(t * 1.2) * 0.04 * floatAmp;
 
     // rotX — flat (−π/2) → interactive spring target
     // Completes at p=0.72 so the phone is upright well before copy is read
@@ -367,9 +369,10 @@ const PhoneMesh = memo(function PhoneMesh({
     const liftT   = mr(p, 0.04, 0.72, 0, 1, easeIO3);
     const baseRotX = flatX + (rotX.get() - flatX) * liftT;
 
-    // rotY — 0 → interactive spring target
+    // rotY — 0 → spring target + micro overshoot at p≈0.75
     const rotateT   = mr(p, 0.14, 0.78, 0, 1, easeIO3);
-    const baseRotY  = rotY.get() * rotateT;
+    const overshoot = Math.sin(rangeCl(p, 0.68, 0.92) * Math.PI) * 0.06;
+    const baseRotY  = rotY.get() * rotateT + overshoot;
 
     // posZ — dolly from far (3.2) → settled (0.5)
     const targetPosZ = mr(p, 0, 0.78, 3.2, 0.5, easeIO3);
@@ -377,8 +380,8 @@ const PhoneMesh = memo(function PhoneMesh({
     // posY — slide up from off-bottom (−1.2) → centre (0)
     const targetPosY = mr(p, 0.02, 0.65, -1.2, 0, easeOut3);
 
-    group.current.rotation.x = baseRotX;
-    group.current.rotation.y = baseRotY;
+    group.current.rotation.x = baseRotX + floatRotX;
+    group.current.rotation.y = baseRotY + floatRotY;
     group.current.position.y = targetPosY + floatPosY;
     group.current.position.z = targetPosZ;
 
@@ -559,7 +562,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, -0.05, flat ? 3.2 : 3.52], fov: 36, near: 0.05, far: 80 }}
+          camera={{ position: [0, -0.08, flat ? 3.15 : 3.48], fov: 35, near: 0.05, far: 80 }}
           style={{
             width: "100%",
             height: "100%",

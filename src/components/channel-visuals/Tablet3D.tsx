@@ -34,8 +34,8 @@ import {
 
 import { Model as TabletModel } from "./Tablet3DModel";
 
-const REST_Y = 0;
-const REST_X = 0;
+const REST_Y = 0.06;
+const REST_X = -0.03;
 
 const TABLET_SCREEN_VIDEO = FORMAT_VIDEO;
 const TABLET_SCREEN_STILL = FORMAT_STILL;
@@ -298,17 +298,19 @@ function TabletMesh({
     }
 
     const t = performance.now() / 1000;
-    const floatPosY = Math.sin(t * 1.2) * 0.02;
+    const floatRotX = Math.sin(t * 0.8) * 0.03;
+    const floatRotY = Math.cos(t * 0.6) * 0.04;
+    const floatPosY = Math.sin(t * 1.2) * 0.04;
 
-    group.current.rotation.x = rotX.get();
-    group.current.rotation.y = rotY.get();
+    group.current.rotation.x = rotX.get() + floatRotX;
+    group.current.rotation.y = rotY.get() + floatRotY;
     group.current.position.y = floatPosY;
   });
 
   return (
     <group ref={group}>
       <Center>
-        <group rotation={[0, 0, 0]}>
+        <group rotation={flat ? [0, 0, 0] : [0.08, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]} scale={6.2}>
             <TabletModel screenMap={screenMap} contentScaleX={formatId === "system-ui" ? 0.90 : 1} />
           </group>

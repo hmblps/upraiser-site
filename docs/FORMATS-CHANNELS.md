@@ -1,7 +1,7 @@
 # Formats page — `/channels`
 
 > **SOT for the live Formats experience.**  
-> Last synced: **13 Oct 2026** — 3D device upright normalization (REST 0/0), canvas 100% aspect ratio fix, floating back-button clearance, and snowfall disabled on channels.  
+> Last synced: **14 Oct 2026** — 3D device rendering restoration on Mac (REST angles, float, 150%/110% canvas bounds), header-integrated mirrored Back button, and mobile header island compression.  
 > Brand / IA / deploy: `docs/UPRAISER-MASTER.md` (§4, §5, §10, §25).  
 > When MASTER §10/§25 lag, **this file + the source paths below win**.
 
@@ -14,7 +14,7 @@
 | **URL** | `http://localhost:5173/channels` · prod `https://upraiser.co.uk/channels` |
 | **Route** | `ChannelsPage` → `ProgrammaticScrollSection` |
 | **Job** | Product proof: every ad format on a real device mockup (Phone / Tablet / TV) |
-| **Nav** | Not in header — home `#routes` CTA → `/channels`; fixed “Back to The Routes” → `/#routes` |
+| **Nav** | Not in header — home `#routes` CTA → `/channels`; mirrored “Back to The Routes” capsule inside `Header.tsx` → `/#routes` |
 | **Tone** | Operator proof — tagline + one sentence + three infrastructure bullets |
 
 Home **does not** mount Formats 3D (Everest race). Legacy `/solutions` → `/#routes`.
