@@ -113,10 +113,10 @@ export function FraudScrollChart({ progress }: FraudScrollChartProps) {
       style={{ opacity: chartOpacity }}
       aria-hidden
     >
-      <div className="w-full max-w-[500px] ml-auto flex flex-col gap-[72px] z-10 relative" style={{ transform: "translateX(-158px)" }}>
+      <div className="fraud-linear-chart__content z-10 relative">
         
         {/* Background Technical Grid aligned with bars */}
-        <div className="absolute -top-[80px] -bottom-[80px] left-0 right-0 pointer-events-none flex opacity-20 z-0">
+        <div className="absolute -top-[80px] -bottom-[80px] left-4 right-4 sm:left-6 sm:right-6 lg:left-0 lg:right-0 pointer-events-none flex opacity-20 z-0">
           {[25, 50, 75, 100].map(pct => (
             <div key={pct} className="h-full border-r border-dashed border-white/20 relative" style={{ width: '25%' }}>
               <span className="absolute -bottom-6 -right-4 font-mono text-[10px] text-white/40">{pct}%</span>
@@ -139,12 +139,12 @@ export function FraudScrollChart({ progress }: FraudScrollChartProps) {
 
           return (
             <div key={m.label} className="flex flex-col gap-2 relative z-10">
-              <div className="flex justify-between items-end border-b border-white/10 pb-1">
-                <div className="flex gap-4 items-baseline">
-                  <span className="font-mono text-[9px] text-white/30 tracking-widest">{m.id}</span>
-                  <span className="fold-chart-ghost-label tracking-[0.15em]" data-ghost-theme={m.theme}>{t(m.label, m.label)}</span>
+              <div className="flex justify-between items-end border-b border-white/10 pb-1 gap-2">
+                <div className="flex gap-2 sm:gap-4 items-baseline min-w-0">
+                  <span className="font-mono text-[9px] text-white/30 tracking-widest shrink-0">{m.id}</span>
+                  <span className="fold-chart-ghost-label tracking-[0.08em] sm:tracking-[0.15em] truncate" data-ghost-theme={m.theme}>{t(m.label, m.label)}</span>
                 </div>
-                <span className="fold-chart-ghost-value text-2xl inline-block min-w-[4ch] text-right" data-ghost-theme={m.theme}>
+                <span className="fold-chart-ghost-value text-xl sm:text-2xl inline-block min-w-[4ch] text-right shrink-0" data-ghost-theme={m.theme}>
                   <AnimatedNumber value={numValue} isReducedMotion={isReducedMotion} finalValue={m.value} />
                 </span>
               </div>

@@ -94,10 +94,12 @@
 }
 
 [data-theme="light"] .cta-mountain-bg {
-  opacity: 1;
+  opacity: 0.72;
   mix-blend-mode: multiply;
-  /* Blows out the slightly-grey JPEG sky to pure white so the rectangular рамка disappears */
-  filter: brightness(1.15) contrast(1.2);
+  /* Soft natural mountain tones without harsh black ink contrast */
+  filter: brightness(1.05) contrast(1.02);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 72%, rgba(0, 0, 0, 0) 98%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 72%, rgba(0, 0, 0, 0) 98%);
 }
 
 [data-theme="dark"] .cta-mountain-bg {
@@ -110,8 +112,16 @@
   }
   
   .cta-mountain-bg {
-    background-size: 135% auto;
+    background-size: 120% auto;
     background-position: center bottom;
+  }
+
+  [data-theme="light"] .cta-mountain-bg {
+    /* Subtle atmospheric mountain horizon on mobile: dissolves harsh black ink lines against the white background */
+    opacity: 0.42;
+    filter: brightness(1.04) contrast(0.98);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.85) 60%, rgba(0, 0, 0, 0) 96%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.85) 60%, rgba(0, 0, 0, 0) 96%);
   }
 }
 

@@ -956,11 +956,32 @@ html[data-os="windows"] .parity-water__lake {
   color: color-mix(in srgb, var(--theme-accent) 65%, var(--theme-muted) 35%) !important;
 }
 
+.fraud-linear-chart__content {
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 10;
+  position: relative;
+  padding-inline: 1rem;
+}
 
+@media (min-width: 640px) {
+  .fraud-linear-chart__content {
+    gap: 2.25rem;
+    padding-inline: 1.5rem;
+  }
+}
 
-
-
-
-
-
-
+@media (min-width: 1024px) {
+  .fraud-linear-chart__content {
+    margin-right: 0;
+    transform: translateX(-158px);
+    gap: 72px;
+    padding-inline: 0;
+  }
+}

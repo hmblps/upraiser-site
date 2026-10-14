@@ -55,7 +55,7 @@ export function HomePilotCta() {
         style={reduced ? {} : { y, scale, transformOrigin: "bottom center" }}
       />
 
-      <div className="section-inner relative z-10 pb-[85vw] sm:pb-0">
+      <div className="section-inner relative z-10 pb-[58vw] sm:pb-0">
         <Reveal>
           <div className="flex flex-col items-start gap-8 border-t border-border/70 pt-8 max-w-xl">
             <div>

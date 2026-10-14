@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 14, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v1.2.6-mobile-compact-cards-fit`
+**Tag:** `v1.2.7-mobile-chart-footer-fix`
 
 ---
 
@@ -68,12 +68,30 @@ The visual sizes, hierarchies, and physical pixel dimensions across Mac and Wind
 - Fixed pagination indicator stretching caused by `button { min-height: 44px }`, nesting the visual pill (`h-1.5`) inside an accessible touch target wrapper.
 - Tightened card padding (`p-4 sm:p-5`) and section margins so that the Header, Device, and full swipe Card fit together seamlessly within a single 667–852px mobile screen without vertical scrolling.
 
+### H. Mobile Light Mode Footer Contrast & Dark Mode Fraud Chart Responsive Alignment
+1. **Dark Mode Mobile Fraud Scroll Chart Left Clipping Fixed:**
+   - Identified root cause: Hardcoded desktop offset `style={{ transform: "translateX(-158px)" }}` in `FraudScrollChart.tsx` was shifting the container $158\text{px}$ off-screen on mobile devices ($360\text{--}430\text{px}$ viewports), cropping text labels ("Bots & Farms Eliminated" became "arms Eliminated").
+   - Introduced `.fraud-linear-chart__content` in `charts.css`:
+     - Mobile / Tablet: `transform: none; margin-inline: auto; width: 100%; max-width: 500px; padding-inline: 1rem;` with responsive gaps (`gap: 1.5rem / 2.25rem`).
+     - Desktop ($\ge 1024\text{px}$): `margin-right: 0; transform: translateX(-158px); gap: 72px; padding-inline: 0;` (exact desktop split layout preserved).
+   - Replaced fixed grid offset with responsive bounds: `left-4 right-4 sm:left-6 sm:right-6 lg:left-0 lg:right-0` so technical dashed grid lines align 1:1 with percentage bars on all screen sizes.
+   - Preserved row layout with `min-w-0`, `truncate` on labels, and `shrink-0` on IDs and percentage numbers.
+
+2. **Mobile Light Mode Footer Mountain Image Contrast Softened:**
+   - Identified root cause: On light mobile, `.cta-mountain-bg` had aggressive `filter: brightness(1.15) contrast(1.2)` and `opacity: 1`, turning the mountain rocks into harsh, dark inky patches against the pure white background (`#ffffff`).
+   - Calibrated light mode styles in `site-shell.css`:
+     - Reduced opacity to `0.42` on mobile (`0.72` on desktop), transforming the visual into a subtle, elegant architectural line silhouette that matches the minimalist UPRAISER light theme.
+     - Replaced harsh `contrast(1.2)` with natural `filter: brightness(1.04) contrast(0.98)` on mobile.
+     - Implemented `-webkit-mask-image` and `mask-image` gradient feathering (`linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0) 96%)`) to eliminate sharp image cutoffs and seamlessly dissolve the mountain into the footer.
+     - Adjusted `pb-[85vw]` to `pb-[58vw]` in `HomePilotCta.tsx` to eliminate excessive void between action buttons and mountain peaks.
+
 ---
 
 ## 2. Verification Status
 - `npx tsc -b`: 0 errors.
-- `npm run build`: built in 11.85s with zero errors.
+- `npm run build`: built in 2.92s with zero errors.
 - Live measurements confirmed identical pixel sizes: Phone $175\times 380$, Tablet $346\times 461$, TV $576\times 324$.
-- Viewport check: $1536\text{px}$ width (desktop) and $393\times 852\text{px}$ (mobile), horizontal overflow: NO.
-- Mobile check: Device mockup and swipe card simultaneously visible in single viewport across Phone, Tablet, and TV formats.
+- Viewport check: $1536\text{px}$ width (desktop) and $390\times 844\text{px}$ (mobile), horizontal overflow: NO.
+- Dark mode mobile fraud chart: 0px left clipping, perfectly centered and balanced.
+- Light mode mobile footer: Soft, atmospheric mountain drawing with natural contrast and smooth bottom fade.
 - Both dev servers running: `http://localhost:5173/` (Mac) and `http://localhost:5174/` (Windows).
