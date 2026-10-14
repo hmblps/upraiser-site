@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 14, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v1.2.5-locale-menu-full-height`
+**Tag:** `v1.2.6-mobile-compact-cards-fit`
 
 ---
 
@@ -62,12 +62,18 @@ The visual sizes, hierarchies, and physical pixel dimensions across Mac and Wind
 - Expanded `.locale-switcher__menu` in `rails.css` from `max-height: min(70dvh, 22rem)` to `max-height: min(85dvh, 28rem)`.
 - The full list of 7 languages (English, 中文, 한국어, 日本語, Español, Deutsch, Français) now fits comfortably ($394\text{px}$ content height within $448\text{px}$ container), eliminating internal scrolling and vertical cutoff.
 
+### G. Mobile Format Showcase & Compact Cards Alignment
+- Solved interface disconnect on mobile devices where the swipe card carousel was pushed entirely below the fold, separating the device screen from its card.
+- Calibrated mobile device containers to height-based constraints (`h-[195px]` phone, `h-[180px]` tablet, `h-[125px]` TV) instead of width-based 400px heights.
+- Fixed pagination indicator stretching caused by `button { min-height: 44px }`, nesting the visual pill (`h-1.5`) inside an accessible touch target wrapper.
+- Tightened card padding (`p-4 sm:p-5`) and section margins so that the Header, Device, and full swipe Card fit together seamlessly within a single 667–852px mobile screen without vertical scrolling.
+
 ---
 
 ## 2. Verification Status
 - `npx tsc -b`: 0 errors.
-- `npm run build`: built in 3.78s with zero errors.
+- `npm run build`: built in 11.85s with zero errors.
 - Live measurements confirmed identical pixel sizes: Phone $175\times 380$, Tablet $346\times 461$, TV $576\times 324$.
-- Viewport check: $1536\text{px}$ width, horizontal overflow: NO.
-- Clipping check: 3D Tablet and 3D Phone fully unclipped across all formats and hover tilt angles.
+- Viewport check: $1536\text{px}$ width (desktop) and $393\times 852\text{px}$ (mobile), horizontal overflow: NO.
+- Mobile check: Device mockup and swipe card simultaneously visible in single viewport across Phone, Tablet, and TV formats.
 - Both dev servers running: `http://localhost:5173/` (Mac) and `http://localhost:5174/` (Windows).

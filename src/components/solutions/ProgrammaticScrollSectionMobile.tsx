@@ -87,7 +87,7 @@ export function ProgrammaticScrollSectionMobile({
   };
 
   return (
-    <div className="prog-scroll-section--mobile relative flex flex-col w-full bg-background pt-8 pb-16" aria-label="Ad formats">
+    <div className="prog-scroll-section--mobile relative flex flex-col w-full bg-background pt-4 pb-10" aria-label="Ad formats">
       <div className="prog-mobile-ambience absolute inset-0 !top-0" style={{ position: "absolute", height: "100%" }} aria-hidden />
 
       {/* Header */}
@@ -95,20 +95,20 @@ export function ProgrammaticScrollSectionMobile({
         <SectionHeader label={tLabel} title={tTitle} description={headerDescription} />
       </div>
       {laneSwitcher ? (
-        <div className="prog-mobile-switcher section-inner mb-4 z-30 relative pointer-events-auto">
+        <div className="prog-mobile-switcher section-inner mb-2 z-30 relative pointer-events-auto">
           {laneSwitcher}
         </div>
       ) : null}
 
       {/* Device Area */}
-      <div className="w-full flex flex-col items-center justify-center pt-4 pb-2 px-4 relative z-10 pointer-events-auto">
+      <div className="w-full flex flex-col items-center justify-center pt-2 pb-1 px-4 relative z-10 pointer-events-auto">
         <button
           type="button"
           className="w-full flex justify-center outline-none"
           onClick={() => setZoomed(true)}
           aria-label="Zoom device"
         >
-          <div className={`relative w-full ${format.scene === 'tv' ? 'aspect-[16/9] max-w-[260px]' : format.scene === 'tablet' ? 'aspect-[3/4] max-w-[220px]' : 'aspect-[9/19] max-w-[190px]'}`}>
+          <div className={`relative flex items-center justify-center ${format.scene === 'tv' ? 'h-[125px] aspect-[16/9]' : format.scene === 'tablet' ? 'h-[180px] aspect-[3/4]' : 'h-[195px] aspect-[9/19.5]'}`}>
             <span className="prog-mobile-stage__glow" aria-hidden />
             {format.scene === 'tv' ? (
               <CssTv mode={mode} formatId={format.id} className="h-full w-full pointer-events-none" />
@@ -121,45 +121,48 @@ export function ProgrammaticScrollSectionMobile({
         </button>
 
         {/* Pagination Dots */}
-        <div className="mt-6 flex items-center justify-center gap-2">
+        <div className="mt-2.5 flex items-center justify-center gap-1">
           {formats.map((_, i) => (
             <button 
               key={i}
+              type="button"
               onClick={() => scrollToCard(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 outline-none ${i === activeIndex ? "w-4 bg-accent" : "w-1.5 bg-border hover:bg-border/80"}`} 
+              className="h-6 w-6 flex items-center justify-center p-0 outline-none bg-transparent border-0 cursor-pointer" 
               aria-label={`Go to format ${i + 1}`}
-            />
+            >
+              <span className={`block h-1.5 rounded-full transition-all duration-300 ${i === activeIndex ? "w-5 bg-accent" : "w-1.5 bg-border hover:bg-border/80"}`} />
+            </button>
           ))}
         </div>
-        <span className="mt-2 font-mono text-[10px] uppercase font-semibold text-theme-muted opacity-60">
+        <span className="mt-0.5 font-mono text-[9px] uppercase tracking-wider font-semibold text-theme-muted opacity-60">
           Swipe cards to change
         </span>
       </div>
 
       {/* Horizontal Scrolling Cards Area */}
-      <div className="w-full mt-4 relative z-20">
+      <div className="w-full mt-2 relative z-20">
         <div 
           ref={scrollerRef}
-          className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 px-4 pb-8"
+          className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-3 px-4 pb-4"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {formats.map((fmt, i) => (
             <div 
               key={fmt.id} 
               data-index={i}
-              className="prog-mobile-card-wrapper snap-center shrink-0 w-[85vw] max-w-[340px] flex"
+              className="prog-mobile-card-wrapper snap-center shrink-0 w-[82vw] max-w-[310px] flex"
             >
               <div 
-                className={`w-full bg-bg-elevated/90 backdrop-blur-2xl border ${i === activeIndex ? "border-accent/40 shadow-xl" : "border-border/40 shadow-lg opacity-60 scale-95"} transition-all duration-300 rounded-3xl p-6 flex flex-col`}
+                className={`w-full bg-bg-elevated/90 backdrop-blur-2xl border ${i === activeIndex ? "border-accent/40 shadow-xl" : "border-border/40 shadow-lg opacity-60 scale-95"} transition-all duration-300 rounded-2xl p-4 sm:p-5 flex flex-col`}
               >
-                <div className="prog-mobile-card__meta mb-2">
-                  <p className="prog-mobile-card__tag !max-w-full">{fmt.tagline}</p>
+                <div className="prog-mobile-card__meta mb-1.5">
+                  <p className="prog-mobile-card__tag !max-w-full text-[10px]">{fmt.tagline}</p>
                 </div>
-                <h3 className="card-title text-xl sm:text-2xl">{fmt.label}</h3>
-                <p className="copy mt-3 text-sm text-theme-muted">{fmt.description}</p>
-                <ul className="prog-mobile-card__points mt-4 p-4 bg-background/50 rounded-2xl space-y-2 flex-1">
+                <h3 className="card-title text-lg sm:text-xl">{fmt.label}</h3>
+                <p className="copy mt-1.5 text-xs text-theme-muted line-clamp-2">{fmt.description}</p>
+                <ul className="prog-mobile-card__points mt-2.5 p-3 bg-background/50 rounded-xl space-y-1.5 flex-1">
                   {fmt.points.map((point) => (
-                    <li key={point} className="prog-mobile-card__point text-sm flex items-start gap-2">
+                    <li key={point} className="prog-mobile-card__point text-xs flex items-start gap-1.5">
                       <span className="text-accent mt-0.5">•</span>
                       <span>{point}</span>
                     </li>
