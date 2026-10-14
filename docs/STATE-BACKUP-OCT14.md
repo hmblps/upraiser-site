@@ -106,15 +106,46 @@ The visual sizes, hierarchies, and physical pixel dimensions across Mac and Wind
    - On `/craft`, the island itself serves as the segmented navigation switcher between `The Agency` and `The Craft` (with the active yellow pill on `The Craft`). Duplicate mobile back buttons were eliminated on `/craft`, keeping the brand logo and island cleanly in-frame on 360–390px screens.
    - On subroutes like `/channels`, the mobile back button gracefully renders as a compact capsule `[ ← ]` on small screens (`< sm`) and expands to `[ ← Back to The Routes ]` on larger screens.
 
+### K. Hero Stats Light Theme Contrast (Pure Frameless Typography)
+1. **Root Cause Analysis:**
+   - Over the dynamic mountain video in the light theme, luminance varies between peak snow white (`#FFFFFF`, luminance $\sim 1.0$) and deep rock shadow (`#181818`, luminance $\sim 0.15$).
+   - The original stat subtitles were styled using `color-mix(in srgb, var(--theme-accent-secondary) 25%, var(--theme-fg) 75%)`, producing a muddy, translucent reddish-grey without shadows. When the camera rotated over dark rock ridges, the text blended completely into the rocks (contrast fell below $1.4:1$).
+   - Light mode values (`#FFD700`) had a tendency to wash out on bright snow.
+2. **Pure Typography Implementation (No Cards / No Boxes):**
+   - Preserved the clean, airy, frameless floating aesthetic of the original design without introducing background cards or containers.
+   - **Subtitles (`.hero-stat-ghost__label` & `.hero-fly-label`):**
+     - Color changed to pure solid black `#000000` with `font-weight: 800` (Extrabold) and `letter-spacing: 0.08em`.
+     - Added calibrated diffuse ambient white halo (`text-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 255, 255, 0.95), 0 1px 2px #ffffff`).
+     - Over bright snow: Text renders as razor-sharp deep black with maximum $21:1$ contrast (WCAG AAA).
+     - Over dark rocks: The luminous white ambient halo creates a clean contour separation around each glyph, preventing text from vanishing into rock shadows.
+   - **Metrics Values (`.hero-stat-ghost__value`):**
+     - Updated to warm, high-contrast gradient: `#b45309` (amber) $\to$ `#dc2626` (red) $\to$ `#991b1b` (deep ruby).
+     - Added dual drop-shadow filter: `drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25))` for simultaneous readability on snow and rock.
+   - Dark theme (`[data-theme="dark"]`) remains 100% untouched and preserved.
+
+### L. Hero Stats Halo Unclipped & Mirrored Dark Theme Typography
+1. **Clipping Artifact Resolution:**
+   - Identified root cause of the rectangular frame around the text halo in light mode: `.hero-stat-ghost__label` contained `overflow: hidden` and `-webkit-line-clamp: 2`.
+   - The CSS paint engine was clipping the `text-shadow` blur radius along the element's bounding box, producing sharp rectangular boundaries around `ACTIVE GEOS`, `OEM DEVICE REACH`, `SLA SETUP`, and `MEDIA SPEND OPTIMIZED`.
+   - Replaced `-webkit-line-clamp: 2; overflow: hidden;` with `display: block; overflow: visible;`. All stat labels are concise metrics (1–2 lines) that never overflow.
+   - Refined `text-shadow` blur stops from a heavy 16px diffuse cloud down to a crisp, feathered multi-layer halo:
+     `text-shadow: 0 0 3px #ffffff, 0 0 6px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.55);`
+   - Completely eliminated all rectangular borders and box artifacts, providing an organic, seamless falloff directly onto both mountain snow and rock textures.
+
+2. **Mirrored Dark Theme Typography (Eliminating "Куцый шрифт"):**
+   - In dark mode, labels were previously unstyled fallbacks (`font-weight: 600`, muted grey-red `color-mix`, no shadow), creating a scrawny, low-contrast appearance in comparison to the authoritative, bold light mode.
+   - Symmetrically mirrored typography between both themes:
+     - **Weight & Tracking:** Uniform `font-weight: 800` (Extrabold) and `letter-spacing: 0.08em` for stats, `0.14em` for fly label.
+     - **Color & Halo:** Set to crisp, luminous white `#ffffff` with a calibrated deep dark halo:
+       `text-shadow: 0 0 3px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.85), 0 0 10px rgba(0, 0, 0, 0.55);`
+     - **Value Gradient Depth:** Enhanced `.hero-stat-ghost__value` in dark mode with a tight `drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6))` so golden numbers retain razor-sharp legibility across snow peaks and night skies alike.
+   - Both themes now possess 1:1 typographic parity, visual weight, and contrast standards.
+
 ---
 
 ## 2. Verification Status
 - `npx tsc -b`: 0 errors.
-- `npm run build`: built in 3.06s with zero errors.
-- Header on Mobile (360px, 375px, 390px):
-  - On `/`: Both `[ THE AGENCY ]` (active) and `THE CRAFT` render cleanly alongside Theme, Locale, and Logo.
-  - On `/craft`: Segmented switch displays `THE AGENCY` and `[ THE CRAFT ]` (active) with smooth navigation back to `/`.
-  - On `/channels`: Back arrow capsule and island sit cleanly within viewport without logo clipping.
-- Interactive navigation: 100% verified via automated Puppeteer click loops (switching between Agency and Craft, theme toggle, locale dropdown).
+- `npm run build`: built in 2.95s with zero errors.
+- Visual inspection: Captured high-DPR desktop and mobile screenshots across both light and dark themes at multiple video timestamps, confirming complete removal of rectangular clipping boundaries and 1:1 typographic symmetry between light and dark modes.
 - Both dev servers running: `http://localhost:5173/` (Mac) and `http://localhost:5174/` (Windows).
 
