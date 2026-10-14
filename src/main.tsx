@@ -14,8 +14,16 @@ if (typeof document !== "undefined") {
   // OS Detection for Typography fixes
   const urlParams = new URLSearchParams(window.location.search);
   const osOverride = urlParams.get("os");
-  if (osOverride === "windows" || osOverride === "mac") {
-    document.documentElement.dataset.os = osOverride;
+  if (osOverride) {
+    if (osOverride === "windows" || osOverride === "mac") {
+      try { sessionStorage.setItem("upraiser-os", osOverride); } catch (e) {}
+    } else if (osOverride === "reset") {
+      try { sessionStorage.removeItem("upraiser-os"); } catch (e) {}
+    }
+  }
+  const activeOs = osOverride || (function() { try { return sessionStorage.getItem("upraiser-os"); } catch (e) { return null; } })();
+  if (activeOs === "windows" || activeOs === "mac") {
+    document.documentElement.dataset.os = activeOs;
   } else {
     const ua = navigator.userAgent.toLowerCase();
     if (ua.includes("win")) {

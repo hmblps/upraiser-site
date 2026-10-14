@@ -1325,6 +1325,11 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   2. Adding `savedScrollYRef` in `CaseModalContext.tsx` to capture the exact background page scroll before modal opening and restore it upon closing.
   3. Specifying `preventScrollReset: true` on both `openCase` and `closeCase` router navigation calls.
 - **Windows Emulation & Preview Tooling (14 Oct 2026):** Implemented automated multi-viewport verification tooling for Windows devices without needing physical Windows hardware:
-  - Added URL parameter support: `?os=windows` and `?os=mac` (enables `html[data-os="windows"]` and Windows ClearType styles in any browser), plus `?tier=lite` and `?tier=high` (toggles flat CSS mockups vs 3D WebGL).
+  - Added URL parameter support: `?os=windows` and `?os=mac` (enables `html[data-os="windows"]` and Windows ClearType styles in any browser with sessionStorage persistence), plus `?tier=lite` and `?tier=high` (toggles flat CSS mockups vs 3D WebGL).
+  - Added `npm run dev:windows` (`vite --open '/?os=windows'`) to boot local development directly in Windows mode.
   - Shipped `npm run preview:windows` (`scripts/preview-windows.mjs`), which automatically launches headless Chromium emulating Windows NT 10.0, captures 1080p 125% display scaling (1536×864, DPR 1.25), 150% scaling (1280×720, DPR 1.5), and Intel GPU Lite fallback, saving inspection PNGs to `preview-windows/`.
+- **Flat Mode / CssPhone Aspect-Ratio & Stretching Fix (14 Oct 2026):** Resolved extreme vertical stretching of `CssPhone` in lite/fallback mode (where the phone rendered as an elongated tube with a distorted Dynamic Island). Root cause: `h-full w-full` on `motion.div` in `ProgrammaticScrollSection.tsx` forced 100% width and height, overriding `aspect-ratio: 9 / 19.5`, while nested `inset: 0.35rem` in `.prog-format-glass` and `.prog-css-phone__live-ad` reduced horizontal width by another 34px. Fixed by:
+  1. Removing `h-full w-full` from fallback devices so `.prog-css-phone` respects intrinsic `aspect-ratio: 9 / 19.5` with `height: 100%; width: auto; max-width: 100%;`.
+  2. Expanding `.prog-device-slot--phone` `max-width` to `min(42%, 18.5rem)` so a 522px tall chassis has the 241px width budget required for an authentic 9:19.5 iPhone aspect ratio.
+  3. Setting nested `.prog-format-glass` and `.prog-css-phone__live-ad` to `inset: 0` inside `.prog-css-phone__screen`.
 

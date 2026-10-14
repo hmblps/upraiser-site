@@ -15,8 +15,16 @@
         document.documentElement.style.colorScheme = t;
         var urlParams = new URLSearchParams(window.location.search);
         var osParam = urlParams.get("os");
-        if (osParam === "windows" || osParam === "mac") {
-          document.documentElement.dataset.os = osParam;
+        if (osParam) {
+          if (osParam === "windows" || osParam === "mac") {
+            try { sessionStorage.setItem("upraiser-os", osParam); } catch (e) {}
+          } else if (osParam === "reset") {
+            try { sessionStorage.removeItem("upraiser-os"); } catch (e) {}
+          }
+        }
+        var activeOs = osParam || (function() { try { return sessionStorage.getItem("upraiser-os"); } catch(e) { return null; } })();
+        if (activeOs === "windows" || activeOs === "mac") {
+          document.documentElement.dataset.os = activeOs;
         } else if (/Windows/i.test(navigator.userAgent)) {
           document.documentElement.dataset.os = "windows";
         }

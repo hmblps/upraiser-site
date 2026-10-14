@@ -91,7 +91,7 @@ function DeviceCarousel3({
       >
         <div className="prog-device-slot prog-device-slot--phone">
           <Suspense fallback={null}>
-            <CanvasErrorBoundary fallback={<CssPhone mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
+            <CanvasErrorBoundary fallback={<CssPhone mode={mode} formatId={formatId} className="pointer-events-none" />}>
               {!flat ? (
                 <Phone3D
                   mode={mode}
@@ -101,7 +101,7 @@ function DeviceCarousel3({
                   flat={flat}
                 />
               ) : (
-                <CssPhone mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />
+                <CssPhone mode={mode} formatId={formatId} className="pointer-events-none" />
               )}
             </CanvasErrorBoundary>
           </Suspense>
@@ -120,7 +120,7 @@ function DeviceCarousel3({
       >
         <div className="prog-device-slot prog-device-slot--tablet" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
-            <CanvasErrorBoundary fallback={<CssTablet mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
+            <CanvasErrorBoundary fallback={<CssTablet mode={mode} formatId={formatId} className="pointer-events-none" />}>
               {!flat ? (
                 shouldWarmTablet && (
                   <Tablet3D
@@ -132,7 +132,7 @@ function DeviceCarousel3({
                   />
                 )
               ) : (
-                shouldWarmTablet && <CssTablet mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />
+                shouldWarmTablet && <CssTablet mode={mode} formatId={formatId} className="pointer-events-none" />
               )}
             </CanvasErrorBoundary>
           </Suspense>
@@ -152,7 +152,7 @@ function DeviceCarousel3({
       >
         <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
           <Suspense fallback={null}>
-            <CanvasErrorBoundary fallback={<CssTv mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />}>
+            <CanvasErrorBoundary fallback={<CssTv mode={mode} formatId={formatId} className="pointer-events-none" />}>
               {!flat ? (
                 shouldWarmTv && (
                   <Tv3D
@@ -164,7 +164,7 @@ function DeviceCarousel3({
                   />
                 )
               ) : (
-                shouldWarmTv && <CssTv mode={mode} formatId={formatId} className="h-full w-full pointer-events-none" />
+                shouldWarmTv && <CssTv mode={mode} formatId={formatId} className="pointer-events-none" />
               )}
             </CanvasErrorBoundary>
           </Suspense>
