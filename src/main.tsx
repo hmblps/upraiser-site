@@ -11,7 +11,7 @@ import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { preloadHeroTerrain } from "./lib/heroBoot.ts";
 
 if (typeof document !== "undefined") {
-  // OS Detection for Typography fixes
+  const isWinPort = window.location.port === "5174";
   const urlParams = new URLSearchParams(window.location.search);
   const osOverride = urlParams.get("os");
   if (osOverride) {
@@ -24,6 +24,8 @@ if (typeof document !== "undefined") {
   const activeOs = osOverride || (function() { try { return sessionStorage.getItem("upraiser-os"); } catch (e) { return null; } })();
   if (activeOs === "windows" || activeOs === "mac") {
     document.documentElement.dataset.os = activeOs;
+  } else if (isWinPort) {
+    document.documentElement.dataset.os = "windows";
   } else {
     const ua = navigator.userAgent.toLowerCase();
     if (ua.includes("win")) {

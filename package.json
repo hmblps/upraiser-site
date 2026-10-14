@@ -7,6 +7,8 @@
     "predev": "bash scripts/restore-assets.sh",
     "dev": "vite",
     "dev:windows": "vite --open '/?os=windows'",
+    "dev:win": "vite --port 5174 --strictPort",
+    "dev:dual": "node scripts/dev-dual.mjs",
     "build": "bash scripts/verify-assets.sh && tsc -b && vite build",
     "generate:og": "node scripts/generate-og-image.mjs && bash scripts/sync-assets.sh",
     "optimize:everest": "node scripts/optimize-everest-glb.mjs",

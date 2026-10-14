@@ -34,6 +34,7 @@ function detectHardwareTier(): HardwareTier {
   const params = new URLSearchParams(window.location.search);
   if (params.get("lite") === "1" || params.get("mode") === "lite" || params.get("tier") === "lite") return "lite";
   if (params.get("tier") === "high") return "high";
+  if (window.location.port === "5174") return "lite";
 
   let renderer = "";
   try {
