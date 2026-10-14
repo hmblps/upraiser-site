@@ -35,6 +35,12 @@ body {
   --section-y-statement: clamp(5.5rem, 9vw, 8rem);
   --section-stack-gap: 3.5rem;
 
+  /* ── Stacking order — values match the pre-refactor literals (30 / 120 / 10050).
+     --z-max must stay above GlobalAmbientModalBackground (inline z-index 990). ── */
+  --z-grain: 30;
+  --z-header: 120;
+  --z-max: 10050;
+
   /* ── Spacing scale (4px base) — prefer over ad-hoc rem / Tailwind gaps on brand surfaces ── */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
