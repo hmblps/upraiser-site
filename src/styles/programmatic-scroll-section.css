@@ -614,21 +614,21 @@
 }
 
 .prog-device-slot--phone {
-  /* Larger hero — placements must read without zooming. */
-  height: 100%;
-  max-height: min(82dvh, var(--prog-phone-budget, 82dvh));
-  width: auto;
-  max-width: min(42%, 18.5rem);
+  /* Mathematical aspect-ratio lock: adapts to both width and height bounds at any zoom */
   aspect-ratio: 9 / 19.5;
+  width: min(42%, 18.5rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (9 / 19.5)));
+  height: auto;
+  max-height: min(80dvh, var(--prog-phone-budget, 80dvh));
+  max-width: 100%;
 }
 
 .prog-device-slot--tablet {
-  /* Sized to rival the phone in hierarchy */
-  height: 100%;
-  max-height: min(75dvh, var(--prog-phone-budget, 75dvh));
-  width: auto;
-  max-width: min(60%, 23rem);
+  /* Mathematical aspect-ratio lock: adapts to both width and height bounds at any zoom */
   aspect-ratio: 3 / 4;
+  width: min(60%, 23rem, calc(min(75dvh, var(--prog-phone-budget, 75dvh)) * (3 / 4)));
+  height: auto;
+  max-height: min(75dvh, var(--prog-phone-budget, 75dvh));
+  max-width: 100%;
   overflow: visible;
   position: relative;
   z-index: 4;

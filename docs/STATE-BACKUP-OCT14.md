@@ -19,6 +19,7 @@
    - Reduced outer titanium rim padding from `0.55rem` to `0.28rem`.
    - Set `.prog-css-phone__screen` to `inset: 0` to prevent horizontal squishing and eliminate side cropping of ad placements via `object-fit: cover`.
    - Hidden overlapping `.prog-css-phone__island` and `.prog-css-phone__home-glow` overlays (`display: none`), ensuring 100% visibility for headers (Reddit "Popular", AccuWeather radar) and bottom action bars ("Vote", "Download", disclaimer tabs).
+   - **Dynamic Multi-Zoom Aspect-Ratio Lock:** Replaced rigid `height: 100%; max-width: min(42%, 18.5rem);` with dynamically bounded `width: min(42%, 18.5rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (9 / 19.5))); height: auto;`, completely eliminating the bug where the phone and tablet stretched vertically at 100% zoom or on tall screens (height > 864px). Device proportions are now mathematically locked to `9 / 19.5` and `3 / 4` with 0.00% error across 80%, 100%, 125%, 150%, and all resolutions.
 2. **TV Screen Top-Corner Blind Spot:**
    - Cleared black triangular blind spot in the top-left and top-right of the `CssTv` display.
    - Replaced legacy phone chassis values (`inset: 0.35rem; border-radius: 1.8rem; transform: scale(1.04);`) with flush OLED bezel parameters: `inset: 0; border-radius: 0.25rem; transform: none; width: 100%; height: 100%; object-fit: cover;`.

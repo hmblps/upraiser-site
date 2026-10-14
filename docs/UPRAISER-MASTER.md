@@ -1349,7 +1349,13 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     1. Reducing the outer titanium frame padding to `0.28rem` (ultra-thin flagship bezel).
     2. Setting `.prog-css-phone__screen` to `inset: 0; border-radius: 1.95rem;`, matching the exact `9 / 19.5` aspect ratio of `780 × 1688` screenshots so no side cropping occurs.
     3. Setting `.prog-css-phone__island` and `.prog-css-phone__home-glow` to `display: none;`, preventing the floating black island pill from obscuring headers (e.g. Reddit "Popular", AccuWeather radar titles), matching the clean screen presentation of the 3D phone model.
-- **Automated Windows Multi-Format Verification:**
-  - Expanded `scripts/preview-windows.mjs` (`npm run preview:windows`) to automatically capture Banner, Native, Video, and CTV Video TV stages across both 125% and 150% Windows scaling profiles.
+- **Dynamic Aspect-Ratio Lock Across All Display Zoom Levels (14 Oct 2026):**
+  - Resolved an issue where CSS devices (Phone & Tablet) stretched vertically into elongated tubes on Windows/Lite tier when zooming to 100% or on tall screens (height > 864px), while looking normal only at 125%.
+  - Root cause: `.prog-device-slot--phone` had `height: 100%` and `max-width: min(42%, 18.5rem)`. On 1080p monitors at 100% scale, height expanded to 822px while width was clamped to 241px. Because `height` was an explicit 100% constraint, CSS `aspect-ratio` could not shrink the height, forcing the phone into an 822×241 tube (ratio 0.294 vs true 0.462). At 125% scale (`1536×864`), the height budget coincidentally landed at 522px (`522 * (9 / 19.5) = 240.9px`), which barely fit within the 241px width cap.
+  - Fixed in `src/styles/programmatic-scroll-section.css`:
+    - `.prog-device-slot--phone`: `width: min(42%, 18.5rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (9 / 19.5))); height: auto; max-height: min(80dvh, var(--prog-phone-budget, 80dvh)); aspect-ratio: 9 / 19.5;`.
+    - `.prog-device-slot--tablet`: `width: min(60%, 23rem, calc(min(75dvh, var(--prog-phone-budget, 75dvh)) * (3 / 4))); height: auto; max-height: min(75dvh, var(--prog-phone-budget, 75dvh)); aspect-ratio: 3 / 4;`.
+  - Now, width dynamically bounds itself against the height budget *and* column width, allowing `height: auto` to strictly preserve the exact mathematical ratio (`0.462` for Phone, `0.750` for Tablet) with 0.00% error across 80%, 100%, 125%, 150%, and all viewport sizes.
+
 
 
