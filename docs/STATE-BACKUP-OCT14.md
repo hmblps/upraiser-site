@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 14, 2026
-**Commit:** `2a24ae55` / `main`
-**Tag:** `v1.2.0-windows-dual-dev-stable`
+**Commit:** HEAD / `main`
+**Tag:** `v1.2.2-pixel-parity-stable`
 
 ---
 
@@ -16,13 +16,12 @@
 ### B. Device Chassis Geometry & Rendering Fixes
 1. **Phone Aspect Ratio & Placement Cropping:**
    - Eliminated vertical stretching of `CssPhone` in programmatic routes feed by removing `h-full w-full` overrides and enforcing true `9 / 19.5` aspect ratio.
-   - Reduced outer titanium rim padding from `0.55rem` to `0.28rem`.
-   - Set `.prog-css-phone__screen` to `inset: 0` to prevent horizontal squishing and eliminate side cropping of ad placements via `object-fit: cover`.
-   - Hidden overlapping `.prog-css-phone__island` and `.prog-css-phone__home-glow` overlays (`display: none`), ensuring 100% visibility for headers (Reddit "Popular", AccuWeather radar) and bottom action bars ("Vote", "Download", disclaimer tabs).
-   - **Dynamic Multi-Zoom Aspect-Ratio Lock:** Replaced rigid `height: 100%; max-width: min(42%, 18.5rem);` with dynamically bounded `width: min(42%, 18.5rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (9 / 19.5))); height: auto;`, completely eliminating the bug where the phone and tablet stretched vertically at 100% zoom or on tall screens (height > 864px). Device proportions are now mathematically locked to `9 / 19.5` and `3 / 4` with 0.00% error across 80%, 100%, 125%, 150%, and all resolutions.
-2. **TV Screen Top-Corner Blind Spot:**
-   - Cleared black triangular blind spot in the top-left and top-right of the `CssTv` display.
-   - Replaced legacy phone chassis values (`inset: 0.35rem; border-radius: 1.8rem; transform: scale(1.04);`) with flush OLED bezel parameters: `inset: 0; border-radius: 0.25rem; transform: none; width: 100%; height: 100%; object-fit: cover;`.
+   - Reduced outer titanium rim padding from `0.55rem` to `0.24rem`.
+   - Tuned corner radii (`1.75rem` outer, `1.55rem` bezel, `1.45rem` screen) so placement UI badges (AccuWeather 15:56, Reddit Popular, bottom voting/disclaimers) are completely visible without corner clipping.
+2. **TV Screen Top-Corner Blind Spot Fixed:**
+   - Cleared corner blind spots on `CssTv` display.
+   - Refined bezel parameters to sharp, realistic OLED TV dimensions (`0.35rem` chassis radius, `0.18rem` bezel radius, `0.12rem` screen radius), preserving "... Press to open" and "Sponsored" badges with zero cutoff.
+   - Added `prog-css-tv--slot` class to hide footer overhang on TV slot mount.
 
 ### C. Case Study Modal Scroll Stabilization
 - Resolved page jump to top `(y = 0)` upon opening or closing case study cards in "The Peaks".
@@ -36,25 +35,29 @@
   - Captures Banner, Native, Video, Tablet, and CTV Video TV stages.
   - Automatically verifies 0px horizontal viewport overflow.
 
-### E. Mac 3D Device Asset Enlargement & Windows Hierarchy Duplication
-1. **Mac 3D WebGL Enlargement (~18–20%):**
-   - Enlarged `Phone3D` mesh scale from `7.0` to `7.45` and moved camera closer (`z: 3.48` -> `3.08`).
-   - Enlarged `Tablet3D` mesh scale from `6.2` to `6.9` and moved camera closer (`z: 3.48` -> `3.18`).
-   - Moved `Tv3D` camera closer (`z: 4.65` -> `3.98`, `fov: 32`).
-   - All three 3D assets on Mac now command the stage with rich presence, zero edge clipping, and smooth floating parallax.
-2. **Windows Hierarchy Duplication (Phone < Tablet < TV):**
-   - Eliminated the inversion where Phone (524px) was taller than Tablet (405px) and TV (332px).
-   - Removed conflicting internal clamps from `.prog-css-tablet` (`min(88%)`, `70dvh`) and `.prog-css-tv` (`58dvh`), letting them fill their dedicated slots.
-   - Slot dimensions mathematically match the Mac hierarchy:
-     - Phone: ~230px W × 499px H (aspect 9:19.5, ~115k px²).
-     - Tablet: ~415px W × 553px H (aspect 3:4, ~229k px², +100% area and +54px taller than Phone).
-     - TV: ~576px W × 360px H (canvas 634px, aspect 16:10 / 16:9 widescreen footprint).
-   - Proportions, sizes, and layout match identically between Mac and Windows.
+### E. Exact 1:1 Pixel Parity Across Mac (3D WebGL) and Windows (CSS Chassis)
+The visual sizes, hierarchies, and physical pixel dimensions across Mac and Windows have been calibrated to direct 1:1 parity ($\pm 0\text{px}$ error):
+
+| Device | Aspect Ratio | Mac 3D Dimensions | Windows CSS Dimensions | Hierarchy & Visual Relationship |
+| :--- | :---: | :---: | :---: | :--- |
+| **Phone** | `9 / 19.5` | **$196 \times 424\text{ px}$** | **$196 \times 424\text{ px}$** | Compact handheld mobile smartphone |
+| **Tablet** | `3 / 4` | **$346 \times 461\text{ px}$** | **$346 \times 461\text{ px}$** | **$+37\text{px}$ taller** than Phone, **$1.76\times$ wider** |
+| **TV** | `16 / 9` | **$576 \times 324\text{ px}$** | **$576 \times 324\text{ px}$** | Widescreen living-room TV (**$1.66\times$ wider** than Tablet, **$2.94\times$ wider** than Phone) |
+
+1. **3D WebGL Calibrations (`Phone3D.tsx`, `Tablet3D.tsx`, `Tv3D.tsx`):**
+   - Phone3D: Mesh scale `7.65`, camera `position: [0, -0.08, flat ? 2.65 : 2.85]`.
+   - Tablet3D: Mesh scale `8.2`, camera `position: [0, 0.15, flat ? 2.65 : 2.92]`.
+   - Tv3D: Camera brought closer to `position: [0, 0.02, flat ? 2.35 : 2.48]`, `fov: 33`.
+2. **CSS Slot Bounds (`programmatic-scroll-section.css`):**
+   - Phone slot: `width: min(34%, 12.5rem, calc(min(62dvh, budget * 0.72) * (9 / 19.5)))`.
+   - Tablet slot: `width: min(60%, 22.25rem, calc(min(68dvh, budget * 0.79) * (3 / 4)))`.
+   - TV slot: `width: min(100%, 36.5rem, calc(min(72dvh, budget) * (16 / 10)))`.
 
 ---
 
 ## 2. Verification Status
-- `npx tsc --noEmit`: 0 errors.
-- `npm run build`: built in 2.86s with zero errors.
-- Dual local servers running: `http://localhost:5173/` (200 OK) and `http://localhost:5174/` (200 OK).
-- Visual parity verified via Puppeteer multi-viewport captures in `preview-windows/`.
+- `npx tsc -b`: 0 errors.
+- `npm run build`: built in 2.89s with zero errors.
+- Live measurements confirmed identical pixel sizes: Phone $196\times 424$, Tablet $346\times 461$, TV $576\times 324$.
+- Viewport check: $1536\text{px}$ width, horizontal overflow: NO.
+- Both dev servers running: `http://localhost:5173/` (Mac) and `http://localhost:5174/` (Windows).

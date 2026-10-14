@@ -265,7 +265,7 @@ export function CssTv({ mode, formatId, className = "" }: CssPhoneProps) {
       onPointerLeave={handlePointerLeave}
     >
       <motion.div 
-        className={`prog-css-tv prog-css-phone--${finish} ${className}`.trim()}
+        className={`prog-css-tv prog-css-tv--slot prog-css-phone--${finish} ${className}`.trim()}
         style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d", boxShadow: "0 35px 60px -15px rgba(0,0,0,0.6)" }}
       >
       <div className="prog-css-tv__bezel">
