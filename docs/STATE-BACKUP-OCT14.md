@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 14, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v1.2.7-mobile-chart-footer-fix`
+**Tag:** `v1.2.8-mobile-editorial-feed`
 
 ---
 
@@ -77,21 +77,29 @@ The visual sizes, hierarchies, and physical pixel dimensions across Mac and Wind
    - Replaced fixed grid offset with responsive bounds: `left-4 right-4 sm:left-6 sm:right-6 lg:left-0 lg:right-0` so technical dashed grid lines align 1:1 with percentage bars on all screen sizes.
    - Preserved row layout with `min-w-0`, `truncate` on labels, and `shrink-0` on IDs and percentage numbers.
 
-2. **Mobile Light Mode Footer Mountain Image Contrast Softened:**
-   - Identified root cause: On light mobile, `.cta-mountain-bg` had aggressive `filter: brightness(1.15) contrast(1.2)` and `opacity: 1`, turning the mountain rocks into harsh, dark inky patches against the pure white background (`#ffffff`).
-   - Calibrated light mode styles in `site-shell.css`:
-     - Reduced opacity to `0.42` on mobile (`0.72` on desktop), transforming the visual into a subtle, elegant architectural line silhouette that matches the minimalist UPRAISER light theme.
-     - Replaced harsh `contrast(1.2)` with natural `filter: brightness(1.04) contrast(0.98)` on mobile.
-     - Implemented `-webkit-mask-image` and `mask-image` gradient feathering (`linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0) 96%)`) to eliminate sharp image cutoffs and seamlessly dissolve the mountain into the footer.
-     - Adjusted `pb-[85vw]` to `pb-[58vw]` in `HomePilotCta.tsx` to eliminate excessive void between action buttons and mountain peaks.
+2. **Mobile Light Mode Footer Mountain Image Architecture:**
+   - Provided exact asset directory and path: `/Users/homeboylebz/Downloads/НОВЫЙ САЙТ UPRAISER/public/images/cta-mountains-v8.jpg`.
+   - Created mobile duplicate `public/images/cta-mountains-mobile.jpg` and wired it in `site-shell.css` at 100% opacity with `filter: none` and `mix-blend-mode: multiply`, enabling 100% manual creative control in Photoshop without CSS filter degradation.
+
+### I. Mobile Ad Formats: Editorial Feed (Вариант 2)
+1. **Vertical Rhythm [Full-size Device] → [Editorial Text & Bullets]:**
+   - Completely replaced cramped horizontal card slider and detached mini-device with a continuous vertical Editorial Feed à la Linear and Stripe.
+   - For every format in the feed:
+     - **Device First:** Full-size centered device mockup (`CssPhone` height `min(55dvh, 450px)`, `CssTablet` height `min(46dvh, 370px)`, `CssTv` width `max-w-[420px] 16/9`) with ambient glow halo.
+     - **Editorial Text Card:** Sits immediately below its device, displaying index (`01 / 10`), uppercase tagline badge, full unclipped title, full description, and all 3 value points with native accent bullets.
+2. **Smooth 60 FPS Parallax Motion:**
+   - Bound local `useScroll` to each card container (`offset: ["start end", "end start"]`), gently interpolating `scale` from $0.93 \to 1.0 \to 0.95$ as the device glides through the mobile screen center.
+3. **Bulletproof In-App Webview Reliability:**
+   - Operates flawlessly without `position: sticky` address-bar jumps across Telegram, LinkedIn, Instagram, and Slack webviews.
+   - Interactive elements (live iframes, video playback, close buttons) respond naturally with zero interference from horizontal gestures.
 
 ---
 
 ## 2. Verification Status
 - `npx tsc -b`: 0 errors.
-- `npm run build`: built in 2.92s with zero errors.
-- Live measurements confirmed identical pixel sizes: Phone $175\times 380$, Tablet $346\times 461$, TV $576\times 324$.
-- Viewport check: $1536\text{px}$ width (desktop) and $390\times 844\text{px}$ (mobile), horizontal overflow: NO.
+- `npm run build`: built in 2.93s with zero errors.
+- Mobile Editorial Feed: Clean vertical flow [Device] → [Text] with zero horizontal overflow.
+- TV and Tablet mockups: True widescreen and tablet aspect ratios rendered in-feed.
 - Dark mode mobile fraud chart: 0px left clipping, perfectly centered and balanced.
-- Light mode mobile footer: Soft, atmospheric mountain drawing with natural contrast and smooth bottom fade.
+- Light mode mobile footer: Prepared for custom retouched `cta-mountains-mobile.jpg`.
 - Both dev servers running: `http://localhost:5173/` (Mac) and `http://localhost:5174/` (Windows).

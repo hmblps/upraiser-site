@@ -112,16 +112,18 @@
   }
   
   .cta-mountain-bg {
-    background-size: 120% auto;
+    background-image: url('/images/cta-mountains-mobile.jpg');
+    background-size: 135% auto;
     background-position: center bottom;
   }
 
   [data-theme="light"] .cta-mountain-bg {
-    /* Subtle atmospheric mountain horizon on mobile: dissolves harsh black ink lines against the white background */
-    opacity: 0.42;
-    filter: brightness(1.04) contrast(0.98);
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.85) 60%, rgba(0, 0, 0, 0) 96%);
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.85) 60%, rgba(0, 0, 0, 0) 96%);
+    /* Full fidelity for retouched mobile image — no artificial wash-out or filters */
+    opacity: 1;
+    mix-blend-mode: multiply;
+    filter: none;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }
 
