@@ -1332,4 +1332,24 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   1. Removing `h-full w-full` from fallback devices so `.prog-css-phone` respects intrinsic `aspect-ratio: 9 / 19.5` with `height: 100%; width: auto; max-width: 100%;`.
   2. Expanding `.prog-device-slot--phone` `max-width` to `min(42%, 18.5rem)` so a 522px tall chassis has the 241px width budget required for an authentic 9:19.5 iPhone aspect ratio.
   3. Setting nested `.prog-format-glass` and `.prog-css-phone__live-ad` to `inset: 0` inside `.prog-css-phone__screen`.
+- **Simultaneous Dual-Dev Server for Mac & Windows (14 Oct 2026):**
+  - Added `npm run dev:dual` (`scripts/dev-dual.mjs`) to concurrently host both development environments in real time:
+    - **Mac Server (`http://localhost:5173/`):** Native Retina DPR 2, Apple WebGL Metal, high hardware tier, Mac system typography.
+    - **Windows Server (`http://localhost:5174/`):** Automated `data-os="windows"`, subpixel ClearType font rendering, Windows scrollbars, and lite CSS chassis.
+  - Implemented zero-configuration port detection in `index.html`, `src/main.tsx`, and `src/hooks/useHardwareTier.ts`: any request arriving on port `5174` automatically defaults to Windows mode and lite tier without requiring any URL query parameters.
+  - Added standalone `npm run dev:win` command for launching only the Windows port 5174.
+- **TV Bezel Blind-Spot Resolution (14 Oct 2026):**
+  - Resolved a prominent black triangular cutout/blind spot in the upper-left (and upper-right) corner of the TV screen in `CssTv`.
+  - Root cause: `.prog-css-tv__bezel .prog-css-phone__live-ad` had legacy phone chassis properties (`inset: 0.35rem; border-radius: 1.8rem; transform: scale(1.04);`), rounding off the rectangular video with giant phone corners and offsetting it downward-right, exposing the black `#050505` TV chassis underneath.
+  - Fixed in `src/styles/programmatic-scroll-section.css` by setting `inset: 0; border-radius: 0.25rem; transform: none; width: 100%; height: 100%; object-fit: cover;`, achieving flush edge-to-edge video presentation with realistic OLED panel corners.
+- **Phone Chassis Placement Cropping & Island Cleanup (14 Oct 2026):**
+  - Resolved an issue where the drawn phone chassis borders were eating into ad placements (e.g. cutting off AccuWeather bottom navigation tabs, Reddit "Vote" and comment buttons, and side margins).
+  - Root cause: Outer `.prog-css-phone` had `padding: 0.55rem`, the bezel had `border: 2px`, and `.prog-css-phone__screen` was inset by another `0.35rem` with a `1.8rem` corner radius, creating ~16px of black border on all sides and heavily distorting the screen aspect ratio (0.425 vs true 0.462), forcing `object-fit: cover` to crop the sides of creatives.
+  - Fixed by:
+    1. Reducing the outer titanium frame padding to `0.28rem` (ultra-thin flagship bezel).
+    2. Setting `.prog-css-phone__screen` to `inset: 0; border-radius: 1.95rem;`, matching the exact `9 / 19.5` aspect ratio of `780 × 1688` screenshots so no side cropping occurs.
+    3. Setting `.prog-css-phone__island` and `.prog-css-phone__home-glow` to `display: none;`, preventing the floating black island pill from obscuring headers (e.g. Reddit "Popular", AccuWeather radar titles), matching the clean screen presentation of the 3D phone model.
+- **Automated Windows Multi-Format Verification:**
+  - Expanded `scripts/preview-windows.mjs` (`npm run preview:windows`) to automatically capture Banner, Native, Video, and CTV Video TV stages across both 125% and 150% Windows scaling profiles.
+
 
