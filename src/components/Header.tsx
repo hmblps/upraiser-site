@@ -35,8 +35,8 @@ export function Header() {
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        <span className="hidden sm:inline">Back to </span>
-        <span>{backLabel}</span>
+        <span className="hidden sm:inline">Back to {isChannels ? "The " : ""}</span>
+        <span className="hidden sm:inline">{isChannels ? "Routes" : backLabel}</span>
       </Link>
     </motion.div>
   ) : null;
@@ -52,12 +52,14 @@ export function Header() {
 
           {/* Desktop & Mobile Main Row */}
           <div className="flex items-center w-full justify-between lg:justify-start gap-2 sm:gap-4">
-            {/* Mobile Back Button (on the left if present) */}
-            <div className="flex lg:hidden items-center">
-              {backButtonNode}
-            </div>
+            {/* Mobile Back Button (on subroutes like /channels where island has no tab) */}
+            {isChannels && (
+              <div className="flex lg:hidden items-center shrink-0">
+                {backButtonNode}
+              </div>
+            )}
 
-            <div className="flex items-center gap-2 sm:gap-4 ml-auto lg:ml-0 w-full justify-end lg:justify-start">
+            <div className="flex items-center gap-2 sm:gap-4 ml-auto lg:ml-0 justify-end lg:justify-start shrink-0">
               <HeaderIsland />
               
               <motion.div

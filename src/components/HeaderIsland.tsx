@@ -36,7 +36,7 @@ export function HeaderIsland() {
             return (
                   <motion.li 
                     key={link.href} 
-                    className={`relative ${link.underConstruction ? 'hidden md:block' : ''}`}
+                    className="relative"
                     whileHover={reduced ? undefined : { scale: 1.05 }}
                     whileTap={reduced ? undefined : { scale: 0.95 }}
                     transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
@@ -52,13 +52,13 @@ export function HeaderIsland() {
                       href={link.href}
                       contactIntent={link.contactIntent}
                       aria-current={active ? "page" : undefined}
-                      className={`island-nav-link relative z-10 inline-flex items-center h-6 px-2.5 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap ${
+                      className={`island-nav-link relative z-10 inline-flex items-center h-6 px-1.5 sm:px-2.5 rounded-full text-[10px] sm:text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap after:absolute after:inset-x-0 after:-inset-y-2.5 after:content-[''] ${
                         active ? "text-on-accent" : "text-fg-muted font-semibold"
                       }`}
                     >
                       {link.href === "/" ? t("nav.agency", "The Agency") : t("nav.studio", "The Craft")}
                       {link.underConstruction && (
-                        <span className="ml-1 text-[8px] uppercase tracking-wider opacity-60">{t("nav.soon", "Soon")}</span>
+                        <span className="hidden sm:inline ml-1 text-[8px] uppercase tracking-wider opacity-60">{t("nav.soon", "Soon")}</span>
                       )}
                     </ScrollLink>
                   </motion.li>
@@ -78,7 +78,7 @@ export function HeaderIsland() {
           whileHover={reduced ? undefined : { scale: 1.05 }}
           whileTap={reduced ? undefined : { scale: 0.95 }}
           transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
-          className="island-nav-link relative z-10 inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap text-fg-muted hover:text-fg font-semibold cursor-pointer"
+          className="island-nav-link relative z-10 inline-flex items-center gap-1.5 h-6 px-1.5 sm:px-2.5 rounded-full text-[10px] sm:text-[11px] font-bold tracking-wide uppercase transition-colors whitespace-nowrap text-fg-muted hover:text-fg font-semibold cursor-pointer after:absolute after:inset-x-0 after:-inset-y-2.5 after:content-['']"
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           title="Switch content mode"
         >

@@ -93,13 +93,28 @@ The visual sizes, hierarchies, and physical pixel dimensions across Mac and Wind
    - Operates flawlessly without `position: sticky` address-bar jumps across Telegram, LinkedIn, Instagram, and Slack webviews.
    - Interactive elements (live iframes, video playback, close buttons) respond naturally with zero interference from horizontal gestures.
 
+### J. Mobile Header Craft Navigation Island
+1. **Root Cause Analysis:**
+   - In `src/components/HeaderIsland.tsx`, the `The Craft` navigation item was styled with `className={... ${link.underConstruction ? 'hidden md:block' : ''}}`. Because `underConstruction: true` was set for `The Craft` in `liveContent.ts`, Tailwind hid the link completely on all viewports under 768px (`< md`).
+2. **Mobile Capsule & Responsive Sizing:**
+   - Removed `hidden md:block` from `HeaderIsland.tsx` so `The Craft` renders across all viewports.
+   - Set the `Soon` badge to `hidden sm:inline` so mobile viewports display the clean, uncluttered `THE CRAFT` label without horizontal bloat.
+   - Applied responsive font sizing and horizontal padding (`text-[10px] sm:text-[11px]`, `px-1.5 sm:px-2.5`) to both navigation items and the theme toggle button.
+   - Added touch-target expansion pseudo-elements (`after:absolute after:inset-x-0 after:-inset-y-2.5 after:content-['']`) ensuring strict compliance with the $\ge 44\times 44\text{px}$ touch target doctrine without enlarging visual capsule height.
+3. **Clean Route Adaptation in Header:**
+   - In `src/components/Header.tsx`, removed `w-full` from the island flex container to prevent flex child overflow.
+   - On `/craft`, the island itself serves as the segmented navigation switcher between `The Agency` and `The Craft` (with the active yellow pill on `The Craft`). Duplicate mobile back buttons were eliminated on `/craft`, keeping the brand logo and island cleanly in-frame on 360–390px screens.
+   - On subroutes like `/channels`, the mobile back button gracefully renders as a compact capsule `[ ← ]` on small screens (`< sm`) and expands to `[ ← Back to The Routes ]` on larger screens.
+
 ---
 
 ## 2. Verification Status
 - `npx tsc -b`: 0 errors.
-- `npm run build`: built in 2.93s with zero errors.
-- Mobile Editorial Feed: Clean vertical flow [Device] → [Text] with zero horizontal overflow.
-- TV and Tablet mockups: True widescreen and tablet aspect ratios rendered in-feed.
-- Dark mode mobile fraud chart: 0px left clipping, perfectly centered and balanced.
-- Light mode mobile footer: Prepared for custom retouched `cta-mountains-mobile.jpg`.
+- `npm run build`: built in 3.06s with zero errors.
+- Header on Mobile (360px, 375px, 390px):
+  - On `/`: Both `[ THE AGENCY ]` (active) and `THE CRAFT` render cleanly alongside Theme, Locale, and Logo.
+  - On `/craft`: Segmented switch displays `THE AGENCY` and `[ THE CRAFT ]` (active) with smooth navigation back to `/`.
+  - On `/channels`: Back arrow capsule and island sit cleanly within viewport without logo clipping.
+- Interactive navigation: 100% verified via automated Puppeteer click loops (switching between Agency and Craft, theme toggle, locale dropdown).
 - Both dev servers running: `http://localhost:5173/` (Mac) and `http://localhost:5174/` (Windows).
+
