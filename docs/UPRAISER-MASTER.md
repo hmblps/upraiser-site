@@ -1356,6 +1356,16 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - `.prog-device-slot--phone`: `width: min(42%, 18.5rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (9 / 19.5))); height: auto; max-height: min(80dvh, var(--prog-phone-budget, 80dvh)); aspect-ratio: 9 / 19.5;`.
     - `.prog-device-slot--tablet`: `width: min(60%, 23rem, calc(min(75dvh, var(--prog-phone-budget, 75dvh)) * (3 / 4))); height: auto; max-height: min(75dvh, var(--prog-phone-budget, 75dvh)); aspect-ratio: 3 / 4;`.
   - Now, width dynamically bounds itself against the height budget *and* column width, allowing `height: auto` to strictly preserve the exact mathematical ratio (`0.462` for Phone, `0.750` for Tablet) with 0.00% error across 80%, 100%, 125%, 150%, and all viewport sizes.
+- **Mac 3D Device Asset Enlargement & Windows Hierarchy Duplication (14 Oct 2026):**
+  - **Mac 3D WebGL Enlargement (~18–20%):** Resolved the issue where 3D assets felt slightly too small floating on the stage. Enlarged Phone3D mesh scale from `7.0` to `7.45` and brought camera `z` closer from `3.48` to `3.08`; enlarged Tablet3D mesh scale from `6.2` to `6.9` and moved camera `z` from `3.48` to `3.18`; brought Tv3D camera `z` from `4.65` to `3.98` with `fov: 32`. All three assets now command the stage with richer detail, zero edge clipping, and smooth floating parallax.
+  - **Windows Proportions & Hierarchy Parity (Phone < Tablet < TV):** Resolved the inversion on Windows/Lite tier where the CSS Phone rendered taller (524px) than the Tablet (405px) and TV (332px).
+    - Root cause: `.prog-css-tablet` retained legacy overrides (`height: min(88%, var(--prog-tablet-budget)); max-height: min(70dvh)`), shrinking it inside its slot, and `.prog-css-tv` had `max-height: min(58dvh, 100%)`.
+    - Removed conflicting internal clamps from `.prog-css-tablet` and `.prog-css-tv`, setting them to cleanly fill 100% of their proportional slots.
+    - Sized device slots to mathematically duplicate the Mac hierarchy:
+      - **Phone:** `aspect-ratio: 9 / 19.5; width: min(40%, 15.5rem, calc(min(74dvh, calc(var(--prog-phone-budget, 80dvh) * 0.85)) * (9 / 19.5))); height: auto; max-height: min(74dvh, calc(var(--prog-phone-budget, 80dvh) * 0.85));` -> **230px W × 499px H** (~115k px²).
+      - **Tablet:** `aspect-ratio: 3 / 4; width: min(72%, 27rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (3 / 4))); height: auto; max-height: min(80dvh, var(--prog-phone-budget, 80dvh));` -> **415px W × 553px H** (~229k px², **+100% area and +54px taller than phone**).
+      - **TV:** `aspect-ratio: 16 / 10; width: min(118%, 48rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (16 / 10))); height: auto; max-height: min(80dvh, var(--prog-phone-budget, 80dvh));` -> **576px W × 360px H (canvas 634px)** widescreen cinematic footprint.
+    - Verified through automated Puppeteer multi-viewport captures on both Mac (`:5173`) and Windows (`:5174`) across 100%, 125%, and 150% scales with 0px horizontal overflow (`scrollWidth === innerWidth`).
 
 
 

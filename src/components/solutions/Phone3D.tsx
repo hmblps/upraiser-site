@@ -391,7 +391,7 @@ const PhoneMesh = memo(function PhoneMesh({
   return (
     <group ref={group}>
       <Center>
-        <group rotation={SHARED_ORIENT} scale={7.0} position={[0, -0.45, 0]}>
+        <group rotation={SHARED_ORIENT} scale={7.45} position={[0, -0.45, 0]}>
           <primitive object={prepared} />
           
         </group>
@@ -562,7 +562,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
             powerPreference: "high-performance",
             stencil: false,
           }}
-          camera={{ position: [0, -0.08, flat ? 3.15 : 3.48], fov: 35, near: 0.05, far: 80 }}
+          camera={{ position: [0, -0.08, flat ? 2.82 : 3.08], fov: 35, near: 0.05, far: 80 }}
           style={{
             width: "100%",
             height: "100%",

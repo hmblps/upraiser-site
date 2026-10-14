@@ -36,9 +36,25 @@
   - Captures Banner, Native, Video, Tablet, and CTV Video TV stages.
   - Automatically verifies 0px horizontal viewport overflow.
 
+### E. Mac 3D Device Asset Enlargement & Windows Hierarchy Duplication
+1. **Mac 3D WebGL Enlargement (~18–20%):**
+   - Enlarged `Phone3D` mesh scale from `7.0` to `7.45` and moved camera closer (`z: 3.48` -> `3.08`).
+   - Enlarged `Tablet3D` mesh scale from `6.2` to `6.9` and moved camera closer (`z: 3.48` -> `3.18`).
+   - Moved `Tv3D` camera closer (`z: 4.65` -> `3.98`, `fov: 32`).
+   - All three 3D assets on Mac now command the stage with rich presence, zero edge clipping, and smooth floating parallax.
+2. **Windows Hierarchy Duplication (Phone < Tablet < TV):**
+   - Eliminated the inversion where Phone (524px) was taller than Tablet (405px) and TV (332px).
+   - Removed conflicting internal clamps from `.prog-css-tablet` (`min(88%)`, `70dvh`) and `.prog-css-tv` (`58dvh`), letting them fill their dedicated slots.
+   - Slot dimensions mathematically match the Mac hierarchy:
+     - Phone: ~230px W × 499px H (aspect 9:19.5, ~115k px²).
+     - Tablet: ~415px W × 553px H (aspect 3:4, ~229k px², +100% area and +54px taller than Phone).
+     - TV: ~576px W × 360px H (canvas 634px, aspect 16:10 / 16:9 widescreen footprint).
+   - Proportions, sizes, and layout match identically between Mac and Windows.
+
 ---
 
 ## 2. Verification Status
 - `npx tsc --noEmit`: 0 errors.
+- `npm run build`: built in 2.86s with zero errors.
 - Dual local servers running: `http://localhost:5173/` (200 OK) and `http://localhost:5174/` (200 OK).
-- Visual parity verified via Puppeteer captures in `preview-windows/`.
+- Visual parity verified via Puppeteer multi-viewport captures in `preview-windows/`.
