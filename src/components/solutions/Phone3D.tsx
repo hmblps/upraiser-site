@@ -174,11 +174,12 @@ function applyScreenTexture(root: Object3D, map: Texture) {
             // Downgrade mirror to 75% so diffuse lighting still works if env map fails
             if (patched.metalness > 0.75) patched.metalness = 0.75;
             
-            // Remove heavy refraction, replace with simple alpha transparency
+            // Keep phone chassis solid and opaque — never make outer shell transparent
             if (patched.transmission > 0) {
               patched.transmission = 0;
-              patched.transparent = true;
-              patched.opacity = 0.15;
+              patched.transparent = false;
+              patched.opacity = 1.0;
+              patched.depthWrite = true;
               patched.roughness = Math.max(0.2, patched.roughness);
               patched.metalness = Math.min(0.5, patched.metalness);
             }

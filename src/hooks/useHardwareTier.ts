@@ -9,7 +9,13 @@ function isIntegratedGPU(renderer: string): boolean {
     r.includes("hd graphics") ||
     r.includes("mali") ||
     r.includes("adreno") ||
-    r.includes("powervr")
+    r.includes("powervr") ||
+    r.includes("radeon(tm) graphics") ||
+    r.includes("radeon graphics") ||
+    r.includes("vega") ||
+    r.includes("microsoft basic render") ||
+    r.includes("swiftshader") ||
+    r.includes("llvmpipe")
   );
 }
 
@@ -17,17 +23,21 @@ export type HardwareTier = "high" | "lite";
 
 function isAppleOrDiscreteGPU(renderer: string): boolean {
   const r = renderer.toLowerCase();
+  if (isIntegratedGPU(r)) return false;
   return (
     r.includes("apple") ||
     r.includes("metal") ||
     r.includes("nvidia") ||
     r.includes("geforce") ||
-    r.includes("radeon") ||
-    r.includes("amd ")
+    r.includes("rtx") ||
+    r.includes("gtx") ||
+    r.includes("quadro") ||
+    r.includes("tesla") ||
+    (r.includes("radeon") && (r.includes("rx ") || r.includes("rx-") || r.includes("pro") || r.includes("xt")))
   );
 }
 
-/** Sync so Intel never mounts a WebGL canvas for one frame before falling back. */
+/** Sync so Intel/Windows never mounts a WebGL canvas for one frame before falling back. */
 function detectHardwareTier(): HardwareTier {
   if (typeof window === "undefined") return "high";
 
@@ -35,6 +45,16 @@ function detectHardwareTier(): HardwareTier {
   if (params.get("lite") === "1" || params.get("mode") === "lite" || params.get("tier") === "lite") return "lite";
   if (params.get("tier") === "high") return "high";
   if (window.location.port === "5174") return "lite";
+
+  const isWindows =
+    (typeof document !== "undefined" && document.documentElement.dataset.os === "windows") ||
+    (typeof navigator !== "undefined" && (
+      /Windows/i.test(navigator.userAgent) ||
+      navigator.userAgent.toLowerCase().includes("win")
+    ));
+
+  // Windows systems use the Lite CSS Chassis (1:1 pixel parity, subpixel ClearType, zero WebGL driver quirks)
+  if (isWindows) return "lite";
 
   let renderer = "";
   try {
@@ -51,7 +71,7 @@ function detectHardwareTier(): HardwareTier {
     /* ignore */
   }
 
-  // Mac / NVIDIA / AMD — never CSS-fallback a discrete or Apple GPU because
+  // Mac / NVIDIA / AMD discrete — never CSS-fallback a discrete or Apple GPU because
   // Chrome sometimes reports hardwareConcurrency 4 or deviceMemory 4.
   if (renderer && isAppleOrDiscreteGPU(renderer)) return "high";
   if (renderer && isIntegratedGPU(renderer)) return "lite";
