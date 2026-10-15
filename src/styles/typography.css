@@ -234,8 +234,8 @@
 }
 
 [data-theme="light"] .hero-stat-ghost__value {
-  /* Inherits the dynamic 225deg Gold → Red sheen from .hero-stat-ghost__value, synced with flight progress */
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+  /* Flat vector typography matching YOUR RISE — completely eliminates artificial bevel / emboss ("тиснение") */
+  filter: none;
 }
 
 .hero-stat-ghost.is-accent .hero-stat-ghost__value {
