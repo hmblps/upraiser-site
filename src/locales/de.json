@@ -1,10 +1,11 @@
 {
   "nav": {
     "agency": "Die Agentur",
-    "studio": "The Craft",
+    "studio": "Creative Studio",
     "soon": "Bald",
     "theGrowth": "Das Wachstum",
-    "theAgency": "Die Agentur"
+    "theAgency": "Die Agentur",
+    "craftShort": "Craft"
   },
   "footer": {
     "tagline": "Der definitive algorithmische Wachstumspartner für globale Marken.",

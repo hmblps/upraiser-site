@@ -15,7 +15,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const LOCALES = ["zh", "ja", "ko", "es", "de", "fr"];
+const LOCALES = ["pt", "es", "de", "fr", "zh", "ja", "ko"];
 const out = path.join(root, "src/locales/strings.json");
 const read = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
 const dict = fs.existsSync(out) ? read(out) : {};

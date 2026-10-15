@@ -1,10 +1,11 @@
 {
   "nav": {
     "agency": "The Agency",
-    "studio": "The Craft",
+    "studio": "Creative Studio",
     "soon": "Soon",
     "theGrowth": "The Growth",
-    "theAgency": "The Agency"
+    "theAgency": "The Agency",
+    "craftShort": "Craft"
   },
   "footer": {
     "tagline": "The definitive algorithmic growth partner for global brands.",

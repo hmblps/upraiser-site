@@ -9,6 +9,7 @@ import ko from './locales/ko.json';
 import es from './locales/es.json';
 import de from './locales/de.json';
 import fr from './locales/fr.json';
+import pt from './locales/pt.json';
 
 i18n
   .use(LanguageDetector)
@@ -16,12 +17,13 @@ i18n
   .init({
     resources: {
       en: { translation: en },
-      zh: { translation: zh },
-      ja: { translation: ja },
-      ko: { translation: ko },
+      pt: { translation: pt },
       es: { translation: es },
       de: { translation: de },
       fr: { translation: fr },
+      zh: { translation: zh },
+      ko: { translation: ko },
+      ja: { translation: ja },
     },
     fallbackLng: 'en',
     interpolation: {

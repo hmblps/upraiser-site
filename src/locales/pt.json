@@ -1,0 +1,1010 @@
+{
+  "nav": {
+    "agency": "The Agency",
+    "studio": "Creative Studio",
+    "craftShort": "Craft",
+    "soon": "Em breve",
+    "theGrowth": "The Growth",
+    "theAgency": "The Agency"
+  },
+  "footer": {
+    "tagline": "O parceiro definitivo de crescimento algorítmico para marcas globais.",
+    "legal": "Todos os direitos reservados. O nome e o logotipo UPRAISER são marcas registradas.",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço",
+    "contact": "Contato",
+    "social": "Social",
+    "explore": "Explorar",
+    "company": "Empresa"
+  },
+  "switcher": {
+    "current": "Idioma atual",
+    "soon": "Em breve",
+    "on": "Ativo",
+    "soonBadge": "Breve"
+  },
+  "hero": {
+    "chartingAscent": "UPRAISER · MAPEANDO A ASCENSÃO",
+    "securingBase": "UPRAISER · PROTEGENDO A BASE",
+    "line1": "NÓS VEMOS O QUÃO",
+    "line2": "IMPRESSIONANTE",
+    "line3": "SUA ASCENSÃO",
+    "line4": "AO TOPO",
+    "line5": "PODE SER."
+  },
+  "audience": {
+    "title": "A Quem Atendemos",
+    "scale": "ESCALA",
+    "proof": "PROVA",
+    "growthLabel": "Equipes que precisam converter metas de ROAS em fluxo de caixa real",
+    "growthLine1": "Quando o mercado amadurece, o hiper-crescimento exige um novo modelo de economia unitária.",
+    "growthLine2Prefix": "Foco em",
+    "growthDesc": "Você é o líder de aquisição de usuários ou diretor de marketing que precisa escalar bases de jogadores ativos sem quebrar a economia unitária. Suas campanhas miram conversões profundas no app, desde conclusões de fases até primeiros depósitos.\n\nCompramos mídia com base no valor real do tempo de vida do usuário (LTV), implementando Conteúdo Gerado por Criadores (CGC) sob demanda que supera anúncios estáticos em banner. Escalamos apenas as rotas que geram receita real.\n\nAlinhamos cada campanha com Suas metas financeiras exatas, garantindo que Sua estratégia de crescimento permaneça totalmente sob Seu controle enquanto executamos o trabalho pesado.",
+    "infraLabel": "Equipes que exigem métricas de campanha correspondendo à fatura de mídia",
+    "infraLine1": "Quando Seu MMP e as faturas de mídia divergem, nós reconstruímos Seus pipelines de dados.",
+    "infraLine2Prefix": "Operam com",
+    "infraDesc": "Você é o gerente de Ad Ops, controlador financeiro ou diretor de UA que já explicou a discrepância de atribuição aos stakeholders vezes demais. Suas campanhas programáticas e OEM rodam no Adjust, AppsFlyer, Singular ou Kochava.\n\nVocê exige um caminho de fornecimento direto onde cada evento de KPI remonta a um log bruto do dispositivo. Deixamos relatórios opacos em PDF para fornecedores tradicionais.\n\nConstruímos linhas de fornecimento limpas e verificadas para que Você possa defender Seu investimento em mídia em qualquer auditoria financeira."
+  },
+  "formats": {
+    "label": "Canais",
+    "title": "Todos os Formatos. Um Único Caminho de Fornecimento.",
+    "descPhone": "Vídeo vertical e unidades jogáveis (playables) projetados para TikTok, Reels e posicionamentos diretos in-app. Otimizamos para os primeiros 3 segundos para garantir taxas de retenção visual que convertem.",
+    "descTablet": "Rich media de alto impacto e experiências em tela dividida projetadas para engajamento mais profundo em telas maiores. Perfeito para jogos de estratégia e narrativas complexas.",
+    "descTv": "Connected TV e posicionamentos OTT que trazem marketing de performance para a maior tela da casa. Rastreamos a atribuição diretamente da tela até a instalação."
+  },
+  "values": {
+    "growthHeroKicker": "Compra ponderada por eventos",
+    "growthHeroTitle": "Compre o evento que Sua diretoria acompanha",
+    "growthHeroDesc": "Limites de orçamento conectam-se diretamente a eventos de receita antes do primeiro lance ser liberado, garantindo alinhamento absoluto com Seus objetivos.",
+    "growthMetric1": "Fraude eliminada antes do fechamento do leilão",
+    "growthMetric2": "Do briefing aos lances ativos",
+    "growthFeature1Title": "Investimento que escala sob auditoria",
+    "growthFeature1Desc": "Cada lance é pontuado antes de ser liberado. Tráfego suspeito cai instantaneamente, e o log exato do dispositivo comprova nossa transparência absoluta.",
+    "growthFeature2Title": "CPA estável em grande escala",
+    "growthFeature2Desc": "A economia unitária permanece plana quando o orçamento dobra. O LTV preciso da coorte guia integralmente a estratégia de lances.",
+    "growthBrandBadge": "Parceiro Oficial de Agência Lenovo",
+    "growthBrandTitle": "Pré-instalações diretas de fábrica em escala global diária.",
+    "growthBrandDesc": "Colocamos Seu aplicativo diretamente em dispositivos Android premium no momento da primeira ativação. Como parceiro oficial de agência Lenovo, garantimos campanhas de pré-instalação e Instalação Pré-Ativada (PAI) em mercados Tier-1, GCC e globais. Sua equipe assegura posicionamento direto de fábrica com zero margens de intermediários.",
+    "infraHeroKicker": "Compra nativa baseada em logs",
+    "infraHeroTitle": "Verifique o evento que Sua diretoria acompanha",
+    "infraHeroDesc": "Logs de servidor conectam-se diretamente ao Adjust e AppsFlyer antes do fechamento do mês, garantindo alinhamento absoluto com Seus dados.",
+    "infraMetric1": "Discrepância pós-voo em logs",
+    "infraMetric2": "Pontuação de lances em p99",
+    "infraFeature1Title": "Tráfego aprovado em auditoria",
+    "infraFeature1Desc": "Solicitações inválidas são descartadas perfeitamente antes do fechamento do leilão. Ad Ops defende com segurança cada dólar em revisões financeiras sem conciliações de última hora.",
+    "infraFeature2Title": "Números que batem com exatidão",
+    "infraFeature2Desc": "O MMP e a fatura de mídia contam exatamente a mesma história por meio de logs brutos. Ad Ops e o setor financeiro operam em alinhamento absoluto.",
+    "infraBrandBadge": "Parceiro Oficial de Agência Lenovo",
+    "infraBrandTitle": "Acesso OEM de nível corporativo com rastreamento de SDK certificado.",
+    "infraBrandDesc": "Conectamos as vias de ROM e PAI da Lenovo diretamente aos Seus endpoints do Adjust, AppsFlyer, Singular ou Kochava. Nossos engenheiros documentam e verificam todo o rastro técnico antes de comprarmos a primeira impressão. Você audita os logs brutos de hardware para verificar cada instalação antes de pagar a fatura."
+  },
+  "cases": {
+    "title": "Evidências Selecionadas",
+    "desc": "Um histórico verificado de superação algorítmica.",
+    "heroicTag": "Jogos",
+    "heroicTitle": "Heroic: Escala Tática",
+    "heroicDesc": "Implementamos aquisição algorítmica de usuários em 35 GEOs para um título de estratégia líder. Ao ponderar os lances fortemente em direção ao ROAS do 7º dia em vez de meras instalações, geramos um fluxo massivo de jogadores de alto LTV mantendo o CPA estritamente abaixo da meta.",
+    "heroicMetric1": "Aumento de ROAS D7",
+    "heroicMetric2": "GEOs Ativos",
+    "lenovoTag": "OEM / Fábrica",
+    "lenovoTitle": "Ativação Lenovo PAI",
+    "lenovoDesc": "Como parceiro oficial de agência Lenovo, nos integramos diretamente ao fluxo de provisionamento de fábrica. Garantimos pré-instalações em alto volume e sem margens adicionais em dispositivos Android premium globalmente, assegurando presença no exato instante do unboxing.",
+    "lenovoMetric1": "Pré-instalações",
+    "lenovoMetric2": "Discrepância de Log",
+    "fintechTag": "FinTech",
+    "fintechTitle": "Aquisição para Neobanco",
+    "fintechDesc": "Para um Neobanco Tier-1, eliminamos rotas opacas de fornecimento e compramos integralmente com base em logs nativos. Ao rastrear cada conclusão de KYC de volta à solicitação bruta de lance, escalamos os primeiros depósitos massivamente sem nenhum caso de fraude de atribuição.",
+    "fintechMetric1": "Redução de CPA",
+    "fintechMetric2": "Depósitos Verificados"
+  },
+  "casesDetails": {
+    "fanatics": {
+      "client": "Fanatics",
+      "headline": "Escala em apostas esportivas regulamentadas com rastreabilidade de ativação em hardware",
+      "channels": [
+        "Programática",
+        "Display de alta intenção",
+        "Segmentação comportamental"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fanatics.png",
+        "accent": "#E31837",
+        "surface": "#1a0508"
+      },
+      "metrics": [
+        {
+          "value": "$25M+",
+          "label": "Receita"
+        },
+        {
+          "value": "50K",
+          "label": "FTDs"
+        },
+        {
+          "value": "800K",
+          "label": "Instalações"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Casa de apostas esportivas com dinheiro real em um mercado saturado de bônus nos EUA. Exigia rastreamento rigoroso de MMP e postbacks S2S sem violar regras de maioridade (18+) ou regulamentações estaduais.",
+        "approach": "Inventário adulto liberado em lista segura com limites de latência sub-segundo, segmentação a nível estadual e controle de qualidade criativo atrelado diretamente ao payload de FTD em vez de volume de instalações.",
+        "result": "800 mil instalações, 50 mil FTDs, mais de $25 milhões em receita. Média de sete apostas adicionais por apostador. Mais de $500 em receita média por FTD."
+      },
+      "optimizationFocus": {
+        "challenge": "TikTok e Snapchat bloqueados para jogos 18+. Cada posicionamento necessitava de comprovante de conformidade e mapeamento limpo de eventos.",
+        "approach": "Exclusivamente listas seguras em conformidade geográfica. Auditoria diária de posicionamento e validação de postback de SDK antes que o investimento atingisse Seu limite.",
+        "result": "Zero inventário contestado no fechamento do mês. Logs de MMP, eventos de servidor e dados de UA alinhados em um único registro auditável por estado."
+      }
+    },
+    "block-blast-pai": {
+      "client": "Block Blast!",
+      "headline": "Volume massivo de pré-instalação de fábrica Lenovo para quebra-cabeça casual",
+      "channels": [
+        "Lenovo OEM",
+        "Google PAI",
+        "Pré-instalação de fábrica"
+      ],
+      "brand": {
+        "icon": "/cases/logos/block-blast.png",
+        "accent": "#F59E0B",
+        "surface": "#1c1404"
+      },
+      "metrics": [
+        {
+          "value": "3.2M+",
+          "label": "Instalações"
+        },
+        {
+          "value": "0%",
+          "label": "Discrepância de Log"
+        },
+        {
+          "value": "$0.14",
+          "label": "CPA Médio"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Jogo de quebra-cabeça casual necessitando de distribuição massiva e de baixo custo nos principais mercados globais sem inflar os custos de UA programática.",
+        "approach": "Ativação direta de pré-instalação no fluxo de fábrica da Lenovo (ROM e PAI), colocando o jogo nativamente na tela inicial de novos dispositivos na primeira inicialização.",
+        "result": "Mais de 3,2 milhões de instalações verificadas em hardware com custo de aquisição médio de $0,14, gerando retenção D30 35% superior a canais tradicionais."
+      },
+      "optimizationFocus": {
+        "challenge": "Verificar se as instalações OEM foram realmente abertas e ativadas por usuários reais, evitando cobrança por dispositivos inativos em estoque.",
+        "approach": "Validação direta via SDK da Adjust com acionamento do evento de primeiro engajamento pós-unboxing e rastreamento completo de IMEI/OAID.",
+        "result": "100% de correspondência entre logs de ativação de fábrica e eventos reportados no MMP com 0% de discrepância na fatura final."
+      }
+    },
+    "fiverr": {
+      "client": "Fiverr",
+      "headline": "Aquisição de compradores B2B com antifraude pré-lance e filtragem em 0.4ms",
+      "channels": [
+        "Programática B2B",
+        "Exchanges Curadas",
+        "Vídeo Nativo"
+      ],
+      "brand": {
+        "icon": "/cases/logos/fiverr.png",
+        "accent": "#1DBF73",
+        "surface": "#05180f"
+      },
+      "metrics": [
+        {
+          "value": "$18M+",
+          "label": "Investimento Gerenciado"
+        },
+        {
+          "value": "-34%",
+          "label": "Redução de CPA"
+        },
+        {
+          "value": "98.2%",
+          "label": "Taxa de Pedidos Reais"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Marketplace de serviços freelancers visando compradores corporativos de alto valor no mercado GCC e Europa, enfrentando custos crescentes em redes de pesquisa e redes sociais pagas.",
+        "approach": "Compra programática em exchanges premium com lances orientados à probabilidade de primeiro pedido em 48h, apoiada por testes intensivos de criativos CGC orientados a negócios.",
+        "result": "Redução de 34% no CPA de primeiros compradores e mais de 120 mil novas contas comerciais ativas geradas no período."
+      },
+      "optimizationFocus": {
+        "challenge": "Ataques sistemáticos de bot farms gerando cadastros falsos e preenchimentos automáticos de formulários sem valor transacional.",
+        "approach": "Pontuação pré-lance em 0.4 milissegundos descartando requisições com anomalias de hardware, IP de data center ou falsificação de dispositivo.",
+        "result": "Eliminação de mais de 98% do tráfego inválido pré-leilão, poupando centenas de milhares de dólares do orçamento de mídia."
+      }
+    },
+    "shopee": {
+      "client": "Shopee",
+      "headline": "Pico de vendas sazonais e escalonamento de transações em e-commerce",
+      "channels": [
+        "Programática Mobile",
+        "Display Dinâmico",
+        "CGC Studio"
+      ],
+      "brand": {
+        "icon": "/cases/logos/shopee.png",
+        "accent": "#EE4D2D",
+        "surface": "#1c0b06"
+      },
+      "metrics": [
+        {
+          "value": "4.5M+",
+          "label": "Transações"
+        },
+        {
+          "value": "4.8x",
+          "label": "ROAS Blended"
+        },
+        {
+          "value": "-22%",
+          "label": "Custo por Venda"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Escalar agressivamente o volume transacional durante campanhas de grandes datas (11.11 e 12.12) mantendo margens unitárias lucrativas.",
+        "approach": "Alocação dinâmica de lances por hora baseada na probabilidade de checkout imediato, combinada com feed criativo dinâmico apresentando ofertas em tempo real.",
+        "result": "Mais de 4,5 milhões de transações verificadas com ROAS médio consolidado de 4.8x durante todo o período promocional."
+      },
+      "optimizationFocus": {
+        "challenge": "Saturação de inventário e aumento rápido de eCPM em exchanges públicas durante semanas de alta competitividade comercial.",
+        "approach": "Caminhos de fornecimento direto (SPO) sem intermediários e listas seguras exclusivas negociadas diretamente com publishers tier-1.",
+        "result": "Custo por impressão mantido 28% abaixo da média de mercado durante os dias de maior pico do varejo."
+      }
+    },
+    "banco-azteca": {
+      "client": "Banco Azteca",
+      "headline": "Abertura de contas digitais e validação rigorosa de KYC",
+      "channels": [
+        "Programática Financeira",
+        "OEM Discovery",
+        "Native In-App"
+      ],
+      "brand": {
+        "icon": "/cases/logos/banco-azteca.png",
+        "accent": "#107C41",
+        "surface": "#04170c"
+      },
+      "metrics": [
+        {
+          "value": "320K+",
+          "label": "Contas Aprovadas"
+        },
+        {
+          "value": "-41%",
+          "label": "Custo por KYC"
+        },
+        {
+          "value": "100%",
+          "label": "Conformidade Regulatória"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Atrair usuários não-bancarizados e convertê-los em clientes ativos de conta corrente digital com envio e aprovação completa de documentos regulatórios.",
+        "approach": "Otimização de lances com foco exclusivo no evento pós-instalação de envio de documento validado (KYC aprovado), em vez de meras instalações do aplicativo.",
+        "result": "Mais de 320 mil novas contas digitais ativadas com redução de 41% no custo por conta aprovada em comparação com canais proprietários anteriores."
+      },
+      "optimizationFocus": {
+        "challenge": "Risco severo de fraudes com documentos gerados por IA e preenchimento de cadastros sintéticos.",
+        "approach": "Rastreamento cruzado entre telemetria de hardware e endpoints de segurança do banco, validando integridade do dispositivo antes da conclusão da instalação.",
+        "result": "Zero ocorrências de contas fraudulentas abertas via inventário programático durante todo o contrato."
+      }
+    },
+    "azar": {
+      "client": "Azar",
+      "headline": "Aquisição global de usuários de alto engajamento em descoberta social e vídeo",
+      "channels": [
+        "CGC Video Ads",
+        "Social Nativo",
+        "Programática In-App"
+      ],
+      "brand": {
+        "icon": "/cases/logos/azar.png",
+        "accent": "#38BDF8",
+        "surface": "#06151f"
+      },
+      "metrics": [
+        {
+          "value": "1.8M+",
+          "label": "Usuários Ativos"
+        },
+        {
+          "value": "+62%",
+          "label": "Retenção D7"
+        },
+        {
+          "value": "24",
+          "label": "GEOs de Alta Conversão"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Escalar a base de usuários para aplicativo de vídeo chat em mercados competitivos da Europa e Ásia mantendo forte retenção de longo prazo e compras in-app de moedas.",
+        "approach": "Produção contínua de criativos em formato vertical através do nosso estúdio de criadores (CGC), testando mais de 80 variações semanais de ganchos visuais nos primeiros 3 segundos.",
+        "result": "Crescimento de 62% na retenção D7 e aquisição consistente de usuários que realizaram recargas in-app dentro dos primeiros 3 dias."
+      },
+      "optimizationFocus": {
+        "challenge": "Discrepância de dados entre cliques nas plataformas de vídeo e eventos reais registrados no AppsFlyer.",
+        "approach": "Implementação de modelo de atribuição determinística com verificação direta de deep link e exclusão de janelas infladas de view-through.",
+        "result": "Redução de 95% na discrepância entre plataformas de mídia e o painel oficial de BI do cliente."
+      }
+    },
+    "vantage": {
+      "client": "Vantage",
+      "headline": "Escala em trading financeiro com conformidade de fábrica OEM Lenovo",
+      "channels": [
+        "Lenovo OEM",
+        "PAI",
+        "Exchanges Financeiras"
+      ],
+      "brand": {
+        "icon": "/cases/logos/vantage.png",
+        "accent": "#3B82F6",
+        "surface": "#081326"
+      },
+      "metrics": [
+        {
+          "value": "$42M+",
+          "label": "Volume de Depósitos"
+        },
+        {
+          "value": "18K+",
+          "label": "Traders Ativos"
+        },
+        {
+          "value": "0%",
+          "label": "Discrepância de Atribuição"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Corretora global de trading multimercado necessitando de operadores ativos que financiassem contas com saldo real, em mercados rigorosamente auditados.",
+        "approach": "Posicionamento prioritário no launcher de dispositivos Lenovo novos através de PAI, complementado por compra programática em sites de economia e notícias de mercado.",
+        "result": "Mais de 18 mil traders ativos cadastrados e mais de $42 milhões em volume de depósitos negociados originados do canal."
+      },
+      "optimizationFocus": {
+        "challenge": "Faturas de publicidade frequentemente contestadas pela auditoria financeira interna por falta de clareza nos relatórios de redes de afiliados.",
+        "approach": "Fornecimento de arquivo de conciliação mensal bruto contendo cada ID de instalação, carimbo de data/hora e correspondência exata com o ledger do Adjust.",
+        "result": "Aprovação imediata de 100% das faturas pelo setor financeiro sem necessidade de reuniões semanais de ajuste."
+      }
+    },
+    "snoop": {
+      "client": "Snoop",
+      "headline": "Crescimento de app de gestão financeira pessoal com alinhamento contábil perfeito",
+      "channels": [
+        "Programática UK",
+        "Redes Nativas",
+        "Display de Alta Qualidade"
+      ],
+      "brand": {
+        "icon": "/cases/logos/snoop.png",
+        "accent": "#EC4899",
+        "surface": "#1f0714"
+      },
+      "metrics": [
+        {
+          "value": "450K+",
+          "label": "Contas Vinculadas"
+        },
+        {
+          "value": "-29%",
+          "label": "CPA de Open Banking"
+        },
+        {
+          "value": "100%",
+          "label": "Paridade de Faturas"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Aplicativo fintech britânico de Open Banking visando conexões bancárias ativas e permissões de consulta de dados financeiros no Reino Unido.",
+        "approach": "Segmentação granular com mensagens adaptadas por categoria de despesa e lances calibrados para a conclusão de vinculação bancária via Open Banking.",
+        "result": "Mais de 450 mil contas bancárias britânicas vinculadas ao aplicativo com custo por aquisição 29% menor do que a meta original."
+      },
+      "optimizationFocus": {
+        "challenge": "A diretoria financeira exigia que cada centavo de mídia fosse respaldado por logs verificáveis de auditoria bancária.",
+        "approach": "Geração de relatórios brutos automatizados com paridade 1:1 entre o registro de transação de mídia e os eventos de telemetria recebidos no MMP.",
+        "result": "Alinhamento integral entre o time de aquisição e a controladoria com eliminação completa de atritos contábeis."
+      }
+    },
+    "autodoc": {
+      "client": "Autodoc",
+      "headline": "Transações e-commerce automotivas em escala pan-europeia",
+      "channels": [
+        "Programática Retargeting",
+        "Display Dinâmico",
+        "OEM Push"
+      ],
+      "brand": {
+        "icon": "/cases/logos/autodoc.png",
+        "accent": "#EF4444",
+        "surface": "#1c0707"
+      },
+      "metrics": [
+        {
+          "value": "1.2M+",
+          "label": "Pedidos Concluídos"
+        },
+        {
+          "value": "5.4x",
+          "label": "ROAS em Retargeting"
+        },
+        {
+          "value": "12",
+          "label": "Países Europeus"
+        }
+      ],
+      "growthFocus": {
+        "challenge": "Gigante de e-commerce de autopeças na Europa com catálogo de mais de 4 milhões de SKUs necessitando de reengajamento de compradores de alto valor e aquisição contínua de novos proprietários de veículos.",
+        "approach": "Arquitetura programática com catálogo dinâmico de produtos segmentado por marca/modelo do veículo e reengajamento automatizado em momento de alta propensão de compra.",
+        "result": "Mais de 1,2 milhão de pedidos de autopeças concluídos em 12 países europeus com ROAS médio de retargeting de 5.4x."
+      },
+      "optimizationFocus": {
+        "challenge": "Atribuição em múltiplos canais gerando sobreposição de crédito entre campanhas de busca, redes sociais e programática.",
+        "approach": "Desduplicação de inventário e atribuição determinística baseada no último toque qualificado via logs brutos do servidor central do cliente.",
+        "result": "Eliminação de sobretaxas de mídia e economia comprovada de 18% no orçamento global de marketing."
+      }
+    }
+  },
+  "process": {
+    "growth": [
+      {
+        "step": "01",
+        "title": "Mapeamento do Funil",
+        "description": "Nossos traders definem Seu público-alvo, mapeiam Seus eventos de KPI no fundo do funil e estabelecem Seu custo de aquisição alvo."
+      },
+      {
+        "step": "02",
+        "title": "Implementação do Mix",
+        "description": "Lançamos um mix personalizado de pré-instalações OEM diretas, compra programática ponderada por eventos e conteúdo nativo de criadores."
+      },
+      {
+        "step": "03",
+        "title": "Escala da Operação",
+        "description": "Nosso estúdio criativo produz variações semanais de vídeo. Escalamos apenas os criativos e rotas de tráfego que geram ROAS positivo."
+      }
+    ],
+    "infrastructure": [
+      {
+        "step": "01",
+        "title": "Mapeamento do Stack",
+        "description": "Nossos operadores documentam Seus endpoints de MMP, pipelines de logs brutos e vetores de fraude antes de lançarmos Suas campanhas."
+      },
+      {
+        "step": "02",
+        "title": "Conexão e Cabeamento",
+        "description": "Conectamos logs brutos de dispositivos diretamente aos Seus endpoints de mensuração, verificando a conciliação antes de comprar a primeira impressão."
+      },
+      {
+        "step": "03",
+        "title": "Implementação e Monitoramento",
+        "description": "Lançamos vias programáticas e OEM com conformidade de SDK verificada. Nosso monitoramento contínuo previne discrepâncias de atribuição."
+      }
+    ]
+  },
+  "promise": {
+    "growth": {
+      "label": "Logs brutos que Sua equipe pode auditar sob demanda",
+      "title": "Nosso Compromisso",
+      "scrollHeroWord": "CLAREZA",
+      "line1": "Rastreamos cada linha da fatura de mídia de volta a um evento real de dispositivo.",
+      "line2Prefix": "Entregamos",
+      "inlineWord": "CLAREZA",
+      "titleLead": "Entregamos ",
+      "accentWord": "CLAREZA",
+      "description": "Sua equipe pode extrair e verificar Seu conjunto de dados a qualquer momento. Nossa validação de logs brutos resolve disputas de atribuição antes que Seus traders abram a campanha. Fornecemos logs brutos, conciliação em tempo real e filtragem pré-lance para que Seus compradores de mídia e diretores financeiros trabalhem com os mesmos dados. Seu processo de conciliação permanece totalmente limpo. Garantimos que cada dólar investido seja totalmente justificado, dando a Você a confiança absoluta para escalar orçamentos agressivamente sem receio de margens ocultas ou fraudes invisíveis."
+    },
+    "infrastructure": {
+      "label": "Logs brutos que Sua equipe pode auditar sob demanda",
+      "title": "Nosso Compromisso",
+      "scrollHeroWord": "PARIDADE",
+      "line1": "Cruzamos cada linha da fatura de mídia diretamente contra logs brutos de dispositivos.",
+      "line2Prefix": "Garantimos",
+      "inlineWord": "PARIDADE",
+      "titleLead": "Garantimos ",
+      "accentWord": "PARIDADE",
+      "description": "Sua equipe pode extrair e verificar Seu conjunto de dados a qualquer momento. Nossa validação de logs brutos resolve disputas de atribuição antes que Seus traders abram a campanha. Fornecemos logs brutos, conciliação em tempo real e filtragem pré-lance para que Seus compradores de mídia e diretores financeiros trabalhem com os mesmos dados. Seu processo de conciliação permanece totalmente limpo."
+    }
+  },
+  "lenovo": {
+    "badge": "Parceiro Oficial de Agência",
+    "logo": "/partners/lenovo-logo.png",
+    "logoAlt": "Lenovo",
+    "title": "Lenovo PC HK LTD",
+    "stripLine": "ROM de fábrica e Google PAI fornecendo vias diretas e verificadas.",
+    "descriptionIntro": "A Upraiser é a parceira oficial de agência da Lenovo. Conectamos nossa infraestrutura programática diretamente ao inventário de fábrica OEM.",
+    "descriptionLead": "Você assegura performance verificada e desbloqueia espaço imediato para Seu crescimento global."
+  },
+  "cta": {
+    "label": "Solicitar Piloto",
+    "href": "/contact"
+  },
+  "heroHighlights": {
+    "growth": [
+      {
+        "value": "35+",
+        "label": "GEOs Ativos"
+      },
+      {
+        "value": "800M+",
+        "label": "Alcance OEM"
+      },
+      {
+        "value": "48h",
+        "label": "Setup de SLA"
+      },
+      {
+        "value": "$75M+",
+        "label": "Mídia Otimizada",
+        "accent": true
+      }
+    ],
+    "infrastructure": [
+      {
+        "value": "97.3%",
+        "label": "Fraude Bloqueada Pré-Lance"
+      },
+      {
+        "value": "0%",
+        "label": "Discrepância de Log Pós-Voo"
+      },
+      {
+        "value": "0.4ms",
+        "label": "Pontuação de Lances p99"
+      },
+      {
+        "value": "180+",
+        "label": "Sinais de Dispositivo"
+      }
+    ]
+  },
+  "trafficChannels": {
+    "growth": [
+      {
+        "id": "oem",
+        "title": "Descoberta OEM e no Dispositivo",
+        "tagline": "Inventário direto de fábrica Lenovo com presença garantida no unboxing.",
+        "teaser": "Instale Seu aplicativo diretamente em novos dispositivos no primeiro boot.",
+        "description": "Como parceiro oficial de agência Lenovo, conectamos Seu aplicativo diretamente às linhas de montagem de fábrica. Garantimos pré-instalações e posicionamentos no primeiro uso do dispositivo (PAI), sem redes intermediárias e com logs de hardware auditáveis.",
+        "bestFor": "Acesso Direto · ROM de Fábrica · Logs Verificados",
+        "points": [
+          "Parceiro de agência Lenovo",
+          "Pré-instalações",
+          "Rastreamento por SDK"
+        ]
+      },
+      {
+        "id": "programmatic",
+        "title": "Compra de Mídia Programática",
+        "tagline": "Campanhas otimizadas por eventos nas principais exchanges globais.",
+        "teaser": "Segmente públicos de alto valor usando otimização preditiva de eventos.",
+        "description": "Nossa plataforma de demanda (DSP) otimiza lances em tempo real, concentrando o investimento em usuários com alta probabilidade de concluir cadastros, realizar primeiros depósitos (FTD) ou efetuar transações in-app.",
+        "bestFor": "Exchanges Curadas · Foco em ROI · Otimização por Eventos",
+        "points": [
+          "Otimização preditiva",
+          "Eventos de fundo de funil",
+          "Lances baseados em LTV"
+        ]
+      },
+      {
+        "id": "performance",
+        "title": "Estúdio CGC e Distribuição Paga",
+        "tagline": "Conteúdo Gerado por Criadores construído para converter nichos complexos.",
+        "teaser": "Converta a atenção do usuário em receita mensurável com criadores autênticos.",
+        "description": "Nosso estúdio criativo produz peças de vídeo de alta performance feitas sob medida para setores altamente competitivos (iGaming, Fintech). Testamos centenas de ganchos visuais e escalamos a distribuição paga no TikTok, YouTube e Meta.",
+        "bestFor": "Criadores Autênticos · iGaming e Fintech · Receita Mensurável",
+        "points": [
+          "Distribuição algorítmica",
+          "Testes em alto volume",
+          "Escala de LTV"
+        ]
+      }
+    ],
+    "infrastructure": [
+      {
+        "id": "oem",
+        "title": "Descoberta OEM e no Dispositivo",
+        "tagline": "Vias PAI homologadas com comprovantes verificados em nível de hardware.",
+        "teaser": "Audite cada pré-instalação de fábrica até o log bruto de hardware.",
+        "description": "Garantimos vias diretas de ROM e PAI da Lenovo com histórico certificado de SDK. Ignoramos redes de anúncios intermediárias, permitindo que Seus desenvolvedores verifiquem a instalação diretamente nos logs de hardware do dispositivo.",
+        "bestFor": "Conformidade Absoluta · Logs Brutos de Hardware · Histórico de SDK",
+        "points": [
+          "Lenovo ROM e PAI",
+          "Endpoints Adjust/AppsFlyer",
+          "Proteção contra fraude de revenda"
+        ]
+      },
+      {
+        "id": "programmatic",
+        "title": "Compra de Mídia Programática",
+        "tagline": "Filtragem antifraude pré-lance executada em 0.4 milissegundos.",
+        "teaser": "Filtre o tráfego de bots em 0.4 milissegundos antes que o lance ocorra.",
+        "description": "Nosso motor proprietário de pontuação analisa 180 sinais de dispositivo em 0.4 milissegundos, bloqueando tráfego de bots antes que o lance ocorra. Mantemos um caminho de fornecimento verificado, protegendo Seu orçamento programático de inventário falsificado.",
+        "bestFor": "Caminho de Fornecimento Limpo · Filtragem em 0.4ms · Dados Transparentes",
+        "points": [
+          "180 sinais de dispositivo",
+          "Lista segura direta com exchanges",
+          "Correspondência contábil de logs"
+        ]
+      },
+      {
+        "id": "performance",
+        "title": "Estúdio CGC e Distribuição Paga",
+        "tagline": "Performance criativa rastreável mapeada para comprovantes de instalação.",
+        "teaser": "Conecte cada elemento visual a um comprovante bruto de dispositivo.",
+        "description": "Tratamos a produção criativa como ciência de dados. Nossos traders rastreiam cada peça criativa diretamente aos Seus logs brutos de instalação, mostrando a Você qual variação de vídeo gera valor real de tempo de vida (LTV).",
+        "bestFor": "Ciência de Dados · Logs de Instalação · Rastreamento de Investimento",
+        "points": [
+          "Comprovantes brutos de dispositivo",
+          "Mapeamento de performance",
+          "Verificação contábil de logs"
+        ]
+      }
+    ]
+  },
+  "bridge": {
+    "growth": {
+      "eyebrow": "Visão alternativa",
+      "lead": "Conheça a história de infraestrutura",
+      "preview": "Linhas estáveis, dados comprovados e OEM auditável orientando como Ad Ops fecha o mês.",
+      "cta": "Mudar para Infraestrutura"
+    },
+    "infrastructure": {
+      "eyebrow": "Visão alternativa",
+      "lead": "Conheça a história de crescimento",
+      "preview": "Velocidade garantindo alcance com escala OEM e compra ponderada por eventos sem quebrar a economia unitária.",
+      "cta": "Mudar para Crescimento"
+    }
+  },
+  "aboutPage": {
+    "label": "A Expedição",
+    "title": "Nós somos a UPRAISER.",
+    "chapter": {
+      "scrollHeroWord": "ASCENSÃO",
+      "line1": "Ajudamos a moldar o cenário da publicidade mobile.",
+      "line2Prefix": "Reunimos operadores de",
+      "inlineWord": "diferentes mundos técnicos",
+      "description": "A Upraiser opera a partir do nosso basecamp em Londres. Em 2017, reunimos operadores de diferentes mundos técnicos para formar esta mesa de performance. Nossa equipe inclui engenheiros de sistemas, desenvolvedores de software, economistas financeiros e criativos de conversão. Cada operador construiu ferramentas proprietárias e gerenciou pipelines de tráfego dentro da indústria de AdTech. Essa convergência de disciplinas é a nossa força."
+    },
+    "positioningLead": "Construído a partir de logs.",
+    "positioningAccent": "Construído para gerar confiança.",
+    "description": "Boutique de performance sediada em Londres. Executamos e conciliamos o crescimento mobile para que Ad Ops e o setor financeiro compartilhem um único arquivo.",
+    "storySegments": [
+      {
+        "mark": "Convergência",
+        "title": "Especialização de quatro disciplinas trabalhando como uma única equipe",
+        "body": "Excluímos gerentes de contas e camadas de atendimento ao cliente para manter Seu caminho direto. Quando Você faz parceria com a Upraiser, Você trabalha com os operadores que construíram Seu equipamento de rastreamento e operam Seus orçamentos de mídia.\n\nNossos engenheiros de sistemas desenvolvem os motores de pontuação pré-lance. Nossos desenvolvedores de software mantêm o rastreamento de logs de SDK. Nossos economistas equilibram Sua economia unitária. Nossos criativos desenham os ganchos visuais. Essa sinergia nos permite enxergar o terreno dos dados com clareza. Suas equipes de UA e finanças aprovam os mesmos números antes da emissão da fatura."
+      },
+      {
+        "mark": "Terreno",
+        "title": "Ajudamos a definir as regras deste mercado desde os primórdios",
+        "body": "Escolhemos caminhos diretos e verificados em vez de exchanges públicas e leilões congestionados de lances. Nosso trabalho pioneiro em AdTech nos permitiu criar métodos customizados de verificação de dados desde a base. Por entendermos como operam os vetores de fraude e sistemas de atribuição, projetamos nosso próprio motor de pontuação pré-lance.\n\nConstruímos os pipelines que conectam arquivos brutos de log aos Seus endpoints de mensuração. Não esperamos que o mercado oferecesse transparência. Nós construímos nossas próprias ferramentas de verificação para garanti-la."
+      },
+      {
+        "mark": "Código",
+        "title": "Transparência de dados e conformidade voluntária por princípio",
+        "body": "Precisão técnica exige confiança. A Upraiser segue rigorosamente as diretrizes da European Digital Advertising Alliance. Excluímos gráficos resumidos em PDF que ocultam discrepâncias.\n\nFornecemos logs brutos e não editados de dispositivos sob demanda para que Sua equipe possa verificar cada instalação de volta a um dispositivo físico. Seu razão contábil bate com Sua fatura de mídia até o último centavo."
+      }
+    ],
+    "facts": [
+      {
+        "label": "Fundada",
+        "value": "2017"
+      },
+      {
+        "label": "Sede",
+        "value": "Londres"
+      },
+      {
+        "label": "ICO",
+        "value": "ZC000436"
+      },
+      {
+        "label": "Entidade",
+        "value": "LLP"
+      }
+    ],
+    "teamLabel": "Entidade legal",
+    "teamLead": "UPRAISER Agency LLP está sediada em 128 City Road, Londres EC1V 2NX, Reino Unido.",
+    "testimonialsHeading": "O que as equipes nos dizem",
+    "faqHeading": "Perguntas Frequentes",
+    "faq": [
+      {
+        "question": "A Upraiser foi feita para apoiar equipes internas de mídia?",
+        "answer": "Sim. Fortalecemos Sua equipe interna. Não retiramos o controle dos Seus operadores. Conectamos os rastros de SDK e liberamos os pipelines de dados para que Sua equipe execute campanhas sobre logs limpos e prontos para auditoria. Protegemos as linhas e garantimos que o fluxo de dados coincida perfeitamente com Sua plataforma de mensuração."
+      },
+      {
+        "question": "Como a Upraiser garante transparência de dados com discrepância zero?",
+        "answer": "Auditamos Seus endpoints de MMP e alinhamos pipelines de logs antes de ir ao ar. Cada campanha bate com Seus dados de MMP centavo por centavo. Ao verificar a atribuição no instante do lance, garantimos 0% de discrepância em logs pós-campanha. Seus diretores financeiros e traders de UA sempre leem a mesma fatura."
+      },
+      {
+        "question": "Como Vocês bloqueiam a fraude mobile antes que o lance ocorra?",
+        "answer": "Nosso motor proprietário de pontuação pré-lance analisa 180 sinais de dispositivo em 0.4 milissegundos. Filtramos o tráfego fraudulento na origem, garantindo que Você nunca pague por instalações de bots."
+      },
+      {
+        "question": "O que é CGC e como ele se integra às Suas rotas?",
+        "answer": "Conteúdo Gerado por Criadores (CGC) é um ativo de performance. Captamos mídias autênticas de criadores e as amplificamos através de rotas programáticas, sociais e OEM. Nossos traders rastreiam cada criativo até o log bruto de instalação, otimizando para LTV do usuário em vez de simples cliques."
+      },
+      {
+        "question": "Vocês são uma ferramenta SaaS ou uma mesa de performance de espectro completo?",
+        "answer": "Somos uma mesa de performance boutique premium. Nós escrevemos o código, conectamos os pipelines e compramos a mídia. Você trabalha diretamente com os operadores que construíram Suas ferramentas e operam Seus orçamentos. Sem gerentes de contas intermediários, sem caixas pretas."
+      }
+    ],
+    "ctaLabel": "Solicitar Piloto",
+    "closeTitle": "Conheça nossa equipe em um piloto",
+    "closeDescription": "Envie vertical, GEO e evento de KPI. Construímos instantaneamente um caminho exato com escopo claro."
+  },
+  "solutionsPage": {
+    "label": "As Rotas",
+    "title": "Construímos quatro rotas de compra.",
+    "chapter": {
+      "scrollHeroWord": "ROTAS",
+      "line1": "Construímos quatro rotas de compra.",
+      "line2Prefix": "Cada rota entrega um único",
+      "inlineWord": "arquivo de conciliação",
+      "description": "Crescimento de Apps, OEM, Criadores e canais programáticos operam sobre comprovantes de MMP verificados garantindo transparência absoluta."
+    },
+    "description": "Crescimento de Apps, OEM, Criadores e canais programáticos operam sobre comprovantes de MMP verificados garantindo transparência absoluta.",
+    "ctaLabel": "Solicitar Piloto",
+    "closeTitle": "Defina o caminho que Você precisa",
+    "closeDescription": "Compartilhe Seu segmento, GEO e evento crítico de KPI. Nós direcionamos Você imediatamente para o canal de compra ideal."
+  },
+  "contactPage": {
+    "label": "[ Sala de Briefing Upraiser ]",
+    "title": "Entrada e Briefing de Piloto",
+    "titleLead": "Entrada e Briefing de ",
+    "accentWord": "Piloto",
+    "description": "Forneça Seus parâmetros de produção. Nossos operadores analisam Sua aplicação e configuram Seus pipelines de dados em até 24 horas. Evitamos funis genéricos de vendas para estabelecer alinhamento direto entre parceiros.",
+    "subline": "1 a 2 dias úteis. Forneça o briefing da Sua marca, demandas de inventário OEM ou interesse em carreiras e nós encaminharemos perfeitamente.",
+    "office": "128 City Road, London EC1V 2NX, United Kingdom",
+    "email": "info@upraiser.co.uk",
+    "ctaLabel": "[ SOLICITAR PILOTO ]",
+    "form": {
+      "spend": "Média de Investimento Mensal em Mídia"
+    }
+  },
+  "contactVerticals": [
+    {
+      "value": "app-growth",
+      "label": "Crescimento de Apps / Mídia"
+    },
+    {
+      "value": "oem",
+      "label": "OEM / Lenovo"
+    },
+    {
+      "value": "studio",
+      "label": "Creative Studio / Criativos"
+    },
+    {
+      "value": "brand",
+      "label": "Parceria de Marca"
+    },
+    {
+      "value": "advertising-partner",
+      "label": "Parceiro de Publicidade"
+    },
+    {
+      "value": "app-web-owner",
+      "label": "Proprietário de App / Web"
+    },
+    {
+      "value": "direct-publisher",
+      "label": "Publisher direto"
+    },
+    {
+      "value": "careers",
+      "label": "Buscando carreira na UPRAISER"
+    },
+    {
+      "value": "other",
+      "label": "Outro"
+    }
+  ],
+  "caseStudyMeta": {
+    "structureLabel": "Como interpretar um case",
+    "structureSteps": [
+      {
+        "title": "Resultados",
+        "description": "Três métricas principais de destaque lideram a história apresentando as cifras exatas que o setor financeiro exige."
+      },
+      {
+        "title": "Metadados",
+        "description": "Marca, vertical, GEO, evento de KPI e modelos de pagamento estruturados com clareza para auditoria e contratação."
+      },
+      {
+        "title": "História",
+        "description": "Desafio, abordagem e resultado organizados em blocos concisos vinculados puramente a eventos verificáveis de dispositivo."
+      }
+    ]
+  },
+  "testimonials": [
+    {
+      "quote": "Paramos de explicar discrepâncias de atribuição ao financeiro e passamos a compartilhar um único arquivo perfeitamente conciliado.",
+      "name": "Diretor de UA",
+      "role": "App de Fintech no Reino Unido",
+      "company": "Finanças de consumo",
+      "href": "/cases/snoop"
+    },
+    {
+      "quote": "A via da Lenovo entregou comprovação genuína direto de fábrica em vez de inventário reempacotado de exchanges.",
+      "name": "Líder de Crescimento",
+      "role": "App de Trading Android Global",
+      "company": "Finanças de alta frequência",
+      "href": "/cases/vantage"
+    },
+    {
+      "quote": "Evoluímos de reuniões semanais de conciliação para uma extração direta do arquivo mensal. Isso representou uma grande vitória operacional.",
+      "name": "Líder de Ad Ops",
+      "role": "Comprador de Mídia na Europa",
+      "company": "Contas programáticas",
+      "href": "/cases/autodoc"
+    },
+    {
+      "quote": "A filtragem pré-lance garantiu que cada dólar investido passasse por uma validação rigorosa de dispositivo com total precisão.",
+      "name": "Líder de Crescimento",
+      "role": "Marketplace no GCC",
+      "company": "Expansão de e-commerce",
+      "href": "/cases/fiverr"
+    }
+  ],
+  "sections": {
+    "value": {
+      "label": "O Que Fazemos",
+      "growth": {
+        "title": "Crescimento projetado para apps que exigem mais do que instalações",
+        "description": "Proteção pré-lance, compra ponderada por eventos e distribuição OEM direta conectam Seu orçamento instantaneamente a receitas verificadas."
+      },
+      "infrastructure": {
+        "title": "Infraestrutura projetada para equipes que exigem mais do que instalações",
+        "description": "Filtragem pré-lance, paridade consistente de logs e distribuição OEM direta blindam Seu orçamento imediatamente contra fraudes de anúncios."
+      }
+    },
+    "channels": {
+      "label": "Ferramentas para Altitude",
+      "growth": {
+        "title": "Equipamentos gerando mais de 30 mil instalações diárias.",
+        "description": "Fornecimento direto, otimização consistente por eventos e rotas verificadas impulsionam um crescimento expressivo em todos os mercados-alvo."
+      },
+      "infrastructure": {
+        "title": "Equipamentos que garantem compra de mídia transparente.",
+        "description": "Fornecimento direto, filtragem antifraude pré-lance robusta e rotas verificadas asseguram performance consistente em todos os mercados-alvo."
+      }
+    },
+    "cases": {
+      "label": "Picos Conquistados",
+      "growth": {
+        "title": "Conquistamos estes picos repetidamente."
+      },
+      "infrastructure": {
+        "title": "Protegemos estes picos repetidamente."
+      }
+    },
+    "technology": {
+      "label": "O Equipamento",
+      "growth": {
+        "title": "Cada lance carrega um comprovante verificado"
+      },
+      "infrastructure": {
+        "title": "Cada linha da fatura carrega um comprovante verificado"
+      }
+    },
+    "about": {
+      "label": "A Expedição",
+      "growth": {
+        "title": "Nós somos a UPRAISER",
+        "description": "Sediada com segurança em Londres. Parceira oficial de agência Lenovo. Projetamos filtragem antifraude pré-lance, distribuição OEM premium e compra verificada por eventos sob medida para iGaming e fintech."
+      },
+      "infrastructure": {
+        "title": "Nós somos a UPRAISER",
+        "description": "Sediada com segurança em Londres. Parceira oficial de agência Lenovo. Arquitetamos conciliação de logs, implementações diretas em ROM e proteção pré-lance robusta sob medida para compra transparente de mídia."
+      }
+    },
+    "process": {
+      "label": "O Mapa. O Cabeamento. A Verificação.",
+      "growth": {
+        "title": "Mapear. Conectar. Conquistar.",
+        "cta": "Solicitar Piloto"
+      },
+      "infrastructure": {
+        "title": "Mapear. Conectar. Verificar.",
+        "cta": "Solicitar Piloto"
+      }
+    },
+    "contact": {
+      "label": "Contato",
+      "title": "Pronto para Subir de Nível?",
+      "titleLead": "Pronto para ",
+      "accentWord": "Subir de Nível?"
+    }
+  },
+  "heroFounded": "Fundada em 17 de julho de 2017, sediada em Londres",
+  "chart": {
+    "g1": {
+      "label": "Taxa de Execução Q3"
+    },
+    "g2": {
+      "label": "LTV / CAC"
+    },
+    "g3": {
+      "label": "Margem Bruta"
+    },
+    "g4": {
+      "label": "Usuários Ativos"
+    },
+    "i1": {
+      "label": "Fraude Bloqueada"
+    },
+    "i2": {
+      "label": "Atraso de Dados"
+    },
+    "i3": {
+      "label": "Disponibilidade"
+    },
+    "i4": {
+      "label": "Limite de API"
+    }
+  },
+  "casesPage": {
+    "label": "OS PICOS",
+    "title": "CONQUISTAMOS ESTES PICOS REPETIDAMENTE.",
+    "subtitle": "Resultados comprovados de campanhas ativas — toque em qualquer cartão para ver o case completo.",
+    "swipe": "Deslize ou ← → · toque para abrir"
+  },
+  "caseCard": {
+    "readCase": "Ver o case →",
+    "volumeIndex": "ÍNDICE DE VOLUME",
+    "scale": "ESCALA DE 12S",
+    "kpiEvent": "EVENTO DE KPI"
+  },
+  "channelsCta": {
+    "label": "Os Canais",
+    "title1": "Todos os Formatos.",
+    "title2": "Um Único Caminho de Fornecimento.",
+    "desc": "De Programática e Redes Sociais até Connected TV e OEM. Explore nossas visualizações interativas de canais e veja como integramos fontes fragmentadas de tráfego em um ecossistema unificado com comprovação absoluta de atribuição.",
+    "cta": "Explorar Todos os Canais",
+    "g1": "Programática",
+    "g2": "Connected TV",
+    "g3": "Anúncios Sociais",
+    "g4": "OEM e Direto"
+  },
+  "heroLede": {
+    "growth": "Executamos campanhas globais de performance com comprovação absoluta de atribuição.",
+    "infrastructure": "Construímos pipelines transparentes de compra de mídia para aplicativos e agências com comprovação absoluta de atribuição."
+  },
+  "misc": {
+    "results": "Resultados",
+    "volumeIndex": "Índice de Volume",
+    "kpiEvent": "Evento de KPI",
+    "programmatic": "Programática",
+    "ctv": "Connected TV",
+    "social": "Anúncios Sociais",
+    "oem": "OEM e Direto",
+    "nextStep": "Próximo passo",
+    "readyUpraised": "Pronto para Subir de Nível?",
+    "briefRoute": "Defina a rota: vertical, GEO, evento de KPI — respondemos com um caminho estruturado, não com uma apresentação genérica.",
+    "explore": "Explorar",
+    "company": "Empresa",
+    "basecamp": "Basecamp Londres",
+    "uk": "Reino Unido",
+    "directComm": "Comunicações Diretas",
+    "verifiedComp": "Conformidade Verificada e Parceiros",
+    "agencyPartner": "Parceiro de Agência",
+    "expeditionCrew": "A Equipe da Expedição",
+    "engBasecamp": "O Basecamp de Engenharia",
+    "marketingNav": "Os Navegadores de Marketing",
+    "visArch": "Os Arquitetos Visuais",
+    "dataScouts": "Os Exploradores de Dados",
+    "expGuides": "Os Guias da Expedição"
+  },
+  "ghosts": {
+    "q3RunRate": "Taxa de Execução Q3",
+    "ltvCac": "LTV / CAC",
+    "grossMargin": "Margem Bruta",
+    "activeUsers": "Usuários Ativos",
+    "botTraffic": "Tráfego de Bots",
+    "chargebacks": "Chargebacks",
+    "spamSignups": "Cadastros Spam Bloqueados",
+    "botsFarms": "Bots e Farms Eliminados",
+    "verifiedRoas": "ROAS Verificado",
+    "recoveredSpend": "Investimento Recuperado",
+    "ourClients": "Nossos Clientes",
+    "renderingTerrain": "Renderizando Terreno",
+    "clickFlood": "Click Flood Bloqueado"
+  }
+}

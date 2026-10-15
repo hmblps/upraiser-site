@@ -21,7 +21,7 @@ import ts from "typescript";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = path.join(root, "src");
-const LOCALES = ["en", "zh", "ja", "ko", "es", "de", "fr"];
+const LOCALES = ["en", "pt", "es", "de", "fr", "zh", "ko", "ja"];
 
 /** Strings that stay identical in every language (brands, acronyms, units). */
 const KEEP = /^(UPRAISER|Lenovo|Apple|Adjust|AppsFlyer|ROAS|CPA|PAI|OEM|GEOs?|FinTech|KYC|MMP|Heroic|eCPM|ARPU|KPI|LTV|CAC|Q[1-4]|CTV|LTV \/ CAC|Basecamp London|United Kingdom|Q3 Run Rate|[\d\s.,%+\-–—×x/$€£·:|()]+)$/i;

@@ -56,7 +56,14 @@ export function HeaderIsland() {
                         active ? "text-on-accent" : "text-fg-muted font-semibold"
                       }`}
                     >
-                      {link.href === "/" ? t("nav.agency", "The Agency") : t("nav.studio", "The Craft")}
+                      {link.href === "/" ? (
+                        t("nav.agency", "The Agency")
+                      ) : (
+                        <>
+                          <span className="inline sm:hidden">{t("nav.craftShort", "Craft")}</span>
+                          <span className="hidden sm:inline">{t("nav.studio", "Creative Studio")}</span>
+                        </>
+                      )}
                       {link.underConstruction && (
                         <span className="hidden sm:inline ml-1 text-[8px] uppercase tracking-wider opacity-60">{t("nav.soon", "Soon")}</span>
                       )}

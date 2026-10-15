@@ -7,12 +7,13 @@ import { cn } from "../lib/cn";
 
 export const localeOptions = [
   { code: "en", label: "English", native: "English" },
-  { code: "zh", label: "Chinese", native: "中文" },
-  { code: "ko", label: "Korean", native: "한국어" },
-  { code: "ja", label: "Japanese", native: "日本語" },
+  { code: "pt", label: "Portuguese", native: "Português" },
   { code: "es", label: "Spanish", native: "Español" },
   { code: "de", label: "German", native: "Deutsch" },
   { code: "fr", label: "French", native: "Français" },
+  { code: "zh", label: "Chinese", native: "中文" },
+  { code: "ko", label: "Korean", native: "한국어" },
+  { code: "ja", label: "Japanese", native: "日本語" },
 ] as const;
 
 export type LocaleCode = (typeof localeOptions)[number]["code"];
