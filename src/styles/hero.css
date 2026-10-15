@@ -331,26 +331,20 @@
   color: color-mix(in srgb, var(--theme-accent-secondary) 25%, var(--theme-fg) 75%);
 }
 
-/* Light: high-contrast black label with ambient white halo for video readability */
+/* Light: brand red, clean and crisp across snow and rock without fuzzy halos */
 [data-theme="light"] .hero-fly-label {
-  color: #000000;
+  color: var(--logo-red);
   font-weight: 800;
   letter-spacing: 0.14em;
-  text-shadow: 
-    0 0 3px #ffffff,
-    0 0 6px rgba(255, 255, 255, 0.9),
-    0 0 10px rgba(255, 255, 255, 0.55);
+  text-shadow: none;
 }
 
-/* Dark: mirrored high-contrast white label with ambient dark halo for video readability */
+/* Dark: crisp off-white, no blurry halo */
 [data-theme="dark"] .hero-fly-label {
-  color: #ffffff;
-  font-weight: 800;
+  color: var(--theme-fg);
+  font-weight: 700;
   letter-spacing: 0.14em;
-  text-shadow: 
-    0 0 3px rgba(0, 0, 0, 0.95),
-    0 0 6px rgba(0, 0, 0, 0.85),
-    0 0 10px rgba(0, 0, 0, 0.55);
+  text-shadow: none;
 }
 
 .hero-lede {
