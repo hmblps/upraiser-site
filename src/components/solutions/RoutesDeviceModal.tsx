@@ -37,6 +37,13 @@ export function RoutesDeviceModal({
   const finish = mode === "growth" ? "deepblue" : "accent";
   const total = formats?.length ?? 1;
 
+  const handleClose = () => {
+    if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onClose();
+  };
+
   useEffect(() => {
     if (!open) return;
     const root = document.documentElement;
@@ -45,7 +52,7 @@ export function RoutesDeviceModal({
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onClose();
+        handleClose();
       } else if (e.key === "ArrowRight" && formats && onSelectIndex && total > 1) {
         e.preventDefault();
         onSelectIndex((index + 1) % total);
@@ -77,7 +84,7 @@ export function RoutesDeviceModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={reduced ? { duration: 0.12 } : { duration: 0.22 }}
-          onClick={onClose}
+          onClick={handleClose}
         >
           {/* Top bar: format metadata + 44x44 close button */}
           <div
@@ -94,7 +101,7 @@ export function RoutesDeviceModal({
 
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Close preview"
               className="routes-device-modal__close"
             >

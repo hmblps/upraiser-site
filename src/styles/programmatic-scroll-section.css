@@ -1503,13 +1503,14 @@
 
 .prog-device-slot--interactive {
   cursor: zoom-in;
-  outline: none;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
+.prog-device-slot--interactive:focus,
 .prog-device-slot--interactive:focus-visible {
-  outline: 2px solid var(--theme-accent);
-  outline-offset: 8px;
-  border-radius: 1.5rem;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .prog-device-slot__zoom-badge {

@@ -52,3 +52,14 @@
 - In [`src/components/solutions/Phone3D.tsx`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/components/solutions/Phone3D.tsx):
   - Added left, right, and bottom rim lights (`intensity: 2.2 / 1.4`) and `hemisphereLight` to sculpt the phone's physical form against dark backgrounds.
   - Rebalanced titanium chassis material to `metalness: 0.45`, `roughness: 0.34`, and `envMapIntensity: 1.6` so the phone body renders as polished natural titanium with crisp physical bevels rather than an invisible black silhouette.
+
+### J. Native Ad Creative Safe Area & Status Bar Composition
+- In [`public/channels/programmatic-refs/screens/native.png`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/public/channels/programmatic-refs/screens/native.png):
+  - Added authentic iOS status bar (clock `15:56`, cellular, wifi, battery icons) on `#ffffff` background, shifting the Reddit header ("Popular" and back arrow `<`) down below the Dynamic Island.
+  - Provided clean horizontal safe area margins and bottom iOS Home Indicator bar so Reddit content, Kalshi chart, and action buttons are never clipped by the phone's curved screen corners.
+
+### K. Removal of Persistent Yellow Focus Frame on Modal Dismiss
+- In [`src/styles/programmatic-scroll-section.css`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/styles/programmatic-scroll-section.css#L1504-L1513):
+  - Replaced `.prog-device-slot--interactive:focus-visible` yellow outline with `outline: none !important; box-shadow: none !important;`.
+- In [`src/components/solutions/RoutesDeviceModal.tsx`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/components/solutions/RoutesDeviceModal.tsx#L40-L46):
+  - Added active element blurring on modal close (`document.activeElement.blur()`), ensuring no residual selection box remains on macOS or Windows upon closing.
