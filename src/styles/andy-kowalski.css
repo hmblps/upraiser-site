@@ -49,7 +49,9 @@ html[data-os="windows"] {
 
 /* ── REDUCED MOTION ── */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  html:not([data-os="windows"]) *,
+  html:not([data-os="windows"]) *::before,
+  html:not([data-os="windows"]) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

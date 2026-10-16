@@ -426,10 +426,10 @@ header nav .nav-link:focus-visible::after {
 
 @media (prefers-reduced-motion: reduce) {
   @media (hover: hover) and (pointer: fine) {
-  .btn-caps:hover,
-  .btn-caps:active {
-    transform: none;
-  }
+    html:not([data-os="windows"]) .btn-caps:hover,
+    html:not([data-os="windows"]) .btn-caps:active {
+      transform: none;
+    }
   }
 }
 

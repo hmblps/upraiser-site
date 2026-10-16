@@ -9,7 +9,7 @@ interface MetricPoint {
 }
 
 const METRICS: MetricPoint[] = [
-  { x: 300,  y: 350, label: 'DAY 7 ROAS',     value: '112%'  },
+  { x: 300,  y: 325, label: 'DAY 7 ROAS',     value: '112%'  },
   { x: 550,  y: 290, label: 'DAILY INSTALLS',  value: '18.5K' },
   { x: 750,  y: 200, label: 'ARPU LIFT',       value: '3.8x'  },
   { x: 950,  y: 130, label: 'CPA HELD',        value: '$31'   },

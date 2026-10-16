@@ -849,13 +849,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-interstitial__bg,
-  .pf-rich__bg,
-  .pf-video__bg,
-  .pf-video__bar span,
-  .pf-video__live i,
-  .pf-rich__nudge,
-  .pf-video__play {
+  html:not([data-os="windows"]) .pf-interstitial__bg,
+  html:not([data-os="windows"]) .pf-rich__bg,
+  html:not([data-os="windows"]) .pf-video__bg,
+  html:not([data-os="windows"]) .pf-video__bar span,
+  html:not([data-os="windows"]) .pf-video__live i,
+  html:not([data-os="windows"]) .pf-rich__nudge,
+  html:not([data-os="windows"]) .pf-video__play {
     animation: none !important;
   }
 }

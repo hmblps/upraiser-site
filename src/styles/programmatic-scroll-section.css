@@ -286,7 +286,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .phone-silhouette__glass {
+  html:not([data-os="windows"]) .phone-silhouette__glass {
     animation: none;
   }
 }
@@ -1036,7 +1036,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .prog-mobile-sticky {
+  html:not([data-os="windows"]) .prog-mobile-sticky {
     transition: opacity 0.01ms linear, visibility 0.01ms linear;
   }
 }

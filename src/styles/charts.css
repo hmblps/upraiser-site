@@ -197,15 +197,6 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
   font-variant-numeric: tabular-nums;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .fold-chart {
-    display: none;
-  }
-
-  .fraud-radial-chart {
-    display: none;
-  }
-}
 
 /* PROOF — full-bleed ambient radial (dark mirror of SCALE line chart) */
 .fraud-radial-chart {
@@ -392,12 +383,6 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
   mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 100%);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .fold-area {
-    display: none;
-  }
-}
-
 /* CLARITY — ledger rows snap to order (infrastructure promise) */
 .clarity-ledger {
   display: none;
@@ -509,12 +494,6 @@ html[data-os="windows"] [data-theme="dark"] .fold-chart-ghost-label {
 [data-theme="dark"] .clarity-ledger__columns line {
   stroke: color-mix(in srgb, var(--theme-accent) 18%, var(--theme-border));
   stroke-opacity: 0.28;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .clarity-ledger {
-    display: none;
-  }
 }
 
 /* PARITY — full-bleed ambient gold / red water (Promise dark) */
@@ -765,15 +744,6 @@ html[data-os="windows"] .parity-water__lake {
   );
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .parity-water {
-    display: none;
-  }
-}
-
-
-
-
 /* CLARITY — ledger rows snap to order (infrastructure promise) */
 .clarity-ledger {
   display: none;
@@ -885,12 +855,6 @@ html[data-os="windows"] .parity-water__lake {
 [data-theme="dark"] .clarity-ledger__columns line {
   stroke: color-mix(in srgb, var(--theme-accent) 18%, var(--theme-border));
   stroke-opacity: 0.28;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .clarity-ledger {
-    display: none;
-  }
 }
 
 @media (min-width: 768px) {

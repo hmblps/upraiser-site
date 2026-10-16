@@ -513,7 +513,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .trust-marquee__track {
+  html:not([data-os="windows"]) .trust-marquee__track {
     animation: none;
     flex-wrap: wrap;
     width: 100%;

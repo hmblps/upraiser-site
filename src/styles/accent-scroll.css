@@ -224,11 +224,11 @@ main > section#promise.section-band--quiet {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .accent-scroll-section--lite {
+  html:not([data-os="windows"]) .accent-scroll-section--lite {
     min-height: auto;
   }
 
-  .accent-scroll-sticky {
+  html:not([data-os="windows"]) .accent-scroll-sticky {
     position: static;
     min-height: auto;
   }

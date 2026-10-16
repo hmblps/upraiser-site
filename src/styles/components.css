@@ -439,18 +439,18 @@ html.theme-light .value-bento-icon--glass .glass-icon-face {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .value-bento-icon--glass .glass-icon-back,
-  .value-bento-icon--glass .glass-icon-face {
+  html:not([data-os="windows"]) .value-bento-icon--glass .glass-icon-back,
+  html:not([data-os="windows"]) .value-bento-icon--glass .glass-icon-face {
     transition: none !important;
     transform: none !important;
   }
 
-@media (hover: hover) and (pointer: fine) {
-  .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-back,
-  .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-face {
-    transform: none !important;
+  @media (hover: hover) and (pointer: fine) {
+    html:not([data-os="windows"]) .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-back,
+    html:not([data-os="windows"]) .value-bento-tile--feature:hover .value-bento-icon--glass .glass-icon-face {
+      transform: none !important;
+    }
   }
-}
 }
 
 .value-bento-icon svg {

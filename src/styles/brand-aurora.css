@@ -196,7 +196,7 @@ html[data-brand-aurora="1"] .depth-page--cases.viewport-page::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .route-aurora__sheet {
+  html:not([data-os="windows"]) .route-aurora__sheet {
     animation: none;
   }
 }

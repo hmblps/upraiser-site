@@ -32,6 +32,7 @@ export function useMarqueePointerDrag(trackRef: RefObject<HTMLElement | null>) {
     let armed = false;
 
     const prefersReduced = () =>
+      document.documentElement.dataset.os !== "windows" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const onPointerDown = (event: PointerEvent) => {

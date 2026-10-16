@@ -1054,11 +1054,11 @@ html.is-scrolling .cv-float {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cv-float {
+  html:not([data-os="windows"]) .cv-float {
     animation: none !important;
   }
 
-  .cv-float__shadow {
+  html:not([data-os="windows"]) .cv-float__shadow {
     animation: none;
   }
 }
