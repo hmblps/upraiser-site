@@ -44,3 +44,11 @@
 ### G. Lenovo Trust Strip Dark Theme Contrast
 - Added `.lenovo-copy-text` with `dark:text-white` in [`src/components/LenovoTrustStrip.tsx`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/components/LenovoTrustStrip.tsx#L60-L64) and rule `[data-theme="dark"] .lenovo-copy-text { color: #ffffff !important; opacity: 0.95; }` in [`src/styles/hero.css`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/styles/hero.css#L246-L250).
 - Delivers clean, high-contrast white text against the dark bottom dock.
+
+### H. Low-End Mobile GPU Classification (GeForce MX / GT) to Lite Tier
+- In [`src/hooks/useHardwareTier.ts`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/hooks/useHardwareTier.ts), filtered out entry-level low-power mobile discrete GPUs (`geforce mx`, `mx110–mx450`, `gt 710–1030`, `920m–940m`) so office laptops (e.g. ASUS VivoBook with i5-8250U + GeForce MX130) correctly receive `tier = "lite"`, rendering the optimized 2D CSS Phone instead of heavy WebGL.
+
+### I. 3D iPhone Titanium Chassis Lighting & PBR Material Sculpting
+- In [`src/components/solutions/Phone3D.tsx`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/components/solutions/Phone3D.tsx):
+  - Added left, right, and bottom rim lights (`intensity: 2.2 / 1.4`) and `hemisphereLight` to sculpt the phone's physical form against dark backgrounds.
+  - Rebalanced titanium chassis material to `metalness: 0.45`, `roughness: 0.34`, and `envMapIntensity: 1.6` so the phone body renders as polished natural titanium with crisp physical bevels rather than an invisible black silhouette.

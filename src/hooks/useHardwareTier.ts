@@ -15,7 +15,11 @@ function isIntegratedGPU(renderer: string): boolean {
     r.includes("vega") ||
     r.includes("microsoft basic render") ||
     r.includes("swiftshader") ||
-    r.includes("llvmpipe")
+    r.includes("llvmpipe") ||
+    // Low-end mobile discrete GPUs (entry-level chips weaker than modern iGPUs)
+    r.includes("geforce mx") ||
+    /\bmx(110|130|150|230|250|330|350|450)\b/i.test(r) ||
+    /\b(gt\s*710|gt\s*720|gt\s*730|gt\s*1030|920m|930m|940m|940mx)\b/i.test(r)
   );
 }
 

@@ -174,8 +174,11 @@ function applyScreenTexture(root: Object3D, map: Texture) {
             if (m.userData?.upraiserDowngraded) return m;
             const patched = mat.clone() as any;
             
-            // Downgrade mirror to 75% so diffuse lighting still works if env map fails
-            if (patched.metalness > 0.75) patched.metalness = 0.75;
+            // Balanced metalness (0.45) & roughness (0.34) so titanium chassis receives rich diffuse and specular light
+            // even if PMREM environment map is dark or fails to load, sculpting crisp physical bevels
+            if (patched.metalness > 0.45) patched.metalness = 0.45;
+            patched.roughness = Math.max(0.3, Math.min(patched.roughness || 0.38, 0.48));
+            patched.envMapIntensity = 1.6;
             
             patched.userData = { ...patched.userData, upraiserDowngraded: true };
             patched.needsUpdate = true;
@@ -416,10 +419,15 @@ const PhoneScene = memo(function PhoneScene({
 }) {
   return (
     <>
-      <ambientLight intensity={isDark ? 0.55 : 0.5} />
+      <ambientLight intensity={isDark ? 0.75 : 0.65} />
+      <hemisphereLight args={["#ffffff", isDark ? "#2a2a32" : "#808090", isDark ? 0.9 : 0.8]} />
       <directionalLight position={[2.8, 4.2, 3.2]} intensity={isDark ? 1.85 : 1.7} castShadow />
-      <directionalLight position={[-3, 2.2, -1]} intensity={0.55} color={isDark ? "#ffb070" : "#8eb0e8"} />
-      <spotLight position={[0, 5.2, 3.2]} angle={0.42} penumbra={0.7} intensity={1.05} />
+      <directionalLight position={[-3, 2.2, -1]} intensity={0.75} color={isDark ? "#ffb070" : "#8eb0e8"} />
+      {/* Side and bottom kicker rim lights to sculpt titanium bevels against dark backgrounds */}
+      <directionalLight position={[-3.8, 0.4, 1.6]} intensity={isDark ? 2.2 : 1.6} color="#eef3ff" />
+      <directionalLight position={[3.8, 0.4, 1.6]} intensity={isDark ? 2.2 : 1.6} color="#eef3ff" />
+      <directionalLight position={[0, -3.5, 2.2]} intensity={isDark ? 1.4 : 1.0} color="#ffffff" />
+      <spotLight position={[0, 5.2, 3.2]} angle={0.42} penumbra={0.7} intensity={1.1} />
       {/* Suspense only for initial GLB/texture resolve — never Still↔Video remount.
           Fallback stays null; Phone3D’s dark boot layer covers the transparent hole. */}
       <Suspense fallback={null}>
