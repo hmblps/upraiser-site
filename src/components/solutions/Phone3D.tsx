@@ -147,14 +147,17 @@ function applyScreenTexture(root: Object3D, map: Texture) {
         // Transmission (refraction) often crashes or turns black on old drivers.
         if ('metalness' in mat) {
           const m = mat as any; // Cast to access standard/physical properties
+          if (m.userData?.upraiserGlass) return m;
+
           let needsClone = false;
           
           if (m.metalness > 0.75) needsClone = true;
           if (m.transmission > 0) needsClone = true;
           
-          // The old 'glass' detection for the front cover
-          if (/glass/i.test(name) && !m.userData?.upraiserGlass) {
+          // Front cover glass (named 'Glass' pre-Draco or 'PaletteMaterial002' with transmission > 0)
+          if (/glass/i.test(name) || m.transmission > 0) {
             const glass = mat.clone() as any;
+            glass.transmission = 0;
             glass.transparent = true;
             glass.opacity = 0.06;
             glass.depthWrite = false;
@@ -173,16 +176,6 @@ function applyScreenTexture(root: Object3D, map: Texture) {
             
             // Downgrade mirror to 75% so diffuse lighting still works if env map fails
             if (patched.metalness > 0.75) patched.metalness = 0.75;
-            
-            // Keep phone chassis solid and opaque — never make outer shell transparent
-            if (patched.transmission > 0) {
-              patched.transmission = 0;
-              patched.transparent = false;
-              patched.opacity = 1.0;
-              patched.depthWrite = true;
-              patched.roughness = Math.max(0.2, patched.roughness);
-              patched.metalness = Math.min(0.5, patched.metalness);
-            }
             
             patched.userData = { ...patched.userData, upraiserDowngraded: true };
             patched.needsUpdate = true;
