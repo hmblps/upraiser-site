@@ -63,3 +63,13 @@
   - Replaced `.prog-device-slot--interactive:focus-visible` yellow outline with `outline: none !important; box-shadow: none !important;`.
 - In [`src/components/solutions/RoutesDeviceModal.tsx`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/components/solutions/RoutesDeviceModal.tsx#L40-L46):
   - Added active element blurring on modal close (`document.activeElement.blur()`), ensuring no residual selection box remains on macOS or Windows upon closing.
+
+### L. Footer Navigation Alignment to "Creative Studio" & Mobile "Craft" Prerogative
+- In [`src/data/liveContent.ts`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/data/liveContent.ts#L24-L320), updated `footerLinks.explore` and `navLinks` from `"The Craft"` to **`"Creative Studio"`** (`/craft`), ensuring the footer renders `<a class="footer-link" href="/craft" data-discover="true">Creative Studio</a>` in alignment with the desktop header.
+- In [`src/data/pageMeta.ts`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/data/pageMeta.ts#L26), updated page title to `"Creative Studio | UPRAISER"`.
+- Preserved the compact **`"Craft"`** moniker on mobile phone header islands ([`src/components/HeaderIsland.tsx`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/components/HeaderIsland.tsx#L63)), maintaining crisp layout fit on 360–390px screens.
+
+### M. Infrastructure Telemetry Chart Vertical Alignment in "WHO WE SERVE"
+- In [`src/styles/charts.css`](file:///Users/homeboylebz/Downloads/%D0%9D%D0%9E%D0%92%D0%AB%D0%99%20%D0%A1%D0%90%D0%99%D0%A2%20UPRAISER/src/styles/charts.css#L944-L951), lifted `.fraud-linear-chart__content` on desktop (`@media (min-width: 1024px)`) with `transform: translate(-158px, -44px)` and tightened `gap: 66px`.
+- **Visual Parity:** The top telemetry bar (`SYS_ERR_01 BOTS & FARMS ELIMINATED`) now aligns directly with the lead copy (*"When Your MMP and media bills diverge, we rebuild Your data pipelines."*), and the bottom metric (`18.5% RECOVERED SPEND`) sits comfortably above the section boundary.
+

@@ -21,7 +21,7 @@ export const contactVerticalOptions = [
 
 export const navLinks: NavLink[] = [
   { label: "The Agency", href: "/" },
-  { label: "The Craft", href: "/craft", underConstruction: true },
+  { label: "Creative Studio", href: "/craft", underConstruction: true },
 ];
 
 export const primaryCta = {
@@ -317,7 +317,7 @@ export const footerLinks = {
     { label: "The Agency", href: "/" },
     { label: "The Routes", href: "/#routes" },
     { label: "The Peaks", href: "/#cases" },
-    { label: "The Craft", href: "/craft" },
+    { label: "Creative Studio", href: "/craft" },
     
   ],
   company: [

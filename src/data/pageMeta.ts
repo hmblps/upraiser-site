@@ -23,7 +23,7 @@ export const pageMetaByPath: Record<string, PageMetaRecord> = {
       "App Growth and OEM & CTV formats on one supply path — programmatic, social, Lenovo OEM, and connected TV.",
   },
   "/craft": {
-    title: "The Craft | UPRAISER",
+    title: "Creative Studio | UPRAISER",
     description: "Creative lab and proprietary pipelines for UPRAISER traffic infrastructure. Workshop opening soon.",
     robots: "noindex, follow",
   },

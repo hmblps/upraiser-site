@@ -944,8 +944,8 @@ html[data-os="windows"] .parity-water__lake {
 @media (min-width: 1024px) {
   .fraud-linear-chart__content {
     margin-right: 0;
-    transform: translateX(-158px);
-    gap: 72px;
+    transform: translate(-158px, -44px);
+    gap: 66px;
     padding-inline: 0;
   }
 }

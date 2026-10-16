@@ -241,7 +241,7 @@ Mode-aware bodies: `**ModeContentTransition**`.
 
 ### Footer explore
 
-The Agency (`/`) · The Routes (`/#routes`) · The Peaks (`/#cases`) · The Craft (`/craft`).  
+The Agency (`/`) · The Routes (`/#routes`) · The Peaks (`/#cases`) · Creative Studio (`/craft`).  
 Company: только Careers inquiry → `/contact`. **Нет** Expedition. **Нет** Request Pilot в footer.
 
 ### Request Pilot — где живёт
@@ -1385,6 +1385,21 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   - Added immediate raw text return for `parsed.end === 0` and `duration <= 0`, plus fallback protections in `formatValue`.
 - **Lenovo Trust Strip Dark Theme Contrast Enhancement (16 Oct 2026):**
   - Made the Lenovo partnership copy in dark theme pure crisp white (`#ffffff` at 0.95 opacity) via `.lenovo-copy-text` and `dark:text-white`, maximizing readability against the dark bottom dock.
+- **Entry-Level Discrete GPU Classification to Lite Tier (16 Oct 2026):**
+  - In `useHardwareTier.ts`, filtered out low-power entry mobile discrete GPUs (`geforce mx`, `mx110–mx450`, `gt 710–1030`, `920m–940m`) so office laptops (e.g. ASUS VivoBook i5-8250U + GeForce MX130) correctly receive `tier = "lite"`, ensuring fluid 60fps CSS device rendering.
+- **3D iPhone Titanium Chassis Lighting & PBR Material Sculpting (16 Oct 2026):**
+  - In `Phone3D.tsx`, added left, right, and bottom rim directional lights (`intensity: 2.2 / 1.4`) plus `hemisphereLight`, and adjusted chassis material to `metalness: 0.45`, `roughness: 0.34`, and `envMapIntensity: 1.6` for natural polished titanium reflections.
+- **Native Ad Creative Safe Area & Status Bar Composition (16 Oct 2026):**
+  - Recomposed `public/channels/programmatic-refs/screens/native.png` with authentic iOS status bar (`15:56`, wifi, battery), calculated safe area margins, and bottom Home Indicator bar, preventing Dynamic Island and rounded corner clipping.
+- **Removal of Persistent Yellow Focus Frame on Modal Dismiss (16 Oct 2026):**
+  - In `programmatic-scroll-section.css` and `RoutesDeviceModal.tsx`, removed active yellow focus-visible outline and added `activeElement.blur()` on modal close.
+- **Footer Navigation Alignment to "Creative Studio" & Mobile "Craft" Prerogative (16 Oct 2026):**
+  - Updated `footerLinks.explore` and `navLinks` in `liveContent.ts` from `"The Craft"` to **`"Creative Studio"`** (`/craft`), ensuring the footer renders `<a class="footer-link" href="/craft" data-discover="true">Creative Studio</a>` in alignment with the desktop header.
+  - Updated page metadata in `pageMeta.ts` to `"Creative Studio | UPRAISER"`.
+  - Preserved the compact **`"Craft"`** moniker on mobile phone header islands (`HeaderIsland.tsx`), maintaining crisp layout fit on 360–390px screens.
+- **Infrastructure Telemetry Chart Vertical Alignment in "WHO WE SERVE" (16 Oct 2026):**
+  - In `charts.css`, lifted `.fraud-linear-chart__content` on desktop (`@media (min-width: 1024px)`) with `transform: translate(-158px, -44px)` and tightened `gap: 66px`.
+  - The top telemetry bar (`SYS_ERR_01 BOTS & FARMS ELIMINATED`) now aligns directly with the lead copy (*"When Your MMP and media bills diverge, we rebuild Your data pipelines."*), and the bottom metric (`18.5% RECOVERED SPEND`) sits comfortably above the section boundary.
 
 
 
