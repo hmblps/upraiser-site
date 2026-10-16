@@ -237,10 +237,9 @@
 .hero-stage--fly {
   --hero-lenovo-opacity: 0;
   --hero-lenovo-y: 108;
-  --hero-lenovo-dock-h: 6.75rem;
-  /* Air between stat labels and the Lenovo dock — rem-min so Windows 125% / short
-     laptops cannot collapse 7vh below the dock height (stats used to sit under it). */
-  --hero-stats-lenovo-gap: clamp(4.5rem, 8vh, 6rem);
+  --hero-lenovo-dock-h: 3.75rem;
+  /* Air between stat labels and the Lenovo dock */
+  --hero-stats-lenovo-gap: clamp(1.75rem, 4vh, 3.5rem);
 }
 
 .lenovo-hero-dock {
@@ -480,9 +479,10 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(var(--hero-lenovo-dock-h) + var(--hero-stats-lenovo-gap));
+  bottom: calc(var(--hero-lenovo-dock-h, 3.75rem) + var(--hero-stats-lenovo-gap, 2rem));
   z-index: 10;
   pointer-events: none;
+  isolation: isolate;
 }
 
 .hero-stats-wrap {
@@ -689,16 +689,15 @@
   opacity: 1;
 }
 
-/* Desktop stats rail — must sit above the Lenovo dock, not under it.
-   Dock height is measured (--hero-lenovo-dock-h); gap is rem-clamped so
-   Windows 125% / short laptops keep the same air as a tall Mac. */
+/* Desktop stats rail — sits above the compact Lenovo dock with isolation */
 .hero-stats-rail.page-container {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(var(--hero-lenovo-dock-h, 6.75rem) + var(--hero-stats-lenovo-gap, 4.5rem));
+  bottom: calc(var(--hero-lenovo-dock-h, 3.75rem) + var(--hero-stats-lenovo-gap, 2rem));
   z-index: 10;
   pointer-events: none;
+  isolation: isolate;
 }
 
 .hero-stats-rail .hero-stats-wrap {
@@ -708,13 +707,18 @@
 
 /* Brand homogeneity for the video fallback */
 .hero-video-canvas {
-  /* Subtle cinematic desaturation to make it look like a branded asset, not raw video */
-  filter: contrast(1.1) saturate(0.8) sepia(0.05);
   transform-origin: center center;
   will-change: transform;
 }
 
-[data-theme="dark"] .hero-video-canvas {
+/* Windows Direct3D hardware video compositor splits video quads if CSS filters or blend modes
+   overlay the video surface. In light mode the raw video is already color-graded and crisp. */
+[data-theme="light"] .hero-video-canvas,
+html[data-os="windows"] .hero-video-canvas {
+  filter: none !important;
+}
+
+[data-theme="dark"]:not([data-os="windows"]) .hero-video-canvas {
   /* Darker, moodier, slightly desaturated to match the #050504 background */
   filter: grayscale(0.2) contrast(1.15) brightness(0.85) sepia(0.1) hue-rotate(-10deg);
 }
@@ -724,14 +728,17 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* Brand color wash */
   background: var(--theme-accent);
   mix-blend-mode: color;
   opacity: 0.08;
 }
 
+[data-theme="light"] .hero-brand-tint,
+html[data-os="windows"] .hero-brand-tint {
+  display: none !important;
+}
+
 [data-theme="dark"] .hero-brand-tint {
-  /* Dark theme gets a cool/moody overlay or a subtle gold overlay */
   background: var(--theme-accent);
   mix-blend-mode: overlay;
   opacity: 0.08;
@@ -745,4 +752,42 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: var(--theme-grain-opacity, 0.04);
   mix-blend-mode: overlay;
+}
+
+/* Windows 1080p @ 125% (740px viewport) and compact laptop responsive tuning */
+@media (max-height: 850px) {
+  .hero-stage--fly {
+    --hero-stats-lenovo-gap: clamp(1rem, 2vh, 1.5rem);
+  }
+
+  .hero-content--fly-rail .hero-title--hero {
+    font-size: clamp(2.35rem, 6.6vh, 3.8rem);
+    line-height: 0.95;
+  }
+
+  .hero-content--fly-rail .hero-copy {
+    padding-top: 0.25rem;
+  }
+
+  .hero-stats-wrap .hero-fly-label {
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-stats__track {
+    row-gap: 0.65rem !important;
+  }
+
+  .hero-stat-ghost {
+    min-height: 3.5rem;
+    padding: 0.15rem 0.2rem;
+  }
+
+  .hero-stat-ghost__value {
+    font-size: clamp(1.4rem, 2.8vw, 2.15rem);
+  }
+
+  .hero-stat-ghost__label {
+    margin-top: 0.25rem;
+    min-height: auto;
+  }
 }

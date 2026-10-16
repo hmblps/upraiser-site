@@ -24,7 +24,6 @@ export function HeroVideoFallback(_props: HeroVideoFallbackProps) {
         <SimpleVideo
           src="/hero/home-light-idle.mp4"
           poster="/hero/home-light-poster.jpg"
-          staticFilter="contrast(1.25) saturate(1.5) brightness(0.93)"
         />
       )}
       {theme === "light" && <SnowParticles />}
