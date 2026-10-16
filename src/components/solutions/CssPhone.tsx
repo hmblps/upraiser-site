@@ -105,9 +105,16 @@ function AnimatedTabletGlass({ formatId }: { formatId: GlassAnimId }) {
  * 3D phone still uses FORMAT_VIDEO / FORMAT_STILL textures.
  * App Growth banner/native/interstitial = still; rich + video = MP4; CTV Video = MP4.
  */
-export function FormatGlass({ formatId }: { formatId: string }) {
-  const html = FORMAT_HTML[formatId];
+export function FormatGlass({
+  formatId,
+  preferVideo = false,
+}: {
+  formatId: string;
+  preferVideo?: boolean;
+}) {
+  const rawHtml = FORMAT_HTML[formatId];
   const video = FORMAT_VIDEO[formatId];
+  const html = preferVideo && video ? undefined : rawHtml;
   const still = FORMAT_STILL[formatId];
   const animated = isAnimatedTabletGlass(formatId);
 

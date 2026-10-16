@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -6,6 +6,7 @@ import type { SiteMode } from "../../data/liveContent";
 import { SectionHeader } from "../SectionHeader";
 import type { AdFormat } from "./ProgrammaticFormats";
 import { CssPhone, CssTablet, CssTv } from "./CssPhone";
+import { RoutesDeviceModal } from "./RoutesDeviceModal";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 export type ProgrammaticScrollSectionMobileProps = {
@@ -27,11 +28,13 @@ function EditorialFeedItem({
   index,
   total,
   mode,
+  onOpenPreview,
 }: {
   format: AdFormat;
   index: number;
   total: number;
   mode: SiteMode;
+  onOpenPreview: () => void;
 }) {
   const itemRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -56,7 +59,17 @@ function EditorialFeedItem({
         style={reduced ? {} : { scale }}
       >
         <div
-          className={`relative flex items-center justify-center ${
+          role="button"
+          tabIndex={0}
+          aria-label={`Expand ${format.label} preview`}
+          onClick={onOpenPreview}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onOpenPreview();
+            }
+          }}
+          className={`relative flex items-center justify-center cursor-zoom-in ${
             format.scene === "tv"
               ? "w-full max-w-[420px] aspect-[16/9]"
               : format.scene === "tablet"
@@ -143,6 +156,8 @@ export function ProgrammaticScrollSectionMobile({
   const { t } = useTranslation();
   const tLabel = t("formats.label", headerLabel);
   const tTitle = t("formats.title", typeof headerTitle === "string" ? headerTitle : "Every Format. One Supply Path.");
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const previewFormat = previewIndex !== null ? (formats[previewIndex] ?? formats[0]!) : formats[0]!;
 
   return (
     <div
@@ -173,9 +188,20 @@ export function ProgrammaticScrollSectionMobile({
             index={idx}
             total={formats.length}
             mode={mode}
+            onOpenPreview={() => setPreviewIndex(idx)}
           />
         ))}
       </div>
+
+      <RoutesDeviceModal
+        open={previewIndex !== null}
+        onClose={() => setPreviewIndex(null)}
+        mode={mode}
+        format={previewFormat}
+        index={previewIndex ?? 0}
+        formats={formats}
+        onSelectIndex={(idx) => setPreviewIndex(idx)}
+      />
     </div>
   );
 }

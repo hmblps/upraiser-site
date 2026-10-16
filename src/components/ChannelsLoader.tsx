@@ -32,9 +32,9 @@ export function ChannelsLoader() {
   }, []);
 
   useEffect(() => {
-    // Wait for at least one frame, then if it's not active and progress is 100, we can hide.
-    // If it's active, wait until it finishes.
-    if (!active && progress === 100) {
+    // When Three.js DefaultLoadingManager is idle (!active) — either all GLBs finished
+    // (progress === 100) or Lite/CSS mode is active (progress === 0, no WebGL loader) — dismiss cleanly.
+    if (!active) {
       const t = setTimeout(() => setShow(false), 400);
       return () => clearTimeout(t);
     }

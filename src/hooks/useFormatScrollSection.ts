@@ -93,7 +93,7 @@ export function useFormatScrollSection(
   }, [enabled, formatCount, registerScrollListener, sectionRef, entranceProgress]);
 
   const jumpTo = useCallback(
-    (idx: number, opts?: { immediate?: boolean }) => {
+    (idx: number, opts?: { immediate?: boolean; duration?: number }) => {
       const section = sectionRef.current;
       if (!section) return;
       const clamped = Math.min(Math.max(0, idx), Math.max(0, formatCount - 1));
@@ -106,23 +106,100 @@ export function useFormatScrollSection(
       );
       const target = contentTarget + INTRO_SCROLL_PX;
       const immediate = opts?.immediate ?? reduced;
+      const duration = opts?.duration ?? 0.55;
 
       lastIndexRef.current = clamped;
       setActiveIndex(clamped);
       indexByLaneRef.current[laneRef.current] = clamped;
 
-      if (immediate) {
-        ignoreSyncRef.current = true;
-        window.clearTimeout(ignoreTimerRef.current);
-        ignoreTimerRef.current = window.setTimeout(() => {
+      ignoreSyncRef.current = true;
+      window.clearTimeout(ignoreTimerRef.current);
+      ignoreTimerRef.current = window.setTimeout(
+        () => {
           ignoreSyncRef.current = false;
-        }, 280);
-      }
+        },
+        immediate ? 280 : Math.round(duration * 1000) + 80,
+      );
 
-      scrollToY(target, { immediate });
+      scrollToY(target, { immediate, duration });
     },
     [formatCount, reduced, scrollToY, sectionRef],
   );
+
+  // Mouse-wheel stepper: touchpad keeps continuous 1500px/card runway, while a
+  // discrete mouse wheel advances 1 format per wheel gesture instead of 5 scrolls.
+  useEffect(() => {
+    if (!enabled) return;
+
+    let touchpadActiveUntil = 0;
+    let wheelCooldownUntil = 0;
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.defaultPrevented || e.ctrlKey || e.metaKey) return;
+      if (
+        document.documentElement.classList.contains("case-modal-open") ||
+        document.documentElement.classList.contains("scroll-locked")
+      ) {
+        return;
+      }
+
+      const now = performance.now();
+      const absY = Math.abs(e.deltaY);
+      const absX = Math.abs(e.deltaX);
+
+      // Touchpad gestures begin with small ramp-up deltas (< 15px) or slight horizontal drift (absX > 0),
+      // and continue as a high-frequency stream (frames every 8–16ms).
+      // Physical mouse wheels fire discrete jumps (absY >= 15, absX === 0) with no ramp-up.
+      const looksLikeTouchpadStart =
+        e.deltaMode === 0 && (absX > 0 || absY < 15);
+
+      if (looksLikeTouchpadStart || now < touchpadActiveUntil) {
+        touchpadActiveUntil = now + 320;
+        return;
+      }
+
+      const section = sectionRef.current;
+      if (!section) return;
+
+      const rect = section.getBoundingClientRect();
+      const isPinned = rect.top <= 24 && rect.bottom >= window.innerHeight - 24;
+
+      if (!isPinned) {
+        return;
+      }
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (now < wheelCooldownUntil) {
+        return;
+      }
+
+      wheelCooldownUntil = now + 420;
+      const dir = e.deltaY > 0 ? 1 : -1;
+      const currentIdx = lastIndexRef.current;
+      const nextIdx = currentIdx + dir;
+
+      if (nextIdx >= 0 && nextIdx < formatCount) {
+        jumpTo(nextIdx, { duration: 0.46 });
+        return;
+      }
+
+      const sectionTop = rect.top + window.scrollY;
+      const totalPinnedScroll = Math.max(0, section.offsetHeight - window.innerHeight);
+
+      if (dir > 0 && currentIdx >= formatCount - 1) {
+        scrollToY(sectionTop + totalPinnedScroll + 200, { duration: 0.46 });
+      } else if (dir < 0 && currentIdx <= 0) {
+        scrollToY(Math.max(0, sectionTop - 200), { duration: 0.46 });
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel, { capture: true });
+    };
+  }, [enabled, formatCount, jumpTo, scrollToY, sectionRef]);
 
   useEffect(() => {
     const pending = pendingJumpRef.current;

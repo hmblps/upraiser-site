@@ -14,6 +14,7 @@ import { CssPhone, CssTablet, CssTv } from "./CssPhone";
 
 
 import { ProgrammaticScrollSectionMobile } from "./ProgrammaticScrollSectionMobile";
+import { RoutesDeviceModal } from "./RoutesDeviceModal";
 import { warmStage } from "../../lib/scrollPreload";
 
 import "../../styles/programmatic-scroll-section.css";
@@ -24,6 +25,28 @@ import { Tablet3D } from "../channel-visuals/Tablet3D";
 import { Tv3D } from "../channel-visuals/Tv3D";
 
 const DESKTOP_MIN_WIDTH = 768;
+
+function DeviceZoomBadge() {
+  return (
+    <span className="prog-device-slot__zoom-badge" aria-hidden="true">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <polyline points="15 3 21 3 21 9" />
+        <polyline points="9 21 3 21 3 15" />
+        <line x1="21" y1="3" x2="14" y2="10" />
+        <line x1="3" y1="21" x2="10" y2="14" />
+      </svg>
+    </span>
+  );
+}
 
 // ─── 3-device Apple-like slide switcher ───────────────────────────────────────
 // Phone · Tablet · TV occupy slots 0 · 1 · 2.
@@ -40,6 +63,7 @@ function DeviceCarousel3({
   scene = "phone",
   className,
   flat = false,
+  onOpenPreview,
 }: {
   mode: SiteMode;
   formatId: string;
@@ -47,6 +71,7 @@ function DeviceCarousel3({
   className?: string;
   /** Same GLBs, face-on — lite / Intel. */
   flat?: boolean;
+  onOpenPreview?: () => void;
 }) {
   const targetPhase = scene === "tablet" ? 1 : scene === "tv" ? 2 : 0;
   const phaseRaw = useMotionValue(targetPhase);
@@ -75,6 +100,13 @@ function DeviceCarousel3({
   const shouldWarmTablet = true;
   const shouldWarmTv = true;
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onOpenPreview?.();
+    }
+  };
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflow: "visible" }}>
       {/* One WebGL device at a time — concurrent phone+tablet+TV canvases starve the
@@ -89,7 +121,14 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--phone">
+        <div
+          className="prog-device-slot prog-device-slot--phone prog-device-slot--interactive"
+          role="button"
+          tabIndex={scene === "phone" ? 0 : -1}
+          aria-label="Expand phone screen preview"
+          onClick={onOpenPreview}
+          onKeyDown={handleKeyDown}
+        >
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={<CssPhone mode={mode} formatId={formatId} className="pointer-events-none" />}>
               {!flat ? (
@@ -105,6 +144,7 @@ function DeviceCarousel3({
               )}
             </CanvasErrorBoundary>
           </Suspense>
+          <DeviceZoomBadge />
         </div>
       </motion.div>
 
@@ -118,7 +158,15 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--tablet" style={{ overflow: "visible" }}>
+        <div
+          className="prog-device-slot prog-device-slot--tablet prog-device-slot--interactive"
+          style={{ overflow: "visible" }}
+          role="button"
+          tabIndex={scene === "tablet" ? 0 : -1}
+          aria-label="Expand tablet screen preview"
+          onClick={onOpenPreview}
+          onKeyDown={handleKeyDown}
+        >
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={<CssTablet mode={mode} formatId={formatId} className="pointer-events-none" />}>
               {!flat ? (
@@ -136,6 +184,7 @@ function DeviceCarousel3({
               )}
             </CanvasErrorBoundary>
           </Suspense>
+          <DeviceZoomBadge />
         </div>
       </motion.div>
 
@@ -150,7 +199,15 @@ function DeviceCarousel3({
           overflow: "visible",
         }}
       >
-        <div className="prog-device-slot prog-device-slot--tv" style={{ overflow: "visible" }}>
+        <div
+          className="prog-device-slot prog-device-slot--tv prog-device-slot--interactive"
+          style={{ overflow: "visible" }}
+          role="button"
+          tabIndex={scene === "tv" ? 0 : -1}
+          aria-label="Expand TV screen preview"
+          onClick={onOpenPreview}
+          onKeyDown={handleKeyDown}
+        >
           <Suspense fallback={null}>
             <CanvasErrorBoundary fallback={<CssTv mode={mode} formatId={formatId} className="pointer-events-none" />}>
               {!flat ? (
@@ -168,6 +225,7 @@ function DeviceCarousel3({
               )}
             </CanvasErrorBoundary>
           </Suspense>
+          <DeviceZoomBadge />
         </div>
       </motion.div>
     </div>
@@ -250,6 +308,7 @@ export function ProgrammaticScrollSection({
   }, []);
 
   const format = formats[activeIndex] ?? formats[0]!;
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   // Pre-warm TV assets immediately on section mount (not lazily on approach).
   // tv-draco.glb is only 546KB but the Draco WASM decoder needs ~400ms to
@@ -319,6 +378,7 @@ export function ProgrammaticScrollSection({
                 scene={format.scene ?? "phone"}
                 className="prog-scroll-canvas"
                 flat={!use3d}
+                onOpenPreview={() => setPreviewOpen(true)}
               />
             </div>
           </div>
@@ -358,6 +418,16 @@ export function ProgrammaticScrollSection({
         </div>
         </div>
       </div>
+
+      <RoutesDeviceModal
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        mode={mode}
+        format={format}
+        index={activeIndex}
+        formats={formats}
+        onSelectIndex={(idx) => jumpTo(idx)}
+      />
     </div>
   );
 }
