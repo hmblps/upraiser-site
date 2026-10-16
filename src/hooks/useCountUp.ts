@@ -32,8 +32,9 @@ function parseStatValue(raw: string): ParsedStat {
   };
 }
 
-function formatValue(value: number, decimals: number) {
-  return decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
+function formatValue(value: number, decimals: number, fallback = 0) {
+  const safe = Number.isFinite(value) ? value : fallback;
+  return decimals > 0 ? safe.toFixed(decimals) : String(Math.round(safe));
 }
 
 export function useCountUp(raw: string, active: boolean, duration = 1400) {
@@ -47,7 +48,15 @@ export function useCountUp(raw: string, active: boolean, duration = 1400) {
 
     const parsed = parseStatValue(raw);
 
-    if (!active || !parsed.animate || reduced) {
+    if (
+      !active ||
+      !parsed.animate ||
+      reduced ||
+      !Number.isFinite(duration) ||
+      duration <= 0 ||
+      !Number.isFinite(parsed.end) ||
+      parsed.end === 0
+    ) {
       el.textContent = raw;
       return;
     }
@@ -55,10 +64,12 @@ export function useCountUp(raw: string, active: boolean, duration = 1400) {
     const start = performance.now();
 
     const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
+      const elapsed = Math.max(0, now - start);
+      const rawProgress = duration > 0 ? elapsed / duration : 1;
+      const progress = Number.isFinite(rawProgress) ? Math.min(Math.max(rawProgress, 0), 1) : 1;
       const eased = 1 - (1 - progress) ** 3;
       const current = parsed.end * eased;
-      el.textContent = `${parsed.prefix}${formatValue(current, parsed.decimals)}${parsed.suffix}`;
+      el.textContent = `${parsed.prefix}${formatValue(current, parsed.decimals, parsed.end)}${parsed.suffix}`;
 
       if (progress < 1) {
         frameRef.current = requestAnimationFrame(tick);

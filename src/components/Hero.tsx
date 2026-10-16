@@ -81,7 +81,7 @@ function StatCard({ value, label, counted, accent, videoDriven, align = "center"
     if (videoDriven) {
       if (typeof document !== "undefined") {
         const v = document.getElementById("hero-idle-video") as HTMLVideoElement | null;
-        if (v && v.duration && !v.paused) {
+        if (v && Number.isFinite(v.duration) && v.duration > 0 && !v.paused) {
           durationRef.current.val = Math.max(1400, (v.duration - v.currentTime) * 1000);
         }
       }

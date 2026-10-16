@@ -243,6 +243,12 @@
   padding: 0;
 }
 
+/* High-contrast crisp white copy in dark theme */
+[data-theme="dark"] .lenovo-copy-text {
+  color: #ffffff !important;
+  opacity: 0.95;
+}
+
 /* Interactive once mostly revealed */
 .hero-stage--fly[data-lenovo-dock="1"] .lenovo-hero-dock {
   pointer-events: auto;

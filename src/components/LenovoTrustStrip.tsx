@@ -59,7 +59,7 @@ export function LenovoTrustStrip() {
             </div>
             <LenovoPartnershipCopy 
               className="hidden md:block w-full max-w-lg lg:max-w-2xl xl:max-w-3xl ml-auto pl-6 lg:pl-8" 
-              paragraphClassName="text-xs lg:text-[13px] 2xl:text-sm leading-snug text-muted text-pretty"
+              paragraphClassName="lenovo-copy-text text-xs lg:text-[13px] 2xl:text-sm leading-snug text-muted dark:text-white text-pretty"
             />
           </div>
         </div>
