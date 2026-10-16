@@ -177,54 +177,33 @@
 /* Lenis fly-through runway: sticky viewport, tall scroll track */
 .hero-stage--fly {
   position: relative;
-  height: 100%;
-  min-height: 100dvh;
+  height: 200vh;
+  min-height: 200vh;
   --hero-label-opacity: 0;
   --hero-label-y: 28;
 }
 
 .hero-fly-sticky {
-  position: relative;
-  min-height: 100dvh;
+  position: sticky;
+  top: 0;
   width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  /* Soft unpin after Lenovo is docked — tiny lift only */
+  transform: translateY(calc(var(--hero-exit, 0) * -1.2vh));
+  opacity: calc(1 - var(--hero-exit, 0) * 0.12);
+  will-change: transform, opacity;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .hero-stage--fly {
-    /* ~6s sticky runway — cinematic drone beat with room to land */
-    height: 200vh;
-    min-height: 200vh;
-  }
-
-  @media (max-width: 899px) {
-    .hero-stage--fly {
-      /* Matching desktop scroll length for consistent video speed */
-      height: 200vh;
-      min-height: 200vh;
-    }
-  }
-
-  .hero-fly-sticky {
-    position: sticky;
-    top: 0;
-    height: 100dvh;
-    min-height: 100dvh;
-    max-height: 100dvh;
-    /* Soft unpin after Lenovo is docked — tiny lift only */
-    transform: translateY(calc(var(--hero-exit, 0) * -1.2vh));
-    opacity: calc(1 - var(--hero-exit, 0) * 0.12);
-    will-change: transform, opacity;
-  }
-}
-
-/* Buffer after the 900vh fly runway — Audience enters with fold progress ≈ 0 */
+/* Buffer after the fly runway — Audience enters with fold progress ≈ 0 */
 .hero-landing-pad {
   display: none;
   height: 0;
   pointer-events: none;
 }
 
-@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 900px) {
   .hero-landing-pad {
     display: block;
     /* Short buffer — Audience fold starts on viewport entry */
@@ -267,17 +246,6 @@
 /* Interactive once mostly revealed */
 .hero-stage--fly[data-lenovo-dock="1"] .lenovo-hero-dock {
   pointer-events: auto;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-stage--fly {
-    --hero-lenovo-opacity: 1;
-    --hero-lenovo-y: 0;
-  }
-
-  .lenovo-hero-dock {
-    pointer-events: auto;
-  }
 }
 
 @media (max-width: 899px) {

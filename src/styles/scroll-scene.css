@@ -17,12 +17,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-scene--fold,
-  .scroll-scene--fold-compact {
+  html:not([data-os="windows"]) .scroll-scene--fold,
+  html:not([data-os="windows"]) .scroll-scene--fold-compact {
     min-height: auto;
   }
 
-  .scroll-scene--fold .scroll-scene-stage {
+  html:not([data-os="windows"]) .scroll-scene--fold .scroll-scene-stage {
     position: static;
     padding-bottom: 0;
   }

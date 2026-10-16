@@ -875,64 +875,48 @@ main [id] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:not([data-os="windows"]) {
     scroll-behavior: auto;
-  }
 
-  .section-ambience-orb,
-  .value-bento-pulse-ring,
-  .value-bento-pulse-bars i,
-  .value-bento-icon-bars i,
-  .value-bento-icon-check,
-  .value-bento-icon-scan,
-  .value-bento-icon-handle,
-  .value-bento-icon--sync svg,
-  .value-bento-icon-node,
-  .value-bento-ring-dot,
-  .live-ring .value-bento-ring-fill,
-  .value-bento-glyph,
-  .value-bento-glyph-animated,
-  .value-bento-glyph-animated svg :is(path, circle, line, polyline, rect),
-  .live-mark,
-  .live-stat,
-  .live-num,
-  .live-panel::after,
-  .sparkline-live-dot,
-  .partners-marquee,
-  .clients-board__track,
-  .marquee-track,
-  .border-beam::before,
-  .scroll-hint,
-  .hero-mountains-video,
-  .hero-entrance,
-  .hero-entrance-stat,
-  .fold-chart-ghost--float {
-    animation: none !important;
-  }
+    .section-ambience-orb,
+    .value-bento-pulse-ring,
+    .value-bento-pulse-bars i,
+    .value-bento-icon-bars i,
+    .value-bento-icon-check,
+    .value-bento-icon-scan,
+    .value-bento-icon-handle,
+    .value-bento-icon--sync svg,
+    .value-bento-icon-node,
+    .value-bento-ring-dot,
+    .live-ring .value-bento-ring-fill,
+    .value-bento-glyph,
+    .value-bento-glyph-animated,
+    .value-bento-glyph-animated svg :is(path, circle, line, polyline, rect),
+    .live-mark,
+    .live-stat,
+    .live-num,
+    .live-panel::after,
+    .sparkline-live-dot,
+    .partners-marquee,
+    .clients-board__track,
+    .marquee-track,
+    .border-beam::before,
+    .scroll-hint,
+    .hero-mountains-video,
+    .hero-entrance,
+    .hero-entrance-stat,
+    .fold-chart-ghost--float {
+      animation: none !important;
+    }
 
-  .fold-chart-ghost--float {
-    opacity: 0.5;
-    transform: none;
-  }
+    .fold-chart-ghost--float {
+      opacity: 0.5;
+      transform: none;
+    }
 
-  @media (hover: hover) and (pointer: fine) {
-
-  .value-bento-tile--feature:hover .value-bento-icon,
-  .value-bento-tile--metric:hover .value-bento-ring,
-  .value-bento-tile--brand:hover .value-bento-brand-mark {
-    transform: none;
-  }
-  }
-
-  .proximity-surface::before {
-    display: none;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-
-  .card-lift:hover {
-    transform: none;
-  }
+    .proximity-surface::before {
+      display: none;
+    }
   }
 }
 
