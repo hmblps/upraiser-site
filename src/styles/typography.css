@@ -257,7 +257,7 @@
 }
 
 [data-theme="light"] .hero-stat-ghost__label {
-  color: var(--logo-red);
+  color: var(--hero-light-stat-label, #e4450b);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-shadow: none;

@@ -298,9 +298,9 @@
   color: color-mix(in srgb, var(--theme-accent-secondary) 25%, var(--theme-fg) 75%);
 }
 
-/* Light: brand red, clean and crisp across snow and rock without fuzzy halos */
+/* Light: red-orange (красно-оранжевый), clean and crisp across snow and rock without fuzzy halos */
 [data-theme="light"] .hero-fly-label {
-  color: var(--logo-red);
+  color: var(--hero-light-stat-label, #e4450b);
   font-weight: 800;
   letter-spacing: 0.14em;
   text-shadow: none;
