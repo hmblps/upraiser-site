@@ -1366,6 +1366,26 @@ We successfully debugged a major issue where the 3D TV component would cause a m
       - **Tablet:** `aspect-ratio: 3 / 4; width: min(72%, 27rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (3 / 4))); height: auto; max-height: min(80dvh, var(--prog-phone-budget, 80dvh));` -> **415px W × 553px H** (~229k px², **+100% area and +54px taller than phone**).
       - **TV:** `aspect-ratio: 16 / 10; width: min(118%, 48rem, calc(min(80dvh, var(--prog-phone-budget, 80dvh)) * (16 / 10))); height: auto; max-height: min(80dvh, var(--prog-phone-budget, 80dvh));` -> **576px W × 360px H (canvas 634px)** widescreen cinematic footprint.
     - Verified through automated Puppeteer multi-viewport captures on both Mac (`:5173`) and Windows (`:5174`) across 100%, 125%, and 150% scales with 0px horizontal overflow (`scrollWidth === innerWidth`).
+- **Windows LTSC Reduced-Motion Graph Restoration (16 Oct 2026):**
+  - Resolved an issue where Windows LTSC machines with `prefers-reduced-motion` enabled completely hid the SVG graphs in the **Clarity** and **Parity** sections.
+  - Replaced display suppression with clean static vector presentation (`strokeDashoffset: 0`), preserving all visual indicators and metrics.
+  - Restored continuous ambient levitation to ghost stat numbers on Windows.
+- **Mouse Wheel 1-Format Discrete Stepping in Routes (16 Oct 2026):**
+  - Updated `useFormatScrollSection.ts` so discrete physical mouse wheel gestures (`absY >= 15 && absX === 0`, including Windows 125% DPI `deltaY = 96`) step exactly 1 format per gesture with a 460ms lock, while touchpad gestures retain natural smooth inertia.
+  - Eliminated 5-second loader freeze on Windows Lite/CSS fallback by auto-dismissing after 400ms when Three.js `useProgress()` is inactive.
+- **Device Screen Zoom Preview Modal in Routes (16 Oct 2026):**
+  - Added `RoutesDeviceModal.tsx` allowing clicking/tapping on any device (Phone, Tablet, TV in both 3D WebGL and CSS chassis) to open an enlarged modal view with true aspect-ratio preservation (`9 / 19.5`, `3 / 4`, `16 / 9`), backdrop blur, and Esc/click-outside dismiss.
+- **Mac 3D iPhone Screen Material Glass Fix (16 Oct 2026):**
+  - Fixed `Phone3D.tsx` where `PaletteMaterial002` (the front cover glass over `17ProMax_Screen`) was rendered opaque gray on macOS Safari/Chrome instead of transparent protective glass (`opacity: 0.06, depthWrite: false`), restoring full visibility of phone screen textures.
+- **Hero Stat Captions Red-Orange Light Theme Color (16 Oct 2026):**
+  - Replaced harsh neon crimson `--logo-red` (`#ff003b`) with warm **красно-оранжевый** (`#e4450b`) from user palette for `.hero-stat-ghost__label` and `.hero-fly-label` in light theme, improving legibility across snow and rock mountains.
+- **Zero-Division (`NaN%`) Stat Counter Fix on Windows (16 Oct 2026):**
+  - Resolved `NaN%` appearing on Windows machines for `POST-FLIGHT LOG DRIFT` (`0%`).
+  - Guarded against `0 / 0 = NaN` during Windows timer tick coalescing (`now === start`) when `duration = 0`.
+  - Added immediate raw text return for `parsed.end === 0` and `duration <= 0`, plus fallback protections in `formatValue`.
+- **Lenovo Trust Strip Dark Theme Contrast Enhancement (16 Oct 2026):**
+  - Made the Lenovo partnership copy in dark theme pure crisp white (`#ffffff` at 0.95 opacity) via `.lenovo-copy-text` and `dark:text-white`, maximizing readability against the dark bottom dock.
+
 
 
 
