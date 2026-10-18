@@ -311,7 +311,8 @@
     linear-gradient(155deg, #6a84a8 0%, #2f4668 38%, #121c2c 72%, #070b12 100%);
 }
 
-.prog-css-phone--accent {
+.prog-css-phone--accent,
+.prog-css-phone--orange {
   background:
     linear-gradient(145deg, #ffb06a, #f77e2d 42%, #c45a18 78%, #7a340c 100%);
 }
@@ -320,9 +321,15 @@
   position: absolute;
   z-index: 3;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0.35));
-  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+  background: linear-gradient(180deg, #556f93 0%, #1d2d44 100%);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.28);
   pointer-events: none;
+}
+
+.prog-css-phone--accent .prog-css-phone__btn,
+.prog-css-phone--orange .prog-css-phone__btn {
+  background: linear-gradient(180deg, #ffa458 0%, #c45a18 65%, #7a340c 100%);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 220, 185, 0.38);
 }
 
 .prog-css-phone__btn--silent {
@@ -480,10 +487,10 @@
   max-height: 100%;
   margin: 0;
   border-radius: 1.35rem;
-  padding: 0.45rem;
+  padding: 0.24rem;
   box-shadow:
-    0 28px 56px rgba(0, 0, 0, 0.28),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    0 28px 56px rgba(0, 0, 0, 0.36),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 }
 
 .prog-css-tablet__bezel {
@@ -491,8 +498,9 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 1rem;
+  border-radius: 1.12rem;
   background: #050505;
+  border: 0.26rem solid #07080c;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   /* Absolute FormatGlass must not collapse / intrinsic-PNG inflate */
   min-height: 0;
@@ -516,11 +524,11 @@
   max-height: 100%;
   max-width: 100%;
   margin: 0 auto;
-  border-radius: 0.35rem;
-  padding: 0.22rem;
+  border-radius: 0.42rem;
+  padding: 0.2rem;
   box-shadow:
-    0 28px 56px rgba(0, 0, 0, 0.38),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    0 28px 56px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 }
 
 .prog-css-tv__bezel {
@@ -528,8 +536,9 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 0.18rem;
+  border-radius: 0.24rem;
   background: #050505;
+  border: 0.16rem solid #07080c;
 }
 
 .prog-css-tv__bezel .prog-css-phone__live-ad,
@@ -714,12 +723,12 @@
 
 .prog-css-tablet--slot {
   aspect-ratio: unset;
-  padding: 0.45rem;
+  padding: 0.24rem;
 }
 
 .prog-css-tv--slot {
   aspect-ratio: unset;
-  padding: 0.28rem;
+  padding: 0.2rem;
 }
 
 .prog-css-tv--slot .prog-css-tv__foot {

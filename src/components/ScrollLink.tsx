@@ -10,8 +10,10 @@ type ScrollLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   contactIntent?: string;
 };
 
-function isHashLink(href: string) {
-  return href.startsWith("#") && href.length > 1;
+function extractHomeHash(href: string): string | null {
+  if (href.startsWith("#") && href.length > 1) return href.slice(1);
+  if (href.startsWith("/#") && href.length > 2) return href.slice(2);
+  return null;
 }
 
 function isExternalLink(href: string) {
@@ -26,12 +28,17 @@ export function ScrollLink({ href, children, onClick, onPointerEnter, onFocus, c
     onClick?.(event);
     if (event.defaultPrevented) return;
     if (contactIntent) publishContactIntent(contactIntent);
-    
-    if (!isHashLink(href)) return;
+
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-    event.preventDefault();
-    scrollTo(href.slice(1));
+    const targetId = extractHomeHash(href);
+    if (targetId && (href.startsWith("#") || window.location.pathname === "/")) {
+      event.preventDefault();
+      if (window.location.hash !== `#${targetId}`) {
+        window.history.replaceState(null, "", `/#${targetId}`);
+      }
+      scrollTo(targetId);
+    }
   };
 
   const handlePointerEnter = (event: ReactPointerEvent<HTMLAnchorElement>) => {

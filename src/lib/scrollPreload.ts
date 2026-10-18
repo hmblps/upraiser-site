@@ -63,8 +63,7 @@ export function warmStage(id: PreloadStage) {
     switch (id) {
       case "mid":
         whenHeroReady(() => {
-          void import("../components/Audience");
-          void import("../components/Process");
+          void import("../components/ModeChart");
         });
         break;
       case "routes":
@@ -93,11 +92,11 @@ export function warmStage(id: PreloadStage) {
         });
         break;
       case "cases":
-        void import("../components/CaseStudies");
+        void import("../components/CaseDetailModal");
         break;
       case "promise":
         whenHeroReady(() => {
-          void import("../components/PromiseSection");
+          void import("../components/FoldAreaMass");
         });
         break;
       default:

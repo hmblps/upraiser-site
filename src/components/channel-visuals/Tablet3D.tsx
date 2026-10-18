@@ -279,14 +279,14 @@ function TabletMesh({
 
     const anim = animRef.current;
     if (anim && modeRef.current === "anim" && playingRef.current) {
-      paintGlassAnim(
+      const didPaint = paintGlassAnim(
         anim.id,
         anim.canvas,
         anim.img,
         (performance.now() - anim.t0) / 1000,
         reduced,
       );
-      anim.tex.needsUpdate = true;
+      if (didPaint) anim.tex.needsUpdate = true;
     }
 
     if (flat) {
@@ -485,7 +485,7 @@ export function Tablet3D({ mode, formatId, className, active = true, flat = fals
         {slotBox ? (
         <Canvas className="tablet-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={active ? "always" : "demand"}
+          frameloop={active && inView ? "always" : "demand"}
           resize={{ debounce: 0, offsetSize: true }}
           gl={{
             antialias: true,

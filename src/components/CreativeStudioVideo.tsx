@@ -37,7 +37,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
       />
       
       {/* Heavy Local Grain to ensure continuity with Hero */}
-      <div className="absolute inset-0 pointer-events-none opacity-50 mix-blend-overlay z-10" style={{ backgroundImage: "url('/grain.svg')", backgroundSize: "128px" }} />
       <div className="site-grain absolute inset-0 z-10 opacity-60" />
 
       {/* Dark overlay for text contrast (stronger in dark theme) */}

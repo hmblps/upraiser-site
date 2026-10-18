@@ -132,10 +132,10 @@ export function Contact() {
   };
 
   const ctaRow = [
-    { label: "The Agency", href: "/" },
+    { label: "The Agency", href: "/#audience" },
     { label: "See Cases", href: "/#cases" },
     { label: "The Routes", href: "/#routes" },
-    { label: "The Expedition", href: "/#promise" },
+    { label: "The Expedition", href: "/#about-us" },
   ];
 
   return (
@@ -187,6 +187,9 @@ export function Contact() {
                           info@upraiser.co.uk
                         </a>
                       </p>
+                      <p className="mt-3 text-xs font-bold tracking-wider uppercase text-accent">
+                        Upraising the standard of digital advertising since 2017
+                      </p>
                     </div>
                     <div>
                       <h2 className="contact-sidebar__title">{t("misc.verifiedComp", "Verified Compliance & Partners")}</h2>
@@ -195,11 +198,6 @@ export function Contact() {
                           <strong className="font-medium text-fg">Official Lenovo Partner:</strong> We work directly
                           with Lenovo PC HK LTD to secure procurement-grade OEM ROM and PAI lanes, avoiding competitive
                           ad re-selling.
-                        </li>
-                        <li>
-                          <strong className="font-medium text-fg">Data Audit Protocols:</strong> We maintain complete
-                          GDPR alignment and utilize ISO 27001 certified physical systems for programmatic log
-                          validation.
                         </li>
                         <li>
                           <strong className="font-medium text-fg">EDAA Alignment:</strong> Upraiser voluntarily
@@ -277,7 +275,7 @@ export function Contact() {
                           <select value={form.companyType} onChange={(e) => setForm({ ...form, companyType: e.target.value })}>
                             <option value="brand">App Brand / Developer</option>
                             <option value="agency">{t("misc.agencyPartner", "Agency Partner")}</option>
-                            <option value="vendor">Ad Tech Platform / Vendor</option>
+                            <option value="vendor">Ad Tech / Supply Partner</option>
                           </select>
                         </ContactFormField>
 

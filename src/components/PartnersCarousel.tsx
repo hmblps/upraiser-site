@@ -162,7 +162,7 @@ export function PartnersCarousel({ compact = false }: PartnersCarouselProps) {
                   </svg>
                 </button>
 
-                <h2 className="text-3xl font-bold mb-10 text-center tracking-tight">{t("ghosts.ourClients", "Our Clients")}</h2>
+                <h2 className="text-3xl font-bold mb-10 text-center tracking-tight">{t("ghosts.conqueringPeaks", "Conquering Peaks Together")}</h2>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-12 items-center justify-items-center">
                   {clientBrands.map((brand) => (

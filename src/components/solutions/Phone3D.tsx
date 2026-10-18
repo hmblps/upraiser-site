@@ -454,7 +454,7 @@ const PhoneScene = memo(function PhoneScene({
  * Glass: still PNG instantly → format MP4 on the same materials (no remount flash).
  * For "rich" format: CSS phone frame with live Vidout HTML ad iframe.
  */
-export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className, flat = false }: Phone3DProps) {
+export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress, className, active = true, flat = false }: Phone3DProps) {
   const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
     
@@ -556,7 +556,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
         <Canvas
           className="phone-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={(!inView || reduced || isCssFormat) ? "never" : "always"}
+          frameloop={(!active || !inView || reduced || isCssFormat) ? "never" : "always"}
           gl={{
             antialias: true,
             alpha: true,
@@ -584,7 +584,7 @@ export const Phone3D = memo(function Phone3D({ mode, formatId, entranceProgress,
           <PhoneScene
             url={url}
             formatId={formatId}
-            inView={inView && !isCssFormat}
+            inView={active && inView && !isCssFormat}
             isDark={isDark}
             rotX={springX}
             rotY={springY}

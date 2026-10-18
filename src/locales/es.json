@@ -113,11 +113,11 @@
       },
       "metrics": [
         {
-          "value": "$25M+",
-          "label": "Ingresos"
+          "value": "$15M+",
+          "label": "Ingresos Lifetime"
         },
         {
-          "value": "50K",
+          "value": "30K",
           "label": "FTDs"
         },
         {
@@ -127,8 +127,8 @@
       ],
       "growthFocus": {
         "challenge": "Apuestas deportivas con dinero real en un mercado de EE. UU. saturado de bonos. Requería un riguroso rastreo de MMP y postbacks S2S sin infringir las normativas para mayores de 18 años ni las regulaciones geográficas estatales.",
-        "approach": "Inventario para adultos en lista blanca con límites de latencia por debajo del segundo, segmentación a nivel estatal y control de calidad creativo vinculado directamente al payload de FTD en lugar del volumen de instalaciones.",
-        "result": "800K instalaciones, 50K FTDs, más de $25M en ingresos. Siete apuestas adicionales por apostador. Promedio de más de $500 en ingresos por FTD."
+        "approach": "Inventario con restricción de edad en lista blanca con límites de latencia por debajo del segundo, segmentación a nivel estatal y control de calidad creativo vinculado directamente al payload de FTD en lugar del volumen de instalaciones.",
+        "result": "800K instalaciones, 30K FTDs, más de $15M en ingresos lifetime. Un promedio de siete apuestas adicionales por apostador."
       },
       "optimizationFocus": {
         "challenge": "TikTok y Snapchat vetados para apuestas 18+. Cada emplazamiento requería un comprobante de cumplimiento normativo y un mapeo limpio de eventos.",
@@ -159,14 +159,14 @@
           "label": "Desviación de atribución"
         },
         {
-          "value": "50%",
+          "value": "37%",
           "label": "Retención día 7"
         }
       ],
       "growthFocus": {
         "challenge": "Título de puzles requería escala global de CPI y retención de calidad postinstalación.",
         "approach": "Lenovo PAI a nivel mundial. Umbrales mínimos de retención (D1 40%, D7 25%, D30 10%) condicionaron cada incremento de puja.",
-        "result": "Más de 32.000 instalaciones diarias en PL, UK, DE y 12 GEOs adicionales. ROAS D1 del 20%, retención D7 del 50%."
+        "result": "Más de 32.000 instalaciones diarias en PL, UK, DE y 12 GEOs adicionales. ROAS D1 del 20%, retención D7 del 37%."
       },
       "optimizationFocus": {
         "challenge": "Ambigüedad en open-exchange sobre instalaciones de fábrica. Finanzas requería pruebas a nivel de paquete.",
@@ -210,7 +210,8 @@
         "challenge": "Los datos de rendimiento de EE. UU. distorsionaron las primeras pujas en el GCC. Las tasas de conversión parecían correctas hasta ejecutar pruebas nativas por región.",
         "approach": "Listas blancas de plataformas específicas por territorio. Variantes creativas dirigidas por separado a los segmentos de gaming y servicios profesionales.",
         "result": "Comprobación de CVR a nivel de plataforma en cada territorio antes de aumentar los límites. Eliminación de fugas presupuestarias entre regiones."
-      }
+      },
+      "kpiEvent": ">1% de instalaciones a FTBs"
     },
     "shopee": {
       "client": "Shopee",
@@ -286,7 +287,8 @@
         "challenge": "Las audiencias de inclusión financiera abarcan amplios segmentos. Creatividades genéricas desgastan el alcance y distorsionan el ROAS por cohorte salvo que se mapeen estrictamente en el MMP.",
         "approach": "Promoción personalizada por segmento. Controles de ROAS a nivel de emplazamiento verificados mediante postbacks S2S antes de liberar presupuesto cada semana.",
         "result": "Cada activo creativo clasificado por ROAS verificado. Finanzas rastreó la inversión hasta IDs de emplazamiento específicos y payloads de postback en lugar de promedios combinados."
-      }
+      },
+      "paymentModel": "CPA"
     },
     "azar": {
       "client": "Azar",
@@ -324,7 +326,9 @@
         "challenge": "Las campañas con creadores consumen presupuesto innecesariamente cuando los formatos de contenido carecen de trazabilidad hacia cohortes de instalación.",
         "approach": "Mix de plataformas valorado por calidad de engagement. Niveles de creadores con bajo rendimiento cancelados durante la campaña.",
         "result": "Cada partida de creadores mapeada a logs de alcance e interacción. Eliminación del gasto opaco en influencers."
-      }
+      },
+      "kpiEvent": "Ventas y participación en videochats",
+      "paymentModel": "CPR"
     },
     "vantage": {
       "client": "Vantage",
@@ -487,7 +491,7 @@
       "inlineWord": "CLARIDAD",
       "titleLead": "Aportamos ",
       "accentWord": "CLARIDAD",
-      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio. Garantizamos que cada dólar invertido esté plenamente justificado, dándole total confianza para escalar presupuestos con agresividad sin temor a márgenes ocultos ni fraude invisible."
+      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio. Garantizamos que cada dólar invertido esté plenamente justificado, dándole total tranquilidad y absoluta confianza para escalar presupuestos ampliamente sin temor a márgenes ocultos ni fraude invisible."
     },
     "infrastructure": {
       "label": "Logs brutos que su equipo puede auditar bajo demanda",
@@ -943,7 +947,7 @@
   "casesPage": {
     "label": "LAS CUMBRES",
     "title": "CONQUISTAMOS ESTAS CUMBRES UNA Y OTRA VEZ.",
-    "subtitle": "Resultados demoledores en campañas activas — toque cualquier tarjeta para ver la historia completa.",
+    "subtitle": "Vista desde la cima: Resultados de alto impacto en campañas activas — toque cualquier tarjeta para ver la historia completa.",
     "swipe": "Deslice o ← → · toque para abrir"
   },
   "caseCard": {
@@ -966,7 +970,7 @@
     "oem": "OEM & Directo",
     "nextStep": "Siguiente paso",
     "readyUpraised": "¿Listo para ascender con UPRAISER?",
-    "briefRoute": "Defina la ruta: vertical, GEO, evento KPI — respondemos con una ruta definida, no con una presentación.",
+    "briefRoute": "Defina la ruta: vertical, GEO, evento KPI — trazamos Su ruta exacta hacia el beneficio.",
     "explore": "Explorar",
     "company": "Compañía",
     "basecamp": "Basecamp London",
@@ -993,6 +997,7 @@
     "verifiedRoas": "ROAS verificado",
     "recoveredSpend": "Inversión recuperada",
     "ourClients": "Nuestros clientes",
+    "conqueringPeaks": "Conquistando Cumbres Juntos",
     "renderingTerrain": "Renderizando terreno",
     "clickFlood": "Click Flood Bloqueado"
   },

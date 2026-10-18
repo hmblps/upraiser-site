@@ -34,16 +34,18 @@ function TrackParticles({ color, isFraud }: { color: string, isFraud: boolean })
 
     let width = 0;
     let height = 0;
-    let animationId: number;
+    let animationId = 0;
+    let inView = false;
 
     const resize = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
       if (!rect) return;
+      const dpr = window.devicePixelRatio || 1;
       width = rect.width;
       height = rect.height;
-      canvas.width = width * window.devicePixelRatio;
-      canvas.height = height * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     window.addEventListener('resize', resize);
     resize();
@@ -78,6 +80,10 @@ function TrackParticles({ color, isFraud }: { color: string, isFraud: boolean })
     const packets = Array.from({ length: isFraud ? 25 : 15 }, () => new Packet());
 
     const loop = () => {
+      if (!inView) {
+        animationId = 0;
+        return;
+      }
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = 'rgba(10, 10, 10, 0.4)';
       ctx.fillRect(0, 0, width, height);
@@ -91,11 +97,26 @@ function TrackParticles({ color, isFraud }: { color: string, isFraud: boolean })
       
       animationId = requestAnimationFrame(loop);
     };
-    loop();
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = Boolean(entry?.isIntersecting);
+        if (inView && !animationId) {
+          resize();
+          animationId = requestAnimationFrame(loop);
+        } else if (!inView && animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = 0;
+        }
+      },
+      { rootMargin: "100px 0px", threshold: 0 },
+    );
+    io.observe(canvas);
 
     return () => {
+      io.disconnect();
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationId);
+      if (animationId) cancelAnimationFrame(animationId);
     };
   }, [color, isFraud]);
 

@@ -90,7 +90,7 @@ export const OEM_CTV_FORMATS: AdFormat[] = [
     label: "Pre-install",
     tagline: "On-device before the store",
     description:
-      "OEM placements reach devices at unboxing and first boot. Install trails that survive procurement questions.",
+      "OEM placements reach devices at unboxing and first boot. Install trails that endure procurement questions.",
     points: [
       "Factory / first-boot placement inventory",
       "Install and activation postback trails",

@@ -156,8 +156,8 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
     const onEnded = () => {
       // Delay auto-scroll slightly so user can absorb the final frame
       window.setTimeout(() => {
-        // If the user hasn't scrolled manually (or barely scrolled)
-        if (window.scrollY < 50) {
+        // If the user hasn't scrolled manually (or barely scrolled) and didn't navigate to a section hash
+        if (window.scrollY < 50 && !window.location.hash) {
           const stage = document.querySelector('.hero-stage') as HTMLElement;
           const partners = document.querySelector('.partners-strip--home');
           

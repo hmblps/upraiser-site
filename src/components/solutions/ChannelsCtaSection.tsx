@@ -47,7 +47,7 @@ function RotatingOmniChart() {
               y1="-440"
               x2="0"
               y2={i % 6 === 0 ? "-460" : "-450"}
-              stroke="var(--brand-yellow)"
+              stroke="var(--logo-gold)"
               strokeWidth={i % 6 === 0 ? "2" : "1"}
               strokeOpacity={i % 6 === 0 ? 0.6 : 0.2}
               transform={`rotate(${i * 5})`}

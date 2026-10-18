@@ -314,6 +314,13 @@
   background: var(--theme-accent);
 }
 
+@media (max-width: 639px) {
+  .cases-chrome-dot {
+    width: 1.5rem;
+    min-width: 1.5rem;
+  }
+}
+
 .case-preview-card--carousel {
   width: min(88vw, 26.5rem);
   flex-shrink: 0;

@@ -222,7 +222,7 @@ export const PERFORMANCE_CONTENT = {
 
   footerCta: {
     title: "Request a pilot on Your stack",
-    subtitle: "Tell us the vertical, GEO, and KPI event — we reply with a scoped path, not a deck.",
+    subtitle: "Tell us the vertical, GEO, and KPI event — we map Your exact route to profit.",
     buttonText: "Request Pilot",
     buttonHref: "/contact",
   },

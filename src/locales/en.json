@@ -113,11 +113,11 @@
       },
       "metrics": [
         {
-          "value": "$25M+",
-          "label": "Revenue"
+          "value": "$15M+",
+          "label": "Lifetime Revenue"
         },
         {
-          "value": "50K",
+          "value": "30K",
           "label": "FTDs"
         },
         {
@@ -127,8 +127,8 @@
       ],
       "growthFocus": {
         "challenge": "Real-money sportsbook in a bonus-saturated US market. Required strict MMP tracking and S2S postbacks without breaching 18+ or state geo rules.",
-        "approach": "Whitelisted adult inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.",
-        "result": "800K installs, 50K FTDs, $25M+ revenue. Seven additional bets per bettor. $500+ revenue per FTD on average."
+        "approach": "Whitelisted age-gated inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.",
+        "result": "800K installs, 30K FTDs, $15M+ lifetime revenue. An average of seven additional bets per bettor."
       },
       "optimizationFocus": {
         "challenge": "TikTok and Snapchat off-limits for 18+ gaming. Every placement needed a compliance receipt and clean event mapping.",
@@ -159,14 +159,14 @@
           "label": "Attribution drift"
         },
         {
-          "value": "50%",
+          "value": "37%",
           "label": "Day-7 retention"
         }
       ],
       "growthFocus": {
         "challenge": "Puzzle title needed global CPI scale and post-install quality retention.",
         "approach": "Lenovo PAI worldwide. Retention floors (D1 40%, D7 25%, D30 10%) gated every bid increase.",
-        "result": "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%."
+        "result": "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 37%."
       },
       "optimizationFocus": {
         "challenge": "Open-exchange ambiguity on factory installs. Finance needed package-level proof.",
@@ -210,7 +210,8 @@
         "challenge": "US performance data misled early GCC bids. Conversion rates looked fine until geo-native tests ran.",
         "approach": "Geo-specific platform whitelists. Creative variants targeted gaming and pro-services segments separately.",
         "result": "Platform-level CVR proof per geo before caps increased. Eliminated cross-region budget bleed."
-      }
+      },
+      "kpiEvent": ">1% of installs to FTB's"
     },
     "shopee": {
       "client": "Shopee",
@@ -286,7 +287,8 @@
         "challenge": "Financial inclusion audiences span wide segments. Generic creatives burn reach and distort ROAS by cohort unless mapped strictly in the MMP.",
         "approach": "Personalized promotion per segment. Placement-level ROAS gates verified via S2S postbacks before budget cleared each week.",
         "result": "Every creative asset ranked by verified ROAS. Finance traced spend to specific placement IDs and postback payloads instead of blended averages."
-      }
+      },
+      "paymentModel": "CPA"
     },
     "azar": {
       "client": "Azar",
@@ -324,7 +326,9 @@
         "challenge": "Creator campaigns bleed budget when content formats lack tracking to install cohorts.",
         "approach": "Platform mix scored by engagement quality. Underperforming creator tiers cut mid-flight.",
         "result": "Every creator line item mapped to reach and interaction logs. Eliminated black-box influencer spend."
-      }
+      },
+      "kpiEvent": "Sales & Video Chats participation",
+      "paymentModel": "CPR"
     },
     "vantage": {
       "client": "Vantage",
@@ -487,7 +491,7 @@
       "inlineWord": "CLARITY",
       "titleLead": "We bring ",
       "accentWord": "CLARITY",
-      "description": "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets aggressively without fear of hidden markups or invisible fraud."
+      "description": "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets extensively with complete peace of mind regarding hidden markups or invisible fraud."
     },
     "infrastructure": {
       "label": "Raw logs Your team can audit on demand",
@@ -943,7 +947,7 @@
   "casesPage": {
     "label": "THE PEAKS",
     "title": "WE CONQUER THESE PEAKS REPEATEDLY.",
-    "subtitle": "Killer outcomes from live flights — tap any card for the full story.",
+    "subtitle": "View from the top: High-impact outcomes from live flights — tap any card for the full story.",
     "swipe": "Swipe or ← → · tap to open"
   },
   "caseCard": {
@@ -977,7 +981,7 @@
     "oem": "OEM & Direct",
     "nextStep": "Next step",
     "readyUpraised": "Ready to be Upraised?",
-    "briefRoute": "Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.",
+    "briefRoute": "Brief the route: vertical, GEO, KPI event — we map Your exact route to profit.",
     "explore": "Explore",
     "company": "Company",
     "basecamp": "Basecamp London",
@@ -1004,6 +1008,7 @@
     "verifiedRoas": "Verified ROAS",
     "recoveredSpend": "Recovered Spend",
     "ourClients": "Our Clients",
+    "conqueringPeaks": "Conquering Peaks Together",
     "renderingTerrain": "Rendering Terrain",
     "clickFlood": "Click Flood Blocked"
   }

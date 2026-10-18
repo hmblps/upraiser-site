@@ -74,7 +74,12 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
     resize();
     window.addEventListener("resize", resize);
 
-    const render = () => {
+    let lastTime = performance.now();
+
+    const render = (now: number) => {
+      const dt = Math.min(Math.max((now - lastTime) / 16.667, 0.25), 3);
+      lastTime = now;
+
       const scrollY = scrollYRef.current;
       const scrollDelta = scrollY - lastScrollYRef.current;
       lastScrollYRef.current = scrollY;
@@ -85,14 +90,14 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
 
       flakes.forEach((f) => {
         // Fall down naturally
-        f.y += f.speed * SNOW_SPEED;
+        f.y += f.speed * SNOW_SPEED * dt;
         
         // Add scroll delta influence (parallax effect)
         f.y -= scrollDelta * f.speed * 0.2;
 
         // Wind/Wobble
-        f.wobble += f.wobbleSpeed;
-        f.x += Math.sin(f.wobble) * 0.5 + WIND_SPEED;
+        f.wobble += f.wobbleSpeed * dt;
+        f.x += (Math.sin(f.wobble) * 0.5 + WIND_SPEED) * dt;
 
         // Wrap around
         if (f.y > canvas.height) f.y = -10;

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 /** Routes that must fit one viewport — no page scroll, no partners/footer runway. */
@@ -19,7 +19,7 @@ export function useViewportRoute() {
   const { pathname } = useLocation();
   const active = isViewportPath(pathname);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = document.documentElement;
     if (!active) {
       root.classList.remove("viewport-route");

@@ -35,8 +35,8 @@ export function Header() {
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        <span className="hidden sm:inline">Back to {isChannels ? "The " : ""}</span>
-        <span className="hidden sm:inline">{isChannels ? "Routes" : backLabel}</span>
+        <span className="hidden lg:inline">Back to {isChannels ? "The " : ""}</span>
+        <span className="hidden lg:inline">{isChannels ? "Routes" : backLabel}</span>
       </Link>
     </motion.div>
   ) : null;
@@ -44,29 +44,29 @@ export function Header() {
   return (
     <header className="site-header fixed inset-x-0 top-0 z-[100] isolate pointer-events-none">
       <div className="page-container flex items-center h-[var(--site-header-bar)] w-full pointer-events-auto mt-2">
-        <div className="w-full grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10 xl:gap-14">
+        <div className="w-full grid xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:gap-14">
           {/* Desktop Left Column */}
-          <div className="hidden lg:flex items-center">
+          <div className="hidden xl:flex items-center">
             {backButtonNode}
           </div>
 
           {/* Desktop & Mobile Main Row */}
-          <div className="flex items-center w-full justify-between lg:justify-start gap-2 sm:gap-4">
+          <div className="flex items-center w-full justify-between xl:justify-start gap-2 sm:gap-4">
             {/* Mobile Back Button (on subroutes like /channels where island has no tab) */}
             {isChannels && (
-              <div className="flex lg:hidden items-center shrink-0">
+              <div className="flex xl:hidden items-center shrink-0">
                 {backButtonNode}
               </div>
             )}
 
-            <div className="flex items-center gap-2 sm:gap-4 ml-auto lg:ml-0 justify-end lg:justify-start shrink-0">
+            <div className="flex items-center gap-2 sm:gap-4 ml-auto xl:ml-0 justify-end xl:justify-start shrink-0">
               <HeaderIsland />
               
               <motion.div
                 whileTap={reduced ? undefined : { scale: 0.92 }}
                 whileHover={reduced ? undefined : { scale: 1.05 }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                className="shrink-0 lg:ml-auto"
+                className="shrink-0 xl:ml-auto"
               >
                 <ScrollLink
                   href="/"

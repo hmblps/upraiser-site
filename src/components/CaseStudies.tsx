@@ -152,7 +152,10 @@ export function CaseStudies({ variant = "home" }: CaseStudiesProps) {
           title={section.title}
           description={
             mode === "growth"
-              ? "Killer outcomes from live flights — tap any card for the full story."
+              ? t(
+                  "casesPage.subtitle",
+                  "View from the top: High-impact outcomes from live flights — tap any card for the full story.",
+                )
               : "Audit-ready pipelines in brief — tap any card for the full story."
           }
         />

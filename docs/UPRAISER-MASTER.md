@@ -1398,9 +1398,21 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   - Updated page metadata in `pageMeta.ts` to `"Creative Studio | UPRAISER"`.
   - Preserved the compact **`"Craft"`** moniker on mobile phone header islands (`HeaderIsland.tsx`), maintaining crisp layout fit on 360–390px screens.
 - **Infrastructure Telemetry Chart Vertical Alignment in "WHO WE SERVE" (16 Oct 2026):**
-  - In `charts.css`, lifted `.fraud-linear-chart__content` on desktop (`@media (min-width: 1024px)`) with `transform: translate(-158px, -44px)` and tightened `gap: 66px`.
+  - In `charts.css`, lifted `.fraud-linear-chart__content` on desktop (`@media (min-width: 1024px)`) with `transform: translate(clamp(-158px, -10vw, -24px), -44px)` and tightened `gap: 66px`.
   - The top telemetry bar (`SYS_ERR_01 BOTS & FARMS ELIMINATED`) now aligns directly with the lead copy (*"When Your MMP and media bills diverge, we rebuild Your data pipelines."*), and the bottom metric (`18.5% RECOVERED SPEND`) sits comfortably above the section boundary.
-
-
-
+- **Cross-Platform WebGL, Memory & Runtime Performance Hardening (18 Oct 2026):**
+  - Added `webglcontextlost` and `webglcontextrestored` recovery listeners and deterministic texture/video unmount disposal across `Phone3D.tsx`, `Tablet3D.tsx`, and `Tv3D.tsx`.
+  - Replaced frame-dependent lerp in `tabletGlassAnim.ts` with exponential decay `1 - Math.exp(-speed * dt)`.
+  - Gated offscreen `requestAnimationFrame` loops and `<video>` playback in `GlobalSnowfall.tsx`, `CreativeStudioVideo.tsx`, `HeroVideoFallback.tsx`, and `GradientTraceBorder.tsx` using `IntersectionObserver` and `document.visibilitychange`.
+  - Split `ModeChart.tsx` into a pure async chunk by removing static `FoldChart` barrel import in `HomePage.tsx`, and gated 3D asset preloading in `scrollPreload.ts` to `getHardwareTier() === "full"`.
+- **Windows DPI Scaling (125% / 150%) & Short Viewport Protection (18 Oct 2026):**
+  - Updated `useViewportRoute.ts` and `index.css` so viewports shorter than `700px` (e.g., Windows 1080p at 150% DPI scaling) allow natural vertical scrolling on `/craft` and `/contact` instead of clipping content inside `100dvh`.
+  - Removed `#audience.section-band::before` in `src/styles/hero.css`, eliminating the horizontal white/grey seam below "Our Clients".
+- **2D Lite CSS Devices Chassis & Strict Flat 2D Rendering (18 Oct 2026):**
+  - Removed `useCssDrag()` 3D perspective tilt from `src/components/solutions/CssPhone.tsx` so Lite-tier devices (`CssPhone`, `CssTablet`, `CssTv`) render strictly flat 2D.
+  - Added `.prog-css-phone--orange` and metallic bezel/button rules in `src/styles/programmatic-scroll-section.css` so all 2D devices display a crisp physical frame in both Dark and Light modes.
+  - Added Firefox masked-renderer fallback (`GTX 980 / R9 200` on `<= 8` cores -> `"lite"`) and `:5174` Lite-tier port check in `src/hooks/useHardwareTier.ts`.
+- **Copywriting, Case Studies, Contact Form & 8-Locale i18n Synchronization (18 Oct 2026):**
+  - Updated CaseStudies subtitle, Fanatics (`$15M+`, `30K FTDs`, `800K installs`, sub-second latency approach), Block Blast (`37%` D7 retention), Fiverr (`>1% of installs to FTB's`), Banco Azteca (`CPA`), Azar (`Sales & Video Chats participation`, `CPR`), PromiseSection closing guarantee, HomePilotCta (*"we map Your exact route to profit."*), and Contact form Company Type (`Ad Tech / Supply Partner`).
+  - Synchronized all 8 locale files (`src/locales/{en,de,es,fr,ja,ko,pt,zh}.json`) and `src/locales/strings.json` with 0 missing keys.
 

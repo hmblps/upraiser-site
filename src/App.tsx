@@ -66,12 +66,13 @@ function RedirectExpertiseToRoutes() {
 import { useEffect } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { DRACO_PATH } from "./lib/heroModel";
+import { detectHardwareTier } from "./hooks/useHardwareTier";
 
 export default function App() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const path = window.location.pathname;
-      if (path === "/" || path === "/channels") {
+      if ((path === "/" || path === "/channels") && detectHardwareTier() === "high") {
         useGLTF.preload("/channels/oem/tv-draco.glb", DRACO_PATH);
         useGLTF.preload("/channels/oem/tablet.glb", DRACO_PATH);
         useGLTF.preload("/phones/deep-blue.glb", DRACO_PATH);

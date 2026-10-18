@@ -39,6 +39,15 @@
     "de": "% Abweichung",
     "fr": "% de dérive"
   },
+  ">1% of installs to FTB's": {
+    "de": ">1 % der Installs zu FTBs",
+    "es": ">1% de instalaciones a FTBs",
+    "fr": ">1 % d'installations vers FTBs",
+    "ja": "初回購入(FTB)転換率 >1%",
+    "ko": "인스톨 대비 FTB 전환 >1%",
+    "pt": ">1% das instalações para FTBs",
+    "zh": ">1% 安装转化为首次买家 (FTB)"
+  },
   "$100,000 to $500,000": {
     "zh": "$100,000 至 $500,000",
     "ja": "$100,000〜$500,000",
@@ -136,7 +145,7 @@
     "es": "Más de 150K instalaciones y más de 45K cuentas vinculadas en cuatro meses. Tasa de activación sostenida por encima del 30%.",
     "de": "Über 150K Installs und über 45K verknüpfte Konten in vier Monaten. Aktivierungsrate stabil über 30 % gehalten.",
     "fr": "Plus de 150K installations et plus de 45K comptes connectés en quatre mois. Taux d'activation maintenu au-dessus de 30 %.",
-    "pt": "Mais de 450 mil contas bancárias britânicas vinculadas ao aplicativo com custo por aquisição 29% menor do que a meta original."
+    "pt": "Mais de 150K instalações e 45K+ contas vinculadas em quatro meses. A taxa de ativação se manteve acima de 30%."
   },
   "150K+ UK installs with a clean activation trail. Month-end matched the Roku delivery log.": {
     "zh": "交付具备清晰激活链路的 150K+ 笔英国安装，月末数据与 Roku 投放日志完美吻合。",
@@ -145,7 +154,7 @@
     "es": "Más de 150K instalaciones en el Reino Unido con un rastro limpio de activación. El cierre de mes coincidió con el log de entrega de Roku.",
     "de": "Über 150K UK-Installs mit lückenloser Aktivierungskette. Monatsabschluss stimmte exakt mit dem Roku-Auslieferungs-Log überein.",
     "fr": "Plus de 150K installations au Royaume-Uni avec une traçabilité d'activation irréprochable. Clôture mensuelle parfaitement alignée sur les logs de diffusion Roku.",
-    "pt": "Alinhamento integral entre o time de aquisição e a controladoria com eliminação completa de atritos contábeis."
+    "pt": "Mais de 150K instalações no Reino Unido com trilha limpa de ativação. O fechamento do mês bateu com o log de entrega da Roku."
   },
   "150M+ impressions, 1.2M interactions, 1.1M likes. Organic download quality improved in target GEOs.": {
     "zh": "收获超 1.5 亿次展示曝光、120 万次互动与 110 万次点赞。目标 GEOs 内的自然下载质量显著提高。",
@@ -154,7 +163,7 @@
     "es": "Más de 150M de impresiones, 1,2M de interacciones y 1,1M de likes. La calidad de descargas orgánicas mejoró en los GEOs objetivo.",
     "de": "Über 150 Mio. Impressionen, 1,2 Mio. Interaktionen, 1,1 Mio. Likes. Organische Download-Qualität in den Ziel-GEOs gesteigert.",
     "fr": "Plus de 150M d'impressions, 1,2M d'interactions, 1,1M de likes. Qualité des téléchargements organiques nettement accrue dans les GEOs ciblés.",
-    "pt": "Crescimento de 62% na retenção D7 e aquisição consistente de usuários que realizaram recargas in-app dentro dos primeiros 3 dias."
+    "pt": "Mais de 150M de impressões, 1,2M de interações, 1,1M de curtidas. A qualidade dos downloads orgânicos melhorou nos GEOs-alvo."
   },
   "15K+ FTDs at $150+ average user value. Live in 1–2 days via factory-side distribution and clean API handshakes.": {
     "zh": "斩获 15K+ 笔 FTDs，平均用户价值超 150 美元。依托出厂端分发与清晰的 API 握手，1–2 天内即可极速上线。",
@@ -163,7 +172,7 @@
     "es": "Más de 15K FTDs con más de $150 de valor medio por usuario. Operativo en 1–2 días mediante distribución directa de fábrica e integraciones limpias de API.",
     "de": "Über 15K FTDs mit durchschnittlich über 150 $ Nutzerwert. Live in 1–2 Tagen durch Distribution ab Werk und saubere API-Handshakes.",
     "fr": "Plus de 15K FTDs à plus de 150$ de valeur utilisateur moyenne. Déploiement en 1 à 2 jours grâce à la distribution directe en usine et à des passerelles API impeccables.",
-    "pt": "Mais de 18 mil traders ativos cadastrados e mais de $42 milhões em volume de depósitos negociados originados do canal."
+    "pt": "Mais de 15K FTDs com valor médio de usuário acima de $150. No ar em 1–2 dias via distribuição de fábrica e integrações de API limpas."
   },
   "180 device signals": {
     "zh": "180 个设备底层信号",
@@ -181,7 +190,7 @@
     "es": "180 creadores macro, mid y micro en UK, DE, FR, ES, NL e IT. #funwithazar en TikTok a lo largo de tres meses.",
     "de": "180 Macro-, Mid- und Micro-Creator in UK, DE, FR, ES, NL und IT. #funwithazar auf TikTok über drei Monate.",
     "fr": "180 macro, mid et micro-créateurs au Royaume-Uni, en Allemagne, en France, en Espagne, aux Pays-Bas et en Italie. Campagne #funwithazar sur TikTok pendant trois mois.",
-    "pt": "Produção contínua de criativos em formato vertical através do nosso estúdio de criadores (CGC), testando mais de 80 variações semanais de ganchos visuais nos primeiros 3 segundos."
+    "pt": "180 macro, médios e microcriadores em UK, DE, FR, ES, NL e IT. #funwithazar no TikTok durante três meses."
   },
   "200 to 500 employees": {
     "zh": "200 至 500 名员工",
@@ -198,7 +207,7 @@
     "es": "Más de 25K instalaciones diarias en UK, FR, ES, IT y DE. ROAS vinculado directamente al checkout.",
     "de": "Über 25K tägliche Installs in UK, FR, ES, IT und DE. ROAS direkt an den Checkout gekoppelt.",
     "fr": "Plus de 25K installations quotidiennes au Royaume-Uni, en France, en Espagne, en Italie et en Allemagne. ROAS directement indexé sur le panier d'achat.",
-    "pt": "Mais de 1,2 milhão de pedidos de autopeças concluídos em 12 países europeus com ROAS médio de retargeting de 5.4x."
+    "pt": "Mais de 25K instalações diárias em UK, FR, ES, IT e DE. ROAS vinculado diretamente ao checkout."
   },
   "3–5× engagement vs standard display": {
     "zh": "3–5× 互动率 vs 标准展示广告",
@@ -208,14 +217,14 @@
     "de": "3–5× Engagement vs. Standard-Display",
     "fr": "3–5× plus d'engagement vs display standard"
   },
-  "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%.": {
-    "zh": "覆盖波兰、英国、德国及其他 12 个 GEOs，日均新增 32,000+ 次安装。D1 ROAS 达 20%，D7 留存率达 50%。",
-    "ja": "ポーランド、英国、ドイツを含む15以上のGEOsで日次32,000件以上のインストールを達成。D1 ROAS 20%、D7継続率50%を記録。",
-    "ko": "폴란드, 영국, 독일 및 12개 이상의 추가 GEOs 전역에서 일일 32,000건 이상의 인스톨 달성. D1 ROAS 20%, D7 리텐션 50% 기록.",
-    "es": "Más de 32.000 instalaciones diarias en PL, UK, DE y 12 GEOs adicionales. ROAS D1 del 20%, retención D7 del 50%.",
-    "de": "Über 32.000 tägliche Installs in PL, UK, DE und 12 weiteren GEOs. D1-ROAS 20 %, D7-Retention 50 %.",
-    "fr": "Plus de 32 000 installations quotidiennes en PL, UK, DE et 12 autres GEOs. ROAS J1 de 20 %, rétention J7 de 50 %.",
-    "pt": "Mais de 3,2 milhões de instalações verificadas em hardware com custo de aquisição médio de $0,14, gerando retenção D30 35% superior a canais tradicionais."
+  "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 37%.": {
+    "zh": "覆盖波兰、英国、德国及其他 12 个 GEOs，日均新增 32,000+ 次安装。D1 ROAS 达 20%，D7 留存率达 37%。",
+    "ja": "ポーランド、英国、ドイツを含む15以上のGEOsで日次32,000件以上のインストールを達成。D1 ROAS 20%、D7継続率37%を記録。",
+    "ko": "폴란드, 영국, 독일 및 12개 이상의 추가 GEOs 전역에서 일일 32,000건 이상의 인스톨 달성. D1 ROAS 20%, D7 리텐션 37% 기록。",
+    "es": "Más de 32.000 instalaciones diarias en PL, UK, DE y 12 GEOs adicionales. ROAS D1 del 20%, retención D7 del 37%。",
+    "de": "Über 32.000 tägliche Installs in PL, UK, DE und 12 weiteren GEOs. D1-ROAS 20 %, D7-Retention 37 %。",
+    "fr": "Plus de 32 000 installations quotidiennes en PL, UK, DE et 12 autres GEOs. ROAS J1 de 20 %, rétention J7 de 37 %。",
+    "pt": "Mais de 32.000 instalações diárias em PL, UK, DE e mais 12 GEOs. ROAS D1 de 20%, retenção D7 de 37%."
   },
   "50 to 200 employees": {
     "zh": "50 至 200 名员工",
@@ -240,16 +249,16 @@
     "es": "Más de 750K conversiones en PH exigieron mitigación de bots y secuestro de atribución mediante verificaciones de SDK para proteger la facturación.",
     "de": "Über 750K Conversions in PH erforderten Bot- und Hijacking-Abwehr via SDK-Prüfungen zum Schutz der Abrechnung.",
     "fr": "Plus de 750K conversions aux Philippines exigeaient le blocage des bots et du détournement d'installations par contrôles SDK pour protéger la facturation.",
-    "pt": "Saturação de inventário e aumento rápido de eCPM em exchanges públicas durante semanas de alta competitividade comercial."
+    "pt": "Mais de 750K conversões nas Filipinas exigiram mitigação de bots e install hijacking via verificações de SDK para proteger o faturamento."
   },
-  "800K installs, 50K FTDs, $25M+ revenue. Seven additional bets per bettor. $500+ revenue per FTD on average.": {
-    "zh": "达成 800K 安装、50K 笔 FTDs 及超 2,500 万美元收入。每位玩家平均额外下注 7 次，单个 FTD 平均创收逾 500 美元。",
-    "ja": "80万件のインストール、5万件のFTDs、2,500万ドル以上の収益を達成。ベッターあたり平均7回の追加ベットを獲得し、FTDあたりの平均収益は500ドル以上を記録。",
-    "ko": "80만 건의 인스톨, 5만 건의 FTDs, 2,500만 달러 이상의 매출 달성. 베터당 7회의 추가 베팅 기록. FTD당 평균 500달러 이상의 매출 창출.",
-    "es": "800K instalaciones, 50K FTDs, más de $25M en ingresos. Siete apuestas adicionales por apostador. Promedio de más de $500 en ingresos por FTD.",
-    "de": "800K Installs, 50K FTDs, über 25 Mio. $ Umsatz. Sieben zusätzliche Wetten pro Spieler. Durchschnittlich über 500 $ Umsatz pro FTD.",
-    "fr": "800K installations, 50K FTDs, plus de 25M$ de revenus. Sept paris supplémentaires par parieur. Plus de 500$ de revenus par FTD en moyenne.",
-    "pt": "800 mil instalações, 50 mil FTDs, mais de $25 milhões em receita. Média de sete apostas adicionais por apostador. Mais de $500 em receita média por FTD."
+  "800K installs, 30K FTDs, $15M+ lifetime revenue. An average of seven additional bets per bettor.": {
+    "zh": "达成 800K 安装、30K 笔 FTDs 及超 1,500 万美元生命周期总收入。每位玩家平均额外下注 7 次。",
+    "ja": "80万件のインストール、3万件のFTDs、1,500万ドル以上のライフタイム収益を達成。ベッターあたり平均7回の追加ベットを記録。",
+    "ko": "80만 건의 인스톨, 3만 건의 FTDs, 1,500만 달러 이상의 라이프타임 매출 달성. 베터당 평균 7회의 추가 베팅 기록。",
+    "es": "800K instalaciones, 30K FTDs, más de $15M en ingresos lifetime. Un promedio de siete apuestas adicionales por apostador。",
+    "de": "800K Installs, 30K FTDs, über 15 Mio. $ Lifetime-Umsatz. Durchschnittlich sieben zusätzliche Wetten pro Spieler。",
+    "fr": "800K installations, 30K FTDs, plus de 15M$ de revenus lifetime. Une moyenne de sept paris supplémentaires par parieur。",
+    "pt": "800 mil instalações, 30 mil FTDs, mais de $15 milhões em receita lifetime. Média de sete apostas adicionais por apostador."
   },
   "A verified record of algorithmic outperformance.": {
     "zh": "算法驱动超越基准的真实履约记录。",
@@ -284,7 +293,7 @@
     "es": "Cuentas vinculadas",
     "de": "Verknüpfte Konten",
     "fr": "Comptes liés",
-    "pt": "CPA de Open Banking"
+    "pt": "Contas vinculadas"
   },
   "Activation rate": {
     "zh": "激活率",
@@ -293,7 +302,7 @@
     "es": "Tasa de activación",
     "de": "Aktivierungsrate",
     "fr": "Taux d'activation",
-    "pt": "Paridade de Faturas"
+    "pt": "Taxa de ativação"
   },
   "Active GEOs": {
     "zh": "活跃 GEOs",
@@ -345,6 +354,15 @@
     "fr": "Responsable Ad Ops",
     "pt": "Líder de Ad Ops"
   },
+  "Ad Tech / Supply Partner": {
+    "de": "Ad-Tech- / Supply-Partner",
+    "es": "Partner de Ad Tech / Supply",
+    "fr": "Partenaire Ad Tech / Supply",
+    "ja": "アドテク / サプライパートナー",
+    "ko": "Ad Tech / 서플라이 파트너",
+    "pt": "Parceiro de Ad Tech / Supply",
+    "zh": "Ad Tech / 流量供应合作伙伴"
+  },
   "Ad Tech Platform / Vendor": {
     "zh": "Ad Tech 平台 / 服务商",
     "ja": "アドテクプラットフォーム / ベンダー",
@@ -386,7 +404,7 @@
     "es": "Mapeo previo desde af_search hasta af_purchase antes del vuelo. Conciliación con frecuencia semanal.",
     "de": "af_search bis af_purchase vor Kampagnenstart gemappt. Wöchentlicher Abstimmungsrhythmus.",
     "fr": "Mapping complet de af_search à af_purchase avant diffusion. Cadence de réconciliation hebdomadaire.",
-    "pt": "Desduplicação de inventário e atribuição determinística baseada no último toque qualificado via logs brutos do servidor central do cliente."
+    "pt": "De af_search até af_purchase mapeados antes do voo. Cadência semanal de conciliação."
   },
   "Agency Partner": {
     "zh": "代理商合作伙伴",
@@ -456,7 +474,7 @@
     "es": "App de trading en Android en un mercado saturado requería FTDs sobre volumen anónimo de instalaciones, mapeado estrictamente mediante MMP.",
     "de": "Android-Trading-App in einem hart umkämpften Markt priorisierte FTDs über anonymes Installationsvolumen – strikt über das MMP abgebildet.",
     "fr": "Application de trading Android sur un marché saturé privilégiant les FTDs aux volumes d'installations anonymes, tracés rigoureusement via MMP.",
-    "pt": "Corretora global de trading multimercado necessitando de operadores ativos que financiassem contas com saldo real, em mercados rigorosamente auditados."
+    "pt": "App de trading Android em um mercado saturado precisava de FTDs em vez de volume anônimo de instalações mapeado via MMP."
   },
   "Anti-fraud and tracking architects securing Your path, ensuring absolute data integrity and clean traffic.": {
     "zh": "反作弊与追踪架构师护航您的增长路径，确保绝对的数据完整性与干净流量。",
@@ -526,7 +544,7 @@
     "es": "La atribución clásica de AppsFlyer debía coincidir con las líneas de facturación en adxreportwa_int.",
     "de": "Klassische AppsFlyer-Attribution musste exakt mit den Rechnungspositionen auf adxreportwa_int übereinstimmen.",
     "fr": "L'attribution classique AppsFlyer devait correspondre exactement aux lignes de facturation adxreportwa_int.",
-    "pt": "Atribuição em múltiplos canais gerando sobreposição de crédito entre campanhas de busca, redes sociais e programática."
+    "pt": "A atribuição clássica da AppsFlyer precisava bater com as linhas de fatura em adxreportwa_int."
   },
   "Are You a SaaS tool or a full-spectrum performance desk?": {
     "zh": "你们是 SaaS 工具还是全链路效果营销操盘团队？",
@@ -586,7 +604,7 @@
     "es": "Desviación de atribución",
     "de": "Attributionsdrift",
     "fr": "Dérive d'attribution",
-    "pt": "Discrepância de Log"
+    "pt": "Desvio de atribuição"
   },
   "Audit every factory pre-install down to the raw hardware log.": {
     "zh": "将每一次出厂预装审计溯源至底层硬件原始日志。",
@@ -632,7 +650,7 @@
     "es": "Marketplace de recambios de automóviles que requería escala en eventos de ingresos, no en clics intermedios.",
     "de": "Online-Marktplatz für Autoteile forderte Skalierung auf Umsatz-Events statt auf Proxy-Klicks.",
     "fr": "Marketplace de pièces automobiles exigeant une montée en échelle sur les événements générateurs de revenus plutôt que sur des clics intermédiaires.",
-    "pt": "Gigante de e-commerce de autopeças na Europa com catálogo de mais de 4 milhões de SKUs necessitando de reengajamento de compradores de alto valor e aquisição contínua de novos proprietários de veículos."
+    "pt": "Marketplace de autopeças exigindo escala em eventos de receita em vez de cliques superficiais."
   },
   "Average Monthly Media Spend": {
     "zh": "月均媒介支出",
@@ -650,7 +668,7 @@
     "es": "Valor medio por usuario",
     "de": "Durchschnittlicher Nutzerwert",
     "fr": "Valeur utilisateur moy.",
-    "pt": "Traders Ativos"
+    "pt": "Valor médio/usuário"
   },
   "Azar app icon": {
     "zh": "Azar 应用图标",
@@ -683,7 +701,7 @@
     "es": "Instalaciones fraudulentas eliminadas antes de liberar el tope. CVR defendible del 0,08% en tráfico masivo de PH.",
     "de": "Mangelhafte Installs gestrichen, bevor das Cap freigegeben wurde. Solide 0,08 % CVR bei hochvolumigem PH-Traffic.",
     "fr": "Installations frauduleuses éliminées avant validation du budget. CVR irréfutable de 0,08 % sur un trafic à fort volume aux Philippines.",
-    "pt": "Custo por impressão mantido 28% abaixo da média de mercado durante os dias de maior pico do varejo."
+    "pt": "Instalações inválidas cortadas antes de liberar o orçamento. CVR defensável de 0,08% em tráfego de alto volume nas Filipinas."
   },
   "Banco Azteca app icon": {
     "zh": "Banco Azteca 应用图标",
@@ -858,14 +876,14 @@
     "fr": "Définissez le circuit adapté à vos besoins",
     "pt": "Defina o caminho que Você precisa"
   },
-  "Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.": {
-    "zh": "概述路线：垂直领域、GEO、KPI事件 —— 我们会回复一份定制方案，而不是千篇一律的PPT。",
-    "ja": "ルートの概要をお知らせください：業種、GEO、KPIイベント。机上のスライドではなく、緻密に策定された実行ルートでお応えします。",
-    "ko": "루트를 브리핑하십시오: 버티컬, GEO, KPI 이벤트 — 단순한 제안서 덱이 아닌, 정밀하게 설계된 실행 경로로 답합니다.",
-    "es": "Defina la ruta: vertical, GEO, evento KPI — respondemos con una ruta definida, no con una presentación.",
-    "de": "Briefe die Route: Vertical, GEO, KPI-Event – wir antworten mit einem präzisen Pfad, nicht mit einem Deck.",
-    "fr": "Décrivez la route : verticale, GEO, événement KPI — nous vous répondrons avec un plan sur mesure, pas une présentation générique.",
-    "pt": "Defina a rota: vertical, GEO, evento de KPI — respondemos com um caminho estruturado, não com uma apresentação genérica."
+  "Brief the route: vertical, GEO, KPI event — we map Your exact route to profit.": {
+    "de": "Briefe die Route: Vertical, GEO, KPI-Event – wir kartieren Deinen exakten Pfad zum Profit.",
+    "es": "Defina la ruta: vertical, GEO, evento KPI — trazamos Su ruta exacta hacia el beneficio.",
+    "fr": "Décrivez la route : verticale, GEO, événement KPI — nous traçons Votre itinéraire exact vers la rentabilité.",
+    "ja": "ルートの概要をお知らせください：業種、GEO、KPIイベント。収益への確実なルートを精密にマッピングします。",
+    "ko": "루트를 브리핑하십시오: 버티컬, GEO, KPI 이벤트 — 수익으로 향하는 귀하의 정확한 경로를 설계합니다.",
+    "pt": "Defina a rota: vertical, GEO, evento de KPI — mapeamos Sua rota exata para o lucro.",
+    "zh": "概述路线：垂直领域、GEO、KPI事件 —— 我们为您精准规划通往盈利的确定路径。"
   },
   "Brief to live bids": {
     "zh": "从需求简报到竞价上线",
@@ -936,7 +954,7 @@
     "es": "Límites vinculados a OrderPlaced en com.shopee.ph y com.shopee.br. Latencia de eventos del embudo minimizada en el ciclo de puja.",
     "de": "Caps an OrderPlaced auf com.shopee.ph und com.shopee.br gekoppelt. Funnel-Event-Latenz im Bid-Loop minimiert.",
     "fr": "Plafonds indexés sur OrderPlaced pour com.shopee.ph et com.shopee.br. Latence des événements du funnel minimisée dans la boucle d'enchères.",
-    "pt": "Alocação dinâmica de lances por hora baseada na probabilidade de checkout imediato, combinada com feed criativo dinâmico apresentando ofertas em tempo real."
+    "pt": "Orçamentos vinculados a OrderPlaced em com.shopee.ph e com.shopee.br. Latência de eventos de funil minimizada no loop de lances."
   },
   "Caps wire directly to revenue events before the first impression clears, ensuring absolute alignment with Your goals.": {
     "zh": "在首个展示曝光结算前，预算上限已直接锚定收入转化事件，确保与您的目标绝对同频。",
@@ -1079,7 +1097,7 @@
     "es": "Clics",
     "de": "Klicks",
     "fr": "Clics",
-    "pt": "Redução de CPA"
+    "pt": "Cliques"
   },
   "Close": {
     "zh": "关闭",
@@ -1337,7 +1355,7 @@
     "es": "Optimización creativa",
     "de": "Creative-Optimierung",
     "fr": "Optimisation créative",
-    "pt": "Native In-App"
+    "pt": "Otimização criativa"
   },
   "Creative Studio": {
     "zh": "创意工作室",
@@ -1354,7 +1372,7 @@
     "es": "Testing creativo",
     "de": "Creative-Testing",
     "fr": "Testing créatif",
-    "pt": "Vídeo Nativo"
+    "pt": "Testes criativos"
   },
   "Creator campaigns bleed budget when content formats lack tracking to install cohorts.": {
     "zh": "当内容形式缺乏对安装同群的追踪链路时，创作者营销往往会造成严重的预算浪费。",
@@ -1363,7 +1381,7 @@
     "es": "Las campañas con creadores consumen presupuesto innecesariamente cuando los formatos de contenido carecen de trazabilidad hacia cohortes de instalación.",
     "de": "Creator-Kampagnen verbrennen Budget, wenn Content-Formaten das Tracking zu Installationskohorten fehlt.",
     "fr": "Les campagnes de créateurs gaspillent le budget lorsque les formats de contenu ne sont pas rattachés aux cohortes d'installation.",
-    "pt": "Discrepância de dados entre cliques nas plataformas de vídeo e eventos reais registrados no AppsFlyer."
+    "pt": "Campanhas de criadores desperdiçam orçamento quando os formatos de conteúdo não têm rastreamento até as coortes de instalação."
   },
   "Creator-Generated Content (CGC) is a performance asset. We source authentic creator media and amplify it across programmatic, social, and OEM routes. Our traders trace every creative asset down to the raw install log, optimizing for user LTV instead of simple clicks.": {
     "zh": "创作者生成内容（CGC）是一种高效的效果资产。我们采购真实的创作者素材，并在程序化、社交及 OEM 路径上放量扩推。操盘手将每一个创意资产向下溯源至原始安装日志，以用户真实 LTV 而非单纯点击量为导向进行深度优化。",
@@ -1390,7 +1408,7 @@
     "es": "Creadores",
     "de": "Creator",
     "fr": "Créateurs",
-    "pt": "GEOs de Alta Conversão"
+    "pt": "Criadores"
   },
   "CTV": {
     "pt": "Programática UK"
@@ -1402,7 +1420,7 @@
     "es": "Instalaciones en CTV con activación de cuenta postinstalación",
     "de": "CTV-Installs mit nachgelagerter Kontoaktivierung",
     "fr": "Installations CTV avec activation de compte post-installation",
-    "pt": "Crescimento de app de gestão financeira pessoal com alinhamento contábil perfeito"
+    "pt": "Instalações via CTV com ativação de conta pós-instalação"
   },
   "CTV Spot": {
     "zh": "CTV 贴片广告",
@@ -1435,7 +1453,7 @@
     "es": "El desperdicio en CTV fuera del Reino Unido infla el CPI sin impulsar la activación.",
     "de": "CTV-Streuverluste außerhalb Großbritanniens treiben den CPI in die Höhe, ohne Aktivierungen zu steigern.",
     "fr": "La déperdition CTV hors du Royaume-Uni gonfle le CPI sans générer d'activations.",
-    "pt": "A diretoria financeira exigia que cada centavo de mídia fosse respaldado por logs verificáveis de auditoria bancária."
+    "pt": "O desperdício de CTV fora do Reino Unido infla o CPI sem mover a ativação."
   },
   "Curated Exchanges · ROI Focus · Event Optimization": {
     "zh": "精选 Exchange · 聚焦 ROI · 深度事件优化",
@@ -1480,7 +1498,7 @@
     "es": "Instalaciones diarias",
     "de": "Tägliche Installs",
     "fr": "Installations quotidiennes",
-    "pt": "Instalações"
+    "pt": "Instalações diárias"
   },
   "DAILY INSTALLS": {
     "zh": "每日安装量",
@@ -1540,7 +1558,7 @@
     "es": "Retención día 7",
     "de": "Day-7-Retention",
     "fr": "Rétention à J7",
-    "pt": "CPA Médio"
+    "pt": "Retenção D7"
   },
   "Dedicated account managers ensuring transparent communication, seamless workflow, and steady momentum at every stage of the climb.": {
     "zh": "专属客户经理确保攀登每一阶段的透明沟通、顺畅协作与强劲势头。",
@@ -1774,7 +1792,7 @@
     "es": "CPI en la UE con un umbral de compra/instalación >2%. af_purchase y af_add_to_cart integrados en el ciclo de puja.",
     "de": "EU-weiter CPI mit Kauf/Install-Untergrenze von >2 %. af_purchase und af_add_to_cart direkt im Bid-Loop.",
     "fr": "Campagnes CPI en Europe avec seuil d'achat/installation > 2 %. Intégration de af_purchase et af_add_to_cart dans la boucle d'enchères.",
-    "pt": "Arquitetura programática com catálogo dinâmico de produtos segmentado por marca/modelo do veículo e reengajamento automatizado em momento de alta propensão de compra."
+    "pt": "CPI na UE com piso de compra/instalação >2%. af_purchase e af_add_to_cart integrados ao loop de lances."
   },
   "EU markets": {
     "zh": "欧洲市场",
@@ -1783,7 +1801,7 @@
     "es": "Mercados de la UE",
     "de": "EU-Märkte",
     "fr": "Marchés UE",
-    "pt": "Países Europeus"
+    "pt": "Mercados da UE"
   },
   "Event-optimized campaigns across premium global exchanges.": {
     "zh": "贯通全球优质 Exchange 的核心事件加权投放。",
@@ -1828,7 +1846,7 @@
     "es": "Cada activo creativo clasificado por ROAS verificado. Finanzas rastreó la inversión hasta IDs de emplazamiento específicos y payloads de postback en lugar de promedios combinados.",
     "de": "Jedes Creative-Asset nach verifiziertem ROAS gerankt. Finance konnte den Spend auf spezifische Placement-IDs und Postback-Payloads zurückführen – statt auf vage Durchschnittswerte.",
     "fr": "Chaque ressource créative classée selon son ROAS vérifié. La direction financière a rattaché chaque dépense aux IDs d'emplacements et aux payloads de postbacks précis plutôt qu'à des moyennes globales.",
-    "pt": "Zero ocorrências de contas fraudulentas abertas via inventário programático durante todo o contrato."
+    "pt": "Cada ativo criativo classificado por ROAS verificado. O financeiro rastreou o gasto até IDs de placement e payloads de postback específicos."
   },
   "Every creator line item mapped to reach and interaction logs. Eliminated black-box influencer spend.": {
     "zh": "每一笔创作者支出明细均精准映射至触达与互动日志，彻底消除红人营销的黑盒支出。",
@@ -1837,7 +1855,7 @@
     "es": "Cada partida de creadores mapeada a logs de alcance e interacción. Eliminación del gasto opaco en influencers.",
     "de": "Jeder Creator-Posten mit Reichweiten- und Interaktions-Logs abgeglichen. Intransparenter Influencer-Spend vollständig eliminiert.",
     "fr": "Chaque ligne budgétaire créateur rattachée aux logs de portée et d'interaction. Élimination des dépenses d'influence opaques.",
-    "pt": "Redução de 95% na discrepância entre plataformas de mídia e o painel oficial de BI do cliente."
+    "pt": "Cada item de criador mapeado para logs de alcance e interação. Gasto opaco com influenciadores eliminado."
   },
   "Every Format": {
     "zh": "全广告形式",
@@ -1872,7 +1890,7 @@
     "es": "Cada instalación vinculada al log de fábrica. Cohortes de baja retención eliminadas antes de la ingesta en el MMP.",
     "de": "Jeder Install an das Werks-Log gekoppelt. Kohorten mit schwacher Retention vor dem MMP-Ingest eliminiert.",
     "fr": "Chaque installation reliée au log d'usine. Les cohortes à faible rétention ont été éliminées avant l'ingestion MMP.",
-    "pt": "Validação direta via SDK da Adjust com acionamento do evento de primeiro engajamento pós-unboxing e rastreamento completo de IMEI/OAID."
+    "pt": "Cada instalação vinculada ao log de fábrica. Coortes de baixa retenção cortadas antes da ingestão no MMP."
   },
   "Every line item carries a verified receipt": {
     "zh": "每一个账目行项，皆有核验回执",
@@ -1967,7 +1985,7 @@
     "es": "Preinstalación directa de fábrica a escala global diaria",
     "de": "Vorinstallationen ab Werk bei globaler täglicher Skalierung",
     "fr": "Pré-installation en usine à échelle mondiale quotidienne",
-    "pt": "Volume massivo de pré-instalação de fábrica Lenovo para quebra-cabeça casual"
+    "pt": "Pré-instalação de fábrica em escala diária global"
   },
   "Fanatics app icon": {
     "zh": "Fanatics 应用图标",
@@ -2021,7 +2039,7 @@
     "es": "Las audiencias de inclusión financiera abarcan amplios segmentos. Creatividades genéricas desgastan el alcance y distorsionan el ROAS por cohorte salvo que se mapeen estrictamente en el MMP.",
     "de": "Zielgruppen für Financial Inclusion umfassen breite Segmente. Generische Creatives verbrennen Reichweite und verzerren den Kohorten-ROAS ohne striktes Mapping im MMP.",
     "fr": "L'inclusion financière touche des segments très variés. Les créations génériques gaspillent la portée et faussent le ROAS par cohorte si elles ne sont pas strictement associées dans le MMP.",
-    "pt": "Risco severo de fraudes com documentos gerados por IA e preenchimento de cadastros sintéticos."
+    "pt": "Públicos de inclusão financeira abrangem segmentos amplos. Criativos genéricos queimam alcance e distorcem o ROAS por coorte se não forem mapeados estritamente no MMP."
   },
   "Fintech · CPI · Global · OEM": {
     "zh": "Fintech · CPI · 全球 · OEM",
@@ -2151,7 +2169,7 @@
     "es": "Marketplace de freelancers en expansión hacia Kuwait, Arabia Saudí y EAU. Nuevas culturas y nuevos puntos de referencia de CPI.",
     "de": "Freelance-Marktplatz expandiert nach Kuwait, Saudi-Arabien und in die VAE. Neue Kulturen und neue CPI-Baselines.",
     "fr": "Marketplace de freelancing en expansion au Koweït, en Arabie saoudite et aux Émirats arabes unis. Nouvelles cultures et nouveaux repères CPI.",
-    "pt": "Marketplace de serviços freelancers visando compradores corporativos de alto valor no mercado GCC e Europa, enfrentando custos crescentes em redes de pesquisa e redes sociais pagas."
+    "pt": "Marketplace de freelancers expandindo para Kuwait, Arábia Saudita e Emirados Árabes. Novas culturas e novas linhas de base de CPI."
   },
   "From in-app display to living-room CTV. Equipment for altitude on a direct supply path you can defend.": {
     "zh": "从应用内展示广告到客厅 CTV。在无可挑剔的直达供应路径上，为您配备冲顶巅峰的专业装备。",
@@ -2224,7 +2242,7 @@
     "es": "Vertical de gaming",
     "de": "Gaming-Vertikale",
     "fr": "Verticale gaming",
-    "pt": "Exchanges Curadas"
+    "pt": "Vertical de Games"
   },
   "GCash": {
     "zh": "GCash",
@@ -2241,7 +2259,7 @@
     "es": "Escalado de app en el GCC tras prueba de concepto en EE. UU.",
     "de": "App-Skalierung in der GCC-Region nach US-Proof-of-Concept",
     "fr": "Montée en échelle sur la région GCC après preuve de concept aux États-Unis",
-    "pt": "Aquisição de compradores B2B com antifraude pré-lance e filtragem em 0.4ms"
+    "pt": "Escala de app no GCC após prova de conceito nos EUA"
   },
   "Generated 1B+ impressions with perfect ledger reconciliation. Volumes and user quality exceeded initial geo benchmarks.": {
     "zh": "创造超 10 亿次展示曝光，账目完全平账吻合。买量规模与用户质量均远超预设的区域基准。",
@@ -2250,7 +2268,7 @@
     "es": "Más de 1.000M de impresiones generadas con conciliación contable perfecta. Los volúmenes y la calidad de usuarios superaron los puntos de referencia geográficos iniciales.",
     "de": "Über 1 Mrd. Impressionen mit lückenloser Ledger-Abstimmung generiert. Volumen und Nutzerqualität übertrafen die ursprünglichen GEO-Benchmarks.",
     "fr": "Plus d'un milliard d'impressions générées avec réconciliation comptable parfaite. Volumes et qualité utilisateurs supérieurs aux benchmarks géographiques initiaux.",
-    "pt": "Redução de 34% no CPA de primeiros compradores e mais de 120 mil novas contas comerciais ativas geradas no período."
+    "pt": "Mais de 1B de impressões geradas com conciliação contábil perfeita. Volumes e qualidade de usuários superaram os benchmarks iniciais."
   },
   "Geo-compliant whitelists only. Daily placement audit and SDK postback validation before spend cleared your cap.": {
     "zh": "仅采买完全符合属地合规要求的白名单。每日在预算消耗结算前执行点位审计与 SDK postback 验证。",
@@ -2268,7 +2286,7 @@
     "es": "Listas blancas de plataformas específicas por territorio. Variantes creativas dirigidas por separado a los segmentos de gaming y servicios profesionales.",
     "de": "GEO-spezifische Plattform-Whitelists. Creative-Varianten zielten getrennt auf Gaming- und Pro-Services-Segmente ab.",
     "fr": "Listes blanches de plateformes spécifiques par région. Variantes créatives ciblant distinctement le gaming et les services professionnels.",
-    "pt": "Pontuação pré-lance em 0.4 milissegundos descartando requisições com anomalias de hardware, IP de data center ou falsificação de dispositivo."
+    "pt": "Whitelists de plataformas específicas por GEO. Variantes criativas segmentaram públicos de games e serviços profissionais separadamente."
   },
   "Go to case 1: Fanatics": {
     "zh": "前往案例 1：Fanatics",
@@ -2349,7 +2367,7 @@
     "es": "Puesta en marcha",
     "de": "Go-Live",
     "fr": "Mise en ligne",
-    "pt": "Discrepância de Atribuição"
+    "pt": "Entrada no ar"
   },
   "Gross Margin": {
     "zh": "毛利率",
@@ -2519,7 +2537,7 @@
     "ko": "노출 수",
     "es": "Impresiones",
     "de": "Impressionen",
-    "pt": "Investimento Gerenciado"
+    "pt": "Impressões"
   },
   "In Development": {
     "zh": "开发中",
@@ -2553,7 +2571,7 @@
     "es": "Influencer",
     "fr": "Influence",
     "de": "Influencer",
-    "pt": "Social Nativo"
+    "pt": "Influenciadores"
   },
   "Infrastructure designed for teams demanding more than installs": {
     "zh": "专为追求超越单纯安装量的团队构建的底层基建",
@@ -2595,7 +2613,7 @@
     "es": "Embudo de instalación a pedido en SEA y LATAM",
     "de": "Install-to-Order-Funnel in SEA und LATAM",
     "fr": "Tunnel de l'installation à la commande en SEA et LATAM",
-    "pt": "Pico de vendas sazonais e escalonamento de transações em e-commerce"
+    "pt": "Funil de instalação até pedido no Sudeste Asiático e LATAM"
   },
   "Installs": {
     "zh": "安装量",
@@ -2613,7 +2631,7 @@
     "es": "Instalaciones · PH",
     "fr": "Installations · PH",
     "de": "Installs · PH",
-    "pt": "ROAS Blended"
+    "pt": "Instalações · PH"
   },
   "Intake & Pilot": {
     "zh": "需求接入 & 试点",
@@ -2647,7 +2665,7 @@
     "ko": "인터랙션",
     "es": "Interacciones",
     "de": "Interaktionen",
-    "pt": "Retenção D7"
+    "pt": "Interações"
   },
   "Interactive formats that earn attention": {
     "zh": "赢得受众注意力的交互式广告形式",
@@ -2730,15 +2748,6 @@
     "de": "Ist UPRAISER darauf ausgelegt, In-House-Media-Teams zu unterstützen?",
     "fr": "UPRAISER est-il conçu pour épauler les équipes médias internes ?",
     "pt": "A Upraiser foi feita para apoiar equipes internas de mídia?"
-  },
-  "Killer outcomes from live flights — tap any card for the full story.": {
-    "zh": "来自实盘战役的硬核战果——轻点任意卡片，查看完整实录。",
-    "ja": "実稼働キャンペーンが生んだ圧倒的な成果 — カードをタップして全貌を確認。",
-    "ko": "실제 라이브 캠페인에서 거둔 압도적 성과 — 카드를 탭하여 전체 스토리를 확인하십시오.",
-    "es": "Resultados demoledores en campañas activas — toque cualquier tarjeta para ver la historia completa.",
-    "de": "Überragende Ergebnisse aus Live-Flights — Karte antippen für die ganze Geschichte.",
-    "fr": "Des résultats percutants issus de campagnes réelles — touchez une carte pour découvrir toute l'histoire.",
-    "pt": "Resultados comprovados de campanhas ativas — toque em qualquer cartão para ver o case completo."
   },
   "KPI event": {
     "zh": "KPI事件",
@@ -2844,7 +2853,7 @@
     "es": "Rutas OEM de Lenovo Exchange. deposit_crm_ftd integrado en la puja algorítmica mediante postbacks S2S antes de liberar los límites.",
     "de": "OEM-Lanes auf Lenovo Exchange. deposit_crm_ftd vor Budgetfreigabe über S2S-Postbacks direkt in das algorithmische Bidding eingespeist.",
     "fr": "Canaux OEM Lenovo Exchange. Événement deposit_crm_ftd intégré à l'enchère algorithmique par postbacks S2S avant validation des plafonds.",
-    "pt": "Posicionamento prioritário no launcher de dispositivos Lenovo novos através de PAI, complementado por compra programática em sites de economia e notícias de mercado."
+    "pt": "Rotas OEM do Lenovo Exchange. deposit_crm_ftd conectado ao lance algorítmico via postbacks S2S antes da liberação de orçamento."
   },
   "Lenovo OEM traffic into first-time deposits": {
     "zh": "将 Lenovo OEM 流量高效转化为首充入金（FTDs）",
@@ -2853,7 +2862,7 @@
     "es": "Tráfico OEM de Lenovo convertido en primeros depósitos",
     "de": "Lenovo-OEM-Traffic in First-Time Deposits verwandelt",
     "fr": "Conversion du trafic OEM Lenovo en premiers dépôts",
-    "pt": "Escala em trading financeiro com conformidade de fábrica OEM Lenovo"
+    "pt": "Tráfego OEM Lenovo convertido em primeiros depósitos"
   },
   "Lenovo PAI Activation": {
     "zh": "Lenovo PAI 激活",
@@ -2871,7 +2880,7 @@
     "es": "Lenovo PAI a nivel mundial. Umbrales mínimos de retención (D1 40%, D7 25%, D30 10%) condicionaron cada incremento de puja.",
     "de": "Lenovo PAI weltweit. Retention-Untergrenzen (D1 40 %, D7 25 %, D30 10 %) steuerten jede Gebotserhöhung.",
     "fr": "Lenovo PAI à l'échelle mondiale. Des seuils minimaux de rétention (J1 40 %, J7 25 %, J30 10 %) ont conditionné chaque hausse d'enchère.",
-    "pt": "Ativação direta de pré-instalação no fluxo de fábrica da Lenovo (ROM e PAI), colocando o jogo nativamente na tela inicial de novos dispositivos na primeira inicialização."
+    "pt": "Lenovo PAI em escala global. Pisos de retenção (D1 40%, D7 25%, D30 10%) condicionaram cada aumento de lance."
   },
   "Lenovo partnership": {
     "zh": "Lenovo 合作伙伴关系",
@@ -2893,6 +2902,15 @@
     "es": "ROM y PAI de Lenovo",
     "fr": "ROM & PAI Lenovo",
     "pt": "Lenovo ROM e PAI"
+  },
+  "Lifetime Revenue": {
+    "zh": "生命周期总收入",
+    "ja": "ライフタイム収益",
+    "ko": "라이프타임 매출",
+    "es": "Ingresos Lifetime",
+    "de": "Lifetime-Umsatz",
+    "fr": "Revenus Lifetime",
+    "pt": "Receita Lifetime"
   },
   "Lifetime value bidding": {
     "zh": "生命周期价值竞价",
@@ -3032,7 +3050,7 @@
     "es": "Alineación absoluta entre la entrega de Lenovo y los reportes del panel a fin de mes mediante rastreo determinista.",
     "de": "Absolute Übereinstimmung zwischen Lenovo-Auslieferung und Dashboard-Reporting zum Monatsende durch deterministisches Tracking gesichert.",
     "fr": "Alignement absolu préservé entre les volumes livrés par Lenovo et les tableaux de bord en fin de mois grâce au suivi déterministe.",
-    "pt": "Aprovação imediata de 100% das faturas pelo setor financeiro sem necessidade de reuniões semanais de ajuste."
+    "pt": "Alinhamento absoluto mantido entre a entrega da Lenovo e os relatórios de dashboard no fechamento do mês via rastreamento determinístico."
   },
   "Map the Funnel": {
     "zh": "构建转化漏斗",
@@ -3068,7 +3086,7 @@
     "es": "Mercado",
     "de": "Markt",
     "fr": "Marché",
-    "pt": "Conformidade Regulatória"
+    "pt": "Mercado"
   },
   "Marketplace · CPI · KW · SA · AE": {
     "zh": "电商平台 · CPI · KW · SA · AE",
@@ -3099,7 +3117,7 @@
     "es": "UA de marketplace priorizando Register y OrderPlaced sobre el CPI de instalación bruta mediante postbacks detallados de MMP.",
     "de": "Marktplatz-UA priorisiert Register und OrderPlaced gegenüber reinem Installations-CPI über granulare MMP-Postbacks.",
     "fr": "Acquisition marketplace privilégiant Register et OrderPlaced au simple CPI d'installation grâce à des postbacks MMP granulaires.",
-    "pt": "Escalar agressivamente o volume transacional durante campanhas de grandes datas (11.11 e 12.12) mantendo margens unitárias lucrativas."
+    "pt": "UA de marketplace priorizando Register e OrderPlaced em vez de CPI bruto via postbacks granulares no MMP."
   },
   "Match Group video-chat app needed EU brand lift and quality organic installs.": {
     "zh": "Match Group 旗下视频社交应用亟需在欧洲市场实现品牌声量提升与高品质自然量转化。",
@@ -3108,7 +3126,7 @@
     "es": "App de videochat de Match Group requería brand lift en la UE e instalaciones orgánicas de calidad.",
     "de": "Video-Chat-App der Match Group benötigte Brand Lift in der EU und hochwertige organische Installs.",
     "fr": "L'application de chat vidéo de Match Group devait renforcer sa notoriété en Europe et générer des installations organiques de qualité.",
-    "pt": "Escalar a base de usuários para aplicativo de vídeo chat em mercados competitivos da Europa e Ásia mantendo forte retenção de longo prazo e compras in-app de moedas."
+    "pt": "App de vídeo-chat do Match Group precisava de brand lift na UE e instalações orgânicas de qualidade."
   },
   "MBS": {
     "zh": "MBS",
@@ -3186,7 +3204,7 @@
     "es": "Los recuentos del MMP coincidieron con la entrega de Lenovo. Cero fraude o sorpresas de retención en la factura.",
     "de": "MMP-Zahlen stimmten exakt mit der Lenovo-Auslieferung überein. Null Fraud und keine bösen Überraschungen bei der Rechnungsstellung.",
     "fr": "Concordance parfaite entre les volumes MMP et la livraison Lenovo. Zéro fraude et aucune surprise de rétention à la facturation.",
-    "pt": "100% de correspondência entre logs de ativação de fábrica e eventos reportados no MMP com 0% de discrepância na fatura final."
+    "pt": "Contagens do MMP bateram com a entrega da Lenovo. Zero fraude ou surpresas de retenção na fatura."
   },
   "MMP match": {
     "zh": "MMP 匹配",
@@ -3219,7 +3237,7 @@
     "es": "Segmentación por modelo de dispositivo. Paridad de eventos en deposit_crm_ftd y watch_amount_click verificada antes del vuelo mediante auditorías de SDK.",
     "de": "Targeting auf Geräte-Modellebene. Event-Parität für deposit_crm_ftd und watch_amount_click vor Kampagnenstart durch SDK-Audits verifiziert.",
     "fr": "Ciblage au niveau des modèles d'appareils. Parité des événements sur deposit_crm_ftd et watch_amount_click vérifiée avant diffusion par audits SDK.",
-    "pt": "Fornecimento de arquivo de conciliação mensal bruto contendo cada ID de instalação, carimbo de data/hora e correspondência exata com o ledger do Adjust."
+    "pt": "Segmentação por modelo de dispositivo. Paridade de eventos em deposit_crm_ftd e watch_amount_click verificada antes do voo via auditorias de SDK."
   },
   "Moneycat": {
     "zh": "Moneycat",
@@ -3373,13 +3391,14 @@
     "fr": "Portée d'appareils OEM",
     "pt": "Alcance OEM"
   },
-  "OEM placements reach devices at unboxing and first boot. Install trails that survive procurement questions.": {
+  "OEM placements reach devices at unboxing and first boot. Install trails that endure procurement questions.": {
     "zh": "OEM 广告位在开箱与首次开机时触达设备。安装链路完全经得起采购端的严格质询。",
     "ja": "開封時や初回起動時にデバイスへ直接届くOEMプレイスメント。調達部門の厳しい精査にも耐えうるインストール追跡記録。",
     "ko": "언박싱 및 첫 부팅 시점에 기기에 도달하는 OEM 지면. 조달 및 감사 검토에서도 완벽히 입증되는 설치 추적 경로.",
     "es": "Las ubicaciones OEM llegan a los dispositivos al desempacar y en el primer encendido. Registros de instalación que superan cualquier auditoría de compras.",
     "de": "OEM-Placements erreichen Geräte direkt beim Unboxing und ersten Start. Install-Trails, die jeder Procurement-Prüfung standhalten.",
-    "fr": "Les placements OEM atteignent les appareils dès le déballage et le premier démarrage. Des pistes d'installation qui résistent aux exigences des achats."
+    "fr": "Les placements OEM atteignent les appareils dès le déballage et le premier démarrage. Des pistes d'installation qui résistent aux exigences des achats.",
+    "pt": "Posicionamentos OEM alcançam dispositivos no unboxing e primeiro boot. Trilhas de instalação que resistem a questionamentos de procurement."
   },
   "OEM Pre-install": {
     "zh": "OEM 出厂预装",
@@ -3388,7 +3407,7 @@
     "es": "Preinstalación OEM",
     "de": "OEM-Vorinstallation",
     "fr": "Pré-installation OEM",
-    "pt": "Lenovo OEM"
+    "pt": "Pré-instalação OEM"
   },
   "OEM Store": {
     "zh": "OEM 商店",
@@ -3405,7 +3424,7 @@
     "es": "El suministro OEM abarca más de 120 GEOs. Las cohortes deficientes requirieron filtrado algorítmico en rutas de open-exchange según latencia y CVR.",
     "de": "OEM-Inventar erstreckt sich über 120+ GEOs. Mangelhafte Kohorten erforderten algorithmische Filterung aus Open-Exchange-Lanes anhand von Latenz und CVR.",
     "fr": "L'inventaire OEM couvre plus de 120 GEOs. Les cohortes non qualifiées exigeaient un filtrage algorithmique sur les flux open exchange basé sur la latence et le CVR.",
-    "pt": "Faturas de publicidade frequentemente contestadas pela auditoria financeira interna por falta de clareza nos relatórios de redes de afiliados."
+    "pt": "O inventário OEM abrange mais de 120 GEOs. Coortes ruins exigiam filtragem algorítmica das rotas de open-exchange com base em latência e CVR."
   },
   "Official Agency Partner": {
     "zh": "官方代理合作伙伴",
@@ -3490,7 +3509,7 @@
     "es": "Ambigüedad en open-exchange sobre instalaciones de fábrica. Finanzas requería pruebas a nivel de paquete.",
     "de": "Intransparenz auf Open Exchanges bei Werksinstallationen. Die Finanzabteilung verlangte Nachweise auf Paketebene.",
     "fr": "Ambiguïté des open exchanges sur les installations en usine. La finance exigeait une preuve au niveau du package.",
-    "pt": "Verificar se as instalações OEM foram realmente abertas e ativadas por usuários reais, evitando cobrança por dispositivos inativos em estoque."
+    "pt": "Ambiguidade de open-exchange em instalações de fábrica. O financeiro exigia comprovação no nível do pacote."
   },
   "Opera": {
     "zh": "Opera",
@@ -3515,7 +3534,7 @@
     "es": "Tasa de pedidos · BR",
     "de": "Bestellrate · BR",
     "fr": "Taux de commande · BR",
-    "pt": "Custo por Venda"
+    "pt": "Taxa de pedidos · BR"
   },
   "Order rate · PH": {
     "zh": "下单转化率 · 菲律宾",
@@ -3524,7 +3543,7 @@
     "es": "Tasa de pedidos · PH",
     "de": "Bestellrate · PH",
     "fr": "Taux de commande · PH",
-    "pt": "Transações"
+    "pt": "Taxa de pedidos · PH"
   },
   "OrderPlaced": {
     "zh": "OrderPlaced",
@@ -3703,7 +3722,7 @@
     "es": "Promoción personalizada por segmento. Controles de ROAS a nivel de emplazamiento verificados mediante postbacks S2S antes de liberar presupuesto cada semana.",
     "de": "Personalisierte Kampagnenansprache pro Segment. Platzierungsbezogene ROAS-Schwellen vor der wöchentlichen Budgetfreigabe über S2S-Postbacks verifiziert.",
     "fr": "Promotion personnalisée par segment. Seuils de ROAS par emplacement vérifiés par postbacks S2S avant validation hebdomadaire du budget.",
-    "pt": "Rastreamento cruzado entre telemetria de hardware e endpoints de segurança do banco, validando integridade do dispositivo antes da conclusão da instalação."
+    "pt": "Promoção personalizada por segmento. Travas de ROAS por placement verificadas via postbacks S2S antes da liberação semanal de orçamento."
   },
   "PH: 250K+ installs, 22% register, 7.2% order rate. BR: 80K+ installs, 10.7% order rate.": {
     "zh": "菲律宾市场：250K+ 安装量，22% 注册率，7.2% 下单转化率。巴西市场：80K+ 安装量，10.7% 下单转化率。",
@@ -3712,7 +3731,7 @@
     "es": "PH: más de 250K instalaciones, 22% de registro, 7,2% de tasa de pedidos. BR: más de 80K instalaciones, 10,7% de tasa de pedidos.",
     "de": "PH: 250K+ Installs, 22 % Registrierungen, 7,2 % Bestellrate. BR: 80K+ Installs, 10,7 % Bestellrate.",
     "fr": "PH : 250K+ installations, 22 % d'inscriptions, taux de commande de 7,2 %. BR : 80K+ installations, taux de commande de 10,7 %.",
-    "pt": "Mais de 4,5 milhões de transações verificadas com ROAS médio consolidado de 4.8x durante todo o período promocional."
+    "pt": "PH: 250K+ instalações, 22% de registro, 7,2% de taxa de pedidos. BR: 80K+ instalações, 10,7% de taxa de pedidos."
   },
   "Placement quality scored before bid": {
     "zh": "竞价前即完成广告位质量评分",
@@ -3729,7 +3748,7 @@
     "es": "Mix de plataformas valorado por calidad de engagement. Niveles de creadores con bajo rendimiento cancelados durante la campaña.",
     "de": "Plattform-Mix nach Engagement-Qualität bewertet. Leistungsschwache Creator-Tiers noch während der Kampagne gestrichen.",
     "fr": "Mix de plateformes évalué selon la qualité de l'engagement. Suspension en cours de vol des catégories de créateurs sous-performantes.",
-    "pt": "Implementação de modelo de atribuição determinística com verificação direta de deep link e exclusão de janelas infladas de view-through."
+    "pt": "Mix de plataformas pontuado por qualidade de engajamento. Níveis de criadores com baixa performance cortados durante a campanha."
   },
   "Platform-level CVR proof per geo before caps increased. Eliminated cross-region budget bleed.": {
     "zh": "在提高预算上限前先获取各地区平台级 CVR 实证，彻底杜绝跨区域预算损耗。",
@@ -3738,7 +3757,7 @@
     "es": "Comprobación de CVR a nivel de plataforma en cada territorio antes de aumentar los límites. Eliminación de fugas presupuestarias entre regiones.",
     "de": "CVR-Nachweis auf Plattformebene pro GEO vor jeder Budgeterhöhung. Budgetverluste zwischen den Regionen eliminiert.",
     "fr": "Preuve de CVR par plateforme et par zone avant toute hausse de plafond. Élimination des déperditions budgétaires entre régions.",
-    "pt": "Eliminação de mais de 98% do tráfego inválido pré-leilão, poupando centenas de milhares de dólares do orçamento de mídia."
+    "pt": "Comprovação de CVR no nível da plataforma por GEO antes de aumentar os limites de orçamento. Eliminamos o desperdício entre regiões."
   },
   "Platiza": {
     "zh": "Platiza",
@@ -3789,7 +3808,7 @@
     "es": "Filtro pre-bid para reject_bots, reject_install_hijacking y reject_ctit_anomalies contrastado con logs de MMP.",
     "de": "Pre-Bid-Filter für reject_bots, reject_install_hijacking und reject_ctit_anomalies im Abgleich mit MMP-Logs.",
     "fr": "Filtrage pre-bid sur reject_bots, reject_install_hijacking et reject_ctit_anomalies adossé aux logs MMP.",
-    "pt": "Caminhos de fornecimento direto (SPO) sem intermediários e listas seguras exclusivas negociadas diretamente com publishers tier-1."
+    "pt": "Filtro pré-lance em reject_bots, reject_install_hijacking e reject_ctit_anomalies contra os logs do MMP."
   },
   "Pre-bid filtration ensured every single dollar we allocated cleared a robust device check flawlessly.": {
     "zh": "竞价前过滤机制确保我们投入的每一美元，都能毫无悬念地通过严格的设备层级校验。",
@@ -3968,7 +3987,7 @@
     "es": "ROAS programático en ventas de cartera completa en México",
     "de": "Programmatic-ROAS auf Portfolio-Verkäufe in Mexiko",
     "fr": "ROAS programmatique sur l'ensemble du portefeuille de produits au Mexique",
-    "pt": "Abertura de contas digitais e validação rigorosa de KYC"
+    "pt": "ROAS programático nas vendas de todo o portfólio no México"
   },
   "Proof": {
     "zh": "验证凭据",
@@ -4012,7 +4031,7 @@
     "es": "Compra / instalación",
     "de": "Kauf / Install",
     "fr": "Achat / installation",
-    "pt": "ROAS em Retargeting"
+    "pt": "Compra / instalação"
   },
   "Purchase events at CPI scale across the EU": {
     "zh": "在欧洲全境以 CPI 规模驱动真实购买事件",
@@ -4021,7 +4040,7 @@
     "es": "Eventos de compra a escala de CPI en toda la UE",
     "de": "Kauf-Events bei CPI-Skalierung in der gesamten EU",
     "fr": "Événements d'achat au coût d'un CPI à l'échelle de l'UE",
-    "pt": "Transações e-commerce automotivas em escala pan-europeia"
+    "pt": "Eventos de compra em escala de CPI em toda a UE"
   },
   "Purchase trail auditable on demand. Month-end reporting executed flawlessly.": {
     "zh": "购买转化链路支持随时按需审计，月末报表核对零瑕疵交付。",
@@ -4030,7 +4049,7 @@
     "es": "Rastro de compras auditable bajo demanda. Informes de cierre de mes impecables.",
     "de": "Kaufpfad jederzeit auditierbar. Monatsabschluss-Reporting fehlerfrei umgesetzt.",
     "fr": "Historique d'achat auditable à la demande. Clôture mensuelle exécutée sans la moindre anomalie.",
-    "pt": "Eliminação de sobretaxas de mídia e economia comprovada de 18% no orçamento global de marketing."
+    "pt": "Trilha de compras auditável sob demanda. Relatórios de fim de mês executados sem falhas."
   },
   "PureVPN": {
     "zh": "PureVPN",
@@ -4047,7 +4066,7 @@
     "es": "Título de puzles requería escala global de CPI y retención de calidad postinstalación.",
     "de": "Puzzle-Titel benötigte weltweite Skalierung auf CPI-Basis und erstklassige Post-Install-Retention.",
     "fr": "Jeu de réflexion nécessitant une montée en échelle CPI mondiale et une rétention post-installation de haute qualité.",
-    "pt": "Jogo de quebra-cabeça casual necessitando de distribuição massiva e de baixo custo nos principais mercados globais sem inflar os custos de UA programática."
+    "pt": "Título de quebra-cabeça precisava de escala global em CPI e retenção de qualidade pós-instalação."
   },
   "Q3 Run Rate": {
     "zh": "Q3 运行率",
@@ -4205,7 +4224,7 @@
     "es": "Banco minorista en México necesitaba adquirir usuarios y realizar venta cruzada de toda su cartera de productos. Su ambición de MAU a largo plazo requería pruebas de ROAS a corto plazo mediante logs de DSP.",
     "de": "Retail-Bank in Mexiko wollte Neukunden gewinnen und das gesamte Produktportfolio cross-sellen. Langfristige MAU-Ziele verlangten kurzfristige ROAS-Nachweise über DSP-Logs.",
     "fr": "Banque de détail au Mexique cherchant à acquérir des utilisateurs et générer des ventes croisées sur tout son portefeuille de produits. L'ambition de MAU à long terme imposait une preuve immédiate de ROAS via les logs DSP.",
-    "pt": "Atrair usuários não-bancarizados e convertê-los em clientes ativos de conta corrente digital com envio e aprovação completa de documentos regulatórios."
+    "pt": "Banco de varejo no México precisava adquirir usuários e fazer venda cruzada em todo o portfólio. A meta de MAU de longo prazo exigia prova de ROAS no curto prazo via logs de DSP."
   },
   "Retargeting": {
     "zh": "重定向",
@@ -4296,7 +4315,7 @@
     "es": "ROAS · mes 10",
     "de": "ROAS · Monat 10",
     "fr": "ROAS · mois 10",
-    "pt": "Contas Aprovadas"
+    "pt": "ROAS · mês 10"
   },
   "ROAS · month 6": {
     "zh": "ROAS · 第 6 个月",
@@ -4305,7 +4324,7 @@
     "es": "ROAS · mes 6",
     "de": "ROAS · Monat 6",
     "fr": "ROAS · mois 6",
-    "pt": "Custo por KYC"
+    "pt": "ROAS · mês 6"
   },
   "Roku": {
     "zh": "Roku",
@@ -4323,7 +4342,7 @@
     "es": "CTV en Roku durante las horas de mayor audiencia. Notificaciones de retargeting postinstalación para first_account_connected.",
     "de": "Roku CTV zu Spitzen-Sendezeiten. Retargeting mit Post-Install-Prompts für first_account_connected.",
     "fr": "Roku CTV aux heures de forte audience. Relances reciblées post-installation pour l'événement first_account_connected.",
-    "pt": "Segmentação granular com mensagens adaptadas por categoria de despesa e lances calibrados para a conclusão de vinculação bancária via Open Banking."
+    "pt": "Roku CTV nos horários de pico de audiência. Prompts pós-instalação com retargeting para first_account_connected."
   },
   "Run on": {
     "zh": "依托",
@@ -4333,6 +4352,15 @@
     "de": "Setze auf",
     "fr": "Opérer sur la",
     "pt": "Operam com"
+  },
+  "Sales & Video Chats participation": {
+    "de": "Käufe & Video-Chat-Teilnahme",
+    "es": "Ventas y participación en videochats",
+    "fr": "Ventes et participation aux chats vidéo",
+    "ja": "売上およびビデオチャット参加",
+    "ko": "매출 및 비디오 채팅 참여",
+    "pt": "Vendas e participação em chats de vídeo",
+    "zh": "销售额与视频聊天参与度"
   },
   "SCALE": {
     "zh": "规模",
@@ -4426,7 +4454,7 @@
     "es": "Creatividades a nivel de segmento mediante DSPs programáticos. Inversión concentrada dinámicamente en los emplazamientos de SSP con mejor rendimiento a través de optimización algorítmica de pujas.",
     "de": "Segmentbasierte Creatives über programmatische DSPs. Spend durch algorithmische Gebotsoptimierung dynamisch auf die stärksten SSP-Platzierungen konzentriert.",
     "fr": "Créations personnalisées par segment via DSP programmatiques. Dépenses concentrées dynamiquement sur les meilleurs emplacements SSP grâce à l'optimisation algorithmique des enchères.",
-    "pt": "Otimização de lances com foco exclusivo no evento pós-instalação de envio de documento validado (KYC aprovado), em vez de meras instalações do aplicativo."
+    "pt": "Criativos por segmento via DSPs programáticas. Investimento concentrado dinamicamente nos melhores placements de SSP por otimização algorítmica de lances."
   },
   "Selected Evidence": {
     "zh": "精选实证",
@@ -4842,7 +4870,7 @@
     "es": "Se probaron 20 plataformas por territorio, asegurando las tres mejores. Creatividades del sector gaming para impulsar la demanda de freelancers.",
     "de": "20 Plattformen pro GEO getestet und die Top 3 fixiert. Creatives aus der Gaming-Branche zur Generierung von Freelancer-Bedarf.",
     "fr": "Test de 20 plateformes par zone géographique et sélection des 3 plus performantes. Créations issues de l'industrie du gaming pour stimuler la demande de freelances.",
-    "pt": "Compra programática em exchanges premium com lances orientados à probabilidade de primeiro pedido em 48h, apoiada por testes intensivos de criativos CGC orientados a negócios."
+    "pt": "Testamos 20 plataformas por GEO e fixamos as três melhores. Criativos da indústria de games para atrair demanda de freelancers."
   },
   "The Agency": {
     "zh": "关于机构",
@@ -5072,7 +5100,7 @@
     "es": "Escalado con creadores de TikTok para calidad de instalación orgánica",
     "de": "TikTok-Creator-Skalierung für organische Installationsqualität",
     "fr": "Montée en échelle avec créateurs TikTok pour des installations organiques de qualité",
-    "pt": "Aquisição global de usuários de alto engajamento em descoberta social e vídeo"
+    "pt": "Escala de criadores no TikTok para qualidade de instalação orgânica"
   },
   "To be released soon": {
     "zh": "即将推出",
@@ -5174,7 +5202,7 @@
     "es": "App financiera del Reino Unido en iOS. Las instalaciones eran económicas, pero la vinculación de cuentas continuaba siendo el KPI crítico.",
     "de": "Britische Finanz-App auf iOS. Installs waren günstig, aber Kontoverknüpfungen blieben der entscheidende KPI.",
     "fr": "Application financière britannique sur iOS. Les installations étaient peu coûteuses, mais la liaison de comptes restait le KPI décisif.",
-    "pt": "Aplicativo fintech britânico de Open Banking visando conexões bancárias ativas e permissões de consulta de dados financeiros no Reino Unido."
+    "pt": "App financeiro do Reino Unido no iOS. As instalações eram baratas, mas a conexão de contas bancárias continuava sendo o KPI crítico."
   },
   "UK geo concentration enforced. Activation event mapped in MMP before cap went live.": {
     "zh": "强制锁定英国本土地域流量。在预算上限生效前，于 MMP 中严格映射激活事件。",
@@ -5183,7 +5211,7 @@
     "es": "Concentración geográfica estricta en el Reino Unido. Evento de activación mapeado en el MMP antes de liberar el presupuesto.",
     "de": "Strikte GEO-Konzentration auf UK. Aktivierungs-Event im MMP gemappt, bevor das Cap live ging.",
     "fr": "Concentration géographique stricte sur le Royaume-Uni. Événement d'activation intégré dans le MMP avant l'ouverture des plafonds.",
-    "pt": "Geração de relatórios brutos automatizados com paridade 1:1 entre o registro de transação de mídia e os eventos de telemetria recebidos no MMP."
+    "pt": "Concentração geográfica no Reino Unido aplicada com rigor. Evento de ativação mapeado no MMP antes da abertura de orçamento."
   },
   "Unable to send message. Please try again.": {
     "zh": "无法发送信息，请重试。",
@@ -5352,7 +5380,7 @@
     "es": "Los datos de rendimiento de EE. UU. distorsionaron las primeras pujas en el GCC. Las tasas de conversión parecían correctas hasta ejecutar pruebas nativas por región.",
     "de": "US-Performancedaten führten bei anfänglichen GCC-Geboten in die Irre. Conversion-Raten schienen solide, bis GEO-native Tests liefen.",
     "fr": "Les données de performance américaines ont faussé les premières enchères GCC. Les taux de conversion semblaient solides jusqu'aux tests géographiques natifs.",
-    "pt": "Ataques sistemáticos de bot farms gerando cadastros falsos e preenchimentos automáticos de formulários sem valor transacional."
+    "pt": "Dados de performance dos EUA distorceram os lances iniciais no GCC. As taxas de conversão pareciam boas até rodarmos testes nativos por GEO."
   },
   "UX/UI designers translating complex strategies into high-converting assets that actively drive user action.": {
     "zh": "UX/UI 设计师将复杂策略转化为高转化率素材，强力驱动用户转化行动。",
@@ -5394,7 +5422,7 @@
     "es": "ROAS verificado del 200% al mes seis y del 500% al mes diez. Ventas de cartera y notoriedad escaladas sin depender de métricas vanidosas de MAU, basadas en pings de eventos de servidor.",
     "de": "Verifizierter ROAS von 200 % in Monat sechs und 500 % in Monat zehn. Portfolio-Umsätze und Markenbekanntheit skalierten basierend auf serverseitigen Event-Pings unabhängig von oberflächlichen MAU-Kennzahlen.",
     "fr": "ROAS vérifié de 200 % au sixième mois et de 500 % au dixième mois. Ventes du portefeuille et notoriété développées indépendamment des vanity metrics de MAU, appuyées sur des signaux d'événements côté serveur.",
-    "pt": "Mais de 320 mil novas contas digitais ativadas com redução de 41% no custo por conta aprovada em comparação com canais proprietários anteriores."
+    "pt": "ROAS verificado de 200% no sexto mês e 500% no décimo mês. Vendas de portfólio e reconhecimento escalaram com base em pings de eventos server-side."
   },
   "Verified Compliance & Partners": {
     "zh": "合规与合作伙伴认证",
@@ -5481,6 +5509,15 @@
     "es": "Ver todos los casos de estudio",
     "de": "Alle Case Studies ansehen",
     "fr": "Voir toutes les études de cas"
+  },
+  "View from the top: High-impact outcomes from live flights — tap any card for the full story.": {
+    "zh": "绝顶视野：来自实盘战役的高成效战果——轻点任意卡片，查看完整实录。",
+    "ja": "頂上からの眺望：実稼働キャンペーンが生んだ高水準の成果 — カードをタップして全貌を確認。",
+    "ko": "정상에서의 조망: 실제 라이브 캠페인에서 거둔 독보적 성과 — 카드를 탭하여 전체 스토리를 확인하십시오.",
+    "es": "Vista desde la cima: Resultados de alto impacto en campañas activas — toque cualquier tarjeta para ver la historia completa.",
+    "de": "Blick vom Gipfel: Hochwirksame Ergebnisse aus Live-Flights — Karte antippen für die ganze Geschichte.",
+    "fr": "Vue du sommet : Des résultats à fort impact issus de campagnes réelles — touchez une carte pour découvrir toute l'histoire.",
+    "pt": "Visão do topo: Resultados de alto impacto de campanhas ativas — toque em qualquer cartão para ver o case completo."
   },
   "Volume Index": {
     "zh": "体量指数",
@@ -5847,14 +5884,14 @@
     "de": "Whitelist-only, MRAID-konformer Supply",
     "fr": "Supply exclusivement sur whitelist et conforme au standard MRAID"
   },
-  "Whitelisted adult inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.": {
-    "zh": "锁定具备亚秒级延迟限制的白名单成人流量，实施州级精准定向，并将素材 QA 质检直接锚定 FTD 数据载荷而非单纯的安装量。",
-    "ja": "1秒未満のレイテンシ制限を設けた成人向けホワイトリスト在庫、州レベルのターゲティング、そしてインストール数ではなくFTDペイロードに直接連動させたクリエイティブQAを展開。",
-    "ko": "1초 미만 레이턴시 제한의 화이트리스트 성인 인벤토리, 주(State) 단위 타겟팅, 단순 인스톨 볼륨이 아닌 FTD 페이로드에 직접 연동된 크리에이티브 QA를 적용했습니다.",
-    "es": "Inventario para adultos en lista blanca con límites de latencia por debajo del segundo, segmentación a nivel estatal y control de calidad creativo vinculado directamente al payload de FTD en lugar del volumen de instalaciones.",
-    "de": "Whitelisted Adult-Inventar mit Latenzgrenzen im Subsekundenbereich, Targeting auf Bundesstaatsebene und Creative-QA, die direkt an den FTD-Payload statt an das Installationsvolumen gekoppelt ist.",
-    "fr": "Inventaire adulte sur liste blanche avec latence inférieure à la seconde, ciblage par État et QA créative directement indexée sur le payload FTD plutôt que sur le volume d'installations.",
-    "pt": "Inventário adulto liberado em lista segura com limites de latência sub-segundo, segmentação a nível estadual e controle de qualidade criativo atrelado diretamente ao payload de FTD em vez de volume de instalações."
+  "Whitelisted age-gated inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.": {
+    "zh": "锁定具备亚秒级延迟限制的年龄受限白名单流量，实施州级精准定向，并将素材 QA 质检直接锚定 FTD 数据载荷而非单纯的安装量。",
+    "ja": "1秒未満のレイテンシ制限を設けた年齢制限付きホワイトリスト在庫、州レベルのターゲティング、そしてインストール数ではなくFTDペイロードに直接連動させたクリエイティブQAを展開。",
+    "ko": "1초 미만 레이턴시 제한의 연령 인증 화이트리스트 인벤토리, 주(State) 단위 타겟팅, 단순 인스톨 볼륨이 아닌 FTD 페이로드에 직접 연동된 크리에이티브 QA를 적용했습니다.",
+    "es": "Inventario con restricción de edad en lista blanca con límites de latencia por debajo del segundo, segmentación a nivel estatal y control de calidad creativo vinculado directamente al payload de FTD en lugar del volumen de instalaciones.",
+    "de": "Whitelisted Age-Gated-Inventar mit Latenzgrenzen im Subsekundenbereich, Targeting auf Bundesstaatsebene und Creative-QA, die direkt an den FTD-Payload statt an das Installationsvolumen gekoppelt ist.",
+    "fr": "Inventaire soumis à une limite d'âge sur liste blanche avec latence inférieure à la seconde, ciblage par État et QA créative directement indexée sur le payload FTD plutôt que sur le volume d'installations.",
+    "pt": "Inventário com restrição de idade em lista segura com limites de latência sub-segundo, segmentação a nível estadual e controle de qualidade criativo atrelado diretamente ao payload de FTD em vez de volume de instalações."
   },
   "Who We Serve": {
     "zh": "服务对象",
@@ -5919,14 +5956,14 @@
     "fr": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même le début de la diffusion. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide.",
     "pt": "Sua equipe pode extrair e verificar Seu conjunto de dados a qualquer momento. Nossa validação de logs brutos resolve disputas de atribuição antes que Seus traders abram a campanha. Fornecemos logs brutos, conciliação em tempo real e filtragem pré-lance para que Seus compradores de mídia e diretores financeiros trabalhem com os mesmos dados. Seu processo de conciliação permanece totalmente limpo."
   },
-  "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets aggressively without fear of hidden markups or invisible fraud.": {
-    "zh": "您的团队可以随时提取并核验证实您的数据集。我们的原始日志验证在操盘手开启投放前便已彻底消除归因争议。我们提供原生日志、实时对账与竞价前过滤，确保媒介采买与财务主管始终基于同一套真实数据协同决策。您的对账流程始终保持分毫不差。我们确保支出的每一分钱都账目分明，让您在积极扩大预算时拥有绝对底气，告别隐性溢价与隐蔽欺诈。",
-    "ja": "貴社チームはいつでもデータセットを抽出して検証可能です。生のログ検証により、トレーダーが配信を開始する前にアトリビューションの不一致を解決します。生ログ、リアルタイム照合、事前入札フィルタリングを提供し、メディアバイヤーと財務責任者が同一のデータに基づいて業務を遂行できるようにします。照合プロセスは常に完全にクリーンな状態を維持。支出されたすべての広告費を完全に追跡可能にし、隠れたマージンや見えない不正への懸念を一切排除した上で、確固たる自信をもって予算を積極的にスケール拡大できるようにします。",
-    "ko": "귀하의 팀은 언제든지 데이터세트를 추출하고 검증할 수 있습니다. 당사의 원시 로그 검증은 트레이더가 캠페인을 시작하기도 전에 어트리뷰션 분쟁을 사전에 해결합니다. 원시 로그, 실시간 대조, 프리비드 필터링을 제공하여 미디어 바이어와 재무 책임자가 완전히 동일한 데이터를 기반으로 일하도록 지원합니다. 귀하의 정산 프로세스는 완벽하게 무결점을 유지합니다. 집행된 모든 비용이 투명하게 입증되므로, 숨겨진 마진이나 보이지 않는 프로드에 대한 우려 없이 확신을 갖고 공격적으로 예산을 확장할 수 있습니다.",
-    "es": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio. Garantizamos que cada dólar invertido esté plenamente justificado, dándole total confianza para escalar presupuestos con agresividad sin temor a márgenes ocultos ni fraude invisible.",
-    "de": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber. Wir stellen sicher, dass jeder investierte Dollar vollständig belegt ist – für maximale Sicherheit, Budgets offensiv zu skalieren, ohne versteckte Aufschläge oder unsichtbaren Fraud fürchten zu müssen.",
-    "fr": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même le début de la diffusion. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide. Chaque dollar investi est rigoureusement justifié, vous donnant l'entière confiance nécessaire pour développer vos budgets sans craindre de marges cachées ni de fraudes invisibles.",
-    "pt": "Sua equipe pode extrair e verificar Seu conjunto de dados a qualquer momento. Nossa validação de logs brutos resolve disputas de atribuição antes que Seus traders abram a campanha. Fornecemos logs brutos, conciliação em tempo real e filtragem pré-lance para que Seus compradores de mídia e diretores financeiros trabalhem com os mesmos dados. Seu processo de conciliação permanece totalmente limpo. Garantimos que cada dólar investido seja totalmente justificado, dando a Você a confiança absoluta para escalar orçamentos agressivamente sem receio de margens ocultas ou fraudes invisíveis."
+  "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets extensively with complete peace of mind regarding hidden markups or invisible fraud.": {
+    "de": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber. Wir stellen sicher, dass jeder investierte Dollar vollständig belegt ist – für maximale Sicherheit, Budgets umfassend zu skalieren, mit vollkommenem Vertrauen und ohne Sorge vor versteckten Aufschlägen oder unsichtbarem Fraud.",
+    "es": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio. Garantizamos que cada dólar invertido esté plenamente justificado, dándole total tranquilidad y absoluta confianza para escalar presupuestos ampliamente sin temor a márgenes ocultos ni fraude invisible.",
+    "fr": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même le début de la diffusion. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide. Chaque dollar investi est rigoureusement justifié, vous donnant l'entière sérénité et une confiance absolue pour développer largement vos budgets sans craindre de marges cachées ni de fraudes invisibles.",
+    "ja": "貴社チームはいつでもデータセットを抽出して検証可能です。生のログ検証により、トレーダーが配信を開始する前にアトリビューションの不一致を解決します。生ログ、リアルタイム照合、事前入札フィルタリングを提供し、メディアバイヤーと財務責任者が同一のデータに基づいて業務を遂行できるようにします。照合プロセスは常に完全にクリーンな状態を維持。支出されたすべての広告費を完全に追跡可能にし、隠れたマージンや見えない不正への懸念を完全に払拭した上で、確固たる安心感と自信をもって予算を大規模にスケール拡大できるようにします。",
+    "ko": "귀하의 팀은 언제든지 데이터세트를 추출하고 검증할 수 있습니다. 당사의 원시 로그 검증은 트레이더가 캠페인을 시작하기도 전에 어트리뷰션 분쟁을 사전에 해결합니다. 원시 로그, 실시간 대조, 프리비드 필터링을 제공하여 미디어 바이어와 재무 책임자가 완전히 동일한 데이터를 기반으로 일하도록 지원합니다. 귀하의 정산 프로세스는 완벽하게 무결점을 유지합니다. 집행된 모든 비용이 투명하게 입증되므로, 숨겨진 마진이나 보이지 않는 프로드에 대한 불안 없이 완전한 안심과 확신을 갖고 예산을 대규모로 확장할 수 있습니다。",
+    "pt": "Sua equipe pode extrair e verificar Seu conjunto de dados a qualquer momento. Nossa validação de logs brutos resolve disputas de atribuição antes que Seus traders abram a campanha. Fornecemos logs brutos, conciliação em tempo real e filtragem pré-lance para que Seus compradores de mídia e diretores financeiros trabalhem com os mesmos dados. Seu processo de conciliação permanece totalmente limpo. Garantizamos que cada dólar investido seja totalmente justificado, dando a Você total tranquilidade e confiança absoluta para escalar orçamentos amplamente, sem qualquer preocupação com margens ocultas ou fraudes invisíveis.",
+    "zh": "您的团队可以随时提取并核验证实您的数据集。我们的原始日志验证在操盘手开启投放前便已彻底消除归因争议。我们提供原生日志、实时对账与竞价前过滤，确保媒介采买与财务主管始终基于同一套真实数据协同决策。您的对账流程始终保持分毫不差。我们确保支出的每一分钱都账目分明，让您在从容大幅拓展预算的同时享有绝对底气，告别隐性溢价与隐蔽欺诈的后顾之忧。"
   },
   "Zero disputed inventory at month-end. MMP logs, server events, and UA data aligned into one auditable record per state.": {
     "zh": "月末实现争议流量清零。MMP 日志、服务器事件与 UA 买量数据统一对齐为各州可审计的精准账目。",

@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { AD_W, AD_H } from "./PhoneConstants";
 import type { SiteMode } from "../../data/liveContent";
@@ -11,35 +11,6 @@ import {
   type GlassAnimId,
 } from "../../lib/tabletGlassAnim";
 
-
-function useCssDrag() {
-  const reduced = useReducedMotion();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const springConfig = { damping: 20, stiffness: 150 };
-  const smoothX = useSpring(x, springConfig);
-  const smoothY = useSpring(y, springConfig);
-
-  const rotX = useTransform(smoothY, [-1, 1], [15, -15]);
-  const rotY = useTransform(smoothX, [-1, 1], [-20, 20]);
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (reduced) return;
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    x.set((e.clientX - cx) / (rect.width / 2));
-    y.set((e.clientY - cy) / (rect.height / 2));
-  };
-
-  const handlePointerLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return { rotX, rotY, handlePointerMove, handlePointerLeave };
-}
 
 
 type CssPhoneProps = {
@@ -62,14 +33,13 @@ function AnimatedTabletGlass({ formatId }: { formatId: GlassAnimId }) {
     if (!canvas) return;
 
     let cancelled = false;
-    let raf = 0;
+    let timer = 0;
     let img: HTMLImageElement | null = null;
     const t0 = performance.now();
 
-    const tick = (now: number) => {
+    const tick = () => {
       if (cancelled || !img || !canvasRef.current) return;
-      paintGlassAnim(formatId, canvasRef.current, img, (now - t0) / 1000, reduced);
-      if (!reduced) raf = requestAnimationFrame(tick);
+      paintGlassAnim(formatId, canvasRef.current, img, (performance.now() - t0) / 1000, reduced);
     };
 
     img = new Image();
@@ -77,13 +47,16 @@ function AnimatedTabletGlass({ formatId }: { formatId: GlassAnimId }) {
     img.onload = () => {
       if (cancelled || !canvasRef.current || !img) return;
       paintStill(canvasRef.current, img);
-      raf = requestAnimationFrame(tick);
+      tick();
+      if (!reduced && formatId !== "oem-store") {
+        timer = window.setInterval(tick, 15_000);
+      }
     };
     img.src = still;
 
     return () => {
       cancelled = true;
-      cancelAnimationFrame(raf);
+      window.clearInterval(timer);
     };
   }, [formatId, still, reduced]);
 
@@ -211,51 +184,43 @@ export function FormatGlass({
  */
 export function CssPhone({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
-  const { rotX, rotY, handlePointerMove, handlePointerLeave } = useCssDrag();
 
   return (
-    <div 
-      style={{ perspective: 1200, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
+    <div
+      style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
     >
-      <motion.div 
+      <div
         className={`prog-css-phone prog-css-phone--${finish} ${className}`.trim()}
-        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)" }}
       >
-      <span className="prog-css-phone__btn prog-css-phone__btn--silent" aria-hidden />
-      <span className="prog-css-phone__btn prog-css-phone__btn--vol-up" aria-hidden />
-      <span className="prog-css-phone__btn prog-css-phone__btn--vol-down" aria-hidden />
-      <span className="prog-css-phone__btn prog-css-phone__btn--power" aria-hidden />
-      <div className="prog-css-phone__bezel">
-        <div className="prog-css-phone__island" aria-hidden />
-        <div className="prog-css-phone__screen">
-          <FormatGlass formatId={formatId} />
+        <span className="prog-css-phone__btn prog-css-phone__btn--silent" aria-hidden />
+        <span className="prog-css-phone__btn prog-css-phone__btn--vol-up" aria-hidden />
+        <span className="prog-css-phone__btn prog-css-phone__btn--vol-down" aria-hidden />
+        <span className="prog-css-phone__btn prog-css-phone__btn--power" aria-hidden />
+        <div className="prog-css-phone__bezel">
+          <div className="prog-css-phone__island" aria-hidden />
+          <div className="prog-css-phone__screen">
+            <FormatGlass formatId={formatId} />
+          </div>
         </div>
       </div>
-      </motion.div>
     </div>
   );
 }
 
 export function CssTablet({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
-  const { rotX, rotY, handlePointerMove, handlePointerLeave } = useCssDrag();
 
   return (
-    <div 
-      style={{ perspective: 1200, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
+    <div
+      style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
     >
-      <motion.div 
+      <div
         className={`prog-css-tablet prog-css-phone--${finish} ${className}`.trim()}
-        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)" }}
       >
-      <div className="prog-css-tablet__bezel">
-        <FormatGlass formatId={formatId} />
+        <div className="prog-css-tablet__bezel">
+          <FormatGlass formatId={formatId} />
+        </div>
       </div>
-      </motion.div>
     </div>
   );
 }
@@ -263,23 +228,19 @@ export function CssTablet({ mode, formatId, className = "" }: CssPhoneProps) {
 export function CssTv({ mode, formatId, className = "" }: CssPhoneProps) {
   const finish = mode === "growth" ? "deepblue" : "orange";
   const glassId = FORMAT_VIDEO[formatId] || FORMAT_STILL[formatId] ? formatId : "ctv-spot";
-  const { rotX, rotY, handlePointerMove, handlePointerLeave } = useCssDrag();
 
   return (
-    <div 
-      style={{ perspective: 1200, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
+    <div
+      style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
     >
-      <motion.div 
+      <div
         className={`prog-css-tv prog-css-tv--slot prog-css-phone--${finish} ${className}`.trim()}
-        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d", boxShadow: "0 35px 60px -15px rgba(0,0,0,0.6)" }}
       >
-      <div className="prog-css-tv__bezel">
-        <FormatGlass formatId={glassId} />
+        <div className="prog-css-tv__bezel">
+          <FormatGlass formatId={glassId} />
+        </div>
+        <div className="prog-css-tv__foot" aria-hidden />
       </div>
-      <div className="prog-css-tv__foot" aria-hidden />
-      </motion.div>
     </div>
   );
 }

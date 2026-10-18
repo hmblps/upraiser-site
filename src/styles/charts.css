@@ -706,12 +706,12 @@ html[data-os="windows"] .parity-water__lake {
 
 .parity-water__plot::before {
   left: 0;
-  background: linear-gradient(to right, var(--bg, #050505) 0%, transparent 100%);
+  background: linear-gradient(to right, var(--theme-bg, #050505) 0%, transparent 100%);
 }
 
 .parity-water__plot::after {
   right: 0;
-  background: linear-gradient(to left, var(--bg, #050505) 0%, transparent 100%);
+  background: linear-gradient(to left, var(--theme-bg, #050505) 0%, transparent 100%);
 }
 
 .parity-water__ghosts {
@@ -944,8 +944,14 @@ html[data-os="windows"] .parity-water__lake {
 @media (min-width: 1024px) {
   .fraud-linear-chart__content {
     margin-right: 0;
-    transform: translate(-158px, -44px);
+    transform: translate(-36px, -44px);
     gap: 66px;
     padding-inline: 0;
+  }
+}
+
+@media (min-width: 1280px) {
+  .fraud-linear-chart__content {
+    transform: translate(-158px, -44px);
   }
 }

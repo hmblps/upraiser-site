@@ -116,6 +116,11 @@ export function GradientTraceBorder({
             <motion.linearGradient
               id={gradientId}
               gradientUnits="userSpaceOnUse"
+              x1={0}
+              x2={0}
+              y1={0}
+              y2={0}
+              initial={{ x1: 0, x2: 0, y1: 0, y2: 0 }}
               animate={{
                 x1: [0, box.w * 2],
                 x2: [0, box.w],

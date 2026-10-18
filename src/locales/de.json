@@ -113,11 +113,11 @@
       },
       "metrics": [
         {
-          "value": "$25M+",
-          "label": "Umsatz"
+          "value": "$15M+",
+          "label": "Lifetime-Umsatz"
         },
         {
-          "value": "50K",
+          "value": "30K",
           "label": "FTDs"
         },
         {
@@ -127,8 +127,8 @@
       ],
       "growthFocus": {
         "challenge": "Echtgeld-Sportsbook in einem bonusgesättigten US-Markt. Erforderte striktes MMP-Tracking und S2S-Postbacks ohne Verletzung von 18+- oder bundesstaatlichen Vorgaben.",
-        "approach": "Whitelisted Adult-Inventar mit Latenzgrenzen im Subsekundenbereich, Targeting auf Bundesstaatsebene und Creative-QA, die direkt an den FTD-Payload statt an das Installationsvolumen gekoppelt ist.",
-        "result": "800K Installs, 50K FTDs, über 25 Mio. $ Umsatz. Sieben zusätzliche Wetten pro Spieler. Durchschnittlich über 500 $ Umsatz pro FTD."
+        "approach": "Whitelisted Age-Gated-Inventar mit Latenzgrenzen im Subsekundenbereich, Targeting auf Bundesstaatsebene und Creative-QA, die direkt an den FTD-Payload statt an das Installationsvolumen gekoppelt ist.",
+        "result": "800K Installs, 30K FTDs, über 15 Mio. $ Lifetime-Umsatz. Durchschnittlich sieben zusätzliche Wetten pro Spieler."
       },
       "optimizationFocus": {
         "challenge": "TikTok und Snapchat für 18+-Gaming gesperrt. Jede Platzierung erforderte einen Compliance-Nachweis und sauberes Event-Mapping.",
@@ -159,14 +159,14 @@
           "label": "Attributionsdrift"
         },
         {
-          "value": "50%",
+          "value": "37%",
           "label": "Day-7-Retention"
         }
       ],
       "growthFocus": {
         "challenge": "Puzzle-Titel benötigte weltweite Skalierung auf CPI-Basis und erstklassige Post-Install-Retention.",
         "approach": "Lenovo PAI weltweit. Retention-Untergrenzen (D1 40 %, D7 25 %, D30 10 %) steuerten jede Gebotserhöhung.",
-        "result": "Über 32.000 tägliche Installs in PL, UK, DE und 12 weiteren GEOs. D1-ROAS 20 %, D7-Retention 50 %."
+        "result": "Über 32.000 tägliche Installs in PL, UK, DE und 12 weiteren GEOs. D1-ROAS 20 %, D7-Retention 37 %."
       },
       "optimizationFocus": {
         "challenge": "Intransparenz auf Open Exchanges bei Werksinstallationen. Die Finanzabteilung verlangte Nachweise auf Paketebene.",
@@ -210,7 +210,8 @@
         "challenge": "US-Performancedaten führten bei anfänglichen GCC-Geboten in die Irre. Conversion-Raten schienen solide, bis GEO-native Tests liefen.",
         "approach": "GEO-spezifische Plattform-Whitelists. Creative-Varianten zielten getrennt auf Gaming- und Pro-Services-Segmente ab.",
         "result": "CVR-Nachweis auf Plattformebene pro GEO vor jeder Budgeterhöhung. Budgetverluste zwischen den Regionen eliminiert."
-      }
+      },
+      "kpiEvent": ">1 % der Installs zu FTBs"
     },
     "shopee": {
       "client": "Shopee",
@@ -286,7 +287,8 @@
         "challenge": "Zielgruppen für Financial Inclusion umfassen breite Segmente. Generische Creatives verbrennen Reichweite und verzerren den Kohorten-ROAS ohne striktes Mapping im MMP.",
         "approach": "Personalisierte Kampagnenansprache pro Segment. Platzierungsbezogene ROAS-Schwellen vor der wöchentlichen Budgetfreigabe über S2S-Postbacks verifiziert.",
         "result": "Jedes Creative-Asset nach verifiziertem ROAS gerankt. Finance konnte den Spend auf spezifische Placement-IDs und Postback-Payloads zurückführen – statt auf vage Durchschnittswerte."
-      }
+      },
+      "paymentModel": "CPA"
     },
     "azar": {
       "client": "Azar",
@@ -324,7 +326,9 @@
         "challenge": "Creator-Kampagnen verbrennen Budget, wenn Content-Formaten das Tracking zu Installationskohorten fehlt.",
         "approach": "Plattform-Mix nach Engagement-Qualität bewertet. Leistungsschwache Creator-Tiers noch während der Kampagne gestrichen.",
         "result": "Jeder Creator-Posten mit Reichweiten- und Interaktions-Logs abgeglichen. Intransparenter Influencer-Spend vollständig eliminiert."
-      }
+      },
+      "kpiEvent": "Käufe & Video-Chat-Teilnahme",
+      "paymentModel": "CPR"
     },
     "vantage": {
       "client": "Vantage",
@@ -487,7 +491,7 @@
       "inlineWord": "KLARHEIT",
       "titleLead": "Wir schaffen ",
       "accentWord": "KLARHEIT",
-      "description": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber. Wir stellen sicher, dass jeder investierte Dollar vollständig belegt ist – für maximale Sicherheit, Budgets offensiv zu skalieren, ohne versteckte Aufschläge oder unsichtbaren Fraud fürchten zu müssen."
+      "description": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber. Wir stellen sicher, dass jeder investierte Dollar vollständig belegt ist – für maximale Sicherheit, Budgets umfassend zu skalieren, mit vollkommenem Vertrauen und ohne Sorge vor versteckten Aufschlägen oder unsichtbarem Fraud."
     },
     "infrastructure": {
       "label": "Rohdaten-Logs, die Dein Team jederzeit auditieren kann",
@@ -943,7 +947,7 @@
   "casesPage": {
     "label": "DIE GIPFEL",
     "title": "WIR BEZWINGEN DIESE GIPFEL IMMER WIEDER.",
-    "subtitle": "Überragende Ergebnisse aus Live-Flights — Karte antippen für die ganze Geschichte.",
+    "subtitle": "Blick vom Gipfel: Hochwirksame Ergebnisse aus Live-Flights — Karte antippen für die ganze Geschichte.",
     "swipe": "Wischen oder ← → · Antippen zum Öffnen"
   },
   "caseCard": {
@@ -966,7 +970,7 @@
     "oem": "OEM & Direkt",
     "nextStep": "Nächster Schritt",
     "readyUpraised": "Bereit für UPRAISER?",
-    "briefRoute": "Briefe die Route: Vertical, GEO, KPI-Event – wir antworten mit einem präzisen Pfad, nicht mit einem Deck.",
+    "briefRoute": "Briefe die Route: Vertical, GEO, KPI-Event – wir kartieren Deinen exakten Pfad zum Profit.",
     "explore": "Entdecken",
     "company": "Unternehmen",
     "basecamp": "Basecamp London",
@@ -993,6 +997,7 @@
     "verifiedRoas": "Verifizierter ROAS",
     "recoveredSpend": "Rückgewonnener Spend",
     "ourClients": "Unsere Kunden",
+    "conqueringPeaks": "Gemeinsam Gipfel erobern",
     "renderingTerrain": "Terrain wird gerendert",
     "clickFlood": "Click Flood blockiert"
   },

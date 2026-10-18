@@ -62,7 +62,7 @@ export function HomePilotCta() {
               <p className="section-label">{t("misc.nextStep", "Next step")}</p>
               <h2 className="section-heading">{t("misc.readyUpraised", "Ready to be Upraised?")}</h2>
               <p className="copy mt-3">
-                {t("misc.briefRoute", "Brief the route: vertical, GEO, KPI event — we reply with a scoped path, not a deck.")}
+                {t("misc.briefRoute", "Brief the route: vertical, GEO, KPI event — we map Your exact route to profit.")}
               </p>
             </div>
 

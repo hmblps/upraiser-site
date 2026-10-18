@@ -49,17 +49,17 @@ export function LenovoTrustStrip() {
             colorFrom="var(--theme-accent-light)"
             colorTo="var(--color-magenta)"
           />
-          <div className="relative z-[1] rail-strip__inner page-container flex items-center justify-center md:justify-between gap-4 py-2 sm:py-2.5 md:py-2.5 lg:py-2.5 2xl:py-3.5 antialiased [transform:translateZ(0)]">
-            <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-              <LenovoPartnershipLogo className="h-6 w-auto shrink-0 sm:h-7 md:h-7 lg:h-8" />
+          <div className="relative z-[1] rail-strip__inner page-container flex items-center justify-center md:justify-between gap-4 py-3 sm:py-3.5 md:py-4 lg:py-4.5 xl:py-5 antialiased [transform:translateZ(0)]">
+            <div className="flex items-center gap-3.5 sm:gap-5 shrink-0">
+              <LenovoPartnershipLogo className="h-7 w-auto shrink-0 sm:h-8 md:h-9 lg:h-10" />
               <div className="text-left">
-                <p className="stat-label text-[10px] sm:text-xs text-accent leading-none">{t("lenovo.badge", lenovoPartnership.badge)}</p>
-                <p className="mt-0.5 card-title text-[13px] sm:text-sm md:text-sm lg:text-base normal-case tracking-normal leading-none">{t("lenovo.title", lenovoPartnership.title)}</p>
+                <p className="stat-label text-[11px] sm:text-xs text-accent leading-none font-bold tracking-wider uppercase">{t("lenovo.badge", lenovoPartnership.badge)}</p>
+                <p className="mt-1 card-title text-sm sm:text-base md:text-lg lg:text-xl font-bold normal-case tracking-tight leading-tight">{t("lenovo.title", lenovoPartnership.title)}</p>
               </div>
             </div>
             <LenovoPartnershipCopy 
-              className="hidden md:block w-full max-w-lg lg:max-w-2xl xl:max-w-3xl ml-auto pl-6 lg:pl-8" 
-              paragraphClassName="lenovo-copy-text text-xs lg:text-[13px] 2xl:text-sm leading-snug text-muted dark:text-white text-pretty"
+              className="hidden md:block w-full max-w-lg lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl ml-auto pl-6 lg:pl-10" 
+              paragraphClassName="lenovo-copy-text text-sm md:text-[14.5px] lg:text-[15.5px] xl:text-base leading-relaxed text-pretty"
             />
           </div>
         </div>

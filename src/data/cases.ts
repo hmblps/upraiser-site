@@ -53,15 +53,15 @@ export const caseStudies: CaseStudy[] = [
       surface: "#1a0508",
     },
     metrics: [
-      { value: "$25M+", label: "Revenue" },
-      { value: "50K", label: "FTDs" },
+      { value: "$15M+", label: "Lifetime Revenue" },
+      { value: "30K", label: "FTDs" },
       { value: "800K", label: "Installs" },
     ],
     trend: [22, 28, 34, 40, 46, 52, 58, 64, 70, 76, 82, 88],
     growthFocus: {
       challenge: "Real-money sportsbook in a bonus-saturated US market. Required strict MMP tracking and S2S postbacks without breaching 18+ or state geo rules.",
-      approach: "Whitelisted adult inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.",
-      result: "800K installs, 50K FTDs, $25M+ revenue. Seven additional bets per bettor. $500+ revenue per FTD on average.",
+      approach: "Whitelisted age-gated inventory with sub-second latency limits, state-level targeting, and creative QA tied directly to FTD payload instead of install volume.",
+      result: "800K installs, 30K FTDs, $15M+ lifetime revenue. An average of seven additional bets per bettor.",
     },
     optimizationFocus: {
       challenge: "TikTok and Snapchat off-limits for 18+ gaming. Every placement needed a compliance receipt and clean event mapping.",
@@ -86,13 +86,13 @@ export const caseStudies: CaseStudy[] = [
     metrics: [
       { value: "32K+", label: "Daily installs" },
       { value: "0%", label: "Attribution drift" },
-      { value: "50%", label: "Day-7 retention" },
+      { value: "37%", label: "Day-7 retention" },
     ],
     trend: [8, 18, 32, 48, 58, 66, 72, 78, 84, 90, 95, 100],
     growthFocus: {
       challenge: "Puzzle title needed global CPI scale and post-install quality retention.",
       approach: "Lenovo PAI worldwide. Retention floors (D1 40%, D7 25%, D30 10%) gated every bid increase.",
-      result: "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 50%.",
+      result: "32,000+ daily installs across PL, UK, DE and 12 more GEOs. D1 ROAS 20%, D7 retention 37%.",
     },
     optimizationFocus: {
       challenge: "Open-exchange ambiguity on factory installs. Finance needed package-level proof.",
@@ -106,7 +106,7 @@ export const caseStudies: CaseStudy[] = [
     vertical: "Marketplace",
     paymentModel: "CPI",
     geos: "KW · SA · AE",
-    kpiEvent: "Install",
+    kpiEvent: ">1% of installs to FTB's",
     headline: "GCC app scale after US proof-of-concept",
     channels: ["Programmatic", "Gaming vertical", "Creative testing"],
     brand: {
@@ -166,7 +166,7 @@ export const caseStudies: CaseStudy[] = [
     id: "banco-azteca",
     client: "Banco Azteca",
     vertical: "Fintech",
-    paymentModel: "Programmatic",
+    paymentModel: "CPA",
     geos: "MX",
     kpiEvent: "ROAS",
     headline: "Programmatic ROAS on full portfolio sales in Mexico",
@@ -203,9 +203,9 @@ export const caseStudies: CaseStudy[] = [
     id: "azar",
     client: "Azar",
     vertical: "Social",
-    paymentModel: "CPE",
+    paymentModel: "CPR",
     geos: "UK · DE · FR · ES",
-    kpiEvent: "Install",
+    kpiEvent: "Sales & Video Chats participation",
     headline: "TikTok creator scale for organic install quality",
     channels: ["TikTok", "Influencer", "UGC"],
     brand: {

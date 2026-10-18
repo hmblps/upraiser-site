@@ -25,9 +25,9 @@ export function AboutUsSection() {
           <style>
             {`
               .mountain-line { stroke: currentColor; stroke-width: 3px; opacity: 0.3; stroke-linejoin: round; stroke-linecap: round; }
-              .route-line { stroke: var(--accent); stroke-width: 4px; opacity: 0.55; stroke-linejoin: round; stroke-linecap: round; }
-              .node-circle { fill: var(--accent); opacity: 0.6; }
-              .node-text { fill: var(--bg); font-size: 16px; font-weight: bold; text-anchor: middle; dominant-baseline: central; font-family: ui-sans-serif, system-ui, sans-serif; }
+              .route-line { stroke: var(--theme-accent); stroke-width: 4px; opacity: 0.55; stroke-linejoin: round; stroke-linecap: round; }
+              .node-circle { fill: var(--theme-accent); opacity: 0.6; }
+              .node-text { fill: var(--theme-bg); font-size: 16px; font-weight: bold; text-anchor: middle; dominant-baseline: central; font-family: ui-sans-serif, system-ui, sans-serif; }
               .label-text { fill: currentColor; font-size: 11px; opacity: 0.4; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
               .label-title { fill: currentColor; font-size: 14px; font-weight: bold; opacity: 0.55; letter-spacing: 0.1em; font-family: ui-sans-serif, system-ui, sans-serif; }
             `}

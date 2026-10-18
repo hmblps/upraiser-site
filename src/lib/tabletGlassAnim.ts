@@ -55,6 +55,7 @@ export function paintStill(canvas: HTMLCanvasElement, img: HTMLImageElement) {
   ensureSize(canvas, img.naturalWidth || img.width, img.naturalHeight || img.height);
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
+  delete canvas.dataset.lastGlassKey;
   ctx.drawImage(img, 0, 0);
 }
 
@@ -109,24 +110,34 @@ export function paintGlassAnim(
   img: HTMLImageElement,
   timeSec: number,
   reducedMotion: boolean,
-) {
+): boolean {
+  const key = `${id}:${img.src}:${id === "oem-store" ? "static" : nowClock()}`;
+  if (canvas.dataset.lastGlassKey === key) {
+    return false;
+  }
+
   if (reducedMotion) {
     paintStill(canvas, img);
     if (id === "pre-install" || id === "system-ui") {
       const ctx = canvas.getContext("2d");
       if (ctx) paintClock(ctx, id === "pre-install" ? PRE.clock : SYS.clock);
     }
-    return;
+    canvas.dataset.lastGlassKey = key;
+    return true;
   }
   if (id === "oem-store") {
     paintOemStore(canvas, img, timeSec);
-    return;
+    canvas.dataset.lastGlassKey = key;
+    return true;
   }
   if (id === "pre-install") {
     paintPreInstall(canvas, img, timeSec);
-    return;
+    canvas.dataset.lastGlassKey = key;
+    return true;
   }
   paintSystemUi(canvas, img, timeSec);
+  canvas.dataset.lastGlassKey = key;
+  return true;
 }
 
 export function isAnimatedTabletGlass(formatId: string): formatId is GlassAnimId {

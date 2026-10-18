@@ -10,6 +10,12 @@ const HEADER_OFFSET = 80;
 const SCROLLING_CLASS_TIMEOUT_MS = 120;
 
 function getSectionTop(el: HTMLElement, offset = HEADER_OFFSET) {
+  if (el.classList.contains("accent-scroll-section")) {
+    const header = el.querySelector<HTMLElement>(".section-header");
+    if (header) {
+      return header.getBoundingClientRect().top + window.scrollY - offset;
+    }
+  }
   return el.getBoundingClientRect().top + window.scrollY - offset;
 }
 
@@ -81,34 +87,59 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       const el = document.getElementById(targetId);
       if (!el) return;
 
+      if (!isViewportPath(window.location.pathname)) {
+        document.documentElement.classList.remove("viewport-route", "scroll-locked");
+      }
+
+      const top = Math.max(0, getSectionTop(el, -offset));
+
       if (lenisRef.current && useLenis) {
-        lenisRef.current.scrollTo(el, { offset, duration: 1.05 });
+        if (modalStoppedRef.current && !heroLockedRef.current && !document.documentElement.classList.contains("case-modal-open")) {
+          lenisRef.current.start();
+          modalStoppedRef.current = false;
+        }
+        lenisRef.current.resize();
+        lenisRef.current.scrollTo(top, { duration: 1.05, force: true });
         return;
       }
 
-      window.scrollTo({ top: getSectionTop(el, -offset), behavior: reduced ? "auto" : "smooth" });
+      window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+      notifyScroll(top);
     },
-    [reduced, useLenis],
+    [notifyScroll, reduced, useLenis],
   );
 
-  const jumpToSection = useCallback((targetId: string) => {
-    const el = document.getElementById(targetId);
-    if (!el) return;
+  const jumpToSection = useCallback(
+    (targetId: string) => {
+      const el = document.getElementById(targetId);
+      if (!el) return;
 
-    const top = getSectionTop(el);
+      if (!isViewportPath(window.location.pathname)) {
+        document.documentElement.classList.remove("viewport-route", "scroll-locked");
+      }
 
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(top, { immediate: true, force: true });
-      return;
-    }
+      const top = Math.max(0, getSectionTop(el, HEADER_OFFSET));
 
-    window.scrollTo({ top, behavior: "auto" });
-  }, []);
+      if (lenisRef.current) {
+        if (modalStoppedRef.current && !heroLockedRef.current && !document.documentElement.classList.contains("case-modal-open")) {
+          lenisRef.current.start();
+          modalStoppedRef.current = false;
+        }
+        lenisRef.current.resize();
+        lenisRef.current.scrollTo(top, { immediate: true, force: true });
+      }
+
+      window.scrollTo({ top, behavior: "auto" });
+      notifyScroll(top);
+    },
+    [notifyScroll],
+  );
 
   const scrollToY = useCallback(
     (top: number, opts?: { immediate?: boolean; duration?: number; easing?: (t: number) => number }) => {
       const immediate = opts?.immediate ?? false;
       if (lenisRef.current && useLenis) {
+        lenisRef.current.resize();
         lenisRef.current.scrollTo(top, {
           immediate,
           force: true,
@@ -173,7 +204,6 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       notifyScroll(instance.scroll);
     });
 
-    const hasHash = Boolean(window.location.hash);
     let userIntent = false;
     const markUserIntent = () => {
       userIntent = true;
@@ -183,7 +213,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     window.addEventListener("keydown", markUserIntent, { passive: true, once: true });
 
     const pinTop = () => {
-      if (hasHash || userIntent) return;
+      if (window.location.hash || userIntent) return;
       lenis.scrollTo(0, { immediate: true, force: true });
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       if (document.documentElement) document.documentElement.scrollTop = 0;
@@ -195,7 +225,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     // Browser often restores scroll *after* first paint on tall pages — re-pin briefly.
     const pinUntil = performance.now() + 1000;
     const guardRestore = () => {
-      if (hasHash || userIntent || performance.now() > pinUntil) return;
+      if (window.location.hash || userIntent || performance.now() > pinUntil) return;
       if (window.scrollY > 1) {
         pinTop();
         notifyScroll(0);
@@ -220,9 +250,10 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
           lenis.start();
           modalStoppedRef.current = false;
           document.documentElement.classList.remove("scroll-locked");
+          lenis.resize();
         }
         if (!shouldStop) {
-          if (!hasHash && !userIntent && performance.now() < pinUntil) guardRestore();
+          if (!window.location.hash && !userIntent && performance.now() < pinUntil) guardRestore();
           lenis.raf(time);
         }
       }
@@ -230,7 +261,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     };
 
     rafRef.current = requestAnimationFrame(raf);
-    notifyScroll(hasHash ? window.scrollY : 0);
+    notifyScroll(window.location.hash ? window.scrollY : 0);
 
     const onVisibility = () => {
       if (!document.hidden) {
@@ -269,15 +300,23 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const lenis = lenisRef.current;
-    if (!lenis) return;
     if (viewportRoute) {
-      lenis.stop();
+      if (lenis) {
+        lenis.stop();
+        modalStoppedRef.current = true;
+      }
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       notifyScroll(0);
       return;
     }
+    document.documentElement.classList.remove("viewport-route");
     if (!heroLockedRef.current && !document.documentElement.classList.contains("case-modal-open")) {
-      lenis.start();
+      document.documentElement.classList.remove("scroll-locked");
+      if (lenis) {
+        lenis.start();
+        modalStoppedRef.current = false;
+        lenis.resize();
+      }
     }
   }, [viewportRoute, notifyScroll]);
 
@@ -289,18 +328,50 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname;
 
     if (hash) {
-      const t = window.setTimeout(() => {
-        const id = hash.replace("#", "");
+      const id = hash.replace(/^#/, "");
+      if (!id) return;
+
+      let cancelled = false;
+      const stopOnUserInput = () => {
+        cancelled = true;
+      };
+      window.addEventListener("wheel", stopOnUserInput, { passive: true, once: true });
+      window.addEventListener("touchstart", stopOnUserInput, { passive: true, once: true });
+      window.addEventListener("keydown", stopOnUserInput, { passive: true, once: true });
+
+      const alignToHash = () => {
+        if (cancelled) return;
         const el = document.getElementById(id);
-        if (el) {
-          if (lenisRef.current && useLenis) {
-            lenisRef.current.scrollTo(el, { offset: -HEADER_OFFSET, immediate: true, force: true });
-          } else {
-            window.scrollTo({ top: getSectionTop(el, -HEADER_OFFSET), behavior: "auto" });
-          }
+        if (!el) return;
+
+        if (!isViewportPath(window.location.pathname)) {
+          document.documentElement.classList.remove("viewport-route", "scroll-locked");
         }
-      }, 100);
-      return () => window.clearTimeout(t);
+
+        const top = Math.max(0, getSectionTop(el, HEADER_OFFSET));
+        if (lenisRef.current && useLenis) {
+          if (modalStoppedRef.current && !heroLockedRef.current && !document.documentElement.classList.contains("case-modal-open")) {
+            lenisRef.current.start();
+            modalStoppedRef.current = false;
+          }
+          lenisRef.current.resize();
+          lenisRef.current.scrollTo(top, { immediate: true, force: true });
+        }
+        window.scrollTo({ top, behavior: "auto" });
+        notifyScroll(top);
+      };
+
+      const frame = window.requestAnimationFrame(alignToHash);
+      const timers = [40, 120, 260, 450].map((ms) => window.setTimeout(alignToHash, ms));
+
+      return () => {
+        cancelled = true;
+        window.cancelAnimationFrame(frame);
+        timers.forEach((t) => window.clearTimeout(t));
+        window.removeEventListener("wheel", stopOnUserInput);
+        window.removeEventListener("touchstart", stopOnUserInput);
+        window.removeEventListener("keydown", stopOnUserInput);
+      };
     } else {
       // Do not reset scroll on case study modal open/close/switch
       if (pathname.startsWith("/cases") || (prevPath.startsWith("/cases") && pathname === "/")) {
@@ -312,8 +383,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         lenisRef.current.scrollTo(0, { immediate: true, force: true });
       }
       window.scrollTo(0, 0);
+      notifyScroll(0);
     }
-  }, [pathname, hash, useLenis]);
+  }, [pathname, hash, useLenis, notifyScroll]);
 
   return (
     <ScrollProvider

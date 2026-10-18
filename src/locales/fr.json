@@ -113,11 +113,11 @@
       },
       "metrics": [
         {
-          "value": "$25M+",
-          "label": "Revenus"
+          "value": "$15M+",
+          "label": "Revenus Lifetime"
         },
         {
-          "value": "50K",
+          "value": "30K",
           "label": "FTDs"
         },
         {
@@ -127,8 +127,8 @@
       ],
       "growthFocus": {
         "challenge": "Paris sportifs en argent réel sur un marché américain saturé de bonus. Suivi MMP rigoureux et postbacks S2S requis sans enfreindre les règles 18+ ou les restrictions géographiques des États.",
-        "approach": "Inventaire adulte sur liste blanche avec latence inférieure à la seconde, ciblage par État et QA créative directement indexée sur le payload FTD plutôt que sur le volume d'installations.",
-        "result": "800K installations, 50K FTDs, plus de 25M$ de revenus. Sept paris supplémentaires par parieur. Plus de 500$ de revenus par FTD en moyenne."
+        "approach": "Inventaire soumis à une limite d'âge sur liste blanche avec latence inférieure à la seconde, ciblage par État et QA créative directement indexée sur le payload FTD plutôt que sur le volume d'installations.",
+        "result": "800K installations, 30K FTDs, plus de 15M$ de revenus lifetime. Une moyenne de sept paris supplémentaires par parieur."
       },
       "optimizationFocus": {
         "challenge": "TikTok et Snapchat inaccessibles pour les jeux 18+. Chaque emplacement exigeait une preuve de conformité et un mapping d'événements irréprochable.",
@@ -159,14 +159,14 @@
           "label": "Dérive d'attribution"
         },
         {
-          "value": "50%",
+          "value": "37%",
           "label": "Rétention à J7"
         }
       ],
       "growthFocus": {
         "challenge": "Jeu de réflexion nécessitant une montée en échelle CPI mondiale et une rétention post-installation de haute qualité.",
         "approach": "Lenovo PAI à l'échelle mondiale. Des seuils minimaux de rétention (J1 40 %, J7 25 %, J30 10 %) ont conditionné chaque hausse d'enchère.",
-        "result": "Plus de 32 000 installations quotidiennes en PL, UK, DE et 12 autres GEOs. ROAS J1 de 20 %, rétention J7 de 50 %."
+        "result": "Plus de 32 000 installations quotidiennes en PL, UK, DE et 12 autres GEOs. ROAS J1 de 20 %, rétention J7 de 37 %."
       },
       "optimizationFocus": {
         "challenge": "Ambiguïté des open exchanges sur les installations en usine. La finance exigeait une preuve au niveau du package.",
@@ -210,7 +210,8 @@
         "challenge": "Les données de performance américaines ont faussé les premières enchères GCC. Les taux de conversion semblaient solides jusqu'aux tests géographiques natifs.",
         "approach": "Listes blanches de plateformes spécifiques par région. Variantes créatives ciblant distinctement le gaming et les services professionnels.",
         "result": "Preuve de CVR par plateforme et par zone avant toute hausse de plafond. Élimination des déperditions budgétaires entre régions."
-      }
+      },
+      "kpiEvent": ">1 % d'installations vers FTBs"
     },
     "shopee": {
       "client": "Shopee",
@@ -286,7 +287,8 @@
         "challenge": "L'inclusion financière touche des segments très variés. Les créations génériques gaspillent la portée et faussent le ROAS par cohorte si elles ne sont pas strictement associées dans le MMP.",
         "approach": "Promotion personnalisée par segment. Seuils de ROAS par emplacement vérifiés par postbacks S2S avant validation hebdomadaire du budget.",
         "result": "Chaque ressource créative classée selon son ROAS vérifié. La direction financière a rattaché chaque dépense aux IDs d'emplacements et aux payloads de postbacks précis plutôt qu'à des moyennes globales."
-      }
+      },
+      "paymentModel": "CPA"
     },
     "azar": {
       "client": "Azar",
@@ -324,7 +326,9 @@
         "challenge": "Les campagnes de créateurs gaspillent le budget lorsque les formats de contenu ne sont pas rattachés aux cohortes d'installation.",
         "approach": "Mix de plateformes évalué selon la qualité de l'engagement. Suspension en cours de vol des catégories de créateurs sous-performantes.",
         "result": "Chaque ligne budgétaire créateur rattachée aux logs de portée et d'interaction. Élimination des dépenses d'influence opaques."
-      }
+      },
+      "kpiEvent": "Ventes et participation aux chats vidéo",
+      "paymentModel": "CPR"
     },
     "vantage": {
       "client": "Vantage",
@@ -487,7 +491,7 @@
       "inlineWord": "CLARTÉ",
       "titleLead": "Nous apportons la ",
       "accentWord": "CLARTÉ",
-      "description": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même le début de la diffusion. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide. Chaque dollar investi est rigoureusement justifié, vous donnant l'entière confiance nécessaire pour développer vos budgets sans craindre de marges cachées ni de fraudes invisibles."
+      "description": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même le début de la diffusion. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide. Chaque dollar investi est rigoureusement justifié, vous donnant l'entière sérénité et une confiance absolue pour développer largement vos budgets sans craindre de marges cachées ni de fraudes invisibles."
     },
     "infrastructure": {
       "label": "Des logs bruts que votre équipe peut auditer à la demande",
@@ -943,7 +947,7 @@
   "casesPage": {
     "label": "LES SOMMETS",
     "title": "NOUS CONQUÉRONS CES SOMMETS AVEC RÉGULARITÉ.",
-    "subtitle": "Des résultats percutants issus de campagnes réelles — touchez une carte pour découvrir toute l'histoire.",
+    "subtitle": "Vue du sommet : Des résultats à fort impact issus de campagnes réelles — touchez une carte pour découvrir toute l'histoire.",
     "swipe": "Balayez ou ← → · touchez pour ouvrir"
   },
   "caseCard": {
@@ -966,7 +970,7 @@
     "oem": "OEM & Direct",
     "nextStep": "Prochaine étape",
     "readyUpraised": "Prêt à être Upraised ?",
-    "briefRoute": "Décrivez la route : verticale, GEO, événement KPI — nous vous répondrons avec un plan sur mesure, pas une présentation générique.",
+    "briefRoute": "Décrivez la route : verticale, GEO, événement KPI — nous traçons Votre itinéraire exact vers la rentabilité.",
     "explore": "Explorer",
     "company": "Entreprise",
     "basecamp": "Basecamp London",
@@ -993,6 +997,7 @@
     "verifiedRoas": "ROAS Vérifié",
     "recoveredSpend": "Dépenses Récupérées",
     "ourClients": "Nos Clients",
+    "conqueringPeaks": "À la conquête des sommets ensemble",
     "renderingTerrain": "Rendu du Terrain",
     "clickFlood": "Click Flood bloqué"
   },

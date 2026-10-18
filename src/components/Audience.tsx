@@ -1,5 +1,5 @@
 import { motion, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { audienceByMode } from "../data/liveContent";
 import { useMobileChartProgress, useScrollRunwayEnabled } from "../hooks/useScrollScene";
@@ -7,7 +7,8 @@ import { ModeContentTransition } from "./motion/ModeContentTransition";
 import { AccentScrollFold, inlineWordWidth } from "./AccentScrollFold";
 import { SectionHeader, useMode } from "./SectionHeader";
 import { formatEventNames } from "../lib/formatEventNames";
-import { FoldChart } from "./ModeChart";
+
+const FoldChart = lazy(() => import("./ModeChart").then((m) => ({ default: m.FoldChart })));
 
 
 function GrowthWordInline({ word }: { word: string }) {
@@ -39,7 +40,9 @@ function AudienceStatic() {
 
         <div ref={chartRef} className="relative w-full aspect-[4/3] sm:aspect-[21/9] mt-28 pt-6 overflow-visible pointer-events-none flex items-center justify-center">
           <motion.div className="w-full h-full flex items-center justify-center" style={{ y: chartY }}>
-             <FoldChart progress={progress} forceMode={isFraud ? "fraud" : "growth"} />
+             <Suspense fallback={null}>
+               <FoldChart progress={progress} forceMode={isFraud ? "fraud" : "growth"} />
+             </Suspense>
           </motion.div>
         </div>
       </ModeContentTransition>

@@ -141,8 +141,8 @@ export function CasePreviewCard({
     >
       <CaseBrandHeader item={item} compact />
       <div className="card-pad flex min-h-0 flex-1 flex-col">
-        <p className="case-teaser-metric shrink-0">{primary.value}</p>
-        <p className="case-teaser-metric-label case-preview-card__primary-label shrink-0">{primary.label}</p>
+        <p className="case-teaser-metric shrink-0">{t(`casesDetails.${item.id}.metrics.0.value`, primary.value)}</p>
+        <p className="case-teaser-metric-label case-preview-card__primary-label shrink-0">{t(`casesDetails.${item.id}.metrics.0.label`, primary.label)}</p>
 
         {isCarousel ? (
           <div className="case-preview-metrics case-preview-metrics--secondary mt-3 shrink-0" aria-hidden={secondary.length === 0}>
@@ -162,7 +162,7 @@ export function CasePreviewCard({
         </p>
 
         <p className="mt-2.5 text-[0.78rem] leading-relaxed text-fg line-clamp-2">
-          {item.growthFocus.approach}
+          {t(`casesDetails.${item.id}.growthFocus.approach`, item.growthFocus.approach)}
         </p>
 
         {/* Glowing vector sparkline chart */}

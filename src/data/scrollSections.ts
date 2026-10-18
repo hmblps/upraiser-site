@@ -6,6 +6,7 @@ export const scrollSectionIds = [
   "routes",
   "cases",
   "promise",
+  "about-us",
   "pilot",
 ] as const;
 

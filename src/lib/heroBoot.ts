@@ -1,5 +1,5 @@
 import { DESKTOP_HERO_QUERY } from "./heroDesktop";
-import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT, SNOW_COLOR_URL, SNOW_NORMAL_URL, SNOW_ROUGH_URL } from "./heroModel";
+import { DRACO_PATH, MODEL_URL, MODEL_URL_LIGHT } from "./heroModel";
 
 const preloaded = new Set<string>();
 
@@ -27,18 +27,10 @@ export function preloadFetch(
   document.head.appendChild(link);
 }
 
-/** Network-only: GLB + Draco before R3F parses. Safe to call more than once. */
-export function preloadHeroTerrain(theme: "light" | "dark") {
-  if (!isDesktopHeroViewport()) return;
-  preloadFetch(heroModelUrl(theme), "fetch", "high");
-  preloadFetch(`${DRACO_PATH}draco_decoder.wasm`, "fetch", "high");
-  preloadFetch(`${DRACO_PATH}draco_wasm_wrapper.js`, "script", "high");
-  if (theme === "light") {
-    preloadFetch(SNOW_COLOR_URL, "fetch", "low");
-    preloadFetch(SNOW_NORMAL_URL, "fetch", "low");
-    preloadFetch(SNOW_ROUGH_URL, "fetch", "low");
-  } else {
-      }
+/** Network-only: GLB + Draco before R3F parses. No-op while HeroAtmosphere uses video mode. */
+export function preloadHeroTerrain(_theme: "light" | "dark") {
+  // 3D hero terrain is currently disabled in HeroAtmosphere (use3d = false);
+  // skip preloading /hero/mountain-light-baked.glb and /hero/snow005/* textures.
 }
 
 /** Resolves when the mountain GLB is in cache. Voyager must not block first paint. */

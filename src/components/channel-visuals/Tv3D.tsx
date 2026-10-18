@@ -259,7 +259,6 @@ function TvMesh({
       if (HIDDEN_NODE_NAMES.has(obj.name)) obj.visible = false;
     });
     if (screenMap) {
-      console.log("[TvMesh] mesh and screenMap ready!");
       onReady?.();
     }
   }, [scene, onReady, screenMap]);
@@ -473,11 +472,11 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
   const springY = useSpring(rotY, { stiffness: 260, damping: 30, mass: 0.7 });
   const springX = useSpring(rotX, { stiffness: 260, damping: 30, mass: 0.7 });
 
-    const [, setInView] = useState(true);
+    const [inView, setInView] = useState(true);
   const [meshReady, setMeshReady] = useState(false);
 
   const isDark = mode !== "growth";
-  const markMeshReady = useCallback(() => { console.log("[Tv3D] markMeshReady called!"); setMeshReady(true); }, []);
+  const markMeshReady = useCallback(() => { setMeshReady(true); }, []);
 
   useEffect(() => {
     const node = stageRef.current;
@@ -530,7 +529,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       <div className="prog-device-load"><div className="prog-device-load__canvas" style={{zIndex: 1}}>
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={active ? "always" : "demand"}
+          frameloop={active && inView ? "always" : "demand"}
           gl={{
             antialias: true,
             alpha: true,
@@ -550,7 +549,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
           <TvScene
             isDark={isDark}
             formatId={formatId}
-            inView={active}
+            inView={active && inView}
             rotX={springX}
             rotY={springY}
             onMeshReady={markMeshReady}

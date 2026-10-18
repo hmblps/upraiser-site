@@ -48,8 +48,14 @@ function SimpleVideo({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (isInView && v.ended) {
+    if (!isInView) {
+      if (!v.paused) v.pause();
+      return;
+    }
+    if (v.ended) {
       v.currentTime = 0;
+      v.play().catch(() => {});
+    } else if (v.paused) {
       v.play().catch(() => {});
     }
   }, [isInView]);
@@ -159,7 +165,7 @@ function SnowParticles() {
     const flakes: Flake[] = Array.from({ length: COUNT }, spawn);
 
     function resize() {
-      const dpr = devicePixelRatio || 1;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
       c.width  = c.offsetWidth  * dpr;
       c.height = c.offsetHeight * dpr;
     }
@@ -168,8 +174,17 @@ function SnowParticles() {
     ro.observe(c);
 
     let raf = 0;
+    let inView = true;
+    let lastTime = performance.now();
 
-    function draw() {
+    function draw(now: number) {
+      if (!inView) {
+        raf = 0;
+        return;
+      }
+      const dt = Math.min(Math.max((now - lastTime) / 16.667, 0.25), 3);
+      lastTime = now;
+
       const W  = c.width;
       const H  = c.height;
       const cx = W * 0.5;
@@ -181,8 +196,8 @@ function SnowParticles() {
       for (let i = 0; i < flakes.length; i++) {
         const f = flakes[i];
 
-        f.r     += f.speed * (1 + f.r * f.r * 7);
-        f.angle += f.wind;
+        f.r     += f.speed * (1 + f.r * f.r * 7) * dt;
+        f.angle += f.wind * dt;
 
         if (f.r >= 1.1) {
           flakes[i] = spawn();
@@ -225,10 +240,26 @@ function SnowParticles() {
       raf = requestAnimationFrame(draw);
     }
 
-    draw();
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = Boolean(entry?.isIntersecting);
+        if (inView && !raf) {
+          lastTime = performance.now();
+          raf = requestAnimationFrame(draw);
+        } else if (!inView && raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      },
+      { rootMargin: "200px 0px", threshold: 0 },
+    );
+    io.observe(c);
+
+    raf = requestAnimationFrame(draw);
 
     return () => {
-      cancelAnimationFrame(raf);
+      io.disconnect();
+      if (raf) cancelAnimationFrame(raf);
       ro.disconnect();
     };
   }, []);
