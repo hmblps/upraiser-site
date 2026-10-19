@@ -112,6 +112,16 @@
   justify-self: start;
 }
 
+.header-brand img {
+  transition: filter 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .header-brand:hover img {
+    filter: drop-shadow(0 0 10px rgba(248, 200, 0, 0.55));
+  }
+}
+
 .header-actions {
   display: flex;
   align-items: center;

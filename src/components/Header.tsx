@@ -1,18 +1,29 @@
 import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { HeaderIsland } from "./HeaderIsland";
 import { ScrollLink } from "./ScrollLink";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { primaryCta } from "../data/liveContent";
 
 export function Header() {
   const reduced = useReducedMotion();
   const { pathname } = useLocation();
+  const { t } = useTranslation();
 
   const isCraft = pathname === "/craft" || pathname.startsWith("/craft");
   const isChannels = pathname === "/channels" || pathname.startsWith("/channels");
+  const isContact = pathname === "/contact" || pathname.startsWith("/contact");
   const hasBack = isCraft || isChannels;
   const backTo = isCraft ? "/" : "/#routes";
   const backLabel = isCraft ? "Explore" : "The Routes";
+  const ctaLabel = t("cta.label", primaryCta.label);
+
+  const handleLogoClick = () => {
+    if (isContact) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const backButtonNode = hasBack ? (
     <motion.div
@@ -64,16 +75,20 @@ export function Header() {
               
               <motion.div
                 whileTap={reduced ? undefined : { scale: 0.92 }}
-                whileHover={reduced ? undefined : { scale: 1.05 }}
+                whileHover={reduced ? undefined : { scale: 1.08 }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                 className="shrink-0 xl:ml-auto"
               >
                 <ScrollLink
-                  href="/"
-                  className="header-brand flex items-center shrink-0"
-                  aria-label="UPRAISER — The Agency"
+                  href={primaryCta.href}
+                  contactIntent="pilot"
+                  data-cursor="cta"
+                  onClick={handleLogoClick}
+                  className="header-brand flex items-center justify-center shrink-0"
+                  aria-label={ctaLabel}
+                  title={ctaLabel}
                 >
-                  <img src="/upraiser-logo.png" alt="" className="h-7 w-7 object-contain" />
+                  <img src="/upraiser-logo.png" alt={ctaLabel} className="h-7 w-7 object-contain" />
                 </ScrollLink>
               </motion.div>
             </div>
