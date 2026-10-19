@@ -734,28 +734,108 @@
   }
 }
 
-/* ——— Viewport pages (non-Home): one screen, tab/carousel panels ——— */
-html.viewport-route,
-html.viewport-route body {
-  overflow: hidden;
-  height: 100%;
+/* ——— Viewport pages (non-Home): one screen on desktop, natural scroll on mobile ——— */
+@media (min-width: 1024px) {
+  html.viewport-route,
+  html.viewport-route body {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .viewport-route-frame {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding-top: var(--site-header-height);
+    overflow: hidden;
+  }
+
+  .viewport-route-frame > .site-main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 }
 
-.viewport-route-frame {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  max-height: 100dvh;
-  padding-top: var(--site-header-height);
-  overflow: hidden;
-}
+@media (max-width: 1023px) {
+  html.viewport-route,
+  html.viewport-route body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
 
-.viewport-route-frame > .site-main {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  .viewport-route-frame {
+    display: flex;
+    flex-direction: column;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 100dvh !important;
+    padding-top: var(--site-header-height);
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  .viewport-route-frame > .site-main {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    flex: none !important;
+  }
+
+  .depth-page--contact.viewport-page {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    flex: none !important;
+  }
+
+  .depth-page--contact .contact-page-shell {
+    height: auto !important;
+    min-height: min-content !important;
+    overflow: visible !important;
+    flex: none !important;
+    padding-bottom: max(3rem, env(safe-area-inset-bottom, 28px)) !important;
+  }
+
+  .depth-page--contact .contact-briefing-card {
+    height: auto !important;
+    min-height: min-content !important;
+    overflow: visible !important;
+    flex: none !important;
+  }
+
+  .depth-page--contact .contact-briefing-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: min-content !important;
+    overflow: visible !important;
+  }
+
+  .depth-page--contact .contact-briefing-copy {
+    overflow: visible !important;
+    height: auto !important;
+    flex: none !important;
+  }
+
+  .depth-page--contact .contact-briefing-form {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    flex: none !important;
+  }
+
+  .depth-page--contact .contact-briefing-form form {
+    height: auto !important;
+    min-height: min-content !important;
+    flex: none !important;
+  }
 }
 
 .viewport-route-frame .viewport-page,

@@ -48,25 +48,77 @@ function SimpleVideo({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+
+    v.defaultMuted = true;
+    v.muted = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+
+    const playVideo = () => {
+      const p = v.play();
+      if (p !== undefined) {
+        p.catch(() => {
+          // iOS Low Power Mode: unlock on first user gesture
+          const unlock = () => {
+            v.play().catch(() => {});
+            window.removeEventListener("touchstart", unlock);
+            window.removeEventListener("touchend", unlock);
+            window.removeEventListener("pointerdown", unlock);
+            window.removeEventListener("scroll", unlock);
+          };
+          window.addEventListener("touchstart", unlock, { passive: true, once: true });
+          window.addEventListener("touchend", unlock, { passive: true, once: true });
+          window.addEventListener("pointerdown", unlock, { passive: true, once: true });
+          window.addEventListener("scroll", unlock, { passive: true, once: true });
+        });
+      }
+    };
+
     if (!isInView) {
       if (!v.paused) v.pause();
       return;
     }
     if (v.ended) {
       v.currentTime = 0;
-      v.play().catch(() => {});
+      playVideo();
     } else if (v.paused) {
-      v.play().catch(() => {});
+      playVideo();
     }
   }, [isInView]);
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.play().catch(() => {});
+
+    v.defaultMuted = true;
+    v.muted = true;
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+
+    const playVideo = () => {
+      const p = v.play();
+      if (p !== undefined) {
+        p.catch(() => {
+          const unlock = () => {
+            v.play().catch(() => {});
+            window.removeEventListener("touchstart", unlock);
+            window.removeEventListener("touchend", unlock);
+            window.removeEventListener("pointerdown", unlock);
+            window.removeEventListener("scroll", unlock);
+          };
+          window.addEventListener("touchstart", unlock, { passive: true, once: true });
+          window.addEventListener("touchend", unlock, { passive: true, once: true });
+          window.addEventListener("pointerdown", unlock, { passive: true, once: true });
+          window.addEventListener("scroll", unlock, { passive: true, once: true });
+        });
+      }
+    };
+
+    playVideo();
+
     // Resume after tab switch / iOS low-power pause if not ended
     const onVis = () => {
-      if (!document.hidden && v.paused && !v.ended) v.play().catch(() => {});
+      if (!document.hidden && v.paused && !v.ended) playVideo();
     };
     document.addEventListener("visibilitychange", onVis);
     

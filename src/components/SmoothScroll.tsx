@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Lenis from "lenis";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { usePreferNativeScroll } from "../hooks/usePreferNativeScroll";
-import { isViewportPath } from "../hooks/useViewportRoute";
+import { useViewportRoute, isViewportPath } from "../hooks/useViewportRoute";
 import { ScrollProvider } from "../context/ScrollContext";
 
 const HEADER_OFFSET = 80;
@@ -23,7 +23,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   const nativeScroll = usePreferNativeScroll();
   const { pathname, hash } = useLocation();
-  const viewportRoute = isViewportPath(pathname);
+  const viewportRoute = useViewportRoute();
   const useLenis = !reduced && !nativeScroll;
   const lenisRef = useRef<Lenis | null>(null);
   const listenersRef = useRef(new Set<(scrollY: number) => void>());
