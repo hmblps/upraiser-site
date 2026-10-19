@@ -266,7 +266,9 @@ export function ProgrammaticScrollSection({
   const tier = useHardwareTier();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < DESKTOP_MIN_WIDTH : false,
+    typeof window !== "undefined"
+      ? window.innerWidth < DESKTOP_MIN_WIDTH || (window.innerWidth <= 900 && window.innerHeight > window.innerWidth)
+      : false,
   );
   const desktopEnabled = !isMobile;
   const use3d = desktopEnabled && tier === "high";
@@ -300,7 +302,7 @@ export function ProgrammaticScrollSection({
   }, [lane]);
 
   useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${DESKTOP_MIN_WIDTH - 1}px)`);
+    const mq = window.matchMedia(`(max-width: ${DESKTOP_MIN_WIDTH - 1}px), (max-width: 900px) and (orientation: portrait)`);
     const sync = () => setIsMobile(mq.matches);
     sync();
     mq.addEventListener("change", sync);
