@@ -150,7 +150,7 @@ export function Contact() {
                 colorTo="var(--color-magenta)"
               />
               <div className="contact-briefing-grid relative z-[1]">
-                <div className="contact-briefing-copy relative flex flex-col bg-bg-elevated">
+                <div data-lenis-prevent className="contact-briefing-copy relative flex flex-col bg-bg-elevated">
                   <p className="section-label">{contactPage.label}</p>
                   <h1 className="section-title section-title--compact mt-1.5">
                     {contactPage.titleLead}
@@ -209,7 +209,7 @@ export function Contact() {
                   </div>
                 </div>
 
-                <div className="contact-briefing-form flex min-h-0 flex-col">
+                <div data-lenis-prevent className="contact-briefing-form flex min-h-0 flex-col">
                     <form
                       onSubmit={handleSubmit}
                       className="flex flex-1 flex-col gap-2"

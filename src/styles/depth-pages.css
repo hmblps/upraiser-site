@@ -861,9 +861,22 @@ html.viewport-route body {
   }
 
   .contact-briefing-copy .contact-sidebar {
-    margin-top: clamp(0.5rem, 1.5dvh, 1rem);
-    padding-top: clamp(0.5rem, 1.5dvh, 1rem);
-    gap: clamp(0.5rem, 1.5dvh, 1rem);
+    margin-top: clamp(0.4rem, 1.1dvh, 0.75rem);
+    padding-top: clamp(0.4rem, 1.1dvh, 0.75rem);
+    gap: clamp(0.4rem, 1.1dvh, 0.75rem);
+  }
+
+  .contact-briefing-copy .contact-sidebar .copy {
+    margin-top: 0.25rem;
+    line-height: 1.38;
+  }
+
+  .contact-briefing-copy .contact-sidebar ul.copy {
+    gap: 0.35rem;
+  }
+
+  .contact-briefing-copy .contact-sidebar ul.copy > li + li {
+    margin-top: 0.35rem;
   }
 
   .contact-briefing-form form {
