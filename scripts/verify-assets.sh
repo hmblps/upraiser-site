@@ -13,6 +13,7 @@ REQUIRED=(
   "public/draco/gltf/draco_decoder.wasm"
   "public/draco/gltf/draco_wasm_wrapper.js"
   "public/upraiser-logo.png"
+  "public/og-image.png"
   "public/favicon.png"
   "public/favicon-16x16.png"
   "public/favicon-32x32.png"

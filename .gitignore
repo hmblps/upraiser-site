@@ -23,6 +23,8 @@ Integrations Logos/
 .tmp-*/
 videos/
 captures/
+backup-old-site/
+backup-old-site-upraiser.zip
 
 # Hero local backup (optional; use assets/hero/ as source of truth)
 public/hero/_original/
