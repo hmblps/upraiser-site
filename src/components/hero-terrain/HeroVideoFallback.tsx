@@ -1,8 +1,6 @@
-import { useEffect, useRef } from "react";
-import { useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 
-// The legacy scroll-driven frame sequence was removed to save ~600 lines of dead code.
 export const VIDEO_ONLY_MODE = true;
 
 interface HeroVideoFallbackProps {
@@ -16,9 +14,7 @@ export function HeroVideoFallback(_props: HeroVideoFallbackProps) {
   return (
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden hero-video-canvas">
       {theme === "dark" && (
-        <>
-          <SimpleVideo src="/hero/home-dark-idle.mp4" poster="/hero/home-dark-poster.jpg" />
-        </>
+        <SimpleVideo src="/hero/home-dark-idle.mp4" poster="/hero/home-dark-poster.jpg" />
       )}
       {theme === "light" && (
         <SimpleVideo
@@ -31,8 +27,9 @@ export function HeroVideoFallback(_props: HeroVideoFallbackProps) {
   );
 }
 
-// ─── Simple Forward Video ────────────────────────────────────────────────────
-// Plays forward once and stops on the last frame.
+// ─── Simple Forward Loop Video ────────────────────────────────────────────────
+// Renders poster via <img> to guarantee iOS Safari NEVER displays a native play icon.
+// When video begins playback, it cross-fades seamlessly over the poster.
 function SimpleVideo({
   src,
   poster,
@@ -43,7 +40,7 @@ function SimpleVideo({
   staticFilter?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(videoRef, { margin: "0px 0px 500px 0px" });
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -51,56 +48,19 @@ function SimpleVideo({
 
     v.defaultMuted = true;
     v.muted = true;
+    v.loop = true;
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
 
     const playVideo = () => {
       const p = v.play();
       if (p !== undefined) {
-        p.catch(() => {
-          // iOS Low Power Mode: unlock on first user gesture
+        p.then(() => {
+          setIsPlaying(true);
+        }).catch(() => {
+          // iOS Safari Low Power Mode: unlock on first user gesture
           const unlock = () => {
-            v.play().catch(() => {});
-            window.removeEventListener("touchstart", unlock);
-            window.removeEventListener("touchend", unlock);
-            window.removeEventListener("pointerdown", unlock);
-            window.removeEventListener("scroll", unlock);
-          };
-          window.addEventListener("touchstart", unlock, { passive: true, once: true });
-          window.addEventListener("touchend", unlock, { passive: true, once: true });
-          window.addEventListener("pointerdown", unlock, { passive: true, once: true });
-          window.addEventListener("scroll", unlock, { passive: true, once: true });
-        });
-      }
-    };
-
-    if (!isInView) {
-      if (!v.paused) v.pause();
-      return;
-    }
-    if (v.ended) {
-      v.currentTime = 0;
-      playVideo();
-    } else if (v.paused) {
-      playVideo();
-    }
-  }, [isInView]);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-
-    v.defaultMuted = true;
-    v.muted = true;
-    v.setAttribute("playsinline", "");
-    v.setAttribute("webkit-playsinline", "");
-
-    const playVideo = () => {
-      const p = v.play();
-      if (p !== undefined) {
-        p.catch(() => {
-          const unlock = () => {
-            v.play().catch(() => {});
+            v.play().then(() => setIsPlaying(true)).catch(() => {});
             window.removeEventListener("touchstart", unlock);
             window.removeEventListener("touchend", unlock);
             window.removeEventListener("pointerdown", unlock);
@@ -116,16 +76,28 @@ function SimpleVideo({
 
     playVideo();
 
-    // Resume after tab switch / iOS low-power pause if not ended
+    // Pause only when user scrolls far away down the page (> 1.3 screen heights)
+    const onScroll = () => {
+      if (window.scrollY > window.innerHeight * 1.3) {
+        if (!v.paused) v.pause();
+      } else {
+        if (v.paused) playVideo();
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    // Resume after tab switch / iOS unlock
     const onVis = () => {
-      if (!document.hidden && v.paused && !v.ended) playVideo();
+      if (!document.hidden && v.paused && window.scrollY <= window.innerHeight * 1.3) {
+        playVideo();
+      }
     };
     document.addEventListener("visibilitychange", onVis);
-    
+
     let raf = 0;
     const loop = () => {
       if (v.duration && !v.paused) {
-        // Reveal stats over the last 14 seconds of the video.
+        // Reveal stats over the last 14 seconds of the video cycle
         const timeLeft = v.duration - v.currentTime;
         let progress = 0;
         if (timeLeft <= 14) {
@@ -134,15 +106,13 @@ function SimpleVideo({
           if (progress < 0) progress = 0;
         }
         window.dispatchEvent(new CustomEvent('hero-video-stats-progress', { detail: progress }));
-        
-        // Dispatch ended event for the triumphant gesture
-        if (v.ended || timeLeft <= 0.1) {
+
+        // Dispatch ended event for the triumphant gesture on first loop pass
+        if (timeLeft <= 0.2) {
           if (v.dataset.endedEmitted !== "true") {
             v.dataset.endedEmitted = "true";
             window.dispatchEvent(new CustomEvent('hero-video-ended'));
           }
-        } else {
-          v.dataset.endedEmitted = "";
         }
       }
       raf = requestAnimationFrame(loop);
@@ -150,40 +120,68 @@ function SimpleVideo({
     raf = requestAnimationFrame(loop);
 
     return () => {
+      window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVis);
       cancelAnimationFrame(raf);
     };
   }, [src]);
 
   return (
-    <video
-      ref={videoRef}
-      id="hero-idle-video"
-      src={src}
-      poster={poster}
-      autoPlay
-      muted
-      playsInline
-      preload="auto"
-      disablePictureInPicture
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        display: "block",
-        filter: staticFilter || undefined,
-      }}
-    />
+    <div className="absolute inset-0 overflow-hidden">
+      {poster && (
+        <img
+          src={poster}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+            isPlaying ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+          style={{ filter: staticFilter || undefined }}
+        />
+      )}
+      <video
+        ref={videoRef}
+        id="hero-idle-video"
+        autoPlay
+        muted
+        playsInline
+        loop
+        preload="auto"
+        disablePictureInPicture
+        onPlaying={() => setIsPlaying(true)}
+        onTimeUpdate={() => {
+          if (!isPlaying) setIsPlaying(true);
+        }}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+          isPlaying ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ filter: staticFilter || undefined }}
+      >
+        <source src={`${src}#t=0.001`} type="video/mp4" />
+      </video>
+    </div>
   );
 }
 
-// ─── FPV snow particles ───────────────────────────────────────────────────────
+// ─── FPV snow particles (Desktop Only) ─────────────────────────────────────────
 function SnowParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth >= 1024 && !window.matchMedia("(pointer: coarse)").matches;
+  });
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setIsDesktop(mq.matches && !window.matchMedia("(pointer: coarse)").matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -314,7 +312,9 @@ function SnowParticles() {
       if (raf) cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, []);
+  }, [isDesktop]);
+
+  if (!isDesktop) return null;
 
   return (
     <canvas

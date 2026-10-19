@@ -133,7 +133,6 @@ export function SiteLayout() {
   const { isPreviewMode: applePreview, features: appleFeatures } = useApplePreview();
   const viewportRoute = useViewportRoute();
   const { pathname } = useLocation();
-  const isChannelsPage = pathname === "/channels" || pathname.startsWith("/channels/");
 
   return (
     <SmoothScroll>
@@ -150,7 +149,7 @@ export function SiteLayout() {
           <Outlet />
           {viewportRoute ? <ViewportChrome /> : null}
         </div>
-        {!isChannelsPage && <GlobalSnowfall />}
+        {pathname === "/" && <GlobalSnowfall />}
         {!viewportRoute ? (
           <LazySection minHeight="20dvh">
             <Footer />

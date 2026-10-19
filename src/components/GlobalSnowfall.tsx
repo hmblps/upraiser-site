@@ -22,7 +22,21 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
   const reduced = useReducedMotion();
   const snowEnabled = useEnvironment((s) => s.snowEnabled);
   const { pathname } = useLocation();
-  const isChannelsPage = pathname === "/channels" || pathname.startsWith("/channels/");
+  const isHomePage = pathname === "/";
+
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth >= 1024 && !window.matchMedia("(pointer: coarse)").matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setIsDesktop(mq.matches && !window.matchMedia("(pointer: coarse)").matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { registerScrollListener } = useScroll();
@@ -31,10 +45,12 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
   const scrollYRef = useRef(0);
   const lastScrollYRef = useRef(0);
 
+  const active = !reduced && isDesktop && isHomePage && snowEnabled && mode === "growth";
+
   // Initialize flakes once
   useEffect(() => {
-    if (reduced || isChannelsPage) return;
-    const count = window.innerWidth < 768 ? 40 : 120;
+    if (!active) return;
+    const count = 120;
     const initialFlakes: Flake[] = Array.from({ length: count }).map(() => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -44,19 +60,19 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       wobbleSpeed: Math.random() * 0.02 + 0.01,
     }));
     setFlakes(initialFlakes);
-  }, [reduced, isChannelsPage]);
+  }, [active]);
 
   // Track scroll delta
   useEffect(() => {
-    if (reduced || isChannelsPage) return;
+    if (!active) return;
     return registerScrollListener((y) => {
       scrollYRef.current = y;
     });
-  }, [registerScrollListener, reduced, isChannelsPage]);
+  }, [registerScrollListener, active]);
 
   // Main render loop
   useEffect(() => {
-    if (reduced || flakes.length === 0 || !snowEnabled || mode !== "growth" || isChannelsPage) return;
+    if (!active || flakes.length === 0) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -119,9 +135,9 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       cancelAnimationFrame(rAF);
       window.removeEventListener("resize", resize);
     };
-  }, [flakes, reduced, snowEnabled, mode, isChannelsPage]);
+  }, [flakes, active]);
 
-  if (reduced || mode !== "growth" || !snowEnabled || isChannelsPage) return null;
+  if (!active) return null;
 
   return (
     <canvas

@@ -764,6 +764,7 @@ html[data-os="windows"] .hero-brand-tint {
 }
 
 /* Suppress iOS Safari native start playback overlay when autoplay is suspended or in Low Power Mode */
+*::-webkit-media-controls-start-playback-button,
 #hero-idle-video::-webkit-media-controls-start-playback-button,
 video#hero-idle-video::-webkit-media-controls-start-playback-button,
 .hero-video-canvas video::-webkit-media-controls-start-playback-button {
@@ -774,6 +775,7 @@ video#hero-idle-video::-webkit-media-controls-start-playback-button,
   pointer-events: none !important;
 }
 
+*::-webkit-media-controls,
 #hero-idle-video::-webkit-media-controls,
 video#hero-idle-video::-webkit-media-controls,
 .hero-video-canvas video::-webkit-media-controls {
