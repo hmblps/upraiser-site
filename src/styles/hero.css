@@ -262,7 +262,7 @@
 }
 
 [data-theme="light"] .lenovo-trust-strip .stat-label {
-  color: var(--logo-red, #cb310d) !important;
+  color: var(--theme-accent, var(--logo-gold)) !important;
   font-weight: 800;
 }
 
