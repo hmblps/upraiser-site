@@ -100,8 +100,18 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       const scrollDelta = scrollY - lastScrollYRef.current;
       lastScrollYRef.current = scrollY;
 
+      // In the Hero section (top of page), the dedicated camera-correlated 3D flight snow
+      // takes stage. As the user scrolls down into content, fade in gentle ambient snowfall.
+      const heroThreshold = window.innerHeight * 0.65;
+      const ambientAlpha = Math.min(1, Math.max(0, (scrollY - heroThreshold * 0.4) / (heroThreshold * 0.6)));
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+      if (ambientAlpha <= 0.01) {
+        rAF = requestAnimationFrame(render);
+        return;
+      }
+
+      ctx.fillStyle = `rgba(255, 255, 255, ${(0.42 * ambientAlpha).toFixed(3)})`;
       ctx.beginPath();
 
       flakes.forEach((f) => {
