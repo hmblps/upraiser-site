@@ -47,15 +47,15 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
 
   const active = !reduced && isDesktop && isHomePage && snowEnabled && mode === "growth";
 
-  // Initialize flakes once — moderate, gentle ambient snowfall
+  // Initialize flakes once — lush, moderate ambient snowfall with natural distribution
   useEffect(() => {
     if (!active) return;
-    const count = 55;
+    const count = window.innerWidth >= 1440 ? 125 : 90;
     const initialFlakes: Flake[] = Array.from({ length: count }).map(() => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 1.8 + 0.6,
-      speed: Math.random() * 0.7 + 0.25,
+      size: Math.random() * 2.2 + 0.9,
+      speed: Math.random() * 0.65 + 0.35,
       wobble: Math.random() * Math.PI * 2,
       wobbleSpeed: Math.random() * 0.02 + 0.01,
     }));
@@ -101,8 +101,8 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       lastScrollYRef.current = scrollY;
 
       // In the Hero section (top of page), the dedicated camera-correlated 3D flight snow
-      // takes stage. As the user scrolls down into content, fade in gentle, moderate ambient snowfall.
-      const heroThreshold = window.innerHeight * 0.7;
+      // takes stage. As the user scrolls into the Lenovo dock and content, fade in lush, pure white ambient snowfall.
+      const heroThreshold = window.innerHeight * 0.55;
       const ambientAlpha = Math.min(1, Math.max(0, (scrollY - heroThreshold * 0.35) / (heroThreshold * 0.65)));
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -111,33 +111,36 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
         return;
       }
 
+      const clampedDelta = Math.max(-12, Math.min(12, scrollDelta));
+
       flakes.forEach((f) => {
         // Fall down naturally
         f.y += f.speed * SNOW_SPEED * dt;
         
-        // Add scroll delta influence (parallax effect)
-        f.y -= scrollDelta * f.speed * 0.15;
+        // Add scroll delta influence (parallax effect), smoothly clamped to prevent sudden jerking
+        f.y -= clampedDelta * f.speed * 0.06;
 
         // Wind/Wobble
         f.wobble += f.wobbleSpeed * dt;
-        f.x += (Math.sin(f.wobble) * 0.4 + WIND_SPEED) * dt;
+        f.x += (Math.sin(f.wobble) * 0.35 + WIND_SPEED) * dt;
 
         // Wrap around
         if (f.y > canvas.height + 10) f.y = -10;
-        if (f.y < -50) f.y = canvas.height + 10;
+        if (f.y < -30) f.y = canvas.height + 10;
         if (f.x > canvas.width + 10) f.x = -10;
         if (f.x < -10) f.x = canvas.width + 10;
 
-        // 1. Soft cool-slate rim for crystalline visibility against light surfaces
-        ctx.fillStyle = `rgba(145, 170, 200, ${(0.36 * ambientAlpha).toFixed(3)})`;
+        // 1. Soft contrast micro-shadow offset by 0.6px: gives physical depth and ensures
+        // the snowflake is clearly visible on white/light backgrounds
+        ctx.fillStyle = `rgba(15, 30, 60, ${(0.22 * ambientAlpha).toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+        ctx.arc(f.x + 0.6, f.y + 0.7, f.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // 2. Bright white core so it remains visible against darker content
-        ctx.fillStyle = `rgba(255, 255, 255, ${(0.82 * ambientAlpha).toFixed(3)})`;
+        // 2. Pure, brilliant white snowflake body drawn at full size
+        ctx.fillStyle = `rgba(255, 255, 255, ${(0.96 * ambientAlpha).toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(f.x, f.y, f.size * 0.65, 0, Math.PI * 2);
+        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
         ctx.fill();
       });
 

@@ -282,7 +282,7 @@ function SnowParticles() {
       baseAlpha: number;
     }
 
-    const COUNT = window.innerWidth < 1024 ? 80 : 180;
+    const COUNT = window.innerWidth < 1024 ? 40 : 70;
 
     function spawnFlake(atFar = false): Flake3D {
       const z = atFar ? 0.90 + Math.random() * 0.10 : 0.05 + Math.random() * 0.95;
@@ -296,10 +296,10 @@ function SnowParticles() {
         prevX: x,
         prevY: y,
         prevZ: z,
-        size: 1.2 + Math.random() * 2.4,
-        speedFactor: 0.8 + Math.random() * 0.5,
+        size: 1.0 + Math.random() * 1.8,
+        speedFactor: 0.6 + Math.random() * 0.4,
         flutterPhase: Math.random() * Math.PI * 2,
-        flutterSpeed: 0.03 + Math.random() * 0.04,
+        flutterSpeed: 0.02 + Math.random() * 0.03,
         glintPhase: Math.random() * Math.PI * 2,
         baseAlpha: 0.55 + Math.random() * 0.45,
       };
@@ -330,6 +330,12 @@ function SnowParticles() {
     };
     window.addEventListener("mousemove", onPointerMove, { passive: true });
 
+    let scrollY = typeof window !== "undefined" ? window.scrollY : 0;
+    const onScroll = () => {
+      scrollY = window.scrollY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     let raf = 0;
     let inView = true;
     let lastTime = performance.now();
@@ -352,6 +358,14 @@ function SnowParticles() {
       // Smooth pointer sway damping
       swayX += (targetSwayX - swayX) * 0.06 * dt;
       swayY += (targetSwayY - swayY) * 0.06 * dt;
+
+      // When user scrolls down towards Lenovo dock and content, fade out Hero 3D flight snow smoothly
+      const scrollFade = Math.max(0, 1 - scrollY / 380);
+      if (scrollFade <= 0.01) {
+        ct.clearRect(0, 0, W, H);
+        raf = requestAnimationFrame(draw);
+        return;
+      }
 
       // Correlate with video flight velocity
       const video = document.getElementById("hero-idle-video") as HTMLVideoElement | null;
@@ -380,33 +394,27 @@ function SnowParticles() {
         f.prevY = f.y;
         f.prevZ = f.z;
 
-        // Forward motion along camera Z axis (camera rushes forward through snow)
-        const forwardStep = (0.0075 * forwardFlight + 0.0012) * f.speedFactor * dt;
+        // Gentle forward motion along camera Z axis (calm alpine drift, no hypersonic rush)
+        const forwardStep = (0.0035 * forwardFlight + 0.0008) * f.speedFactor * dt;
         f.z -= forwardStep;
 
-        // Mountain ridge crosswind (slight drift to left along ridge slope) + natural gravity
-        const crosswind = (-0.0014 * forwardFlight - 0.0004) * dt;
-        const gravity = (0.0009 + 0.0012 * (1 - forwardFlight)) * dt;
-        const flutter = Math.sin(f.flutterPhase) * 0.0005 * dt;
+        // Mountain ridge crosswind + natural gravity
+        const crosswind = (-0.0008 * forwardFlight - 0.0003) * dt;
+        const gravity = (0.0008 + 0.0009 * (1 - forwardFlight)) * dt;
+        const flutter = Math.sin(f.flutterPhase) * 0.0004 * dt;
 
         f.x += crosswind + flutter;
         f.y += gravity;
         f.flutterPhase += f.flutterSpeed * dt;
-        f.glintPhase += 0.05 * dt;
+        f.glintPhase += 0.04 * dt;
 
         // Perspective 3D Projection
         const invZ = 1 / f.z;
-        const invPrevZ = 1 / f.prevZ;
 
         // Parallax offset: close flakes sway much more with the camera than far flakes
         const parallaxFactor = (1 - f.z);
-        const prevParallaxFactor = (1 - f.prevZ);
-
         const screenX = cx + ((f.x - swayX * parallaxFactor) * invZ) * focal;
         const screenY = cy + ((f.y - swayY * parallaxFactor) * invZ) * focal;
-
-        const prevScreenX = cx + ((f.prevX - swayX * prevParallaxFactor) * invPrevZ) * focal;
-        const prevScreenY = cy + ((f.prevY - swayY * prevParallaxFactor) * invPrevZ) * focal;
 
         // Respawn when passing behind the camera lens or rushed off-screen
         if (
@@ -420,49 +428,28 @@ function SnowParticles() {
           continue;
         }
 
-        // Motion displacement on screen
-        const dx = screenX - prevScreenX;
-        const dy = screenY - prevScreenY;
-        const streakDist = Math.hypot(dx, dy);
-
         // Flake scale based on inverse depth (natural perspective scaling)
-        const radius = Math.min(Math.max(0.8, (f.size * 0.42) * invZ * (W / 1440)), 5.5);
+        const radius = Math.min(Math.max(0.8, (f.size * 0.38) * invZ * (W / 1440)), 4.0);
 
-        // Alpha: fade in smoothly from far horizon; fade out gently right at the lens
+        // Alpha: fade in smoothly from far horizon; fade out gently right at the lens; apply scrollFade
         const horizonFade = Math.min(1, (1.0 - f.z) * 3.5);
         const nearFade = f.z < 0.08 ? f.z / 0.08 : 1.0;
         const glint = 0.85 + Math.sin(f.glintPhase) * 0.15;
-        const alpha = Math.min(1, Math.max(0, f.baseAlpha * horizonFade * nearFade * glint));
+        const alpha = Math.min(1, Math.max(0, f.baseAlpha * horizonFade * nearFade * glint * scrollFade));
 
         if (alpha <= 0.02) continue;
 
-        // 1. Motion blur streak when rushing past camera
-        if (streakDist > 1.2 && forwardFlight > 0.12) {
-          const grad = ct.createLinearGradient(prevScreenX, prevScreenY, screenX, screenY);
-          grad.addColorStop(0, `rgba(220, 235, 255, 0)`);
-          grad.addColorStop(0.5, `rgba(240, 248, 255, ${(alpha * 0.45).toFixed(3)})`);
-          grad.addColorStop(1, `rgba(255, 255, 255, ${(alpha * 0.95).toFixed(3)})`);
-
+        // Crisp crystalline snowflake: subtle contrast rim for definition, pure white core
+        if (radius > 1.4) {
           ct.beginPath();
-          ct.strokeStyle = grad;
-          ct.lineWidth = Math.max(0.6, radius * 0.85);
-          ct.lineCap = "round";
-          ct.moveTo(prevScreenX, prevScreenY);
-          ct.lineTo(screenX, screenY);
-          ct.stroke();
-        }
-
-        // 2. Crystalline snowflake head (sunlit core with subtle cool alpine shadow halo for contrast)
-        if (radius > 1.5) {
-          ct.beginPath();
-          ct.arc(screenX, screenY, radius * 1.6, 0, Math.PI * 2);
-          ct.fillStyle = `rgba(160, 195, 230, ${(alpha * 0.32).toFixed(3)})`;
+          ct.arc(screenX, screenY, radius + 0.6, 0, Math.PI * 2);
+          ct.fillStyle = `rgba(140, 175, 215, ${(alpha * 0.35).toFixed(3)})`;
           ct.fill();
         }
 
         ct.beginPath();
         ct.arc(screenX, screenY, radius, 0, Math.PI * 2);
-        ct.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+        ct.fillStyle = `rgba(255, 255, 255, ${(alpha * 0.95).toFixed(3)})`;
         ct.fill();
       }
 
