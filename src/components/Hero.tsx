@@ -153,61 +153,80 @@ const HeroPinnedScene = memo(function HeroPinnedScene() {
   );
 
   useEffect(() => {
+    let userInteracted = false;
+    const onUserInteraction = () => {
+      userInteracted = true;
+    };
+
+    window.addEventListener("touchstart", onUserInteraction, { passive: true });
+    window.addEventListener("pointerdown", onUserInteraction, { passive: true });
+    window.addEventListener("wheel", onUserInteraction, { passive: true });
+    window.addEventListener("keydown", onUserInteraction, { passive: true });
+
     const onEnded = () => {
       // Delay auto-scroll slightly so user can absorb the final frame
       window.setTimeout(() => {
-        // If the user hasn't scrolled manually (or barely scrolled) and didn't navigate to a section hash
-        if (window.scrollY < 50 && !window.location.hash) {
-          const stage = document.querySelector('.hero-stage') as HTMLElement;
-          const partners = document.querySelector('.partners-strip--home');
-          
-          if (stage && partners) {
-            const startY = window.scrollY;
-            const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
-            
-            // Where the Lenovo popup is fully visible
-            const lenovoProgress = 0.65; 
-            const targetY1 = stage.getBoundingClientRect().top + startY + (runway * lenovoProgress);
-            const finalY = partners.getBoundingClientRect().top + startY + 23;
-            
-            // Calculate what percentage of the total scroll distance the Lenovo popup represents
-            const totalDist = finalY - startY;
-            const p = Math.max(0, Math.min(1, (targetY1 - startY) / totalDist));
-            
-            // Custom Plateau Easing (6 seconds total duration):
-            // 0% -> 40% time: ease in-out to the Lenovo popup
-            // 40% -> 70% time: extreme slow-mo (plateau) to read the badge
-            // 70% -> 100% time: ease in-out to the end
-            const plateauEase = (t: number) => {
-              if (t < 0.4) {
-                // Scale t to [0, 1], apply easeInOutSine, then scale to [0, p]
-                const norm = t / 0.4;
-                const ease = -(Math.cos(Math.PI * norm) - 1) / 2;
-                return ease * p;
-              } else if (t < 0.7) {
-                // Micro-movement during the "pause" to keep it feeling alive (moves 2% of distance)
-                const norm = (t - 0.4) / 0.3;
-                return p + (norm * 0.02);
-              } else {
-                // Scale t to [0, 1], apply easeInOutSine, then scale from [p + 0.02, 1]
-                const norm = (t - 0.7) / 0.3;
-                const ease = -(Math.cos(Math.PI * norm) - 1) / 2;
-                return (p + 0.02) + (ease * (1 - (p + 0.02)));
-              }
-            };
+        // If the user interacted manually, or scrolled, or navigated via anchor hash, do not hijack scroll
+        if (userInteracted || window.scrollY > 20 || window.location.hash) {
+          return;
+        }
 
-            // A single, continuous scroll command so the momentum is never broken by the browser
-            scrollToY(finalY, { duration: 5.5, easing: Math.abs(p) > 0 ? plateauEase : undefined });
-          } else if (partners) {
-            const top = partners.getBoundingClientRect().top + window.scrollY;
-            const coastingEase = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
-            scrollToY(top + 23, { duration: 4.2, easing: coastingEase });
-          }
+        const stage = document.querySelector('.hero-stage') as HTMLElement;
+        const partners = document.querySelector('.partners-strip--home');
+        
+        if (stage && partners) {
+          const startY = window.scrollY;
+          const runway = Math.max(stage.offsetHeight - window.innerHeight, 1);
+          
+          // Where the Lenovo popup is fully visible
+          const lenovoProgress = 0.65; 
+          const targetY1 = stage.getBoundingClientRect().top + startY + (runway * lenovoProgress);
+          const finalY = partners.getBoundingClientRect().top + startY + 23;
+          
+          // Calculate what percentage of the total scroll distance the Lenovo popup represents
+          const totalDist = finalY - startY;
+          const p = Math.max(0, Math.min(1, (targetY1 - startY) / totalDist));
+          
+          // Custom Plateau Easing (6 seconds total duration):
+          // 0% -> 40% time: ease in-out to the Lenovo popup
+          // 40% -> 70% time: extreme slow-mo (plateau) to read the badge
+          // 70% -> 100% time: ease in-out to the end
+          const plateauEase = (t: number) => {
+            if (t < 0.4) {
+              // Scale t to [0, 1], apply easeInOutSine, then scale to [0, p]
+              const norm = t / 0.4;
+              const ease = -(Math.cos(Math.PI * norm) - 1) / 2;
+              return ease * p;
+            } else if (t < 0.7) {
+              // Micro-movement during the "pause" to keep it feeling alive (moves 2% of distance)
+              const norm = (t - 0.4) / 0.3;
+              return p + (norm * 0.02);
+            } else {
+              // Scale t to [0, 1], apply easeInOutSine, then scale from [p + 0.02, 1]
+              const norm = (t - 0.7) / 0.3;
+              const ease = -(Math.cos(Math.PI * norm) - 1) / 2;
+              return (p + 0.02) + (ease * (1 - (p + 0.02)));
+            }
+          };
+
+          // A single, continuous scroll command so the momentum is never broken by the browser
+          scrollToY(finalY, { duration: 5.5, easing: Math.abs(p) > 0 ? plateauEase : undefined });
+        } else if (partners) {
+          const top = partners.getBoundingClientRect().top + window.scrollY;
+          const coastingEase = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
+          scrollToY(top + 23, { duration: 4.2, easing: coastingEase });
         }
       }, 400); 
     };
+
     window.addEventListener('hero-video-ended', onEnded);
-    return () => window.removeEventListener('hero-video-ended', onEnded);
+    return () => {
+      window.removeEventListener('hero-video-ended', onEnded);
+      window.removeEventListener("touchstart", onUserInteraction);
+      window.removeEventListener("pointerdown", onUserInteraction);
+      window.removeEventListener("wheel", onUserInteraction);
+      window.removeEventListener("keydown", onUserInteraction);
+    };
   }, [scrollToY]);
 
   useEffect(() => {
