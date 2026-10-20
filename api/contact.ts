@@ -89,6 +89,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     monthlyBudget = "pilot",
     notes = "",
     filePath = null,
+    fileUrl = null,
     fileName = null,
     fileType = null,
     fileSize = null,
@@ -201,7 +202,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       <div style="font-size: 13px; font-weight: 600; color: #4b5563; margin-top: 16px;">Brief Details & Project Notes:</div>
       <div class="notes-box">${escapeHtml(notes || "No additional comments provided.")}</div>
 
-      ${fileName ? `<div class="attachment-box">📎 <strong>Attached Brief:</strong> ${escapeHtml(fileName)} (${fileSize ? (fileSize / 1024).toFixed(0) + " KB" : "attached to this email"})</div>` : ""}
+      ${fileName ? `<div class="attachment-box">📎 <strong>Attached Brief:</strong> ${escapeHtml(fileName)} (${fileSize ? (fileSize / 1024).toFixed(0) + " KB" : ""})${fileUrl ? `<div style="margin-top: 8px;"><a href="${fileUrl}" style="color: #1e40af; font-weight: 600; text-decoration: underline;" target="_blank">⬇️ Click here to open / download file directly</a></div>` : ""}</div>` : ""}
     </div>
     <div class="footer">
       Upraiser Agency LLP · 128 City Road, London EC1V 2NX · info@upraiser.co.uk
@@ -241,10 +242,5 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return res.end(
       JSON.stringify({ ok: false, error: err instanceof Error ? err.message : "Failed to deliver pilot brief" })
     );
-  } finally {
-    // 4. Guaranteed cleanup: Delete temporary file from Supabase Storage
-    if (filePath && supabaseAdmin) {
-      await supabaseAdmin.storage.from("temp-briefs").remove([filePath]).catch(() => {});
-    }
   }
 }

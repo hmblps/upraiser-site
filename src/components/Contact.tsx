@@ -65,7 +65,7 @@ function escapeTgHtml(str: string) {
     .replace(/>/g, "&gt;");
 }
 
-async function sendTelegramNotification(state: FormState): Promise<boolean> {
+async function sendTelegramNotification(state: FormState, fileUrl?: string | null): Promise<boolean> {
   if (!tgBotToken || !tgChatId) return false;
   try {
     const text = [
@@ -79,7 +79,11 @@ async function sendTelegramNotification(state: FormState): Promise<boolean> {
       `👥 <b>Company Size:</b> ${escapeTgHtml(state.companySize)}`,
       `💰 <b>Monthly Spend:</b> ${escapeTgHtml(state.monthlyBudget)}`,
       state.notes ? `📝 <b>Notes:</b> ${escapeTgHtml(state.notes)}` : null,
-      state.attachment ? `📎 <b>Attachment:</b> ${escapeTgHtml(state.attachment.name)}` : null,
+      state.attachment
+        ? fileUrl
+          ? `📎 <b>Attachment:</b> <a href="${fileUrl}">Download ${escapeTgHtml(state.attachment.name)}</a>`
+          : `📎 <b>Attachment:</b> ${escapeTgHtml(state.attachment.name)}`
+        : null,
     ].filter(Boolean).join("\n");
 
     const res = await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
@@ -154,9 +158,8 @@ export function Contact() {
     abortCtrl.current = new AbortController();
 
     try {
-      const tgPromise = sendTelegramNotification(form);
-
       let filePath: string | null = null;
+      let fileUrl: string | null = null;
 
       // 1. If file attached & Supabase configured, upload directly to temp-briefs bucket
       if (form.attachment && supabase) {
@@ -171,12 +174,17 @@ export function Contact() {
           if (uploadError) {
             console.warn("Supabase upload failed, proceeding with server fallback:", uploadError.message);
             filePath = null;
+          } else {
+            const { data: pubData } = supabase.storage.from("temp-briefs").getPublicUrl(filePath);
+            fileUrl = pubData?.publicUrl || null;
           }
         } catch (uploadErr) {
           console.warn("Supabase direct upload exception:", uploadErr);
           filePath = null;
         }
       }
+
+      const tgPromise = sendTelegramNotification(form, fileUrl);
 
       // 2. Primary: Send to Vercel Serverless Function /api/contact (Resend Email with Attachment)
       let serverSent = false;
@@ -192,6 +200,7 @@ export function Contact() {
           monthlyBudget: form.monthlyBudget,
           notes: form.notes,
           filePath,
+          fileUrl,
           fileName: form.attachment ? form.attachment.name : null,
           fileType: form.attachment ? form.attachment.type : null,
           fileSize: form.attachment ? form.attachment.size : null,
@@ -237,10 +246,18 @@ export function Contact() {
           formData.append("notes", form.notes);
           formData.append("privacy_policy_accepted", "Yes");
           if (form.attachment) {
-            formData.append(
-              "attachment_notice",
-              `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
-            );
+            if (fileUrl) {
+              formData.append("attachment_link", fileUrl);
+              formData.append(
+                "attachment",
+                `${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB) — Direct Download: ${fileUrl}`
+              );
+            } else {
+              formData.append(
+                "attachment_notice",
+                `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
+              );
+            }
           }
 
           const response = await fetch("https://api.web3forms.com/submit", {
