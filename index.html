@@ -6,11 +6,13 @@
       (function () {
         var mobile = window.matchMedia("(max-width: 899px)").matches;
         var stored = localStorage.getItem("upraiser-theme");
+        var systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var defaultTheme = systemDark ? "dark" : "light";
         var t = mobile
           ? "light"
           : stored === "light" || stored === "dark"
             ? stored
-            : "dark";
+            : defaultTheme;
         document.documentElement.dataset.theme = t;
         document.documentElement.style.colorScheme = t;
         var isWinPort = window.location.port === "5174";

@@ -48,13 +48,23 @@ function themeFromSearch(search: string): Theme | null {
   return t === "light" || t === "dark" ? t : null;
 }
 
-/** Mobile always boots light; desktop keeps stored preference (default dark). `?theme=` wins (local lite preview). */
+function getSystemTheme(): Theme {
+  if (typeof window !== "undefined" && window.matchMedia) {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+    if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+  }
+  return "light";
+}
+
+/** Mobile boots light; desktop keeps stored preference or respects browser/system preference. `?theme=` wins. */
 function resolveInitialTheme(): Theme {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
   const fromQuery = themeFromSearch(window.location.search);
   if (fromQuery) return fromQuery;
+  const stored = readStoredTheme();
+  if (stored) return stored;
   if (isMobileViewport()) return "light";
-  return readStoredTheme() ?? "dark";
+  return getSystemTheme();
 }
 
 function readSeen(current: Theme): SeenModes {

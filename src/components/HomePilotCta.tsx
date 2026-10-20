@@ -67,49 +67,49 @@ export function HomePilotCta() {
               </p>
             </div>
 
-            {/* Middle: Action buttons shifted right between both texts */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:ml-28 md:ml-40 lg:ml-48">
-              <Magnetic className="flex w-full sm:w-auto">
-                <motion.div
-                  className="w-full sm:w-auto"
+            {/* Middle: Action buttons shifted right, with perspective text starting strictly under the first button */}
+            <div className="flex flex-col items-start gap-3 sm:ml-28 md:ml-40 lg:ml-48">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+                <Magnetic className="flex w-full sm:w-auto">
+                  <motion.div
+                    className="w-full sm:w-auto"
+                    whileHover={reduced ? undefined : { scale: 1.02 }}
+                    whileTap={reduced ? undefined : { scale: 0.95 }}
+                    transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
+                  >
+                    <ScrollLink
+                      href={primaryCta.href}
+                      data-cursor="cta"
+                      className={`btn-caps flex w-full sm:w-auto justify-center items-center rounded-full px-8 py-3.5 min-h-[44px] font-bold text-xs uppercase tracking-wider transition-colors shadow-sm ${
+                        theme === "light"
+                          ? "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
+                          : "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
+                      }`}
+                    >
+                      {primaryCta.label}
+                    </ScrollLink>
+                  </motion.div>
+                </Magnetic>
+
+                {/* Theme switcher */}
+                <motion.button
+                  type="button"
+                  onClick={switchStory}
                   whileHover={reduced ? undefined : { scale: 1.02 }}
                   whileTap={reduced ? undefined : { scale: 0.95 }}
                   transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
+                  className={`pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider px-7 py-3.5 min-h-[44px] rounded-full shadow-sm cursor-pointer relative z-20 transition-colors ${
+                    theme === "light"
+                      ? "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
+                      : "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
+                  }`}
                 >
-                  <ScrollLink
-                    href={primaryCta.href}
-                    data-cursor="cta"
-                    className={`btn-caps flex w-full sm:w-auto justify-center items-center rounded-full px-8 py-3.5 min-h-[44px] font-bold text-xs uppercase tracking-wider transition-colors shadow-sm ${
-                      theme === "light"
-                        ? "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
-                        : "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
-                    }`}
-                  >
-                    {primaryCta.label}
-                  </ScrollLink>
-                </motion.div>
-              </Magnetic>
+                  {switchLabel}
+                </motion.button>
+              </div>
 
-              {/* Theme switcher */}
-              <motion.button
-                type="button"
-                onClick={switchStory}
-                whileHover={reduced ? undefined : { scale: 1.02 }}
-                whileTap={reduced ? undefined : { scale: 0.95 }}
-                transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-                className={`pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider px-7 py-3.5 min-h-[44px] rounded-full shadow-sm cursor-pointer relative z-20 transition-colors ${
-                  theme === "light"
-                    ? "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
-                    : "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
-                }`}
-              >
-                {switchLabel}
-              </motion.button>
-            </div>
-
-            {/* Bottom Right: Perspective text placed below and to the right of the buttons */}
-            <div className="flex justify-start sm:justify-end sm:mr-4 md:mr-12">
-              <p className="text-xs sm:text-sm text-fg-muted font-sans tracking-normal max-w-sm text-left sm:text-right">
+              {/* Perspective text starting strictly aligned under the first (Request Pilot) button */}
+              <p className="text-xs sm:text-sm text-fg-muted font-sans tracking-normal text-left pt-1">
                 {t("misc.flipPerspective", "Flip the perspective — see what's on the other side.")}
               </p>
             </div>
