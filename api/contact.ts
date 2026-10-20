@@ -137,7 +137,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
 
     // 2. Format HTML email
-    const toEmail = process.env.NOTIFICATION_EMAIL || "info@upraiser.co.uk";
+    const DEFAULT_RECIPIENTS = ["info@upraiser.co.uk", "alex@upraiser.co.uk", "ceo@upraiser.co.uk"];
+    const notificationEnv = process.env.NOTIFICATION_EMAIL;
+    const toEmails = notificationEnv
+      ? notificationEnv.split(/[,;]/).map((e) => e.trim()).filter(Boolean)
+      : DEFAULT_RECIPIENTS;
     const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
 
     const html = `
@@ -221,7 +225,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       },
       body: JSON.stringify({
         from: fromEmail,
-        to: [toEmail],
+        to: toEmails,
         reply_to: email,
         subject: `[UPRAISER Pilot] ${name} · ${appId} (${monthlyBudget})`,
         html,

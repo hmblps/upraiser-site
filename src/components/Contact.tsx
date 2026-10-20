@@ -232,44 +232,51 @@ export function Contact() {
       let web3Sent = false;
       if (!serverSent && accessKey) {
         try {
-          const formData = new FormData();
-          formData.append("access_key", accessKey);
-          formData.append("subject", `UPRAISER Pilot Request - ${form.appId}`);
-          formData.append("from_name", form.name);
-          formData.append("email", form.email);
-          formData.append("replyto", form.email);
-          formData.append("app_url", form.appId);
-          formData.append("geos", form.geos);
-          formData.append("company_type", form.companyType);
-          formData.append("company_size", form.companySize);
-          formData.append("monthly_budget", form.monthlyBudget);
-          formData.append("notes", form.notes);
-          formData.append("privacy_policy_accepted", "Yes");
-          if (form.attachment) {
-            if (fileUrl) {
-              formData.append("attachment_download_url", fileUrl);
-              formData.append("attachment_name", form.attachment.name);
-              formData.append("attachment_size", `${(form.attachment.size / 1024).toFixed(0)} KB`);
-              formData.append(
-                "attachment",
-                `${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB) — Download: ${fileUrl}`
-              );
-            } else {
-              formData.append(
-                "attachment_notice",
-                `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
-              );
-            }
-          }
+          const keys = accessKey.split(/[,;]/).map((k) => k.trim()).filter(Boolean);
+          const results = await Promise.allSettled(
+            keys.map(async (key) => {
+              const formData = new FormData();
+              formData.append("access_key", key);
+              formData.append("subject", `UPRAISER Pilot Request - ${form.appId}`);
+              formData.append("from_name", form.name);
+              formData.append("email", form.email);
+              formData.append("replyto", form.email);
+              formData.append("app_url", form.appId);
+              formData.append("geos", form.geos);
+              formData.append("company_type", form.companyType);
+              formData.append("company_size", form.companySize);
+              formData.append("monthly_budget", form.monthlyBudget);
+              formData.append("notes", form.notes);
+              formData.append("privacy_policy_accepted", "Yes");
+              if (form.attachment) {
+                if (fileUrl) {
+                  formData.append("attachment_download_url", fileUrl);
+                  formData.append("attachment_name", form.attachment.name);
+                  formData.append("attachment_size", `${(form.attachment.size / 1024).toFixed(0)} KB`);
+                  formData.append(
+                    "attachment",
+                    `${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB) — Download: ${fileUrl}`
+                  );
+                } else {
+                  formData.append(
+                    "attachment_notice",
+                    `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
+                  );
+                }
+              }
 
-          const response = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            body: formData,
-            signal: abortCtrl.current.signal,
-          });
-          const data = (await response.json().catch(() => ({}))) as { success?: boolean };
-          if (response.ok && data.success) {
+              const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: { Accept: "application/json" },
+                body: formData,
+                signal: abortCtrl.current?.signal,
+              });
+              const data = (await response.json().catch(() => ({}))) as { success?: boolean };
+              return Boolean(response.ok && data.success);
+            })
+          );
+
+          if (results.some((r) => r.status === "fulfilled" && r.value)) {
             web3Sent = true;
           }
         } catch (web3Err) {
