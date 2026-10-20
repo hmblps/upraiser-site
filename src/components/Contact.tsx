@@ -7,6 +7,7 @@ import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
 import { GradientTraceBorder } from "./GradientTraceBorder";
 import { ContactFormField } from "./ContactFormField";
+import { PrivacyModal } from "./PrivacyModal";
 import { supabase } from "../lib/supabaseClient";
 
 const ALLOWED_MIME_TYPES = new Set([
@@ -54,6 +55,53 @@ const initialForm: FormState = {
   notes: "",
   attachments: [],
 };
+
+const DRAFT_STORAGE_KEY = "upraiser_contact_draft_v1";
+
+type FormDraft = {
+  name?: string;
+  email?: string;
+  appId?: string;
+  geos?: string;
+  companyType?: string;
+  companySize?: string;
+  monthlyBudget?: string;
+  notes?: string;
+  privacyAccepted?: boolean;
+};
+
+function readDraft(): FormDraft | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (typeof parsed === "object" && parsed !== null) {
+      return parsed as FormDraft;
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return null;
+}
+
+function writeDraft(data: FormDraft) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // Ignore storage quota errors
+  }
+}
+
+function clearDraft() {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+  } catch {
+    // Ignore
+  }
+}
 
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
 const tgBotToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN as string | undefined;
@@ -127,8 +175,28 @@ export function Contact() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [form, setForm] = useState<FormState>(initialForm);
-  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+
+  const [form, setForm] = useState<FormState>(() => {
+    const draft = readDraft();
+    if (!draft) return initialForm;
+    return {
+      ...initialForm,
+      name: typeof draft.name === "string" ? draft.name : initialForm.name,
+      email: typeof draft.email === "string" ? draft.email : initialForm.email,
+      appId: typeof draft.appId === "string" ? draft.appId : initialForm.appId,
+      geos: typeof draft.geos === "string" ? draft.geos : initialForm.geos,
+      companyType: typeof draft.companyType === "string" ? draft.companyType : initialForm.companyType,
+      companySize: typeof draft.companySize === "string" ? draft.companySize : initialForm.companySize,
+      monthlyBudget: typeof draft.monthlyBudget === "string" ? draft.monthlyBudget : initialForm.monthlyBudget,
+      notes: typeof draft.notes === "string" ? draft.notes : initialForm.notes,
+      attachments: [],
+    };
+  });
+  const [privacyAccepted, setPrivacyAccepted] = useState<boolean>(() => {
+    const draft = readDraft();
+    return typeof draft?.privacyAccepted === "boolean" ? draft.privacyAccepted : false;
+  });
+  const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -139,6 +207,31 @@ export function Contact() {
       if (abortCtrl.current) abortCtrl.current.abort();
     };
   }, []);
+
+  // Continuously persist form draft to sessionStorage so navigating to privacy or reloading never resets progress
+  useEffect(() => {
+    writeDraft({
+      name: form.name,
+      email: form.email,
+      appId: form.appId,
+      geos: form.geos,
+      companyType: form.companyType,
+      companySize: form.companySize,
+      monthlyBudget: form.monthlyBudget,
+      notes: form.notes,
+      privacyAccepted,
+    });
+  }, [
+    form.name,
+    form.email,
+    form.appId,
+    form.geos,
+    form.companyType,
+    form.companySize,
+    form.monthlyBudget,
+    form.notes,
+    privacyAccepted,
+  ]);
 
   const validate = () => {
     const next: FormErrors = {};
@@ -304,6 +397,7 @@ export function Contact() {
       const tgDelivered = await tgPromise;
 
       if (serverSent || web3Sent || tgDelivered) {
+        clearDraft();
         setForm(initialForm);
         setPrivacyAccepted(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
@@ -588,22 +682,51 @@ export function Contact() {
                         ) : null}
                       </div>
 
-                      <label className="text-caption mt-1 flex shrink-0 items-start gap-2 text-muted">
+                      <div className="text-caption mt-1 flex shrink-0 items-start gap-2 text-muted">
                         <input
+                          id="privacy-checkbox"
                           type="checkbox"
-                          className="mt-0.5"
+                          className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-accent cursor-pointer"
                           checked={privacyAccepted}
-                          onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                          onChange={(e) => {
+                            setPrivacyAccepted(e.target.checked);
+                            if (e.target.checked && errors.privacyAccepted) {
+                              setErrors((prev) => {
+                                const copy = { ...prev };
+                                delete copy.privacyAccepted;
+                                return copy;
+                              });
+                            }
+                          }}
                           disabled={status === "loading"}
                         />
-                        <span>
-                          I agree to the{" "}
-                          <Link to="/privacy" className="underline hover:text-fg">
+                        <span className="leading-tight">
+                          <label
+                            htmlFor="privacy-checkbox"
+                            className="cursor-pointer select-none hover:text-fg"
+                          >
+                            I agree to the{" "}
+                          </label>
+                          <a
+                            href="/privacy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => {
+                              if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
+                                e.preventDefault();
+                                setPrivacyModalOpen(true);
+                              }
+                            }}
+                            className="underline underline-offset-2 transition hover:text-fg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                            aria-haspopup="dialog"
+                          >
                             Privacy Policy
-                          </Link>
-                          {errors.privacyAccepted ? <span className="ml-1 text-magenta-light">· Required</span> : null}
+                          </a>
+                          {errors.privacyAccepted ? (
+                            <span className="ml-1 text-magenta-light">· Required</span>
+                          ) : null}
                         </span>
-                      </label>
+                      </div>
 
                       <Magnetic className="mt-2 w-full shrink-0">
                         <motion.button
@@ -622,6 +745,21 @@ export function Contact() {
               </div>
             </div>
       </div>
+
+      <PrivacyModal
+        open={privacyModalOpen}
+        onClose={() => setPrivacyModalOpen(false)}
+        onAccept={() => {
+          setPrivacyAccepted(true);
+          if (errors.privacyAccepted) {
+            setErrors((prev) => {
+              const copy = { ...prev };
+              delete copy.privacyAccepted;
+              return copy;
+            });
+          }
+        }}
+      />
     </div>
   );
 }
