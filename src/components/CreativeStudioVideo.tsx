@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
@@ -9,8 +10,6 @@ interface CreativeStudioVideoProps {
 
 interface StudioCategory {
   key: string;
-  index: string;
-  meta: string;
   titleKey: string;
   defaultTitle: string;
   tags: string[];
@@ -20,8 +19,6 @@ interface StudioCategory {
 const STUDIO_CATEGORIES: StudioCategory[] = [
   {
     key: "immersive",
-    index: "01",
-    meta: "DOMAIN 01 · IMMERSIVE",
     titleKey: "creativeStudio.categories.immersive.title",
     defaultTitle: "Immersive & High-Tech",
     tags: ["3D & CGI", "Motion CGI", "Virtual Avatars"],
@@ -33,8 +30,6 @@ const STUDIO_CATEGORIES: StudioCategory[] = [
   },
   {
     key: "content",
-    index: "02",
-    meta: "DOMAIN 02 · PRODUCTION",
     titleKey: "creativeStudio.categories.content.title",
     defaultTitle: "Content Production",
     tags: ["Photo & Video", "Creator-Led", "Playable"],
@@ -47,8 +42,6 @@ const STUDIO_CATEGORIES: StudioCategory[] = [
   },
   {
     key: "engineering",
-    index: "03",
-    meta: "DOMAIN 03 · ENGINEERING",
     titleKey: "creativeStudio.categories.engineering.title",
     defaultTitle: "Digital & Tech Engineering",
     tags: ["Web Dev", "Mobile Apps", "Cloud Arch"],
@@ -134,6 +127,10 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     "Driving digital growth: from immersive 3D and AI concepts to high-performance content and enterprise tech."
   );
 
+  // Hero stat color: light mode uses climbing red (#cb310d) from Hero stat label; dark mode uses gold accent
+  const kickerColor =
+    theme === "light" ? "var(--hero-light-stat-label, #cb310d)" : "var(--theme-accent, #eab308)";
+
   return (
     <div
       onClick={phase === "climbing" ? handleSkipToSummit : undefined}
@@ -176,35 +173,30 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
       {/* Heavy Local Grain to ensure continuity with Hero */}
       <div className="site-grain absolute inset-0 z-10 opacity-60 pointer-events-none" />
 
-      {/* Subtle theme-aware ambient scrim over the background */}
+      {/* Subtle theme-aware contrast overlay without artificial haze */}
       <div
         className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
-          theme === "dark" ? "bg-black/40" : "bg-black/10"
+          theme === "dark" ? "bg-black/55" : "bg-black/30"
         }`}
         style={{
-          opacity: phase === "summit" ? 0.75 : 0.35,
+          opacity: phase === "summit" ? 0.75 : 0.45,
         }}
       />
 
       {/* Main Content Area: safely cleared below top header island (pt-24 sm:pt-28), scrollable if viewport is tight */}
       <div className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-24 pb-16">
         <div className="min-h-full w-full max-w-6xl mx-auto flex flex-col items-center justify-start md:justify-center">
-          {/* Header (Title & Subtitle with site-standard typography & soft organic backdrop blur) */}
+          {/* Header (Clean site display typography without any letter-shadow glow) */}
           <motion.div
             layout
-            className="section-header text-center max-w-4xl mx-auto shrink-0 relative px-4"
+            className="text-center max-w-4xl mx-auto shrink-0 relative px-4"
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Seamless ambient backdrop blur matching AboutUsSection — zero hard box edges */}
-            <div
-              className="absolute -inset-x-12 -inset-y-8 z-[-1] pointer-events-none backdrop-blur-md"
-              style={{
-                maskImage: "radial-gradient(ellipse at center, black 40%, transparent 75%)",
-                WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 75%)",
-              }}
-            />
-
-            <p className="section-label">
+            {/* Kicker label using Hero stat color (#cb310d in light, gold in dark) */}
+            <p
+              className="font-bold tracking-[0.16em] uppercase text-xs sm:text-sm mb-2"
+              style={{ color: kickerColor }}
+            >
               {t("creativeStudio.label", "UPRAISER · FULL-CYCLE STUDIO")}
             </p>
 
@@ -212,17 +204,11 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className={`section-title text-balance text-fg transition-all duration-500 ${
+              className={`font-display font-bold text-white tracking-tight uppercase leading-tight transition-all duration-500 text-balance ${
                 phase === "summit"
-                  ? "!text-2xl sm:!text-3xl md:!text-4xl lg:!text-5xl"
-                  : "!text-3xl sm:!text-4xl md:!text-5xl lg:!text-6xl"
+                  ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
+                  : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
               }`}
-              style={{
-                textShadow:
-                  theme === "light"
-                    ? "0 2px 24px rgba(255, 255, 255, 0.95), 0 1px 4px rgba(255, 255, 255, 0.9)"
-                    : "0 4px 28px rgba(0, 0, 0, 0.9), 0 1px 4px rgba(0, 0, 0, 0.95)",
-              }}
             >
               {titleText}
             </motion.h1>
@@ -234,13 +220,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="section-description text-balance text-fg/80 max-w-3xl mx-auto mt-3 sm:mt-4 text-xs sm:text-sm md:text-base leading-relaxed"
-                  style={{
-                    textShadow:
-                      theme === "light"
-                        ? "0 2px 16px rgba(255, 255, 255, 0.9), 0 1px 2px rgba(255, 255, 255, 0.85)"
-                        : "0 2px 16px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.95)",
-                  }}
+                  className="font-sans text-white/90 max-w-2xl mx-auto mt-3 sm:mt-4 text-xs sm:text-sm md:text-base leading-relaxed text-balance"
                 >
                   {subtitleText}
                 </motion.p>
@@ -248,7 +228,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
             </AnimatePresence>
           </motion.div>
 
-          {/* Phase 2: Full Capabilities Grid using the EXACT Case Preview Card system */}
+          {/* Phase 2: Full Capabilities Grid using the EXACT Case Preview Card system without AI slop counters */}
           <AnimatePresence>
             {phase === "summit" && (
               <motion.div
@@ -272,18 +252,10 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                       } as React.CSSProperties
                     }
                   >
-                    {/* Case Card Header matching CaseBrandHeader */}
+                    {/* Case Card Header matching CaseBrandHeader — clean, no 01/02/03 */}
                     <div className="case-brand-header relative overflow-hidden border-b border-border/40 p-5 sm:p-6 shrink-0">
                       <div className="case-brand-header__wash" aria-hidden />
-                      <div className="relative z-10 flex flex-col gap-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-micro font-bold tracking-[0.14em] uppercase text-accent">
-                            {cat.meta}
-                          </span>
-                          <span className="case-brand-header__event-value font-mono text-[10px] text-muted opacity-80">
-                            [{cat.index}]
-                          </span>
-                        </div>
+                      <div className="relative z-10">
                         <h2 className="case-brand-header__title text-base sm:text-lg lg:text-xl font-bold tracking-tight text-fg">
                           {t(cat.titleKey, cat.defaultTitle)}
                         </h2>
@@ -315,17 +287,24 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                         ))}
                       </ul>
 
-                      {/* Clean baseline status matching case study bottom specs */}
+                      {/* Clean baseline with direct transition to Contact Form */}
                       <div className="pt-4 mt-auto border-t border-border/30 flex items-center justify-between">
                         <span className="text-[10px] font-bold tracking-wider uppercase text-muted">
-                          UPRAISER STUDIO
+                          {t("creativeStudio.cardFooterLabel", "Creative & Tech")}
                         </span>
-                        <span className="case-preview-card__cta !mt-0 !pt-0 text-xs font-semibold">
-                          <span>READY FOR SCALE</span>{" "}
-                          <span aria-hidden="true" className="inline-block transition-transform duration-200">
+                        <Link
+                          to="/contact"
+                          onClick={(e) => e.stopPropagation()}
+                          className="case-preview-card__cta !mt-0 !pt-0 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                        >
+                          <span>{t("creativeStudio.contactCta", "Discuss Project")}</span>
+                          <span
+                            aria-hidden="true"
+                            className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+                          >
                             →
                           </span>
-                        </span>
+                        </Link>
                       </div>
                     </div>
                   </motion.article>

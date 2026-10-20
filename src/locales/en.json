@@ -1043,6 +1043,8 @@
       }
     },
     "skipToSummit": "View Capabilities",
-    "replayClimb": "Replay Climb"
+    "replayClimb": "Replay Climb",
+    "contactCta": "Discuss Project",
+    "cardFooterLabel": "Creative & Tech"
   }
 }

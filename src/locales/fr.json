@@ -1043,6 +1043,8 @@
       }
     },
     "skipToSummit": "Voir les expertises",
-    "replayClimb": "Revoir l'ascension"
+    "replayClimb": "Revoir l'ascension",
+    "contactCta": "Discuter du projet",
+    "cardFooterLabel": "Création & Tech"
   }
 }

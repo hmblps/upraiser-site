@@ -1385,6 +1385,15 @@
     "fr": "CPI",
     "pt": "Pré-instalação de fábrica"
   },
+  "Creative & Tech": {
+    "de": "Creative & Tech",
+    "fr": "Création & Tech",
+    "es": "Creatividad y Tecnología",
+    "pt": "Criativo & Tech",
+    "zh": "创意与科技",
+    "ja": "クリエイティブ＆テック",
+    "ko": "크리에이티브 & 테크"
+  },
   "Creative Lab": {
     "zh": "创意实验室",
     "ja": "クリエイティブラボ",
@@ -1769,6 +1778,15 @@
     "de": "Direktes Inventar, robuste Pre-Bid-Filterung und verifizierte Routen sichern maximale Performance in allen Zielmärkten.",
     "fr": "Inventaires directs, filtrage pre-bid renforcé et flux certifiés garantissent des performances exceptionnelles sur l'ensemble de vos marchés cibles.",
     "pt": "Fornecimento direto, filtragem antifraude pré-lance robusta e rotas verificadas asseguram performance consistente em todos os mercados-alvo."
+  },
+  "Discuss Project": {
+    "de": "Projekt besprechen",
+    "fr": "Discuter du projet",
+    "es": "Hablar del proyecto",
+    "pt": "Discutir projeto",
+    "zh": "洽谈项目需求",
+    "ja": "プロジェクトのご相談",
+    "ko": "프로젝트 문의하기"
   },
   "Downstream events": {
     "zh": "深层转化事件",
