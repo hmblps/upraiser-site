@@ -65,7 +65,7 @@ export const audienceByMode = {
     scrollHeroWord: "SCALE",
     cta: primaryCta.label,
     description:
-      "You are the user acquisition lead or marketing director who needs to scale active player bases without breaking unit economics. Your campaigns target deep in-app conversions, from level completions to first deposits.\n\nWe buy media based on real player lifetime value, deploying on-demand Creator-Generated Content (CGC) that out-converts static banner ads. We scale only the routes that deliver real revenue.\n\nYou set the target ROAS and downstream event thresholds. We engineer the supply lines, test 50+ video hooks weekly, and buy the bids.",
+      "You are the user acquisition lead or marketing director who needs to scale active player bases without breaking unit economics. Your campaigns target deep in-app conversions, from level completions to first deposits.\n\nWe buy media based on real player lifetime value, deploying on-demand Creator-Generated Content (CGC) that out-converts static banner ads. We scale only the routes that deliver real revenue.\n\nWe align every campaign with your exact financial targets, ensuring your growth strategy remains entirely in your control while we execute the heavy lifting.",
   },
   infrastructure: {
     label: "Teams who require campaign metrics to match the media invoice",
@@ -95,7 +95,7 @@ export const valueByMode = {
       kicker: "Event-weighted buying",
       title: "Buy the event Your board tracks",
       description:
-        "Caps wire directly to downstream revenue events before the first impression clears, locking unit economics to Your targets.",
+        "Caps wire directly to revenue events before the first impression clears, ensuring absolute alignment with Your goals.",
     },
     metrics: [
       { value: "97.3%", label: "Fraud killed before auction close", progress: 0.973 },
@@ -105,7 +105,7 @@ export const valueByMode = {
       {
         title: "Spend that scales under scrutiny",
         description:
-          "Every bid is scored before it clears. Fraudulent requests drop in 0.4 milliseconds, and raw device logs verify every impression.",
+          "Every bid is scored before it clears. Bad traffic drops instantly, and the exact device log proves our absolute transparency.",
       },
       {
         title: "CPA that holds at scale",
@@ -124,7 +124,7 @@ export const valueByMode = {
       kicker: "Log-native buying",
       title: "Verify the event Your board tracks",
       description:
-        "Server logs wire directly to Adjust and AppsFlyer before the month closes, eliminating billing discrepancies before payment.",
+        "Server logs wire directly to Adjust and AppsFlyer before the month closes, ensuring absolute alignment with Your data.",
     },
     metrics: [
       { value: "0%", label: "Post-flight log drift", progress: 0.02 },
@@ -134,12 +134,12 @@ export const valueByMode = {
       {
         title: "Traffic that passes audit",
         description:
-          "Invalid requests drop before auction close. Ad Ops defends every dollar in finance reviews without end-of-month reconciliations.",
+          "Invalid requests drop flawlessly before auction close. Ad Ops confidently defends every dollar in a finance review without last-minute reconciliation.",
       },
       {
         title: "Numbers that match",
         description:
-          "The MMP and media bill report identical figures through raw logs. Ad Ops and finance verify from the same dataset.",
+          "The MMP and media bill tell exactly the same story through raw logs. Ad Ops and finance operate in absolute alignment.",
       },
     ],
     brand: {
@@ -161,7 +161,7 @@ export const promiseByMode = {
     titleLead: "We bring ",
     accentWord: "CLARITY",
     description:
-      "Your team can inspect and pull raw datasets on demand. We reconcile media spend against MMP endpoints before flights open, matching every invoice line item to physical device logs. Your ledger balances to the penny. Zero unverified markups. Zero phantom impressions.",
+      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your programmatic traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets extensively with complete peace of mind regarding hidden markups or invisible fraud.",
   },
   infrastructure: {
     label: "Raw logs Your team can audit on demand",
@@ -389,7 +389,7 @@ export const aboutPage = {
     {
       question: "Is Upraiser built to support in-house media teams?",
       answer:
-        "Yes. We integrate directly with Your in-house team without adding agency friction. We wire the SDK trails and configure the data pipelines so Your internal traders execute campaigns on audit-ready logs. We verify that every raw pipeline matches Your tracking platform down to the single event.",
+        "Yes. We empower Your in-house team. We do not take ownership away from Your operators. We wire the SDK trails and clear the data pipelines so Your team can execute campaigns on clean, audit-ready logs. We secure the lines and ensure the data pipeline matches Your tracking platform perfectly.",
     },
     {
       question: "How does Upraiser ensure zero-drift data transparency?",
@@ -414,7 +414,7 @@ export const aboutPage = {
   ],
   ctaLabel: "Request Pilot",
   closeTitle: "Meet the team on a pilot",
-  closeDescription: "Submit vertical, GEO, and target KPI event. We map the verified buying route and required budget within 48 hours.",
+  closeDescription: "Submit vertical, GEO, and KPI event. We instantly construct a beautifully scoped exact path.",
 } as const;
 
 export const casesPage = {
@@ -428,11 +428,11 @@ export const casesPage = {
   structureSteps: [
     {
       title: "Results",
-      description: "Audited performance figures lead the review, presenting the verified metrics finance demands.",
+      description: "Three powerful hero numbers lead the story presenting the exact figures finance demands.",
     },
     {
       title: "Metadata",
-      description: "Brand, vertical, GEO, KPI event, and payout models structured for rapid procurement sign-off.",
+      description: "Brand, vertical, GEO, KPI event, and payment models structured brilliantly for procurement review.",
     },
     {
       title: "Story",
@@ -453,13 +453,13 @@ export const solutionsPage = {
     line2Prefix: "Every path ships one",
     inlineWord: "reconciliation file",
     description:
-      "App Growth, OEM, Creators, and programmatic channels operate on verified MMP receipts with zero undisclosed markups.",
+      "App Growth, OEM, Creators, and programmatic channels operate on verified MMP receipts ensuring absolute transparency.",
   },
   description:
-    "App Growth, OEM, Creators, and programmatic channels operate on verified MMP receipts with zero undisclosed markups.",
+    "App Growth, OEM, Creators, and programmatic channels operate on verified MMP receipts ensuring absolute transparency.",
   ctaLabel: "Request Pilot",
   closeTitle: "Brief the path You need",
-  closeDescription: "Share Your vertical, GEO, and target KPI event. We configure Your verified supply lane within 48 hours.",
+  closeDescription: "Share Your vertical, GEO, and critical KPI event. We immediately route You into the most optimal buying lane.",
 } as const;
 
 export const contactPage = {
@@ -469,7 +469,7 @@ export const contactPage = {
   accentWord: "Briefing",
   description: "",
   subline:
-    "SLA: 24–48 hours. Submit Your vertical, target GEO, or OEM supply criteria to receive a technical flight plan.",
+    "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
   email: "info@upraiser.co.uk",
   ctaLabel: "Request Pilot",
@@ -481,12 +481,12 @@ export const caseStudyMeta = {
     {
       title: "Results",
       description:
-        "Audited performance figures lead the review, presenting the verified metrics finance demands.",
+        "Three powerful hero numbers lead the story presenting the exact figures finance demands.",
     },
     {
       title: "Metadata",
       description:
-        "Brand, vertical, GEO, KPI event, and payout models structured for rapid procurement sign-off.",
+        "Brand, vertical, GEO, KPI event, and payment models structured brilliantly for procurement review.",
     },
     {
       title: "Story",
@@ -499,7 +499,7 @@ export const caseStudyMeta = {
 export const testimonials = [
   {
     quote:
-      "We stopped explaining attribution drift to finance and started sharing one unified, reconciled file.",
+      "We stopped explaining attribution drift to finance and started sharing one perfectly aligned file.",
     name: "UA Director",
     role: "Fintech app UK",
     company: "Mid-size consumer finance",
@@ -515,7 +515,7 @@ export const testimonials = [
   },
   {
     quote:
-      "We upgraded from weekly reconciliation calls to a direct monthly file pull. That solved our operational bottleneck.",
+      "We upgraded from weekly reconciliation calls to a direct monthly file pull. That constitutes a massive operational victory.",
     name: "Ad Ops Lead",
     role: "Media buyer EU",
     company: "Programmatic accounts",
@@ -523,7 +523,7 @@ export const testimonials = [
   },
   {
     quote:
-      "Pre-bid filtration ensured every single dollar we allocated cleared a rigorous device check before auction close.",
+      "Pre-bid filtration ensured every single dollar we allocated cleared a robust device check flawlessly.",
     name: "Growth Lead",
     role: "Marketplace GCC",
     company: "E-commerce expansion",
@@ -552,12 +552,12 @@ export const sectionsByMode = {
     growth: {
       title: "Equipment powering 30K+ daily installs.",
       description:
-        "Direct supply, event-weighted optimization, and verified routes scale volume across all targeted markets.",
+        "Direct supply, robust event-weighted optimization, and verified routes power incredible growth across all targeted markets.",
     },
     infrastructure: {
       title: "Equipment powering transparent media buying.",
       description:
-        "Direct supply, 0.4ms pre-bid filtration, and verified routes secure performance across all targeted markets.",
+        "Direct supply, robust pre-bid filtration, and verified routes secure incredible performance across all targeted markets.",
     },
   },
   cases: {
@@ -575,12 +575,12 @@ export const sectionsByMode = {
     growth: {
       title: "We are UPRAISER",
       description:
-        "Based securely in London. Official Lenovo agency partner. We engineer pre-bid fraud filtration, premium OEM distribution, and event-verified buying built specifically for iGaming and fintech.",
+        "Based securely in London. Official Lenovo agency partner. We engineer pre-bid fraud filtration, premium OEM distribution, and event-verified buying perfectly tailored for iGaming and fintech.",
     },
     infrastructure: {
       title: "We are UPRAISER",
       description:
-        "Based securely in London. Official Lenovo agency partner. We architect log reconciliation, direct ROM deploys, and robust pre-bid guards built specifically for transparent media buying.",
+        "Based securely in London. Official Lenovo agency partner. We architect log reconciliation, direct ROM deploys, and robust pre-bid guards perfectly tailored for transparent media buying.",
     },
   },
   process: {
