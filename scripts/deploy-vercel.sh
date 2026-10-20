@@ -28,6 +28,10 @@ if [[ -f .env ]]; then
     local var_name="$1"
     local val
     val="$(grep -E "^${var_name}=" .env | cut -d= -f2- | tr -d '\r' || true)"
+    val="${val%\"}"
+    val="${val#\"}"
+    val="${val%\'}"
+    val="${val#\'}"
     if [[ -n "$val" && "$val" != "your_"* && "$val" != "https://your-"* ]]; then
       for target_env in production preview development; do
         printf '%s' "$val" | vercel env add "$var_name" "$target_env" --force >/dev/null 2>&1 || true
@@ -52,9 +56,19 @@ vercel build --prod --yes
 
 echo "Rebuilding client bundle with real environment variables…"
 if [[ -f .env ]]; then
-  set -a
-  eval "$(grep -E '^[A-Za-z0-9_]+=' .env | sed 's/\r$//')"
-  set +a
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "$line" ]] && continue
+    if [[ "$line" =~ ^([A-Za-z0-9_]+)=(.*)$ ]]; then
+      key="${BASH_REMATCH[1]}"
+      val="${BASH_REMATCH[2]}"
+      val="${val%\"}"
+      val="${val#\"}"
+      val="${val%\'}"
+      val="${val#\'}"
+      export "$key"="$val"
+    fi
+  done < .env
 fi
 
 # Remove masked .vercel/.env.production.local that contains [SENSITIVE]

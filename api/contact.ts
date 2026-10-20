@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createClient } from "@supabase/supabase-js";
 
@@ -88,6 +89,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     companySize = "boutique",
     monthlyBudget = "pilot",
     notes = "",
+    files = [],
     filePath = null,
     fileUrl = null,
     fileName = null,
@@ -100,40 +102,41 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return res.end(JSON.stringify({ ok: false, error: "Required fields missing (name, email, appId)." }));
   }
 
+  const rawFiles: Array<{ name: string; size?: number; type?: string; filePath: string; url?: string }> =
+    Array.isArray(files) && files.length > 0
+      ? files
+      : filePath
+      ? [{ name: fileName || "client-brief-attachment", size: fileSize, type: fileType, filePath, url: fileUrl }]
+      : [];
+
   let attachments: Array<{ filename: string; content: string }> | undefined;
 
   try {
-    // 1. Validate and download file from Supabase Storage if attached
-    if (filePath) {
-      if (!supabaseAdmin) {
-        throw new Error("Supabase Storage is not configured on the server.");
+    // 1. Validate and download files from Supabase Storage if attached
+    if (rawFiles.length > 0 && supabaseAdmin) {
+      attachments = [];
+      for (const f of rawFiles) {
+        if (!f.filePath) continue;
+        if (f.size && f.size > MAX_FILE_SIZE) continue;
+        if (f.type && !ALLOWED_MIME_TYPES.has(f.type)) continue;
+
+        try {
+          const { data: fileBlob, error: downloadError } = await supabaseAdmin.storage
+            .from("temp-briefs")
+            .download(f.filePath);
+
+          if (!downloadError && fileBlob) {
+            const buffer = Buffer.from(await fileBlob.arrayBuffer());
+            attachments.push({
+              filename: f.name || "brief-attachment",
+              content: buffer.toString("base64"),
+            });
+          }
+        } catch (downloadErr) {
+          console.warn("Failed to download brief attachment from Supabase:", f.filePath, downloadErr);
+        }
       }
-
-      if (fileSize && fileSize > MAX_FILE_SIZE) {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ ok: false, error: "File exceeds 10 MB limit." }));
-      }
-
-      if (fileType && !ALLOWED_MIME_TYPES.has(fileType)) {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ ok: false, error: "Unsupported file type. Allowed: PDF, Word, Excel, CSV, TXT, PNG, JPG." }));
-      }
-
-      const { data: fileBlob, error: downloadError } = await supabaseAdmin.storage
-        .from("temp-briefs")
-        .download(filePath);
-
-      if (downloadError || !fileBlob) {
-        throw new Error(downloadError?.message || "Failed to download brief attachment.");
-      }
-
-      const buffer = Buffer.from(await fileBlob.arrayBuffer());
-      attachments = [
-        {
-          filename: fileName || "client-brief-attachment",
-          content: buffer.toString("base64"),
-        },
-      ];
+      if (attachments.length === 0) attachments = undefined;
     }
 
     // 2. Format HTML email
@@ -206,7 +209,19 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       <div style="font-size: 13px; font-weight: 600; color: #4b5563; margin-top: 16px;">Brief Details & Project Notes:</div>
       <div class="notes-box">${escapeHtml(notes || "No additional comments provided.")}</div>
 
-      ${fileName ? `<div class="attachment-box">📎 <strong>Attached Brief:</strong> ${escapeHtml(fileName)} (${fileSize ? (fileSize / 1024).toFixed(0) + " KB" : ""})${fileUrl ? `<div style="margin-top: 8px;"><a href="${fileUrl}" style="color: #1e40af; font-weight: 600; text-decoration: underline;" target="_blank">⬇️ Click here to open / download file directly</a></div>` : ""}</div>` : ""}
+      ${rawFiles.length > 0 ? `
+        <div class="attachment-box">
+          📎 <strong>Attached Brief Files (${rawFiles.length}):</strong>
+          <ul style="margin: 8px 0 0; padding-left: 18px; line-height: 1.6;">
+            ${rawFiles.map((f, i) => `
+              <li style="margin: 4px 0;">
+                <strong>${escapeHtml(f.name)}</strong> ${f.size ? `(${(f.size / 1024).toFixed(0)} KB)` : ""}
+                ${f.url ? ` · <a href="${f.url}" style="color: #1e40af; font-weight: 600; text-decoration: underline;" target="_blank">⬇️ Download / Open</a>` : ""}
+              </li>
+            `).join("")}
+          </ul>
+        </div>
+      ` : ""}
     </div>
     <div class="footer">
       Upraiser Agency LLP · 128 City Road, London EC1V 2NX · info@upraiser.co.uk

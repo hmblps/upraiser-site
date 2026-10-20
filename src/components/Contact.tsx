@@ -33,11 +33,12 @@ type FormState = {
   companySize: string;
   monthlyBudget: string;
   notes: string;
-  attachment: File | null;
+  attachments: File[];
 };
 
 type FormErrors = Partial<Record<keyof FormState, string>> & {
   privacyAccepted?: string;
+  attachment?: string;
 };
 
 type SubmitStatus = "idle" | "loading" | "error";
@@ -51,7 +52,7 @@ const initialForm: FormState = {
   companySize: "boutique",
   monthlyBudget: "pilot",
   notes: "",
-  attachment: null,
+  attachments: [],
 };
 
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
@@ -65,9 +66,31 @@ function escapeTgHtml(str: string) {
     .replace(/>/g, "&gt;");
 }
 
-async function sendTelegramNotification(state: FormState, fileUrl?: string | null): Promise<boolean> {
+type UploadedBriefFile = {
+  name: string;
+  size: number;
+  type: string;
+  filePath: string;
+  url: string;
+};
+
+async function sendTelegramNotification(
+  state: FormState,
+  files?: UploadedBriefFile[]
+): Promise<boolean> {
   if (!tgBotToken || !tgChatId) return false;
   try {
+    const filesText =
+      files && files.length > 0
+        ? `📎 <b>Attached Briefs (${files.length}):</b>\n` +
+          files
+            .map(
+              (f, i) =>
+                `  ${i + 1}. <a href="${f.url}">${escapeTgHtml(f.name)}</a> (${(f.size / 1024).toFixed(0)} KB)`
+            )
+            .join("\n")
+        : null;
+
     const text = [
       `🚀 <b>New UPRAISER Pilot Request</b>`,
       ``,
@@ -79,11 +102,7 @@ async function sendTelegramNotification(state: FormState, fileUrl?: string | nul
       `👥 <b>Company Size:</b> ${escapeTgHtml(state.companySize)}`,
       `💰 <b>Monthly Spend:</b> ${escapeTgHtml(state.monthlyBudget)}`,
       state.notes ? `📝 <b>Notes:</b> ${escapeTgHtml(state.notes)}` : null,
-      state.attachment
-        ? fileUrl
-          ? `📎 <b>Attachment:</b> <a href="${fileUrl}">Download ${escapeTgHtml(state.attachment.name)}</a>`
-          : `📎 <b>Attachment:</b> ${escapeTgHtml(state.attachment.name)}`
-        : null,
+      filesText,
     ].filter(Boolean).join("\n");
 
     const res = await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
@@ -96,17 +115,6 @@ async function sendTelegramNotification(state: FormState, fileUrl?: string | nul
         disable_web_page_preview: true,
       }),
     });
-
-    if (state.attachment) {
-      const docData = new FormData();
-      docData.append("chat_id", tgChatId);
-      docData.append("document", state.attachment);
-      docData.append("caption", `📎 Brief attachment from ${state.name} (${state.email})`);
-      await fetch(`https://api.telegram.org/bot${tgBotToken}/sendDocument`, {
-        method: "POST",
-        body: docData,
-      });
-    }
 
     return res.ok;
   } catch (err) {
@@ -158,37 +166,47 @@ export function Contact() {
     abortCtrl.current = new AbortController();
 
     try {
-      let filePath: string | null = null;
-      let fileUrl: string | null = null;
+      let uploadedFiles: UploadedBriefFile[] = [];
 
-      // 1. If file attached & Supabase configured, upload directly to temp-briefs bucket
-      if (form.attachment && supabase) {
+      // 1. If files attached & Supabase configured, upload all files in parallel
+      if (form.attachments.length > 0 && supabase) {
+        const client = supabase;
         try {
-          const fileExt = form.attachment.name.split(".").pop() || "bin";
-          filePath = `brief-${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+          const uploadPromises = form.attachments.map(async (file) => {
+            const fileExt = file.name.split(".").pop() || "bin";
+            const randomSuffix = Math.random().toString(36).substring(2, 9);
+            const filePath = `brief-${Date.now()}-${randomSuffix}.${fileExt}`;
 
-          const { error: uploadError } = await supabase.storage
-            .from("temp-briefs")
-            .upload(filePath, form.attachment);
+            const { error: uploadError } = await client.storage
+              .from("temp-briefs")
+              .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
-          if (uploadError) {
-            console.warn("Supabase upload failed, proceeding with server fallback:", uploadError.message);
-            filePath = null;
-          } else {
-            const { data: pubData } = supabase.storage.from("temp-briefs").getPublicUrl(filePath);
-            fileUrl = pubData?.publicUrl || null;
-          }
+            if (uploadError) {
+              console.warn(`Supabase upload failed for ${file.name}:`, uploadError.message);
+              return null;
+            }
+
+            const { data: pubData } = client.storage.from("temp-briefs").getPublicUrl(filePath);
+            return {
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              filePath,
+              url: pubData?.publicUrl || "",
+            };
+          });
+
+          const results = await Promise.all(uploadPromises);
+          uploadedFiles = results.filter((r): r is UploadedBriefFile => r !== null && Boolean(r.url));
         } catch (uploadErr) {
-          console.warn("Supabase direct upload exception:", uploadErr);
-          filePath = null;
+          console.warn("Supabase multi-upload exception:", uploadErr);
         }
       }
 
-      const tgPromise = sendTelegramNotification(form, fileUrl);
+      const tgPromise = sendTelegramNotification(form, uploadedFiles);
 
       // 2. Primary: Send to Vercel Serverless Function /api/contact (Resend Email with Attachment)
       let serverSent = false;
-      let serverErrorMsg: string | null = null;
       try {
         const payload = {
           name: form.name,
@@ -199,11 +217,12 @@ export function Contact() {
           companySize: form.companySize,
           monthlyBudget: form.monthlyBudget,
           notes: form.notes,
-          filePath,
-          fileUrl,
-          fileName: form.attachment ? form.attachment.name : null,
-          fileType: form.attachment ? form.attachment.type : null,
-          fileSize: form.attachment ? form.attachment.size : null,
+          files: uploadedFiles,
+          filePath: uploadedFiles[0]?.filePath || null,
+          fileUrl: uploadedFiles[0]?.url || null,
+          fileName: uploadedFiles[0]?.name || null,
+          fileType: uploadedFiles[0]?.type || null,
+          fileSize: uploadedFiles[0]?.size || null,
         };
 
         const serverRes = await fetch("/api/contact", {
@@ -217,12 +236,7 @@ export function Contact() {
           const resData = (await serverRes.json().catch(() => ({}))) as { ok?: boolean; error?: string };
           if (resData.ok) {
             serverSent = true;
-          } else {
-            serverErrorMsg = resData.error || "Email delivery failed";
           }
-        } else {
-          const errData = (await serverRes.json().catch(() => ({}))) as { error?: string };
-          serverErrorMsg = errData.error || `Server responded with ${serverRes.status}`;
         }
       } catch (err) {
         console.warn("Direct /api/contact call failed or running in non-Vercel dev:", err);
@@ -248,21 +262,24 @@ export function Contact() {
               formData.append("monthly_budget", form.monthlyBudget);
               formData.append("notes", form.notes);
               formData.append("privacy_policy_accepted", "Yes");
-              if (form.attachment) {
-                if (fileUrl) {
-                  formData.append("attachment_download_url", fileUrl);
-                  formData.append("attachment_name", form.attachment.name);
-                  formData.append("attachment_size", `${(form.attachment.size / 1024).toFixed(0)} KB`);
-                  formData.append(
-                    "attachment",
-                    `${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB) — Download: ${fileUrl}`
-                  );
-                } else {
-                  formData.append(
-                    "attachment_notice",
-                    `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
-                  );
-                }
+
+              // CRITICAL: NEVER use reserved field name "attachment" which triggers Web3Forms Pro paywall!
+              if (uploadedFiles.length > 0) {
+                uploadedFiles.forEach((f, idx) => {
+                  formData.append(`file_${idx + 1}_name`, f.name);
+                  formData.append(`file_${idx + 1}_download_url`, f.url);
+                });
+                formData.append(
+                  "brief_files_summary",
+                  uploadedFiles
+                    .map((f, idx) => `${idx + 1}. ${f.name} (${(f.size / 1024).toFixed(0)} KB) — Direct Download: ${f.url}`)
+                    .join("\n")
+                );
+              } else if (form.attachments.length > 0) {
+                formData.append(
+                  "brief_files_notice",
+                  form.attachments.map((f, idx) => `${idx + 1}. ${f.name} (${(f.size / 1024).toFixed(0)} KB)`).join(", ")
+                );
               }
 
               const response = await fetch("https://api.web3forms.com/submit", {
@@ -295,7 +312,7 @@ export function Contact() {
       }
 
       setStatus("error");
-      setSubmitError(serverErrorMsg || "Unable to send message. Please try again.");
+      setSubmitError("Unable to transmit brief. Please try again or email us directly at info@upraiser.co.uk.");
     } catch (err) {
       setStatus("error");
       setSubmitError(err instanceof Error ? err.message : "Network error. Please check your connection and try again.");
@@ -471,67 +488,99 @@ export function Contact() {
                         <textarea enterKeyHint="done" maxLength={250} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
                       </ContactFormField>
 
-                      <div className="mt-0.5 flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
+                      <div className="mt-0.5 flex flex-col gap-2">
                         <input
                           ref={fileInputRef}
                           type="file"
                           id="attachment"
                           className="hidden"
+                          multiple
                           accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.png,.jpg,.jpeg,.webp"
                           disabled={status === "loading"}
                           onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
+                            const chosen = Array.from(e.target.files || []);
+                            if (chosen.length === 0) return;
+
+                            const current = [...form.attachments];
+                            let errorMsg: string | null = null;
+
+                            for (const file of chosen) {
+                              if (current.length >= 5) {
+                                errorMsg = "Maximum 5 files allowed";
+                                break;
+                              }
                               if (file.size > MAX_FILE_SIZE) {
-                                setErrors((prev) => ({ ...prev, attachment: "File must be under 10 MB" }));
-                                e.target.value = "";
-                                return;
+                                errorMsg = `${file.name} exceeds 10 MB limit`;
+                                continue;
                               }
                               if (file.type && !ALLOWED_MIME_TYPES.has(file.type)) {
-                                setErrors((prev) => ({ ...prev, attachment: "Allowed formats: PDF, Word, Excel, CSV, TXT, PNG, JPG" }));
-                                e.target.value = "";
-                                return;
+                                errorMsg = `${file.name}: format not supported`;
+                                continue;
+                              }
+                              if (!current.some((f) => f.name === file.name && f.size === file.size)) {
+                                current.push(file);
                               }
                             }
+
                             setErrors((prev) => {
                               const next = { ...prev };
-                              delete next.attachment;
+                              if (errorMsg) next.attachment = errorMsg;
+                              else delete next.attachment;
                               return next;
                             });
-                            setForm({ ...form, attachment: file || null });
+
+                            setForm({ ...form, attachments: current });
+                            if (fileInputRef.current) fileInputRef.current.value = "";
                           }}
                         />
-                        {form.attachment ? (
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-caption flex items-center gap-1.5 text-fg font-medium">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                              <span className="max-w-[180px] sm:max-w-[260px] truncate">{form.attachment.name}</span>
-                              <span className="text-muted text-[11px]">({(form.attachment.size / 1024).toFixed(0)} KB)</span>
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setForm((prev) => ({ ...prev, attachment: null }));
-                                if (fileInputRef.current) fileInputRef.current.value = "";
-                              }}
-                              className="text-xs text-muted hover:text-accent p-1 transition-colors flex items-center gap-1 cursor-pointer"
-                              title="Remove attached file"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                              <span>Remove</span>
-                            </button>
+
+                        {form.attachments.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {form.attachments.map((file, idx) => (
+                              <div
+                                key={`${file.name}-${idx}`}
+                                className="flex items-center gap-1.5 rounded-lg border border-border bg-bg-surface px-2.5 py-1 text-xs"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted shrink-0">
+                                  <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                                </svg>
+                                <span className="max-w-[140px] sm:max-w-[200px] truncate font-medium text-fg">{file.name}</span>
+                                <span className="text-muted text-[10px]">({(file.size / 1024).toFixed(0)} KB)</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setForm((prev) => ({
+                                      ...prev,
+                                      attachments: prev.attachments.filter((_, i) => i !== idx),
+                                    }));
+                                  }}
+                                  className="text-muted hover:text-accent p-0.5 ml-1 transition-colors cursor-pointer"
+                                  title={`Remove ${file.name}`}
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                  </svg>
+                                </button>
+                              </div>
+                            ))}
                           </div>
-                        ) : (
+                        )}
+
+                        {form.attachments.length < 5 && (
                           <label
                             htmlFor="attachment"
                             className={`text-caption flex cursor-pointer items-center gap-1.5 text-muted transition hover:text-fg ${status === "loading" ? "pointer-events-none opacity-50" : ""}`}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                            Attach brief (.pdf, .doc, .xlsx, .png, etc.) | max 10MB
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                            </svg>
+                            {form.attachments.length === 0
+                              ? "Attach briefs, data or screenshots (.pdf, .png, .xlsx, etc.) | up to 5 files (max 10MB each)"
+                              : "+ Add another file (up to 5)"}
                           </label>
                         )}
-                        </div>
+
                         {errors.attachment ? (
                           <p className="text-caption text-magenta-light" role="alert">
                             {errors.attachment}
