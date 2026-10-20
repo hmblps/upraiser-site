@@ -1011,5 +1011,38 @@
     "g2": "Connected TV",
     "g3": "Social Ads",
     "g4": "OEM & Directo"
+  },
+  "creativeStudio": {
+    "title": "Estudio Digital Creativo y Tecnológico de Ciclo Completo",
+    "subtitle": "Impulsando el crecimiento digital: desde conceptos inmersivos en 3D e IA hasta contenido de alto rendimiento y tecnología empresarial.",
+    "categories": {
+      "immersive": {
+        "title": "Inmersivo y Alta Tecnología",
+        "items": [
+          "Gráficos 3D y CGI",
+          "Diseño de Movimiento y Animación",
+          "Embajadores de Marca con IA y Avatares Virtuales"
+        ]
+      },
+      "content": {
+        "title": "Producción de Contenido",
+        "items": [
+          "Producción Integral de Foto y Video",
+          "Contenido Digital Creado por Creadores",
+          "Videos y Banners Digitales de Alta Conversión",
+          "Rich Media Jugable e Interactivo"
+        ]
+      },
+      "engineering": {
+        "title": "Ingeniería Digital y Tecnológica",
+        "items": [
+          "Desarrollo Web Integral de Extremo a Extremo",
+          "Desarrollo de Aplicaciones Móviles",
+          "Infraestructura en la Nube y Arquitectura de Sistemas"
+        ]
+      }
+    },
+    "skipToSummit": "Ver capacidades",
+    "replayClimb": "Repetir ascenso"
   }
 }

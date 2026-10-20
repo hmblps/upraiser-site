@@ -1011,5 +1011,38 @@
     "conqueringPeaks": "Conquistando Picos Juntos",
     "renderingTerrain": "Renderizando Terreno",
     "clickFlood": "Click Flood Bloqueado"
+  },
+  "creativeStudio": {
+    "title": "Estúdio Digital Criativo e Tecnológico Full-Cycle",
+    "subtitle": "Impulsionando o crescimento digital: de conceitos imersivos em 3D e IA a conteúdo de alta performance e tecnologia empresarial.",
+    "categories": {
+      "immersive": {
+        "title": "Imersivo & Alta Tecnologia",
+        "items": [
+          "Computação Gráfica 3D & CGI",
+          "Motion Design & Animação",
+          "Embaixadores de Marca com IA & Avatares Virtuais"
+        ]
+      },
+      "content": {
+        "title": "Produção de Conteúdo",
+        "items": [
+          "Produção Completa de Foto & Vídeo",
+          "Conteúdo Digital Conduzido por Criadores",
+          "Vídeos e Banners Digitais de Alta Conversão",
+          "Rich Media Jogável & Interativo"
+        ]
+      },
+      "engineering": {
+        "title": "Engenharia Digital & Tecnológica",
+        "items": [
+          "Desenvolvimento Web Ponta a Ponta",
+          "Desenvolvimento de Aplicativos Mobile",
+          "Infraestrutura em Nuvem & Arquitetura de Sistemas"
+        ]
+      }
+    },
+    "skipToSummit": "Ver capacidades",
+    "replayClimb": "Repetir escalada"
   }
 }

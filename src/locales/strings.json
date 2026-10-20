@@ -226,6 +226,15 @@
     "fr": "Plus de 32 000 installations quotidiennes en PL, UK, DE et 12 autres GEOs. ROAS J1 de 20 %, rétention J7 de 37 %。",
     "pt": "Mais de 32.000 instalações diárias em PL, UK, DE e mais 12 GEOs. ROAS D1 de 20%, retenção D7 de 37%."
   },
+  "3D Graphics & CGI": {
+    "de": "3D-Grafik & CGI",
+    "fr": "Graphismes 3D & CGI",
+    "es": "Gráficos 3D y CGI",
+    "pt": "Computação Gráfica 3D & CGI",
+    "zh": "3D 图形与 CGI 特效",
+    "ja": "3Dグラフィックス＆CGI",
+    "ko": "3D 그래픽 & CGI"
+  },
   "50 to 200 employees": {
     "zh": "50 至 200 名员工",
     "ja": "従業員50〜200名",
@@ -415,6 +424,15 @@
     "fr": "Partenaire Agence",
     "pt": "Parceiro de Agência"
   },
+  "AI Brand Ambassadors & Virtual Avatars": {
+    "de": "KI-Markenbotschafter & Virtuelle Avatare",
+    "fr": "Ambassadeurs de Marque IA & Avatars Virtuels",
+    "es": "Embajadores de Marca con IA y Avatares Virtuales",
+    "pt": "Embaixadores de Marca com IA & Avatares Virtuais",
+    "zh": "AI 品牌代言人与虚拟数字人",
+    "ja": "AIブランドアンバサダー＆バーチャルアバター",
+    "ko": "AI 브랜드 앰버서더 & 가상 아바타"
+  },
   "Algorithmic distribution": {
     "zh": "算法分发",
     "ja": "アルゴリズム配信",
@@ -449,6 +467,15 @@
     "es": "Analistas que descubren vectores ocultos de crecimiento, monitorean métricas y optimizan sus presupuestos en tiempo real.",
     "de": "Analysten, die versteckte Wachstumsvektoren aufdecken, Metriken überwachen und Deine Budgets in Echtzeit optimieren.",
     "fr": "Des analystes qui révèlent les vecteurs de croissance cachés, surveillent les métriques et optimisent Vos budgets en temps réel."
+  },
+  "Analytics experts who continuously monitor the metrics, uncover hidden growth vectors, and optimize Your budgets in real time to keep Your trajectory moving upward.": {
+    "zh": "全天候监控核心指标、深度挖掘隐藏增长向量的资深数据分析专家。他们实时优化您的投放预算，确保业务发展轨迹持续稳步攀升。",
+    "ja": "指標を継続的に監視し、隠れた成長ベクトルを発見するアナリティクス専門家。リアルタイムで予算配分を最適化し、貴社の成長軌道を常に上昇させ続けます。",
+    "ko": "지표를 끊임없이 모니터링하고 숨겨진 성장 벡터를 발굴하는 데이터 분석 전문가들입니다. 예산을 실시간으로 최적화하여 귀사의 성장 궤적이 계속해서 상승 곡선을 그리도록 만듭니다.",
+    "es": "Expertos en analítica que supervisan métricas continuamente, descubren vectores de crecimiento ocultos y optimizan sus presupuestos en tiempo real para mantener su trayectoria siempre en ascenso.",
+    "de": "Analytics-Experten, die Metriken kontinuierlich überwachen, verborgene Wachstumsvektoren aufdecken und Deine Budgets in Echtzeit optimieren, um die Flugbahn Deines Unternehmens kontinuierlich nach oben zu lenken.",
+    "fr": "Experts en analyse de données qui surveillent en continu les métriques clés, révèlent des vecteurs de croissance insoupçonnés et optimisent Vos budgets en temps réel pour maintenir Votre trajectoire constamment orientée vers le haut.",
+    "pt": "Especialistas em analytics que monitoram métricas continuamente, descobrem vetores de crescimento ocultos e otimizam Seus orçamentos em tempo real para manter Sua trajetória em constante ascensão."
   },
   "and": {
     "zh": "与",
@@ -1131,6 +1158,15 @@
     "de": "Vorschau schließen",
     "fr": "Fermer l'aperçu"
   },
+  "Cloud Infrastructure & System Architecture": {
+    "de": "Cloud-Infrastruktur & Systemarchitektur",
+    "fr": "Infrastructure Cloud & Architecture Système",
+    "es": "Infraestructura en la Nube y Arquitectura de Sistemas",
+    "pt": "Infraestrutura em Nuvem & Arquitetura de Sistemas",
+    "zh": "云原生基础设施与系统架构",
+    "ja": "クラウドインフラ＆システムアーキテクチャ",
+    "ko": "클라우드 인프라 & 시스템 아키텍처"
+  },
   "Code": {
     "zh": "代码",
     "ja": "コード",
@@ -1263,6 +1299,15 @@
     "es": "Contacto",
     "de": "Kontakt",
     "pt": "Contato"
+  },
+  "Content Production": {
+    "de": "Content-Produktion",
+    "fr": "Production de Contenu",
+    "es": "Producción de Contenido",
+    "pt": "Produção de Conteúdo",
+    "zh": "全域内容制作",
+    "ja": "コンテンツ制作",
+    "ko": "콘텐츠 제작"
   },
   "Controls": {
     "zh": "管控机制",
@@ -1400,6 +1445,15 @@
     "de": "Creator-Generated Content, entwickelt für die Conversion komplexer Verticals.",
     "fr": "Creator-Generated Content conçu pour convertir sur les verticaux complexes.",
     "pt": "Conteúdo Gerado por Criadores construído para converter nichos complexos."
+  },
+  "Creator-Led Digital Content": {
+    "de": "Creator-geführter digitaler Content",
+    "fr": "Contenus Digitaux Portés par des Créateurs",
+    "es": "Contenido Digital Creado por Creadores",
+    "pt": "Conteúdo Digital Conduzido por Criadores",
+    "zh": "创作者生态定制数字内容",
+    "ja": "クリエイター主導型デジタルコンテンツ",
+    "ko": "크리에이터 중심 디지털 콘텐츠"
   },
   "Creators": {
     "zh": "合作创作者",
@@ -1636,6 +1690,15 @@
     "fr": "différents univers techniques",
     "pt": "diferentes mundos técnicos"
   },
+  "Digital & Tech Engineering": {
+    "de": "Digital- & Tech-Engineering",
+    "fr": "Ingénierie Digitale & Technologique",
+    "es": "Ingeniería Digital y Tecnológica",
+    "pt": "Engenharia Digital & Tecnológica",
+    "zh": "数字与工程技术架构",
+    "ja": "デジタル＆テックエンジニアリング",
+    "ko": "디지털 & 테크 엔지니어링"
+  },
   "Direct Access · Factory ROM · Verified Logs": {
     "zh": "直连通道 · 出厂 ROM · 验证日志",
     "ja": "ダイレクトアクセス · 工場ROM · 検証済みログ",
@@ -1716,6 +1779,15 @@
     "fr": "Événements post-install",
     "pt": "Eventos de fundo de funil"
   },
+  "Driving digital growth: from immersive 3D and AI concepts to high-performance content and enterprise tech.": {
+    "de": "Digitales Wachstum antreiben: von immersiven 3D- und KI-Konzepten bis hin zu hochperformantem Content und Enterprise-Tech.",
+    "fr": "Propulser la croissance digitale : des concepts immersifs 3D et IA jusqu’aux contenus haute performance et technologies d'entreprise.",
+    "es": "Impulsando el crecimiento digital: desde conceptos inmersivos en 3D e IA hasta contenido de alto rendimiento y tecnología empresarial.",
+    "pt": "Impulsionando o crescimento digital: de conceitos imersivos em 3D e IA a conteúdo de alta performance e tecnologia empresarial.",
+    "zh": "驱动数字化增长：从沉浸式 3D 与 AI 概念，到高转化内容与企业级技术方案。",
+    "ja": "デジタルの成長を牽引：没入型3D・AIコンセプトから高パフォーマンスコンテンツ、エンタープライズ技術まで。",
+    "ko": "디지털 성장을 견인합니다: 몰입형 3D 및 AI 콘셉트부터 고성과 콘텐츠와 엔터프라이즈 테크까지."
+  },
   "DSP": {
     "zh": "DSP",
     "ja": "DSP",
@@ -1757,6 +1829,15 @@
     "es": "Llevando su negocio a la cima absoluta",
     "de": "Dein Business an die absolute Spitze bringen",
     "fr": "Hisser Votre entreprise au sommet absolu"
+  },
+  "End-to-End Web Development": {
+    "de": "End-to-End Webentwicklung",
+    "fr": "Développement Web Bout-en-Bout",
+    "es": "Desarrollo Web Integral de Extremo a Extremo",
+    "pt": "Desenvolvimento Web Ponta a Ponta",
+    "zh": "端到端全栈 Web 开发",
+    "ja": "エンドツーエンドWeb開発",
+    "ko": "엔드투엔드 웹 개발"
   },
   "Entity": {
     "zh": "法定实体",
@@ -2205,6 +2286,24 @@
     "fr": "FTDs",
     "pt": "Volume de Depósitos"
   },
+  "Full-Cycle Digital Creative & Tech Studio": {
+    "de": "Full-Cycle Digital-Kreativ- & Tech-Studio",
+    "fr": "Studio Digital Créatif & Tech Full-Cycle",
+    "es": "Estudio Digital Creativo y Tecnológico de Ciclo Completo",
+    "pt": "Estúdio Digital Criativo e Tecnológico Full-Cycle",
+    "zh": "全链路全案数字创意与技术工作室",
+    "ja": "フルサイクル・デジタルクリエイティブ＆テックスタジオ",
+    "ko": "풀사이클 디지털 크리에이티브 & 테크 스튜디오"
+  },
+  "Full-Scale Photo & Video Production": {
+    "de": "Vollumfängliche Foto- & Videoproduktion",
+    "fr": "Production Photo & Vidéo Complète",
+    "es": "Producción Integral de Foto y Video",
+    "pt": "Produção Completa de Foto & Vídeo",
+    "zh": "全画幅摄影与商业影视制作",
+    "ja": "フルスケール写真・動画プロダクション",
+    "ko": "풀스케일 사진 & 영상 제작"
+  },
   "Full-screen at natural breaks like level load, article end, or checkout. Scored pre-bid so high-bounce slots never clear the cap.": {
     "zh": "在关卡加载、文章结尾或结算等自然停顿处全屏呈现。竞价前即进行评分，确保高跳出率广告位绝不超限消耗。",
     "ja": "レベル読み込み、記事末尾、決済完了などの自然な合間に全画面表示。入札前にスコアリングを行い、離脱率の高い枠を確実に排除。",
@@ -2428,6 +2527,15 @@
     "fr": "Heroic : Échelle tactique",
     "pt": "Heroic: Escala Tática"
   },
+  "High-Converting Video & Digital Banners": {
+    "de": "Konvertierungsstarke Video- & Digital-Banner",
+    "fr": "Vidéos & Bannières Digitales Haute Conversion",
+    "es": "Videos y Banners Digitales de Alta Conversión",
+    "pt": "Vídeos e Banners Digitais de Alta Conversão",
+    "zh": "高转化视频广告与数字素材",
+    "ja": "高CV動画＆デジタルバナー",
+    "ko": "고전환 영상 & 디지털 배너"
+  },
   "High-frequency finance": {
     "zh": "高频金融科技",
     "ja": "高頻度取引フィンテック",
@@ -2530,6 +2638,15 @@
     "es": "iGaming · CPI · US legal states",
     "de": "iGaming · CPI · US legal states",
     "fr": "iGaming · CPI · États américains autorisés"
+  },
+  "Immersive & High-Tech": {
+    "de": "Immersive & High-Tech",
+    "fr": "Immersif & Haute Technologie",
+    "es": "Inmersivo y Alta Tecnología",
+    "pt": "Imersivo & Alta Tecnologia",
+    "zh": "沉浸式与尖端科技",
+    "ja": "イマーシブ＆ハイテク",
+    "ko": "몰입형 & 하이테크"
   },
   "Impressions": {
     "zh": "展示曝光",
@@ -3088,6 +3205,15 @@
     "fr": "Marché",
     "pt": "Mercado"
   },
+  "Marketers with rich experience spanning traditional media (including television and magazines) and modern digital landscapes. Having shaped the mobile marketing industry since its very dawn, they know exactly how to find the optimal route to Your audience across complex digital terrains.": {
+    "zh": "拥有横跨传统媒体（包括电视与期刊）及现代数字生态深厚积淀的营销专家。早在移动营销诞生之初他们便参与行业格局的奠定，深谙如何在错综复杂的数字环境中为您的精准受众开辟最高效通路。",
+    "ja": "テレビや雑誌などのトラディショナルメディアから最新のデジタル領域まで、幅広い経験を有するマーケター陣。モバイルマーケティング黎明期から業界を切り拓いてきた経験を武器に、複雑なデジタル環境の中で貴社のターゲット層へ至る最適なルートを正確に描き出します。",
+    "ko": "텔레비전 및 잡지를 포함한 전통 매체부터 최신 디지털 환경에 이르기까지 폭넓은 경험을 갖춘 마케터들입니다. 모바일 마케팅 태동기부터 업계를 주도해 온 이들은 복잡한 디지털 지형 속에서 귀사의 타깃 고객에게 도달하는 최적의 경로를 정확히 찾아냅니다.",
+    "es": "Especialistas en marketing con amplia trayectoria que abarca desde medios tradicionales (incluyendo televisión y revistas) hasta los entornos digitales más modernos. Habiendo impulsado la industria del marketing móvil desde sus inicios, saben con total precisión cómo trazar la ruta óptima hacia su audiencia en terrenos digitales complejos.",
+    "de": "Marketer mit umfassender Erfahrung, die von traditionellen Medien (einschließlich Fernsehen und Magazinen) bis zu modernen digitalen Landschaften reicht. Da sie die Mobile-Marketing-Branche seit ihren frühesten Anfängen mitgestaltet haben, wissen sie genau, wie man in komplexen digitalen Terrains den optimalen Weg zu Deiner Zielgruppe findet.",
+    "fr": "Des spécialistes du marketing fort d'une riche expérience couvrant aussi bien les médias traditionnels (dont la télévision et la presse écrite) que les écosystèmes digitaux modernes. Acteurs de l'industrie du marketing mobile depuis ses débuts, ils savent exactement comment tracer la trajectoire optimale vers Votre audience au cœur des environnements digitaux les plus complexes.",
+    "pt": "Especialistas em marketing com vasta experiência que abrange desde a mídia tradicional (incluindo televisão e revistas) até os ecossistemas digitais mais avançados. Tendo moldado a indústria de marketing mobile desde as suas origens, eles sabem exatamente como encontrar a rota ideal para alcançar o Seu público em cenários digitais complexos."
+  },
   "Marketplace · CPI · KW · SA · AE": {
     "zh": "电商平台 · CPI · KW · SA · AE",
     "ja": "マーケットプレイス · CPI · KW · SA · AE",
@@ -3222,6 +3348,15 @@
     "de": "MMP-abgestimmte Aktivierungs-Events",
     "fr": "Événements d'activation alignés sur le MMP"
   },
+  "Mobile Application Development": {
+    "de": "Entwicklung mobiler Apps",
+    "fr": "Développement d'Applications Mobiles",
+    "es": "Desarrollo de Aplicaciones Móviles",
+    "pt": "Desenvolvimento de Aplicativos Mobile",
+    "zh": "移动客户端应用开发 (iOS / Android)",
+    "ja": "モバイルアプリケーション開発",
+    "ko": "모바일 애플리케이션 개발"
+  },
   "Model": {
     "zh": "模式",
     "ja": "モデル",
@@ -3246,6 +3381,15 @@
     "es": "Moneycat",
     "de": "Moneycat",
     "fr": "Moneycat"
+  },
+  "Motion Design & Animation": {
+    "de": "Motion Design & Animation",
+    "fr": "Motion Design & Animation",
+    "es": "Diseño de Movimiento y Animación",
+    "pt": "Motion Design & Animação",
+    "zh": "动态视觉设计与动画",
+    "ja": "モーションデザイン＆アニメーション",
+    "ko": "모션 디자인 & 애니메이션"
   },
   "MX": {
     "pt": "100%"
@@ -3615,6 +3759,15 @@
     "fr": "Notre DSP optimise chaque enchère en temps réel pour concentrer vos dépenses sur les profils à fort potentiel : inscriptions, premiers dépôts (EFTD) ou achats in-game.",
     "pt": "Nossa plataforma de demanda (DSP) otimiza lances em tempo real, concentrando o investimento em usuários com alta probabilidade de concluir cadastros, realizar primeiros depósitos (FTD) ou efetuar transações in-app."
   },
+  "Our foundation is a synergy of elite talent, built to conquer any digital terrain. We combine mathematical precision, creative power, and strategic vision, ensuring that every step of Your ascent is secured by the specialists who understand the pure mechanics of scale.": {
+    "zh": "我们的根基是顶尖人才的协同汇聚，专为征服任何数字地形而生。我们融合数学般的严密精准、创意张力与战略视野，确保您攀升的每一步都由深谙规模增长底层逻辑的专家保驾护航。",
+    "ja": "私たちの基盤は、あらゆるデジタル領域を制覇するために構築された精鋭たちのシナジーです。数学的精密さ、創造力、そして戦略的ビジョンを融合させ、スケールの本質的なメカニズムを熟知したスペシャリストが貴社の飛躍を確実に支えます。",
+    "ko": "우리의 토대는 모든 디지털 지형을 정복하도록 구축된 엘리트 인재들의 시너지입니다. 수학적 정밀성, 창의적 역량, 전략적 비전을 결합하여, 스케일업의 본질적인 메커니즘을 꿰뚫고 있는 전문가들이 귀사의 도약의 모든 단계를 견고하게 뒷받침합니다.",
+    "es": "Nuestra base es una sinergia de talento de élite, creada para conquistar cualquier terreno digital. Combinamos precisión matemática, potencia creativa y visión estratégica, asegurando que cada paso de su ascenso esté respaldado por especialistas que entienden la pura mecánica de la escala.",
+    "de": "Unser Fundament ist eine Synergie von Elite-Talenten, geschaffen, um jedes digitale Terrain zu bezwingen. Wir verbinden mathematische Präzision, kreative Kraft und strategische Vision und stellen sicher, dass jeder Schritt Deines Aufstiegs von Spezialisten abgesichert wird, die die reine Mechanik der Skalierung beherrschen.",
+    "fr": "Notre socle repose sur la synergie de talents d'élite, forgée pour conquérir n'importe quel terrain digital. Nous allions rigueur mathématique, puissance créative et vision stratégique, garantissant que chaque étape de Votre ascension soit sécurisée par des spécialistes maîtrisant la mécanique pure de la mise à l'échelle.",
+    "pt": "Nossa base é uma sinergia de talentos de elite, construída para conquistar qualquer terreno digital. Combinamos precisão matemática, força criativa e visão estratégica, garantindo que cada passo da Sua ascensão seja assegurado por especialistas que compreendem a pura mecânica da escala."
+  },
   "Our foundation is built to conquer any terrain. We combine mathematical precision, creative power, and bulletproof infrastructure, ensuring that every step of Your ascent is secured by operators who understand the pure mechanics of scale.": {
     "zh": "我们的根基专为征服任何地形而筑。我们将数学的精准度、创意的穿透力与坚如磐石的基础设施融为一体，确保由深谙规模化纯粹逻辑的运营专家为您攀登的每一步保驾护航。",
     "ja": "当社の基盤は、あらゆる領域を攻略するために構築されています。数学的な精度、クリエイティブの力、堅牢なインフラストラクチャを融合。スケールの本質的な仕組みを熟知したオペレーターが、貴社の成長への登頂を一歩一歩確実に支えます。",
@@ -3766,6 +3919,15 @@
     "es": "Platiza",
     "de": "Platiza",
     "fr": "Platiza"
+  },
+  "Playable Rich Media": {
+    "de": "Playable Rich Media",
+    "fr": "Formats Riches Interactifs (Playables)",
+    "es": "Rich Media Jugable e Interactivo",
+    "pt": "Rich Media Jogável & Interativo",
+    "zh": "可玩交互式互动广告 (Playable Ads)",
+    "ja": "プレイアブル・リッチメディア",
+    "ko": "플레이어블 리치 미디어"
   },
   "Playwing": {
     "zh": "Playwing",
@@ -4182,6 +4344,15 @@
     "fr": "Rendu du Terrain",
     "pt": "Renderizando Terreno"
   },
+  "Replay Climb": {
+    "de": "Aufstieg erneut ansehen",
+    "fr": "Revoir l'ascension",
+    "es": "Repetir ascenso",
+    "pt": "Repetir escalada",
+    "zh": "重新观看攀登",
+    "ja": "登攀をもう一度再生",
+    "ko": "클라이밍 다시 보기"
+  },
   "Request Pilot": {
     "zh": "申请试点",
     "ja": "パイロット配信をリクエスト",
@@ -4388,6 +4559,15 @@
     "fr": "Déployer à l'échelle",
     "pt": "Escala da Operação"
   },
+  "Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth and prosperity.": {
+    "zh": "攀登数字领域的巅峰，需要一支紧密协作的复合型专家团队。在 Upraiser，我们将各自独特的专业技能凝聚于同一罗盘指向：引领您的业务登顶增长与繁荣的绝对顶峰。",
+    "ja": "デジタル領域の頂点を極めるには、多様なオペレーターからなる結束力の高いチームが必要です。Upraiserでは、独自の専門性をひとつの方位磁針のもとに結集し、貴社のビジネスを成長と繁栄の絶対的な頂点へと導きます。",
+    "ko": "디지털 지형의 정상을 정복하려면 긴밀히 결속된 다양한 운영팀이 필요합니다. Upraiser의 독보적인 역량은 단 하나의 나침반을 향해 정렬되어 있습니다. 귀사의 비즈니스를 성장과 번영의 절대적 정점으로 안내하는 것입니다.",
+    "es": "Escalar las alturas del panorama digital requiere un equipo cohesionado de diversos especialistas. En Upraiser, nuestras habilidades únicas se unen hacia un solo norte: guiar su negocio hacia la cima absoluta del crecimiento y la prosperidad.",
+    "de": "Die Höhen der digitalen Landschaft zu erklimmen, erfordert ein eingespieltes Team spezialisierter Operators. Bei Upraiser bündeln wir unsere Fähigkeiten auf einen einzigen Kompasspunkt: Dein Business an die absolute Spitze des Wachstums und Wohlstands zu führen.",
+    "fr": "Atteindre les sommets de l'univers digital exige une équipe soudée d'opérateurs aux expertises complémentaires. Chez Upraiser, nos compétences uniques convergent vers un seul point cardinal : guider Votre entreprise vers le pic absolu de croissance et de prospérité.",
+    "pt": "Alcançar os picos do cenário digital exige uma equipe coesa de diversos operadores. Na Upraiser, nossas habilidades únicas convergem para um único ponto de bússola: guiar o Seu negócio ao ápice absoluto de crescimento e prosperidade."
+  },
   "Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth.": {
     "zh": "攀登数字领域的巅峰，需要一支紧密协作的复合型专家团队。在 Upraiser，我们将各自独特的专业技能凝聚于同一罗盘指向：引领您的业务登顶增长的最顶峰。",
     "ja": "デジタル領域の頂点を極めるには、多様なオペレーターからなる結束力の高いチームが必要です。Upraiserでは、独自の専門性をひとつの方位磁針のもとに結集し、貴社のビジネスを成長の絶対的な頂点へと導きます。",
@@ -4577,6 +4757,15 @@
     "fr": "Social Ads",
     "de": "Social Ads",
     "pt": "Anúncios Sociais"
+  },
+  "Software engineers with background of developing anti-fraud system and advanced tracking platform. They secure Your path, ensuring clean traffic, data integrity, and rock-solid infrastructure.": {
+    "zh": "拥有反欺诈系统与高级归因追踪平台自研背景的资深软件工程师。他们为您的增长路径筑起防线，确保流量纯净、数据绝对完整以及坚如磐石的基础架构。",
+    "ja": "不正防止システムおよび高度なトラッキングプラットフォームの開発実績を持つソフトウェアエンジニア。クリーンなトラフィック、データの完全性、そして堅牢なインフラを確立し、貴社の進路を安全に確保します。",
+    "ko": "부정 트래픽 방지 시스템과 고급 트래킹 플랫폼을 직접 개발한 경력을 지닌 소프트웨어 엔지니어들입니다. 클린 트래픽, 데이터 무결성, 흔들림 없는 인프라를 보장하여 귀사의 성장 경로를 빈틈없이 보호합니다.",
+    "es": "Ingenieros de software con experiencia en el desarrollo de sistemas antifraude y plataformas de atribución avanzadas. Aseguran su ruta, garantizando tráfico limpio, integridad de datos y una infraestructura sólida como una roca.",
+    "de": "Software-Engineers mit fundierter Erfahrung in der Entwicklung von Anti-Fraud-Systemen und fortschrittlichen Tracking-Plattformen. Sie sichern Deinen Pfad ab und gewährleisten sauberen Traffic, Datenintegrität und eine grundsolide Infrastruktur.",
+    "fr": "Ingénieurs logiciels forts d'une expertise reconnue dans le développement de systèmes anti-fraude et de plateformes de tracking avancées. Ils sécurisent Votre parcours en garantissant un trafic propre, l'intégrité des données et une infrastructure infaillible.",
+    "pt": "Engenheiros de software com sólida bagagem no desenvolvimento de sistemas antifraude e plataformas avançadas de rastreamento. Eles asseguram o Seu caminho, garantindo tráfego limpo, integridade dos dados e uma infraestrutura sólida como rocha."
   },
   "SolPrestado": {
     "zh": "SolPrestado",
@@ -5356,6 +5545,15 @@
     "de": "upraiser-theme",
     "fr": "upraiser-theme"
   },
+  "UPRAISER’S EXPEDITION CREW": {
+    "zh": "UPRAISER 探险队",
+    "ja": "UPRAISER 遠征クルー",
+    "ko": "UPRAISER 원정 크루",
+    "es": "El Equipo de Expedición de UPRAISER",
+    "de": "UPRAISERs Expeditions-Crew",
+    "fr": "L'Équipage de l'Expédition UPRAISER",
+    "pt": "A Equipe de Expedição da UPRAISER"
+  },
   "Uptime": {
     "zh": "正常运行时间",
     "ja": "稼働率",
@@ -5381,6 +5579,15 @@
     "de": "US-Performancedaten führten bei anfänglichen GCC-Geboten in die Irre. Conversion-Raten schienen solide, bis GEO-native Tests liefen.",
     "fr": "Les données de performance américaines ont faussé les premières enchères GCC. Les taux de conversion semblaient solides jusqu'aux tests géographiques natifs.",
     "pt": "Dados de performance dos EUA distorceram os lances iniciais no GCC. As taxas de conversão pareciam boas até rodarmos testes nativos por GEO."
+  },
+  "UX/UI and graphic designers who translate complex marketing strategies into breathtaking visual journeys. They craft high-converting interfaces and creatives that don’t just look stunning, but actively drive user actions.": {
+    "zh": "擅长将复杂营销战略转化为惊艳视觉体验的 UI/UX 与平面设计大师。他们匠心打造高转化率的交互界面与创意素材，不仅具备极致视觉美感，更能强效驱动用户行动。",
+    "ja": "複雑なマーケティング戦略を圧巻のビジュアル体験へと昇華させるUI/UXおよびグラフィックデザイナー。単に美しいだけでなく、ユーザーの行動を確実に促す高コンバージョンのインターフェースとクリエイティブを創出します。",
+    "ko": "복잡한 마케팅 전략을 숨막히는 시각적 여정으로 구현해내는 UI/UX 및 그래픽 디자이너들입니다. 단순히 감탄을 자아내는 데 그치지 않고, 사용자의 실질적인 행동을 적극적으로 유도하는 고전환 인터페이스와 크리에이티브를 정교하게 빚어냅니다.",
+    "es": "Diseñadores gráficos y de UX/UI que traducen estrategias de marketing complejas en experiencias visuales impactantes. Diseñan interfaces y creatividades de alta conversión que no solo lucen extraordinarias, sino que impulsan activamente las decisiones del usuario.",
+    "de": "UX/UI- und Grafikdesigner, die komplexe Marketingstrategien in atemberaubende visuelle Reisen verwandeln. Sie gestalten hochkonvertierende Interfaces und Creatives, die nicht nur eindrucksvoll aussehen, sondern zielgerichtete Nutzeraktionen aktiv vorantreiben.",
+    "fr": "Designers UI/UX et graphistes qui métamorphosent des stratégies marketing complexes en véritables voyages visuels immersifs. Ils conçoivent des interfaces et des créations à fort taux de conversion qui, au-delà de leur esthétique remarquable, déclenchent activement l'action des utilisateurs.",
+    "pt": "Designers de UX/UI e gráficos que transformam estratégias complexas de marketing em jornadas visuais impressionantes. Eles desenvolvem interfaces e criativos de alta conversão que não são apenas visualmente impecáveis, mas impulsionam ativamente as ações dos usuários."
   },
   "UX/UI designers translating complex strategies into high-converting assets that actively drive user action.": {
     "zh": "UX/UI 设计师将复杂策略转化为高转化率素材，强力驱动用户转化行动。",
@@ -5509,6 +5716,15 @@
     "es": "Ver todos los casos de estudio",
     "de": "Alle Case Studies ansehen",
     "fr": "Voir toutes les études de cas"
+  },
+  "View Capabilities": {
+    "de": "Leistungen ansehen",
+    "fr": "Voir les expertises",
+    "es": "Ver capacidades",
+    "pt": "Ver capacidades",
+    "zh": "查看业务矩阵",
+    "ja": "サービス一覧を見る",
+    "ko": "스튜디오 역량 보기"
   },
   "View from the top: High-impact outcomes from live flights — tap any card for the full story.": {
     "zh": "绝顶视野：来自实盘战役的高成效战果——轻点任意卡片，查看完整实录。",
@@ -5981,68 +6197,5 @@
     "es": "Ampliar dispositivo",
     "de": "Gerät vergrößern",
     "fr": "Zoomer sur l'appareil"
-  },
-  "UPRAISER’S EXPEDITION CREW": {
-    "zh": "UPRAISER 探险队",
-    "ja": "UPRAISER 遠征クルー",
-    "ko": "UPRAISER 원정 크루",
-    "es": "El Equipo de Expedición de UPRAISER",
-    "de": "UPRAISERs Expeditions-Crew",
-    "fr": "L'Équipage de l'Expédition UPRAISER",
-    "pt": "A Equipe de Expedição da UPRAISER"
-  },
-  "Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth and prosperity.": {
-    "zh": "攀登数字领域的巅峰，需要一支紧密协作的复合型专家团队。在 Upraiser，我们将各自独特的专业技能凝聚于同一罗盘指向：引领您的业务登顶增长与繁荣的绝对顶峰。",
-    "ja": "デジタル領域の頂点を極めるには、多様なオペレーターからなる結束力の高いチームが必要です。Upraiserでは、独自の専門性をひとつの方位磁針のもとに結集し、貴社のビジネスを成長と繁栄の絶対的な頂点へと導きます。",
-    "ko": "디지털 지형의 정상을 정복하려면 긴밀히 결속된 다양한 운영팀이 필요합니다. Upraiser의 독보적인 역량은 단 하나의 나침반을 향해 정렬되어 있습니다. 귀사의 비즈니스를 성장과 번영의 절대적 정점으로 안내하는 것입니다.",
-    "es": "Escalar las alturas del panorama digital requiere un equipo cohesionado de diversos especialistas. En Upraiser, nuestras habilidades únicas se unen hacia un solo norte: guiar su negocio hacia la cima absoluta del crecimiento y la prosperidad.",
-    "de": "Die Höhen der digitalen Landschaft zu erklimmen, erfordert ein eingespieltes Team spezialisierter Operators. Bei Upraiser bündeln wir unsere Fähigkeiten auf einen einzigen Kompasspunkt: Dein Business an die absolute Spitze des Wachstums und Wohlstands zu führen.",
-    "fr": "Atteindre les sommets de l'univers digital exige une équipe soudée d'opérateurs aux expertises complémentaires. Chez Upraiser, nos compétences uniques convergent vers un seul point cardinal : guider Votre entreprise vers le pic absolu de croissance et de prospérité.",
-    "pt": "Alcançar os picos do cenário digital exige uma equipe coesa de diversos operadores. Na Upraiser, nossas habilidades únicas convergem para um único ponto de bússola: guiar o Seu negócio ao ápice absoluto de crescimento e prosperidade."
-  },
-  "Our foundation is a synergy of elite talent, built to conquer any digital terrain. We combine mathematical precision, creative power, and strategic vision, ensuring that every step of Your ascent is secured by the specialists who understand the pure mechanics of scale.": {
-    "zh": "我们的根基是顶尖人才的协同汇聚，专为征服任何数字地形而生。我们融合数学般的严密精准、创意张力与战略视野，确保您攀升的每一步都由深谙规模增长底层逻辑的专家保驾护航。",
-    "ja": "私たちの基盤は、あらゆるデジタル領域を制覇するために構築された精鋭たちのシナジーです。数学的精密さ、創造力、そして戦略的ビジョンを融合させ、スケールの本質的なメカニズムを熟知したスペシャリストが貴社の飛躍を確実に支えます。",
-    "ko": "우리의 토대는 모든 디지털 지형을 정복하도록 구축된 엘리트 인재들의 시너지입니다. 수학적 정밀성, 창의적 역량, 전략적 비전을 결합하여, 스케일업의 본질적인 메커니즘을 꿰뚫고 있는 전문가들이 귀사의 도약의 모든 단계를 견고하게 뒷받침합니다.",
-    "es": "Nuestra base es una sinergia de talento de élite, creada para conquistar cualquier terreno digital. Combinamos precisión matemática, potencia creativa y visión estratégica, asegurando que cada paso de su ascenso esté respaldado por especialistas que entienden la pura mecánica de la escala.",
-    "de": "Unser Fundament ist eine Synergie von Elite-Talenten, geschaffen, um jedes digitale Terrain zu bezwingen. Wir verbinden mathematische Präzision, kreative Kraft und strategische Vision und stellen sicher, dass jeder Schritt Deines Aufstiegs von Spezialisten abgesichert wird, die die reine Mechanik der Skalierung beherrschen.",
-    "fr": "Notre socle repose sur la synergie de talents d'élite, forgée pour conquérir n'importe quel terrain digital. Nous allions rigueur mathématique, puissance créative et vision stratégique, garantissant que chaque étape de Votre ascension soit sécurisée par des spécialistes maîtrisant la mécanique pure de la mise à l'échelle.",
-    "pt": "Nossa base é uma sinergia de talentos de elite, construída para conquistar qualquer terreno digital. Combinamos precisão matemática, força criativa e visão estratégica, garantindo que cada passo da Sua ascensão seja assegurado por especialistas que compreendem a pura mecânica da escala."
-  },
-  "Software engineers with background of developing anti-fraud system and advanced tracking platform. They secure Your path, ensuring clean traffic, data integrity, and rock-solid infrastructure.": {
-    "zh": "拥有反欺诈系统与高级归因追踪平台自研背景的资深软件工程师。他们为您的增长路径筑起防线，确保流量纯净、数据绝对完整以及坚如磐石的基础架构。",
-    "ja": "不正防止システムおよび高度なトラッキングプラットフォームの開発実績を持つソフトウェアエンジニア。クリーンなトラフィック、データの完全性、そして堅牢なインフラを確立し、貴社の進路を安全に確保します。",
-    "ko": "부정 트래픽 방지 시스템과 고급 트래킹 플랫폼을 직접 개발한 경력을 지닌 소프트웨어 엔지니어들입니다. 클린 트래픽, 데이터 무결성, 흔들림 없는 인프라를 보장하여 귀사의 성장 경로를 빈틈없이 보호합니다.",
-    "es": "Ingenieros de software con experiencia en el desarrollo de sistemas antifraude y plataformas de atribución avanzadas. Aseguran su ruta, garantizando tráfico limpio, integridad de datos y una infraestructura sólida como una roca.",
-    "de": "Software-Engineers mit fundierter Erfahrung in der Entwicklung von Anti-Fraud-Systemen und fortschrittlichen Tracking-Plattformen. Sie sichern Deinen Pfad ab und gewährleisten sauberen Traffic, Datenintegrität und eine grundsolide Infrastruktur.",
-    "fr": "Ingénieurs logiciels forts d'une expertise reconnue dans le développement de systèmes anti-fraude et de plateformes de tracking avancées. Ils sécurisent Votre parcours en garantissant un trafic propre, l'intégrité des données et une infrastructure infaillible.",
-    "pt": "Engenheiros de software com sólida bagagem no desenvolvimento de sistemas antifraude e plataformas avançadas de rastreamento. Eles asseguram o Seu caminho, garantindo tráfego limpo, integridade dos dados e uma infraestrutura sólida como rocha."
-  },
-  "Marketers with rich experience spanning traditional media (including television and magazines) and modern digital landscapes. Having shaped the mobile marketing industry since its very dawn, they know exactly how to find the optimal route to Your audience across complex digital terrains.": {
-    "zh": "拥有横跨传统媒体（包括电视与期刊）及现代数字生态深厚积淀的营销专家。早在移动营销诞生之初他们便参与行业格局的奠定，深谙如何在错综复杂的数字环境中为您的精准受众开辟最高效通路。",
-    "ja": "テレビや雑誌などのトラディショナルメディアから最新のデジタル領域まで、幅広い経験を有するマーケター陣。モバイルマーケティング黎明期から業界を切り拓いてきた経験を武器に、複雑なデジタル環境の中で貴社のターゲット層へ至る最適なルートを正確に描き出します。",
-    "ko": "텔레비전 및 잡지를 포함한 전통 매체부터 최신 디지털 환경에 이르기까지 폭넓은 경험을 갖춘 마케터들입니다. 모바일 마케팅 태동기부터 업계를 주도해 온 이들은 복잡한 디지털 지형 속에서 귀사의 타깃 고객에게 도달하는 최적의 경로를 정확히 찾아냅니다.",
-    "es": "Especialistas en marketing con amplia trayectoria que abarca desde medios tradicionales (incluyendo televisión y revistas) hasta los entornos digitales más modernos. Habiendo impulsado la industria del marketing móvil desde sus inicios, saben con total precisión cómo trazar la ruta óptima hacia su audiencia en terrenos digitales complejos.",
-    "de": "Marketer mit umfassender Erfahrung, die von traditionellen Medien (einschließlich Fernsehen und Magazinen) bis zu modernen digitalen Landschaften reicht. Da sie die Mobile-Marketing-Branche seit ihren frühesten Anfängen mitgestaltet haben, wissen sie genau, wie man in komplexen digitalen Terrains den optimalen Weg zu Deiner Zielgruppe findet.",
-    "fr": "Des spécialistes du marketing fort d'une riche expérience couvrant aussi bien les médias traditionnels (dont la télévision et la presse écrite) que les écosystèmes digitaux modernes. Acteurs de l'industrie du marketing mobile depuis ses débuts, ils savent exactement comment tracer la trajectoire optimale vers Votre audience au cœur des environnements digitaux les plus complexes.",
-    "pt": "Especialistas em marketing com vasta experiência que abrange desde a mídia tradicional (incluindo televisão e revistas) até os ecossistemas digitais mais avançados. Tendo moldado a indústria de marketing mobile desde as suas origens, eles sabem exatamente como encontrar a rota ideal para alcançar o Seu público em cenários digitais complexos."
-  },
-  "UX/UI and graphic designers who translate complex marketing strategies into breathtaking visual journeys. They craft high-converting interfaces and creatives that don’t just look stunning, but actively drive user actions.": {
-    "zh": "擅长将复杂营销战略转化为惊艳视觉体验的 UI/UX 与平面设计大师。他们匠心打造高转化率的交互界面与创意素材，不仅具备极致视觉美感，更能强效驱动用户行动。",
-    "ja": "複雑なマーケティング戦略を圧巻のビジュアル体験へと昇華させるUI/UXおよびグラフィックデザイナー。単に美しいだけでなく、ユーザーの行動を確実に促す高コンバージョンのインターフェースとクリエイティブを創出します。",
-    "ko": "복잡한 마케팅 전략을 숨막히는 시각적 여정으로 구현해내는 UI/UX 및 그래픽 디자이너들입니다. 단순히 감탄을 자아내는 데 그치지 않고, 사용자의 실질적인 행동을 적극적으로 유도하는 고전환 인터페이스와 크리에이티브를 정교하게 빚어냅니다.",
-    "es": "Diseñadores gráficos y de UX/UI que traducen estrategias de marketing complejas en experiencias visuales impactantes. Diseñan interfaces y creatividades de alta conversión que no solo lucen extraordinarias, sino que impulsan activamente las decisiones del usuario.",
-    "de": "UX/UI- und Grafikdesigner, die komplexe Marketingstrategien in atemberaubende visuelle Reisen verwandeln. Sie gestalten hochkonvertierende Interfaces und Creatives, die nicht nur eindrucksvoll aussehen, sondern zielgerichtete Nutzeraktionen aktiv vorantreiben.",
-    "fr": "Designers UI/UX et graphistes qui métamorphosent des stratégies marketing complexes en véritables voyages visuels immersifs. Ils conçoivent des interfaces et des créations à fort taux de conversion qui, au-delà de leur esthétique remarquable, déclenchent activement l'action des utilisateurs.",
-    "pt": "Designers de UX/UI e gráficos que transformam estratégias complexas de marketing em jornadas visuais impressionantes. Eles desenvolvem interfaces e criativos de alta conversão que não são apenas visualmente impecáveis, mas impulsionam ativamente as ações dos usuários."
-  },
-  "Analytics experts who continuously monitor the metrics, uncover hidden growth vectors, and optimize Your budgets in real time to keep Your trajectory moving upward.": {
-    "zh": "全天候监控核心指标、深度挖掘隐藏增长向量的资深数据分析专家。他们实时优化您的投放预算，确保业务发展轨迹持续稳步攀升。",
-    "ja": "指標を継続的に監視し、隠れた成長ベクトルを発見するアナリティクス専門家。リアルタイムで予算配分を最適化し、貴社の成長軌道を常に上昇させ続けます。",
-    "ko": "지표를 끊임없이 모니터링하고 숨겨진 성장 벡터를 발굴하는 데이터 분석 전문가들입니다. 예산을 실시간으로 최적화하여 귀사의 성장 궤적이 계속해서 상승 곡선을 그리도록 만듭니다.",
-    "es": "Expertos en analítica que supervisan métricas continuamente, descubren vectores de crecimiento ocultos y optimizan sus presupuestos en tiempo real para mantener su trayectoria siempre en ascenso.",
-    "de": "Analytics-Experten, die Metriken kontinuierlich überwachen, verborgene Wachstumsvektoren aufdecken und Deine Budgets in Echtzeit optimieren, um die Flugbahn Deines Unternehmens kontinuierlich nach oben zu lenken.",
-    "fr": "Experts en analyse de données qui surveillent en continu les métriques clés, révèlent des vecteurs de croissance insoupçonnés et optimisent Vos budgets en temps réel pour maintenir Votre trajectoire constamment orientée vers le haut.",
-    "pt": "Especialistas em analytics que monitoram métricas continuamente, descobrem vetores de crescimento ocultos e otimizam Seus orçamentos em tempo real para manter Sua trajetória em constante ascensão."
   }
 }

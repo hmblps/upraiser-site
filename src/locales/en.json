@@ -1011,5 +1011,38 @@
     "conqueringPeaks": "Conquering Peaks Together",
     "renderingTerrain": "Rendering Terrain",
     "clickFlood": "Click Flood Blocked"
+  },
+  "creativeStudio": {
+    "title": "Full-Cycle Digital Creative & Tech Studio",
+    "subtitle": "Driving digital growth: from immersive 3D and AI concepts to high-performance content and enterprise tech.",
+    "categories": {
+      "immersive": {
+        "title": "Immersive & High-Tech",
+        "items": [
+          "3D Graphics & CGI",
+          "Motion Design & Animation",
+          "AI Brand Ambassadors & Virtual Avatars"
+        ]
+      },
+      "content": {
+        "title": "Content Production",
+        "items": [
+          "Full-Scale Photo & Video Production",
+          "Creator-Led Digital Content",
+          "High-Converting Video & Digital Banners",
+          "Playable Rich Media"
+        ]
+      },
+      "engineering": {
+        "title": "Digital & Tech Engineering",
+        "items": [
+          "End-to-End Web Development",
+          "Mobile Application Development",
+          "Cloud Infrastructure & System Architecture"
+        ]
+      }
+    },
+    "skipToSummit": "View Capabilities",
+    "replayClimb": "Replay Climb"
   }
 }

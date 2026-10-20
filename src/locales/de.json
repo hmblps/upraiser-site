@@ -1011,5 +1011,38 @@
     "g2": "Connected TV",
     "g3": "Social Ads",
     "g4": "OEM & Direkt"
+  },
+  "creativeStudio": {
+    "title": "Full-Cycle Digital-Kreativ- & Tech-Studio",
+    "subtitle": "Digitales Wachstum antreiben: von immersiven 3D- und KI-Konzepten bis hin zu hochperformantem Content und Enterprise-Tech.",
+    "categories": {
+      "immersive": {
+        "title": "Immersive & High-Tech",
+        "items": [
+          "3D-Grafik & CGI",
+          "Motion Design & Animation",
+          "KI-Markenbotschafter & Virtuelle Avatare"
+        ]
+      },
+      "content": {
+        "title": "Content-Produktion",
+        "items": [
+          "Vollumfängliche Foto- & Videoproduktion",
+          "Creator-geführter digitaler Content",
+          "Konvertierungsstarke Video- & Digital-Banner",
+          "Playable Rich Media"
+        ]
+      },
+      "engineering": {
+        "title": "Digital- & Tech-Engineering",
+        "items": [
+          "End-to-End Webentwicklung",
+          "Entwicklung mobiler Apps",
+          "Cloud-Infrastruktur & Systemarchitektur"
+        ]
+      }
+    },
+    "skipToSummit": "Leistungen ansehen",
+    "replayClimb": "Aufstieg erneut ansehen"
   }
 }
