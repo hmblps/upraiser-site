@@ -49,8 +49,8 @@ function escapeTgHtml(str: string) {
     .replace(/>/g, "&gt;");
 }
 
-async function sendTelegramNotification(state: FormState) {
-  if (!tgBotToken || !tgChatId) return;
+async function sendTelegramNotification(state: FormState): Promise<boolean> {
+  if (!tgBotToken || !tgChatId) return false;
   try {
     const text = [
       `🚀 <b>New UPRAISER Pilot Request</b>`,
@@ -66,7 +66,7 @@ async function sendTelegramNotification(state: FormState) {
       state.attachment ? `📎 <b>Attachment:</b> ${escapeTgHtml(state.attachment.name)}` : null,
     ].filter(Boolean).join("\n");
 
-    await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
+    const res = await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -87,8 +87,11 @@ async function sendTelegramNotification(state: FormState) {
         body: docData,
       });
     }
+
+    return res.ok;
   } catch (err) {
     console.error("Telegram ping notification error:", err);
+    return false;
   }
 }
 
@@ -141,6 +144,8 @@ export function Contact() {
     abortCtrl.current = new AbortController();
 
     try {
+      const tgPromise = sendTelegramNotification(form);
+
       const formData = new FormData();
       formData.append("access_key", accessKey);
       formData.append("subject", `UPRAISER Pilot Request - ${form.appId}`);
@@ -190,8 +195,9 @@ export function Contact() {
         data = (await fallbackRes.json()) as { success?: boolean; message?: string };
       }
 
-      if (response.ok && data.success) {
-        void sendTelegramNotification(form);
+      const tgDelivered = await tgPromise;
+
+      if ((response.ok && data.success) || tgDelivered) {
         setForm(initialForm);
         setPrivacyAccepted(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
