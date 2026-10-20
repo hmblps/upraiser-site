@@ -173,7 +173,7 @@ export function AboutUsSection() {
           <div className="absolute -inset-x-8 -inset-y-4 z-[-1] pointer-events-none backdrop-blur-sm" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
           <div>
             <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.expGuides", "The Expedition Guides")}</h3>
-            <p className="text-muted text-sm leading-relaxed max-w-2xl text-balance">
+            <p className="text-muted text-sm leading-relaxed max-w-none">
               Dedicated account managers ensuring transparent communication, reliable workflow, and steady momentum at every stage of the climb.
             </p>
           </div>
