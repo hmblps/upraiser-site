@@ -22,7 +22,8 @@
     "i18n:runtime": "node scripts/i18n-runtime-audit.mjs",
     "i18n:dict": "node scripts/i18n-dict.mjs",
     "text": "node scripts/find-text.mjs",
-    "preview:windows": "node scripts/preview-windows.mjs"
+    "preview:windows": "node scripts/preview-windows.mjs",
+    "supabase:keepalive": "node scripts/keepalive-supabase.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

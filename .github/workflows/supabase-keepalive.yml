@@ -1,0 +1,33 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Runs every 3 days at 05:00 UTC (prevents Supabase 7-day inactivity auto-pause)
+    - cron: '0 5 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database & Reset Inactivity Counter
+        env:
+          SUPABASE_URL: "https://zlyxwhrpmyyhsplczedu.supabase.co"
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpseXh3aHJwbXl5aHNwbGN6ZWR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MDk0OTUsImV4cCI6MjA4ODQ4NTQ5NX0.f9tn6dYH_BJkgQSnyrOODldAtahH0NXeQPwScS0xp3A' }}
+        run: |
+          echo "🔄 Pinging Supabase Postgres database..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY" \
+            "${SUPABASE_URL}/rest/v1/profiles?select=id&limit=1")
+          
+          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
+          TIME=$(echo "$RESPONSE" | grep "TIME_TOTAL" | cut -d: -f2)
+          
+          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]; then
+            echo "✅ Successfully pinged Supabase (HTTP $STATUS, ${TIME}s)."
+            echo "✨ Inactivity clock reset. upraising26 will stay active."
+          else
+            echo "⚠️ Unexpected status: HTTP $STATUS"
+            exit 1
+          fi
