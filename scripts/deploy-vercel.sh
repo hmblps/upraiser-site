@@ -24,32 +24,27 @@ fi
 vercel link --yes --project "$VERCEL_PROJECT"
 
 if [[ -f .env ]]; then
-  # shellcheck disable=SC2046
-  KEY="$(grep -E '^VITE_WEB3FORMS_ACCESS_KEY=' .env | cut -d= -f2- | tr -d '\r' || true)"
-  if [[ -n "$KEY" && "$KEY" != "your_access_key_here" ]]; then
-    for env in production preview development; do
-      printf '%s' "$KEY" | vercel env add VITE_WEB3FORMS_ACCESS_KEY "$env" --force >/dev/null 2>&1 || true
-    done
-    echo "Web3Forms key synced to Vercel env."
-  else
-    echo "Warning: VITE_WEB3FORMS_ACCESS_KEY missing in .env — contact form won't work until you add it in Vercel dashboard."
-  fi
+  sync_env_var() {
+    local var_name="$1"
+    local val
+    val="$(grep -E "^${var_name}=" .env | cut -d= -f2- | tr -d '\r' || true)"
+    if [[ -n "$val" && "$val" != "your_"* && "$val" != "https://your-"* ]]; then
+      for target_env in production preview development; do
+        printf '%s' "$val" | vercel env add "$var_name" "$target_env" --force >/dev/null 2>&1 || true
+      done
+      echo "$var_name synced to Vercel env."
+    fi
+  }
 
-  TG_TOKEN="$(grep -E '^VITE_TELEGRAM_BOT_TOKEN=' .env | cut -d= -f2- | tr -d '\r' || true)"
-  if [[ -n "$TG_TOKEN" ]]; then
-    for env in production preview development; do
-      printf '%s' "$TG_TOKEN" | vercel env add VITE_TELEGRAM_BOT_TOKEN "$env" --force >/dev/null 2>&1 || true
-    done
-    echo "Telegram Bot Token synced to Vercel env."
-  fi
-
-  TG_CHAT="$(grep -E '^VITE_TELEGRAM_CHAT_ID=' .env | cut -d= -f2- | tr -d '\r' || true)"
-  if [[ -n "$TG_CHAT" ]]; then
-    for env in production preview development; do
-      printf '%s' "$TG_CHAT" | vercel env add VITE_TELEGRAM_CHAT_ID "$env" --force >/dev/null 2>&1 || true
-    done
-    echo "Telegram Chat ID synced to Vercel env."
-  fi
+  sync_env_var "RESEND_API_KEY"
+  sync_env_var "RESEND_FROM_EMAIL"
+  sync_env_var "NOTIFICATION_EMAIL"
+  sync_env_var "VITE_SUPABASE_URL"
+  sync_env_var "VITE_SUPABASE_ANON_KEY"
+  sync_env_var "SUPABASE_SERVICE_ROLE_KEY"
+  sync_env_var "VITE_WEB3FORMS_ACCESS_KEY"
+  sync_env_var "VITE_TELEGRAM_BOT_TOKEN"
+  sync_env_var "VITE_TELEGRAM_CHAT_ID"
 fi
 
 echo "Building locally…"

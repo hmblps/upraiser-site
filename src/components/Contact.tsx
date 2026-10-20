@@ -7,6 +7,22 @@ import { Magnetic } from "./motion-preview/Magnetic";
 import { AccentWord } from "./AccentWord";
 import { GradientTraceBorder } from "./GradientTraceBorder";
 import { ContactFormField } from "./ContactFormField";
+import { supabase } from "../lib/supabaseClient";
+
+const ALLOWED_MIME_TYPES = new Set([
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+  "application/msword", // .doc
+  "application/vnd.ms-excel", // .xls
+  "text/csv",
+  "text/plain",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+]);
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 type FormState = {
   name: string;
@@ -129,12 +145,6 @@ export function Contact() {
     setSubmitError(null);
     if (!validate()) return;
 
-    if (!accessKey) {
-      setStatus("error");
-      setSubmitError("Form is not configured. Set VITE_WEB3FORMS_ACCESS_KEY in your environment.");
-      return;
-    }
-
     setStatus("loading");
     setSubmitError(null);
 
@@ -146,58 +156,111 @@ export function Contact() {
     try {
       const tgPromise = sendTelegramNotification(form);
 
-      const formData = new FormData();
-      formData.append("access_key", accessKey);
-      formData.append("subject", `UPRAISER Pilot Request - ${form.appId}`);
-      formData.append("from_name", form.name);
-      formData.append("email", form.email);
-      formData.append("replyto", form.email);
-      formData.append("app_url", form.appId);
-      formData.append("geos", form.geos);
-      formData.append("company_type", form.companyType);
-      formData.append("company_size", form.companySize);
-      formData.append("monthly_budget", form.monthlyBudget);
-      formData.append("notes", form.notes);
-      formData.append("privacy_policy_accepted", "Yes");
-      if (form.attachment) {
-        formData.append("attachment", form.attachment);
+      let filePath: string | null = null;
+
+      // 1. If file attached & Supabase configured, upload directly to temp-briefs bucket
+      if (form.attachment && supabase) {
+        try {
+          const fileExt = form.attachment.name.split(".").pop() || "bin";
+          filePath = `brief-${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from("temp-briefs")
+            .upload(filePath, form.attachment);
+
+          if (uploadError) {
+            console.warn("Supabase upload failed, proceeding with server fallback:", uploadError.message);
+            filePath = null;
+          }
+        } catch (uploadErr) {
+          console.warn("Supabase direct upload exception:", uploadErr);
+          filePath = null;
+        }
       }
 
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: formData,
-        signal: abortCtrl.current.signal,
-      });
+      // 2. Primary: Send to Vercel Serverless Function /api/contact (Resend Email with Attachment)
+      let serverSent = false;
+      let serverErrorMsg: string | null = null;
+      try {
+        const payload = {
+          name: form.name,
+          email: form.email,
+          appId: form.appId,
+          geos: form.geos,
+          companyType: form.companyType,
+          companySize: form.companySize,
+          monthlyBudget: form.monthlyBudget,
+          notes: form.notes,
+          filePath,
+          fileName: form.attachment ? form.attachment.name : null,
+          fileType: form.attachment ? form.attachment.type : null,
+          fileSize: form.attachment ? form.attachment.size : null,
+        };
 
-      let data = (await response.json()) as { success?: boolean; message?: string };
-
-      // Fallback: If Web3Forms free tier rejects due to Pro file upload paywall,
-      // resubmit without binary attachment so the lead is never blocked or lost!
-      if (!data.success && form.attachment && data.message?.toLowerCase().includes("pro feature")) {
-        const fallbackData = new FormData();
-        formData.forEach((val, key) => {
-          if (key !== "attachment") fallbackData.append(key, val);
-        });
-        fallbackData.append(
-          "attachment_notice",
-          `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
-        );
-
-        const fallbackRes = await fetch("https://api.web3forms.com/submit", {
+        const serverRes = await fetch("/api/contact", {
           method: "POST",
-          headers: { Accept: "application/json" },
-          body: fallbackData,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
           signal: abortCtrl.current.signal,
         });
-        data = (await fallbackRes.json()) as { success?: boolean; message?: string };
+
+        if (serverRes.ok) {
+          const resData = (await serverRes.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+          if (resData.ok) {
+            serverSent = true;
+          } else {
+            serverErrorMsg = resData.error || "Email delivery failed";
+          }
+        } else {
+          const errData = (await serverRes.json().catch(() => ({}))) as { error?: string };
+          serverErrorMsg = errData.error || `Server responded with ${serverRes.status}`;
+        }
+      } catch (err) {
+        console.warn("Direct /api/contact call failed or running in non-Vercel dev:", err);
+      }
+
+      // 3. Fallback: If /api/contact did not handle it, try Web3Forms
+      let web3Sent = false;
+      if (!serverSent && accessKey) {
+        try {
+          const formData = new FormData();
+          formData.append("access_key", accessKey);
+          formData.append("subject", `UPRAISER Pilot Request - ${form.appId}`);
+          formData.append("from_name", form.name);
+          formData.append("email", form.email);
+          formData.append("replyto", form.email);
+          formData.append("app_url", form.appId);
+          formData.append("geos", form.geos);
+          formData.append("company_type", form.companyType);
+          formData.append("company_size", form.companySize);
+          formData.append("monthly_budget", form.monthlyBudget);
+          formData.append("notes", form.notes);
+          formData.append("privacy_policy_accepted", "Yes");
+          if (form.attachment) {
+            formData.append(
+              "attachment_notice",
+              `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
+            );
+          }
+
+          const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { Accept: "application/json" },
+            body: formData,
+            signal: abortCtrl.current.signal,
+          });
+          const data = (await response.json().catch(() => ({}))) as { success?: boolean };
+          if (response.ok && data.success) {
+            web3Sent = true;
+          }
+        } catch (web3Err) {
+          console.warn("Web3Forms fallback error:", web3Err);
+        }
       }
 
       const tgDelivered = await tgPromise;
 
-      if ((response.ok && data.success) || tgDelivered) {
+      if (serverSent || web3Sent || tgDelivered) {
         setForm(initialForm);
         setPrivacyAccepted(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
@@ -206,10 +269,10 @@ export function Contact() {
       }
 
       setStatus("error");
-      setSubmitError(data.message ?? "Unable to send message. Please try again.");
-    } catch {
+      setSubmitError(serverErrorMsg || "Unable to send message. Please try again.");
+    } catch (err) {
       setStatus("error");
-      setSubmitError("Network error. Please check your connection and try again.");
+      setSubmitError(err instanceof Error ? err.message : "Network error. Please check your connection and try again.");
     }
   };
 
@@ -389,14 +452,21 @@ export function Contact() {
                           type="file"
                           id="attachment"
                           className="hidden"
-                          accept=".pdf,.png,.jpg,.jpeg"
+                          accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.png,.jpg,.jpeg,.webp"
                           disabled={status === "loading"}
                           onChange={(e) => {
                             const file = e.target.files?.[0];
-                            if (file && file.size > 5 * 1024 * 1024) {
-                              setErrors((prev) => ({ ...prev, attachment: "File must be under 5 MB" }));
-                              e.target.value = "";
-                              return;
+                            if (file) {
+                              if (file.size > MAX_FILE_SIZE) {
+                                setErrors((prev) => ({ ...prev, attachment: "File must be under 10 MB" }));
+                                e.target.value = "";
+                                return;
+                              }
+                              if (file.type && !ALLOWED_MIME_TYPES.has(file.type)) {
+                                setErrors((prev) => ({ ...prev, attachment: "Allowed formats: PDF, Word, Excel, CSV, TXT, PNG, JPG" }));
+                                e.target.value = "";
+                                return;
+                              }
                             }
                             setErrors((prev) => {
                               const next = { ...prev };
@@ -432,7 +502,7 @@ export function Contact() {
                             className={`text-caption flex cursor-pointer items-center gap-1.5 text-muted transition hover:text-fg ${status === "loading" ? "pointer-events-none opacity-50" : ""}`}
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                            Attach brief (.pdf, .jpg, .png) | max 5MB
+                            Attach brief (.pdf, .doc, .xlsx, .png, etc.) | max 10MB
                           </label>
                         )}
                         </div>

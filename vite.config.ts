@@ -2,9 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { heroCapturePlugin } from "./scripts/vite-plugin-hero-capture.ts";
+import { apiContactPlugin } from "./scripts/vite-plugin-api-contact.ts";
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), heroCapturePlugin()],
+  plugins: [react(), tailwindcss(), heroCapturePlugin(), apiContactPlugin()],
   server: {
     allowedHosts: true,
     host: true,

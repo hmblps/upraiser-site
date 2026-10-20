@@ -44,7 +44,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!.*\\.(?:js|css|map|png|jpe?g|gif|svg|webp|avif|woff2?|glb|gltf|wasm|mp4|webm|ico|json|html|txt|xml|webmanifest)).*)",
+      "source": "/((?!api/|.*\\.(?:js|css|map|png|jpe?g|gif|svg|webp|avif|woff2?|glb|gltf|wasm|mp4|webm|ico|json|html|txt|xml|webmanifest)).*)",
       "destination": "/index.html"
     }
   ]
