@@ -17,20 +17,16 @@ export function ThankYouPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={SPRING}
         >
-          <p className="section-label">Brief received</p>
-          <h1 className="section-heading--lg max-w-[16ch]">We have Your parameters</h1>
-          <p className="copy mt-5 max-w-md text-muted">
-            Operators will review the App ID logs and reply to Your work email within 24 hours — a scoped path, not a
-            deck.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-3">
+          <p className="section-label">Route Telemetry Logged</p>
+          <h1 className="section-heading--lg max-w-xl">Every summit starts with a verified route.</h1>
+          <div className="mt-8 flex flex-wrap gap-3">
             <Magnetic>
               <Link
-                to="/"
+                to="/#cases"
                 data-cursor="cta"
                 className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
               >
-                The Agency
+                Proven Summits
               </Link>
             </Magnetic>
             <Magnetic strength={0.22}>
