@@ -42,3 +42,19 @@
   - Restored CTV prewarming to ensure zero frame latency when scrolling into the Channels format visualizer.
 - **Documentation & Strict Content Integrity:**
   - Preserved original copy in `liveContent.ts` without unauthorized modification.
+
+### F. Typography & Punctuation Polish
+- **Promise Lead Trailing Period Removal (`PromiseSection.tsx`):**
+  - Removed trailing period dot and its `<motion.span className="inline">.</motion.span>` wrapper from the Promise lead banner so it reads clean and open: *"We bring CLARITY"* (and *"We guarantee PARITY"* in infrastructure mode) with zero trailing punctuation or whitespace separation.
+
+### G. Asset Pruning & Video Size Reduction
+- **Unused 3D Model Pruning (`public/channels/oem/`):**
+  - Deleted unmounted 29 MB model `macbook-draco.glb` and disabled eager `useGLTF.preload` in `Macbook3DModel.tsx`.
+- **Hero Video Bitrate Optimization (`public/hero/`):**
+  - Optimized `home-dark-idle.mp4` (from 8.9 MB to 7.1 MB) and `home-light-idle.mp4` (from 11.9 MB to 9.5 MB) via x264 CRF encoding with faststart headers, bringing total `public/` size down to 73 MB (from 160 MB).
+
+### H. Hero Camera Flight Snow Restoration
+- **3D FPV Drone Ascent Particle Dynamics (`HeroVideoFallback.tsx`):**
+  - Restored full 160-particle density (80 on mobile) with dynamic forward velocity (`0.007 * forwardFlight + 0.001`), mountain ridge crosswind, and directional speed streaks during flight.
+  - Enforced zero-acceleration calm drift (`forwardFlight = 0.05`) with streak suppression on pause/summit hold.
+  - Extended scroll visibility across the full Hero pinned scene (`window.innerHeight * 1.15`).

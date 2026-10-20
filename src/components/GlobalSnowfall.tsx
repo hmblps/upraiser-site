@@ -62,12 +62,21 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
     setFlakes(initialFlakes);
   }, [active]);
 
-  // Track scroll delta
+  // Track scroll delta with both Lenis and native fallback
   useEffect(() => {
     if (!active) return;
-    return registerScrollListener((y) => {
+    const onScroll = () => {
+      scrollYRef.current = window.scrollY;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const unsub = registerScrollListener((y) => {
       scrollYRef.current = y;
     });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      unsub();
+    };
   }, [registerScrollListener, active]);
 
   // Main render loop
@@ -100,10 +109,11 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       const scrollDelta = scrollY - lastScrollYRef.current;
       lastScrollYRef.current = scrollY;
 
-      // In the Hero section (top of page), the dedicated camera-correlated 3D flight snow
-      // takes stage. As the user scrolls into the Lenovo dock and content, fade in lush, pure white ambient snowfall.
-      const heroThreshold = window.innerHeight * 0.55;
-      const ambientAlpha = Math.min(1, Math.max(0, (scrollY - heroThreshold * 0.35) / (heroThreshold * 0.65)));
+      // In the Hero section (top of page), the dedicated 3D camera-correlated flight snow
+      // takes stage. Once the user scrolls past the Hero runway and the docked Lenovo strip into the site,
+      // fade in the delicate, pure white ambient crystal snowfall.
+      const heroRunway = window.innerHeight * 0.88;
+      const ambientAlpha = Math.min(1, Math.max(0, (scrollY - heroRunway) / (window.innerHeight * 0.25)));
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (ambientAlpha <= 0.01) {
@@ -111,14 +121,14 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
         return;
       }
 
-      const clampedDelta = Math.max(-12, Math.min(12, scrollDelta));
+      const clampedDelta = Math.max(-5, Math.min(5, scrollDelta));
 
       flakes.forEach((f) => {
-        // Fall down naturally
+        // Fall down naturally (moderate, calm drift)
         f.y += f.speed * SNOW_SPEED * dt;
         
-        // Add scroll delta influence (parallax effect), smoothly clamped to prevent sudden jerking
-        f.y -= clampedDelta * f.speed * 0.06;
+        // Gentle scroll delta influence (calm parallax without jerking)
+        f.y -= clampedDelta * f.speed * 0.03;
 
         // Wind/Wobble
         f.wobble += f.wobbleSpeed * dt;
@@ -130,8 +140,7 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
         if (f.x > canvas.width + 10) f.x = -10;
         if (f.x < -10) f.x = canvas.width + 10;
 
-        // 1. Soft contrast micro-shadow offset by 0.4px: gives physical depth and ensures
-        // the fine snowflake is clearly visible on white/light backgrounds
+        // 1. Soft contrast micro-shadow offset by 0.4px: physical depth on light backgrounds
         ctx.fillStyle = `rgba(15, 30, 60, ${(0.18 * ambientAlpha).toFixed(3)})`;
         ctx.beginPath();
         ctx.arc(f.x + 0.4, f.y + 0.4, f.size, 0, Math.PI * 2);
@@ -160,7 +169,7 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-20 opacity-80"
+      className="global-snow-canvas pointer-events-none fixed inset-0 z-20 opacity-80"
       aria-hidden="true"
     />
   );

@@ -31,7 +31,7 @@ function PromiseClean() {
         <div className="section-stack flex max-w-3xl flex-col gap-5">
           <p className="section-lead">{t(`promise.${mode}.line1`, content.line1)}</p>
           <p className="section-lead">
-            {t(`promise.${mode}.line2Prefix`, content.line2Prefix)} <GrowthWordInline word={t(`promise.${mode}.inlineWord`, content.inlineWord)} />.
+            {t(`promise.${mode}.line2Prefix`, content.line2Prefix)} <GrowthWordInline word={t(`promise.${mode}.inlineWord`, content.inlineWord)} />
           </p>
           <p className="section-description max-w-2xl mt-4 mb-6">{formatEventNames(t(`promise.${mode}.description`, content.description))}</p>
         </div>
@@ -78,9 +78,6 @@ function PromiseFold({ mode }: { mode: SiteMode }) {
                 <GrowthWordInline word={t(`promise.${mode}.inlineWord`, content.inlineWord)} />
               </motion.span>
             </span>
-            <motion.span style={{ opacity: bodyOpacity, x: bodyX }} className="inline">
-              .
-            </motion.span>
           </p>
           <motion.p className="section-description relative z-[2] mt-4 mb-6 max-w-2xl" style={{ opacity: bodyOpacity, x: bodyX }}>
             {formatEventNames(t(`promise.${mode}.description`, content.description))}

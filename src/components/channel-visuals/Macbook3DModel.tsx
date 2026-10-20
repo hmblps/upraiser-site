@@ -467,4 +467,4 @@ export function Model(props: ThreeElements['group'] & { mode?: SiteMode }) {
   );
 }
 
-useGLTF.preload('/channels/oem/macbook-draco.glb');
+// useGLTF.preload('/channels/oem/macbook-draco.glb');

@@ -282,7 +282,7 @@ function SnowParticles() {
       baseAlpha: number;
     }
 
-    const COUNT = window.innerWidth < 1024 ? 40 : 70;
+    const COUNT = window.innerWidth < 1024 ? 80 : 160;
 
     function spawnFlake(atFar = false): Flake3D {
       const z = atFar ? 0.90 + Math.random() * 0.10 : 0.05 + Math.random() * 0.95;
@@ -296,10 +296,10 @@ function SnowParticles() {
         prevX: x,
         prevY: y,
         prevZ: z,
-        size: 1.0 + Math.random() * 1.8,
-        speedFactor: 0.6 + Math.random() * 0.4,
+        size: 1.2 + Math.random() * 2.2,
+        speedFactor: 0.75 + Math.random() * 0.45,
         flutterPhase: Math.random() * Math.PI * 2,
-        flutterSpeed: 0.02 + Math.random() * 0.03,
+        flutterSpeed: 0.03 + Math.random() * 0.035,
         glintPhase: Math.random() * Math.PI * 2,
         baseAlpha: 0.55 + Math.random() * 0.45,
       };
@@ -359,8 +359,9 @@ function SnowParticles() {
       swayX += (targetSwayX - swayX) * 0.06 * dt;
       swayY += (targetSwayY - swayY) * 0.06 * dt;
 
-      // When user scrolls down towards Lenovo dock and content, fade out Hero 3D flight snow smoothly
-      const scrollFade = Math.max(0, 1 - scrollY / 380);
+      // Stay visible through the Hero flight scene; gently fade only as the stage exits into content
+      const maxScroll = typeof window !== "undefined" ? window.innerHeight * 1.15 : 1000;
+      const scrollFade = Math.max(0, 1 - scrollY / maxScroll);
       if (scrollFade <= 0.01) {
         ct.clearRect(0, 0, W, H);
         raf = requestAnimationFrame(draw);
@@ -399,14 +400,14 @@ function SnowParticles() {
         f.prevY = f.y;
         f.prevZ = f.z;
 
-        // Gentle forward motion along camera Z axis (calm alpine drift, no hypersonic rush)
-        const forwardStep = (0.0035 * forwardFlight + 0.0008) * f.speedFactor * dt;
+        // Dynamic forward motion along camera Z axis
+        const forwardStep = (0.007 * forwardFlight + 0.001) * f.speedFactor * dt;
         f.z -= forwardStep;
 
         // Mountain ridge crosswind + natural gravity
-        const crosswind = (-0.0008 * forwardFlight - 0.0003) * dt;
-        const gravity = (0.0008 + 0.0009 * (1 - forwardFlight)) * dt;
-        const flutter = Math.sin(f.flutterPhase) * 0.0004 * dt;
+        const crosswind = (-0.0012 * forwardFlight - 0.0004) * dt;
+        const gravity = (0.0009 + 0.0012 * (1 - forwardFlight)) * dt;
+        const flutter = Math.sin(f.flutterPhase) * 0.0005 * dt;
 
         f.x += crosswind + flutter;
         f.y += gravity;
@@ -415,11 +416,15 @@ function SnowParticles() {
 
         // Perspective 3D Projection
         const invZ = 1 / f.z;
-
-        // Parallax offset: close flakes sway much more with the camera than far flakes
         const parallaxFactor = (1 - f.z);
         const screenX = cx + ((f.x - swayX * parallaxFactor) * invZ) * focal;
         const screenY = cy + ((f.y - swayY * parallaxFactor) * invZ) * focal;
+
+        // Previous frame perspective projection for directional motion streaks
+        const prevInvZ = 1 / f.prevZ;
+        const prevParallax = (1 - f.prevZ);
+        const prevScreenX = cx + ((f.prevX - swayX * prevParallax) * prevInvZ) * focal;
+        const prevScreenY = cy + ((f.prevY - swayY * prevParallax) * prevInvZ) * focal;
 
         // Respawn when passing behind the camera lens or rushed off-screen
         if (
@@ -443,6 +448,17 @@ function SnowParticles() {
         const alpha = Math.min(1, Math.max(0, f.baseAlpha * horizonFade * nearFade * glint * scrollFade));
 
         if (alpha <= 0.02) continue;
+
+        // Directional motion streak during forward flight
+        if (forwardFlight > 0.35 && radius > 1.2) {
+          ct.beginPath();
+          ct.moveTo(prevScreenX, prevScreenY);
+          ct.lineTo(screenX, screenY);
+          ct.strokeStyle = `rgba(255, 255, 255, ${(alpha * 0.55 * forwardFlight).toFixed(3)})`;
+          ct.lineWidth = Math.max(0.7, radius * 0.8);
+          ct.lineCap = "round";
+          ct.stroke();
+        }
 
         // Crisp crystalline snowflake: subtle contrast rim for definition, pure white core
         if (radius > 1.4) {
@@ -491,6 +507,7 @@ function SnowParticles() {
   return (
     <canvas
       ref={canvasRef}
+      className="hero-video-snow-canvas"
       style={{
         position: "absolute",
         inset: 0,
