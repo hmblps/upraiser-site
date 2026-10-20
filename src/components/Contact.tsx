@@ -39,6 +39,47 @@ const initialForm: FormState = {
 };
 
 const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined;
+const tgBotToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN as string | undefined;
+const tgChatId = import.meta.env.VITE_TELEGRAM_CHAT_ID as string | undefined;
+
+function escapeTgHtml(str: string) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+async function sendTelegramNotification(state: FormState) {
+  if (!tgBotToken || !tgChatId) return;
+  try {
+    const text = [
+      `🚀 <b>New UPRAISER Pilot Request</b>`,
+      ``,
+      `👤 <b>Name:</b> ${escapeTgHtml(state.name)}`,
+      `📧 <b>Email:</b> ${escapeTgHtml(state.email)}`,
+      `📱 <b>App / Store:</b> ${escapeTgHtml(state.appId)}`,
+      `🌍 <b>GEOs:</b> ${escapeTgHtml(state.geos || "Worldwide / unspecified")}`,
+      `🏢 <b>Company Type:</b> ${escapeTgHtml(state.companyType)}`,
+      `👥 <b>Company Size:</b> ${escapeTgHtml(state.companySize)}`,
+      `💰 <b>Monthly Spend:</b> ${escapeTgHtml(state.monthlyBudget)}`,
+      state.notes ? `📝 <b>Notes:</b> ${escapeTgHtml(state.notes)}` : null,
+      state.attachment ? `📎 <b>Attachment:</b> ${escapeTgHtml(state.attachment.name)}` : null,
+    ].filter(Boolean).join("\n");
+
+    await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: tgChatId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+    });
+  } catch (err) {
+    console.error("Telegram ping notification error:", err);
+  }
+}
 
 export function Contact() {
   const { t } = useTranslation();
@@ -117,6 +158,7 @@ export function Contact() {
       const data = (await response.json()) as { success?: boolean; message?: string };
 
       if (response.ok && data.success) {
+        void sendTelegramNotification(form);
         setForm(initialForm);
         setPrivacyAccepted(false);
         navigate("/contact/sent", { replace: true });
@@ -151,8 +193,7 @@ export function Contact() {
               />
               <div className="contact-briefing-grid relative z-[1]">
                 <div data-lenis-prevent className="contact-briefing-copy relative flex flex-col bg-bg-elevated">
-                  <p className="section-label">{contactPage.label}</p>
-                  <h1 className="section-title section-title--compact mt-1.5">
+                  <h1 className="section-title section-title--compact">
                     {contactPage.titleLead}
                     <AccentWord tone="red">{contactPage.accentWord}</AccentWord>
                   </h1>
@@ -365,7 +406,7 @@ export function Contact() {
                           data-cursor="cta"
                           className="btn-caps btn-caps--primary w-full rounded-full py-3 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                          {status === "loading" ? "Transmitting…" : contactPage.ctaLabel}
+                          {status === "loading" ? t("contactPage.form.transmitting", "Transmitting…") : t("contactPage.ctaLabel", contactPage.ctaLabel)}
                         </motion.button>
                       </Magnetic>
                     </form>

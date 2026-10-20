@@ -749,7 +749,7 @@
     "closeDescription": "業種バーティカル、GEO、重要KPIイベントをご共有ください。最適なバイイングレーンへと即座にご案内します。"
   },
   "contactPage": {
-    "label": "[ UPRAISER ブリーフィングルーム ]",
+    "label": "",
     "title": "インテーク & パイロットブリーフィング",
     "titleLead": "インテーク & パイロット ",
     "accentWord": "ブリーフィング",
@@ -757,7 +757,7 @@
     "subline": "通常1〜2営業日。ブランド概要、OEM配信のご要望、採用に関するお問い合わせをいただければ、最適な窓口へダイレクトにお繋ぎします。",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ パイロット配信をリクエスト ]",
+    "ctaLabel": "パイロット配信をリクエスト",
     "form": {
       "spend": "月間平均メディア支出"
     }

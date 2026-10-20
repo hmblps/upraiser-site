@@ -749,7 +749,7 @@
     "closeDescription": "告知我们您的垂直赛道、GEO 及核心 KPI 事件。我们将立即引导您接入最契合的采买通道。"
   },
   "contactPage": {
-    "label": "[ UPRAISER 需求接入室 ]",
+    "label": "",
     "title": "需求接入 & 试点简报",
     "titleLead": "需求接入 & 试点 ",
     "accentWord": "简报",
@@ -757,7 +757,7 @@
     "subline": "1 至 2 个工作日内响应。请提供您的品牌需求简报、OEM 供应申请或求职意向，我们将精准为您分派路径。",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ 申请试点测试 ]",
+    "ctaLabel": "申请试点测试",
     "form": {
       "spend": "月均媒介支出"
     }

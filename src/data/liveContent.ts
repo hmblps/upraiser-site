@@ -463,7 +463,7 @@ export const solutionsPage = {
 } as const;
 
 export const contactPage = {
-  label: "[ Upraiser Briefing Room ]",
+  label: "",
   title: "Intake & Pilot Briefing",
   titleLead: "Intake & Pilot ",
   accentWord: "Briefing",
@@ -472,7 +472,7 @@ export const contactPage = {
     "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",
   email: "info@upraiser.co.uk",
-  ctaLabel: "[ REQUEST PILOT ]",
+  ctaLabel: "Request Pilot",
 } as const;
 
 export const caseStudyMeta = {

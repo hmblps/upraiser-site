@@ -749,7 +749,7 @@
     "closeDescription": "Teile Dein Vertical, GEO und entscheidendes KPI-Event. Wir leiten Dich umgehend in die optimale Einkaufs-Lane."
   },
   "contactPage": {
-    "label": "[ UPRAISER Briefing Room ]",
+    "label": "",
     "title": "Intake & Pilot-Briefing",
     "titleLead": "Intake & Pilot-",
     "accentWord": "Briefing",
@@ -757,7 +757,7 @@
     "subline": "1 bis 2 Werktage. Übermittle Dein Markenbriefing, OEM-Inventaranfragen oder Deine Bewerbung – wir leiten alles direkt an die richtige Stelle.",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ PILOTPROJEKT ANFRAGEN ]",
+    "ctaLabel": "Pilotprojekt anfragen",
     "form": {
       "spend": "Durchschnittlicher monatlicher Media-Spend"
     }

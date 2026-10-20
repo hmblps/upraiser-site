@@ -749,7 +749,7 @@
     "closeDescription": "Partagez votre vertical, vos GEOs et votre événement KPI critique. Nous vous orientons sans attendre vers le flux d'achat le plus performant."
   },
   "contactPage": {
-    "label": "[ Briefing Room UPRAISER ]",
+    "label": "",
     "title": "Cadrage & Pilote : Briefing",
     "titleLead": "Cadrage & Pilote : ",
     "accentWord": "Briefing",
@@ -757,7 +757,7 @@
     "subline": "1 à 2 jours ouvrés. Transmettez le brief de votre marque, vos demandes OEM ou vos candidatures : nous les traitons dans les meilleurs délais.",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ DEMANDER UN PILOTE ]",
+    "ctaLabel": "Demander un pilote",
     "form": {
       "spend": "Dépenses médias mensuelles moyennes"
     }

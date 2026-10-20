@@ -749,7 +749,7 @@
     "closeDescription": "Share Your vertical, GEO, and critical KPI event. We immediately route You into the most optimal buying lane."
   },
   "contactPage": {
-    "label": "[ Upraiser Briefing Room ]",
+    "label": "",
     "title": "Intake & Pilot Briefing",
     "titleLead": "Intake & Pilot ",
     "accentWord": "Briefing",
@@ -757,7 +757,7 @@
     "subline": "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ REQUEST PILOT ]",
+    "ctaLabel": "Request Pilot",
     "form": {
       "spend": "Average Monthly Media Spend"
     }

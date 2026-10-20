@@ -749,7 +749,7 @@
     "closeDescription": "Compartilhe Seu segmento, GEO e evento crítico de KPI. Nós direcionamos Você imediatamente para o canal de compra ideal."
   },
   "contactPage": {
-    "label": "[ Sala de Briefing Upraiser ]",
+    "label": "",
     "title": "Entrada e Briefing de Piloto",
     "titleLead": "Entrada e Briefing de ",
     "accentWord": "Piloto",
@@ -757,7 +757,7 @@
     "subline": "1 a 2 dias úteis. Forneça o briefing da Sua marca, demandas de inventário OEM ou interesse em carreiras e nós encaminharemos perfeitamente.",
     "office": "128 City Road, London EC1V 2NX, United Kingdom",
     "email": "info@upraiser.co.uk",
-    "ctaLabel": "[ SOLICITAR PILOTO ]",
+    "ctaLabel": "Solicitar piloto",
     "form": {
       "spend": "Média de Investimento Mensal em Mídia"
     }

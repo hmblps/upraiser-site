@@ -7,24 +7,6 @@
     "de": "· Erforderlich",
     "fr": "· Requis"
   },
-  "[ REQUEST PILOT ]": {
-    "zh": "[ 申请试点测试 ]",
-    "ja": "[ パイロット配信をリクエスト ]",
-    "ko": "[ 파일럿 요청 ]",
-    "es": "[ SOLICITAR PILOTO ]",
-    "de": "[ PILOTPROJEKT ANFRAGEN ]",
-    "fr": "[ DEMANDER UN PILOTE ]",
-    "pt": "[ SOLICITAR PILOTO ]"
-  },
-  "[ Upraiser Briefing Room ]": {
-    "zh": "[ UPRAISER 需求接入室 ]",
-    "ja": "[ UPRAISER ブリーフィングルーム ]",
-    "ko": "[ UPRAISER 브리핑 룸 ]",
-    "es": "[ Sala de Briefing UPRAISER ]",
-    "de": "[ UPRAISER Briefing Room ]",
-    "fr": "[ Briefing Room UPRAISER ]",
-    "pt": "[ Sala de Briefing Upraiser ]"
-  },
   "#7C3AED": {
     "pt": "#F59E0B"
   },
@@ -4372,13 +4354,13 @@
     "ko": "클라이밍 다시 보기"
   },
   "Request Pilot": {
-    "zh": "申请试点",
+    "zh": "申请试点测试",
     "ja": "パイロット配信をリクエスト",
     "ko": "파일럿 요청",
     "es": "Solicitar piloto",
     "de": "Pilotprojekt anfragen",
     "fr": "Demander un pilote",
-    "pt": "Solicitar Piloto"
+    "pt": "Solicitar piloto"
   },
   "Required": {
     "zh": "必填",
