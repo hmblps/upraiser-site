@@ -371,12 +371,17 @@ function SnowParticles() {
       const video = document.getElementById("hero-idle-video") as HTMLVideoElement | null;
       let forwardFlight = 1.0;
       if (video) {
-        const cur = video.currentTime || 0;
-        const dur = video.duration || 22.8;
-        // Summit hold / deceleration
-        if (video.paused || cur >= dur - 4.2) {
-          const rem = Math.max(0, (dur - cur) / 4.2);
-          forwardFlight = 0.06 + 0.94 * (rem * rem);
+        if (video.paused) {
+          // When video pauses (on scroll, summit hold, or tab switch), settle into calm ambient drift
+          forwardFlight = 0.05;
+        } else {
+          const cur = video.currentTime || 0;
+          const dur = video.duration || 22.8;
+          // Gentle deceleration approaching the summit
+          if (cur >= dur - 4.2) {
+            const rem = Math.max(0, Math.min(1, (dur - cur) / 4.2));
+            forwardFlight = 0.05 + 0.95 * (rem * rem);
+          }
         }
       }
 

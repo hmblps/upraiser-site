@@ -48,8 +48,8 @@
         var l = document.createElement("link");
         l.rel = "preload";
         l.href = v;
-        l.as = "video";
-        l.type = "video/mp4";
+        l.as = "fetch";
+        l.crossOrigin = "anonymous";
         l.setAttribute("fetchpriority", "high");
         document.head.appendChild(l);
 

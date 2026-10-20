@@ -23,7 +23,7 @@ const ApplePreviewPanel = lazy(() =>
   import("../components/apple-preview/ApplePreviewPanel").then((m) => ({ default: m.ApplePreviewPanel })),
 );
 
-const Footer = lazy(() => import("../components/Footer").then((m) => ({ default: m.Footer })));
+import { Footer } from "../components/Footer";
 const GlobalAmbientModalBackground = lazy(() =>
   import("../components/GlobalAmbientModalBackground").then((m) => ({
     default: m.GlobalAmbientModalBackground,

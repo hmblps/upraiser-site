@@ -44,6 +44,35 @@ if (typeof history !== "undefined" && "scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
 
+// Auto-recover if client hits a stale chunk 404 after a new deployment
+if (typeof window !== "undefined") {
+  window.addEventListener("vite:preloadError", (event) => {
+    event.preventDefault();
+    const key = "upraiser_chunk_reload";
+    const last = Number(sessionStorage.getItem(key) || 0);
+    if (Date.now() - last > 5000) {
+      sessionStorage.setItem(key, String(Date.now()));
+      window.location.reload();
+    }
+  });
+
+  window.addEventListener("error", (event) => {
+    const msg = event?.message || "";
+    if (
+      msg.includes("Failed to fetch dynamically imported module") ||
+      msg.includes("Importing a module script failed") ||
+      msg.includes("error loading dynamically imported module")
+    ) {
+      const key = "upraiser_chunk_reload";
+      const last = Number(sessionStorage.getItem(key) || 0);
+      if (Date.now() - last > 5000) {
+        sessionStorage.setItem(key, String(Date.now()));
+        window.location.reload();
+      }
+    }
+  });
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <HelmetProvider>

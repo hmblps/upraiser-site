@@ -47,15 +47,15 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
 
   const active = !reduced && isDesktop && isHomePage && snowEnabled && mode === "growth";
 
-  // Initialize flakes once — lush, moderate ambient snowfall with natural distribution
+  // Initialize flakes once — fine, delicate alpine snowfall matching Hero particle scale
   useEffect(() => {
     if (!active) return;
-    const count = window.innerWidth >= 1440 ? 125 : 90;
+    const count = window.innerWidth >= 1440 ? 110 : 80;
     const initialFlakes: Flake[] = Array.from({ length: count }).map(() => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 2.2 + 0.9,
-      speed: Math.random() * 0.65 + 0.35,
+      size: Math.random() * 0.8 + 0.6,
+      speed: Math.random() * 0.55 + 0.25,
       wobble: Math.random() * Math.PI * 2,
       wobbleSpeed: Math.random() * 0.02 + 0.01,
     }));
@@ -130,14 +130,14 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
         if (f.x > canvas.width + 10) f.x = -10;
         if (f.x < -10) f.x = canvas.width + 10;
 
-        // 1. Soft contrast micro-shadow offset by 0.6px: gives physical depth and ensures
-        // the snowflake is clearly visible on white/light backgrounds
-        ctx.fillStyle = `rgba(15, 30, 60, ${(0.22 * ambientAlpha).toFixed(3)})`;
+        // 1. Soft contrast micro-shadow offset by 0.4px: gives physical depth and ensures
+        // the fine snowflake is clearly visible on white/light backgrounds
+        ctx.fillStyle = `rgba(15, 30, 60, ${(0.18 * ambientAlpha).toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(f.x + 0.6, f.y + 0.7, f.size, 0, Math.PI * 2);
+        ctx.arc(f.x + 0.4, f.y + 0.4, f.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // 2. Pure, brilliant white snowflake body drawn at full size
+        // 2. Pure, brilliant fine white snowflake body drawn at full size
         ctx.fillStyle = `rgba(255, 255, 255, ${(0.96 * ambientAlpha).toFixed(3)})`;
         ctx.beginPath();
         ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
