@@ -97,21 +97,10 @@ function DeviceCarousel3({
   const tabletOpacity = useTransform(tabletDist, (d) => Math.max(0, 1.5 - d * 1.5));
   const tvOpacity = useTransform(tvDist, (d) => Math.max(0, 1.5 - d * 1.5));
 
-  // Mount Tablet only once user reaches or navigates to tablet formats
-  // Mount TV only once user reaches or navigates to TV formats
-  const [hasVisitedTablet, setHasVisitedTablet] = useState(false);
-  const [hasVisitedTv, setHasVisitedTv] = useState(false);
-
-  useEffect(() => {
-    if (scene === "tablet") setHasVisitedTablet(true);
-    if (scene === "tv") {
-      setHasVisitedTablet(true);
-      setHasVisitedTv(true);
-    }
-  }, [scene]);
-
-  const shouldWarmTablet = scene === "tablet" || hasVisitedTablet;
-  const shouldWarmTv = scene === "tv" || hasVisitedTv;
+  // Pre-warmed in background with frameloop="never" so TV and Tablet compile ahead
+  // of time and transition with zero millisecond delay when scrolled into view.
+  const shouldWarmTablet = true;
+  const shouldWarmTv = true;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {

@@ -67,8 +67,8 @@ export function HomePilotCta() {
               </p>
             </div>
 
-            {/* Middle: Action buttons shifted right, with perspective text starting strictly under the first button */}
-            <div className="flex flex-col items-start gap-3 sm:ml-28 md:ml-40 lg:ml-48">
+            {/* Middle: Action buttons aligned left directly under the brief description */}
+            <div className="flex flex-col items-start gap-3">
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
                 <Magnetic className="flex w-full sm:w-auto">
                   <motion.div

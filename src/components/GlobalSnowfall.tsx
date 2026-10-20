@@ -26,13 +26,13 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
 
   const [isDesktop, setIsDesktop] = useState(() => {
     if (typeof window === "undefined") return false;
-    return window.innerWidth >= 1024 && !window.matchMedia("(pointer: coarse)").matches;
+    return window.innerWidth >= 1024;
   });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(min-width: 1024px)");
-    const sync = () => setIsDesktop(mq.matches && !window.matchMedia("(pointer: coarse)").matches);
+    const sync = () => setIsDesktop(mq.matches);
     sync();
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
@@ -47,15 +47,15 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
 
   const active = !reduced && isDesktop && isHomePage && snowEnabled && mode === "growth";
 
-  // Initialize flakes once
+  // Initialize flakes once — moderate, gentle ambient snowfall
   useEffect(() => {
     if (!active) return;
-    const count = 120;
+    const count = 55;
     const initialFlakes: Flake[] = Array.from({ length: count }).map(() => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 2 + 0.5,
-      speed: Math.random() * 0.8 + 0.2,
+      size: Math.random() * 1.8 + 0.6,
+      speed: Math.random() * 0.7 + 0.25,
       wobble: Math.random() * Math.PI * 2,
       wobbleSpeed: Math.random() * 0.02 + 0.01,
     }));
@@ -101,9 +101,9 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
       lastScrollYRef.current = scrollY;
 
       // In the Hero section (top of page), the dedicated camera-correlated 3D flight snow
-      // takes stage. As the user scrolls down into content, fade in gentle ambient snowfall.
-      const heroThreshold = window.innerHeight * 0.65;
-      const ambientAlpha = Math.min(1, Math.max(0, (scrollY - heroThreshold * 0.4) / (heroThreshold * 0.6)));
+      // takes stage. As the user scrolls down into content, fade in gentle, moderate ambient snowfall.
+      const heroThreshold = window.innerHeight * 0.7;
+      const ambientAlpha = Math.min(1, Math.max(0, (scrollY - heroThreshold * 0.35) / (heroThreshold * 0.65)));
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (ambientAlpha <= 0.01) {
@@ -111,31 +111,36 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
         return;
       }
 
-      ctx.fillStyle = `rgba(255, 255, 255, ${(0.42 * ambientAlpha).toFixed(3)})`;
-      ctx.beginPath();
-
       flakes.forEach((f) => {
         // Fall down naturally
         f.y += f.speed * SNOW_SPEED * dt;
         
         // Add scroll delta influence (parallax effect)
-        f.y -= scrollDelta * f.speed * 0.2;
+        f.y -= scrollDelta * f.speed * 0.15;
 
         // Wind/Wobble
         f.wobble += f.wobbleSpeed * dt;
-        f.x += (Math.sin(f.wobble) * 0.5 + WIND_SPEED) * dt;
+        f.x += (Math.sin(f.wobble) * 0.4 + WIND_SPEED) * dt;
 
         // Wrap around
-        if (f.y > canvas.height) f.y = -10;
+        if (f.y > canvas.height + 10) f.y = -10;
         if (f.y < -50) f.y = canvas.height + 10;
-        if (f.x > canvas.width) f.x = -10;
-        if (f.x < -10) f.x = canvas.width;
+        if (f.x > canvas.width + 10) f.x = -10;
+        if (f.x < -10) f.x = canvas.width + 10;
 
-        ctx.moveTo(f.x, f.y);
+        // 1. Soft cool-slate rim for crystalline visibility against light surfaces
+        ctx.fillStyle = `rgba(145, 170, 200, ${(0.36 * ambientAlpha).toFixed(3)})`;
+        ctx.beginPath();
         ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2. Bright white core so it remains visible against darker content
+        ctx.fillStyle = `rgba(255, 255, 255, ${(0.82 * ambientAlpha).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.size * 0.65, 0, Math.PI * 2);
+        ctx.fill();
       });
 
-      ctx.fill();
       rAF = requestAnimationFrame(render);
     };
 
@@ -152,7 +157,7 @@ export const GlobalSnowfall = memo(function GlobalSnowfall() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-20 mix-blend-screen opacity-70"
+      className="pointer-events-none fixed inset-0 z-20 opacity-80"
       aria-hidden="true"
     />
   );

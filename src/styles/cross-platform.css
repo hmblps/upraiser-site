@@ -117,8 +117,8 @@ select {
   }
 }
 
-/* Mobile performance + layout budget */
-@media (max-width: 767px), (pointer: coarse) {
+/* Mobile performance + layout budget (strictly mobile viewports, never touchscreen desktop laptops) */
+@media (max-width: 767px) {
   html,
   body {
     overflow-x: clip;
