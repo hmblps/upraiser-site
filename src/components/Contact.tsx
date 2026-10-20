@@ -247,10 +247,12 @@ export function Contact() {
           formData.append("privacy_policy_accepted", "Yes");
           if (form.attachment) {
             if (fileUrl) {
-              formData.append("attachment_link", fileUrl);
+              formData.append("attachment_download_url", fileUrl);
+              formData.append("attachment_name", form.attachment.name);
+              formData.append("attachment_size", `${(form.attachment.size / 1024).toFixed(0)} KB`);
               formData.append(
                 "attachment",
-                `${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB) — Direct Download: ${fileUrl}`
+                `${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB) — Download: ${fileUrl}`
               );
             } else {
               formData.append(

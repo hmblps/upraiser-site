@@ -47,9 +47,31 @@ if [[ -f .env ]]; then
   sync_env_var "VITE_TELEGRAM_CHAT_ID"
 fi
 
-echo "Building locally…"
-npm run build
+echo "Building Vercel functions and framework scaffolding…"
 vercel build --prod --yes
+
+echo "Rebuilding client bundle with real environment variables…"
+if [[ -f .env ]]; then
+  set -a
+  eval "$(grep -E '^[A-Za-z0-9_]+=' .env | sed 's/\r$//')"
+  set +a
+fi
+
+# Remove masked .vercel/.env.production.local that contains [SENSITIVE]
+rm -f .vercel/.env.production.local
+
+npm run build
+
+echo "Syncing verified client bundle to .vercel/output/static…"
+rm -rf .vercel/output/static/*
+cp -R dist/* .vercel/output/static/
+
+# Verify no [SENSITIVE] tokens made it into client assets
+if grep -rn "\[SENSITIVE\]" .vercel/output/static/ 2>/dev/null; then
+  echo "ERROR: [SENSITIVE] placeholder found in client build assets! Aborting deploy."
+  exit 1
+fi
+echo "Client bundle integrity verified: all public variables resolved cleanly."
 
 echo "Deploying prebuilt output to ${VERCEL_PROJECT} (production)…"
 DEPLOY_URL="$(vercel deploy --prebuilt --prod --yes 2>&1 | tee /dev/stderr | grep -Eo 'https://[^ ]+\.vercel\.app' | tail -1)"
