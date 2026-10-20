@@ -8,17 +8,33 @@ interface HeroVideoFallbackProps {
   forceMobile?: boolean;
 }
 
-export function HeroVideoFallback(_props: HeroVideoFallbackProps) {
+export function HeroVideoFallback(props: HeroVideoFallbackProps) {
   const { theme } = useTheme();
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return Boolean(props.forceMobile) || window.innerWidth < 1024;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const sync = () => setIsMobile(Boolean(props.forceMobile) || mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [props.forceMobile]);
+
+  const darkSrc = isMobile ? "/hero/home-dark-idle-mobile.mp4" : "/hero/home-dark-idle.mp4";
+  const lightSrc = isMobile ? "/hero/home-light-idle-mobile.mp4" : "/hero/home-light-idle.mp4";
 
   return (
     <div className="absolute inset-0 z-0 bg-bg pointer-events-none overflow-hidden hero-video-canvas">
       {theme === "dark" && (
-        <SimpleVideo src="/hero/home-dark-idle.mp4" poster="/hero/home-dark-poster.jpg" />
+        <SimpleVideo src={darkSrc} poster="/hero/home-dark-poster.jpg" />
       )}
       {theme === "light" && (
         <SimpleVideo
-          src="/hero/home-light-idle.mp4"
+          src={lightSrc}
           poster="/hero/home-light-poster.jpg"
         />
       )}
@@ -51,6 +67,8 @@ function SimpleVideo({
     v.loop = false;
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
+    v.setAttribute("muted", "");
+    v.setAttribute("autoplay", "");
 
     let isHolding = false;
     let holdTimeout: number | undefined;
@@ -76,10 +94,12 @@ function SimpleVideo({
     const playVideo = () => {
       const p = v.play();
       if (p !== undefined) {
-        p.catch(() => {
+        p.then(() => {
+          setIsPlaying(true);
+        }).catch(() => {
           // iOS Safari Low Power Mode: unlock on first user gesture
           const unlock = () => {
-            v.play().catch(() => {});
+            v.play().then(() => setIsPlaying(true)).catch(() => {});
             window.removeEventListener("touchstart", unlock);
             window.removeEventListener("touchend", unlock);
             window.removeEventListener("pointerdown", unlock);
@@ -92,6 +112,14 @@ function SimpleVideo({
         });
       }
     };
+
+    const onCanPlay = () => {
+      if (v.paused && !isHolding) {
+        playVideo();
+      }
+    };
+    v.addEventListener("canplay", onCanPlay);
+    v.addEventListener("loadeddata", onCanPlay);
 
     playVideo();
 
@@ -160,6 +188,8 @@ function SimpleVideo({
 
     return () => {
       if (holdTimeout) window.clearTimeout(holdTimeout);
+      v.removeEventListener("canplay", onCanPlay);
+      v.removeEventListener("loadeddata", onCanPlay);
       v.removeEventListener("ended", handleEnded);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVis);
@@ -184,11 +214,13 @@ function SimpleVideo({
       <video
         ref={videoRef}
         id="hero-idle-video"
+        src={src}
         autoPlay
         muted
         playsInline
         preload="auto"
         disablePictureInPicture
+        onPlaying={() => setIsPlaying(true)}
         onTimeUpdate={() => {
           const v = videoRef.current;
           if (v && v.currentTime > 0.05) {
@@ -199,9 +231,7 @@ function SimpleVideo({
           isPlaying ? "opacity-100" : "opacity-0"
         }`}
         style={{ filter: staticFilter || undefined }}
-      >
-        <source src={`${src}#t=0.001`} type="video/mp4" />
-      </video>
+      />
     </div>
   );
 }

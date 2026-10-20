@@ -800,6 +800,7 @@
     min-height: min-content !important;
     overflow: visible !important;
     flex: none !important;
+    padding-top: calc(var(--site-header-height, 72px) + 1.25rem) !important;
     padding-bottom: max(3rem, env(safe-area-inset-bottom, 28px)) !important;
   }
 
