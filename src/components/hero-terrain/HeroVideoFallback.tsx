@@ -55,12 +55,10 @@ function SimpleVideo({
     const playVideo = () => {
       const p = v.play();
       if (p !== undefined) {
-        p.then(() => {
-          setIsPlaying(true);
-        }).catch(() => {
+        p.catch(() => {
           // iOS Safari Low Power Mode: unlock on first user gesture
           const unlock = () => {
-            v.play().then(() => setIsPlaying(true)).catch(() => {});
+            v.play().catch(() => {});
             window.removeEventListener("touchstart", unlock);
             window.removeEventListener("touchend", unlock);
             window.removeEventListener("pointerdown", unlock);
@@ -97,6 +95,11 @@ function SimpleVideo({
     let raf = 0;
     const loop = () => {
       if (v.duration && !v.paused) {
+        // Fade in only once frames have physically started advancing
+        if (v.currentTime > 0.05) {
+          setIsPlaying(true);
+        }
+
         // Reveal stats over the last 14 seconds of the video cycle
         const timeLeft = v.duration - v.currentTime;
         let progress = 0;
@@ -133,9 +136,10 @@ function SimpleVideo({
           src={poster}
           alt=""
           aria-hidden="true"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-            isPlaying ? "opacity-0 pointer-events-none" : "opacity-100"
-          }`}
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover z-0"
           style={{ filter: staticFilter || undefined }}
         />
       )}
@@ -148,11 +152,13 @@ function SimpleVideo({
         loop
         preload="auto"
         disablePictureInPicture
-        onPlaying={() => setIsPlaying(true)}
         onTimeUpdate={() => {
-          if (!isPlaying) setIsPlaying(true);
+          const v = videoRef.current;
+          if (v && v.currentTime > 0.05) {
+            setIsPlaying(true);
+          }
         }}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+        className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-700 ${
           isPlaying ? "opacity-100" : "opacity-0"
         }`}
         style={{ filter: staticFilter || undefined }}

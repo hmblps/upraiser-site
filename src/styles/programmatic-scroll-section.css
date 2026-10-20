@@ -1774,17 +1774,48 @@
   transform: scale(0.95);
 }
 
-.routes-device-modal__pills {
+.routes-device-modal__active-indicator {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 140px;
+  max-width: 220px;
+  padding: 0 1.25rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  overflow-x: auto;
-  max-width: calc(100vw - 8.5rem);
-  scrollbar-width: none;
+  background: var(--theme-accent);
+  color: #0b0d12;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--theme-accent) 30%, transparent);
+  pointer-events: none;
+}
+
+.routes-device-modal__pills {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .routes-device-modal__active-indicator {
+    display: none !important;
+  }
+
+  .routes-device-modal__pills {
+    display: flex !important;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    overflow-x: auto;
+    max-width: calc(100vw - 8.5rem);
+    scrollbar-width: none;
+  }
 }
 
 .routes-device-modal__pills::-webkit-scrollbar {

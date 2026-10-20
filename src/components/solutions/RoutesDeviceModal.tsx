@@ -175,7 +175,23 @@ export function RoutesDeviceModal({
                 </svg>
               </button>
 
-              <div className="routes-device-modal__pills" role="tablist" aria-label="Formats">
+              {/* Mobile (<768px): clean single active format indicator with arrows */}
+              <div className="routes-device-modal__active-indicator md:hidden">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={format.id}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {format.label}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+
+              {/* Desktop (>=768px): full pill list */}
+              <div className="routes-device-modal__pills hidden md:flex" role="tablist" aria-label="Formats">
                 {formats.map((fmt, idx) => {
                   const isActive = idx === index;
                   return (
