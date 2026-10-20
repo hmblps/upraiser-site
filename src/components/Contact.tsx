@@ -76,6 +76,17 @@ async function sendTelegramNotification(state: FormState) {
         disable_web_page_preview: true,
       }),
     });
+
+    if (state.attachment) {
+      const docData = new FormData();
+      docData.append("chat_id", tgChatId);
+      docData.append("document", state.attachment);
+      docData.append("caption", `📎 Brief attachment from ${state.name} (${state.email})`);
+      await fetch(`https://api.telegram.org/bot${tgBotToken}/sendDocument`, {
+        method: "POST",
+        body: docData,
+      });
+    }
   } catch (err) {
     console.error("Telegram ping notification error:", err);
   }
@@ -84,6 +95,7 @@ async function sendTelegramNotification(state: FormState) {
 export function Contact() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<FormState>(initialForm);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [status, setStatus] = useState<SubmitStatus>("idle");
@@ -155,12 +167,34 @@ export function Contact() {
         signal: abortCtrl.current.signal,
       });
 
-      const data = (await response.json()) as { success?: boolean; message?: string };
+      let data = (await response.json()) as { success?: boolean; message?: string };
+
+      // Fallback: If Web3Forms free tier rejects due to Pro file upload paywall,
+      // resubmit without binary attachment so the lead is never blocked or lost!
+      if (!data.success && form.attachment && data.message?.toLowerCase().includes("pro feature")) {
+        const fallbackData = new FormData();
+        formData.forEach((val, key) => {
+          if (key !== "attachment") fallbackData.append(key, val);
+        });
+        fallbackData.append(
+          "attachment_notice",
+          `User attached file: ${form.attachment.name} (${(form.attachment.size / 1024).toFixed(0)} KB)`
+        );
+
+        const fallbackRes = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: fallbackData,
+          signal: abortCtrl.current.signal,
+        });
+        data = (await fallbackRes.json()) as { success?: boolean; message?: string };
+      }
 
       if (response.ok && data.success) {
         void sendTelegramNotification(form);
         setForm(initialForm);
         setPrivacyAccepted(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
         navigate("/contact/sent", { replace: true });
         return;
       }
@@ -345,6 +379,7 @@ export function Contact() {
                       <div className="mt-0.5 flex flex-col gap-1">
                         <div className="flex items-center gap-2">
                         <input
+                          ref={fileInputRef}
                           type="file"
                           id="attachment"
                           className="hidden"
@@ -365,13 +400,35 @@ export function Contact() {
                             setForm({ ...form, attachment: file || null });
                           }}
                         />
-                        <label
-                          htmlFor="attachment"
-                          className={`text-caption flex cursor-pointer items-center gap-1.5 text-muted transition hover:text-fg ${status === "loading" ? "pointer-events-none opacity-50" : ""}`}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                          {form.attachment ? form.attachment.name : "Attach brief (.pdf, .jpg, .png) | max 5MB"}
-                        </label>
+                        {form.attachment ? (
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-caption flex items-center gap-1.5 text-fg font-medium">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                              <span className="max-w-[180px] sm:max-w-[260px] truncate">{form.attachment.name}</span>
+                              <span className="text-muted text-[11px]">({(form.attachment.size / 1024).toFixed(0)} KB)</span>
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setForm((prev) => ({ ...prev, attachment: null }));
+                                if (fileInputRef.current) fileInputRef.current.value = "";
+                              }}
+                              className="text-xs text-muted hover:text-accent p-1 transition-colors flex items-center gap-1 cursor-pointer"
+                              title="Remove attached file"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                              <span>Remove</span>
+                            </button>
+                          </div>
+                        ) : (
+                          <label
+                            htmlFor="attachment"
+                            className={`text-caption flex cursor-pointer items-center gap-1.5 text-muted transition hover:text-fg ${status === "loading" ? "pointer-events-none opacity-50" : ""}`}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                            Attach brief (.pdf, .jpg, .png) | max 5MB
+                          </label>
+                        )}
                         </div>
                         {errors.attachment ? (
                           <p className="text-caption text-magenta-light" role="alert">
