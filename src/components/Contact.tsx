@@ -438,52 +438,57 @@ export function Contact() {
                     <AccentWord tone="red">{contactPage.accentWord}</AccentWord>
                   </h1>
 
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="mt-4 flex items-center gap-1.5 sm:gap-2 overflow-x-auto sm:flex-wrap no-scrollbar -mx-1 px-1 sm:mx-0 sm:px-0 py-0.5">
                     {ctaRow.map((item) => (
                       <Link
                         key={item.label}
                         to={item.href}
-                        className="link-caps rounded-full border border-border px-3 py-1.5 text-fg transition-colors hover:border-accent hover:text-accent"
+                        className="link-caps inline-flex items-center shrink-0 rounded-full border border-border px-2.5 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs text-fg transition-colors hover:border-accent hover:text-accent whitespace-nowrap relative after:absolute after:inset-x-0 after:-inset-y-2 after:content-['']"
                       >
                         {item.label}
                       </Link>
                     ))}
                   </div>
 
-                  <div className="contact-sidebar hidden md:flex flex-col">
-                    <div>
-                      <h2 className="contact-sidebar__title">{t("misc.basecamp", "Basecamp London")}</h2>
-                      <address className="copy mt-2 space-y-1 not-italic">
-                        <p className="font-medium text-fg">Upraiser Agency LLP</p>
-                        <p>128 City Road, London EC1V 2NX</p>
-                        <p>{t("misc.uk", "United Kingdom")}</p>
-                      </address>
+                  <div className="contact-sidebar hidden md:flex flex-col flex-1">
+                    <div className="space-y-4">
+                      <div>
+                        <h2 className="contact-sidebar__title">{t("misc.basecamp", "Basecamp London")}</h2>
+                        <address className="copy mt-2 space-y-1 not-italic">
+                          <p className="font-medium text-fg">Upraiser Agency LLP</p>
+                          <p>128 City Road, London EC1V 2NX</p>
+                          <p>{t("misc.uk", "United Kingdom")}</p>
+                        </address>
+                      </div>
+                      <div>
+                        <p className="copy">
+                          <span className="font-bold text-fg">{t("misc.directComm", "Direct Communications")}:</span>{" "}
+                          <a href="mailto:info@upraiser.co.uk" className="text-fg underline hover:text-accent">
+                            info@upraiser.co.uk
+                          </a>
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="copy">
-                        <span className="font-bold text-fg">{t("misc.directComm", "Direct Communications")}:</span>{" "}
-                        <a href="mailto:info@upraiser.co.uk" className="text-fg underline hover:text-accent">
-                          info@upraiser.co.uk
-                        </a>
-                      </p>
-                      <p className="mt-2 text-xs font-bold tracking-wider uppercase text-accent">
+
+                    <div className="mt-8 md:mt-auto pt-6 border-t border-border/60">
+                      <p className="text-xs font-bold tracking-wider uppercase text-accent mb-3">
                         Upraising the standard of digital advertising since 2017
                       </p>
-                    </div>
-                    <div>
-                      <h2 className="contact-sidebar__title">{t("misc.verifiedComp", "Verified Compliance & Partners")}</h2>
-                      <ul className="copy mt-2 space-y-3">
-                        <li>
-                          <strong className="font-medium text-fg">Official Lenovo Partner:</strong> We work directly
-                          with Lenovo PC HK LTD to secure procurement-grade OEM ROM and PAI lanes, avoiding competitive
-                          ad re-selling.
-                        </li>
-                        <li>
-                          <strong className="font-medium text-fg">EDAA Alignment:</strong> Upraiser voluntarily
-                          implements the European Digital Advertising Alliance self-restriction recommendations for
-                          global targeting.
-                        </li>
-                      </ul>
+                      <div>
+                        <h2 className="contact-sidebar__title">{t("misc.verifiedComp", "Verified Compliance & Partners")}</h2>
+                        <ul className="copy mt-2 space-y-3">
+                          <li>
+                            <strong className="font-medium text-fg">Official Lenovo Partner:</strong> We work directly
+                            with Lenovo PC HK LTD to secure procurement-grade OEM ROM and PAI lanes, avoiding competitive
+                            ad re-selling.
+                          </li>
+                          <li>
+                            <strong className="font-medium text-fg">EDAA Alignment:</strong> Upraiser voluntarily
+                            implements the European Digital Advertising Alliance self-restriction recommendations for
+                            global targeting.
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
