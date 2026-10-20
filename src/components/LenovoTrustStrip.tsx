@@ -54,7 +54,7 @@ export function LenovoTrustStrip() {
               <LenovoPartnershipLogo className="h-7 w-auto shrink-0 sm:h-8 md:h-9 lg:h-10" />
               <div className="text-left">
                 <p className="stat-label text-[11px] sm:text-xs text-accent leading-none font-bold tracking-wider uppercase">{t("lenovo.badge", lenovoPartnership.badge)}</p>
-                <p className="mt-1 card-title text-sm sm:text-base md:text-lg lg:text-xl font-bold normal-case tracking-tight leading-tight">{t("lenovo.title", lenovoPartnership.title)}</p>
+                <p className="mt-1 card-title text-sm sm:text-base md:text-lg lg:text-xl font-medium normal-case tracking-tight leading-tight">{t("lenovo.title", lenovoPartnership.title)}</p>
               </div>
             </div>
             <LenovoPartnershipCopy 

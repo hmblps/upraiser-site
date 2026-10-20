@@ -983,7 +983,8 @@
     "marketingNav": "마케팅 내비게이터",
     "visArch": "비주얼 아키텍트",
     "dataScouts": "데이터 스카우트",
-    "expGuides": "원정 가이드"
+    "expGuides": "원정 가이드",
+    "flipPerspective": "시각을 전환하여 반대편에 무엇이 있는지 확인해 보세요."
   },
   "ghosts": {
     "q3RunRate": "Q3 런레이트",

@@ -57,8 +57,9 @@ export function HomePilotCta() {
 
       <div className="section-inner relative z-10 pb-[58vw] sm:pb-0">
         <Reveal>
-          <div className="flex flex-col items-start gap-8 border-t border-border/70 pt-8 max-w-xl">
-            <div>
+          <div className="flex flex-col gap-6 border-t border-border/70 pt-8 max-w-3xl">
+            {/* Top Left: Pilot Text */}
+            <div className="max-w-xl">
               <p className="section-label">{t("misc.nextStep", "Next step")}</p>
               <h2 className="section-heading">{t("misc.readyUpraised", "Ready to be Upraised?")}</h2>
               <p className="copy mt-3">
@@ -66,10 +67,11 @@ export function HomePilotCta() {
               </p>
             </div>
 
-            <div className="flex flex-col items-stretch sm:flex-row gap-4 w-full sm:w-auto">
+            {/* Middle: Action buttons shifted right between both texts */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:ml-28 md:ml-40 lg:ml-48">
               <Magnetic className="flex w-full sm:w-auto">
                 <motion.div
-                  className="w-full"
+                  className="w-full sm:w-auto"
                   whileHover={reduced ? undefined : { scale: 1.02 }}
                   whileTap={reduced ? undefined : { scale: 0.95 }}
                   transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
@@ -77,7 +79,11 @@ export function HomePilotCta() {
                   <ScrollLink
                     href={primaryCta.href}
                     data-cursor="cta"
-                    className="btn-caps btn-caps--primary flex w-full justify-center rounded-full px-8 py-3.5 min-h-[44px]"
+                    className={`btn-caps flex w-full sm:w-auto justify-center items-center rounded-full px-8 py-3.5 min-h-[44px] font-bold text-xs uppercase tracking-wider transition-colors shadow-sm ${
+                      theme === "light"
+                        ? "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
+                        : "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
+                    }`}
                   >
                     {primaryCta.label}
                   </ScrollLink>
@@ -91,10 +97,21 @@ export function HomePilotCta() {
                 whileHover={reduced ? undefined : { scale: 1.02 }}
                 whileTap={reduced ? undefined : { scale: 0.95 }}
                 transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
-                className="pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-sm font-medium text-fg-muted hover:text-fg px-6 py-2.5 min-h-[44px] rounded-full border border-border/60 bg-bg-elevated/90 backdrop-blur-md shadow-xs cursor-pointer relative z-20"
+                className={`pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider px-7 py-3.5 min-h-[44px] rounded-full shadow-sm cursor-pointer relative z-20 transition-colors ${
+                  theme === "light"
+                    ? "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
+                    : "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
+                }`}
               >
                 {switchLabel}
               </motion.button>
+            </div>
+
+            {/* Bottom Right: Perspective text placed below and to the right of the buttons */}
+            <div className="flex justify-start sm:justify-end sm:mr-4 md:mr-12">
+              <p className="text-xs sm:text-sm text-fg-muted font-sans tracking-normal max-w-sm text-left sm:text-right">
+                {t("misc.flipPerspective", "Flip the perspective — see what's on the other side.")}
+              </p>
             </div>
           </div>
         </Reveal>

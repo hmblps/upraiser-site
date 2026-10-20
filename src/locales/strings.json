@@ -6215,5 +6215,14 @@
     "es": "Ampliar dispositivo",
     "de": "Gerät vergrößern",
     "fr": "Zoomer sur l'appareil"
+  },
+  "Flip the perspective — see what's on the other side.": {
+    "de": "Wechsle die Perspektive – sieh, was auf der anderen Seite liegt.",
+    "fr": "Changez de perspective — découvrez l'autre versant.",
+    "es": "Cambia de perspectiva — descubre lo que hay al otro lado.",
+    "pt": "Mude de perspectiva — veja o que está do outro lado.",
+    "zh": "转换视角 —— 探索另一面的无限可能。",
+    "ja": "視点を切り替える — 反対側に広がる景色を見る。",
+    "ko": "시각을 전환하여 반대편에 무엇이 있는지 확인해 보세요."
   }
 }

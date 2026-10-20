@@ -983,7 +983,8 @@
     "marketingNav": "Los Navegantes de Marketing",
     "visArch": "Los Arquitectos Visuales",
     "dataScouts": "Los Exploradores de Datos",
-    "expGuides": "Los Guías de Expedición"
+    "expGuides": "Los Guías de Expedición",
+    "flipPerspective": "Cambia de perspectiva — descubre lo que hay al otro lado."
   },
   "ghosts": {
     "q3RunRate": "Run Rate Q3",

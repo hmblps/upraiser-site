@@ -1414,6 +1414,27 @@ select.contact-field {
   background-position: right 0.875rem top 50%;
   background-size: 0.65rem auto;
   padding-right: 2rem;
+  color-scheme: dark;
+}
+
+[data-theme="light"] select.contact-field {
+  color-scheme: light;
+}
+
+select.contact-field option {
+  background-color: #121318;
+  color: #f3f4f6;
+  padding: 8px 12px;
+}
+
+[data-theme="light"] select.contact-field option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+[data-theme="dark"] select.contact-field option {
+  background-color: #121318;
+  color: #f3f4f6;
 }
 
 .contact-field-wrap--beam {
