@@ -33,7 +33,7 @@ export const heroFounded = "Founded 17 July 2017 based in London";
 
 /** Shared poetic H1 stays in Hero.tsx lede annotates by mode (ascent brand). */
 export const heroLedeByMode = {
-  growth: "We run global performance campaigns with absolute attribution proof.",
+  growth: "We run global performance campaigns built for market-leading growth.",
   infrastructure: "We provide transparent infrastructure with absolute attribution proof.",
 } as const satisfies Record<SiteMode, string>;
 

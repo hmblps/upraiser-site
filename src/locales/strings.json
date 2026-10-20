@@ -5976,14 +5976,14 @@
     "fr": "Nous installons votre application directement sur des appareils Android haut de gamme dès leur première activation. En tant qu'agence partenaire officielle Lenovo, nous sécurisons des pré-installations et des campagnes Pre-Activated Install (PAI) sur les marchés Tier-1, GCC et mondiaux. Votre équipe bénéficie d'un positionnement direct en usine, sans aucune marge d'intermédiaire.",
     "pt": "Colocamos Seu aplicativo diretamente em dispositivos Android premium no momento da primeira ativação. Como parceiro oficial de agência Lenovo, garantimos campanhas de pré-instalação e Instalação Pré-Ativada (PAI) em mercados Tier-1, GCC e globais. Sua equipe assegura posicionamento direto de fábrica com zero margens de intermediários."
   },
-  "We run global performance campaigns with absolute attribution proof.": {
-    "zh": "我们操盘全球效果战役，提供绝对确凿的归因证据。",
-    "ja": "私たちは、絶対的なアトリビューション証明を持つグローバルなパフォーマンスキャンペーンを実行します。",
-    "ko": "우리는 완벽한 어트리뷰션 증명을 바탕으로 글로벌 퍼포먼스 캠페인을 집행합니다.",
-    "es": "Ejecutamos campañas globales de performance con prueba absoluta de atribución.",
-    "de": "Wir steuern globale Performance-Kampagnen mit absolutem Attributionsnachweis.",
-    "fr": "Nous pilotons des campagnes de performance mondiales avec une preuve absolue d'attribution.",
-    "pt": "Executamos campanhas globais de performance com comprovação absoluta de atribuição."
+  "We run global performance campaigns built for market-leading growth.": {
+    "zh": "我们操盘专为引领行业增长而打造的全球效果战役。",
+    "ja": "私たちは、市場を牽引する成長のために設計されたグローバルなパフォーマンスキャンペーンを展開します。",
+    "ko": "우리는 시장을 선도하는 성장을 위해 설계된 글로벌 퍼포먼스 캠페인을 집행합니다。",
+    "es": "Ejecutamos campañas globales de performance diseñadas para un crecimiento líder en el mercado.",
+    "de": "Wir steuern globale Performance-Kampagnen, geschaffen für marktführendes Wachstum.",
+    "fr": "Nous pilotons des campagnes de performance mondiales conçues pour une croissance leader sur le marché.",
+    "pt": "Executamos campanhas globais de performance desenvolvidas para um crescimento líder de mercado."
   },
   "We secure direct Lenovo ROM and PAI lanes with certified SDK trails. We bypass intermediate ad networks, allowing Your developers to verify installation footprints directly from device hardware logs.": {
     "zh": "我们直连具有权威认证 SDK 链路的 Lenovo ROM 与 PAI 通道。绕过所有中间广告网络，让您的技术团队能够直接从设备硬件日志中核验每一次安装足迹。",
