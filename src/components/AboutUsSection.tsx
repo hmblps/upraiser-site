@@ -165,15 +165,18 @@ export function AboutUsSection() {
                 Analytics experts who continuously monitor the metrics, uncover hidden growth vectors, and optimize Your budgets in real time to keep Your trajectory moving upward.
               </p>
             </div>
-            <div className="sm:col-span-2 pt-5 border-t border-border/30 mt-1">
-              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3">
-                <h3 className="font-semibold text-fg text-sm whitespace-nowrap">{t("misc.expGuides", "The Expedition Guides")}</h3>
-                <span className="hidden sm:inline text-muted/40 font-mono text-xs" aria-hidden>—</span>
-                <p className="text-muted text-sm leading-relaxed text-balance">
-                  Dedicated account managers ensuring transparent communication, reliable workflow, and steady momentum at every stage of the climb.
-                </p>
-              </div>
-            </div>
+          </div>
+        </div>
+
+        {/* Full-width Expedition Guides across all 3 columns */}
+        <div className="mt-10 pt-6 border-t border-border/30 relative">
+          <div className="absolute -inset-x-8 -inset-y-4 z-[-1] pointer-events-none backdrop-blur-sm" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
+          <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 max-w-4xl">
+            <h3 className="font-semibold text-fg text-sm whitespace-nowrap">{t("misc.expGuides", "The Expedition Guides")}</h3>
+            <span className="hidden md:inline text-muted/40 font-mono text-xs" aria-hidden>—</span>
+            <p className="text-muted text-sm leading-relaxed text-balance">
+              Dedicated account managers ensuring transparent communication, reliable workflow, and steady momentum at every stage of the climb.
+            </p>
           </div>
         </div>
       </div>
