@@ -952,6 +952,6 @@ html[data-os="windows"] .parity-water__lake {
 
 @media (min-width: 1280px) {
   .fraud-linear-chart__content {
-    transform: translate(-158px, -44px);
+    transform: translate(clamp(-158px, calc(-36px - (100vw - 1280px) * 0.2), -36px), -44px);
   }
 }

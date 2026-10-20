@@ -529,7 +529,7 @@ export function Tv3D({ mode, formatId, className, active = true, flat = false }:
       <div className="prog-device-load"><div className="prog-device-load__canvas" style={{zIndex: 1}}>
         <Canvas className="tv-glb-canvas"
           dpr={[1, 1.5]}
-          frameloop={active && inView ? "always" : "demand"}
+          frameloop={(!active || !inView || reduced) ? "never" : "always"}
           gl={{
             antialias: true,
             alpha: true,

@@ -103,7 +103,7 @@ export function detectHardwareTier(): HardwareTier {
 
   // 3. Fallback when GPU renderer info is masked / generic
   if (isWindows) {
-    if (cores <= 8 || ram < 8) return "lite";
+    if (cores < 6 || ram < 8) return "lite";
     return "high";
   }
 
