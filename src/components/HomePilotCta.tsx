@@ -82,8 +82,8 @@ export function HomePilotCta() {
                       data-cursor="cta"
                       className={`btn-caps flex w-full sm:w-auto justify-center items-center rounded-full px-8 py-3.5 min-h-[44px] font-bold text-xs uppercase tracking-wider transition-colors shadow-sm ${
                         theme === "light"
-                          ? "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
-                          : "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
+                          ? "bg-[#ff003b] text-white hover:bg-[#e60035]"
+                          : "bg-[#F7C806] text-[#0f1115] hover:bg-[#dfb405]"
                       }`}
                     >
                       {primaryCta.label}
@@ -100,8 +100,8 @@ export function HomePilotCta() {
                   transition={{ type: "spring", bounce: 0.25, duration: 0.4 }}
                   className={`pilot-story-switch flex items-center justify-center w-full sm:w-auto gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider px-7 py-3.5 min-h-[44px] rounded-full shadow-sm cursor-pointer relative z-20 transition-colors ${
                     theme === "light"
-                      ? "bg-[#eab308] text-[#0f1115] hover:bg-[#ca8a04]"
-                      : "bg-[#cb310d] text-white hover:bg-[#b02a0b]"
+                      ? "bg-[#F7C806] text-[#0f1115] hover:bg-[#dfb405]"
+                      : "bg-[#ff003b] text-white hover:bg-[#e60035]"
                   }`}
                 >
                   {switchLabel}
