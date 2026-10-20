@@ -43,7 +43,7 @@
     "infraLabel": "Teams, deren Kampagnen-Metriken exakt mit der Media-Rechnung übereinstimmen müssen",
     "infraLine1": "Wenn Dein MMP und Deine Media-Rechnungen auseinanderdriften, bauen wir Deine Daten-Pipelines neu auf.",
     "infraLine2Prefix": "Setze auf",
-    "infraDesc": "Du bist der Ad Ops Manager, Finance Controller oder UA Director, der Stakeholdern schon zu oft Attributionsdrift erklären musste. Deine programmatischen und OEM-Kampagnen laufen über Adjust, AppsFlyer, Singular oder Kochava.\n\nDu verlangst einen direkten Supply Path, bei dem sich jedes KPI-Event bis zum Rohdaten-Geräte-Log zurückverfolgen lässt. Undurchsichtige PDF-Reports überlassen wir traditionellen Anbietern.\n\nWir bauen saubere, verifizierte Lieferwege auf, damit Du Deinen Media Spend in jedem Finanz-Audit souverän verteidigen kannst."
+    "infraDesc": "Du bist der Ad Ops Manager, Finance Controller oder UA Director, der Stakeholdern schon zu oft Attributionsdrift erklären musste. Deine programmatischen und OEM-Kampagnen laufen über Adjust, AppsFlyer, Singular oder Kochava.\n\nDu verlangst einen direkten Supply Path, bei dem sich jedes KPI-Event bis zum Rohdaten-Geräte-Log zurückverfolgen lässt – und keine undurchsichtigen PDF-Reports, auf die sich andere Traffic-Anbieter verlassen.\n\nWir bauen saubere, verifizierte Lieferwege auf, damit Du Deinen Media Spend in jedem Finanz-Audit souverän verteidigen kannst."
   },
   "formats": {
     "label": "Lanes",
@@ -491,7 +491,7 @@
       "inlineWord": "KLARHEIT",
       "titleLead": "Wir schaffen ",
       "accentWord": "KLARHEIT",
-      "description": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber. Wir stellen sicher, dass jeder investierte Dollar vollständig belegt ist – für maximale Sicherheit, Budgets umfassend zu skalieren, mit vollkommenem Vertrauen und ohne Sorge vor versteckten Aufschlägen oder unsichtbarem Fraud."
+      "description": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Programmatic-Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber. Wir stellen sicher, dass jeder investierte Dollar vollständig belegt ist – für maximale Sicherheit, Budgets umfassend zu skalieren, mit vollkommenem Vertrauen und ohne Sorge vor versteckten Aufschlägen oder unsichtbarem Fraud."
     },
     "infrastructure": {
       "label": "Rohdaten-Logs, die Dein Team jederzeit auditieren kann",
@@ -502,7 +502,7 @@
       "inlineWord": "PARITÄT",
       "titleLead": "Wir garantieren ",
       "accentWord": "PARITÄT",
-      "description": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber."
+      "description": "Dein Team kann Deinen Datensatz jederzeit abrufen und verifizieren. Unsere Rohdaten-Log-Validierung löst Attributionsdiskrepanzen, bevor Deine Programmatic-Trader die Kampagne starten. Wir liefern Rohdaten-Logs, Echtzeit-Abgleich und Pre-Bid-Filterung, damit Deine Media Buyer und Finance Directors auf derselben Datenbasis arbeiten. Dein Abstimmungsprozess bleibt lückenlos sauber."
     }
   },
   "lenovo": {

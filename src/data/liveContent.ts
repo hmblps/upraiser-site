@@ -76,7 +76,7 @@ export const audienceByMode = {
     scrollHeroWord: "PROOF",
     cta: primaryCta.label,
     description:
-      "You are the Ad Ops manager, finance controller, or UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava.\n\nYou require a direct supply path where every KPI event traces back to a raw device log. We leave opaque PDF reporting to traditional vendors.\n\nWe build clean, verified supply lines so You can defend Your media spend in any financial review.",
+      "You are the Ad Ops manager, finance controller, or UA director who has explained attribution drift to stakeholders too many times. Your programmatic and OEM campaigns run on Adjust, AppsFlyer, Singular, or Kochava.\n\nYou require a direct supply path where every KPI event traces back to a raw device log — not the opaque PDF reports that other traffic providers rely on.\n\nWe build clean, verified supply lines so You can defend Your media spend in any financial review.",
   },
 } satisfies Record<SiteMode, {
   label: string;
@@ -161,7 +161,7 @@ export const promiseByMode = {
     titleLead: "We bring ",
     accentWord: "CLARITY",
     description:
-      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets extensively with complete peace of mind regarding hidden markups or invisible fraud.",
+      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your programmatic traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean. We ensure every dollar spent is fully accounted for, giving you the absolute confidence to scale budgets extensively with complete peace of mind regarding hidden markups or invisible fraud.",
   },
   infrastructure: {
     label: "Raw logs Your team can audit on demand",
@@ -173,7 +173,7 @@ export const promiseByMode = {
     titleLead: "We guarantee ",
     accentWord: "PARITY",
     description:
-      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean.",
+      "Your team can pull and verify Your dataset at any time. Our raw log validation resolves attribution disputes before Your programmatic traders open the flight. We provide raw logs, real-time reconciliation, and pre-bid filtration so Your media buyers and finance directors work with the same data. Your reconciliation process remains completely clean.",
   },
 } satisfies Record<
   SiteMode,

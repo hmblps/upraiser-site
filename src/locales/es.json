@@ -43,7 +43,7 @@
     "infraLabel": "Equipos que exigen que las métricas de campaña coincidan con la factura de medios",
     "infraLine1": "Cuando su MMP y las facturas de medios divergen, reconstruimos sus pipelines de datos.",
     "infraLine2Prefix": "Opere con",
-    "infraDesc": "Usted es el responsable de Ad Ops, controller financiero o director de UA que ha tenido que explicar la desviación de atribución a los directivos demasiadas veces. Sus campañas programáticas y OEM operan en Adjust, AppsFlyer, Singular o Kochava.\n\nExige una ruta directa de suministro donde cada evento KPI se rastree hasta el log bruto del dispositivo. Dejamos los informes opacos en PDF a las agencias tradicionales.\n\nConstruimos líneas de suministro limpias y verificadas para que pueda defender su inversión en medios en cualquier auditoría financiera."
+    "infraDesc": "Usted es el responsable de Ad Ops, controller financiero o director de UA que ha tenido que explicar la desviación de atribución a los directivos demasiadas veces. Sus campañas programáticas y OEM operan en Adjust, AppsFlyer, Singular o Kochava.\n\nExige una ruta directa de suministro donde cada evento KPI se rastree hasta el log bruto del dispositivo, no los informes opacos en PDF en los que confían otros proveedores de tráfico.\n\nConstruimos líneas de suministro limpias y verificadas para que pueda defender su inversión en medios en cualquier auditoría financiera."
   },
   "formats": {
     "label": "Rutas",
@@ -491,7 +491,7 @@
       "inlineWord": "CLARIDAD",
       "titleLead": "Aportamos ",
       "accentWord": "CLARIDAD",
-      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio. Garantizamos que cada dólar invertido esté plenamente justificado, dándole total tranquilidad y absoluta confianza para escalar presupuestos ampliamente sin temor a márgenes ocultos ni fraude invisible."
+      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders programáticos abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio. Garantizamos que cada dólar invertido esté plenamente justificado, dándole total tranquilidad y absoluta confianza para escalar presupuestos ampliamente sin temor a márgenes ocultos ni fraude invisible."
     },
     "infrastructure": {
       "label": "Logs brutos que su equipo puede auditar bajo demanda",
@@ -502,7 +502,7 @@
       "inlineWord": "PARIDAD",
       "titleLead": "Garantizamos ",
       "accentWord": "PARIDAD",
-      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio."
+      "description": "Su equipo puede extraer y verificar sus datos en cualquier momento. Nuestra validación de logs brutos resuelve las disputas de atribución antes de que sus traders programáticos abran la campaña. Proporcionamos logs brutos, conciliación en tiempo real y filtrado pre-bid para que sus compradores de medios y directores financieros trabajen con los mismos datos. Su proceso de conciliación se mantiene completamente limpio."
     }
   },
   "lenovo": {

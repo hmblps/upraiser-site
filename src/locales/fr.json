@@ -43,7 +43,7 @@
     "infraLabel": "Les équipes qui exigent que les métriques de campagne correspondent à la facture média",
     "infraLine1": "Quand votre MMP et vos factures médias divergent, nous reconstruisons vos pipelines de données.",
     "infraLine2Prefix": "Opérer sur la",
-    "infraDesc": "Vous êtes Ad Ops manager, contrôleur financier ou directeur UA et avez expliqué trop souvent les dérives d'attribution à vos parties prenantes. Vos campagnes programmatiques et OEM tournent sur Adjust, AppsFlyer, Singular ou Kochava.\n\nVous exigez une chaîne d'approvisionnement directe où chaque événement clé remonte à un log d'appareil brut. Nous laissons les rapports PDF opaques aux prestataires traditionnels.\n\nNous bâtissons des flux d'approvisionnement vérifiés et transparents afin que vous puissiez défendre vos dépenses médias lors de n'importe quel audit financier."
+    "infraDesc": "Vous êtes Ad Ops manager, contrôleur financier ou directeur UA et avez expliqué trop souvent les dérives d'attribution à vos parties prenantes. Vos campagnes programmatiques et OEM tournent sur Adjust, AppsFlyer, Singular ou Kochava.\n\nVous exigez une chaîne d'approvisionnement directe où chaque événement clé remonte à un log d'appareil brut — et non les rapports PDF opaques sur lesquels s'appuient d'autres fournisseurs de trafic.\n\nNous bâtissons des flux d'approvisionnement vérifiés et transparents afin que vous puissiez défendre vos dépenses médias lors de n'importe quel audit financier."
   },
   "formats": {
     "label": "Voies",
@@ -491,7 +491,7 @@
       "inlineWord": "CLARTÉ",
       "titleLead": "Nous apportons la ",
       "accentWord": "CLARTÉ",
-      "description": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même le début de la diffusion. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide. Chaque dollar investi est rigoureusement justifié, vous donnant l'entière sérénité et une confiance absolue pour développer largement vos budgets sans craindre de marges cachées ni de fraudes invisibles."
+      "description": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même que vos traders programmatiques ne lancent la campagne. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide. Chaque dollar investi est rigoureusement justifié, vous donnant l'entière sérénité et une confiance absolue pour développer largement vos budgets sans craindre de marges cachées ni de fraudes invisibles."
     },
     "infrastructure": {
       "label": "Des logs bruts que votre équipe peut auditer à la demande",
@@ -502,7 +502,7 @@
       "inlineWord": "PARITÉ",
       "titleLead": "Nous garantissons la ",
       "accentWord": "PARITÉ",
-      "description": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même le début de la diffusion. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide."
+      "description": "Votre équipe peut extraire et vérifier vos données à tout moment. Notre validation par logs bruts résout les litiges d'attribution avant même que vos traders programmatiques ne lancent la campagne. Nous fournissons des logs bruts, une réconciliation en temps réel et un filtrage pre-bid afin que vos acheteurs médias et vos directeurs financiers travaillent avec les mêmes chiffres. Votre processus de réconciliation reste parfaitement limpide."
     }
   },
   "lenovo": {
