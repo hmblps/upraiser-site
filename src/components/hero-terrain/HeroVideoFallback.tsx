@@ -48,9 +48,30 @@ function SimpleVideo({
 
     v.defaultMuted = true;
     v.muted = true;
-    v.loop = true;
+    v.loop = false;
     v.setAttribute("playsinline", "");
     v.setAttribute("webkit-playsinline", "");
+
+    let isHolding = false;
+    let holdTimeout: number | undefined;
+
+    const restartLoop = () => {
+      v.currentTime = 0;
+      isHolding = false;
+      playVideo();
+    };
+
+    const triggerEndHold = () => {
+      if (isHolding) return;
+      isHolding = true;
+      v.pause();
+      // Keep triumph stats fully revealed throughout the 3.5s summit pause
+      window.dispatchEvent(new CustomEvent('hero-video-stats-progress', { detail: 1 }));
+      window.dispatchEvent(new CustomEvent('hero-video-ended'));
+
+      if (holdTimeout) window.clearTimeout(holdTimeout);
+      holdTimeout = window.setTimeout(restartLoop, 3500);
+    };
 
     const playVideo = () => {
       const p = v.play();
@@ -74,27 +95,45 @@ function SimpleVideo({
 
     playVideo();
 
+    // Listen for native HTML5 video ended event as backup
+    const handleEnded = () => {
+      triggerEndHold();
+    };
+    v.addEventListener("ended", handleEnded);
+
     // Pause only when user scrolls far away down the page (> 1.3 screen heights)
     const onScroll = () => {
       if (window.scrollY > window.innerHeight * 1.3) {
         if (!v.paused) v.pause();
+        if (holdTimeout) {
+          window.clearTimeout(holdTimeout);
+          holdTimeout = undefined;
+        }
       } else {
-        if (v.paused) playVideo();
+        if (isHolding) {
+          if (!holdTimeout) holdTimeout = window.setTimeout(restartLoop, 1500);
+        } else if (v.paused) {
+          playVideo();
+        }
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
 
     // Resume after tab switch / iOS unlock
     const onVis = () => {
-      if (!document.hidden && v.paused && window.scrollY <= window.innerHeight * 1.3) {
-        playVideo();
+      if (!document.hidden && window.scrollY <= window.innerHeight * 1.3) {
+        if (isHolding) {
+          if (!holdTimeout) holdTimeout = window.setTimeout(restartLoop, 1500);
+        } else if (v.paused) {
+          playVideo();
+        }
       }
     };
     document.addEventListener("visibilitychange", onVis);
 
     let raf = 0;
     const loop = () => {
-      if (v.duration && !v.paused) {
+      if (v.duration && !v.paused && !isHolding) {
         // Fade in only once frames have physically started advancing
         if (v.currentTime > 0.05) {
           setIsPlaying(true);
@@ -110,12 +149,9 @@ function SimpleVideo({
         }
         window.dispatchEvent(new CustomEvent('hero-video-stats-progress', { detail: progress }));
 
-        // Dispatch ended event for the triumphant gesture on first loop pass
-        if (timeLeft <= 0.2) {
-          if (v.dataset.endedEmitted !== "true") {
-            v.dataset.endedEmitted = "true";
-            window.dispatchEvent(new CustomEvent('hero-video-ended'));
-          }
+        // Hold last frame for 3.5s before restarting loop
+        if (timeLeft <= 0.08) {
+          triggerEndHold();
         }
       }
       raf = requestAnimationFrame(loop);
@@ -123,6 +159,8 @@ function SimpleVideo({
     raf = requestAnimationFrame(loop);
 
     return () => {
+      if (holdTimeout) window.clearTimeout(holdTimeout);
+      v.removeEventListener("ended", handleEnded);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVis);
       cancelAnimationFrame(raf);
@@ -149,7 +187,6 @@ function SimpleVideo({
         autoPlay
         muted
         playsInline
-        loop
         preload="auto"
         disablePictureInPicture
         onTimeUpdate={() => {

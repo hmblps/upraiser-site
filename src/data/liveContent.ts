@@ -467,8 +467,7 @@ export const contactPage = {
   title: "Intake & Pilot Briefing",
   titleLead: "Intake & Pilot ",
   accentWord: "Briefing",
-  description:
-    "Provide Your production parameters. Our operators review Your application and configure Your data pipelines within 24 hours. We bypass generic sales funnels to establish direct partner alignment.",
+  description: "",
   subline:
     "1 to 2 business days. Provide Your brand brief, OEM supply requests, or careers intent and we route it perfectly.",
   office: "128 City Road, London EC1V 2NX, United Kingdom",

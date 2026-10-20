@@ -122,7 +122,7 @@ export function AboutUsSection() {
       <div className="page-container relative z-10 py-16">
         <div className="section-header relative">
           <div className="absolute -inset-x-8 -inset-y-4 z-[-1] pointer-events-none backdrop-blur-md" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
-          <p className="section-label">{t("misc.expeditionCrew", "The Expedition Crew")}</p>
+          <p className="section-label">{t("misc.expeditionCrew", "UPRAISER’S EXPEDITION CREW")}</p>
           <h2 className="section-title max-w-4xl text-balance">
             Elevating Your business to the absolute summit
           </h2>
@@ -132,10 +132,10 @@ export function AboutUsSection() {
           <div className="flex flex-col gap-5 relative">
             <div className="absolute -inset-8 z-[-1] pointer-events-none backdrop-blur-md" style={{ maskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 70%)" }} />
             <p className="section-description !max-w-none text-body-lg leading-snug text-fg/80 text-balance">
-              Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth.
+              Scaling the heights of the digital landscape requires a tightly-knit crew of diverse operators. At Upraiser, our unique skills are unified toward a single compass point: guiding Your business to the absolute peak of growth and prosperity.
             </p>
             <p className="section-description !max-w-none text-body-lg leading-snug text-fg/80 text-balance">
-              Our foundation is built to conquer any terrain. We combine mathematical precision, creative power, and bulletproof infrastructure, ensuring that every step of Your ascent is secured by operators who understand the pure mechanics of scale.
+              Our foundation is a synergy of elite talent, built to conquer any digital terrain. We combine mathematical precision, creative power, and strategic vision, ensuring that every step of Your ascent is secured by the specialists who understand the pure mechanics of scale.
             </p>
           </div>
 
@@ -144,25 +144,25 @@ export function AboutUsSection() {
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.engBasecamp", "The Engineering Basecamp")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
-                Anti-fraud and tracking architects securing Your path, ensuring absolute data integrity and clean traffic.
+                Software engineers with background of developing anti-fraud system and advanced tracking platform. They secure Your path, ensuring clean traffic, data integrity, and rock-solid infrastructure.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.marketingNav", "The Marketing Navigators")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
-                Media veterans plotting the optimal, verified route to Your exact audience across complex digital terrains.
+                Marketers with rich experience spanning traditional media (including television and magazines) and modern digital landscapes. Having shaped the mobile marketing industry since its very dawn, they know exactly how to find the optimal route to Your audience across complex digital terrains.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.visArch", "The Visual Architects")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
-                UX/UI designers translating complex strategies into high-converting assets that actively drive user action.
+                UX/UI and graphic designers who translate complex marketing strategies into breathtaking visual journeys. They craft high-converting interfaces and creatives that don’t just look stunning, but actively drive user actions.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.dataScouts", "The Data Scouts")}</h3>
               <p className="text-muted text-sm leading-relaxed text-balance">
-                Analysts uncovering hidden growth vectors, monitoring metrics, and optimizing Your budgets in real-time.
+                Analytics experts who continuously monitor the metrics, uncover hidden growth vectors, and optimize Your budgets in real time to keep Your trajectory moving upward.
               </p>
             </div>
             <div className="sm:col-span-2">

@@ -156,7 +156,6 @@ export function Contact() {
                     {contactPage.titleLead}
                     <AccentWord tone="red">{contactPage.accentWord}</AccentWord>
                   </h1>
-                  <p className="section-description mt-2 line-clamp-3">{contactPage.description}</p>
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     {ctaRow.map((item) => (
@@ -180,14 +179,13 @@ export function Contact() {
                       </address>
                     </div>
                     <div>
-                      <h2 className="contact-sidebar__title">{t("misc.directComm", "Direct Communications")}</h2>
-                      <p className="copy mt-2">
-                        Direct Operator Contact:{" "}
+                      <p className="copy">
+                        <span className="font-bold text-fg">{t("misc.directComm", "Direct Communications")}:</span>{" "}
                         <a href="mailto:info@upraiser.co.uk" className="text-fg underline hover:text-accent">
                           info@upraiser.co.uk
                         </a>
                       </p>
-                      <p className="mt-3 text-xs font-bold tracking-wider uppercase text-accent">
+                      <p className="mt-2 text-xs font-bold tracking-wider uppercase text-accent">
                         Upraising the standard of digital advertising since 2017
                       </p>
                     </div>
