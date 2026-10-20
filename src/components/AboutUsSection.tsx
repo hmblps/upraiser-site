@@ -165,11 +165,14 @@ export function AboutUsSection() {
                 Analytics experts who continuously monitor the metrics, uncover hidden growth vectors, and optimize Your budgets in real time to keep Your trajectory moving upward.
               </p>
             </div>
-            <div className="sm:col-span-2">
-              <h3 className="font-semibold text-fg text-sm mb-1">{t("misc.expGuides", "The Expedition Guides")}</h3>
-              <p className="text-muted text-sm leading-relaxed max-w-xl text-balance">
-                Dedicated account managers ensuring transparent communication, seamless workflow, and steady momentum at every stage of the climb.
-              </p>
+            <div className="sm:col-span-2 pt-5 border-t border-border/30 mt-1">
+              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3">
+                <h3 className="font-semibold text-fg text-sm whitespace-nowrap">{t("misc.expGuides", "The Expedition Guides")}</h3>
+                <span className="hidden sm:inline text-muted/40 font-mono text-xs" aria-hidden>—</span>
+                <p className="text-muted text-sm leading-relaxed text-balance">
+                  Dedicated account managers ensuring transparent communication, reliable workflow, and steady momentum at every stage of the climb.
+                </p>
+              </div>
             </div>
           </div>
         </div>
