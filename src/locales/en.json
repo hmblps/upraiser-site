@@ -1044,7 +1044,8 @@
       }
     },
     "skipToSummit": "View Capabilities",
-    "replayClimb": "Replay Climb",
+    "replayClimb": "Repeat Climb",
+    "inDevelopment": "In Development",
     "contactCta": "Discuss Project",
     "cardFooterLabel": "Creative & Tech",
     "featuredSoon": "To be featured soon"
