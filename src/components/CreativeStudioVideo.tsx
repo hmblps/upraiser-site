@@ -191,7 +191,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   return (
     <div
       onClick={phase === "climbing" ? handleSkipToSummit : undefined}
-      className={`relative w-full h-[100dvh] overflow-hidden flex flex-col items-center justify-center select-none ${
+      className={`relative w-full h-[100dvh] overflow-hidden flex flex-col select-none ${
         phase === "climbing" ? "cursor-pointer" : ""
       }`}
       style={{ background: "var(--theme-bg)" }}
@@ -305,62 +305,44 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }}
       />
 
-      {/* Main Content Area: safely cleared below top header island (pt-20 sm:pt-24 md:pt-28), scrollable if needed */}
-      <div className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-28 pb-28">
-        <div className="min-h-full w-full max-w-6xl mx-auto flex flex-col items-start justify-start">
+      {/* Main Content Area: Hugs the left rail exactly like Hero (--hero-rail-left) */}
+      <div
+        className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar pt-20 sm:pt-24 lg:pt-28 pb-28"
+        style={{
+          paddingLeft: "var(--hero-rail-left, clamp(1.25rem, 4vw, 3rem))",
+          paddingRight: "var(--hero-rail-left, clamp(1.25rem, 4vw, 3rem))",
+        }}
+      >
+        <div className="min-h-full w-full flex flex-col items-start justify-start">
           
-          {/* Header Typography: Anchored to Top-Left like 'We see how stunning' */}
-          <motion.div
-            layout
-            className="text-left w-full max-w-3xl shrink-0 relative mb-4 sm:mb-6"
-            transition={{ type: "spring", bounce: 0.12, duration: 0.7 }}
-          >
-            {/* 3-Row Monumental Title aligned to the top-left */}
-            <motion.h1
-              layout
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", bounce: 0.12, duration: 0.8 }}
-              className={`font-display font-extrabold text-white tracking-tight uppercase leading-[0.96] text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] ${
-                phase === "summit"
-                  ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
-                  : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
-              }`}
-            >
+          {/* Header Typography: Anchored to Top-Left like 'We see how stunning', perfectly stable without jitter */}
+          <div className="text-left w-full max-w-2xl lg:max-w-3xl shrink-0 relative mb-6 sm:mb-8">
+            {/* Monumental Title: Fixed font size and stable position to eliminate dancing/jumping */}
+            <h1 className="font-display font-extrabold text-white tracking-tighter uppercase leading-[0.88] text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-3xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.75rem]">
               <span className="block">Full-Cycle Digital</span>
               <span className="block">Creative & Tech</span>
               <span className="block">Studio</span>
-            </motion.h1>
+            </h1>
 
             {/* Subtitle / Caption directly underneath headline (analogous to hero-lede in 'We see how stunning') */}
-            <motion.p
-              layout
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className={`font-sans text-left text-white/90 font-medium text-balance drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] ${
-                phase === "summit"
-                  ? "mt-2 sm:mt-2.5 max-w-xl text-xs sm:text-sm md:text-base leading-snug"
-                  : "mt-4 sm:mt-5 max-w-xl text-sm sm:text-base md:text-lg leading-relaxed"
-              }`}
-            >
+            <p className="font-sans text-left text-white/90 font-medium text-balance drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] mt-3 sm:mt-4 max-w-xl text-sm sm:text-base md:text-lg leading-relaxed">
               {t(
                 "creativeStudio.subtitle",
                 "From immersive 3D and AI concepts to high-performance content and enterprise tech."
               )}
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
 
           {/* Phase 2: Full Capabilities Grid using Emil Kowalski Staggered Cascade & Ultra-Transparent Glass Cards */}
           <AnimatePresence>
             {phase === "summit" && (
               <div
-                className="w-full mt-4 sm:mt-6 lg:mt-8 grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch"
+                className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch max-w-7xl"
               >
                 {STUDIO_CATEGORIES.map((cat, index) => (
                   <motion.article
                     key={cat.key}
-                    initial={{ opacity: 0, y: 56, scale: 0.93 }}
+                    initial={{ opacity: 0, y: 48, scale: 0.94 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 24, scale: 0.96, transition: { duration: 0.2 } }}
                     transition={{
@@ -443,7 +425,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-6 sm:mt-8 pb-20 sm:pb-24 flex flex-col items-center justify-center shrink-0 w-full"
+              className="mt-6 sm:mt-8 pb-20 sm:pb-24 flex flex-col items-center justify-center shrink-0 w-full max-w-7xl"
             >
               <p className="font-sans text-accent tracking-[0.22em] uppercase text-xs sm:text-sm font-bold text-center drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {t("creativeStudio.featuredSoon", "To be featured soon")}
