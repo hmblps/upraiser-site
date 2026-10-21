@@ -313,15 +313,21 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
           paddingRight: "var(--hero-rail-left, clamp(1.25rem, 4vw, 3rem))",
         }}
       >
-        <div className="min-h-full w-full flex flex-col items-start justify-start">
+        <div
+          className="min-h-full w-full flex flex-col items-start justify-start"
+          style={{ zoom: 0.8 }}
+        >
           
           {/* Header Typography: Anchored to Top-Left like 'We see how stunning', perfectly stable without jitter */}
           <div className="text-left w-full max-w-3xl lg:max-w-4xl shrink-0 relative mb-6 sm:mb-8">
             {/* Monumental Title: Exact font, size, line-height & ladder structure as Hero reference */}
             <h1 className="hero-title hero-title--hero font-extrabold tracking-tighter !text-white text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-left">
-              <span className="block">Full-Cycle</span>
-              <span className="block">Digital Creative</span>
-              <span className="block">& Tech Studio</span>
+              <span className="block">We build the</span>
+              <span className="block">
+                <span className="hero-title-accent">Art & Code</span>
+              </span>
+              <span className="block">Behind the</span>
+              <span className="block">Ascent.</span>
             </h1>
 
             {/* Subtitle / Caption directly underneath headline (matching hero-lede in 'We see how stunning') */}
