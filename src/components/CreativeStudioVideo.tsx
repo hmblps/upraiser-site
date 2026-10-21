@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Variants } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -54,33 +53,6 @@ const STUDIO_CATEGORIES: StudioCategory[] = [
   },
 ];
 
-// Emil Kowalski Staggered Spring Cascade Variants (slower, deliberate, luxurious reveal)
-const gridVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.16,
-      delayChildren: 0.12,
-    },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 32, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 140,
-      damping: 20,
-      mass: 1.1,
-    },
-  },
-};
-
 export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProps) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
@@ -89,21 +61,16 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const altitudeRef = useRef<HTMLSpanElement>(null);
 
   const [phase, setPhase] = useState<"climbing" | "summit">("climbing");
-  const [subtitleVisible, setSubtitleVisible] = useState(false);
   const [goldenVisible, setGoldenVisible] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
 
   const phaseRef = useRef<"climbing" | "summit">("climbing");
-  const subtitleVisibleRef = useRef(false);
   const goldenVisibleRef = useRef(false);
 
   // Exact timestamp when camera cuts and climber is viewed from behind on the massive wall:
   // light-loop.mp4: 4.75s (cut & settle on wide wall with climber seen from behind)
   // dark-loop.mp4: 6.00s (headlamp strikes wall with climber seen from behind)
   const goldenStartTime = theme === "light" ? 4.75 : 6.0;
-
-  // Subtitle reveal timing: delayed until top-down climb climax (~3.8s in light, ~5.0s in dark)
-  const subtitleStartTime = theme === "light" ? 3.8 : 5.0;
 
   // Subtle imperceptible deceleration on the wide mountain wall:
   // 1.0x full speed everywhere (especially whip zoom 4.60-4.88s) to eliminate judder,
@@ -120,8 +87,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   useEffect(() => {
     phaseRef.current = "climbing";
     setPhase("climbing");
-    subtitleVisibleRef.current = false;
-    setSubtitleVisible(false);
     goldenVisibleRef.current = false;
     setGoldenVisible(false);
 
@@ -133,7 +98,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     }
   }, [videoSrc]);
 
-  // Precision 60/120 FPS rAF loop for telemetry updates, subtitle reveal & frame-perfect transitions
+  // Precision 60/120 FPS rAF loop for telemetry updates & frame-perfect transitions
   useEffect(() => {
     let rafId: number;
     const check = () => {
@@ -149,12 +114,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         if (altitudeRef.current) {
           const alt = Math.round(720 + (pct / 100) * 170);
           altitudeRef.current.textContent = `${alt}M`;
-        }
-
-        // Subtitle reveal timed to video narrative climax (replaces arbitrary early 800ms timer)
-        if (cur >= subtitleStartTime && !subtitleVisibleRef.current) {
-          subtitleVisibleRef.current = true;
-          setSubtitleVisible(true);
         }
 
         // Bloom golden filter strictly when climber is seen from behind
@@ -180,8 +139,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
           v.pause();
           phaseRef.current = "summit";
           setPhase("summit");
-          subtitleVisibleRef.current = true;
-          setSubtitleVisible(true);
           if (!goldenVisibleRef.current) {
             goldenVisibleRef.current = true;
             setGoldenVisible(true);
@@ -193,15 +150,13 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
 
     rafId = requestAnimationFrame(check);
     return () => cancelAnimationFrame(rafId);
-  }, [decelStartTime, goldenStartTime, pauseTime, subtitleStartTime, targetSlowRate]);
+  }, [decelStartTime, goldenStartTime, pauseTime, targetSlowRate]);
 
   const handleVideoEnded = useCallback(() => {
     const v = videoRef.current;
     if (v) v.pause();
     phaseRef.current = "summit";
     setPhase("summit");
-    subtitleVisibleRef.current = true;
-    setSubtitleVisible(true);
     goldenVisibleRef.current = true;
     setGoldenVisible(true);
   }, []);
@@ -214,8 +169,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     v.playbackRate = 1.0;
     phaseRef.current = "climbing";
     setPhase("climbing");
-    subtitleVisibleRef.current = false;
-    setSubtitleVisible(false);
     goldenVisibleRef.current = false;
     setGoldenVisible(false);
     setReplayKey((k) => k + 1);
@@ -231,15 +184,9 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     v.pause();
     phaseRef.current = "summit";
     setPhase("summit");
-    subtitleVisibleRef.current = true;
-    setSubtitleVisible(true);
     goldenVisibleRef.current = true;
     setGoldenVisible(true);
   }, [pauseTime]);
-
-  // Hero stat color: light mode uses climbing red (#cb310d) from Hero stat label; dark mode uses gold accent
-  const kickerColor =
-    theme === "light" ? "var(--hero-light-stat-label, #cb310d)" : "var(--theme-accent, #eab308)";
 
   return (
     <div
@@ -358,35 +305,26 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }}
       />
 
-      {/* Main Content Area: safely cleared below top header island (pt-24 sm:pt-28), scrollable if needed */}
-      <div className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-24 pb-28">
-        <div className="min-h-full w-full max-w-6xl mx-auto flex flex-col items-center justify-start md:justify-center">
+      {/* Main Content Area: safely cleared below top header island (pt-20 sm:pt-24 md:pt-28), scrollable if needed */}
+      <div className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-28 pb-28">
+        <div className="min-h-full w-full max-w-6xl mx-auto flex flex-col items-start justify-start">
           
-          {/* Header Typography with Emil Kowalski Shared Layout Spring Physics */}
+          {/* Header Typography: Anchored to Top-Left like 'We see how stunning' */}
           <motion.div
             layout
-            className="text-center max-w-4xl mx-auto shrink-0 relative px-4"
+            className="text-left w-full max-w-3xl shrink-0 relative mb-4 sm:mb-6"
             transition={{ type: "spring", bounce: 0.12, duration: 0.7 }}
           >
-            {/* Kicker label using Hero stat color (#cb310d in light, gold in dark) */}
-            <motion.p
-              layout
-              className="font-bold tracking-[0.16em] uppercase text-xs sm:text-sm mb-1 sm:mb-2 font-sans"
-              style={{ color: kickerColor }}
-            >
-              {t("creativeStudio.label", "UPRAISER · FULL-CYCLE STUDIO")}
-            </motion.p>
-
-            {/* Slightly Enlarged 3-Row Main Title (Clean, razor-sharp editorial typography without cheap fuzzy text halos) */}
+            {/* 3-Row Monumental Title aligned to the top-left */}
             <motion.h1
               layout
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: "spring", bounce: 0.12, duration: 0.8 }}
-              className={`font-display font-bold text-white tracking-tight uppercase leading-[1.08] text-balance drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] ${
+              className={`font-display font-extrabold text-white tracking-tight uppercase leading-[0.96] text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] ${
                 phase === "summit"
-                  ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl"
-                  : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+                  ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
+                  : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
               }`}
             >
               <span className="block">Full-Cycle Digital</span>
@@ -394,49 +332,52 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
               <span className="block">Studio</span>
             </motion.h1>
 
-            {/* Subtitle: Silky Optical Lens Dissolve (Appears at 3.8s, eliminating abrupt jump) */}
-            <AnimatePresence>
-              {subtitleVisible && (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, filter: "blur(6px)", y: 14 }}
-                  animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                  exit={{ opacity: 0, filter: "blur(4px)", transition: { duration: 0.2 } }}
-                  transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-sans text-white/95 max-w-3xl mx-auto font-medium text-balance drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] ${
-                    phase === "summit"
-                      ? "mt-2 sm:mt-3 text-xs sm:text-sm md:text-base leading-snug"
-                      : "mt-4 sm:mt-5 text-sm sm:text-base md:text-lg lg:text-xl leading-snug sm:leading-relaxed"
-                  }`}
-                >
-                  <span className="block">Driving digital growth:</span>
-                  <span className="block">from immersive 3D and AI concepts</span>
-                  <span className="block">to high-performance content and enterprise tech.</span>
-                </motion.div>
+            {/* Subtitle / Caption directly underneath headline (analogous to hero-lede in 'We see how stunning') */}
+            <motion.p
+              layout
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className={`font-sans text-left text-white/90 font-medium text-balance drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] ${
+                phase === "summit"
+                  ? "mt-2 sm:mt-2.5 max-w-xl text-xs sm:text-sm md:text-base leading-snug"
+                  : "mt-4 sm:mt-5 max-w-xl text-sm sm:text-base md:text-lg leading-relaxed"
+              }`}
+            >
+              {t(
+                "creativeStudio.subtitle",
+                "From immersive 3D and AI concepts to high-performance content and enterprise tech."
               )}
-            </AnimatePresence>
+            </motion.p>
           </motion.div>
 
-          {/* Phase 2: Full Capabilities Grid using Emil Kowalski Staggered Spring Cascade & Transparent Glass Cards */}
+          {/* Phase 2: Full Capabilities Grid using Emil Kowalski Staggered Cascade & Ultra-Transparent Glass Cards */}
           <AnimatePresence>
             {phase === "summit" && (
-              <motion.div
-                variants={gridVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
+              <div
                 className="w-full mt-4 sm:mt-6 lg:mt-8 grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch"
               >
-                {STUDIO_CATEGORIES.map((cat) => (
+                {STUDIO_CATEGORIES.map((cat, index) => (
                   <motion.article
                     key={cat.key}
-                    variants={cardVariants}
-                    whileHover={{
-                      y: -6,
-                      transition: { type: "spring", stiffness: 400, damping: 25 },
+                    initial={{ opacity: 0, y: 56, scale: 0.93 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 24, scale: 0.96, transition: { duration: 0.2 } }}
+                    transition={{
+                      delay: 0.35 + index * 0.40, // Distinct 400ms sequential cadence: Card 1 at 0.35s, Card 2 at 0.75s, Card 3 at 1.15s
+                      duration: 0.95,
+                      ease: [0.16, 1, 0.3, 1], // Emil Kowalski Apple-like fluid deceleration curve
                     }}
+                    whileHover={
+                      reduced
+                        ? undefined
+                        : {
+                            y: -6,
+                            transition: { type: "spring", stiffness: 400, damping: 25 },
+                          }
+                    }
                     whileTap={{ scale: 0.985 }}
-                    className="case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/40 bg-bg-card/35 backdrop-blur-2xl shadow-2xl transition-all duration-300 hover:border-accent/45 hover:bg-bg-card/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+                    className="case-preview-card group flex flex-col overflow-hidden rounded-2xl border border-white/12 dark:border-white/10 bg-bg-card/18 sm:bg-bg-card/22 backdrop-blur-2xl shadow-2xl transition-[border-color,background-color,box-shadow] duration-300 hover:border-accent/40 hover:bg-bg-card/28 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)]"
                     style={
                       {
                         "--case-accent": "var(--theme-accent)",
@@ -445,7 +386,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     }
                   >
                     {/* Case Card Header matching CaseBrandHeader */}
-                    <div className="case-brand-header relative overflow-hidden border-b border-border/30 p-5 sm:p-6 shrink-0">
+                    <div className="case-brand-header relative overflow-hidden border-b border-white/10 dark:border-white/10 p-5 sm:p-6 shrink-0">
                       <div className="case-brand-header__wash" aria-hidden />
                       <div className="relative z-10">
                         <h2 className="case-brand-header__title text-base sm:text-lg lg:text-xl font-bold tracking-tight text-fg">
@@ -480,7 +421,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                       </ul>
 
                       {/* Clean baseline: no "Discuss Project" CTA, indicates active studio development */}
-                      <div className="pt-4 mt-auto border-t border-border/30 flex items-center justify-between">
+                      <div className="pt-4 mt-auto border-t border-white/10 dark:border-white/10 flex items-center justify-between">
                         <span className="text-[10px] font-bold tracking-wider uppercase text-fg-muted font-sans">
                           {t("creativeStudio.cardFooterLabel", "Creative & Tech")}
                         </span>
@@ -492,17 +433,17 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     </div>
                   </motion.article>
                 ))}
-              </motion.div>
+              </div>
             )}
           </AnimatePresence>
 
-          {/* Under Columns: Clean "To be featured soon" announcement with generous breathing room */}
+          {/* Under Columns: Clean "To be featured soon" announcement appearing after cards cascade */}
           {phase === "summit" && (
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-6 sm:mt-8 pb-20 sm:pb-24 flex flex-col items-center justify-center shrink-0"
+              transition={{ delay: 1.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-6 sm:mt-8 pb-20 sm:pb-24 flex flex-col items-center justify-center shrink-0 w-full"
             >
               <p className="font-sans text-accent tracking-[0.22em] uppercase text-xs sm:text-sm font-bold text-center drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {t("creativeStudio.featuredSoon", "To be featured soon")}
