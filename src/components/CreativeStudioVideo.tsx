@@ -257,13 +257,12 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                       : "linear-gradient(to top, rgba(234, 179, 8, 0.17) 0%, rgba(245, 158, 11, 0.09) 35%, rgba(217, 119, 6, 0.03) 65%, transparent 100%)",
                 }}
               />
-              {/* Soft glowing crest at leading edge with 36px gaussian blur */}
+              {/* Soft glowing crest at leading edge with smooth gradient falloff (no gaussian blur filter) */}
               <div
                 className="absolute inset-x-0 top-0 h-48 pointer-events-none"
                 style={{
                   background:
-                    "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.18) 0%, rgba(234, 179, 8, 0.08) 45%, transparent 80%)",
-                  filter: "blur(36px)",
+                    "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.16) 0%, rgba(234, 179, 8, 0.06) 45%, transparent 80%)",
                 }}
               />
             </motion.div>
@@ -273,6 +272,17 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
 
       {/* Heavy Local Grain to ensure continuity with Hero */}
       <div className="site-grain absolute inset-0 z-10 opacity-60 pointer-events-none" />
+
+      {/* Centered cinematic contrast vignette for razor-sharp typography without fuzzy text halos */}
+      <div
+        className="absolute inset-0 pointer-events-none z-10"
+        style={{
+          background:
+            theme === "dark"
+              ? "radial-gradient(ellipse 85% 65% at 50% 35%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)"
+              : "radial-gradient(ellipse 85% 65% at 50% 35%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.10) 60%, transparent 100%)",
+        }}
+      />
 
       {/* Subtle theme-aware contrast overlay without artificial haze */}
       <div
@@ -301,19 +311,16 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
               {t("creativeStudio.label", "UPRAISER · FULL-CYCLE STUDIO")}
             </p>
 
-            {/* Slightly Enlarged 3-Row Main Title */}
+            {/* Slightly Enlarged 3-Row Main Title (Clean, razor-sharp editorial typography without cheap fuzzy text-blur halos) */}
             <motion.h1
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className={`font-display font-bold text-white tracking-tight uppercase leading-[1.08] transition-all duration-500 text-balance ${
+              className={`font-display font-bold text-white tracking-tight uppercase leading-[1.08] transition-all duration-500 text-balance drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] ${
                 phase === "summit"
                   ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl"
                   : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
               }`}
-              style={{
-                textShadow: "0 4px 28px rgba(0,0,0,0.85), 0 1px 4px rgba(0,0,0,0.9)",
-              }}
             >
               <span className="block">Full-Cycle Digital</span>
               <span className="block">Creative & Tech</span>
@@ -328,14 +335,11 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.7, ease: "easeOut" }}
-                  className={`font-sans text-white/95 max-w-3xl mx-auto font-medium text-balance transition-all duration-500 ${
+                  className={`font-sans text-white/95 max-w-3xl mx-auto font-medium text-balance transition-all duration-500 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] ${
                     phase === "summit"
                       ? "mt-2 sm:mt-3 text-xs sm:text-sm md:text-base leading-snug"
                       : "mt-4 sm:mt-5 text-sm sm:text-base md:text-lg lg:text-xl leading-snug sm:leading-relaxed"
                   }`}
-                  style={{
-                    textShadow: "0 2px 20px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.95)",
-                  }}
                 >
                   <span className="block">Driving digital growth:</span>
                   <span className="block">from immersive 3D and AI concepts</span>
@@ -439,8 +443,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
               className="mt-5 sm:mt-6 pb-6 flex flex-col items-center justify-center gap-2.5 shrink-0"
             >
               <p
-                className="font-mono text-accent tracking-[0.25em] uppercase text-xs sm:text-sm md:text-base font-semibold text-center"
-                style={{ textShadow: "0 2px 14px rgba(0,0,0,0.9)" }}
+                className="font-mono text-accent tracking-[0.25em] uppercase text-xs sm:text-sm md:text-base font-semibold text-center drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
               >
                 {t("creativeStudio.featuredSoon", "To be featured soon")}
               </p>
