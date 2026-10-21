@@ -58,38 +58,140 @@ type Stage = "initial" | "title" | "subtitle" | "summit";
 export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProps) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [stage, setStage] = useState<Stage>("initial");
+  const summitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rafIdRef = useRef<number | null>(null);
 
-  // Calibrated video thresholds & slow-motion window:
-  // When looking at the mountain ridge from behind, playbackRate slows down
-  // to tame frantic dynamics and give each text reveal generous breathing space.
-  //
-  // light-loop.mp4 (6.01s):
-  //   0.0s – 1.1s: Normal speed (1.0x). Initial hold ("The Craft In Development" / "To be released soon")
-  //   1.1s – 4.8s: Slow-motion (0.55x). Camera ascends mountain from behind.
-  //                1.1s: Title enters in 3 rows alone
-  //                2.5s: Subtitle enters below in 3 rows
-  //   4.8s – 5.2s: Gentle ease (0.8x) into summit panorama
-  //   >= 5.2s: Summit hold -> 3 clean typography columns + "To be featured soon"
-  //
-  // dark-loop.mp4 (11.01s):
-  //   0.0s – 1.8s: Normal speed (1.0x). Initial hold
-  //   1.8s – 8.8s: Slow-motion (0.65x). Ice face climb from behind.
-  //                1.8s: Title enters in 3 rows alone
-  //                4.0s: Subtitle enters below in 3 rows
-  //   8.8s – 10.3s: Gentle ease (0.85x) into summit ridge
-  //   >= 10.3s: Summit hold -> 3 clean typography columns + "To be featured soon"
-  const titleSwitchTime = theme === "light" ? 1.1 : 1.8;
-  const subtitleAppearTime = theme === "light" ? 2.5 : 4.0;
+  const [stage, setStage] = useState<Stage>("initial");
+  const [isSlowMo, setIsSlowMo] = useState(false);
+
+  const stageRef = useRef<Stage>("initial");
+  const isSlowMoRef = useRef(false);
+
+  // Exact timestamp when climber is viewed from behind:
+  // light-loop.mp4: camera pulls back directly behind the climber's back at 1.8s.
+  // dark-loop.mp4: camera aligns behind climber on the vertical ice wall at 3.2s.
+  // Before this exact moment: strictly 1.0x normal speed (not a single second of slowdown!).
+  const slowStart = theme === "light" ? 1.8 : 3.2;
+  const slowEnd = theme === "light" ? 5.0 : 9.8;
+  const slowRate = theme === "light" ? 0.45 : 0.50;
+
+  const titleSwitchTime = slowStart;
+  const subtitleAppearTime = theme === "light" ? 3.2 : 5.2;
   const pauseTime = theme === "light" ? 5.2 : 10.3;
 
-  const slowStart = theme === "light" ? 1.0 : 1.8;
-  const slowEnd = theme === "light" ? 4.8 : 8.8;
-  const slowRate = theme === "light" ? 0.55 : 0.65;
+  const handleReplay = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (summitTimerRef.current) {
+      clearTimeout(summitTimerRef.current);
+      summitTimerRef.current = null;
+    }
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = 0;
+    v.playbackRate = 1.0;
+    isSlowMoRef.current = false;
+    setIsSlowMo(false);
+    stageRef.current = "initial";
+    setStage("initial");
+    v.play().catch(() => {});
+  }, []);
+
+  // Frame-perfect tick function running at 60 FPS
+  const checkVideoTime = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const cur = v.currentTime;
+
+    // Final summit check
+    if (cur >= pauseTime) {
+      if (stageRef.current !== "summit") {
+        v.pause();
+        stageRef.current = "summit";
+        setStage("summit");
+        // Hold summit view for 6.5s to let visitor read the 3 columns, then loop & restart climb
+        if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
+        summitTimerRef.current = setTimeout(() => {
+          handleReplay();
+        }, 6500);
+      }
+      return;
+    }
+
+    // Dynamic playback rate: strictly 1.0x before climber is seen from behind,
+    // then slow-mo kicks in during the mountain climb from behind!
+    if (cur < slowStart) {
+      if (v.playbackRate !== 1.0) v.playbackRate = 1.0;
+      if (isSlowMoRef.current) {
+        isSlowMoRef.current = false;
+        setIsSlowMo(false);
+      }
+    } else if (cur >= slowStart && cur < slowEnd) {
+      if (v.playbackRate !== slowRate) v.playbackRate = slowRate;
+      if (!isSlowMoRef.current) {
+        isSlowMoRef.current = true;
+        setIsSlowMo(true);
+      }
+    } else {
+      if (v.playbackRate !== 0.85) v.playbackRate = 0.85;
+      if (!isSlowMoRef.current) {
+        isSlowMoRef.current = true;
+        setIsSlowMo(true);
+      }
+    }
+
+    // Stage progression with distinct intervals
+    let nextStage: Stage = "initial";
+    if (cur >= subtitleAppearTime) {
+      nextStage = "subtitle";
+    } else if (cur >= titleSwitchTime) {
+      nextStage = "title";
+    }
+
+    if (stageRef.current !== nextStage) {
+      stageRef.current = nextStage;
+      setStage(nextStage);
+    }
+  }, [
+    pauseTime,
+    slowStart,
+    slowEnd,
+    slowRate,
+    subtitleAppearTime,
+    titleSwitchTime,
+    handleReplay,
+  ]);
+
+  // Continuously poll playback rate & stage via requestAnimationFrame for 60 FPS precision
+  useEffect(() => {
+    let active = true;
+
+    const loop = () => {
+      if (!active) return;
+      const v = videoRef.current;
+      if (v && !v.paused) {
+        checkVideoTime();
+      }
+      rafIdRef.current = requestAnimationFrame(loop);
+    };
+
+    rafIdRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      active = false;
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+    };
+  }, [checkVideoTime]);
 
   // Reset timeline when video source changes
   useEffect(() => {
+    stageRef.current = "initial";
     setStage("initial");
+    isSlowMoRef.current = false;
+    setIsSlowMo(false);
+    if (summitTimerRef.current) {
+      clearTimeout(summitTimerRef.current);
+      summitTimerRef.current = null;
+    }
     const v = videoRef.current;
     if (v) {
       v.currentTime = 0;
@@ -98,61 +200,40 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     }
   }, [videoSrc]);
 
-  const handleTimeUpdate = useCallback(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const cur = v.currentTime;
-
-    // Final summit check
-    if (cur >= pauseTime) {
-      v.pause();
-      setStage("summit");
-      return;
-    }
-
-    // Dynamic playback rate to soften rapid camera motion when mountain is viewed from behind
-    if (cur >= slowStart && cur < slowEnd) {
-      if (v.playbackRate !== slowRate) v.playbackRate = slowRate;
-    } else if (cur >= slowEnd) {
-      if (v.playbackRate !== 0.8) v.playbackRate = 0.8;
-    } else {
-      if (v.playbackRate !== 1.0) v.playbackRate = 1.0;
-    }
-
-    // Stage progression with distinct intervals
-    if (cur >= subtitleAppearTime) {
-      setStage("subtitle");
-    } else if (cur >= titleSwitchTime) {
-      setStage("title");
-    } else {
-      setStage("initial");
-    }
-  }, [pauseTime, slowStart, slowEnd, slowRate, subtitleAppearTime, titleSwitchTime]);
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+    };
+  }, []);
 
   const handleVideoEnded = useCallback(() => {
     const v = videoRef.current;
     if (v) v.pause();
+    stageRef.current = "summit";
     setStage("summit");
-  }, []);
-
-  const handleReplay = useCallback((e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    const v = videoRef.current;
-    if (!v) return;
-    v.currentTime = 0;
-    v.playbackRate = 1.0;
-    setStage("initial");
-    v.play().catch(() => {});
-  }, []);
+    if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
+    summitTimerRef.current = setTimeout(() => {
+      handleReplay();
+    }, 6500);
+  }, [handleReplay]);
 
   const handleSkipToSummit = useCallback(() => {
-    if (stage === "summit") return;
+    if (stageRef.current === "summit") return;
     const v = videoRef.current;
     if (!v) return;
     v.currentTime = pauseTime;
     v.pause();
+    stageRef.current = "summit";
     setStage("summit");
-  }, [pauseTime, stage]);
+    isSlowMoRef.current = true;
+    setIsSlowMo(true);
+    if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
+    summitTimerRef.current = setTimeout(() => {
+      handleReplay();
+    }, 6500);
+  }, [pauseTime, handleReplay]);
 
   // Accent kicker color
   const kickerColor =
@@ -173,7 +254,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         autoPlay
         muted
         playsInline
-        onTimeUpdate={handleTimeUpdate}
+        onTimeUpdate={checkVideoTime}
         onEnded={handleVideoEnded}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
           theme === "light"
@@ -196,6 +277,41 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
             : "bg-gradient-to-b from-[#111a24]/40 to-[#080d14]/60"
         }`}
       />
+
+      {/* Golden Rising Filter on Slow-Mo Ascent (crawls bottom to top symbolizing elevation & prosperity) */}
+      <AnimatePresence>
+        {isSlowMo && (
+          <motion.div
+            key="golden-ascent-filter"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 3.2, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 pointer-events-none z-15 overflow-hidden"
+            style={{ mixBlendMode: "screen" }}
+          >
+            {/* Golden gradient wash rising from bottom */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  theme === "dark"
+                    ? "linear-gradient(to top, rgba(234, 179, 8, 0.40) 0%, rgba(217, 119, 6, 0.25) 30%, rgba(180, 83, 9, 0.12) 60%, transparent 100%)"
+                    : "linear-gradient(to top, rgba(234, 179, 8, 0.48) 0%, rgba(245, 158, 11, 0.30) 35%, rgba(217, 119, 6, 0.14) 65%, transparent 100%)",
+              }}
+            />
+            {/* Radiant golden crest line at leading top edge of the rising wave */}
+            <div
+              className="absolute inset-x-0 top-0 h-40 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 50% 100%, rgba(253, 224, 71, 0.5) 0%, rgba(234, 179, 8, 0.25) 45%, transparent 80%)",
+                filter: "blur(20px)",
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Heavy Local Grain to ensure continuity with Hero */}
       <div className="site-grain absolute inset-0 z-10 opacity-60 pointer-events-none" />
