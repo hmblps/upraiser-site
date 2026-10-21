@@ -67,10 +67,10 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const phaseRef = useRef<"climbing" | "summit">("climbing");
   const goldenVisibleRef = useRef(false);
 
-  // Exact timestamp when camera cuts and climber is viewed from behind on the massive wall:
-  // light-loop.mp4: 4.75s (cut & settle on wide wall with climber seen from behind)
-  // dark-loop.mp4: 6.00s (headlamp strikes wall with climber seen from behind)
-  const goldenStartTime = theme === "light" ? 4.75 : 6.0;
+  // Golden ascent filter onset and crawl duration:
+  // Starts early during ascent (0.8s light / 1.5s dark) and slowly floods upward from bottom over 5.5s/8.5s
+  const goldenStartTime = theme === "light" ? 0.8 : 1.5;
+  const goldenDuration = theme === "light" ? 5.5 : 8.5;
 
   // Subtle imperceptible deceleration on the wide mountain wall:
   // 1.0x full speed everywhere (especially whip zoom 4.60-4.88s) to eliminate judder,
@@ -237,27 +237,27 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="absolute inset-0 pointer-events-none z-15 overflow-hidden"
           >
-            {/* Layer A: Ambient Warm Champagne Illumination */}
+            {/* Layer A: Ambient Warm Golden Illumination */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 2.0, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 2.2, ease: [0.25, 0.1, 0.25, 1] }}
               className="absolute inset-0"
               style={{
-                mixBlendMode: "color-dodge",
+                mixBlendMode: "screen",
                 background:
                   theme === "dark"
-                    ? "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(234, 179, 8, 0.10) 0%, rgba(180, 83, 9, 0.04) 50%, transparent 85%)"
-                    : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.13) 0%, rgba(217, 119, 6, 0.05) 50%, transparent 85%)",
+                    ? "radial-gradient(ellipse 110% 85% at 50% 100%, rgba(234, 179, 8, 0.28) 0%, rgba(217, 119, 6, 0.16) 45%, rgba(180, 83, 9, 0.05) 75%, transparent 100%)"
+                    : "radial-gradient(ellipse 110% 85% at 50% 100%, rgba(245, 158, 11, 0.36) 0%, rgba(234, 179, 8, 0.22) 45%, rgba(217, 119, 6, 0.08) 75%, transparent 100%)",
               }}
             />
 
-            {/* Layer B: Cinematic Golden Sunrise Wave Crawling Upwards */}
+            {/* Layer B: Cinematic Golden Sunrise Wave Crawling Slower from Bottom to Top (More Obvious & Luminous) */}
             <motion.div
-              initial={{ y: "45%", opacity: 0 }}
-              animate={{ y: "-6%", opacity: 1 }}
-              transition={{ duration: 3.8, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-0 -bottom-24 h-[125%] pointer-events-none"
+              initial={{ y: "85%", opacity: 0 }}
+              animate={{ y: "-15%", opacity: 1 }}
+              transition={{ duration: goldenDuration, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-x-0 -bottom-32 h-[140%] pointer-events-none"
               style={{ mixBlendMode: "screen" }}
             >
               <div
@@ -265,15 +265,15 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                 style={{
                   background:
                     theme === "dark"
-                      ? "linear-gradient(to top, rgba(234, 179, 8, 0.15) 0%, rgba(217, 119, 6, 0.08) 35%, rgba(180, 83, 9, 0.02) 65%, transparent 100%)"
-                      : "linear-gradient(to top, rgba(234, 179, 8, 0.17) 0%, rgba(245, 158, 11, 0.09) 35%, rgba(217, 119, 6, 0.03) 65%, transparent 100%)",
+                      ? "linear-gradient(to top, rgba(234, 179, 8, 0.40) 0%, rgba(217, 119, 6, 0.25) 35%, rgba(180, 83, 9, 0.10) 65%, transparent 100%)"
+                      : "linear-gradient(to top, rgba(245, 158, 11, 0.45) 0%, rgba(234, 179, 8, 0.28) 35%, rgba(217, 119, 6, 0.12) 65%, transparent 100%)",
                 }}
               />
               <div
-                className="absolute inset-x-0 top-0 h-48 pointer-events-none"
+                className="absolute inset-x-0 top-0 h-72 pointer-events-none"
                 style={{
                   background:
-                    "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.16) 0%, rgba(234, 179, 8, 0.06) 45%, transparent 80%)",
+                    "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(254, 240, 138, 0.50) 0%, rgba(245, 158, 11, 0.26) 45%, transparent 85%)",
                 }}
               />
             </motion.div>
@@ -316,16 +316,16 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         <div className="min-h-full w-full flex flex-col items-start justify-start">
           
           {/* Header Typography: Anchored to Top-Left like 'We see how stunning', perfectly stable without jitter */}
-          <div className="text-left w-full max-w-2xl lg:max-w-3xl shrink-0 relative mb-6 sm:mb-8">
-            {/* Monumental Title: Fixed font size and stable position to eliminate dancing/jumping */}
-            <h1 className="font-display font-extrabold text-white tracking-tighter uppercase leading-[0.88] text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-3xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.75rem]">
+          <div className="text-left w-full max-w-3xl lg:max-w-4xl shrink-0 relative mb-6 sm:mb-8">
+            {/* Monumental Title: Exact font, size, line-height & ladder structure as Hero reference */}
+            <h1 className="hero-title hero-title--hero font-extrabold tracking-tighter !text-white text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-left">
               <span className="block">Full-Cycle Digital</span>
-              <span className="block">Creative & Tech</span>
-              <span className="block">Studio</span>
+              <span className="block">Creative &</span>
+              <span className="block">Tech Studio</span>
             </h1>
 
-            {/* Subtitle / Caption directly underneath headline (analogous to hero-lede in 'We see how stunning') */}
-            <p className="font-sans text-left text-white/90 font-medium text-balance drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] mt-3 sm:mt-4 max-w-xl text-sm sm:text-base md:text-lg leading-relaxed">
+            {/* Subtitle / Caption directly underneath headline (matching hero-lede in 'We see how stunning') */}
+            <p className="hero-lede mt-4 sm:mt-5 max-w-xl text-balance text-sm sm:text-base md:text-lg text-white/90 font-medium leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
               {t(
                 "creativeStudio.subtitle",
                 "From immersive 3D and AI concepts to high-performance content and enterprise tech."
@@ -419,19 +419,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
             )}
           </AnimatePresence>
 
-          {/* Under Columns: Clean "To be featured soon" announcement appearing after cards cascade */}
-          {phase === "summit" && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-6 sm:mt-8 pb-20 sm:pb-24 flex flex-col items-center justify-center shrink-0 w-full max-w-7xl"
-            >
-              <p className="font-sans text-accent tracking-[0.22em] uppercase text-xs sm:text-sm font-bold text-center drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
-                {t("creativeStudio.featuredSoon", "To be featured soon")}
-              </p>
-            </motion.div>
-          )}
+
         </div>
       </div>
 
