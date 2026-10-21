@@ -122,17 +122,17 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
           stageRef.current = "summit";
           setStage("summit");
         }
-        // Hold summit view for 6.5s to let visitor read the 3 columns, then loop & restart climb
+        // Hold summit view for 2.8s (crisp & engaging, no long freeze), then loop & restart climb
         if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
         summitTimerRef.current = setTimeout(() => {
           handleReplay();
-        }, 6500);
+        }, 2800);
       }
       return;
     }
 
     // Dynamic playback rate: strictly 1.0x before climber is seen from behind,
-    // then slow-mo kicks in during the mountain climb from behind!
+    // then smooth cinematic deceleration into slow-mo!
     if (cur < slowStart) {
       if (v.playbackRate !== 1.0) v.playbackRate = 1.0;
       if (isSlowMoRef.current) {
@@ -140,7 +140,17 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         setIsSlowMo(false);
       }
     } else if (cur >= slowStart && cur < slowEnd) {
-      if (v.playbackRate !== slowRate) v.playbackRate = slowRate;
+      // Smooth non-linear deceleration ramp over rampDuration
+      const rampDuration = theme === "light" ? 0.48 : 0.8;
+      const elapsed = cur - slowStart;
+      const progress = Math.min(1, Math.max(0, elapsed / rampDuration));
+      // Ease-out cubic for organic camera deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const targetRate = 1.0 - eased * (1.0 - slowRate);
+      const roundedRate = Math.round(targetRate * 100) / 100;
+      if (Math.abs(v.playbackRate - roundedRate) > 0.005) {
+        v.playbackRate = roundedRate;
+      }
       if (!isSlowMoRef.current) {
         isSlowMoRef.current = true;
         setIsSlowMo(true);
@@ -233,7 +243,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
     summitTimerRef.current = setTimeout(() => {
       handleReplay();
-    }, 6500);
+    }, 2800);
   }, [handleReplay]);
 
   const handleSkipToSummit = useCallback(() => {
@@ -249,7 +259,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
     summitTimerRef.current = setTimeout(() => {
       handleReplay();
-    }, 6500);
+    }, 2800);
   }, [pauseTime, handleReplay]);
 
   // Accent kicker color
@@ -295,37 +305,61 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }`}
       />
 
-      {/* Golden Rising Filter on Slow-Mo Ascent (crawls bottom to top symbolizing elevation & prosperity) */}
+      {/* Cinematic Golden Ascent Flood on Slow-Mo */}
       <AnimatePresence>
         {isSlowMo && (
           <motion.div
             key="golden-ascent-filter"
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 3.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.0, ease: "easeOut" }}
             className="absolute inset-0 pointer-events-none z-15 overflow-hidden"
-            style={{ mixBlendMode: "screen" }}
           >
-            {/* Golden gradient wash rising from bottom */}
-            <div
+            {/* Layer A: Ambient Warm Champagne Illumination (breathes in softly across highlights) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 2.4, ease: [0.25, 0.1, 0.25, 1] }}
               className="absolute inset-0"
               style={{
+                mixBlendMode: "color-dodge",
                 background:
                   theme === "dark"
-                    ? "linear-gradient(to top, rgba(234, 179, 8, 0.40) 0%, rgba(217, 119, 6, 0.25) 30%, rgba(180, 83, 9, 0.12) 60%, transparent 100%)"
-                    : "linear-gradient(to top, rgba(234, 179, 8, 0.48) 0%, rgba(245, 158, 11, 0.30) 35%, rgba(217, 119, 6, 0.14) 65%, transparent 100%)",
+                    ? "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(234, 179, 8, 0.20) 0%, rgba(180, 83, 9, 0.08) 50%, transparent 85%)"
+                    : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.24) 0%, rgba(217, 119, 6, 0.10) 50%, transparent 85%)",
               }}
             />
-            {/* Radiant golden crest line at leading top edge of the rising wave */}
-            <div
-              className="absolute inset-x-0 top-0 h-40 pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(ellipse at 50% 100%, rgba(253, 224, 71, 0.5) 0%, rgba(234, 179, 8, 0.25) 45%, transparent 80%)",
-                filter: "blur(20px)",
-              }}
-            />
+
+            {/* Layer B: Cinematic Golden Sunrise Wave Crawling Upwards without hard edges */}
+            <motion.div
+              initial={{ y: "40%", opacity: 0 }}
+              animate={{ y: "-6%", opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 4.2, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-x-0 -bottom-24 h-[125%] pointer-events-none"
+              style={{ mixBlendMode: "screen" }}
+            >
+              {/* Ultra-soft feathered golden flood */}
+              <div
+                className="w-full h-full"
+                style={{
+                  background:
+                    theme === "dark"
+                      ? "linear-gradient(to top, rgba(234, 179, 8, 0.30) 0%, rgba(217, 119, 6, 0.16) 35%, rgba(180, 83, 9, 0.06) 65%, transparent 100%)"
+                      : "linear-gradient(to top, rgba(234, 179, 8, 0.36) 0%, rgba(245, 158, 11, 0.20) 35%, rgba(217, 119, 6, 0.08) 65%, transparent 100%)",
+                }}
+              />
+              {/* Soft glowing crest at leading edge with 32px gaussian blur */}
+              <div
+                className="absolute inset-x-0 top-0 h-52 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.38) 0%, rgba(234, 179, 8, 0.16) 45%, transparent 80%)",
+                  filter: "blur(32px)",
+                }}
+              />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
