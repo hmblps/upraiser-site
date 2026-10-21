@@ -58,7 +58,16 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const videoRef = useRef<HTMLVideoElement>(null);
   const [phase, setPhase] = useState<"climbing" | "summit">("climbing");
   const [subtitleVisible, setSubtitleVisible] = useState(false);
+  const [goldenVisible, setGoldenVisible] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
+
+  const phaseRef = useRef<"climbing" | "summit">("climbing");
+  const goldenVisibleRef = useRef(false);
+
+  // Exact timestamp when camera cuts and climber is viewed from behind:
+  // light-loop.mp4: 4.75s (cut & settle on wide wall with climber seen from behind)
+  // dark-loop.mp4: 6.00s (headlamp strikes wall with climber seen from behind)
+  const goldenStartTime = theme === "light" ? 4.75 : 6.0;
 
   // Natural 1.0x video playback — pause on reaching the mountain wall:
   // light-loop.mp4 (6.01s): ~5.5s reaches full wide mountain wall
@@ -67,8 +76,11 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
 
   // Reset when video source changes
   useEffect(() => {
+    phaseRef.current = "climbing";
     setPhase("climbing");
     setSubtitleVisible(false);
+    goldenVisibleRef.current = false;
+    setGoldenVisible(false);
 
     const v = videoRef.current;
     if (v) {
@@ -84,22 +96,50 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     return () => clearTimeout(timer);
   }, [videoSrc]);
 
-  const handleTimeUpdate = useCallback(() => {
-    const v = videoRef.current;
-    if (!v) return;
+  // Precision 60 FPS time check for smooth golden filter appearance strictly on back-view
+  useEffect(() => {
+    let rafId: number;
+    const check = () => {
+      const v = videoRef.current;
+      if (v && !v.paused) {
+        const cur = v.currentTime;
 
-    if (v.currentTime >= pauseTime && phase === "climbing") {
-      v.pause();
-      setPhase("summit");
-      setSubtitleVisible(true);
-    }
-  }, [pauseTime, phase]);
+        // Bloom golden filter strictly when climber is seen from behind
+        if (cur >= goldenStartTime && !goldenVisibleRef.current) {
+          goldenVisibleRef.current = true;
+          setGoldenVisible(true);
+        } else if (cur < goldenStartTime && goldenVisibleRef.current) {
+          goldenVisibleRef.current = false;
+          setGoldenVisible(false);
+        }
+
+        // Pause on summit wall
+        if (cur >= pauseTime && phaseRef.current === "climbing") {
+          v.pause();
+          phaseRef.current = "summit";
+          setPhase("summit");
+          setSubtitleVisible(true);
+          if (!goldenVisibleRef.current) {
+            goldenVisibleRef.current = true;
+            setGoldenVisible(true);
+          }
+        }
+      }
+      rafId = requestAnimationFrame(check);
+    };
+
+    rafId = requestAnimationFrame(check);
+    return () => cancelAnimationFrame(rafId);
+  }, [goldenStartTime, pauseTime]);
 
   const handleVideoEnded = useCallback(() => {
     const v = videoRef.current;
     if (v) v.pause();
+    phaseRef.current = "summit";
     setPhase("summit");
     setSubtitleVisible(true);
+    goldenVisibleRef.current = true;
+    setGoldenVisible(true);
   }, []);
 
   const handleReplay = useCallback((e?: React.MouseEvent) => {
@@ -108,22 +148,28 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     if (!v) return;
     v.currentTime = 0;
     v.playbackRate = 1.0;
+    phaseRef.current = "climbing";
     setPhase("climbing");
     setSubtitleVisible(false);
+    goldenVisibleRef.current = false;
+    setGoldenVisible(false);
     setReplayKey((k) => k + 1);
     v.play().catch(() => {});
     setTimeout(() => setSubtitleVisible(true), 900);
   }, []);
 
   const handleSkipToSummit = useCallback(() => {
-    if (phase === "summit") return;
+    if (phaseRef.current === "summit") return;
     const v = videoRef.current;
     if (!v) return;
     v.currentTime = pauseTime;
     v.pause();
+    phaseRef.current = "summit";
     setPhase("summit");
     setSubtitleVisible(true);
-  }, [pauseTime, phase]);
+    goldenVisibleRef.current = true;
+    setGoldenVisible(true);
+  }, [pauseTime]);
 
   // Hero stat color: light mode uses climbing red (#cb310d) from Hero stat label; dark mode uses gold accent
   const kickerColor =
@@ -137,24 +183,23 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
       }`}
       style={{ background: "var(--theme-bg)" }}
     >
-      {/* Video with Theme-Specific Filters (natural 1.0x 60fps playback) */}
+      {/* Video with Theme-Specific Filters (natural 1.0x 60fps playback, no artificial yellow sepia) */}
       <video
         ref={videoRef}
         src={videoSrc}
         autoPlay
         muted
         playsInline
-        onTimeUpdate={handleTimeUpdate}
         onEnded={handleVideoEnded}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
           theme === "light"
-            ? "opacity-90 contrast-125 saturate-150 sepia-[.1] hue-rotate-[-10deg]"
+            ? "opacity-95 contrast-[1.10] saturate-[1.05]"
             : "opacity-100 contrast-[1.15] saturate-[0.8]"
         }`}
         style={{
           filter:
             theme === "light"
-              ? "contrast(1.15) saturate(1.1) brightness(1.1)"
+              ? "contrast(1.08) saturate(1.04) brightness(1.04)"
               : "contrast(1.1) saturate(0.95) brightness(1.0)",
         }}
       />
@@ -168,52 +213,63 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }`}
       />
 
-      {/* Cinematic Golden Ascent Flood Filter on Mountain Climb */}
-      <div key={replayKey} className="absolute inset-0 pointer-events-none z-15 overflow-hidden">
-        {/* Layer A: Ambient Warm Champagne Illumination (breathes in softly across highlights) */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2.2, ease: [0.25, 0.1, 0.25, 1] }}
-          className="absolute inset-0"
-          style={{
-            mixBlendMode: "color-dodge",
-            background:
-              theme === "dark"
-                ? "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(234, 179, 8, 0.20) 0%, rgba(180, 83, 9, 0.08) 50%, transparent 85%)"
-                : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.24) 0%, rgba(217, 119, 6, 0.10) 50%, transparent 85%)",
-          }}
-        />
+      {/* Cinematic Golden Ascent Flood Filter — crawls in smoothly strictly on climber back-view shot */}
+      <AnimatePresence>
+        {goldenVisible && (
+          <motion.div
+            key={`golden-filter-${replayKey}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.1 } }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="absolute inset-0 pointer-events-none z-15 overflow-hidden"
+          >
+            {/* Layer A: Ambient Warm Champagne Illumination (airy, subtle warmth without heavy tint) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 2.0, ease: [0.25, 0.1, 0.25, 1] }}
+              className="absolute inset-0"
+              style={{
+                mixBlendMode: "color-dodge",
+                background:
+                  theme === "dark"
+                    ? "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(234, 179, 8, 0.10) 0%, rgba(180, 83, 9, 0.04) 50%, transparent 85%)"
+                    : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.13) 0%, rgba(217, 119, 6, 0.05) 50%, transparent 85%)",
+              }}
+            />
 
-        {/* Layer B: Cinematic Golden Sunrise Wave Crawling Upwards without hard edges */}
-        <motion.div
-          initial={{ y: "45%", opacity: 0 }}
-          animate={{ y: "-6%", opacity: 1 }}
-          transition={{ duration: 4.2, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-x-0 -bottom-24 h-[125%] pointer-events-none"
-          style={{ mixBlendMode: "screen" }}
-        >
-          {/* Ultra-soft feathered golden flood */}
-          <div
-            className="w-full h-full"
-            style={{
-              background:
-                theme === "dark"
-                  ? "linear-gradient(to top, rgba(234, 179, 8, 0.30) 0%, rgba(217, 119, 6, 0.16) 35%, rgba(180, 83, 9, 0.06) 65%, transparent 100%)"
-                  : "linear-gradient(to top, rgba(234, 179, 8, 0.36) 0%, rgba(245, 158, 11, 0.20) 35%, rgba(217, 119, 6, 0.08) 65%, transparent 100%)",
-            }}
-          />
-          {/* Soft glowing crest at leading edge with 32px gaussian blur */}
-          <div
-            className="absolute inset-x-0 top-0 h-52 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.38) 0%, rgba(234, 179, 8, 0.16) 45%, transparent 80%)",
-              filter: "blur(32px)",
-            }}
-          />
-        </motion.div>
-      </div>
+            {/* Layer B: Cinematic Golden Sunrise Wave Crawling Upwards (subtle, transparent, soft blurred crest) */}
+            <motion.div
+              initial={{ y: "45%", opacity: 0 }}
+              animate={{ y: "-6%", opacity: 1 }}
+              transition={{ duration: 3.8, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-x-0 -bottom-24 h-[125%] pointer-events-none"
+              style={{ mixBlendMode: "screen" }}
+            >
+              {/* Ultra-soft feathered golden flood (50% more transparent) */}
+              <div
+                className="w-full h-full"
+                style={{
+                  background:
+                    theme === "dark"
+                      ? "linear-gradient(to top, rgba(234, 179, 8, 0.15) 0%, rgba(217, 119, 6, 0.08) 35%, rgba(180, 83, 9, 0.02) 65%, transparent 100%)"
+                      : "linear-gradient(to top, rgba(234, 179, 8, 0.17) 0%, rgba(245, 158, 11, 0.09) 35%, rgba(217, 119, 6, 0.03) 65%, transparent 100%)",
+                }}
+              />
+              {/* Soft glowing crest at leading edge with 36px gaussian blur */}
+              <div
+                className="absolute inset-x-0 top-0 h-48 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.18) 0%, rgba(234, 179, 8, 0.08) 45%, transparent 80%)",
+                  filter: "blur(36px)",
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Heavy Local Grain to ensure continuity with Hero */}
       <div className="site-grain absolute inset-0 z-10 opacity-60 pointer-events-none" />
