@@ -60,21 +60,32 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stage, setStage] = useState<Stage>("initial");
 
-  // Ascent timeline choreography (seconds):
+  // Calibrated video thresholds & slow-motion window:
+  // When looking at the mountain ridge from behind, playbackRate slows down
+  // to tame frantic dynamics and give each text reveal generous breathing space.
+  //
   // light-loop.mp4 (6.01s):
-  //   0.0s – 0.9s: Initial hold ("The Craft In Development" / "To be released soon")
-  //   0.9s – 2.2s: First frames ("Full-Cycle Digital Creative & Tech Studio" in 3 rows)
-  //   2.2s – 5.3s: Next frames reveal larger subtitle in 3 rows
-  //   >= 5.3s: Mountain summit hold -> 3 capability cards + "To be featured soon"
+  //   0.0s – 1.1s: Normal speed (1.0x). Initial hold ("The Craft In Development" / "To be released soon")
+  //   1.1s – 4.8s: Slow-motion (0.55x). Camera ascends mountain from behind.
+  //                1.1s: Title enters in 3 rows alone
+  //                2.5s: Subtitle enters below in 3 rows
+  //   4.8s – 5.2s: Gentle ease (0.8x) into summit panorama
+  //   >= 5.2s: Summit hold -> 3 clean typography columns + "To be featured soon"
   //
   // dark-loop.mp4 (11.01s):
-  //   0.0s – 1.0s: Initial hold
-  //   1.0s – 2.5s: First frames
-  //   2.5s – 10.4s: Subtitle in 3 rows
-  //   >= 10.4s: Ice wall summit hold -> 3 capability cards + "To be featured soon"
-  const titleSwitchTime = theme === "light" ? 0.9 : 1.0;
-  const subtitleAppearTime = theme === "light" ? 2.2 : 2.5;
-  const pauseTime = theme === "light" ? 5.3 : 10.4;
+  //   0.0s – 1.8s: Normal speed (1.0x). Initial hold
+  //   1.8s – 8.8s: Slow-motion (0.65x). Ice face climb from behind.
+  //                1.8s: Title enters in 3 rows alone
+  //                4.0s: Subtitle enters below in 3 rows
+  //   8.8s – 10.3s: Gentle ease (0.85x) into summit ridge
+  //   >= 10.3s: Summit hold -> 3 clean typography columns + "To be featured soon"
+  const titleSwitchTime = theme === "light" ? 1.1 : 1.8;
+  const subtitleAppearTime = theme === "light" ? 2.5 : 4.0;
+  const pauseTime = theme === "light" ? 5.2 : 10.3;
+
+  const slowStart = theme === "light" ? 1.0 : 1.8;
+  const slowEnd = theme === "light" ? 4.8 : 8.8;
+  const slowRate = theme === "light" ? 0.55 : 0.65;
 
   // Reset timeline when video source changes
   useEffect(() => {
@@ -82,6 +93,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     const v = videoRef.current;
     if (v) {
       v.currentTime = 0;
+      v.playbackRate = 1.0;
       v.play().catch(() => {});
     }
   }, [videoSrc]);
@@ -91,12 +103,23 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     if (!v) return;
     const cur = v.currentTime;
 
+    // Final summit check
     if (cur >= pauseTime) {
       v.pause();
       setStage("summit");
       return;
     }
 
+    // Dynamic playback rate to soften rapid camera motion when mountain is viewed from behind
+    if (cur >= slowStart && cur < slowEnd) {
+      if (v.playbackRate !== slowRate) v.playbackRate = slowRate;
+    } else if (cur >= slowEnd) {
+      if (v.playbackRate !== 0.8) v.playbackRate = 0.8;
+    } else {
+      if (v.playbackRate !== 1.0) v.playbackRate = 1.0;
+    }
+
+    // Stage progression with distinct intervals
     if (cur >= subtitleAppearTime) {
       setStage("subtitle");
     } else if (cur >= titleSwitchTime) {
@@ -104,7 +127,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     } else {
       setStage("initial");
     }
-  }, [pauseTime, subtitleAppearTime, titleSwitchTime]);
+  }, [pauseTime, slowStart, slowEnd, slowRate, subtitleAppearTime, titleSwitchTime]);
 
   const handleVideoEnded = useCallback(() => {
     const v = videoRef.current;
@@ -117,6 +140,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     const v = videoRef.current;
     if (!v) return;
     v.currentTime = 0;
+    v.playbackRate = 1.0;
     setStage("initial");
     v.play().catch(() => {});
   }, []);
@@ -182,11 +206,11 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
           theme === "dark" ? "bg-black/55" : "bg-black/35"
         }`}
         style={{
-          opacity: stage === "summit" ? 0.72 : 0.45,
+          opacity: stage === "summit" ? 0.65 : 0.40,
         }}
       />
 
-      {/* Main Content Area: safely cleared below top header island (pt-24 sm:pt-28), scrollable when summit cards mount */}
+      {/* Main Content Area: safely cleared below top header island (pt-24 sm:pt-28), scrollable when summit columns mount */}
       <div className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-24 pb-16">
         <div className="min-h-full w-full max-w-6xl mx-auto flex flex-col items-center justify-start md:justify-center">
           {/* Header Typography with smooth layout animation */}
@@ -277,98 +301,101 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
             </AnimatePresence>
           </motion.div>
 
-          {/* Summit Phase: 3 Columns of Capability Cards */}
+          {/* Summit Phase: 3 Clean Typography Columns (NO Card Background Boxes) */}
           <AnimatePresence>
             {stage === "summit" && (
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 12 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                className="w-full mt-6 sm:mt-8 lg:mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch"
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
+                className="w-full mt-8 sm:mt-12 lg:mt-14 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 items-start text-left"
               >
                 {STUDIO_CATEGORIES.map((cat, idx) => (
-                  <motion.article
+                  <motion.div
                     key={cat.key}
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.15 + idx * 0.12, ease: "easeOut" }}
-                    className="case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition duration-300 hover:border-accent/40 shadow-xl"
-                    style={
-                      {
-                        "--case-accent": "var(--theme-accent)",
-                        "--case-surface": "var(--theme-bg-card)",
-                      } as React.CSSProperties
-                    }
+                    transition={{ duration: 0.6, delay: 0.18 + idx * 0.12, ease: "easeOut" }}
+                    className="flex flex-col justify-between h-full group"
                   >
-                    {/* Case Card Header */}
-                    <div className="case-brand-header relative overflow-hidden border-b border-border/40 p-5 sm:p-6 shrink-0">
-                      <div className="case-brand-header__wash" aria-hidden />
-                      <div className="relative z-10">
-                        <h2 className="case-brand-header__title text-base sm:text-lg lg:text-xl font-bold tracking-tight text-fg">
+                    {/* Category Header: Clean typography over video with subtle hairline divider */}
+                    <div className="pb-3 border-b border-white/20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 shadow-[0_0_8px_var(--theme-accent)]" />
+                        <h2
+                          className="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-white uppercase font-display"
+                          style={{ textShadow: "0 2px 14px rgba(0,0,0,0.9)" }}
+                        >
                           {t(cat.titleKey, cat.defaultTitle)}
                         </h2>
                       </div>
 
                       {/* Domain / format pills */}
-                      <div className="case-brand-header__channels mt-3 flex flex-wrap gap-1.5">
-                        {cat.tags.map((tag) => (
-                          <span key={tag} className="case-brand-channel">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                      <p
+                        className="text-[11px] font-mono tracking-widest uppercase text-white/60"
+                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.85)" }}
+                      >
+                        {cat.tags.join(" · ")}
+                      </p>
                     </div>
 
-                    {/* Case Card Body */}
-                    <div className="card-pad p-5 sm:p-6 flex flex-col flex-1 justify-between gap-5">
-                      <ul className="space-y-3 sm:space-y-3.5 my-auto">
-                        {cat.items.map((item) => (
-                          <li
-                            key={item.key}
-                            className="flex items-start gap-3 text-xs sm:text-sm text-fg/80 leading-relaxed group/item"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-accent/80 shrink-0 mt-2 transition-transform duration-200 group-hover/item:scale-125" />
-                            <span className="group-hover/item:text-fg transition-colors duration-200 font-medium">
-                              {t(item.key, item.defaultText)}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* Direct transition to Contact Form */}
-                      <div className="pt-4 mt-auto border-t border-border/30 flex items-center justify-between">
-                        <span className="text-[10px] font-bold tracking-wider uppercase text-muted">
-                          {t("creativeStudio.cardFooterLabel", "Creative & Tech")}
-                        </span>
-                        <Link
-                          to="/contact"
-                          onClick={(e) => e.stopPropagation()}
-                          className="case-preview-card__cta !mt-0 !pt-0 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                    {/* Services List: Clean floating list with high-contrast text shadow */}
+                    <ul className="space-y-3.5 my-5 flex-1">
+                      {cat.items.map((item) => (
+                        <li
+                          key={item.key}
+                          className="flex items-start gap-2.5 text-xs sm:text-sm text-white/90 leading-relaxed font-medium group/item"
+                          style={{
+                            textShadow: "0 1px 12px rgba(0,0,0,0.95), 0 2px 4px rgba(0,0,0,0.9)",
+                          }}
                         >
-                          <span>{t("creativeStudio.contactCta", "Discuss Project")}</span>
-                          <span
-                            aria-hidden="true"
-                            className="inline-block transition-transform duration-200 group-hover:translate-x-1"
-                          >
-                            →
+                          <span className="text-accent/90 font-mono text-xs shrink-0 select-none transition-transform duration-200 group-hover/item:translate-x-0.5">
+                            /
                           </span>
-                        </Link>
-                      </div>
+                          <span className="group-hover/item:text-white transition-colors duration-200">
+                            {t(item.key, item.defaultText)}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Direct text link to Contact Form */}
+                    <div className="pt-3 border-t border-white/15 flex items-center justify-between mt-auto">
+                      <span
+                        className="text-[10px] font-mono font-bold tracking-wider uppercase text-white/50"
+                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
+                      >
+                        {t("creativeStudio.cardFooterLabel", "Creative & Tech")}
+                      </span>
+                      <Link
+                        to="/contact"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-xs font-semibold text-accent hover:text-white inline-flex items-center gap-1.5 transition-colors group/cta"
+                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}
+                      >
+                        <span>{t("creativeStudio.contactCta", "Discuss Project")}</span>
+                        <span
+                          aria-hidden="true"
+                          className="inline-block transition-transform duration-200 group-hover/cta:translate-x-1"
+                        >
+                          →
+                        </span>
+                      </Link>
                     </div>
-                  </motion.article>
+                  </motion.div>
                 ))}
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Under Cards: "To be featured soon" + Replay Climb button */}
+          {/* Under Columns: "To be featured soon" + Replay Climb button */}
           {stage === "summit" && (
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.6 }}
-              className="mt-8 sm:mt-10 pb-6 flex flex-col items-center justify-center gap-3 shrink-0"
+              className="mt-8 sm:mt-12 pb-6 flex flex-col items-center justify-center gap-3 shrink-0"
             >
               <p
                 className="font-mono text-accent tracking-[0.25em] uppercase text-xs sm:text-sm md:text-base font-semibold text-center"
