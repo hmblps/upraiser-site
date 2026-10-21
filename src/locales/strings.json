@@ -5299,6 +5299,15 @@
     "de": "Demnächst verfügbar",
     "fr": "Bientôt disponible"
   },
+  "To be featured soon": {
+    "zh": "即将呈现",
+    "ja": "近日公開",
+    "ko": "곧 공개됩니다",
+    "es": "Próximamente disponible",
+    "de": "Demnächst präsentiert",
+    "fr": "Bientôt à l'affiche",
+    "pt": "Em breve em destaque"
+  },
   "TO THE TOP": {
     "zh": "问鼎巅峰",
     "ja": "どれほど圧倒的な",
