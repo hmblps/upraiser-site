@@ -68,16 +68,28 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const isSlowMoRef = useRef(false);
 
   // Exact timestamp when climber is viewed from behind:
-  // light-loop.mp4: camera pulls back directly behind the climber's back at 1.8s.
-  // dark-loop.mp4: camera aligns behind climber on the vertical ice wall at 3.2s.
-  // Before this exact moment: strictly 1.0x normal speed (not a single second of slowdown!).
-  const slowStart = theme === "light" ? 1.8 : 3.2;
-  const slowEnd = theme === "light" ? 5.0 : 9.8;
-  const slowRate = theme === "light" ? 0.45 : 0.50;
+  // light-loop.mp4 (6.01s):
+  //   0.00s – 4.63s: Camera views climber from ABOVE (top-down close-up). Speed is STRICTLY 1.0x (not a fraction of a second of slowdown!).
+  //   4.63s: Instant scene cut to camera BEHIND climber on the massive sheer cliff wall.
+  //          Slow-mo kicks in (0.22x), golden rising filter activates, title reveals!
+  //   4.88s: Subtitle reveals in 3 rows below
+  //   5.50s: 3 typography columns reveal
+  //   5.85s: Summit pause hold -> 6.5s countdown -> auto loop & restart
+  //
+  // dark-loop.mp4 (11.01s):
+  //   0.00s – 6.50s: Initial wall climb at normal 1.0x speed
+  //   6.50s: Slow-mo kicks in (0.35x), golden rising filter activates, title reveals!
+  //   7.80s: Subtitle reveals below
+  //   9.60s: 3 typography columns reveal
+  //   10.40s: Summit pause hold -> 6.5s countdown -> auto loop & restart
+  const slowStart = theme === "light" ? 4.63 : 6.5;
+  const slowEnd = theme === "light" ? 5.85 : 10.4;
+  const slowRate = theme === "light" ? 0.22 : 0.35;
 
   const titleSwitchTime = slowStart;
-  const subtitleAppearTime = theme === "light" ? 3.2 : 5.2;
-  const pauseTime = theme === "light" ? 5.2 : 10.3;
+  const subtitleAppearTime = theme === "light" ? 4.88 : 7.8;
+  const summitAppearTime = theme === "light" ? 5.50 : 9.6;
+  const pauseTime = theme === "light" ? 5.85 : 10.4;
 
   const handleReplay = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -102,12 +114,14 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     if (!v) return;
     const cur = v.currentTime;
 
-    // Final summit check
+    // Final summit check & pause
     if (cur >= pauseTime) {
-      if (stageRef.current !== "summit") {
+      if (!v.paused) {
         v.pause();
-        stageRef.current = "summit";
-        setStage("summit");
+        if (stageRef.current !== "summit") {
+          stageRef.current = "summit";
+          setStage("summit");
+        }
         // Hold summit view for 6.5s to let visitor read the 3 columns, then loop & restart climb
         if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
         summitTimerRef.current = setTimeout(() => {
@@ -141,7 +155,9 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
 
     // Stage progression with distinct intervals
     let nextStage: Stage = "initial";
-    if (cur >= subtitleAppearTime) {
+    if (cur >= summitAppearTime) {
+      nextStage = "summit";
+    } else if (cur >= subtitleAppearTime) {
       nextStage = "subtitle";
     } else if (cur >= titleSwitchTime) {
       nextStage = "title";
@@ -157,6 +173,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     slowEnd,
     slowRate,
     subtitleAppearTime,
+    summitAppearTime,
     titleSwitchTime,
     handleReplay,
   ]);
@@ -355,7 +372,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     <span className="block">In Development</span>
                   </h2>
                   <p
-                    className="mt-5 sm:mt-6 md:mt-7 text-base sm:text-lg md:text-xl font-mono text-accent tracking-[0.25em] uppercase font-semibold"
+                    className="mt-5 sm:mt-6 md:mt-7 text-lg sm:text-xl md:text-2xl font-mono text-accent tracking-[0.25em] uppercase font-semibold"
                     style={{ textShadow: "0 2px 16px rgba(0,0,0,0.9)" }}
                   >
                     {t("To be released soon", "To be released soon")}
