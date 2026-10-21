@@ -53,235 +53,98 @@ const STUDIO_CATEGORIES: StudioCategory[] = [
   },
 ];
 
-type Stage = "initial" | "title" | "subtitle" | "summit";
-
 export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProps) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const summitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const rafIdRef = useRef<number | null>(null);
+  const [phase, setPhase] = useState<"climbing" | "summit">("climbing");
+  const [subtitleVisible, setSubtitleVisible] = useState(false);
+  const [replayKey, setReplayKey] = useState(0);
 
-  const [stage, setStage] = useState<Stage>("initial");
-  const [isSlowMo, setIsSlowMo] = useState(false);
+  // Natural 1.0x video playback — pause on reaching the mountain wall:
+  // light-loop.mp4 (6.01s): ~5.5s reaches full wide mountain wall
+  // dark-loop.mp4 (11.01s): ~10.6s reaches top of the ice wall
+  const pauseTime = theme === "light" ? 5.5 : 10.6;
 
-  const stageRef = useRef<Stage>("initial");
-  const isSlowMoRef = useRef(false);
-
-  // Exact timestamp when climber is viewed from behind:
-  // light-loop.mp4 (6.01s):
-  //   0.00s – 4.63s: Camera views climber from ABOVE (top-down close-up). Speed is STRICTLY 1.0x (not a fraction of a second of slowdown!).
-  //   4.63s: Instant scene cut to camera BEHIND climber on the massive sheer cliff wall.
-  //          Slow-mo kicks in (0.22x), golden rising filter activates, title reveals!
-  //   4.88s: Subtitle reveals in 3 rows below
-  //   5.50s: 3 typography columns reveal
-  //   5.85s: Summit pause hold -> 6.5s countdown -> auto loop & restart
-  //
-  // dark-loop.mp4 (11.01s):
-  //   0.00s – 6.50s: Initial wall climb at normal 1.0x speed
-  //   6.50s: Slow-mo kicks in (0.35x), golden rising filter activates, title reveals!
-  //   7.80s: Subtitle reveals below
-  //   9.60s: 3 typography columns reveal
-  //   10.40s: Summit pause hold -> 6.5s countdown -> auto loop & restart
-  const slowStart = theme === "light" ? 4.63 : 6.5;
-  const slowEnd = theme === "light" ? 5.85 : 10.4;
-  const slowRate = theme === "light" ? 0.22 : 0.35;
-
-  const titleSwitchTime = slowStart;
-  const subtitleAppearTime = theme === "light" ? 4.88 : 7.8;
-  const summitAppearTime = theme === "light" ? 5.50 : 9.6;
-  const pauseTime = theme === "light" ? 5.85 : 10.4;
-
-  const handleReplay = useCallback((e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    if (summitTimerRef.current) {
-      clearTimeout(summitTimerRef.current);
-      summitTimerRef.current = null;
-    }
-    const v = videoRef.current;
-    if (!v) return;
-    v.currentTime = 0;
-    v.playbackRate = 1.0;
-    isSlowMoRef.current = false;
-    setIsSlowMo(false);
-    stageRef.current = "initial";
-    setStage("initial");
-    v.play().catch(() => {});
-  }, []);
-
-  // Frame-perfect tick function running at 60 FPS
-  const checkVideoTime = useCallback(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const cur = v.currentTime;
-
-    // Final summit check & pause
-    if (cur >= pauseTime) {
-      if (!v.paused) {
-        v.pause();
-        if (stageRef.current !== "summit") {
-          stageRef.current = "summit";
-          setStage("summit");
-        }
-        // Hold summit view for 2.8s (crisp & engaging, no long freeze), then loop & restart climb
-        if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
-        summitTimerRef.current = setTimeout(() => {
-          handleReplay();
-        }, 2800);
-      }
-      return;
-    }
-
-    // Dynamic playback rate: strictly 1.0x before climber is seen from behind,
-    // then smooth cinematic deceleration into slow-mo!
-    if (cur < slowStart) {
-      if (v.playbackRate !== 1.0) v.playbackRate = 1.0;
-      if (isSlowMoRef.current) {
-        isSlowMoRef.current = false;
-        setIsSlowMo(false);
-      }
-    } else if (cur >= slowStart && cur < slowEnd) {
-      // Smooth non-linear deceleration ramp over rampDuration
-      const rampDuration = theme === "light" ? 0.48 : 0.8;
-      const elapsed = cur - slowStart;
-      const progress = Math.min(1, Math.max(0, elapsed / rampDuration));
-      // Ease-out cubic for organic camera deceleration
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const targetRate = 1.0 - eased * (1.0 - slowRate);
-      const roundedRate = Math.round(targetRate * 100) / 100;
-      if (Math.abs(v.playbackRate - roundedRate) > 0.005) {
-        v.playbackRate = roundedRate;
-      }
-      if (!isSlowMoRef.current) {
-        isSlowMoRef.current = true;
-        setIsSlowMo(true);
-      }
-    } else {
-      if (v.playbackRate !== 0.85) v.playbackRate = 0.85;
-      if (!isSlowMoRef.current) {
-        isSlowMoRef.current = true;
-        setIsSlowMo(true);
-      }
-    }
-
-    // Stage progression with distinct intervals
-    let nextStage: Stage = "initial";
-    if (cur >= summitAppearTime) {
-      nextStage = "summit";
-    } else if (cur >= subtitleAppearTime) {
-      nextStage = "subtitle";
-    } else if (cur >= titleSwitchTime) {
-      nextStage = "title";
-    }
-
-    if (stageRef.current !== nextStage) {
-      stageRef.current = nextStage;
-      setStage(nextStage);
-    }
-  }, [
-    pauseTime,
-    slowStart,
-    slowEnd,
-    slowRate,
-    subtitleAppearTime,
-    summitAppearTime,
-    titleSwitchTime,
-    handleReplay,
-  ]);
-
-  // Continuously poll playback rate & stage via requestAnimationFrame for 60 FPS precision
+  // Reset when video source changes
   useEffect(() => {
-    let active = true;
+    setPhase("climbing");
+    setSubtitleVisible(false);
 
-    const loop = () => {
-      if (!active) return;
-      const v = videoRef.current;
-      if (v && !v.paused) {
-        checkVideoTime();
-      }
-      rafIdRef.current = requestAnimationFrame(loop);
-    };
-
-    rafIdRef.current = requestAnimationFrame(loop);
-
-    return () => {
-      active = false;
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
-    };
-  }, [checkVideoTime]);
-
-  // Reset timeline when video source changes
-  useEffect(() => {
-    stageRef.current = "initial";
-    setStage("initial");
-    isSlowMoRef.current = false;
-    setIsSlowMo(false);
-    if (summitTimerRef.current) {
-      clearTimeout(summitTimerRef.current);
-      summitTimerRef.current = null;
-    }
     const v = videoRef.current;
     if (v) {
       v.currentTime = 0;
       v.playbackRate = 1.0;
       v.play().catch(() => {});
     }
+
+    const timer = setTimeout(() => {
+      setSubtitleVisible(true);
+    }, 900);
+
+    return () => clearTimeout(timer);
   }, [videoSrc]);
 
-  // Cleanup timers on unmount
-  useEffect(() => {
-    return () => {
-      if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
-    };
-  }, []);
+  const handleTimeUpdate = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    if (v.currentTime >= pauseTime && phase === "climbing") {
+      v.pause();
+      setPhase("summit");
+      setSubtitleVisible(true);
+    }
+  }, [pauseTime, phase]);
 
   const handleVideoEnded = useCallback(() => {
     const v = videoRef.current;
     if (v) v.pause();
-    stageRef.current = "summit";
-    setStage("summit");
-    if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
-    summitTimerRef.current = setTimeout(() => {
-      handleReplay();
-    }, 2800);
-  }, [handleReplay]);
+    setPhase("summit");
+    setSubtitleVisible(true);
+  }, []);
+
+  const handleReplay = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = 0;
+    v.playbackRate = 1.0;
+    setPhase("climbing");
+    setSubtitleVisible(false);
+    setReplayKey((k) => k + 1);
+    v.play().catch(() => {});
+    setTimeout(() => setSubtitleVisible(true), 900);
+  }, []);
 
   const handleSkipToSummit = useCallback(() => {
-    if (stageRef.current === "summit") return;
+    if (phase === "summit") return;
     const v = videoRef.current;
     if (!v) return;
     v.currentTime = pauseTime;
     v.pause();
-    stageRef.current = "summit";
-    setStage("summit");
-    isSlowMoRef.current = true;
-    setIsSlowMo(true);
-    if (summitTimerRef.current) clearTimeout(summitTimerRef.current);
-    summitTimerRef.current = setTimeout(() => {
-      handleReplay();
-    }, 2800);
-  }, [pauseTime, handleReplay]);
+    setPhase("summit");
+    setSubtitleVisible(true);
+  }, [pauseTime, phase]);
 
-  // Accent kicker color
+  // Hero stat color: light mode uses climbing red (#cb310d) from Hero stat label; dark mode uses gold accent
   const kickerColor =
     theme === "light" ? "var(--hero-light-stat-label, #cb310d)" : "var(--theme-accent, #eab308)";
 
   return (
     <div
-      onClick={stage !== "summit" ? handleSkipToSummit : undefined}
+      onClick={phase === "climbing" ? handleSkipToSummit : undefined}
       className={`relative w-full h-[100dvh] overflow-hidden flex flex-col items-center justify-center select-none ${
-        stage !== "summit" ? "cursor-pointer" : ""
+        phase === "climbing" ? "cursor-pointer" : ""
       }`}
       style={{ background: "var(--theme-bg)" }}
     >
-      {/* Video with Theme-Specific Filters */}
+      {/* Video with Theme-Specific Filters (natural 1.0x 60fps playback) */}
       <video
         ref={videoRef}
         src={videoSrc}
         autoPlay
         muted
         playsInline
-        onTimeUpdate={checkVideoTime}
+        onTimeUpdate={handleTimeUpdate}
         onEnded={handleVideoEnded}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
           theme === "light"
@@ -305,64 +168,52 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }`}
       />
 
-      {/* Cinematic Golden Ascent Flood on Slow-Mo */}
-      <AnimatePresence>
-        {isSlowMo && (
-          <motion.div
-            key="golden-ascent-filter"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.0, ease: "easeOut" }}
-            className="absolute inset-0 pointer-events-none z-15 overflow-hidden"
-          >
-            {/* Layer A: Ambient Warm Champagne Illumination (breathes in softly across highlights) */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 2.4, ease: [0.25, 0.1, 0.25, 1] }}
-              className="absolute inset-0"
-              style={{
-                mixBlendMode: "color-dodge",
-                background:
-                  theme === "dark"
-                    ? "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(234, 179, 8, 0.20) 0%, rgba(180, 83, 9, 0.08) 50%, transparent 85%)"
-                    : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.24) 0%, rgba(217, 119, 6, 0.10) 50%, transparent 85%)",
-              }}
-            />
+      {/* Cinematic Golden Ascent Flood Filter on Mountain Climb */}
+      <div key={replayKey} className="absolute inset-0 pointer-events-none z-15 overflow-hidden">
+        {/* Layer A: Ambient Warm Champagne Illumination (breathes in softly across highlights) */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2.2, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute inset-0"
+          style={{
+            mixBlendMode: "color-dodge",
+            background:
+              theme === "dark"
+                ? "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(234, 179, 8, 0.20) 0%, rgba(180, 83, 9, 0.08) 50%, transparent 85%)"
+                : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.24) 0%, rgba(217, 119, 6, 0.10) 50%, transparent 85%)",
+          }}
+        />
 
-            {/* Layer B: Cinematic Golden Sunrise Wave Crawling Upwards without hard edges */}
-            <motion.div
-              initial={{ y: "40%", opacity: 0 }}
-              animate={{ y: "-6%", opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 4.2, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-0 -bottom-24 h-[125%] pointer-events-none"
-              style={{ mixBlendMode: "screen" }}
-            >
-              {/* Ultra-soft feathered golden flood */}
-              <div
-                className="w-full h-full"
-                style={{
-                  background:
-                    theme === "dark"
-                      ? "linear-gradient(to top, rgba(234, 179, 8, 0.30) 0%, rgba(217, 119, 6, 0.16) 35%, rgba(180, 83, 9, 0.06) 65%, transparent 100%)"
-                      : "linear-gradient(to top, rgba(234, 179, 8, 0.36) 0%, rgba(245, 158, 11, 0.20) 35%, rgba(217, 119, 6, 0.08) 65%, transparent 100%)",
-                }}
-              />
-              {/* Soft glowing crest at leading edge with 32px gaussian blur */}
-              <div
-                className="absolute inset-x-0 top-0 h-52 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.38) 0%, rgba(234, 179, 8, 0.16) 45%, transparent 80%)",
-                  filter: "blur(32px)",
-                }}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Layer B: Cinematic Golden Sunrise Wave Crawling Upwards without hard edges */}
+        <motion.div
+          initial={{ y: "45%", opacity: 0 }}
+          animate={{ y: "-6%", opacity: 1 }}
+          transition={{ duration: 4.2, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-x-0 -bottom-24 h-[125%] pointer-events-none"
+          style={{ mixBlendMode: "screen" }}
+        >
+          {/* Ultra-soft feathered golden flood */}
+          <div
+            className="w-full h-full"
+            style={{
+              background:
+                theme === "dark"
+                  ? "linear-gradient(to top, rgba(234, 179, 8, 0.30) 0%, rgba(217, 119, 6, 0.16) 35%, rgba(180, 83, 9, 0.06) 65%, transparent 100%)"
+                  : "linear-gradient(to top, rgba(234, 179, 8, 0.36) 0%, rgba(245, 158, 11, 0.20) 35%, rgba(217, 119, 6, 0.08) 65%, transparent 100%)",
+            }}
+          />
+          {/* Soft glowing crest at leading edge with 32px gaussian blur */}
+          <div
+            className="absolute inset-x-0 top-0 h-52 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.38) 0%, rgba(234, 179, 8, 0.16) 45%, transparent 80%)",
+              filter: "blur(32px)",
+            }}
+          />
+        </motion.div>
+      </div>
 
       {/* Heavy Local Grain to ensure continuity with Hero */}
       <div className="site-grain absolute inset-0 z-10 opacity-60 pointer-events-none" />
@@ -373,196 +224,163 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
           theme === "dark" ? "bg-black/55" : "bg-black/35"
         }`}
         style={{
-          opacity: stage === "summit" ? 0.65 : 0.40,
+          opacity: phase === "summit" ? 0.70 : 0.40,
         }}
       />
 
-      {/* Main Content Area: safely cleared below top header island (pt-24 sm:pt-28), scrollable when summit columns mount */}
+      {/* Main Content Area: safely cleared below top header island (pt-24 sm:pt-28), scrollable if needed */}
       <div className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-24 pb-16">
         <div className="min-h-full w-full max-w-6xl mx-auto flex flex-col items-center justify-start md:justify-center">
-          {/* Header Typography with smooth layout animation */}
+          {/* Header Typography with smooth layout transition */}
           <motion.div
             layout
             className="text-center max-w-4xl mx-auto shrink-0 relative px-4"
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <AnimatePresence mode="wait">
-              {stage === "initial" ? (
-                <motion.div
-                  key="initial-header"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98, y: -10 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-center px-4"
-                >
-                  <h2
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight uppercase max-w-4xl leading-[1.08] font-display text-balance"
-                    style={{
-                      textShadow: "0 4px 28px rgba(0,0,0,0.85), 0 1px 4px rgba(0,0,0,0.9)",
-                    }}
-                  >
-                    <span className="block">The Craft</span>
-                    <span className="block">In Development</span>
-                  </h2>
-                  <p
-                    className="mt-5 sm:mt-6 md:mt-7 text-lg sm:text-xl md:text-2xl font-mono text-accent tracking-[0.25em] uppercase font-semibold"
-                    style={{ textShadow: "0 2px 16px rgba(0,0,0,0.9)" }}
-                  >
-                    {t("To be released soon", "To be released soon")}
-                  </p>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="active-header"
-                  initial={{ opacity: 0, scale: 0.96, y: 14 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-center px-4"
-                >
-                  {/* Kicker label */}
-                  <p
-                    className="font-bold tracking-[0.16em] uppercase text-xs sm:text-sm mb-2"
-                    style={{ color: kickerColor }}
-                  >
-                    {t("creativeStudio.label", "UPRAISER · FULL-CYCLE STUDIO")}
-                  </p>
+            {/* Kicker label using Hero stat color (#cb310d in light, gold in dark) */}
+            <p
+              className="font-bold tracking-[0.16em] uppercase text-xs sm:text-sm mb-1 sm:mb-2"
+              style={{ color: kickerColor }}
+            >
+              {t("creativeStudio.label", "UPRAISER · FULL-CYCLE STUDIO")}
+            </p>
 
-                  {/* 3-Row Main Title */}
-                  <h1
-                    className={`font-display font-bold text-white tracking-tight uppercase leading-[1.08] transition-all duration-500 text-balance ${
-                      stage === "summit"
-                        ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
-                        : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-                    }`}
-                    style={{
-                      textShadow: "0 4px 28px rgba(0,0,0,0.85), 0 1px 4px rgba(0,0,0,0.9)",
-                    }}
-                  >
-                    <span className="block">Full-Cycle Digital</span>
-                    <span className="block">Creative & Tech</span>
-                    <span className="block">Studio</span>
-                  </h1>
+            {/* Slightly Enlarged 3-Row Main Title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className={`font-display font-bold text-white tracking-tight uppercase leading-[1.08] transition-all duration-500 text-balance ${
+                phase === "summit"
+                  ? "text-xl sm:text-2xl md:text-3xl lg:text-4xl"
+                  : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+              }`}
+              style={{
+                textShadow: "0 4px 28px rgba(0,0,0,0.85), 0 1px 4px rgba(0,0,0,0.9)",
+              }}
+            >
+              <span className="block">Full-Cycle Digital</span>
+              <span className="block">Creative & Tech</span>
+              <span className="block">Studio</span>
+            </motion.h1>
 
-                  {/* 3-Row Subtitle in Visibly Larger Size */}
-                  <AnimatePresence>
-                    {(stage === "subtitle" || stage === "summit") && (
-                      <motion.p
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                        className="font-sans text-white/95 max-w-3xl mx-auto mt-4 sm:mt-5 text-sm sm:text-base md:text-lg lg:text-xl font-medium leading-snug sm:leading-relaxed text-balance"
-                        style={{
-                          textShadow: "0 2px 20px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.95)",
-                        }}
-                      >
-                        <span className="block">Driving digital growth:</span>
-                        <span className="block">from immersive 3D and AI concepts</span>
-                        <span className="block">to high-performance content and enterprise tech.</span>
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
+            {/* Slightly Enlarged 3-Row Subtitle in Clear, High-Contrast Typography */}
+            <AnimatePresence>
+              {subtitleVisible && (
+                <motion.p
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  className={`font-sans text-white/95 max-w-3xl mx-auto font-medium text-balance transition-all duration-500 ${
+                    phase === "summit"
+                      ? "mt-2 sm:mt-3 text-xs sm:text-sm md:text-base leading-snug"
+                      : "mt-4 sm:mt-5 text-sm sm:text-base md:text-lg lg:text-xl leading-snug sm:leading-relaxed"
+                  }`}
+                  style={{
+                    textShadow: "0 2px 20px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.95)",
+                  }}
+                >
+                  <span className="block">Driving digital growth:</span>
+                  <span className="block">from immersive 3D and AI concepts</span>
+                  <span className="block">to high-performance content and enterprise tech.</span>
+                </motion.p>
               )}
             </AnimatePresence>
           </motion.div>
 
-          {/* Summit Phase: 3 Clean Typography Columns (NO Card Background Boxes) */}
+          {/* Phase 2: Full Capabilities Grid using the Native Case Preview Card system */}
           <AnimatePresence>
-            {stage === "summit" && (
+            {phase === "summit" && (
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 12 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-                className="w-full mt-8 sm:mt-12 lg:mt-14 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 items-start text-left"
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                className="w-full mt-4 sm:mt-6 lg:mt-8 grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch"
               >
                 {STUDIO_CATEGORIES.map((cat, idx) => (
-                  <motion.div
+                  <motion.article
                     key={cat.key}
-                    initial={{ opacity: 0, y: 18 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.18 + idx * 0.12, ease: "easeOut" }}
-                    className="flex flex-col justify-between h-full group"
+                    transition={{ duration: 0.6, delay: 0.15 + idx * 0.12, ease: "easeOut" }}
+                    className="case-preview-card card-lift group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-bg-card transition duration-300 hover:border-accent/40 shadow-xl"
+                    style={
+                      {
+                        "--case-accent": "var(--theme-accent)",
+                        "--case-surface": "var(--theme-bg-card)",
+                      } as React.CSSProperties
+                    }
                   >
-                    {/* Category Header: Clean typography over video with subtle hairline divider */}
-                    <div className="pb-3 border-b border-white/20">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 shadow-[0_0_8px_var(--theme-accent)]" />
-                        <h2
-                          className="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-white uppercase font-display"
-                          style={{ textShadow: "0 2px 14px rgba(0,0,0,0.9)" }}
-                        >
+                    {/* Case Card Header matching CaseBrandHeader — clean, no 01/02/03 */}
+                    <div className="case-brand-header relative overflow-hidden border-b border-border/40 p-5 sm:p-6 shrink-0">
+                      <div className="case-brand-header__wash" aria-hidden />
+                      <div className="relative z-10">
+                        <h2 className="case-brand-header__title text-base sm:text-lg lg:text-xl font-bold tracking-tight text-fg">
                           {t(cat.titleKey, cat.defaultTitle)}
                         </h2>
                       </div>
 
                       {/* Domain / format pills */}
-                      <p
-                        className="text-[11px] font-mono tracking-widest uppercase text-white/60"
-                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.85)" }}
-                      >
-                        {cat.tags.join(" · ")}
-                      </p>
+                      <div className="case-brand-header__channels mt-3 flex flex-wrap gap-1.5">
+                        {cat.tags.map((tag) => (
+                          <span key={tag} className="case-brand-channel">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
-                    {/* Services List: Clean floating list with high-contrast text shadow */}
-                    <ul className="space-y-3.5 my-5 flex-1">
-                      {cat.items.map((item) => (
-                        <li
-                          key={item.key}
-                          className="flex items-start gap-2.5 text-xs sm:text-sm text-white/90 leading-relaxed font-medium group/item"
-                          style={{
-                            textShadow: "0 1px 12px rgba(0,0,0,0.95), 0 2px 4px rgba(0,0,0,0.9)",
-                          }}
-                        >
-                          <span className="text-accent/90 font-mono text-xs shrink-0 select-none transition-transform duration-200 group-hover/item:translate-x-0.5">
-                            /
-                          </span>
-                          <span className="group-hover/item:text-white transition-colors duration-200">
-                            {t(item.key, item.defaultText)}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                    {/* Case Card Body matching card-pad */}
+                    <div className="card-pad p-5 sm:p-6 flex flex-col flex-1 justify-between gap-5">
+                      <ul className="space-y-3 sm:space-y-3.5 my-auto">
+                        {cat.items.map((item) => (
+                          <li
+                            key={item.key}
+                            className="flex items-start gap-3 text-xs sm:text-sm text-fg/80 leading-relaxed group/item"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-accent/80 shrink-0 mt-2 transition-transform duration-200 group-hover/item:scale-125" />
+                            <span className="group-hover/item:text-fg transition-colors duration-200 font-medium">
+                              {t(item.key, item.defaultText)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
 
-                    {/* Direct text link to Contact Form */}
-                    <div className="pt-3 border-t border-white/15 flex items-center justify-between mt-auto">
-                      <span
-                        className="text-[10px] font-mono font-bold tracking-wider uppercase text-white/50"
-                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
-                      >
-                        {t("creativeStudio.cardFooterLabel", "Creative & Tech")}
-                      </span>
-                      <Link
-                        to="/contact"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-xs font-semibold text-accent hover:text-white inline-flex items-center gap-1.5 transition-colors group/cta"
-                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}
-                      >
-                        <span>{t("creativeStudio.contactCta", "Discuss Project")}</span>
-                        <span
-                          aria-hidden="true"
-                          className="inline-block transition-transform duration-200 group-hover/cta:translate-x-1"
-                        >
-                          →
+                      {/* Clean baseline with direct transition to Contact Form */}
+                      <div className="pt-4 mt-auto border-t border-border/30 flex items-center justify-between">
+                        <span className="text-[10px] font-bold tracking-wider uppercase text-muted">
+                          {t("creativeStudio.cardFooterLabel", "Creative & Tech")}
                         </span>
-                      </Link>
+                        <Link
+                          to="/contact"
+                          onClick={(e) => e.stopPropagation()}
+                          className="case-preview-card__cta !mt-0 !pt-0 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                        >
+                          <span>{t("creativeStudio.contactCta", "Discuss Project")}</span>
+                          <span
+                            aria-hidden="true"
+                            className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+                          >
+                            →
+                          </span>
+                        </Link>
+                      </div>
                     </div>
-                  </motion.div>
+                  </motion.article>
                 ))}
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* Under Columns: "To be featured soon" + Replay Climb button */}
-          {stage === "summit" && (
+          {phase === "summit" && (
             <motion.div
-              initial={{ opacity: 0, y: 14 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.6 }}
-              className="mt-8 sm:mt-12 pb-6 flex flex-col items-center justify-center gap-3 shrink-0"
+              transition={{ delay: 0.35, duration: 0.5 }}
+              className="mt-5 sm:mt-6 pb-6 flex flex-col items-center justify-center gap-2.5 shrink-0"
             >
               <p
                 className="font-mono text-accent tracking-[0.25em] uppercase text-xs sm:text-sm md:text-base font-semibold text-center"
