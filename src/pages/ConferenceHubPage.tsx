@@ -188,7 +188,7 @@ export function ConferenceHubPage() {
             gl={{ alpha: true, powerPreference: "low-power", antialias: true }}
             style={{ pointerEvents: "none", position: "absolute", inset: 0, width: "100%", height: "100%" }}
           >
-            <NightStars />
+            <NightStars speed={2.5} />
           </Canvas>
         </Suspense>
       </div>
@@ -251,7 +251,7 @@ export function ConferenceHubPage() {
           </label>
         </div>
 
-        {/* 1. Primary vCard Action */}
+        {/* 1. Primary One-Tap vCard Action */}
         <motion.a
           href="/contact.vcf"
           download="oleksii-ostroukhov.vcf"
@@ -267,7 +267,72 @@ export function ConferenceHubPage() {
           <span>{t.saveContactBtn}</span>
         </motion.a>
 
-        {/* 2. Direct Team Roster (Airy & Clean — Cardless) */}
+        {/* 2. Direct Lead Capture Form */}
+        <div className="w-full pt-1 space-y-3">
+          <div className="text-start px-1">
+            <h2 className="text-sm font-medium text-white">{t.formHeading}</h2>
+            <p className="text-xs text-white/40 mt-1 leading-relaxed">{t.formSub}</p>
+          </div>
+
+          <AnimatePresence mode="wait">
+            {status === "success" ? (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={SPRING_TACTILE}
+                className="py-4 px-3 text-center text-xs font-mono text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20"
+              >
+                {t.successTitle}
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-2.5">
+                <input
+                  type="text"
+                  required
+                  placeholder={t.fieldCallsign}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  dir="auto"
+                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#e63558] transition-colors"
+                />
+                <input
+                  type="text"
+                  required
+                  dir="ltr"
+                  placeholder={t.fieldContact}
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
+                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#e63558] transition-colors"
+                />
+
+                {errorMessage && (
+                  <p className="text-xs text-[#ff003b] font-mono px-1">{errorMessage}</p>
+                )}
+
+                <motion.button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  whileTap={{ scale: 0.98 }}
+                  transition={SPRING_TACTILE}
+                  className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium transition-colors flex items-center justify-center space-x-2 border border-white/10 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                >
+                  {status === "submitting" ? (
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <span>{t.btnSubmit}</span>
+                      <span aria-hidden className="inline-block rtl:-scale-x-100 font-bold">→</span>
+                    </>
+                  )}
+                </motion.button>
+              </form>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* 3. Direct Team Roster (Two Avatars — Cardless) */}
         <div className="w-full space-y-3 pt-1">
           {/* Oleksii */}
           <div className="flex items-center justify-between py-2.5 px-1 border-b border-white/[0.06]">
@@ -361,12 +426,22 @@ export function ConferenceHubPage() {
           </div>
         </div>
 
-        {/* 3. Ecosystem & Links (Clean minimal list) */}
+        {/* 4. Ecosystem & Links (routes, mediadeck, website, linkedin) */}
         <div className="w-full space-y-2 pt-1">
           <div className="text-[11px] font-mono tracking-widest text-white/35 uppercase px-1">
             {t.ecosystemHeader}
           </div>
 
+          {/* Routes */}
+          <Link
+            to="/channels?utm_source=qr_wallet"
+            className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
+          >
+            <span className="text-sm text-white/85 group-hover:text-white">{t.routesTitle}</span>
+            <span className="text-xs text-[#e63558] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
+          </Link>
+
+          {/* Media Deck */}
           <a
             href={MEDIA_DECK_URL}
             target="_blank"
@@ -377,14 +452,16 @@ export function ConferenceHubPage() {
             <span className="text-xs text-white/40 font-mono">2.6 MB ↓</span>
           </a>
 
-          <Link
-            to="/channels?utm_source=qr_wallet"
+          {/* Official Website */}
+          <a
+            href="https://upraiser.co.uk"
             className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
           >
-            <span className="text-sm text-white/85 group-hover:text-white">{t.routesTitle}</span>
-            <span className="text-xs text-[#e63558] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
-          </Link>
+            <span className="text-sm text-white/85 group-hover:text-white">{t.officialPlatform}</span>
+            <span dir="ltr" className="text-xs text-white/40 font-mono">upraiser.co.uk ↗</span>
+          </a>
 
+          {/* LinkedIn */}
           <a
             href="https://www.linkedin.com/company/upraiser/"
             target="_blank"
@@ -394,79 +471,6 @@ export function ConferenceHubPage() {
             <span className="text-sm text-white/85 group-hover:text-white">{t.linkedinTitle}</span>
             <span className="text-xs text-white/40 font-mono">↗</span>
           </a>
-
-          <a
-            href="https://upraiser.co.uk"
-            className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
-          >
-            <span className="text-sm text-white/85 group-hover:text-white">{t.officialPlatform}</span>
-            <span dir="ltr" className="text-xs text-white/40 font-mono">upraiser.co.uk ↗</span>
-          </a>
-        </div>
-
-        {/* 5. Minimal Lead Capture Form */}
-        <div className="w-full pt-2 space-y-3">
-          <div className="text-start px-1">
-            <h2 className="text-sm font-medium text-white">{t.formHeading}</h2>
-            <p className="text-xs text-white/40 mt-1 leading-relaxed">{t.formSub}</p>
-          </div>
-
-          <AnimatePresence mode="wait">
-            {status === "success" ? (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={SPRING_TACTILE}
-                className="py-4 px-3 text-center text-xs font-mono text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20"
-              >
-                {t.successTitle}
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-2.5">
-                <input
-                  type="text"
-                  required
-                  placeholder={t.fieldCallsign}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  dir="auto"
-                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#e63558] transition-colors"
-                />
-                <input
-                  type="text"
-                  required
-                  dir="ltr"
-                  placeholder={t.fieldContact}
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#e63558] transition-colors"
-                />
-
-                {errorMessage && (
-                  <p className="text-xs text-[#ff003b] font-mono px-1">{errorMessage}</p>
-                )}
-
-                <motion.button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  whileTap={{ scale: 0.98 }}
-                  transition={SPRING_TACTILE}
-                  className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium transition-colors flex items-center justify-center space-x-2 border border-white/10 active:scale-[0.98] cursor-pointer disabled:opacity-50"
-                >
-                  {status === "submitting" ? (
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <span>{t.btnSubmit}</span>
-                      <span aria-hidden className="inline-block rtl:-scale-x-100 font-bold">→</span>
-                    </>
-                  )}
-                </motion.button>
-              </form>
-            )}
-          </AnimatePresence>
         </div>
 
       </div>

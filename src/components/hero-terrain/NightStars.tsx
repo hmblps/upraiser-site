@@ -7,7 +7,7 @@ import { heroCapture } from "../../lib/heroCapture";
  * Camera-centered star dome. Counts trimmed ~35% vs original — still dense,
  * cheaper to upload/draw each frame.
  */
-export function NightStars() {
+export function NightStars({ speed = 1 }: { speed?: number } = {}) {
   const groupRef = useRef<Object3D>(null);
   const { camera } = useThree();
 
@@ -40,8 +40,8 @@ export function NightStars() {
     if (!g) return;
     g.position.copy(camera.position);
     if (heroCapture.snap) return;
-    g.rotation.y = state.clock.elapsedTime * 0.015;
-    g.rotation.x = Math.sin(state.clock.elapsedTime * 0.005) * 0.02;
+    g.rotation.y = state.clock.elapsedTime * 0.015 * speed;
+    g.rotation.x = Math.sin(state.clock.elapsedTime * 0.005 * speed) * 0.02;
   });
 
   return (
