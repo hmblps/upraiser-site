@@ -288,50 +288,38 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }}
       >
         <div
-          className="min-h-full w-full flex flex-col items-start justify-start"
+          className="min-h-full w-full flex flex-col items-center justify-center relative"
           style={{ zoom: 0.8 }}
         >
-          
-          {/* Header Typography: Anchored to Top-Left like 'We see how stunning', perfectly stable without jitter */}
-          <div className="text-left w-full max-w-3xl lg:max-w-4xl shrink-0 relative mb-6 sm:mb-8">
-            {/* Monumental Title: Exact font, size, line-height & ladder structure as Hero reference */}
-            <h1 className="hero-title hero-title--hero font-extrabold tracking-tighter !text-white text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-left">
-              <span className="block">We build the</span>
-              <span className="block">
-                <span className="hero-title-accent">Art & Code</span>
-              </span>
-              <span className="block">Behind the</span>
-              <span className="block">Ascent.</span>
-            </h1>
-
-            {/* Subtitle / Caption directly underneath headline (hidden while video plays, smoothly reveals at summit) */}
-            <AnimatePresence>
-              {phase === "summit" && (
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6, transition: { duration: 0.15 } }}
-                  transition={{
-                    duration: 0.7,
-                    ease: [0.16, 1, 0.3, 1],
-                    delay: 0.12,
-                  }}
-                  className="hero-lede mt-4 sm:mt-5 max-w-xl text-balance text-sm sm:text-base md:text-lg text-white/90 font-medium leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
-                >
-                  {t(
-                    "creativeStudio.subtitle",
-                    "From immersive 3D and AI concepts to high-performance content and enterprise tech."
-                  )}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
+          {/* Phase 1: Header Typography — Visible strictly during climbing video, fades out when climb completes */}
+          <AnimatePresence>
+            {phase === "climbing" && (
+              <motion.div
+                key="climbing-header"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeOut" } }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="absolute top-0 left-0 text-left w-full max-w-3xl lg:max-w-4xl pointer-events-none"
+              >
+                {/* Monumental Title: Exact font, size, line-height & ladder structure as Hero reference */}
+                <h1 className="hero-title hero-title--hero font-extrabold tracking-tighter !text-white text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-left">
+                  <span className="block">We build the</span>
+                  <span className="block">
+                    <span className="hero-title-accent">Art & Code</span>
+                  </span>
+                  <span className="block">Behind the</span>
+                  <span className="block">Ascent.</span>
+                </h1>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Phase 2: Full Capabilities Grid centered in the middle of the viewport */}
           <AnimatePresence>
             {phase === "summit" && (
               <div
-                className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch max-w-6xl xl:max-w-7xl mx-auto self-center my-auto"
+                className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch max-w-6xl xl:max-w-7xl mx-auto my-auto"
               >
                 {STUDIO_CATEGORIES.map((cat, index) => (
                   <motion.article
