@@ -10,5 +10,6 @@ EMAIL;TYPE=INTERNET:ceo@upraiser.co.uk
 EMAIL;TYPE=INTERNET:info@upraiser.co.uk
 URL;TYPE=WORK:https://upraiser.co.uk
 X-SOCIALPROFILE;TYPE=telegram:https://t.me/alex_upraiser
-NOTE:UPRAISER — Pre-bid filtration, official Lenovo OEM distribution, and 0% log drift.\nLondon · Since 2017.
+X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/company/upraiser/
+NOTE:UPRAISER — Direct operator desk. Zero log drift, pre-bid filtration, and Tier-1 routing.\nLondon · Since 2017.
 END:VCARD
