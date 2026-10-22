@@ -370,14 +370,12 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     {t("creativeStudio.summitTitle", "Full-Cycle Digital Creative & Tech Studio")}
                   </h1>
 
-                  {/* Secondary Line: smaller, with ART & CODE gradient */}
-                  <p className="mt-3 sm:mt-3.5 text-center max-w-4xl mx-auto text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-tight leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                    <span className="hero-title-accent">
-                      {t(
-                        "creativeStudio.summitSubtitle",
-                        "Driving digital growth: from immersive 3D and AI concepts to high-performance content and enterprise tech."
-                      )}
-                    </span>
+                  {/* Secondary Line: single line on desktop, clean Swiss white typography without gradient */}
+                  <p className="mt-2.5 sm:mt-3 text-center max-w-5xl mx-auto text-sm sm:text-base md:text-lg lg:text-xl font-medium sm:font-semibold tracking-tight text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] whitespace-normal md:whitespace-nowrap">
+                    {t(
+                      "creativeStudio.summitSubtitle",
+                      "3D & CGI, AI avatars, playable rich media, and end-to-end web & app engineering."
+                    )}
                   </p>
 
                   {/* Tertiary Status: To be featured soon */}
