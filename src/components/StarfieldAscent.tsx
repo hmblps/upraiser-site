@@ -13,12 +13,12 @@ const ASCENT_CSS = `
 }
 
 .animate-ascent-slow {
-  animation: ascentSlow 60s linear infinite;
+  animation: ascentSlow 20s linear infinite;
   will-change: transform;
 }
 
 .animate-ascent-fast {
-  animation: ascentFast 35s linear infinite;
+  animation: ascentFast 12s linear infinite;
   will-change: transform;
 }
 `;
