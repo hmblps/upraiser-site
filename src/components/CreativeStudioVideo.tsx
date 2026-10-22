@@ -226,7 +226,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }`}
       />
 
-      {/* Cinematic Golden Ascent Flood Filter — crawls in smoothly strictly on climber back-view shot */}
+      {/* Cinematic Golden Ascent Flood Filter — subtle ambient warm illumination strictly on climber back-view shot */}
       <AnimatePresence>
         {goldenVisible && (
           <motion.div
@@ -237,7 +237,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="absolute inset-0 pointer-events-none z-15 overflow-hidden"
           >
-            {/* Layer A: Ambient Warm Champagne Illumination */}
+            {/* Ambient Warm Champagne Illumination (no moving scanlines/stripes) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -251,32 +251,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.13) 0%, rgba(217, 119, 6, 0.05) 50%, transparent 85%)",
               }}
             />
-
-            {/* Layer B: Cinematic Golden Sunrise Wave Crawling Upwards */}
-            <motion.div
-              initial={{ y: "45%", opacity: 0 }}
-              animate={{ y: "-6%", opacity: 1 }}
-              transition={{ duration: 3.8, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-0 -bottom-24 h-[125%] pointer-events-none"
-              style={{ mixBlendMode: "screen" }}
-            >
-              <div
-                className="w-full h-full"
-                style={{
-                  background:
-                    theme === "dark"
-                      ? "linear-gradient(to top, rgba(234, 179, 8, 0.15) 0%, rgba(217, 119, 6, 0.08) 35%, rgba(180, 83, 9, 0.02) 65%, transparent 100%)"
-                      : "linear-gradient(to top, rgba(234, 179, 8, 0.17) 0%, rgba(245, 158, 11, 0.09) 35%, rgba(217, 119, 6, 0.03) 65%, transparent 100%)",
-                }}
-              />
-              <div
-                className="absolute inset-x-0 top-0 h-48 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 100% 60% at 50% 100%, rgba(254, 240, 138, 0.16) 0%, rgba(234, 179, 8, 0.06) 45%, transparent 80%)",
-                }}
-              />
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -330,13 +304,27 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
               <span className="block">Ascent.</span>
             </h1>
 
-            {/* Subtitle / Caption directly underneath headline (matching hero-lede in 'We see how stunning') */}
-            <p className="hero-lede mt-4 sm:mt-5 max-w-xl text-balance text-sm sm:text-base md:text-lg text-white/90 font-medium leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
-              {t(
-                "creativeStudio.subtitle",
-                "From immersive 3D and AI concepts to high-performance content and enterprise tech."
+            {/* Subtitle / Caption directly underneath headline (hidden while video plays, smoothly reveals at summit) */}
+            <AnimatePresence>
+              {phase === "summit" && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6, transition: { duration: 0.15 } }}
+                  transition={{
+                    duration: 0.7,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: 0.12,
+                  }}
+                  className="hero-lede mt-4 sm:mt-5 max-w-xl text-balance text-sm sm:text-base md:text-lg text-white/90 font-medium leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+                >
+                  {t(
+                    "creativeStudio.subtitle",
+                    "From immersive 3D and AI concepts to high-performance content and enterprise tech."
+                  )}
+                </motion.p>
               )}
-            </p>
+            </AnimatePresence>
           </div>
 
           {/* Phase 2: Full Capabilities Grid centered in the middle of the viewport */}
