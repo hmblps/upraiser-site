@@ -60,6 +60,23 @@
       ]
     },
     {
+      "source": "/Upraiser_Traffic_Infrastructure.pdf",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"UPRAISER-Media-Kit-2026.pdf\""
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    },
+    {
       "source": "/contact.vcf",
       "headers": [
         {
@@ -79,7 +96,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!api/|.*\\.(?:js|css|map|png|jpe?g|gif|svg|webp|avif|woff2?|glb|gltf|wasm|mp4|webm|ico|json|html|txt|xml|webmanifest)).*)",
+      "source": "/((?!api/|.*\\.(?:js|css|map|png|jpe?g|gif|svg|webp|avif|woff2?|glb|gltf|wasm|mp4|webm|ico|json|html|txt|xml|webmanifest|pdf|vcf)).*)",
       "destination": "/index.html"
     }
   ]
