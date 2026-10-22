@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -279,16 +280,16 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
         }}
       />
 
-      {/* Main Content Area: Hugs the left rail exactly like Hero (--hero-rail-left) */}
+      {/* Main Content Area */}
       <div
-        className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar pt-20 sm:pt-24 lg:pt-28 pb-28"
+        className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar pt-14 sm:pt-16 lg:pt-20 pb-36 sm:pb-40"
         style={{
           paddingLeft: "var(--hero-rail-left, clamp(1.25rem, 4vw, 3rem))",
           paddingRight: "var(--hero-rail-left, clamp(1.25rem, 4vw, 3rem))",
         }}
       >
         <div
-          className="min-h-full w-full flex flex-col items-center justify-center relative"
+          className="min-h-full w-full flex flex-col items-center justify-start relative my-auto py-2"
           style={{ zoom: 0.8 }}
         >
           {/* Phase 1: Header Typography — Visible strictly during climbing video, fades out when climb completes */}
@@ -300,7 +301,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeOut" } }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="absolute top-0 left-0 text-left w-full max-w-3xl lg:max-w-4xl pointer-events-none"
+                className="absolute top-2 sm:top-4 left-0 text-left w-full max-w-3xl lg:max-w-4xl pointer-events-none"
               >
                 {/* Monumental Title: Exact font, size, line-height & ladder structure as Hero reference */}
                 <h1 className="hero-title hero-title--hero font-extrabold tracking-tighter !text-white text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)] text-left">
@@ -315,93 +316,131 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
             )}
           </AnimatePresence>
 
-          {/* Phase 2: Full Capabilities Grid centered in the middle of the viewport */}
+          {/* Phase 2: Summit Showcase (Centered directly under climber) */}
           <AnimatePresence>
             {phase === "summit" && (
-              <div
-                className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch max-w-6xl xl:max-w-7xl mx-auto my-auto"
-              >
-                {STUDIO_CATEGORIES.map((cat, index) => (
-                  <motion.article
-                    key={cat.key}
-                    initial={{ opacity: 0, y: 48, scale: 0.94 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 24, scale: 0.96, transition: { duration: 0.2 } }}
-                    transition={{
-                      delay: 0.35 + index * 0.40, // Distinct 400ms sequential cadence: Card 1 at 0.35s, Card 2 at 0.75s, Card 3 at 1.15s
-                      duration: 0.95,
-                      ease: [0.16, 1, 0.3, 1], // Emil Kowalski Apple-like fluid deceleration curve
-                    }}
-                    whileHover={
-                      reduced
-                        ? undefined
-                        : {
-                            y: -6,
-                            transition: { type: "spring", stiffness: 400, damping: 25 },
-                          }
-                    }
-                    whileTap={{ scale: 0.985 }}
-                    className="case-preview-card group flex flex-col overflow-hidden rounded-2xl border border-white/12 dark:border-white/10 bg-bg-card/18 sm:bg-bg-card/22 backdrop-blur-2xl shadow-2xl transition-[border-color,background-color,box-shadow] duration-300 hover:border-accent/40 hover:bg-bg-card/28 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)]"
-                    style={
-                      {
-                        "--case-accent": "var(--theme-accent)",
-                        "--case-surface": "var(--theme-bg-card)",
-                      } as React.CSSProperties
-                    }
+              <div className="w-full flex flex-col items-center justify-start max-w-6xl xl:max-w-7xl mx-auto my-auto">
+                {/* 1. Summit Header Block (Centered directly under climber) */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full text-center flex flex-col items-center justify-center mb-6 sm:mb-8"
+                >
+                  {/* Main Headline: Swiss white, wide single-line layout */}
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[2.65rem] font-extrabold font-display tracking-tight uppercase text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] text-center leading-tight whitespace-normal md:whitespace-nowrap">
+                    {t("creativeStudio.summitTitle", "Full-Cycle Digital Creative & Tech Studio")}
+                  </h1>
+
+                  {/* Secondary Line: smaller, with ART & CODE gradient */}
+                  <p className="mt-3 sm:mt-3.5 text-center max-w-4xl mx-auto text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-tight leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                    <span className="hero-title-accent">
+                      {t(
+                        "creativeStudio.summitSubtitle",
+                        "Driving digital growth: from immersive 3D and AI concepts to high-performance content and enterprise tech."
+                      )}
+                    </span>
+                  </p>
+
+                  {/* Tertiary Status: To be featured soon */}
+                  <p className="mt-2.5 sm:mt-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-accent drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                    {t("creativeStudio.featuredSoon", "To be featured soon")}
+                  </p>
+                </motion.div>
+
+                {/* 2. Capabilities Cards Grid: Clean, enlarged text, no tags, no footer */}
+                <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch">
+                  {STUDIO_CATEGORIES.map((cat, index) => (
+                    <motion.article
+                      key={cat.key}
+                      initial={{ opacity: 0, y: 36, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 20, scale: 0.96, transition: { duration: 0.2 } }}
+                      transition={{
+                        delay: 0.25 + index * 0.18,
+                        duration: 0.85,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                      whileHover={
+                        reduced
+                          ? undefined
+                          : {
+                              y: -6,
+                              transition: { type: "spring", stiffness: 400, damping: 25 },
+                            }
+                      }
+                      whileTap={{ scale: 0.985 }}
+                      className="case-preview-card group flex flex-col overflow-hidden rounded-2xl border border-white/14 dark:border-white/12 bg-bg-card/20 sm:bg-bg-card/24 backdrop-blur-2xl shadow-2xl transition-[border-color,background-color,box-shadow] duration-300 hover:border-accent/45 hover:bg-bg-card/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+                      style={
+                        {
+                          "--case-accent": "var(--theme-accent)",
+                          "--case-surface": "var(--theme-bg-card)",
+                        } as React.CSSProperties
+                      }
+                    >
+                      {/* Card Header: Bold title only, NO tag pills */}
+                      <div className="relative overflow-hidden border-b border-white/10 dark:border-white/10 p-5 sm:p-6 shrink-0">
+                        <div className="case-brand-header__wash" aria-hidden />
+                        <div className="relative z-10">
+                          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+                            {t(cat.titleKey, cat.defaultTitle)}
+                          </h2>
+                        </div>
+                      </div>
+
+                      {/* Card Body: Enlarged, bold, legible service items */}
+                      <div className="p-5 sm:p-6 flex flex-col flex-1 justify-center">
+                        <ul className="space-y-4 my-auto">
+                          {cat.items.map((item) => (
+                            <li
+                              key={item.key}
+                              className="flex items-start gap-3.5 text-sm sm:text-base lg:text-[1.05rem] text-white/95 leading-snug group/item font-semibold"
+                            >
+                              <span className="w-2 h-2 rounded-full bg-accent/90 shrink-0 mt-1.5 transition-transform duration-200 group-hover/item:scale-125 shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
+                              <span className="group-hover/item:text-fg transition-colors duration-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+                                {t(item.key, item.defaultText)}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.article>
+                  ))}
+                </div>
+
+                {/* 3. Under Cards: Contact prompt and button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.85, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                  className="mt-8 sm:mt-10 mb-14 sm:mb-16 flex flex-col items-center justify-center text-center max-w-2xl mx-auto px-4"
+                >
+                  <p className="text-sm sm:text-base lg:text-lg text-white/95 font-semibold leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] mb-4">
+                    {t(
+                      "creativeStudio.contactPrompt",
+                      "Get in touch to check out our recent work and start co-creating ahead of the official launch."
+                    )}
+                  </p>
+                  <Link
+                    to="/contact"
+                    className="btn-caps btn-caps--primary inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-xs sm:text-sm font-bold tracking-widest uppercase shadow-2xl hover:scale-105 active:scale-95 transition-transform"
                   >
-                    {/* Case Card Header matching CaseBrandHeader */}
-                    <div className="case-brand-header relative overflow-hidden border-b border-white/10 dark:border-white/10 p-5 sm:p-6 shrink-0">
-                      <div className="case-brand-header__wash" aria-hidden />
-                      <div className="relative z-10">
-                        <h2 className="case-brand-header__title text-base sm:text-lg lg:text-xl font-bold tracking-tight text-fg">
-                          {t(cat.titleKey, cat.defaultTitle)}
-                        </h2>
-                      </div>
-
-                      {/* Domain / format pills */}
-                      <div className="case-brand-header__channels mt-3 flex flex-wrap gap-1.5">
-                        {cat.tags.map((tag) => (
-                          <span key={tag} className="case-brand-channel">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Case Card Body matching card-pad */}
-                    <div className="card-pad p-5 sm:p-6 flex flex-col flex-1 justify-between gap-5">
-                      <ul className="space-y-3 sm:space-y-3.5 my-auto">
-                        {cat.items.map((item) => (
-                          <li
-                            key={item.key}
-                            className="flex items-start gap-3 text-xs sm:text-sm text-fg/85 leading-relaxed group/item"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-accent/80 shrink-0 mt-2 transition-transform duration-200 group-hover/item:scale-125" />
-                            <span className="group-hover/item:text-fg transition-colors duration-200 font-medium">
-                              {t(item.key, item.defaultText)}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* Clean baseline: no "Discuss Project" CTA, indicates active studio development */}
-                      <div className="pt-4 mt-auto border-t border-white/10 dark:border-white/10 flex items-center justify-between">
-                        <span className="text-[10px] font-bold tracking-wider uppercase text-fg-muted font-sans">
-                          {t("creativeStudio.cardFooterLabel", "Creative & Tech")}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-semibold text-accent/90 px-2.5 py-0.5 rounded-full bg-accent/10 border border-accent/20 select-none">
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                          {t("creativeStudio.inDevelopment", "In Development")}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.article>
-                ))}
+                    <span>{t("creativeStudio.contactButton", "Get in Touch")}</span>
+                    <svg
+                      className="w-4 h-4 text-accent-fg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </Link>
+                </motion.div>
               </div>
             )}
           </AnimatePresence>
-
-
         </div>
       </div>
 

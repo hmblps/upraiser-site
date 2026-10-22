@@ -1048,6 +1048,10 @@
     "inDevelopment": "In Development",
     "contactCta": "Discuss Project",
     "cardFooterLabel": "Creative & Tech",
-    "featuredSoon": "To be featured soon"
+    "featuredSoon": "To be featured soon",
+    "summitTitle": "Full-Cycle Digital Creative & Tech Studio",
+    "summitSubtitle": "Driving digital growth: from immersive 3D and AI concepts to high-performance content and enterprise tech.",
+    "contactPrompt": "Get in touch to check out our recent work and start co-creating ahead of the official launch.",
+    "contactButton": "Get in Touch"
   }
 }
