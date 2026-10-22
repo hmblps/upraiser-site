@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, Suspense, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { NightStars } from "../components/hero-terrain/NightStars";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -15,7 +15,30 @@ import {
 } from "./conferenceHubI18n";
 
 const MEDIA_DECK_URL = "/Upraiser_Traffic_Infrastructure.pdf";
-const SPRING_TACTILE = { type: "spring", bounce: 0.15, duration: 0.4 } as const;
+const SPRING_TACTILE = { type: "spring", stiffness: 400, damping: 25 } as const;
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.04,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
 
 /** Match device language against supported languages. */
 function detectDeviceLang(): HubLang {
@@ -55,6 +78,30 @@ const PLAIN_SCRIPT_CSS = `
   letter-spacing: 0 !important;
 }
 `;
+
+function TelegramIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.94-1.28 4.91-2.13 5.9-2.54 2.81-1.17 3.4-.97 3.78-.97.08 0 .28.02.4.12.1.08.13.2.14.28-.01.07-.01.2-.03.4z" />
+    </svg>
+  );
+}
+
+function WhatsAppIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.23-8.22 8.23zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.66.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.57.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.12-.23-.19-.48-.31z" />
+    </svg>
+  );
+}
+
+function MailIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25-6.54 4.09c-.65.41-1.47.41-2.12 0L4.4 8.25A1.75 1.75 0 0 1 4 7.25c0-.97.78-1.75 1.75-1.75h12.5c.97 0 1.75.78 1.75 1.75 0 .38-.13.73-.4 1z" />
+    </svg>
+  );
+}
 
 export function ConferenceHubPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -102,7 +149,7 @@ export function ConferenceHubPage() {
     };
   }, []);
 
-  // Form state — streamlined to 2 inputs per user specification
+  // Form state
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -200,11 +247,15 @@ export function ConferenceHubPage() {
       />
       <SiteGrain />
 
-      {/* Main Column (max 380px) */}
-      <div className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7">
-        
+      {/* Main Column (max 380px) with Staggered Entry Animation */}
+      <motion.div
+        variants={containerVariants}
+        initial={reduced ? "visible" : "hidden"}
+        animate="visible"
+        className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7"
+      >
         {/* Top Minimal Bar: Language Switcher */}
-        <div className="w-full flex items-center justify-between">
+        <motion.div variants={itemVariants} className="w-full flex items-center justify-between">
           <Link
             to="/"
             className="flex items-center gap-2 group outline-none focus-visible:ring-1 focus-visible:ring-[#e63558] rounded-lg p-0.5"
@@ -249,45 +300,58 @@ export function ConferenceHubPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
             </svg>
           </label>
-        </div>
+        </motion.div>
 
-        {/* 1. Primary One-Tap vCard Action */}
-        <motion.a
-          href="/contact.vcf"
-          download="oleksii-ostroukhov.vcf"
-          whileHover={{ scale: 1.015 }}
-          whileTap={{ scale: 0.98 }}
-          transition={SPRING_TACTILE}
-          className="w-full min-h-[48px] py-3.5 px-6 rounded-2xl bg-[#e63558] hover:bg-[#ff003b] text-white font-medium text-sm text-center shadow-lg shadow-[#e63558]/25 transition-all flex items-center justify-center space-x-2 select-none cursor-pointer"
-        >
-          <svg className="w-4 h-4 shrink-0 text-[#FECF09]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-          <span>{t.saveContactBtn}</span>
-        </motion.a>
+        {/* 1. Primary One-Tap vCard Action (Tactile Spring) */}
+        <motion.div variants={itemVariants} className="w-full">
+          <motion.a
+            href="/contact.vcf"
+            download="oleksii-ostroukhov.vcf"
+            whileHover={{ scale: 1.015 }}
+            whileTap={{ scale: 0.98 }}
+            transition={SPRING_TACTILE}
+            className="w-full min-h-[48px] py-3.5 px-6 rounded-2xl bg-[#e63558] hover:bg-[#ff003b] text-white font-medium text-sm text-center shadow-lg shadow-[#e63558]/25 transition-all flex items-center justify-center space-x-2 select-none cursor-pointer"
+          >
+            <svg className="w-4 h-4 shrink-0 text-[#FECF09]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>{t.saveContactBtn}</span>
+          </motion.a>
+        </motion.div>
 
-        {/* 2. Direct Lead Capture Form */}
-        <div className="w-full pt-1 space-y-3">
-          <div className="text-start px-1">
+        {/* 2. Direct Lead Capture Form (Centered Header + Micro-Success) */}
+        <motion.div variants={itemVariants} className="w-full pt-1 space-y-3">
+          <div className="text-center px-1 flex flex-col items-center">
             <h2 className="text-sm font-medium text-white">{t.formHeading}</h2>
-            <p className="text-xs text-white/40 mt-1 whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">{t.formSub}</p>
+            <p className="text-xs text-white/40 mt-1 whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed max-w-[340px]">
+              {t.formSub}
+            </p>
           </div>
 
           <AnimatePresence mode="wait">
             {status === "success" ? (
               <motion.div
                 key="success"
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, scale: 0.98, y: 6 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98, y: -6 }}
                 transition={SPRING_TACTILE}
-                className="py-4 px-3 text-center text-xs font-mono text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20"
+                className="py-4 px-4 text-center text-xs font-mono text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center justify-center space-x-2"
               >
-                {t.successTitle}
+                <span className="text-[#FECF09] font-bold">✓</span>
+                <span>{t.successTitle}</span>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-2.5">
+              <motion.form
+                key="form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+                onSubmit={handleSubmit}
+                className="space-y-2.5"
+              >
                 <input
                   type="text"
                   required
@@ -308,15 +372,16 @@ export function ConferenceHubPage() {
                 />
 
                 {errorMessage && (
-                  <p className="text-xs text-[#ff003b] font-mono px-1">{errorMessage}</p>
+                  <p className="text-xs text-[#ff003b] font-mono px-1 text-center">{errorMessage}</p>
                 )}
 
                 <motion.button
                   type="submit"
                   disabled={status === "submitting"}
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   transition={SPRING_TACTILE}
-                  className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium transition-colors flex items-center justify-center space-x-2 border border-white/10 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                  className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium transition-colors flex items-center justify-center space-x-2 border border-white/10 cursor-pointer disabled:opacity-50"
                 >
                   {status === "submitting" ? (
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -327,13 +392,13 @@ export function ConferenceHubPage() {
                     </>
                   )}
                 </motion.button>
-              </form>
+              </motion.form>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
-        {/* 3. Direct Team Roster (Two Avatars — Cardless) */}
-        <div className="w-full space-y-3 pt-1">
+        {/* 3. Direct Team Roster (Monochrome App Icons, Clean Role) */}
+        <motion.div variants={itemVariants} className="w-full space-y-3 pt-1">
           {/* Oleksii */}
           <div className="flex items-center justify-between py-2.5 px-1 border-b border-white/[0.06]">
             <div className="flex items-center space-x-3 min-w-0 flex-1">
@@ -354,33 +419,43 @@ export function ConferenceHubPage() {
               </div>
             </div>
             <div className="flex items-center space-x-1.5 shrink-0 ms-2">
-              <a
+              <motion.a
                 href="https://t.me/homeboylebz"
                 target="_blank"
                 rel="noreferrer"
-                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
                 title="Telegram @homeboylebz"
+                aria-label="Telegram @homeboylebz"
               >
-                TG
-              </a>
-              <a
+                <TelegramIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
+              <motion.a
                 href="https://wa.me/40724787390"
                 target="_blank"
                 rel="noreferrer"
-                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
                 title="WhatsApp"
+                aria-label="WhatsApp"
               >
-                WA
-              </a>
-              <a
+                <WhatsAppIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
+              <motion.a
                 href="mailto:alex@upraiser.co.uk"
-                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
                 title="Email alex@upraiser.co.uk"
+                aria-label="Email alex@upraiser.co.uk"
               >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </a>
+                <MailIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
             </div>
           </div>
 
@@ -404,72 +479,85 @@ export function ConferenceHubPage() {
               </div>
             </div>
             <div className="flex items-center space-x-1.5 shrink-0 ms-2">
-              <a
+              <motion.a
                 href="https://t.me/Vladussoboi108"
                 target="_blank"
                 rel="noreferrer"
-                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
                 title="Telegram @Vladussoboi108"
+                aria-label="Telegram @Vladussoboi108"
               >
-                TG
-              </a>
-              <a
+                <TelegramIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
+              <motion.a
                 href="mailto:ceo@upraiser.co.uk"
-                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
                 title="Email ceo@upraiser.co.uk"
+                aria-label="Email ceo@upraiser.co.uk"
               >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </a>
+                <MailIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* 4. Ecosystem & Links (routes, mediadeck, website, linkedin) */}
-        <div className="w-full space-y-2 pt-1">
+        {/* 4. Ecosystem & Links (Centered, stripped of 2.6 MB & domain labels) */}
+        <motion.div variants={itemVariants} className="w-full space-y-2 pt-1">
           {/* Routes */}
-          <Link
-            to="/channels?utm_source=qr_wallet"
-            className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
-          >
-            <span className="text-sm text-white/85 group-hover:text-white">{t.routesTitle}</span>
-            <span className="text-xs text-[#FECF09] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
-          </Link>
+          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
+            <Link
+              to="/channels?utm_source=qr_wallet"
+              className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
+            >
+              <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.routesTitle}</span>
+              <span className="text-xs text-[#FECF09] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
+            </Link>
+          </motion.div>
 
-          {/* Media Deck */}
-          <a
-            href={MEDIA_DECK_URL}
-            target="_blank"
-            rel="noopener"
-            className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
-          >
-            <span className="text-sm text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>
-            <span className="text-xs text-white/40 font-mono">2.6 MB ↓</span>
-          </a>
+          {/* Expedition Dossier */}
+          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
+            <a
+              href={MEDIA_DECK_URL}
+              target="_blank"
+              rel="noopener"
+              className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
+            >
+              <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>
+              <span className="text-xs text-white/40 font-mono group-hover:translate-y-0.5 transition-transform">↓</span>
+            </a>
+          </motion.div>
 
-          {/* Official Website */}
-          <a
-            href="https://upraiser.co.uk"
-            className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
-          >
-            <span className="text-sm text-white/85 group-hover:text-white">{t.officialPlatform}</span>
-            <span dir="ltr" className="text-xs text-white/40 font-mono">upraiser.co.uk ↗</span>
-          </a>
+          {/* Website */}
+          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
+            <a
+              href="https://upraiser.co.uk"
+              className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
+            >
+              <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.officialPlatform}</span>
+              <span className="text-xs text-white/40 font-mono group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+            </a>
+          </motion.div>
 
           {/* LinkedIn */}
-          <a
-            href="https://www.linkedin.com/company/upraiser/"
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
-          >
-            <span className="text-sm text-white/85 group-hover:text-white">{t.linkedinTitle}</span>
-            <span className="text-xs text-white/40 font-mono">↗</span>
-          </a>
-        </div>
-
-      </div>
+          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
+            <a
+              href="https://www.linkedin.com/company/upraiser/"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
+            >
+              <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.linkedinTitle}</span>
+              <span className="text-xs text-white/40 font-mono group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+            </a>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
       {/* Footer */}
       <footer className="w-full text-center pt-10 pb-2 text-[11px] font-mono text-white/20 z-10">
