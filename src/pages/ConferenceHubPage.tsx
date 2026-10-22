@@ -1,6 +1,9 @@
-import { useState, useCallback, useEffect, useMemo, type FormEvent } from "react";
+import { useState, useCallback, useEffect, useMemo, Suspense, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
+import { NightStars } from "../components/hero-terrain/NightStars";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SiteGrain } from "../components/SiteGrain";
 import {
   HUB_LANGS,
@@ -82,6 +85,7 @@ export function ConferenceHubPage() {
   const t = useMemo(() => HUB_DICT[lang] || HUB_DICT.en, [lang]);
   const isRtl = HUB_RTL.has(lang);
   const isPlain = HUB_PLAIN_SCRIPT.has(lang);
+  const reduced = useReducedMotion();
 
   // Keep meta robots noindex
   useEffect(() => {
@@ -121,7 +125,7 @@ export function ConferenceHubPage() {
         companyType: "Direct Operator Contact",
         companySize: "On-Site Desk",
         monthlyBudget: "Custom Route & Benchmark Split",
-        notes: `[CONFERENCE HUB · DIRECT NOTE TO ALEX]\nName/Callsign: ${name.trim()}\nHandle / Email: ${contact.trim()}\nPreferred Language: ${lang.toUpperCase()} (${HUB_LANG_NAMES[lang]})`,
+        notes: `[CONFERENCE HUB · DISPATCH TO BASECAMP]\nName/Callsign: ${name.trim()}\nHandle / Email: ${contact.trim()}\nPreferred Language: ${lang.toUpperCase()} (${HUB_LANG_NAMES[lang]})`,
       };
 
       try {
@@ -141,7 +145,7 @@ export function ConferenceHubPage() {
         const accessKey = "260b2ece-07ce-4a41-8136-88bb30545e23";
         const fd = new FormData();
         fd.append("access_key", accessKey);
-        fd.append("subject", `Conference Note to Alex: ${name.trim()}`);
+        fd.append("subject", `Conference Dispatch to Basecamp: ${name.trim()}`);
         fd.append("from_name", name.trim());
         fd.append("email", isEmail ? contact.trim() : "conference-lead@upraiser.co.uk");
         fd.append("notes", payload.notes);
@@ -170,9 +174,24 @@ export function ConferenceHubPage() {
       lang={lang}
       dir={isRtl ? "rtl" : "ltr"}
       data-hub-plain={isPlain ? "true" : "false"}
-      className="min-h-[100dvh] bg-gradient-to-b from-[#120407] via-[#090204] to-[#050102] text-white flex flex-col items-center justify-between px-5 sm:px-6 py-10 sm:py-12 relative overflow-hidden font-sans selection:bg-[#e63558] selection:text-white"
+      className="min-h-[100dvh] bg-gradient-to-b from-[#120407] via-[#090204] to-[#050102] text-white flex flex-col items-center justify-between px-5 sm:px-6 py-8 sm:py-10 relative overflow-hidden font-sans selection:bg-[#e63558] selection:text-white"
     >
       <style>{PLAIN_SCRIPT_CSS}</style>
+
+      {/* Three.js Starfield celestial drift */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-35" aria-hidden="true">
+        <Suspense fallback={null}>
+          <Canvas
+            dpr={[1, 2]}
+            frameloop={reduced ? "never" : "always"}
+            camera={{ position: [0, 0, 0], fov: 60 }}
+            gl={{ alpha: true, powerPreference: "low-power", antialias: true }}
+            style={{ pointerEvents: "none", position: "absolute", inset: 0, width: "100%", height: "100%" }}
+          >
+            <NightStars />
+          </Canvas>
+        </Suspense>
+      </div>
 
       {/* Ambient background glow — soft wine atmospheric haze */}
       <div
@@ -182,7 +201,7 @@ export function ConferenceHubPage() {
       <SiteGrain />
 
       {/* Main Column (max 380px) */}
-      <div className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-8">
+      <div className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7">
         
         {/* Top Minimal Bar: Language Switcher */}
         <div className="w-full flex items-center justify-between">
@@ -232,21 +251,7 @@ export function ConferenceHubPage() {
           </label>
         </div>
 
-        {/* 1. Brand Header */}
-        <div className="flex flex-col items-center text-center space-y-2.5">
-          <div className="flex items-center space-x-2 text-[11px] font-mono tracking-widest text-amber-400 uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-            <span data-latin>{t.kicker}</span>
-          </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white/95">
-            {t.headline}
-          </h1>
-          <p className="text-sm text-white/50 max-w-[300px] leading-relaxed">
-            {t.subtext}
-          </p>
-        </div>
-
-        {/* 2. Primary vCard Action */}
+        {/* 1. Primary vCard Action */}
         <motion.a
           href="/contact.vcf"
           download="oleksii-ostroukhov.vcf"
@@ -262,12 +267,8 @@ export function ConferenceHubPage() {
           <span>{t.saveContactBtn}</span>
         </motion.a>
 
-        {/* 3. Direct Team Roster (Airy & Clean — Cardless) */}
+        {/* 2. Direct Team Roster (Airy & Clean — Cardless) */}
         <div className="w-full space-y-3 pt-1">
-          <div className="text-[11px] font-mono tracking-widest text-white/35 uppercase px-1">
-            {t.directChannels}
-          </div>
-
           {/* Oleksii */}
           <div className="flex items-center justify-between py-2.5 px-1 border-b border-white/[0.06]">
             <div className="flex items-center space-x-3 min-w-0 flex-1">
@@ -284,15 +285,15 @@ export function ConferenceHubPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div dir="ltr" className="text-sm font-medium text-white truncate">Oleksii Ostroukhov</div>
-                <div className="text-[11px] sm:text-xs text-[#e63558] font-mono truncate">{t.founderRole}</div>
+                <div className="text-[10px] sm:text-xs text-[#e63558] font-mono whitespace-nowrap overflow-hidden text-ellipsis">{t.founderRole}</div>
               </div>
             </div>
-            <div className="flex items-center space-x-2 shrink-0 ms-2">
+            <div className="flex items-center space-x-1.5 shrink-0 ms-2">
               <a
                 href="https://t.me/homeboylebz"
                 target="_blank"
                 rel="noreferrer"
-                className="min-h-[44px] min-w-[44px] px-3 py-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
                 title="Telegram @homeboylebz"
               >
                 TG
@@ -301,10 +302,19 @@ export function ConferenceHubPage() {
                 href="https://wa.me/40724787390"
                 target="_blank"
                 rel="noreferrer"
-                className="min-h-[44px] min-w-[44px] px-3 py-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
                 title="WhatsApp"
               >
                 WA
+              </a>
+              <a
+                href="mailto:alex@upraiser.co.uk"
+                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                title="Email alex@upraiser.co.uk"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
               </a>
             </div>
           </div>
@@ -325,31 +335,33 @@ export function ConferenceHubPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div dir="ltr" className="text-sm font-medium text-white truncate">Vladyslav Samoilenko</div>
-                <div className="text-[11px] sm:text-xs text-white/40 font-mono truncate">{t.opsRole}</div>
+                <div className="text-[10px] sm:text-xs text-white/40 font-mono whitespace-nowrap overflow-hidden text-ellipsis">{t.opsRole}</div>
               </div>
             </div>
-            <div className="flex items-center space-x-2 shrink-0 ms-2">
+            <div className="flex items-center space-x-1.5 shrink-0 ms-2">
               <a
                 href="https://t.me/Vladussoboi108"
                 target="_blank"
                 rel="noreferrer"
-                className="min-h-[44px] min-w-[44px] px-3 py-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
                 title="Telegram @Vladussoboi108"
               >
                 TG
               </a>
               <a
                 href="mailto:ceo@upraiser.co.uk"
-                className="min-h-[44px] min-w-[44px] px-3 py-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
-                title="ceo@upraiser.co.uk"
+                className="min-h-[44px] min-w-[34px] px-2 py-1.5 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors text-xs font-mono"
+                title="Email ceo@upraiser.co.uk"
               >
-                ✉
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
               </a>
             </div>
           </div>
         </div>
 
-        {/* 4. Ecosystem & Links (Clean minimal list) */}
+        {/* 3. Ecosystem & Links (Clean minimal list) */}
         <div className="w-full space-y-2 pt-1">
           <div className="text-[11px] font-mono tracking-widest text-white/35 uppercase px-1">
             {t.ecosystemHeader}
