@@ -1,8 +1,7 @@
-import { useState, useCallback, useEffect, useMemo, Suspense, type FormEvent } from "react";
+import { useState, useCallback, useEffect, useMemo, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { Canvas } from "@react-three/fiber";
-import { NightStars } from "../components/hero-terrain/NightStars";
+import { StarfieldAscent } from "../components/StarfieldAscent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { SiteGrain } from "../components/SiteGrain";
 import {
@@ -225,26 +224,8 @@ export function ConferenceHubPage() {
     >
       <style>{PLAIN_SCRIPT_CSS}</style>
 
-      {/* Three.js Starfield celestial drift */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-35" aria-hidden="true">
-        <Suspense fallback={null}>
-          <Canvas
-            dpr={[1, 2]}
-            frameloop={reduced ? "never" : "always"}
-            camera={{ position: [0, 0, 0], fov: 60 }}
-            gl={{ alpha: true, powerPreference: "low-power", antialias: true }}
-            style={{ pointerEvents: "none", position: "absolute", inset: 0, width: "100%", height: "100%" }}
-          >
-            <NightStars speed={2.5} />
-          </Canvas>
-        </Suspense>
-      </div>
-
-      {/* Ambient background glow — soft wine atmospheric haze */}
-      <div
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#e63558]/10 blur-[120px] rounded-full pointer-events-none"
-        aria-hidden
-      />
+      {/* 60 FPS CSS Parallax Starfield — Ascent Metaphor */}
+      <StarfieldAscent />
       <SiteGrain />
 
       {/* Main Column (max 380px) with Staggered Entry Animation */}
