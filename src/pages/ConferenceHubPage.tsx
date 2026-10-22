@@ -260,7 +260,7 @@ export function ConferenceHubPage() {
           transition={SPRING_TACTILE}
           className="w-full min-h-[48px] py-3.5 px-6 rounded-2xl bg-[#e63558] hover:bg-[#ff003b] text-white font-medium text-sm text-center shadow-lg shadow-[#e63558]/25 transition-all flex items-center justify-center space-x-2 select-none cursor-pointer"
         >
-          <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <svg className="w-4 h-4 shrink-0 text-[#FECF09]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
             <circle cx="12" cy="7" r="4" />
           </svg>
@@ -271,7 +271,7 @@ export function ConferenceHubPage() {
         <div className="w-full pt-1 space-y-3">
           <div className="text-start px-1">
             <h2 className="text-sm font-medium text-white">{t.formHeading}</h2>
-            <p className="text-xs text-white/40 mt-1 leading-relaxed">{t.formSub}</p>
+            <p className="text-xs text-white/40 mt-1 whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">{t.formSub}</p>
           </div>
 
           <AnimatePresence mode="wait">
@@ -295,7 +295,7 @@ export function ConferenceHubPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   dir="auto"
-                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#e63558] transition-colors"
+                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
                 <input
                   type="text"
@@ -304,7 +304,7 @@ export function ConferenceHubPage() {
                   placeholder={t.fieldContact}
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
-                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#e63558] transition-colors"
+                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
 
                 {errorMessage && (
@@ -323,7 +323,7 @@ export function ConferenceHubPage() {
                   ) : (
                     <>
                       <span>{t.btnSubmit}</span>
-                      <span aria-hidden className="inline-block rtl:-scale-x-100 font-bold">→</span>
+                      <span aria-hidden className="inline-block rtl:-scale-x-100 font-bold text-[#FECF09]">→</span>
                     </>
                   )}
                 </motion.button>
@@ -400,7 +400,7 @@ export function ConferenceHubPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div dir="ltr" className="text-sm font-medium text-white truncate">Vladyslav Samoilenko</div>
-                <div className="text-[10px] sm:text-xs text-white/40 font-mono whitespace-nowrap overflow-hidden text-ellipsis">{t.opsRole}</div>
+                <div className="text-[10px] sm:text-xs text-[#FECF09] font-mono whitespace-nowrap overflow-hidden text-ellipsis">{t.opsRole}</div>
               </div>
             </div>
             <div className="flex items-center space-x-1.5 shrink-0 ms-2">
@@ -428,17 +428,13 @@ export function ConferenceHubPage() {
 
         {/* 4. Ecosystem & Links (routes, mediadeck, website, linkedin) */}
         <div className="w-full space-y-2 pt-1">
-          <div className="text-[11px] font-mono tracking-widest text-white/35 uppercase px-1">
-            {t.ecosystemHeader}
-          </div>
-
           {/* Routes */}
           <Link
             to="/channels?utm_source=qr_wallet"
             className="flex items-center justify-between min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group"
           >
             <span className="text-sm text-white/85 group-hover:text-white">{t.routesTitle}</span>
-            <span className="text-xs text-[#e63558] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
+            <span className="text-xs text-[#FECF09] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
           </Link>
 
           {/* Media Deck */}
