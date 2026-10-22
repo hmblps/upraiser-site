@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//UPRAISER Agency LLP//Conference Card//EN
+N:Upraiser;Alex;;;
+FN:Alex | UPRAISER
+ORG:UPRAISER Agency LLP
+TITLE:Founder & Lead
+EMAIL;TYPE=INTERNET,PREF:alex@upraiser.co.uk
+EMAIL;TYPE=INTERNET:ceo@upraiser.co.uk
+EMAIL;TYPE=INTERNET:info@upraiser.co.uk
+URL;TYPE=WORK:https://upraiser.co.uk
+X-SOCIALPROFILE;TYPE=telegram:https://t.me/alex_upraiser
+NOTE:UPRAISER — Pre-bid filtration, official Lenovo OEM distribution, and 0% log drift.\nLondon · Since 2017.
+END:VCARD

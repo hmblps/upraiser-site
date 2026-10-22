@@ -2,6 +2,10 @@ User-agent: *
 Allow: /
 
 Disallow: /contact/sent
+Disallow: /connect
+Disallow: /meet
+Disallow: /hub
+Disallow: /card
 
 Sitemap: https://upraiser.co.uk/sitemap.xml
 Host: https://upraiser.co.uk

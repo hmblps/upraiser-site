@@ -18,6 +18,7 @@ const ContactPage = lazy(() => import("./pages/ContactPage").then((m) => ({ defa
 const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((m) => ({ default: m.ThankYouPage })));
 const HeroCapturePage = lazy(() => import("./pages/HeroCapturePage").then((m) => ({ default: m.HeroCapturePage })));
 const HeroLitePreviewPage = lazy(() => import("./pages/HeroLitePreviewPage").then((m) => ({ default: m.HeroLitePreviewPage })));
+const ConferenceHubPage = lazy(() => import("./pages/ConferenceHubPage"));
 
 function RouteFallback() {
   return (
@@ -96,6 +97,12 @@ export default function App() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <Routes>
+        {/* Unlisted Conference Networking Hub (Mobile-first, outside SiteLayout, unindexed) */}
+        <Route path="connect" element={<ConferenceHubPage />} />
+        <Route path="meet" element={<Navigate to="/connect" replace />} />
+        <Route path="card" element={<Navigate to="/connect" replace />} />
+        <Route path="hub" element={<Navigate to="/connect" replace />} />
+
         {import.meta.env.DEV ? <Route path="dev/hero-capture" element={<HeroCapturePage />} /> : null}
         {import.meta.env.DEV ? <Route path="dev/hero-lite" element={<HeroLitePreviewPage theme="light" />} /> : null}
         {import.meta.env.DEV ? <Route path="dev/hero-dark" element={<HeroLitePreviewPage theme="dark" />} /> : null}
