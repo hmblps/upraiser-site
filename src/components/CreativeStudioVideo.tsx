@@ -69,20 +69,19 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const goldenVisibleRef = useRef(false);
 
   // Exact timestamp when camera cuts and climber is viewed from behind on the massive wall:
-  // light-loop.mp4: 4.75s (cut & settle on wide wall with climber seen from behind)
+  // light-loop.mp4: 4.25s (cut & settle on wide wall with climber seen from behind)
   // dark-loop.mp4: 6.00s (headlamp strikes wall with climber seen from behind)
-  const goldenStartTime = theme === "light" ? 4.75 : 6.0;
+  const goldenStartTime = theme === "light" ? 4.25 : 6.0;
 
   // Subtle imperceptible deceleration on the wide mountain wall:
-  // 1.0x full speed everywhere (especially whip zoom 4.60-4.88s) to eliminate judder,
-  // then gentle 0.82x on wide wall approach:
-  const decelStartTime = theme === "light" ? 4.88 : 6.5;
+  // 1.0x full speed everywhere to eliminate judder, then gentle deceleration on approach:
+  const decelStartTime = theme === "light" ? 4.4 : 6.5;
   const targetSlowRate = theme === "light" ? 0.82 : 0.85;
 
   // Natural pause on reaching the mountain wall / summit:
-  // light-loop.mp4 (6.01s): ~5.5s reaches full wide mountain wall
-  // dark-loop.mp4 (11.01s): ~10.6s reaches top of the ice wall
-  const pauseTime = theme === "light" ? 5.5 : 10.6;
+  // light-loop.mp4: 5.0s (climbs 2.5m at 0.5m/s from 98.0m to exactly 100.5m)
+  // dark-loop.mp4: 10.6s (climbs 1.0m from 899.0m to 900.0m)
+  const pauseTime = theme === "light" ? 5.0 : 10.6;
 
   // Reset when video source changes
   useEffect(() => {
@@ -91,13 +90,20 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     goldenVisibleRef.current = false;
     setGoldenVisible(false);
 
+    if (altitudeRef.current) {
+      altitudeRef.current.textContent = theme === "light" ? "98.0M" : "899.0M";
+    }
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = "0%";
+    }
+
     const v = videoRef.current;
     if (v) {
       v.currentTime = 0;
       v.playbackRate = 1.0;
       v.play().catch(() => {});
     }
-  }, [videoSrc]);
+  }, [videoSrc, theme]);
 
   // Precision 60/120 FPS rAF loop for telemetry updates & frame-perfect transitions
   useEffect(() => {
@@ -113,8 +119,15 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
           progressBarRef.current.style.width = `${pct}%`;
         }
         if (altitudeRef.current) {
-          const alt = Math.round(720 + (pct / 100) * 170);
-          altitudeRef.current.textContent = `${alt}M`;
+          if (theme === "light") {
+            // Light theme: 0.5m/s, starts at 98.0m, finishes on 100.5m
+            const alt = Math.min(100.5, 98.0 + (cur / pauseTime) * 2.5).toFixed(1);
+            altitudeRef.current.textContent = `${alt}M`;
+          } else {
+            // Dark theme: 1m over the whole climb, 899.0m -> 900.0m
+            const alt = Math.min(900.0, 899.0 + (cur / pauseTime) * 1.0).toFixed(1);
+            altitudeRef.current.textContent = `${alt}M`;
+          }
         }
 
         // Bloom golden filter strictly when climber is seen from behind
@@ -140,6 +153,12 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
           v.pause();
           phaseRef.current = "summit";
           setPhase("summit");
+          if (altitudeRef.current) {
+            altitudeRef.current.textContent = theme === "light" ? "100.5M" : "900.0M";
+          }
+          if (progressBarRef.current) {
+            progressBarRef.current.style.width = "100%";
+          }
           if (!goldenVisibleRef.current) {
             goldenVisibleRef.current = true;
             setGoldenVisible(true);
@@ -151,7 +170,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
 
     rafId = requestAnimationFrame(check);
     return () => cancelAnimationFrame(rafId);
-  }, [decelStartTime, goldenStartTime, pauseTime, targetSlowRate]);
+  }, [decelStartTime, goldenStartTime, pauseTime, targetSlowRate, theme]);
 
   const handleVideoEnded = useCallback(() => {
     const v = videoRef.current;
@@ -160,7 +179,13 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     setPhase("summit");
     goldenVisibleRef.current = true;
     setGoldenVisible(true);
-  }, []);
+    if (altitudeRef.current) {
+      altitudeRef.current.textContent = theme === "light" ? "100.5M" : "900.0M";
+    }
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = "100%";
+    }
+  }, [theme]);
 
   const handleReplay = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -172,9 +197,15 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     setPhase("climbing");
     goldenVisibleRef.current = false;
     setGoldenVisible(false);
+    if (altitudeRef.current) {
+      altitudeRef.current.textContent = theme === "light" ? "98.0M" : "899.0M";
+    }
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = "0%";
+    }
     setReplayKey((k) => k + 1);
     v.play().catch(() => {});
-  }, []);
+  }, [theme]);
 
   const handleSkipToSummit = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -187,7 +218,13 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     setPhase("summit");
     goldenVisibleRef.current = true;
     setGoldenVisible(true);
-  }, [pauseTime]);
+    if (altitudeRef.current) {
+      altitudeRef.current.textContent = theme === "light" ? "100.5M" : "900.0M";
+    }
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = "100%";
+    }
+  }, [pauseTime, theme]);
 
   return (
     <div
@@ -371,7 +408,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                             }
                       }
                       whileTap={{ scale: 0.985 }}
-                      className="case-preview-card group flex flex-col overflow-hidden rounded-2xl border border-white/14 dark:border-white/12 bg-bg-card/20 sm:bg-bg-card/24 backdrop-blur-2xl shadow-2xl transition-[border-color,background-color,box-shadow] duration-300 hover:border-accent/45 hover:bg-bg-card/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+                      className="case-preview-card group flex flex-col overflow-hidden rounded-2xl border border-border/80 dark:border-white/12 bg-bg-card shadow-2xl transition-[border-color,box-shadow] duration-300 hover:border-accent/50"
                       style={
                         {
                           "--case-accent": "var(--theme-accent)",
@@ -380,10 +417,10 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                       }
                     >
                       {/* Card Header: Bold title only, NO tag pills */}
-                      <div className="relative overflow-hidden border-b border-white/10 dark:border-white/10 p-5 sm:p-6 shrink-0">
+                      <div className="relative overflow-hidden border-b border-border/40 dark:border-white/10 p-5 sm:p-6 shrink-0">
                         <div className="case-brand-header__wash" aria-hidden />
                         <div className="relative z-10">
-                          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+                          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-fg">
                             {t(cat.titleKey, cat.defaultTitle)}
                           </h2>
                         </div>
@@ -395,10 +432,10 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                           {cat.items.map((item) => (
                             <li
                               key={item.key}
-                              className="flex items-start gap-3.5 text-sm sm:text-base lg:text-[1.05rem] text-white/95 leading-snug group/item font-semibold"
+                              className="flex items-start gap-3.5 text-sm sm:text-base lg:text-[1.05rem] text-fg/85 leading-snug group/item font-semibold"
                             >
                               <span className="w-2 h-2 rounded-full bg-accent/90 shrink-0 mt-1.5 transition-transform duration-200 group-hover/item:scale-125 shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
-                              <span className="group-hover/item:text-fg transition-colors duration-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+                              <span className="group-hover/item:text-fg transition-colors duration-200">
                                 {t(item.key, item.defaultText)}
                               </span>
                             </li>
@@ -480,7 +517,8 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
                 <span className="text-fg/90 whitespace-nowrap">
-                  PITCH 04 · ASCENT · <span ref={altitudeRef}>720M</span>
+                  {theme === "light" ? "PITCH 03" : "PITCH 21"} · ASCENT ·{" "}
+                  <span ref={altitudeRef}>{theme === "light" ? "98.0M" : "899.0M"}</span>
                 </span>
                 <div className="w-12 sm:w-16 h-1 rounded-full bg-border/50 overflow-hidden shrink-0">
                   <div
