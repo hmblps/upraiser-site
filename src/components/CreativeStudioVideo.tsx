@@ -459,11 +459,15 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                   </p>
                   <Link
                     to="/contact"
-                    className="btn-caps btn-caps--primary inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-xs sm:text-sm font-bold tracking-widest uppercase shadow-2xl hover:scale-105 active:scale-95 transition-transform"
+                    className={`inline-flex items-center justify-center gap-2.5 rounded-full px-8 py-3.5 min-h-[44px] text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-200 select-none shadow-[0_6px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-105 active:scale-95 ${
+                      theme === "light"
+                        ? "bg-[#EE1C25] text-white hover:bg-[#d91921]"
+                        : "bg-accent text-[#0a0a0a] hover:bg-accent/90"
+                    }`}
                   >
                     <span>{t("creativeStudio.contactButton", "Get in Touch")}</span>
                     <svg
-                      className="w-4 h-4 text-accent-fg"
+                      className={`w-4 h-4 ${theme === "light" ? "text-white" : "text-[#0a0a0a]"}`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
