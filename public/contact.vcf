@@ -1,15 +1,15 @@
 BEGIN:VCARD
 VERSION:3.0
-PRODID:-//UPRAISER Agency LLP//Conference Card//EN
-N:Upraiser;Alex;;;
-FN:Alex | UPRAISER
+PRODID:-//UPRAISER Agency LLP//Oleksii Ostroukhov//EN
+N:Ostroukhov;Oleksii;;;
+FN:Oleksii Ostroukhov
 ORG:UPRAISER Agency LLP
 TITLE:Founder & Lead
+TEL;TYPE=CELL,VOICE,PREF:+40724787390
 EMAIL;TYPE=INTERNET,PREF:alex@upraiser.co.uk
-EMAIL;TYPE=INTERNET:ceo@upraiser.co.uk
-EMAIL;TYPE=INTERNET:info@upraiser.co.uk
 URL;TYPE=WORK:https://upraiser.co.uk
-X-SOCIALPROFILE;TYPE=telegram:https://t.me/alex_upraiser
+X-SOCIALPROFILE;TYPE=telegram:https://t.me/homeboylebz
+X-SOCIALPROFILE;TYPE=whatsapp:https://wa.me/40724787390
 X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/company/upraiser/
 NOTE:UPRAISER — Direct operator desk. Zero log drift, pre-bid filtration, and Tier-1 routing.\nLondon · Since 2017.
 END:VCARD
