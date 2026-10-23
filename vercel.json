@@ -6,6 +6,17 @@
   "installCommand": "npm install",
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": ".*\\.vercel\\.app"
+        }
+      ],
+      "destination": "https://upraiser.co.uk/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
