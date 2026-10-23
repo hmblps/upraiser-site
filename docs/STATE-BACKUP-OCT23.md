@@ -89,23 +89,23 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 
 ---
 
-## 3. RFC 2426 vCard 3.0 Compliance & Contact Optimization (`contact.vcf`)
+## 3. RFC 2426 vCard 3.0 Compliance & Contact Optimization (`contact.vcf` · `alex-upraiser.vcf`)
 
 ### A. Search-Optimized Contact Name
-- Name saved as **Alex Upraiser**:
+- Name saved strictly as **Alex Upraiser**:
   - `FN:Alex Upraiser`
   - `N:Upraiser;Alex;;;`
-  - `NICKNAME:Oleksii`
   - `ORG:UPRAISER Agency LLP`
   - `TITLE:Founder & Lead`
-- **Rationale:** Ensures that searching for either "Alex" or "Upraiser" in iOS Spotlight / Contacts or Google Contacts instantly matches the contact card without having to remember the founder's full Ukrainian surname.
-- Download filename updated to `alex-upraiser.vcf`.
+- **NickName Elimination:** Removed `NICKNAME:Oleksii`. On iOS Contacts, when `NICKNAME` is present, Apple automatically replaces the primary header title with the nickname (`Oleksii`) and demotes `Alex Upraiser` to a tiny subtitle, computing initials as `OO`. Removing it ensures the big bold title is **Alex Upraiser** and initials match **AU**.
+- Download filename updated to `alex-upraiser.vcf` across both link downloads and `Content-Disposition` in `vercel.json`.
+- Added Cache-Control `no-cache, no-store, must-revalidate` in `vercel.json` and query string cache-busting `/contact.vcf?v=3` in `ConferenceHubPage.tsx` to prevent stale browser caches.
 
 ### B. Avatar Rendering on iOS & Android
-- **Previous Issue:** Line breaks in base64 without CRLF and an empty line after `PHOTO;ENCODING=b;TYPE=JPEG:` caused Apple AddressBook and Android Contacts to fail parsing the avatar photo.
+- **Previous Issue:** Line breaks in base64 without CRLF, binary string encoding corruption, and an empty line after `PHOTO;ENCODING=b;TYPE=JPEG:` caused Apple AddressBook and Android Contacts to fail parsing the avatar photo.
 - **Remediation:**
   - Encoded `public/team/oleksii.jpg` (256×256 baseline JPEG).
-  - Base64 data starts immediately after the colon on line 1.
-  - Standard RFC 2426 72-character line folding with leading space.
-  - Strict CRLF (`\r\n`) line endings enforced throughout the file.
+  - First line: `PHOTO;ENCODING=b;TYPE=JPEG:` + 49 chars base64 = 76 chars (Apple Contacts native spec).
+  - Continuation lines: ` ` (1 leading space) + 75 chars base64 = 76 chars.
+  - Strict CRLF (`\r\n`) line endings enforced throughout the file with UTF-8 character encoding.
   - Verified by OS file utility: `public/contact.vcf: vCard visiting card, version 3.0`.

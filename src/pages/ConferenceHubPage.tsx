@@ -357,7 +357,7 @@ export function ConferenceHubPage() {
         } catch {}
       }
       const vcardLink = document.createElement("a");
-      vcardLink.href = "/contact.vcf";
+      vcardLink.href = "/contact.vcf?v=3";
       vcardLink.download = "alex-upraiser.vcf";
       vcardLink.rel = "noopener noreferrer";
       document.body.appendChild(vcardLink);
@@ -557,7 +557,7 @@ export function ConferenceHubPage() {
         {/* 1. Primary One-Tap vCard Action (Tactile Spring + Warp Burst) */}
         <motion.div variants={itemVariants} className="w-full">
           <motion.a
-            href="/contact.vcf"
+            href="/contact.vcf?v=3"
             download="alex-upraiser.vcf"
             onClick={() => triggerWarp(2200)}
             whileHover={{ scale: 1.015 }}
