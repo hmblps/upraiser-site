@@ -303,11 +303,11 @@ export function ConferenceHubPage() {
 
         {/* 2. Direct Lead Capture Form (Centered Header + Micro-Success) */}
         <motion.div variants={itemVariants} className="w-full pt-1 space-y-3">
-          <div className="text-center px-2 flex flex-col items-center">
+          <div className="text-center px-1 flex flex-col items-center">
             <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight text-center leading-snug">
               {t.formHeading}
             </h2>
-            <p className="text-xs sm:text-[13px] text-white/90 font-normal text-center leading-relaxed max-w-[340px] mt-1.5">
+            <p className="text-[11px] sm:text-xs text-white/90 font-normal text-center leading-relaxed max-w-[365px] mt-1.5">
               {t.formSub}
             </p>
           </div>
