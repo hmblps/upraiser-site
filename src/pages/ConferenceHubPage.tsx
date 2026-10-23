@@ -47,19 +47,25 @@ function detectDeviceLang(): HubLang {
     if (!raw) continue;
     const norm = raw.toLowerCase().trim();
     const primary = norm.split(/[-_]/)[0];
-    if (primary === "ru" || primary === "be" || primary === "kk") return "ru";
-    if (primary === "uk") return "uk";
-    if (primary === "de") return "de";
+    if (primary === "zh") return "zh";
+    if (primary === "hi") return "hi";
     if (primary === "es") return "es";
+    if (primary === "ar") return "ar";
     if (primary === "fr") return "fr";
     if (primary === "pt") return "pt";
-    if (primary === "tr") return "tr";
-    if (primary === "ar") return "ar";
-    if (primary === "he") return "he";
-    if (primary === "hi") return "hi";
-    if (primary === "zh") return "zh";
+    if (primary === "ru" || primary === "be" || primary === "kk") return "ru";
+    if (primary === "id") return "id";
+    if (primary === "de") return "de";
     if (primary === "ja") return "ja";
+    if (primary === "fil" || primary === "tl") return "fil";
+    if (primary === "tr") return "tr";
+    if (primary === "vi") return "vi";
     if (primary === "ko") return "ko";
+    if (primary === "th") return "th";
+    if (primary === "it") return "it";
+    if (primary === "pl") return "pl";
+    if (primary === "uk") return "uk";
+    if (primary === "he") return "he";
     if (primary === "en") return "en";
   }
   return "en";
@@ -164,8 +170,19 @@ export function ConferenceHubPage() {
     }, durationMs);
   }, []);
 
+  // Resilience: Auto-recover if user returns from native Contacts sheet or locks/unlocks phone
   useEffect(() => {
+    const handleReturn = () => {
+      setIsWarping(false);
+      setStatus((current) => (current === "submitting" ? "success" : current));
+    };
+
+    window.addEventListener("focus", handleReturn);
+    document.addEventListener("visibilitychange", handleReturn);
+
     return () => {
+      window.removeEventListener("focus", handleReturn);
+      document.removeEventListener("visibilitychange", handleReturn);
       if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
     };
   }, []);
@@ -198,16 +215,31 @@ export function ConferenceHubPage() {
       e.preventDefault();
       if (!name.trim() || !contact.trim()) return;
 
-      // 1. Immediately burst into hyperspace warp speed
-      setIsWarping(true);
+      // 1. Tactile impulse
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        try {
+          navigator.vibrate(18);
+        } catch {}
+      }
 
-      // 2. Immediately trigger reciprocal vCard download inside user activation
+      // 2. Burst into hyperspace warp speed with an automatic 2.2s cap
+      if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
+      setIsWarping(true);
+      warpTimeoutRef.current = setTimeout(() => {
+        setIsWarping(false);
+      }, 2200);
+
+      // 3. Trigger reciprocal vCard download inside user activation
       triggerVCardDownload();
 
       setStatus("submitting");
       setErrorMessage("");
 
-      const startTime = Date.now();
+      // 4. Fail-safe watchdog: guarantees the UI never hangs in infinite loading
+      const watchdog = setTimeout(() => {
+        setIsWarping(false);
+        setStatus((s) => (s === "submitting" ? "success" : s));
+      }, 2800);
 
       const isEmail = contact.includes("@") && contact.includes(".") && !contact.trim().startsWith("@");
       const payload = {
@@ -232,12 +264,9 @@ export function ConferenceHubPage() {
 
         const data = (await res.json().catch(() => ({}))) as { ok?: boolean };
         if (res.ok && data.ok) {
-          const elapsed = Date.now() - startTime;
-          if (elapsed < 1600) {
-            await new Promise((r) => setTimeout(r, 1600 - elapsed));
-          }
+          clearTimeout(watchdog);
+          setIsWarping(false);
           setStatus("success");
-          setTimeout(() => setIsWarping(false), 800);
           return;
         }
 
@@ -257,20 +286,17 @@ export function ConferenceHubPage() {
           keepalive: true,
         });
 
-        const elapsed = Date.now() - startTime;
-        if (elapsed < 1600) {
-          await new Promise((r) => setTimeout(r, 1600 - elapsed));
-        }
+        clearTimeout(watchdog);
+        setIsWarping(false);
 
         if (fbRes.ok) {
           setStatus("success");
-          setTimeout(() => setIsWarping(false), 800);
         } else {
-          setIsWarping(false);
           setStatus("error");
           setErrorMessage(t.errSubmit);
         }
       } catch {
+        clearTimeout(watchdog);
         setIsWarping(false);
         setStatus("error");
         setErrorMessage(t.errNetwork);
