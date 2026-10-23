@@ -293,6 +293,11 @@ export function ConferenceHubPage() {
     window.addEventListener("focus", handleReturn);
     document.addEventListener("visibilitychange", handleReturn);
 
+    // Pre-cache vCard on mount for instant 0 ms save even in concrete expo centers with weak reception
+    try {
+      fetch("/Oleksii_Upraiser.vcf?v=4", { cache: "force-cache" }).catch(() => {});
+    } catch {}
+
     return () => {
       window.removeEventListener("focus", handleReturn);
       document.removeEventListener("visibilitychange", handleReturn);
@@ -357,8 +362,8 @@ export function ConferenceHubPage() {
         } catch {}
       }
       const vcardLink = document.createElement("a");
-      vcardLink.href = "/contact.vcf?v=3";
-      vcardLink.download = "alex-upraiser.vcf";
+      vcardLink.href = "/Oleksii_Upraiser.vcf?v=4";
+      vcardLink.download = "Oleksii_Upraiser.vcf";
       vcardLink.rel = "noopener noreferrer";
       document.body.appendChild(vcardLink);
       vcardLink.click();
@@ -557,8 +562,8 @@ export function ConferenceHubPage() {
         {/* 1. Primary One-Tap vCard Action (Tactile Spring + Warp Burst) */}
         <motion.div variants={itemVariants} className="w-full">
           <motion.a
-            href="/contact.vcf?v=3"
-            download="alex-upraiser.vcf"
+            href="/Oleksii_Upraiser.vcf?v=4"
+            download="Oleksii_Upraiser.vcf"
             onClick={() => triggerWarp(2200)}
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.98 }}

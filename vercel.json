@@ -116,7 +116,7 @@
       ]
     },
     {
-      "source": "/(contact|alex-upraiser).vcf",
+      "source": "/(contact|Oleksii_Upraiser|alex-upraiser).vcf",
       "headers": [
         {
           "key": "Content-Type",
@@ -124,11 +124,11 @@
         },
         {
           "key": "Content-Disposition",
-          "value": "inline; filename=\"alex-upraiser.vcf\""
+          "value": "inline; filename=\"Oleksii_Upraiser.vcf\""
         },
         {
           "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
+          "value": "public, max-age=600, stale-while-revalidate=86400"
         },
         {
           "key": "X-Robots-Tag",

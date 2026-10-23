@@ -89,23 +89,39 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 
 ---
 
-## 3. RFC 2426 vCard 3.0 Compliance & Contact Optimization (`contact.vcf` · `alex-upraiser.vcf`)
+## 3. 1-Screen Native Contact Sheet & Phonebook SEO (`Oleksii_Upraiser.vcf` · `contact.vcf`)
 
-### A. Search-Optimized Contact Name
-- Name saved strictly as **Alex Upraiser**:
-  - `FN:Alex Upraiser`
-  - `N:Upraiser;Alex;;;`
-  - `ORG:UPRAISER Agency LLP`
-  - `TITLE:Founder & Lead`
-- **NickName Elimination:** Removed `NICKNAME:Oleksii`. On iOS Contacts, when `NICKNAME` is present, Apple automatically replaces the primary header title with the nickname (`Oleksii`) and demotes `Alex Upraiser` to a tiny subtitle, computing initials as `OO`. Removing it ensures the big bold title is **Alex Upraiser** and initials match **AU**.
-- Download filename updated to `alex-upraiser.vcf` across both link downloads and `Content-Disposition` in `vercel.json`.
-- Added Cache-Control `no-cache, no-store, must-revalidate` in `vercel.json` and query string cache-busting `/contact.vcf?v=3` in `ConferenceHubPage.tsx` to prevent stale browser caches.
+### A. The 1-Screen Zero-Scroll Problem & Solution
+- **Previous Diagnosis:** The vCard contained 7 separate blocks (mobile, email, work, home, telegram, whatsapp, linkedin). On iOS, each block renders as an individual padded card, pushing the native contact view past the fold and forcing the user to scroll vertically to see the "Create New Contact" or "Done" button.
+- **1-Screen Architecture:**
+  - Trimmed down to strictly **3 clickable cards**:
+    1. `TEL;TYPE=CELL,VOICE,PREF:+40724787390` (Phone)
+    2. `EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk` (Work Email)
+    3. `URL;TYPE=WORK:https://upraiser.co.uk/connect` (Single Conference Hub portal link)
+  - Removed duplicate `home` URL and individual `X-SOCIALPROFILE` lines (Telegram, WhatsApp, LinkedIn) because the `/connect` portal already features high-contrast direct tactile links for all three.
+  - Result: On iOS and Android (including compact screens like iPhone Mini/SE), the contact card fits completely on **1 screen without any scrolling**. The top-left blue checkmark `✓` and the bottom "Create New Contact" button are instantly visible and savable in 1 tap.
 
-### B. Avatar Rendering on iOS & Android
-- **Previous Issue:** Line breaks in base64 without CRLF, binary string encoding corruption, and an empty line after `PHOTO;ENCODING=b;TYPE=JPEG:` caused Apple AddressBook and Android Contacts to fail parsing the avatar photo.
-- **Remediation:**
-  - Encoded `public/team/oleksii.jpg` (256×256 baseline JPEG).
-  - First line: `PHOTO;ENCODING=b;TYPE=JPEG:` + 49 chars base64 = 76 chars (Apple Contacts native spec).
-  - Continuation lines: ` ` (1 leading space) + 75 chars base64 = 76 chars.
-  - Strict CRLF (`\r\n`) line endings enforced throughout the file with UTF-8 character encoding.
-  - Verified by OS file utility: `public/contact.vcf: vCard visiting card, version 3.0`.
+### B. Contact Name, Branding & Phonebook SEO
+- **Formatted Name:** `FN:Oleksii · Upraiser`
+- **Family / Given:** `N:Ostroukhov;Oleksii;;;`
+- **Organization:** `ORG:UPRAISER Agency LLP`
+- **Title:** `TITLE:Founder & Lead · Direct Mobile UA & OEM Infra`
+- **Note:** `NOTE:Direct Operator Desk (Mobile UA\, Traffic\, Lenovo OEM\, Fraud Filtration). London · Since 2017. Telegram: @homeboylebz`
+- **Messenger Sync:** When +40724787390 is saved to the address book, both Telegram and WhatsApp automatically recognize and display the contact name as **Oleksii · Upraiser**.
+- **Spotlight & Contact Search SEO:** Findable immediately by typing any of: *Oleksii, Ostroukhov, Upraiser, Traffic, UA, OEM, Alex*.
+
+### C. Embedded Avatar Photo
+- Embedded 256×256 baseline JPEG (`public/team/oleksii.jpg` and `public/team/alex.jpg`).
+- RFC 2426 vCard 3.0 line folding:
+  - Line 1: `PHOTO;ENCODING=b;TYPE=JPEG:` + base64 chunk (75 characters total length).
+  - Continuation lines: ` ` (1 leading space) + base64 chunk (74 chars = 75 characters total length).
+  - Strict CRLF (`\r\n`) line endings and UTF-8 encoding.
+  - Verified with macOS native QuickLook (`qlmanage -t -s 256`), extracting and rendering Oleksii's face directly from the vCard bytes.
+
+### D. 0 ms Fast-Path Delivery
+- Bundled CLI tool `scripts/generate-vcard.mjs` executes automatically during `npm run build` to output:
+  - `public/Oleksii_Upraiser.vcf`
+  - `public/contact.vcf`
+  - `public/alex-upraiser.vcf`
+- `ConferenceHubPage.tsx` pre-fetches `/Oleksii_Upraiser.vcf?v=4` on mount using `{ cache: "force-cache" }`, ensuring instant zero-delay opening even inside concrete conference expo centers with weak cellular reception.
+- `vercel.json` serves `/(contact|Oleksii_Upraiser|alex-upraiser).vcf` with `Content-Type: text/vcard; charset=utf-8`, `Content-Disposition: inline; filename="Oleksii_Upraiser.vcf"`, and `Cache-Control: public, max-age=600, stale-while-revalidate=86400`.
