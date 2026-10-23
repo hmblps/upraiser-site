@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export CI=1
+export VERCEL_NO_UPDATE_NOTIFIER=1
+export VERCEL_TELEMETRY_DISABLED=1
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
