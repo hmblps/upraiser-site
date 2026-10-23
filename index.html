@@ -4,6 +4,21 @@
     <meta charset="UTF-8" />
     <script>
       (function () {
+        try {
+          var host = window.location.hostname;
+          if (host && host.endsWith("vercel.app")) {
+            var metaRobots = document.createElement("meta");
+            metaRobots.name = "robots";
+            metaRobots.content = "noindex, nofollow, noarchive";
+            document.head.appendChild(metaRobots);
+            var target = "https://upraiser.co.uk" + window.location.pathname + window.location.search + window.location.hash;
+            window.location.replace(target);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script>
+      (function () {
         var mobile = window.matchMedia("(max-width: 899px)").matches;
         var stored = localStorage.getItem("upraiser-theme");
         var systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
