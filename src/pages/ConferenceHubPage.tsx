@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo, type FormEvent } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { StarfieldAscent } from "../components/StarfieldAscent";
@@ -148,11 +148,27 @@ export function ConferenceHubPage() {
     };
   }, []);
 
-  // Form state
+  // Form state & Hyper-Jump Warp Speed
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isWarping, setIsWarping] = useState(false);
+  const warpTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const triggerWarp = useCallback((durationMs = 2000) => {
+    if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
+    setIsWarping(true);
+    warpTimeoutRef.current = setTimeout(() => {
+      setIsWarping(false);
+    }, durationMs);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
+    };
+  }, []);
 
   const triggerVCardDownload = () => {
     try {
@@ -182,11 +198,16 @@ export function ConferenceHubPage() {
       e.preventDefault();
       if (!name.trim() || !contact.trim()) return;
 
-      // 1. Immediately trigger reciprocal vCard download inside user activation
+      // 1. Immediately burst into hyperspace warp speed
+      setIsWarping(true);
+
+      // 2. Immediately trigger reciprocal vCard download inside user activation
       triggerVCardDownload();
 
       setStatus("submitting");
       setErrorMessage("");
+
+      const startTime = Date.now();
 
       const isEmail = contact.includes("@") && contact.includes(".") && !contact.trim().startsWith("@");
       const payload = {
@@ -211,7 +232,12 @@ export function ConferenceHubPage() {
 
         const data = (await res.json().catch(() => ({}))) as { ok?: boolean };
         if (res.ok && data.ok) {
+          const elapsed = Date.now() - startTime;
+          if (elapsed < 1600) {
+            await new Promise((r) => setTimeout(r, 1600 - elapsed));
+          }
           setStatus("success");
+          setTimeout(() => setIsWarping(false), 800);
           return;
         }
 
@@ -231,13 +257,21 @@ export function ConferenceHubPage() {
           keepalive: true,
         });
 
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 1600) {
+          await new Promise((r) => setTimeout(r, 1600 - elapsed));
+        }
+
         if (fbRes.ok) {
           setStatus("success");
+          setTimeout(() => setIsWarping(false), 800);
         } else {
+          setIsWarping(false);
           setStatus("error");
           setErrorMessage(t.errSubmit);
         }
       } catch {
+        setIsWarping(false);
         setStatus("error");
         setErrorMessage(t.errNetwork);
       }
@@ -254,8 +288,8 @@ export function ConferenceHubPage() {
     >
       <style>{PLAIN_SCRIPT_CSS}</style>
 
-      {/* 60 FPS CSS Parallax Starfield — Ascent Metaphor */}
-      <StarfieldAscent />
+      {/* 60 FPS CSS Parallax Starfield — Ascent Metaphor (Hyperspace Warp Burst) */}
+      <StarfieldAscent warp={isWarping} />
       <SiteGrain />
 
       {/* Main Column (max 380px) with Staggered Entry Animation */}
@@ -313,11 +347,12 @@ export function ConferenceHubPage() {
           </label>
         </motion.div>
 
-        {/* 1. Primary One-Tap vCard Action (Tactile Spring) */}
+        {/* 1. Primary One-Tap vCard Action (Tactile Spring + Warp Burst) */}
         <motion.div variants={itemVariants} className="w-full">
           <motion.a
             href="/contact.vcf"
-            download="oleksii-ostroukhov.vcf"
+            download="oleksii-upraiser.vcf"
+            onClick={() => triggerWarp(2200)}
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.98 }}
             transition={SPRING_TACTILE}

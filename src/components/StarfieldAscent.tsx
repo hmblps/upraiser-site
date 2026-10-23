@@ -1,6 +1,10 @@
 import { memo } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
+export interface StarfieldAscentProps {
+  warp?: boolean;
+}
+
 const ASCENT_CSS = `
 @keyframes ascentSlow {
   0% { transform: translate3d(0, 0, 0); }
@@ -12,6 +16,31 @@ const ASCENT_CSS = `
   100% { transform: translate3d(0, -50%, 0); }
 }
 
+/* Hyper-jump warp speed keyframes (accelerated + stretched into speed streaks) */
+@keyframes ascentWarpDust {
+  0% { transform: translate3d(0, 0, 0) scaleY(4.5); }
+  100% { transform: translate3d(0, -50%, 0) scaleY(4.5); }
+}
+
+@keyframes ascentWarpStars {
+  0% { transform: translate3d(0, 0, 0) scaleY(6); }
+  100% { transform: translate3d(0, -50%, 0) scaleY(6); }
+}
+
+/* Hyper-jump light beam tunnel */
+@keyframes warpRaysMove {
+  0% { transform: translate3d(0, 35%, 0) scaleY(1); opacity: 0; }
+  25% { opacity: 0.9; }
+  75% { opacity: 0.9; }
+  100% { transform: translate3d(0, -45%, 0) scaleY(2.2); opacity: 0; }
+}
+
+@keyframes warpGlowPulse {
+  0% { transform: translate3d(-50%, 0, 0) scale(1); opacity: 0.15; }
+  50% { transform: translate3d(-50%, 0, 0) scale(1.55); opacity: 0.45; }
+  100% { transform: translate3d(-50%, 0, 0) scale(1.25); opacity: 0.28; }
+}
+
 .animate-ascent-slow {
   animation: ascentSlow 20s linear infinite;
   will-change: transform;
@@ -21,9 +50,29 @@ const ASCENT_CSS = `
   animation: ascentFast 12s linear infinite;
   will-change: transform;
 }
+
+.animate-ascent-warp-dust {
+  animation: ascentWarpDust 0.75s linear infinite;
+  will-change: transform;
+}
+
+.animate-ascent-warp-stars {
+  animation: ascentWarpStars 0.45s linear infinite;
+  will-change: transform;
+}
+
+.animate-warp-rays {
+  animation: warpRaysMove 0.6s linear infinite;
+  will-change: transform, opacity;
+}
+
+.animate-warp-glow {
+  animation: warpGlowPulse 1.2s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
 `;
 
-function StarfieldAscentComponent() {
+function StarfieldAscentComponent({ warp = false }: StarfieldAscentProps) {
   const reduced = useReducedMotion();
 
   return (
@@ -31,7 +80,15 @@ function StarfieldAscentComponent() {
       <style>{ASCENT_CSS}</style>
 
       {/* Layer 1: Dense celestial dust (250 micro-stars) */}
-      <div className={`absolute inset-x-0 top-0 h-[200%] ${reduced ? "" : "animate-ascent-slow"}`}>
+      <div
+        className={`absolute inset-x-0 top-0 h-[200%] origin-center transition-transform duration-500 ${
+          reduced
+            ? ""
+            : warp
+            ? "animate-ascent-warp-dust"
+            : "animate-ascent-slow"
+        }`}
+      >
         <svg className="w-full h-1/2" xmlns="http://www.w3.org/2000/svg">
           <circle cx="13.4%" cy="81.2%" r="1.03" fill="#dbeafe" opacity="0.52" />
           <circle cx="37.9%" cy="96.5%" r="0.68" fill="#f0f4ff" opacity="0.27" />
@@ -539,7 +596,15 @@ function StarfieldAscentComponent() {
       </div>
 
       {/* Layer 2: Parallax mid-stars with brand accents (#FECF09, #e63558) */}
-      <div className={`absolute inset-x-0 top-0 h-[200%] ${reduced ? "" : "animate-ascent-fast"}`}>
+      <div
+        className={`absolute inset-x-0 top-0 h-[200%] origin-center transition-transform duration-500 ${
+          reduced
+            ? ""
+            : warp
+            ? "animate-ascent-warp-stars"
+            : "animate-ascent-fast"
+        }`}
+      >
         <svg className="w-full h-1/2" xmlns="http://www.w3.org/2000/svg">
           <circle cx="92.2%" cy="87.1%" r="1.64" fill="#ffffff" opacity="0.47" />
           <circle cx="26.6%" cy="53.4%" r="1.67" fill="#fde047" opacity="0.36" />
@@ -716,8 +781,49 @@ function StarfieldAscentComponent() {
         </svg>
       </div>
 
+      {/* Layer 3: Hyperspace Warp Rays (Light tunnel burst) */}
+      <div
+        className={`absolute inset-x-0 top-0 h-[200%] pointer-events-none transition-opacity duration-300 origin-center ${
+          warp && !reduced ? "opacity-100 animate-warp-rays" : "opacity-0"
+        }`}
+      >
+        <svg className="w-full h-1/2" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="warpBeamGold" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stopColor="#FECF09" stopOpacity="0" />
+              <stop offset="50%" stopColor="#FECF09" stopOpacity="0.75" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.95" />
+            </linearGradient>
+            <linearGradient id="warpBeamCrimson" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stopColor="#e63558" stopOpacity="0" />
+              <stop offset="60%" stopColor="#e63558" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
+            </linearGradient>
+            <linearGradient id="warpBeamWhite" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+              <stop offset="70%" stopColor="#ffffff" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.95" />
+            </linearGradient>
+          </defs>
+          <line x1="8%" y1="90%" x2="8%" y2="20%" stroke="url(#warpBeamGold)" strokeWidth="1.2" strokeLinecap="round" />
+          <line x1="16%" y1="80%" x2="16%" y2="10%" stroke="url(#warpBeamWhite)" strokeWidth="0.8" strokeLinecap="round" />
+          <line x1="28%" y1="95%" x2="28%" y2="25%" stroke="url(#warpBeamCrimson)" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="42%" y1="85%" x2="42%" y2="15%" stroke="url(#warpBeamWhite)" strokeWidth="1" strokeLinecap="round" />
+          <line x1="58%" y1="90%" x2="58%" y2="20%" stroke="url(#warpBeamGold)" strokeWidth="1.4" strokeLinecap="round" />
+          <line x1="72%" y1="95%" x2="72%" y2="30%" stroke="url(#warpBeamCrimson)" strokeWidth="1.2" strokeLinecap="round" />
+          <line x1="84%" y1="82%" x2="84%" y2="12%" stroke="url(#warpBeamWhite)" strokeWidth="0.9" strokeLinecap="round" />
+          <line x1="92%" y1="92%" x2="92%" y2="22%" stroke="url(#warpBeamGold)" strokeWidth="1.3" strokeLinecap="round" />
+        </svg>
+      </div>
+
       {/* Ambient wine glow at top — atmospheric ascent summit */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[420px] h-[320px] bg-[#e63558]/12 blur-[130px] rounded-full" />
+      <div
+        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[420px] h-[320px] rounded-full transition-all duration-700 pointer-events-none ${
+          warp && !reduced
+            ? "bg-[#e63558]/35 blur-[100px] animate-warp-glow"
+            : "bg-[#e63558]/12 blur-[130px]"
+        }`}
+      />
     </div>
   );
 }
