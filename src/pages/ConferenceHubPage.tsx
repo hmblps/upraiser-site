@@ -303,9 +303,11 @@ export function ConferenceHubPage() {
 
         {/* 2. Direct Lead Capture Form (Centered Header + Micro-Success) */}
         <motion.div variants={itemVariants} className="w-full pt-1 space-y-3">
-          <div className="text-center px-1 flex flex-col items-center">
-            <h2 className="text-sm font-medium text-white">{t.formHeading}</h2>
-            <p className="text-xs text-white/40 mt-1 whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed max-w-[340px]">
+          <div className="text-center px-2 flex flex-col items-center">
+            <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight text-center leading-snug">
+              {t.formHeading}
+            </h2>
+            <p className="text-xs sm:text-[13px] text-white/90 font-normal text-center leading-relaxed max-w-[340px] mt-1.5">
               {t.formSub}
             </p>
           </div>
@@ -541,8 +543,10 @@ export function ConferenceHubPage() {
       </motion.div>
 
       {/* Footer */}
-      <footer className="w-full text-center pt-10 pb-2 text-[11px] font-mono text-white/20 z-10">
-        UPRAISER Agency LLP · London · Since 2017
+      <footer className="w-full text-center pt-10 pb-2 z-10">
+        <span className="text-[11px] font-mono uppercase tracking-wider bg-gradient-to-r from-[#FECF09] via-[#f58e38] to-[#e63558] bg-clip-text text-transparent font-medium select-none">
+          UPRAISER Agency LLP · London · Since 2017
+        </span>
       </footer>
     </div>
   );
