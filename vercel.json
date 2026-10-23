@@ -116,7 +116,7 @@
       ]
     },
     {
-      "source": "/(contact|Oleksii_Upraiser|alex-upraiser).vcf",
+      "source": "/(contact|Alex_Upraiser|Oleksii_Upraiser|alex-upraiser).vcf",
       "headers": [
         {
           "key": "Content-Type",
@@ -124,7 +124,7 @@
         },
         {
           "key": "Content-Disposition",
-          "value": "inline; filename=\"Oleksii_Upraiser.vcf\""
+          "value": "inline; filename=\"Alex_Upraiser.vcf\""
         },
         {
           "key": "Cache-Control",

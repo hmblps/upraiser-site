@@ -89,25 +89,25 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 
 ---
 
-## 3. 1-Screen Native Contact Sheet & Chrome on iOS Optimization (`Oleksii_Upraiser.vcf` · `contact.vcf`)
+## 3. 1-Screen Native Contact Sheet & Safari/Chrome iOS Fix (`Alex_Upraiser.vcf` · `contact.vcf`)
 
-### A. Root Causes Identified via iOS Screen Recording
-1. **Blob Navigation Failure in Chrome on iOS (CriOS):** Dynamic blob downloads (`<a download>.click()`) in Chrome iOS attempt to open the Blob as a new tab, causing an empty black screen flash before presenting the contact.
-   - *Fix:* Replaced programmatic blob click with `window.location.assign(vcfHref)` and client-side pre-generated `data:text/vcard;charset=utf-8,...` (with static `/Oleksii_Upraiser.vcf` fallback). Chrome/Safari on iOS natively overlays the Contact Sheet directly over the active page with 0 ms delay and zero dark screen flicker.
-2. **`Create New Contact` Button Pushed Past the Fold:** The multi-line `NOTE` block consumed ~110px of vertical space, pushing `Create New Contact` ~80px below the viewport fold.
-   - *Fix:* Completely removed the `NOTE` block. Migrated Telegram handle (`@homeboylebz`) and infrastructure keywords directly into `ORG` (`UPRAISER Agency LLP · TG @homeboylebz`) and `TITLE` (`Founder & Lead · Direct Mobile UA & OEM Infra`). On iOS Contact Posters, `ORG` and `TITLE` render as compact subtext beneath the name without generating separate cards.
-   - *Result:* Below the fixed header, strictly 3 clickable cards remain: Phone, Email, and Work Connect URL. `Create New Contact` and `Share Contact` sit cleanly on the first screen with zero scrolling required.
-3. **Photo Avatar Rendering & Line Folding:** Apple Contacts parser rejects Base64 photos if line folding is missing or non-compliant.
-   - *Fix:* Integrated Canvas 200×200 square-crop JPEG encoder (`getAppleCompatibleBase64Photo`) with strict 74-character line folding (`rawBase64.match(/.{1,74}/g).join('\r\n ')`) and `PHOTO;ENCODING=b;TYPE=JPEG:` syntax, pre-baked statically and generated dynamically in memory.
+### A. Root Causes Identified & Fixed
+1. **WebKit / Mobile Safari `data:` URI Security Blocker:** Mobile Safari on iOS strictly blocks top-level navigation and downloads for `data:` URIs (`data:text/vcard;charset=utf-8,...`), causing clicks to silently fail with zero action (except client-side visual triggers like star acceleration).
+   - *Fix:* Switched primary download anchor and `triggerVCardDownload` to the real static endpoint `/Alex_Upraiser.vcf?v=7` served with `Content-Type: text/vcard; charset=utf-8` and `Content-Disposition: inline; filename="Alex_Upraiser.vcf"`. Safari natively intercepts this HTTP response and immediately presents the native contact poster without leaving the page.
+2. **Name Formatting in iOS Contacts:** In iOS `CNContactViewController`, the bold headline is generated from `N: [Family Name];[Given Name];;;`. Setting `N:Ostroukhov;Oleksii;;;` forced iOS to render `Oleksii Ostroukhov`.
+   - *Fix:* Configured `N:Upraiser;Alex;;;` and `FN:Alex Upraiser`. iOS now cleanly displays the headline **Alex Upraiser**, with monogram fallback **AU**.
+   - *Searchability:* Full legal name and handle are placed into `ORG:Oleksii Ostroukhov · UPRAISER Agency LLP · TG @homeboylebz`. Under the headline, this renders in small gray subtext without creating extra cards, allowing Spotlight and Contacts to find the card by *Alex*, *Oleksii*, *Ostroukhov*, or *Upraiser*.
+3. **`Create New Contact` on Screen 1:** Removing the multi-line `NOTE` block saved ~110px of vertical height. The contact card fits strictly on **1 screen without scrolling** across all iOS and Android devices, keeping `Create New Contact` directly visible below the 3 cards (`mobile`, `email`, `work URL`).
+4. **Avatar Photo Parsing:** Embedded 200×200 JPEG with RFC 2426 line folding (`.{1,74}`) and `PHOTO;ENCODING=b;TYPE=JPEG:`.
 
 ### B. Contact Structure Reference
 ```vcard
 BEGIN:VCARD
 VERSION:3.0
 PRODID:-//Apple Inc.//macOS 27.0.1//EN
-N:Ostroukhov;Oleksii;;;
-FN:Oleksii Ostroukhov
-ORG:UPRAISER Agency LLP · TG @homeboylebz
+N:Upraiser;Alex;;;
+FN:Alex Upraiser
+ORG:Oleksii Ostroukhov · UPRAISER Agency LLP · TG @homeboylebz
 TITLE:Founder & Lead · Direct Mobile UA & OEM Infra
 TEL;TYPE=CELL,VOICE,PREF:+40724787390
 EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk
