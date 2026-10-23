@@ -371,7 +371,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                   </h1>
 
                   {/* Secondary Line: single line on desktop, clean Swiss white typography without gradient */}
-                  <p className="mt-2.5 sm:mt-3 text-center max-w-5xl mx-auto text-sm sm:text-base md:text-lg lg:text-xl font-medium sm:font-semibold tracking-tight text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] whitespace-normal md:whitespace-nowrap">
+                  <p className="mt-2.5 sm:mt-3 text-center max-w-5xl mx-auto text-base sm:text-lg md:text-xl lg:text-2xl font-medium sm:font-semibold tracking-tight text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] whitespace-normal md:whitespace-nowrap">
                     {t(
                       "creativeStudio.summitSubtitle",
                       "3D & CGI, AI avatars, playable rich media, and end-to-end web & app engineering."
@@ -379,7 +379,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                   </p>
 
                   {/* Tertiary Status: To be featured soon */}
-                  <p className="mt-2.5 sm:mt-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-accent drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                  <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm md:text-base font-bold uppercase tracking-[0.25em] text-accent drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
                     {t("creativeStudio.featuredSoon", "To be featured soon")}
                   </p>
                 </motion.div>
@@ -418,7 +418,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                       <div className="relative overflow-hidden border-b border-border/40 dark:border-white/10 p-5 sm:p-6 shrink-0">
                         <div className="case-brand-header__wash" aria-hidden />
                         <div className="relative z-10">
-                          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-fg">
+                          <h2 className="text-xl sm:text-2xl lg:text-[1.7rem] font-bold tracking-tight text-fg">
                             {t(cat.titleKey, cat.defaultTitle)}
                           </h2>
                         </div>
@@ -430,9 +430,9 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                           {cat.items.map((item) => (
                             <li
                               key={item.key}
-                              className="flex items-start gap-3.5 text-sm sm:text-base lg:text-[1.05rem] text-fg/85 leading-snug group/item font-semibold"
+                              className="flex items-start gap-3.5 text-base sm:text-lg lg:text-xl text-fg/85 leading-snug group/item font-semibold"
                             >
-                              <span className="w-2 h-2 rounded-full bg-accent/90 shrink-0 mt-1.5 transition-transform duration-200 group-hover/item:scale-125 shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
+                              <span className="w-2.5 h-2.5 rounded-full bg-accent/90 shrink-0 mt-1.5 transition-transform duration-200 group-hover/item:scale-125 shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
                               <span className="group-hover/item:text-fg transition-colors duration-200">
                                 {t(item.key, item.defaultText)}
                               </span>
@@ -451,7 +451,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                   transition={{ delay: 0.85, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
                   className="mt-8 sm:mt-10 mb-14 sm:mb-16 flex flex-col items-center justify-center text-center max-w-2xl mx-auto px-4"
                 >
-                  <p className="text-sm sm:text-base lg:text-lg text-white/95 font-semibold leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] mb-4">
+                  <p className="text-base sm:text-lg lg:text-xl text-white/95 font-semibold leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] mb-4">
                     {t(
                       "creativeStudio.contactPrompt",
                       "Get in touch to check out our recent work and start co-creating ahead of the official launch."
@@ -459,7 +459,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                   </p>
                   <Link
                     to="/contact"
-                    className={`inline-flex items-center justify-center gap-2.5 rounded-full px-8 py-3.5 min-h-[44px] text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-200 select-none shadow-[0_6px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-105 active:scale-95 ${
+                    className={`inline-flex items-center justify-center gap-2.5 rounded-full px-8 py-3.5 min-h-[44px] text-sm sm:text-base font-bold tracking-widest uppercase transition-all duration-200 select-none shadow-[0_6px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-105 active:scale-95 ${
                       theme === "light"
                         ? "bg-[#EE1C25] text-white hover:bg-[#d91921]"
                         : "bg-accent text-[#0a0a0a] hover:bg-accent/90"
