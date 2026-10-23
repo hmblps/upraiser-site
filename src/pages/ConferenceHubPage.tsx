@@ -108,6 +108,119 @@ function MailIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
+interface HubSessionState {
+  visitorId: string;
+  visitCount: number;
+  firstVisitTime: number;
+  lastVisitTime: number;
+  savedName?: string;
+  savedContact?: string;
+}
+
+const HUB_SESSION_KEY = "upraiser_hub_session_v1";
+const HUB_REVISIT_ALERT_KEY = "upraiser_hub_revisit_alert_v1";
+
+function getOrInitHubSession(): HubSessionState {
+  if (typeof window === "undefined") {
+    return { visitorId: "srv", visitCount: 1, firstVisitTime: Date.now(), lastVisitTime: Date.now() };
+  }
+  try {
+    const raw = localStorage.getItem(HUB_SESSION_KEY);
+    const now = Date.now();
+    if (raw) {
+      const parsed: HubSessionState = JSON.parse(raw);
+      // Count a new distinct visit session if at least 90 seconds elapsed since last recorded activity
+      if (now - (parsed.lastVisitTime || 0) > 90 * 1000) {
+        parsed.visitCount = (parsed.visitCount || 1) + 1;
+        parsed.lastVisitTime = now;
+        localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
+      }
+      return parsed;
+    }
+    const newSession: HubSessionState = {
+      visitorId: "hub_" + Math.random().toString(36).substring(2, 9),
+      visitCount: 1,
+      firstVisitTime: now,
+      lastVisitTime: now,
+    };
+    localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(newSession));
+    return newSession;
+  } catch {
+    return { visitorId: "hub_local", visitCount: 1, firstVisitTime: Date.now(), lastVisitTime: Date.now() };
+  }
+}
+
+function updateHubContact(name: string, contact: string) {
+  try {
+    const raw = localStorage.getItem(HUB_SESSION_KEY);
+    if (raw) {
+      const parsed: HubSessionState = JSON.parse(raw);
+      parsed.savedName = name;
+      parsed.savedContact = contact;
+      parsed.lastVisitTime = Date.now();
+      localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
+    }
+  } catch {}
+}
+
+function collectDeviceTelemetry(session: HubSessionState, selectedLang: HubLang) {
+  if (typeof window === "undefined") return null;
+
+  const now = new Date();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  const timestampFormatted = new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "full",
+    timeStyle: "medium",
+    timeZone,
+  }).format(now);
+
+  const screenW = window.screen?.width || window.innerWidth;
+  const screenH = window.screen?.height || window.innerHeight;
+  const dpr = window.devicePixelRatio || 1;
+  const innerW = window.innerWidth;
+  const innerH = window.innerHeight;
+  const isPortrait = window.screen?.orientation
+    ? window.screen.orientation.type.includes("portrait")
+    : innerH >= innerW;
+  const orientation = isPortrait ? "Portrait" : "Landscape";
+
+  const isFirstVisit = session.visitCount <= 1;
+  const firstSeenStr = new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone,
+  }).format(new Date(session.firstVisitTime));
+
+  const sessionState = isFirstVisit
+    ? "⭐ First Visit (Visit #1)"
+    : `🔁 Repeat Visit (Visit #${session.visitCount} · First seen: ${firstSeenStr})`;
+
+  const locale = typeof navigator !== "undefined" ? navigator.language || "unknown" : "unknown";
+  const languages = typeof navigator !== "undefined" && Array.isArray(navigator.languages)
+    ? navigator.languages.join(", ")
+    : locale;
+
+  return {
+    timestampIso: now.toISOString(),
+    timestampFormatted,
+    timeZone,
+    viewport: `${innerW} × ${innerH} px`,
+    screenResolution: `${screenW} × ${screenH} px @ ${dpr}x DPR`,
+    orientation,
+    touchSupport: typeof navigator !== "undefined" && navigator.maxTouchPoints > 0
+      ? `Yes (${navigator.maxTouchPoints} touch points)`
+      : "No touch",
+    locale,
+    languages,
+    hubLang: `${selectedLang.toUpperCase()} (${HUB_LANG_NAMES[selectedLang]})`,
+    sessionState,
+    visitorId: session.visitorId,
+    visitCount: session.visitCount,
+    firstVisitTime: session.firstVisitTime,
+    userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
+  };
+}
+
 export function ConferenceHubPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -187,6 +300,55 @@ export function ConferenceHubPage() {
     };
   }, []);
 
+  // Silent repeat-visit beacon: notifies desk if a previous visitor / contact returns to the Hub
+  useEffect(() => {
+    try {
+      const session = getOrInitHubSession();
+      if (session.visitCount > 1) {
+        const lastAlert = parseInt(localStorage.getItem(HUB_REVISIT_ALERT_KEY) || "0", 10);
+        const now = Date.now();
+        // Cooldown: send at most 1 alert per 15 minutes per visitor device
+        if (now - lastAlert > 15 * 60 * 1000) {
+          localStorage.setItem(HUB_REVISIT_ALERT_KEY, String(now));
+          const telemetry = collectDeviceTelemetry(session, lang);
+          const knownName = session.savedName || `Visitor #${session.visitorId.slice(-4).toUpperCase()}`;
+          const knownContact = session.savedContact || "";
+
+          fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            keepalive: true,
+            body: JSON.stringify({
+              name: knownName,
+              email: knownContact.includes("@") ? knownContact : "revisit-alert@upraiser.co.uk",
+              phone: knownContact && !knownContact.includes("@") ? knownContact : "",
+              appId: "Conference Lead · Repeat Visit Alert",
+              geos: "On-Site Conference",
+              companyType: "Direct Operator Contact",
+              companySize: "On-Site Desk",
+              monthlyBudget: "Revisit Signal",
+              isRepeatAlert: true,
+              telemetry,
+              notes: [
+                `[REPEAT HUB VISIT DETECTED]`,
+                `Visitor: ${knownName} ${knownContact ? `(${knownContact})` : ""}`,
+                `Session State: ${telemetry?.sessionState}`,
+                `Local Timestamp: ${telemetry?.timestampFormatted} (${telemetry?.timeZone})`,
+                `Viewport & Screen: ${telemetry?.viewport} (Screen: ${telemetry?.screenResolution}, ${telemetry?.orientation})`,
+                `Browser Locale: ${telemetry?.locale} (Languages: ${telemetry?.languages})`,
+                `Preferred Hub Language: ${telemetry?.hubLang}`,
+                `Visitor ID: ${telemetry?.visitorId}`,
+                `User-Agent: ${telemetry?.userAgent}`,
+              ].join("\n"),
+            }),
+          }).catch(() => {});
+        }
+      }
+    } catch (e) {
+      console.warn("Revisit beacon error:", e);
+    }
+  }, [lang]);
+
   const triggerVCardDownload = () => {
     try {
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
@@ -196,7 +358,7 @@ export function ConferenceHubPage() {
       }
       const vcardLink = document.createElement("a");
       vcardLink.href = "/contact.vcf";
-      vcardLink.download = "oleksii-upraiser.vcf";
+      vcardLink.download = "alex-upraiser.vcf";
       vcardLink.rel = "noopener noreferrer";
       document.body.appendChild(vcardLink);
       vcardLink.click();
@@ -235,13 +397,31 @@ export function ConferenceHubPage() {
       setStatus("submitting");
       setErrorMessage("");
 
-      // 4. Fail-safe watchdog: guarantees the UI never hangs in infinite loading
+      // 4. Save contact to local session so future visits are recognized with their name
+      updateHubContact(name.trim(), contact.trim());
+      const session = getOrInitHubSession();
+      const telemetry = collectDeviceTelemetry(session, lang);
+
+      // 5. Fail-safe watchdog: guarantees the UI never hangs in infinite loading
       const watchdog = setTimeout(() => {
         setIsWarping(false);
         setStatus((s) => (s === "submitting" ? "success" : s));
       }, 2800);
 
       const isEmail = contact.includes("@") && contact.includes(".") && !contact.trim().startsWith("@");
+      const formattedNotes = [
+        `[CONFERENCE HUB · CLIP IN RECIPROCAL DISPATCH]`,
+        `Name: ${name.trim()}`,
+        `Contact (Phone / TG / Email): ${contact.trim()}`,
+        `Session State: ${telemetry?.sessionState || "First Visit"}`,
+        `Scan Timestamp: ${telemetry?.timestampFormatted || new Date().toISOString()} (${telemetry?.timeZone || "UTC"})`,
+        `Viewport & Screen: ${telemetry?.viewport || "Mobile"} (Screen: ${telemetry?.screenResolution || ""}, ${telemetry?.orientation || ""})`,
+        `Browser Locale: ${telemetry?.locale || "unknown"} (Languages: ${telemetry?.languages || ""})`,
+        `Preferred Hub Language: ${telemetry?.hubLang || lang.toUpperCase()}`,
+        `Visitor ID: ${telemetry?.visitorId || "unknown"}`,
+        `User-Agent: ${telemetry?.userAgent || (typeof navigator !== "undefined" ? navigator.userAgent : "unknown")}`,
+      ].join("\n");
+
       const payload = {
         name: name.trim(),
         email: isEmail ? contact.trim() : "conference-lead@upraiser.co.uk",
@@ -251,7 +431,8 @@ export function ConferenceHubPage() {
         companyType: "Direct Operator Contact",
         companySize: "On-Site Desk",
         monthlyBudget: "Custom Route & Benchmark Split",
-        notes: `[CONFERENCE HUB · CLIP IN RECIPROCAL DISPATCH]\nName: ${name.trim()}\nContact (Phone / TG / Email): ${contact.trim()}\nPreferred Language: ${lang.toUpperCase()} (${HUB_LANG_NAMES[lang]})\nUser-Agent: ${typeof navigator !== "undefined" ? navigator.userAgent : "unknown"}`,
+        telemetry,
+        notes: formattedNotes,
       };
 
       try {
@@ -274,11 +455,11 @@ export function ConferenceHubPage() {
         const accessKey = "260b2ece-07ce-4a41-8136-88bb30545e23";
         const fd = new FormData();
         fd.append("access_key", accessKey);
-        fd.append("subject", `Conference Lead (Clip In): ${name.trim()} · ${contact.trim()}`);
+        fd.append("subject", `Conference Lead (${telemetry?.sessionState?.includes("Repeat") ? "REPEAT" : "CLIP IN"}): ${name.trim()} · ${contact.trim()}`);
         fd.append("from_name", name.trim());
         fd.append("email", isEmail ? contact.trim() : "conference-lead@upraiser.co.uk");
         fd.append("phone_or_telegram", contact.trim());
-        fd.append("notes", payload.notes);
+        fd.append("notes", formattedNotes);
 
         const fbRes = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
@@ -377,7 +558,7 @@ export function ConferenceHubPage() {
         <motion.div variants={itemVariants} className="w-full">
           <motion.a
             href="/contact.vcf"
-            download="oleksii-upraiser.vcf"
+            download="alex-upraiser.vcf"
             onClick={() => triggerWarp(2200)}
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.98 }}

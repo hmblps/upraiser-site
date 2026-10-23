@@ -83,12 +83,15 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const {
     name = "",
     email = "",
+    phone = "",
     appId = "",
     geos = "",
     companyType = "brand",
     companySize = "boutique",
     monthlyBudget = "pilot",
     notes = "",
+    telemetry = null,
+    isRepeatAlert = false,
     files = [],
     filePath = null,
     fileUrl = null,
@@ -147,6 +150,28 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       : DEFAULT_RECIPIENTS;
     const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
 
+    const isConference = appId.includes("Conference") || isRepeatAlert;
+    const headerBorder = isRepeatAlert ? "#FECF09" : isConference ? "#e63558" : "#cb310d";
+    const headerTitle = isRepeatAlert
+      ? "🔁 Repeat Hub Visitor Signal · UPRAISER"
+      : isConference
+      ? "🧗 New Conference Lead (Clip In) · UPRAISER"
+      : "🚀 New Pilot Request · UPRAISER";
+    const headerSub = isRepeatAlert
+      ? "A visitor or saved contact has reopened upraiser.co.uk/connect"
+      : isConference
+      ? "Direct On-Site Lead captured via /connect"
+      : "Submitted via upraiser.co.uk · Direct Agency Lead";
+
+    let emailSubject = `[UPRAISER Pilot] ${name} · ${appId} (${monthlyBudget})`;
+    if (isRepeatAlert) {
+      emailSubject = `🔁 [HUB REVISIT] ${name} reopened /connect (${telemetry?.timeZone || "On-Site"})`;
+    } else if (isConference) {
+      const stateBadge = telemetry?.sessionState?.includes("Repeat") ? "REPEAT VISIT" : "CLIP IN";
+      const contactVal = email.includes("@") && !email.includes("conference-lead") && !email.includes("revisit-alert") ? email : (phone || name);
+      emailSubject = `🧗 [CONFERENCE LEAD · ${stateBadge}] ${name} · ${contactVal}`;
+    }
+
     const html = `
 <!DOCTYPE html>
 <html>
@@ -155,7 +180,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f8fa; margin: 0; padding: 24px; color: #111827; }
     .card { max-width: 620px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .header { background: #0f1115; padding: 24px 32px; border-bottom: 2px solid #cb310d; }
+    .header { background: #0f1115; padding: 24px 32px; border-bottom: 2px solid ${headerBorder}; }
     .header h1 { margin: 0; color: #ffffff; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
     .header p { margin: 4px 0 0; color: #9ca3af; font-size: 13px; }
     .content { padding: 32px; }
@@ -171,11 +196,58 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 <body>
   <div class="card">
     <div class="header">
-      <h1>🚀 New Pilot Request · UPRAISER</h1>
-      <p>Submitted via upraiser.co.uk · Direct Agency Lead</p>
+      <h1>${headerTitle}</h1>
+      <p>${headerSub}</p>
     </div>
     <div class="content">
       <div class="grid">
+        ${isConference ? `
+        <div class="row">
+          <div class="cell-label">Client Name & Callsign</div>
+          <div class="cell-value"><strong>${escapeHtml(name)}</strong></div>
+        </div>
+        <div class="row">
+          <div class="cell-label">Direct Contact</div>
+          <div class="cell-value">
+            <a href="${email.includes('@') && !email.includes('conference-lead') && !email.includes('revisit-alert') ? `mailto:${escapeHtml(email)}` : (phone ? `tel:${escapeHtml(phone)}` : '#')}" style="color: #cb310d; font-weight: 600; text-decoration: underline;">
+              ${escapeHtml(email.includes('@') && !email.includes('conference-lead') && !email.includes('revisit-alert') ? email : (phone || email))}
+            </a>
+          </div>
+        </div>
+        ${telemetry?.sessionState ? `
+        <div class="row">
+          <div class="cell-label">Session State</div>
+          <div class="cell-value">
+            <span style="display: inline-block; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 12px; font-family: monospace; ${telemetry.sessionState.includes('Repeat') ? 'background: #fef3c7; color: #92400e; border: 1px solid #fde68a;' : 'background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;'}">
+              ${escapeHtml(telemetry.sessionState)}
+            </span>
+          </div>
+        </div>` : ""}
+        ${telemetry?.timestampFormatted ? `
+        <div class="row">
+          <div class="cell-label">Scan Timestamp</div>
+          <div class="cell-value"><strong>${escapeHtml(telemetry.timestampFormatted)}</strong> <span style="color: #6b7280; font-size: 12px;">(${escapeHtml(telemetry.timeZone || "UTC")})</span></div>
+        </div>` : ""}
+        ${telemetry?.viewport ? `
+        <div class="row">
+          <div class="cell-label">Screen & Viewport</div>
+          <div class="cell-value">${escapeHtml(telemetry.viewport)} <span style="color: #6b7280; font-size: 12px;">(${escapeHtml(telemetry.screenResolution || "")} · ${escapeHtml(telemetry.orientation || "")})</span></div>
+        </div>` : ""}
+        ${telemetry?.locale ? `
+        <div class="row">
+          <div class="cell-label">Browser Locale</div>
+          <div class="cell-value"><code>${escapeHtml(telemetry.locale)}</code> <span style="color: #6b7280; font-size: 12px;">(Languages: ${escapeHtml(telemetry.languages || "")})</span></div>
+        </div>` : ""}
+        ${telemetry?.hubLang ? `
+        <div class="row">
+          <div class="cell-label">Preferred Hub Lang</div>
+          <div class="cell-value"><strong>${escapeHtml(telemetry.hubLang)}</strong></div>
+        </div>` : ""}
+        <div class="row">
+          <div class="cell-label">Channel Source</div>
+          <div class="cell-value">${escapeHtml(appId)} (${escapeHtml(geos || "On-Site")})</div>
+        </div>
+        ` : `
         <div class="row">
           <div class="cell-label">Client Name & Title</div>
           <div class="cell-value"><strong>${escapeHtml(name)}</strong></div>
@@ -204,9 +276,10 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           <div class="cell-label">Monthly Media Spend</div>
           <div class="cell-value"><strong>${escapeHtml(monthlyBudget)}</strong></div>
         </div>
+        `}
       </div>
 
-      <div style="font-size: 13px; font-weight: 600; color: #4b5563; margin-top: 16px;">Brief Details & Project Notes:</div>
+      <div style="font-size: 13px; font-weight: 600; color: #4b5563; margin-top: 16px;">${isConference ? "Telemetry Footprint & Dispatch Notes:" : "Brief Details & Project Notes:"}</div>
       <div class="notes-box">${escapeHtml(notes || "No additional comments provided.")}</div>
 
       ${rawFiles.length > 0 ? `
@@ -242,7 +315,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         from: fromEmail,
         to: toEmails,
         reply_to: email,
-        subject: `[UPRAISER Pilot] ${name} · ${appId} (${monthlyBudget})`,
+        subject: emailSubject,
         html,
         attachments,
       }),
