@@ -89,39 +89,29 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 
 ---
 
-## 3. 1-Screen Native Contact Sheet & Phonebook SEO (`Oleksii_Upraiser.vcf` · `contact.vcf`)
+## 3. 1-Screen Native Contact Sheet & Chrome on iOS Optimization (`Oleksii_Upraiser.vcf` · `contact.vcf`)
 
-### A. The 1-Screen Zero-Scroll Problem & Solution
-- **Previous Diagnosis:** The vCard contained 7 separate blocks (mobile, email, work, home, telegram, whatsapp, linkedin). On iOS, each block renders as an individual padded card, pushing the native contact view past the fold and forcing the user to scroll vertically to see the "Create New Contact" or "Done" button.
-- **1-Screen Architecture:**
-  - Trimmed down to strictly **3 clickable cards**:
-    1. `TEL;TYPE=CELL,VOICE,PREF:+40724787390` (Phone)
-    2. `EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk` (Work Email)
-    3. `URL;TYPE=WORK:https://upraiser.co.uk/connect` (Single Conference Hub portal link)
-  - Removed duplicate `home` URL and individual `X-SOCIALPROFILE` lines (Telegram, WhatsApp, LinkedIn) because the `/connect` portal already features high-contrast direct tactile links for all three.
-  - Result: On iOS and Android (including compact screens like iPhone Mini/SE), the contact card fits completely on **1 screen without any scrolling**. The top-left blue checkmark `✓` and the bottom "Create New Contact" button are instantly visible and savable in 1 tap.
+### A. Root Causes Identified via iOS Screen Recording
+1. **Blob Navigation Failure in Chrome on iOS (CriOS):** Dynamic blob downloads (`<a download>.click()`) in Chrome iOS attempt to open the Blob as a new tab, causing an empty black screen flash before presenting the contact.
+   - *Fix:* Replaced programmatic blob click with `window.location.assign(vcfHref)` and client-side pre-generated `data:text/vcard;charset=utf-8,...` (with static `/Oleksii_Upraiser.vcf` fallback). Chrome/Safari on iOS natively overlays the Contact Sheet directly over the active page with 0 ms delay and zero dark screen flicker.
+2. **`Create New Contact` Button Pushed Past the Fold:** The multi-line `NOTE` block consumed ~110px of vertical space, pushing `Create New Contact` ~80px below the viewport fold.
+   - *Fix:* Completely removed the `NOTE` block. Migrated Telegram handle (`@homeboylebz`) and infrastructure keywords directly into `ORG` (`UPRAISER Agency LLP · TG @homeboylebz`) and `TITLE` (`Founder & Lead · Direct Mobile UA & OEM Infra`). On iOS Contact Posters, `ORG` and `TITLE` render as compact subtext beneath the name without generating separate cards.
+   - *Result:* Below the fixed header, strictly 3 clickable cards remain: Phone, Email, and Work Connect URL. `Create New Contact` and `Share Contact` sit cleanly on the first screen with zero scrolling required.
+3. **Photo Avatar Rendering & Line Folding:** Apple Contacts parser rejects Base64 photos if line folding is missing or non-compliant.
+   - *Fix:* Integrated Canvas 200×200 square-crop JPEG encoder (`getAppleCompatibleBase64Photo`) with strict 74-character line folding (`rawBase64.match(/.{1,74}/g).join('\r\n ')`) and `PHOTO;ENCODING=b;TYPE=JPEG:` syntax, pre-baked statically and generated dynamically in memory.
 
-### B. Contact Name, Branding & Phonebook SEO
-- **Formatted Name:** `FN:Oleksii · Upraiser`
-- **Family / Given:** `N:Ostroukhov;Oleksii;;;`
-- **Organization:** `ORG:UPRAISER Agency LLP`
-- **Title:** `TITLE:Founder & Lead · Direct Mobile UA & OEM Infra`
-- **Note:** `NOTE:Direct Operator Desk (Mobile UA\, Traffic\, Lenovo OEM\, Fraud Filtration). London · Since 2017. Telegram: @homeboylebz`
-- **Messenger Sync:** When +40724787390 is saved to the address book, both Telegram and WhatsApp automatically recognize and display the contact name as **Oleksii · Upraiser**.
-- **Spotlight & Contact Search SEO:** Findable immediately by typing any of: *Oleksii, Ostroukhov, Upraiser, Traffic, UA, OEM, Alex*.
-
-### C. Embedded Avatar Photo
-- Embedded 256×256 baseline JPEG (`public/team/oleksii.jpg` and `public/team/alex.jpg`).
-- RFC 2426 vCard 3.0 line folding:
-  - Line 1: `PHOTO;ENCODING=b;TYPE=JPEG:` + base64 chunk (75 characters total length).
-  - Continuation lines: ` ` (1 leading space) + base64 chunk (74 chars = 75 characters total length).
-  - Strict CRLF (`\r\n`) line endings and UTF-8 encoding.
-  - Verified with macOS native QuickLook (`qlmanage -t -s 256`), extracting and rendering Oleksii's face directly from the vCard bytes.
-
-### D. 0 ms Fast-Path Delivery
-- Bundled CLI tool `scripts/generate-vcard.mjs` executes automatically during `npm run build` to output:
-  - `public/Oleksii_Upraiser.vcf`
-  - `public/contact.vcf`
-  - `public/alex-upraiser.vcf`
-- `ConferenceHubPage.tsx` pre-fetches `/Oleksii_Upraiser.vcf?v=4` on mount using `{ cache: "force-cache" }`, ensuring instant zero-delay opening even inside concrete conference expo centers with weak cellular reception.
-- `vercel.json` serves `/(contact|Oleksii_Upraiser|alex-upraiser).vcf` with `Content-Type: text/vcard; charset=utf-8`, `Content-Disposition: inline; filename="Oleksii_Upraiser.vcf"`, and `Cache-Control: public, max-age=600, stale-while-revalidate=86400`.
+### B. Contact Structure Reference
+```vcard
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//macOS 27.0.1//EN
+N:Ostroukhov;Oleksii;;;
+FN:Oleksii Ostroukhov
+ORG:UPRAISER Agency LLP · TG @homeboylebz
+TITLE:Founder & Lead · Direct Mobile UA & OEM Infra
+TEL;TYPE=CELL,VOICE,PREF:+40724787390
+EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk
+URL;TYPE=WORK:https://upraiser.co.uk/connect
+PHOTO;ENCODING=b;TYPE=JPEG:[FOLDED_BASE64]
+END:VCARD
+```

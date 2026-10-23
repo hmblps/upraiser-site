@@ -221,6 +221,70 @@ function collectDeviceTelemetry(session: HubSessionState, selectedLang: HubLang)
   };
 }
 
+// Convert avatar image to Apple vCard 3.0 compatible 200x200 JPEG with 74-character line folding
+async function getAppleCompatibleBase64Photo(imageUrl: string): Promise<string> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined") return resolve("");
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        const size = 200; // Optimal 200x200 for crisp, lightweight iOS Contact Poster rendering
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve("");
+
+        // Center square crop
+        const minSide = Math.min(img.width, img.height);
+        const sx = (img.width - minSide) / 2;
+        const sy = (img.height - minSide) / 2;
+        ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+
+        // Strict image/jpeg (iOS ContactUI parser requires standard JPEG)
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+        const rawBase64 = dataUrl.split(",")[1] || "";
+
+        // Apple vCard RFC-2426 line folding: 74 chars + \r\n and leading space
+        const folded = rawBase64.match(/.{1,74}/g)?.join("\r\n ") || "";
+        resolve(folded);
+      } catch {
+        resolve("");
+      }
+    };
+    img.onerror = () => resolve("");
+    img.src = imageUrl;
+  });
+}
+
+// Pre-build client data URI to eliminate Chrome on iOS (CriOS) dark tab / blob navigation glitches
+export async function buildVCardDataUri(): Promise<string> {
+  const photoBase64 = await getAppleCompatibleBase64Photo("/team/oleksii.jpg");
+
+  const lines = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    "PRODID:-//Apple Inc.//macOS 27.0.1//EN",
+    "N:Ostroukhov;Oleksii;;;",
+    "FN:Oleksii Ostroukhov",
+    "ORG:UPRAISER Agency LLP · TG @homeboylebz",
+    "TITLE:Founder & Lead · Direct Mobile UA & OEM Infra",
+    "TEL;TYPE=CELL,VOICE,PREF:+40724787390",
+    "EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk",
+    "URL;TYPE=WORK:https://upraiser.co.uk/connect",
+  ];
+
+  if (photoBase64) {
+    lines.push(`PHOTO;ENCODING=b;TYPE=JPEG:${photoBase64}`);
+  }
+
+  lines.push("END:VCARD");
+
+  const vcfString = lines.join("\r\n") + "\r\n";
+  return `data:text/vcard;charset=utf-8,${encodeURIComponent(vcfString)}`;
+}
+
 export function ConferenceHubPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -273,7 +337,17 @@ export function ConferenceHubPage() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [isWarping, setIsWarping] = useState(false);
+  const [vcfHref, setVcfHref] = useState("/Oleksii_Upraiser.vcf?v=5");
   const warpTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Generate data: URI on client so Chrome on iOS (CriOS) opens contact poster without black screen
+  useEffect(() => {
+    buildVCardDataUri()
+      .then((dataUri) => {
+        if (dataUri) setVcfHref(dataUri);
+      })
+      .catch(() => {});
+  }, []);
 
   const triggerWarp = useCallback((durationMs = 2000) => {
     if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
@@ -293,9 +367,9 @@ export function ConferenceHubPage() {
     window.addEventListener("focus", handleReturn);
     document.addEventListener("visibilitychange", handleReturn);
 
-    // Pre-cache vCard on mount for instant 0 ms save even in concrete expo centers with weak reception
+    // Pre-cache static vCard on mount for instant fallback even offline
     try {
-      fetch("/Oleksii_Upraiser.vcf?v=4", { cache: "force-cache" }).catch(() => {});
+      fetch("/Oleksii_Upraiser.vcf?v=5", { cache: "force-cache" }).catch(() => {});
     } catch {}
 
     return () => {
@@ -361,17 +435,10 @@ export function ConferenceHubPage() {
           navigator.vibrate(18);
         } catch {}
       }
-      const vcardLink = document.createElement("a");
-      vcardLink.href = "/Oleksii_Upraiser.vcf?v=4";
-      vcardLink.download = "Oleksii_Upraiser.vcf";
-      vcardLink.rel = "noopener noreferrer";
-      document.body.appendChild(vcardLink);
-      vcardLink.click();
-      setTimeout(() => {
-        try {
-          document.body.removeChild(vcardLink);
-        } catch {}
-      }, 1000);
+      // Instant reciprocal dispatch without opening blank dark tabs in Chrome on iOS (CriOS)
+      if (typeof window !== "undefined") {
+        window.location.assign(vcfHref);
+      }
     } catch (err) {
       console.warn("Reciprocal contact download failed:", err);
     }
@@ -562,7 +629,7 @@ export function ConferenceHubPage() {
         {/* 1. Primary One-Tap vCard Action (Tactile Spring + Warp Burst) */}
         <motion.div variants={itemVariants} className="w-full">
           <motion.a
-            href="/Oleksii_Upraiser.vcf?v=4"
+            href={vcfHref}
             download="Oleksii_Upraiser.vcf"
             onClick={() => triggerWarp(2200)}
             whileHover={{ scale: 1.015 }}

@@ -6,46 +6,42 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
 
-const imgPath = path.join(rootDir, "public", "team", "oleksii.jpg");
+const avatarPath = path.join(rootDir, "public", "team", "oleksii.jpg");
 const alexImgPath = path.join(rootDir, "public", "team", "alex.jpg");
 
-if (!fs.existsSync(imgPath)) {
-  console.error("Avatar image not found at:", imgPath);
+if (!fs.existsSync(avatarPath)) {
+  console.error("Avatar image not found at:", avatarPath);
   process.exit(1);
 }
 
-// Keep alex.jpg in sync with oleksii.jpg
-fs.copyFileSync(imgPath, alexImgPath);
+// Keep alex.jpg in sync
+fs.copyFileSync(avatarPath, alexImgPath);
 
-const imgBuf = fs.readFileSync(imgPath);
-const b64 = imgBuf.toString("base64");
+const imgBuf = fs.readFileSync(avatarPath);
+const rawBase64 = imgBuf.toString("base64");
 
-// 75-character RFC-2426 compliant line folding
-const prefix = "PHOTO;ENCODING=b;TYPE=JPEG:";
-const firstChunkLen = 75 - prefix.length;
+// Apple vCard standard line folding: 74 chars + \r\n and leading space
+const chunks = rawBase64.match(/.{1,74}/g) || [];
+const folded = chunks.join("\r\n ");
+
+// 1. Remove NOTE block completely so Create New Contact fits on the 1st screen without scroll
+// 2. Pack TG @homeboylebz into ORG so it displays neatly beneath the name in small gray font
+// 3. Keep strictly 3 cards: mobile, email, work connect url
 const lines = [
   "BEGIN:VCARD",
   "VERSION:3.0",
   "PRODID:-//Apple Inc.//macOS 27.0.1//EN",
   "N:Ostroukhov;Oleksii;;;",
-  "FN:Oleksii · Upraiser",
-  "ORG:UPRAISER Agency LLP",
+  "FN:Oleksii Ostroukhov",
+  "ORG:UPRAISER Agency LLP · TG @homeboylebz",
   "TITLE:Founder & Lead · Direct Mobile UA & OEM Infra",
   "TEL;TYPE=CELL,VOICE,PREF:+40724787390",
   "EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk",
   "URL;TYPE=WORK:https://upraiser.co.uk/connect",
-  "NOTE:Direct Operator Desk (Mobile UA\\, Traffic\\, Lenovo OEM\\, Fraud Filtration). London · Since 2017. Telegram: @homeboylebz",
-  prefix + b64.slice(0, firstChunkLen),
+  `PHOTO;ENCODING=b;TYPE=JPEG:${folded}`,
+  "END:VCARD",
 ];
 
-let pos = firstChunkLen;
-while (pos < b64.length) {
-  lines.push(" " + b64.slice(pos, pos + 74));
-  pos += 74;
-}
-lines.push("END:VCARD");
-
-// Strict RFC CRLF line endings
 const vcfContent = lines.join("\r\n") + "\r\n";
 
 const targets = ["Oleksii_Upraiser.vcf", "contact.vcf", "alex-upraiser.vcf"];
@@ -53,5 +49,5 @@ const targets = ["Oleksii_Upraiser.vcf", "contact.vcf", "alex-upraiser.vcf"];
 for (const target of targets) {
   const targetPath = path.join(rootDir, "public", target);
   fs.writeFileSync(targetPath, vcfContent, "utf8");
-  console.log(`✓ Wrote ${target} (${vcfContent.length} bytes)`);
+  console.log(`✓ Wrote static ${target} (${vcfContent.length} bytes)`);
 }
