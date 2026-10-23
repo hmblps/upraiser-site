@@ -124,7 +124,7 @@
         },
         {
           "key": "Content-Disposition",
-          "value": "attachment; filename=\"upraiser.vcf\""
+          "value": "inline; filename=\"oleksii-upraiser.vcf\""
         },
         {
           "key": "X-Robots-Tag",

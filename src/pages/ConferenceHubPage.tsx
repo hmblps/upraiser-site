@@ -154,10 +154,36 @@ export function ConferenceHubPage() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const triggerVCardDownload = () => {
+    try {
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        try {
+          navigator.vibrate(18);
+        } catch {}
+      }
+      const vcardLink = document.createElement("a");
+      vcardLink.href = "/contact.vcf";
+      vcardLink.download = "oleksii-upraiser.vcf";
+      vcardLink.rel = "noopener noreferrer";
+      document.body.appendChild(vcardLink);
+      vcardLink.click();
+      setTimeout(() => {
+        try {
+          document.body.removeChild(vcardLink);
+        } catch {}
+      }, 1000);
+    } catch (err) {
+      console.warn("Reciprocal contact download failed:", err);
+    }
+  };
+
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
       if (!name.trim() || !contact.trim()) return;
+
+      // 1. Immediately trigger reciprocal vCard download inside user activation
+      triggerVCardDownload();
 
       setStatus("submitting");
       setErrorMessage("");
@@ -166,12 +192,13 @@ export function ConferenceHubPage() {
       const payload = {
         name: name.trim(),
         email: isEmail ? contact.trim() : "conference-lead@upraiser.co.uk",
+        phone: !isEmail ? contact.trim() : "",
         appId: "Conference Lead",
         geos: "Tier-1 / Conference",
         companyType: "Direct Operator Contact",
         companySize: "On-Site Desk",
         monthlyBudget: "Custom Route & Benchmark Split",
-        notes: `[CONFERENCE HUB · DISPATCH TO BASECAMP]\nName/Callsign: ${name.trim()}\nHandle / Email: ${contact.trim()}\nPreferred Language: ${lang.toUpperCase()} (${HUB_LANG_NAMES[lang]})`,
+        notes: `[CONFERENCE HUB · CLIP IN RECIPROCAL DISPATCH]\nName: ${name.trim()}\nContact (Phone / TG / Email): ${contact.trim()}\nPreferred Language: ${lang.toUpperCase()} (${HUB_LANG_NAMES[lang]})\nUser-Agent: ${typeof navigator !== "undefined" ? navigator.userAgent : "unknown"}`,
       };
 
       try {
@@ -179,6 +206,7 @@ export function ConferenceHubPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
+          keepalive: true,
         });
 
         const data = (await res.json().catch(() => ({}))) as { ok?: boolean };
@@ -191,14 +219,16 @@ export function ConferenceHubPage() {
         const accessKey = "260b2ece-07ce-4a41-8136-88bb30545e23";
         const fd = new FormData();
         fd.append("access_key", accessKey);
-        fd.append("subject", `Conference Dispatch to Basecamp: ${name.trim()}`);
+        fd.append("subject", `Conference Lead (Clip In): ${name.trim()} · ${contact.trim()}`);
         fd.append("from_name", name.trim());
         fd.append("email", isEmail ? contact.trim() : "conference-lead@upraiser.co.uk");
+        fd.append("phone_or_telegram", contact.trim());
         fd.append("notes", payload.notes);
 
         const fbRes = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
           body: fd,
+          keepalive: true,
         });
 
         if (fbRes.ok) {
@@ -320,10 +350,15 @@ export function ConferenceHubPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98, y: -6 }}
                 transition={SPRING_TACTILE}
-                className="py-4 px-4 text-center text-xs font-mono text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center justify-center space-x-2"
+                className="py-4 px-4 text-center text-xs bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex flex-col items-center justify-center space-y-1.5"
               >
-                <span className="text-[#FECF09] font-bold">✓</span>
-                <span>{t.successTitle}</span>
+                <div className="flex items-center space-x-2 font-mono text-emerald-400">
+                  <span className="text-[#FECF09] font-bold">✓</span>
+                  <span>{t.successTitle}</span>
+                </div>
+                <p className="text-[11px] text-white/70 font-sans leading-relaxed">
+                  {t.successBody}
+                </p>
               </motion.div>
             ) : (
               <motion.form
