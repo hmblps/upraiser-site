@@ -411,15 +411,12 @@ export function ConferenceHubPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98, y: -6 }}
                 transition={SPRING_TACTILE}
-                className="py-4 px-4 text-center text-xs bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex flex-col items-center justify-center space-y-1.5"
+                className="w-full min-h-[46px] py-3.5 px-4 text-center bg-emerald-500/10 rounded-xl border border-emerald-500/25 flex items-center justify-center space-x-2 select-none"
               >
-                <div className="flex items-center space-x-2 font-mono text-emerald-400">
-                  <span className="text-[#FECF09] font-bold">✓</span>
-                  <span>{t.successTitle}</span>
-                </div>
-                <p className="text-[11px] text-white/70 font-sans leading-relaxed">
-                  {t.successBody}
-                </p>
+                <span className="text-[#FECF09] font-bold text-sm">✓</span>
+                <span className="font-mono text-xs sm:text-sm font-semibold tracking-wider text-emerald-400 uppercase">
+                  {t.successTitle}
+                </span>
               </motion.div>
             ) : (
               <motion.form
