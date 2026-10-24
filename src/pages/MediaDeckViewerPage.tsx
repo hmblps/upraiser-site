@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { SiteGrain } from "../components/SiteGrain";
 import { useActivityTracker } from "../hooks/useActivityTracker";
+import { triggerHaptic } from "../utils/haptics";
 import {
   DECK_SLIDES_META,
   TOTAL_SLIDES,
@@ -66,6 +67,7 @@ export default function MediaDeckViewerPage() {
 
   const handleSetLang = useCallback(
     (next: HubLang) => {
+      triggerHaptic("selection");
       setLang(next);
       if (typeof localStorage !== "undefined") {
         try {
@@ -121,6 +123,7 @@ export default function MediaDeckViewerPage() {
   const goToSlide = useCallback(
     (targetSlide: number) => {
       if (targetSlide < 1 || targetSlide > TOTAL_SLIDES) return;
+      triggerHaptic("light");
       setCurrentSlide(targetSlide);
       // Use push (replace: false) so each visited slide registers in browser history with rich titles
       setSearchParams(

@@ -5,6 +5,7 @@ import { StarfieldAscent } from "../components/StarfieldAscent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { useAppleSpatialParallax } from "../hooks/useAppleSpatialParallax";
 import { SiteGrain } from "../components/SiteGrain";
+import { triggerHaptic } from "../utils/haptics";
 import {
   HUB_LANGS,
   HUB_LANG_NAMES,
@@ -206,6 +207,7 @@ export function ConferenceHubPage() {
 
   const handleSetLang = useCallback(
     (next: HubLang) => {
+      triggerHaptic("selection");
       setLang(next);
       if (typeof localStorage !== "undefined") {
         try {
@@ -375,11 +377,9 @@ export function ConferenceHubPage() {
         resolvedName,
         resolvedContact
       );
-      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-        try {
-          navigator.vibrate(18);
-        } catch {}
-      }
+      // Double-pulse tactile confirmation
+      triggerHaptic("success");
+
       if (needsDownloadGuidance) {
         setAndroidDownloaded(true);
         setTimeout(() => setAndroidDownloaded(false), 4500);
@@ -399,14 +399,13 @@ export function ConferenceHubPage() {
       e.preventDefault();
       const trimmedName = name.trim();
       const trimmedContact = contact.trim();
-      if (!trimmedName || !trimmedContact) return;
-
-      // 1. Tactile impulse
-      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-        try {
-          navigator.vibrate(18);
-        } catch {}
+      if (!trimmedName || !trimmedContact) {
+        triggerHaptic("error");
+        return;
       }
+
+      // 1. Tactile press impulse
+      triggerHaptic("medium");
 
       // 2. Save contact to local session FIRST so all subsequent beacons immediately carry the identity
       updateHubContact(trimmedName, trimmedContact);
@@ -492,14 +491,17 @@ export function ConferenceHubPage() {
         setIsWarping(false);
 
         if (fbRes.ok) {
+          triggerHaptic("success");
           setStatus("success");
         } else {
+          triggerHaptic("error");
           setStatus("error");
           setErrorMessage(t.errSubmit);
         }
       } catch {
         clearTimeout(watchdog);
         setIsWarping(false);
+        triggerHaptic("error");
         setStatus("error");
         setErrorMessage(t.errNetwork);
       }
@@ -640,6 +642,7 @@ export function ConferenceHubPage() {
                   placeholder={t.fieldCallsign}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  onFocus={() => triggerHaptic("light")}
                   dir="auto"
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
@@ -657,6 +660,7 @@ export function ConferenceHubPage() {
                   placeholder={t.fieldContact}
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
+                  onFocus={() => triggerHaptic("light")}
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
 
@@ -727,6 +731,7 @@ export function ConferenceHubPage() {
                 href="https://t.me/homeboylebz?text=Hey%20Alex%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => triggerHaptic("light")}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -740,6 +745,7 @@ export function ConferenceHubPage() {
                 href="https://wa.me/40724787390?text=Hey%20Alex%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => triggerHaptic("light")}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -751,6 +757,7 @@ export function ConferenceHubPage() {
               </motion.a>
               <motion.a
                 href="mailto:alex@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Alex%2C%20great%20connecting!"
+                onClick={() => triggerHaptic("light")}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -787,6 +794,7 @@ export function ConferenceHubPage() {
                 href="https://t.me/Vladussoboi108?text=Hey%20Vlad%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => triggerHaptic("light")}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -798,6 +806,7 @@ export function ConferenceHubPage() {
               </motion.a>
               <motion.a
                 href="mailto:ceo@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Vlad%2C%20great%20connecting!"
+                onClick={() => triggerHaptic("light")}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -817,6 +826,7 @@ export function ConferenceHubPage() {
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <Link
               to={`/channels?utm_source=qr_wallet&lang=${lang}`}
+              onClick={() => triggerHaptic("light")}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.routesTitle}</span>
@@ -828,7 +838,10 @@ export function ConferenceHubPage() {
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <Link
               to={`/deck?lang=${lang}`}
-              onClick={() => trackAction("deck_view", 0, { action: "deck_card_clicked", lang })}
+              onClick={() => {
+                triggerHaptic("light");
+                trackAction("deck_view", 0, { action: "deck_card_clicked", lang });
+              }}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>
