@@ -4,19 +4,38 @@ export const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 export type PageMetaRecord = {
   title: string;
   description: string;
+  keywords?: string;
   robots?: string;
 };
 
 const HOME_DESCRIPTION =
   "UPRAISER — London-based mobile performance since 2017. Pre-bid fraud filtration, Lenovo OEM distribution, and verified outcomes for iGaming and fintech.";
 
+const HOME_KEYWORDS =
+  "Upraiser, Lenovo, Lenovo OEM, OEM, OEM traffic, In-App Traffic Infrastructure, In-App, Traffic Infrastructure, Media Deck, Mobile Performance, Programmatic DSP, iGaming, Fintech, Fraud Filtration, London, User Acquisition, Alex Ostroukhov";
+
 export const defaultPageMeta: PageMetaRecord = {
-  title: "UPRAISER — Charting the Ascent",
+  title: "UPRAISER — Lenovo OEM & In-App Traffic Infrastructure",
   description: HOME_DESCRIPTION,
+  keywords: HOME_KEYWORDS,
 };
 
 export const pageMetaByPath: Record<string, PageMetaRecord> = {
   "/": defaultPageMeta,
+  "/connect": {
+    title: "Upraiser — Lenovo OEM & In-App Traffic Infrastructure | Connect Hub",
+    description:
+      "Upraiser Summit Hub. Direct connection with Oleksii Ostroukhov & Vladyslav Samoilenko. Lenovo OEM distribution, programmatic media buying, pre-bid fraud filtration, and verified in-app traffic infrastructure.",
+    keywords:
+      "Upraiser, Lenovo, Lenovo OEM, OEM, OEM traffic, In-App Traffic Infrastructure, In-App, Traffic Infrastructure, Oleksii Ostroukhov, Alex Ostroukhov, Vladyslav Samoilenko, Media Deck, Programmatic, DSP, iGaming, Fintech, Mobile Performance, Connect Hub, Summit, London, Performance Marketing",
+  },
+  "/deck": {
+    title: "Upraiser — Lenovo OEM & In-App Traffic Infrastructure | Media Deck",
+    description:
+      "Upraiser Media Deck — proprietary Lenovo OEM distribution, pre-bid fraud filtration, and verified performance outcomes for mobile apps, iGaming, and fintech.",
+    keywords:
+      "Upraiser, Lenovo, Lenovo OEM, OEM, OEM Advertising, Media Deck, Deck, Presentation, In-App Traffic Infrastructure, In-App, Traffic, Mobile App Growth, User Acquisition, Programmatic DSP, Pre-Bid Fraud Filtration, iGaming Performance, Fintech UA, London, Traffic Infrastructure",
+  },
   "/channels": {
     title: "The Routes | UPRAISER",
     description:

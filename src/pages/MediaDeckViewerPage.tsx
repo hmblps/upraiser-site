@@ -99,6 +99,13 @@ export default function MediaDeckViewerPage() {
     viewMode,
   }));
 
+  // Dynamic document.title update with high-weight keywords for browser history & Omnibox autocomplete
+  useEffect(() => {
+    const targetContent = getDeckSlide(lang, currentSlide);
+    const dynamicTitle = `Upraiser — Lenovo OEM & In-App Traffic Infrastructure | Media Deck (${currentSlide}/${TOTAL_SLIDES}: ${targetContent.title})`;
+    document.title = dynamicTitle;
+  }, [lang, currentSlide]);
+
   // Track initial deck view
   useEffect(() => {
     trackAction("deck_view", 0, {
@@ -115,16 +122,20 @@ export default function MediaDeckViewerPage() {
     (targetSlide: number) => {
       if (targetSlide < 1 || targetSlide > TOTAL_SLIDES) return;
       setCurrentSlide(targetSlide);
+      // Use push (replace: false) so each visited slide registers in browser history with rich titles
       setSearchParams(
         (prev) => {
           const updated = new URLSearchParams(prev);
           updated.set("slide", String(targetSlide));
           return updated;
         },
-        { replace: true }
+        { replace: false }
       );
 
       const targetContent = getDeckSlide(lang, targetSlide);
+      const dynamicTitle = `Upraiser — Lenovo OEM & In-App Traffic Infrastructure | Media Deck (${targetSlide}/${TOTAL_SLIDES}: ${targetContent.title})`;
+      document.title = dynamicTitle;
+
       trackAction("deck_view", getActiveSeconds(), {
         current_slide: targetSlide,
         total_slides: TOTAL_SLIDES,

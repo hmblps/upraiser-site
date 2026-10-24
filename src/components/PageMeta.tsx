@@ -68,6 +68,18 @@ export function PageMeta() {
       nameAttr: "name",
       name: "description",
     });
+    if (meta.keywords) {
+      upsertMeta('meta[name="keywords"]', "content", meta.keywords, {
+        tag: "meta",
+        nameAttr: "name",
+        name: "keywords",
+      });
+    }
+    upsertMeta('meta[property="og:site_name"]', "content", "UPRAISER — Lenovo OEM & In-App Traffic Infrastructure", {
+      tag: "meta",
+      nameAttr: "property",
+      name: "og:site_name",
+    });
     upsertMeta('meta[property="og:title"]', "content", meta.title);
     upsertMeta('meta[property="og:description"]', "content", meta.description);
     upsertMeta('meta[property="og:url"]', "content", url);

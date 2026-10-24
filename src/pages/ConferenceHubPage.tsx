@@ -229,8 +229,10 @@ export function ConferenceHubPage() {
   const isPlain = HUB_PLAIN_SCRIPT.has(lang);
   const reduced = useReducedMotion();
 
-  // Keep meta robots noindex
+  // Keep meta robots noindex and set rich document.title for browser history & Omnibox autocomplete
   useEffect(() => {
+    document.title = "Upraiser — Lenovo OEM & In-App Traffic Infrastructure | Connect Hub";
+
     let tag = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (!tag) {
       tag = document.createElement("meta");

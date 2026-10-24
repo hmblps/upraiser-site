@@ -66,6 +66,7 @@ export function useAppleSpatialParallax(): AppleSpatialParallax {
   const targetRef = useRef({ x: 0, y: 0 });
   const currentRef = useRef({ x: 0, y: 0 });
   const rafRef = useRef<number | null>(null);
+  const hasOrientationRef = useRef(false);
 
   useEffect(() => {
     if (reduced || typeof window === "undefined") return;
@@ -83,6 +84,7 @@ export function useAppleSpatialParallax(): AppleSpatialParallax {
     // 2. Mobile Gyroscope / DeviceOrientation handler (Apple tilt parallax)
     const handleDeviceOrientation = (e: DeviceOrientationEvent) => {
       if (e.gamma === null || e.beta === null) return;
+      hasOrientationRef.current = true;
       // gamma: left-to-right tilt in [-90, 90]. Highly responsive threshold: 8 deg = full tilt
       // beta: front-to-back tilt in [-180, 180]. Typical handheld reading angle is ~42 deg
       const normX = Math.max(-1, Math.min(1, e.gamma / 8));
@@ -92,7 +94,8 @@ export function useAppleSpatialParallax(): AppleSpatialParallax {
 
     // 3. Mobile Motion Acceleration / Gravity fallback handler
     const handleDeviceMotion = (e: DeviceMotionEvent) => {
-      if (!e.accelerationIncludingGravity) return;
+      // If primary DeviceOrientation is already streaming data, skip motion to prevent sensor conflicts
+      if (hasOrientationRef.current || !e.accelerationIncludingGravity) return;
       const { x: ax, y: ay } = e.accelerationIncludingGravity;
       if (ax === null || ay === null) return;
       // ax: lateral gravity component (left/right tilt)
@@ -103,9 +106,9 @@ export function useAppleSpatialParallax(): AppleSpatialParallax {
     };
 
     // Auto-request iOS 13+ DeviceOrientation and DeviceMotionEvent permission on first transient user gesture
-    // WebKit strictly requires 'click', 'touchend', or 'pointerup' (touchstart is rejected by WebKit).
+    // Synchronously called inside user gesture to strictly satisfy WebKit transient activation requirements.
     let permissionRequested = false;
-    const requestSensors = async () => {
+    const requestSensors = () => {
       if (permissionRequested) return;
       permissionRequested = true;
 
@@ -114,12 +117,13 @@ export function useAppleSpatialParallax(): AppleSpatialParallax {
         typeof DeviceOrientationEvent !== "undefined" &&
         typeof (DeviceOrientationEvent as any).requestPermission === "function"
       ) {
-        try {
-          const perm = await (DeviceOrientationEvent as any).requestPermission();
-          if (perm === "granted") {
-            window.addEventListener("deviceorientation", handleDeviceOrientation, { passive: true });
-          }
-        } catch {}
+        (DeviceOrientationEvent as any).requestPermission()
+          .then((perm: string) => {
+            if (perm === "granted") {
+              window.addEventListener("deviceorientation", handleDeviceOrientation, { passive: true });
+            }
+          })
+          .catch(() => {});
       }
 
       // DeviceMotionEvent.requestPermission (Chrome iOS / WebKit fallback)
@@ -127,12 +131,13 @@ export function useAppleSpatialParallax(): AppleSpatialParallax {
         typeof DeviceMotionEvent !== "undefined" &&
         typeof (DeviceMotionEvent as any).requestPermission === "function"
       ) {
-        try {
-          const perm = await (DeviceMotionEvent as any).requestPermission();
-          if (perm === "granted") {
-            window.addEventListener("devicemotion", handleDeviceMotion, { passive: true });
-          }
-        } catch {}
+        (DeviceMotionEvent as any).requestPermission()
+          .then((perm: string) => {
+            if (perm === "granted") {
+              window.addEventListener("devicemotion", handleDeviceMotion, { passive: true });
+            }
+          })
+          .catch(() => {});
       }
     };
 
@@ -140,10 +145,12 @@ export function useAppleSpatialParallax(): AppleSpatialParallax {
     window.addEventListener("deviceorientation", handleDeviceOrientation, { passive: true });
     window.addEventListener("devicemotion", handleDeviceMotion, { passive: true });
 
-    // Transient user gesture listeners (compliant with iOS Safari & Chrome WebKit security)
+    // Transient user gesture listeners across document and window (compliant with iOS Safari WebKit security)
     window.addEventListener("click", requestSensors, { passive: true });
     window.addEventListener("touchend", requestSensors, { passive: true });
     window.addEventListener("pointerup", requestSensors, { passive: true });
+    document.addEventListener("click", requestSensors, { passive: true });
+    document.addEventListener("touchend", requestSensors, { passive: true });
 
     // 4. Mobile Touch Drag Parallax (fluid interactive fallback on touch screens)
     const handleTouchMove = (e: TouchEvent) => {
