@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
-**Date:** October 23, 2026
+**Date:** October 24, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v2.2.49-stable`
+**Tag:** `v2.2.56-stable`
 
 ---
 
@@ -93,7 +93,7 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 
 ### A. Root Causes Identified & Fixed
 1. **WebKit / Mobile Safari `data:` URI Security Blocker:** Mobile Safari on iOS strictly blocks top-level navigation and downloads for `data:` URIs (`data:text/vcard;charset=utf-8,...`), causing clicks to silently fail with zero action (except client-side visual triggers like star acceleration).
-   - *Fix:* Switched primary download anchor and `triggerVCardDownload` to the real static endpoint `/Alex_Upraiser.vcf?v=7` served with `Content-Type: text/vcard; charset=utf-8` and `Content-Disposition: inline; filename="Alex_Upraiser.vcf"`. Safari natively intercepts this HTTP response and immediately presents the native contact poster without leaving the page.
+   - *Fix:* Switched primary download anchor and `triggerVCardDownload` to the real static endpoint `/Alex_Upraiser.vcf?v=8` served with `Content-Type: text/vcard; charset=utf-8` and `Content-Disposition: inline; filename="Alex_Upraiser.vcf"`. Safari natively intercepts this HTTP response and immediately presents the native contact poster without leaving the page.
 2. **Name Formatting in iOS Contacts:** In iOS `CNContactViewController`, the bold headline is generated from `N: [Family Name];[Given Name];;;`. Setting `N:Ostroukhov;Oleksii;;;` forced iOS to render `Oleksii Ostroukhov`.
    - *Fix:* Configured `N:Upraiser;Alex;;;` and `FN:Alex Upraiser`. iOS now cleanly displays the headline **Alex Upraiser**, with monogram fallback **AU**.
    - *Searchability:* Full legal name and handle are placed into `ORG:Oleksii Ostroukhov · UPRAISER Agency LLP · TG @homeboylebz`. Under the headline, this renders in small gray subtext without creating extra cards, allowing Spotlight and Contacts to find the card by *Alex*, *Oleksii*, *Ostroukhov*, or *Upraiser*.
@@ -102,7 +102,7 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 
 ### A2. Seamless Save: No Download Prompt (v2.2.54)
 - **Cause of the "Download contact.vcf?" popup:** the `download` attribute on the anchor tells Safari and Chrome to save the file to the Downloads folder instead of handing it to the Contacts app.
-- **Fix:** removed `download` from the One-Tap Save anchor. Both the anchor and the Clip In handler (`triggerVCardDownload`) now navigate directly to the static `/Alex_Upraiser.vcf?v=7` (no Blob, no `download`, no `target="_blank"`). The server replies with `Content-Type: text/vcard; charset=utf-8` and `Content-Disposition: inline`, so the browser opens the native contact sheet on top of the current page.
+- **Fix:** removed `download` from the One-Tap Save anchor. Both the anchor and the Clip In handler (`triggerVCardDownload`) now navigate directly to the static `/Alex_Upraiser.vcf?v=8` (no Blob, no `download`, no `target="_blank"`). The server replies with `Content-Type: text/vcard; charset=utf-8` and `Content-Disposition: inline`, so the browser opens the native contact sheet on top of the current page.
 - **Lead delivery:** the `/api/contact` and Web3Forms fetches use `keepalive: true`, so the lead is still delivered when navigation to the `.vcf` starts in the same tick.
 - **Cleanup:** removed the unused `src/pages/alexVCardData.ts` data-URI module and its generator block (data: URIs are blocked by WebKit).
 
@@ -119,11 +119,55 @@ VERSION:3.0
 PRODID:-//Apple Inc.//macOS 27.0.1//EN
 N:Upraiser;Alex;;;
 FN:Alex Upraiser
-ORG:Oleksii Ostroukhov · UPRAISER Agency LLP · TG @homeboylebz
-TITLE:Founder & Lead · Direct Mobile UA & OEM Infra
+ORG:Supply & Demand
+TITLE:Oleksii Ostroukhov
 TEL;TYPE=CELL,VOICE,PREF:+40724787390
 EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk
 URL;TYPE=WORK:https://upraiser.co.uk/connect
 PHOTO;ENCODING=b;TYPE=JPEG:[FOLDED_BASE64]
 END:VCARD
 ```
+
+---
+
+## 4. Android & Samsung Internet Architecture: Why Download Prompts Occur & Intent Diagnostics Lab (v2.2.56)
+
+### A. Architectural Divergence: iOS QuickLook vs Android Download Flow
+1. **iOS (Safari / Chrome CriOS):**
+   - The WebKit engine includes an in-process QuickLook vCard viewer.
+   - When receiving `Content-Type: text/vcard; charset=utf-8` without `Content-Disposition: attachment` or a `download` HTML attribute, WebKit does not write to the file system.
+   - It directly invokes `CNContactViewController` as a native overlay sheet.
+2. **Android (Samsung Internet & Chrome for Android):**
+   - Neither Blink nor Samsung Internet has an in-browser QuickLook vCard renderer.
+   - The browser engine must save the MIME payload to local storage (`/storage/emulated/0/Download/`) through Android's `DownloadManager` before the OS can hand the file to the system Contacts app.
+   - **Samsung Internet:** Strictly enforces a security confirmation modal (*"Download file?"* / *"Скачать файл?"*) prior to writing any file to local storage. This modal cannot be suppressed via HTTP response headers (`inline` vs `attachment`).
+   - **Chrome on Android:** If a file named `contact.vcf` or `Alex_Upraiser.vcf` already exists in the Downloads folder, Chrome prompts *"Download contact.vcf again?"* to prevent silent overwrites.
+
+### B. Technical Evaluation: Argon's Proposed `intent:#Intent` Protocol
+Argon proposed switching the Android save mechanism to an Android Intent URI:
+```text
+intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/contact;S.name=Alex%20Upraiser;S.phone=%2B40724787390;S.email=alex%40upraiser.co.uk;S.company=Supply%20%26%20Demand;S.job_title=Oleksii%20Ostroukhov;S.notes=https%3A%2F%2Fupraiser.co.uk%2Fconnect;end
+```
+
+**Pros:**
+- When supported, instructs the Android OS to launch the Contacts editor directly (`ContactsContract.Intents.Insert`) with pre-filled fields without initiating a file download.
+
+**Cons & Constraints:**
+1. **Chrome Android Intent Security Policy (BROWSABLE Category):**
+   - Since Chrome 25+, Android Chrome enforces strict security checks on `intent:` URI navigation triggered from web pages.
+   - Chrome blocks navigation to intent targets unless the receiving app component explicitly declares `<category android:name="android.intent.category.BROWSABLE" />` in its `AndroidManifest.xml`.
+   - The native `android.intent.action.INSERT` action in OEM Contacts apps (Samsung Contacts, Google Contacts) is typically registered under `CATEGORY_DEFAULT`, not `CATEGORY_BROWSABLE`. In Chrome, tapping an unbrowsable intent results in a silent drop or `ERR_UNKNOWN_URL_SCHEME`.
+2. **Binary Photo / Avatar Incompatibility:**
+   - Intent URIs pass data as URL query extras (`S.name`, `S.phone`). They cannot transmit binary image buffers or base64 photo payloads into `ContactsContract`. Contacts created via this intent will always lack the embedded photo.
+3. **OEM Inconsistencies:**
+   - Different Android manufacturers (Samsung OneUI, Xiaomi MIUI/HyperOS, Google Pixel) parse intent extras differently (e.g. `S.company` vs `S.job_title`).
+
+### C. Live Diagnostics Lab (`/connect/test` · `ConnectIntentTestPage.tsx`)
+To verify actual real-world behavior on Samsung Internet and Chrome without disrupting production networking:
+1. Created unlisted test harness page at `/connect/test` (aliased to `/test-intent`).
+2. Provides four interactive test methods:
+   - **Method 1: Direct Anchor Intent (Argon Spec)** — Pure `<a href="intent:...">`.
+   - **Method 2: Smart Intent with 1.5s Fallback** — JS triggered intent; if the page stays visible for >1.5s (meaning the intent failed to switch apps), automatically falls back to `/Alex_Upraiser.vcf?v=8`.
+   - **Method 3: MIME VIEW Intent** — `intent:https://...#Intent;action=VIEW;type=text/vcard;end`.
+   - **Method 4: Production Baseline** — Direct HTTP static `/Alex_Upraiser.vcf?v=8`.
+3. Displays a real-time event console capturing `visibilitychange`, `window.blur`, `window.focus`, and user agent string for precise device verification.

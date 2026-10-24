@@ -19,6 +19,7 @@ const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((m) => ({ de
 const HeroCapturePage = lazy(() => import("./pages/HeroCapturePage").then((m) => ({ default: m.HeroCapturePage })));
 const HeroLitePreviewPage = lazy(() => import("./pages/HeroLitePreviewPage").then((m) => ({ default: m.HeroLitePreviewPage })));
 const ConferenceHubPage = lazy(() => import("./pages/ConferenceHubPage"));
+const ConnectIntentTestPage = lazy(() => import("./pages/ConnectIntentTestPage"));
 
 function RouteFallback() {
   return (
@@ -99,6 +100,8 @@ export default function App() {
       <Routes>
         {/* Unlisted Conference Networking Hub (Mobile-first, outside SiteLayout, unindexed) */}
         <Route path="connect" element={<ConferenceHubPage />} />
+        <Route path="connect/test" element={<ConnectIntentTestPage />} />
+        <Route path="test-intent" element={<Navigate to="/connect/test" replace />} />
         <Route path="meet" element={<Navigate to="/connect" replace />} />
         <Route path="card" element={<Navigate to="/connect" replace />} />
         <Route path="hub" element={<Navigate to="/connect" replace />} />
