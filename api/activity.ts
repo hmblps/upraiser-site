@@ -208,29 +208,46 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     session_end: "🚪 Завершение сессии",
   };
 
+  const formatEventLabel = (type: string, meta: any): string => {
+    if (type === "deck_view") {
+      if (meta?.current_slide) {
+        const slideName = meta?.slide_title ? ` «${meta.slide_title}»` : "";
+        return `📊 Просмотр слайда ${meta.current_slide}/20${slideName}`;
+      }
+      return "📊 Просмотр медиадека (Traffic Infrastructure Deck)";
+    }
+    if (type === "heartbeat" && meta?.current_slide) {
+      return `⏱ Чтение слайда ${meta.current_slide}/20 (${meta.slide_title || "Медиадек"})`;
+    }
+    if (type === "page_scroll" && meta?.scrollDepth) {
+      return `📜 Глубокий скролл страницы (${meta.scrollDepth}%)`;
+    }
+    return eventDescriptions[type] || type;
+  };
+
   const activityLines =
     recentActivities.length > 0
       ? recentActivities
           .map((a) => {
             const timeStr = new Date(a.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-            const label = eventDescriptions[a.event_type] || a.event_type;
+            const label = formatEventLabel(a.event_type, a.metadata);
             const dur = a.duration_seconds > 0 ? ` (${a.duration_seconds} сек)` : "";
             return `• <strong>${timeStr}</strong>: ${label}${dur}`;
           })
           .join("<br/>")
-      : `• ${eventDescriptions[eventType] || eventType} (${durationSeconds} сек)`;
+      : `• ${formatEventLabel(eventType, metadata)} (${durationSeconds} сек)`;
 
   const telegramActivityLines =
     recentActivities.length > 0
       ? recentActivities
           .map((a) => {
             const timeStr = new Date(a.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-            const label = eventDescriptions[a.event_type] || a.event_type;
+            const label = formatEventLabel(a.event_type, a.metadata);
             const dur = a.duration_seconds > 0 ? ` (${a.duration_seconds}s)` : "";
             return `  • <code>${timeStr}</code>: ${label}${dur}`;
           })
           .join("\n")
-      : `  • ${eventDescriptions[eventType] || eventType} (${durationSeconds}s)`;
+      : `  • ${formatEventLabel(eventType, metadata)} (${durationSeconds}s)`;
 
   // 8. Send Resend Email Digest
   const resendApiKey = process.env.RESEND_API_KEY;

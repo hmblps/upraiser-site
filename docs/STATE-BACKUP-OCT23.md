@@ -266,3 +266,47 @@ To defend against degraded cellular connectivity inside conference venues:
    - **Instant Telegram Bot Alert:**
      - Formatted with HTML styling and direct link to the Conference Hub for on-the-go conference follow-ups.
    - Rewritten `/api/telemetry` $\rightarrow$ `/api/activity` in `vercel.json` for unified endpoint compatibility.
+
+## 7. Multilingual Interactive Media Deck (`/deck` · `v2.2.62-stable`)
+
+### A. Architecture & Slide Engine (`MediaDeckViewerPage.tsx` · `mediaDeckData.ts`)
+1. **Interactive Vector Slide Presentation:**
+   - 20 structured slides migrated from static PDF (`/Upraiser_Traffic_Infrastructure.pdf`) into a high-performance vector web slider.
+   - Fixed aspect-ratio box (`sm:aspect-[16/9]`) on desktop and tablet, dynamically adapting to full readable card heights on mobile portrait screens (`< 640px`) without text truncation or microscopic fonts.
+   - Dual-Mode Switcher:
+     - **Interactive Mode (Default)**: Pure React + Tailwind + SVG icons + 22-language real-time translation.
+     - **Visual Mode**: High-resolution 1:1 original WebP slide graphics (`public/deck/slides/slide-01.webp` .. `slide-20.webp`, total 1.8 MB).
+2. **Touch & Keyboard Ergonomics:**
+   - Touch gesture support: `onTouchStart` and `onTouchEnd` swipe navigation ($\ge 45$px horizontal threshold).
+   - Keyboard hotkeys: `ArrowRight` / `Space` (next), `ArrowLeft` / `Backspace` (prev), `KeyF` (fullscreen toggle).
+   - Tactile touch targets $\ge 44 \times 44$px for all controls.
+   - Fullscreen API support with automatic orientation scaling.
+3. **Multilingual Localisation Engine (`mediaDeckI18n.ts`):**
+   - Full 22-language support matching Conference Hub: EN, RU, RO, KA, ES, DE, FR, ZH, JA, KO, PT, IT, PL, TR, UK, AR, HE, HI, VI, TH, ID, FIL.
+   - Dynamic device locale detection via `detectDeviceLang()`.
+   - On-the-fly language modal selector updating `?lang=...` parameter in URL.
+   - Directionality (`dir="rtl"`) for Arabic and Hebrew; unforced plain script for Georgian, Arabic, Hebrew, CJK, Hindi, Thai (`HUB_PLAIN_SCRIPT`).
+
+### B. Deep Engagement Telemetry Integration
+1. **Live Slide-Level Heartbeats:**
+   - `useActivityTracker("media_deck_viewer")` supplies dynamic metadata getter:
+     - `current_slide`: current slide index (1 to 20).
+     - `total_slides`: 20.
+     - `slide_title`: localized slide title.
+     - `lang`: active language.
+     - `viewMode`: "interactive" | "visual".
+2. **Serverless Activity Reporting (`api/activity.ts`):**
+   - Server-side formatters now label events with exact slide position:
+     - `📊 Просмотр слайда 13/20 «High-Value Acquisition: Fanatics & Vantage Markets» (RO)`
+     - `⏱ Чтение слайда 5/20 («Pillar 01 · Hardware Advantage»)`
+   - Allows instant sales discovery of which vertical (iGaming, FinTech, OEM Preloads) captivated the prospect.
+
+### C. Safe Rollback Checkpoints
+- **Pre-deck Tag:** `backup-pre-deck-v2.2.61`
+- **Pre-deck Branch:** `backup-pre-multilingual-deck-20261024`
+- **Rollback Command:**
+  ```bash
+  git reset --hard backup-pre-deck-v2.2.61
+  git push origin main --force
+  ```
+

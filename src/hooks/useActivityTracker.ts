@@ -8,12 +8,17 @@ import {
 
 const HEARTBEAT_INTERVAL_MS = 10 * 1000; // 10s ping
 
-export function useActivityTracker(pageContext: string = "connect") {
+export function useActivityTracker(
+  pageContext: string = "connect",
+  getExtraMetadata?: () => Record<string, any>
+) {
   const activeSecondsRef = useRef<number>(0);
   const isVisibleRef = useRef<boolean>(true);
   const lastTickTimeRef = useRef<number>(Date.now());
   const maxScrollDepthRef = useRef<number>(0);
   const scrollMilestonesHitRef = useRef<Set<number>>(new Set());
+  const extraMetaRef = useRef(getExtraMetadata);
+  extraMetaRef.current = getExtraMetadata;
 
   const getSession = useCallback(() => {
     return getOrInitHubSession();
@@ -34,6 +39,7 @@ export function useActivityTracker(pageContext: string = "connect") {
           url: typeof window !== "undefined" ? window.location.pathname : "",
           visitCount: session.visitCount,
           maxScrollDepth: maxScrollDepthRef.current,
+          ...(extraMetaRef.current ? extraMetaRef.current() : {}),
         },
       });
     },
@@ -142,5 +148,6 @@ export function useActivityTracker(pageContext: string = "connect") {
 
   return {
     trackAction: trackLeadAction,
+    getActiveSeconds: () => activeSecondsRef.current,
   };
 }

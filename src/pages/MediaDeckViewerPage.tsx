@@ -1,105 +1,573 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { SiteGrain } from "../components/SiteGrain";
 import { useActivityTracker } from "../hooks/useActivityTracker";
-import { trackLeadAction } from "../lib/activityTracker";
+import {
+  DECK_SLIDES_META,
+  TOTAL_SLIDES,
+  type SlideVisualMeta,
+} from "./mediaDeckData";
+import {
+  getDeckSlide,
+  getDeckUI,
+  HUB_LANGS,
+  HUB_LANG_NAMES,
+  HUB_RTL,
+  HUB_PLAIN_SCRIPT,
+  type HubLang,
+  type DeckSlideContent,
+} from "./mediaDeckI18n";
+import { detectDeviceLang } from "./conferenceHubI18n";
 
 const PDF_URL = "/Upraiser_Traffic_Infrastructure.pdf";
 
 export default function MediaDeckViewerPage() {
-  const { trackAction } = useActivityTracker("media_deck_viewer");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // 1. Language state synced with URL ?lang=...
+  const [lang, setLang] = useState<HubLang>(() => {
+    const p = searchParams.get("lang")?.toLowerCase().trim();
+    if (p && (HUB_LANGS as readonly string[]).includes(p)) {
+      return p as HubLang;
+    }
+    return detectDeviceLang();
+  });
+
+  // 2. Slide state (1 to 20) synced with URL ?slide=N
+  const [currentSlide, setCurrentSlide] = useState<number>(() => {
+    const s = parseInt(searchParams.get("slide") || "1", 10);
+    return s >= 1 && s <= TOTAL_SLIDES ? s : 1;
+  });
+
+  // 3. View mode: interactive multilingual vs original visual graphics
+  const [viewMode, setViewMode] = useState<"interactive" | "visual">("interactive");
+  const [langModalOpen, setLangModalOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartXRef = useRef<number>(0);
+  const touchStartYRef = useRef<number>(0);
+
+  // Synchronize language when URL search param changes
+  useEffect(() => {
+    const p = searchParams.get("lang")?.toLowerCase().trim();
+    if (p && (HUB_LANGS as readonly string[]).includes(p) && p !== lang) {
+      setLang(p as HubLang);
+    }
+  }, [searchParams, lang]);
+
+  const handleSetLang = useCallback(
+    (next: HubLang) => {
+      setLang(next);
+      setSearchParams(
+        (prev) => {
+          const updated = new URLSearchParams(prev);
+          updated.set("lang", next);
+          return updated;
+        },
+        { replace: true }
+      );
+      setLangModalOpen(false);
+    },
+    [setSearchParams]
+  );
+
+  const slideContent: DeckSlideContent = getDeckSlide(lang, currentSlide);
+  const slideMeta: SlideVisualMeta =
+    DECK_SLIDES_META.find((m) => m.slideNumber === currentSlide) || DECK_SLIDES_META[0];
+  const ui = getDeckUI(lang);
+
+  // 4. Telemetry Tracker with live slide metadata in periodic heartbeats
+  const { trackAction, getActiveSeconds } = useActivityTracker("media_deck_viewer", () => ({
+    current_slide: currentSlide,
+    total_slides: TOTAL_SLIDES,
+    slide_title: slideContent.title,
+    lang,
+    viewMode,
+  }));
+
+  // Track initial deck view
+  useEffect(() => {
+    trackAction("deck_view", 0, {
+      current_slide: currentSlide,
+      total_slides: TOTAL_SLIDES,
+      slide_title: slideContent.title,
+      lang,
+      viewMode,
+      source: "deck_page_mount",
+    });
+  }, []);
+
+  const goToSlide = useCallback(
+    (targetSlide: number) => {
+      if (targetSlide < 1 || targetSlide > TOTAL_SLIDES) return;
+      setCurrentSlide(targetSlide);
+      setSearchParams(
+        (prev) => {
+          const updated = new URLSearchParams(prev);
+          updated.set("slide", String(targetSlide));
+          return updated;
+        },
+        { replace: true }
+      );
+
+      const targetContent = getDeckSlide(lang, targetSlide);
+      trackAction("deck_view", getActiveSeconds(), {
+        current_slide: targetSlide,
+        total_slides: TOTAL_SLIDES,
+        slide_title: targetContent.title,
+        lang,
+        viewMode,
+      });
+    },
+    [lang, viewMode, trackAction, getActiveSeconds, setSearchParams]
+  );
+
+  const prevSlide = useCallback(() => {
+    if (currentSlide > 1) goToSlide(currentSlide - 1);
+  }, [currentSlide, goToSlide]);
+
+  const nextSlide = useCallback(() => {
+    if (currentSlide < TOTAL_SLIDES) goToSlide(currentSlide + 1);
+  }, [currentSlide, goToSlide]);
+
+  // Keyboard navigation: Left / Right arrows & Space
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input
+      if (["INPUT", "TEXTAREA"].includes((e.target as HTMLElement)?.tagName)) return;
+
+      if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === "KeyF" && !e.ctrlKey && !e.metaKey) {
+        toggleFullscreen();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nextSlide, prevSlide]);
+
+  // Touch Swipe navigation
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+
+    // Must be predominantly horizontal swipe > 45px
+    if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      if (deltaX < 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen().catch(() => {});
+      setIsFullscreen(false);
+    }
+  };
 
   useEffect(() => {
-    trackAction("deck_view", 0, { source: "deck_page_opened" });
-  }, [trackAction]);
+    const onFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
+  const isRtl = HUB_RTL.has(lang);
+  const isPlainScript = HUB_PLAIN_SCRIPT.has(lang);
 
   return (
-    <div className="min-h-[100dvh] bg-[#030712] text-white flex flex-col font-sans relative selection:bg-[#ff003b] selection:text-white">
+    <div
+      ref={containerRef}
+      dir={isRtl ? "rtl" : "ltr"}
+      className="min-h-[100dvh] bg-[#030712] text-white flex flex-col font-sans relative selection:bg-[#ff003b] selection:text-white overflow-x-hidden"
+    >
       <SiteGrain />
 
-      {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-20 bg-[#090d16]/90 backdrop-blur-md border-b border-white/10 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
+      {/* Top Header & Navigation Bar */}
+      <header className="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-white/10 px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+        <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse min-w-0">
           <Link
-            to="/connect"
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white transition-colors"
-            title="Back to Conference Hub"
+            to={`/connect?lang=${lang}`}
+            className="min-h-[44px] min-w-[44px] px-2.5 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white transition-colors border border-white/5"
+            title={ui.backToHub}
           >
-            ←
+            <span className="text-sm font-semibold">{ui.backToHub}</span>
           </Link>
-          <div>
-            <div className="text-[10px] font-mono uppercase tracking-wider text-[#FECF09]">
-              Expedition Dossier · 20 Slides
+          <div className="min-w-0">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-[#FECF09] flex items-center space-x-1.5 rtl:space-x-reverse">
+              <span>{ui.slideOf.replace("{current}", String(currentSlide)).replace("{total}", String(TOTAL_SLIDES))}</span>
+              <span className="text-white/30">·</span>
+              <span className="text-white/60 hidden xs:inline uppercase">{slideMeta.category}</span>
             </div>
-            <h1 className="text-sm font-semibold text-white tracking-tight truncate max-w-[200px] sm:max-w-none">
-              Traffic Infrastructure & OEM Preloads
+            <h1 className="text-xs sm:text-sm font-semibold text-white tracking-tight truncate max-w-[140px] sm:max-w-xs md:max-w-md">
+              {slideContent.title}
             </h1>
           </div>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <a
-            href={PDF_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackLeadAction("deck_view", 0, { action: "open_fullscreen" })}
-            className="min-h-[44px] px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-medium text-white flex items-center space-x-1.5 transition-colors"
+        {/* Action Controls */}
+        <div className="flex items-center space-x-1.5 sm:space-x-2 rtl:space-x-reverse shrink-0">
+          {/* Interactive vs Visual Mode Switcher */}
+          <div className="hidden md:flex items-center rounded-xl bg-white/5 p-0.5 border border-white/10">
+            <button
+              onClick={() => setViewMode("interactive")}
+              className={`min-h-[36px] px-2.5 py-1 text-xs rounded-lg font-medium transition-colors ${
+                viewMode === "interactive"
+                  ? "bg-[#e63558] text-white shadow-sm"
+                  : "text-neutral-400 hover:text-white"
+              }`}
+            >
+              {ui.interactiveMode}
+            </button>
+            <button
+              onClick={() => setViewMode("visual")}
+              className={`min-h-[36px] px-2.5 py-1 text-xs rounded-lg font-medium transition-colors ${
+                viewMode === "visual"
+                  ? "bg-[#e63558] text-white shadow-sm"
+                  : "text-neutral-400 hover:text-white"
+              }`}
+            >
+              {ui.visualMode}
+            </button>
+          </div>
+
+          {/* Language Selector Trigger */}
+          <button
+            onClick={() => setLangModalOpen(true)}
+            className="min-h-[44px] min-w-[44px] px-2.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-neutral-200 flex items-center space-x-1 rtl:space-x-reverse transition-colors"
+            title={ui.selectLanguage}
           >
-            <span>Open PDF</span>
-            <span aria-hidden className="text-[#FECF09]">↗</span>
-          </a>
+            <span>🌐</span>
+            <span className="font-mono uppercase font-bold text-[#FECF09]">{lang}</span>
+            <span className="text-[10px] text-neutral-400">▼</span>
+          </button>
+
+          {/* Download Original PDF Button */}
           <a
             href={PDF_URL}
             download="Upraiser_Traffic_Infrastructure.pdf"
-            onClick={() => trackLeadAction("deck_view", 0, { action: "download_pdf" })}
-            className="min-h-[44px] px-3.5 py-2 rounded-xl bg-[#e63558] hover:bg-[#ff003b] text-xs font-medium text-white flex items-center space-x-1.5 transition-colors shadow-sm shadow-[#e63558]/30"
+            onClick={() =>
+              trackAction("deck_view", getActiveSeconds(), {
+                action: "download_original_pdf",
+                current_slide: currentSlide,
+                lang,
+              })
+            }
+            className="min-h-[44px] px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-xs font-medium text-white flex items-center space-x-1.5 rtl:space-x-reverse transition-colors"
+            title="Download PDF"
           >
-            <span>Download</span>
-            <span aria-hidden>⬇</span>
+            <span className="hidden sm:inline">{ui.downloadPdf}</span>
+            <span className="sm:hidden">{ui.openPdfViewer}</span>
+            <span aria-hidden className="text-[#FECF09]">↗</span>
           </a>
+
+          {/* Fullscreen Button */}
+          <button
+            onClick={toggleFullscreen}
+            className="min-h-[44px] min-w-[44px] hidden sm:flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-neutral-300 hover:text-white transition-colors"
+            title={isFullscreen ? ui.exitFullscreen : ui.fullscreen}
+          >
+            {isFullscreen ? "🗗" : "⛶"}
+          </button>
         </div>
       </header>
 
-      {/* Main PDF Viewer Container */}
-      <main className="flex-1 w-full max-w-5xl mx-auto p-2 sm:p-4 flex flex-col relative z-10">
-        <div className="flex-1 w-full bg-neutral-900/60 border border-white/10 rounded-2xl overflow-hidden min-h-[75vh] flex flex-col relative">
-          <object
-            data={`${PDF_URL}#toolbar=0&navpanes=0`}
-            type="application/pdf"
-            className="w-full flex-1 min-h-[75vh] rounded-2xl"
-          >
-            {/* Fallback for browsers without inline PDF rendering (e.g. mobile Chrome) */}
-            <div className="p-8 text-center flex flex-col items-center justify-center flex-1 space-y-4">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
-                📄
-              </div>
-              <div className="space-y-1">
-                <h2 className="text-base font-semibold text-white">UPRAISER Expedition Dossier</h2>
-                <p className="text-xs text-neutral-400 max-w-sm">
-                  Mobile UA & OEM Infrastructure presentation (2.2 MB). Tap below to open directly in Your native document viewer.
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full max-w-xs">
-                <a
-                  href={PDF_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full min-h-[48px] py-3 px-6 rounded-xl bg-[#e63558] hover:bg-[#ff003b] text-white font-medium text-sm text-center flex items-center justify-center space-x-2 transition-colors"
+      {/* Main Slide Presentation Stage */}
+      <main
+        className="flex-1 w-full max-w-5xl mx-auto p-2 sm:p-4 flex flex-col justify-center relative z-10"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Aspect Ratio Slide Container */}
+        <div
+          className={`relative w-full rounded-2xl border border-white/10 bg-[#080c16] shadow-2xl overflow-hidden flex flex-col transition-all duration-300 sm:aspect-[16/9] min-h-[500px] sm:min-h-0 ${
+            isFullscreen ? "sm:max-h-[85vh]" : ""
+          }`}
+          style={{
+            backgroundImage: `radial-gradient(circle at 85% 15%, ${slideMeta.accentColor}18 0%, transparent 60%), radial-gradient(circle at 15% 85%, #030712 0%, transparent 70%)`,
+          }}
+        >
+          {viewMode === "visual" ? (
+            /* Visual Mode: 1:1 High-Res Slide Graphics */
+            <div className="relative w-full h-full flex items-center justify-center bg-black/60 p-2 sm:p-4">
+              <img
+                src={slideMeta.imageWebp}
+                alt={slideContent.title}
+                className="w-full h-full object-contain rounded-xl select-none"
+                loading="eager"
+              />
+            </div>
+          ) : (
+            /* Interactive Mode: 100% Vector Multilingual Layout */
+            <div className="relative w-full h-full p-4 sm:p-8 md:p-10 flex flex-col justify-between overflow-y-auto sm:overflow-hidden">
+              {/* Slide Header Zone */}
+              <div className="space-y-2 sm:space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="inline-flex items-center space-x-2 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono uppercase tracking-wider text-neutral-300">
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: slideMeta.accentColor }}
+                    />
+                    <span>{slideContent.kicker}</span>
+                  </div>
+                  <span className="text-[11px] font-mono text-neutral-400">
+                    #{String(currentSlide).padStart(2, "0")} / {TOTAL_SLIDES}
+                  </span>
+                </div>
+
+                <h2
+                  className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight ${
+                    isPlainScript ? "tracking-normal" : ""
+                  }`}
                 >
-                  <span>Open in Viewer</span>
-                  <span>↗</span>
-                </a>
-                <Link
-                  to="/connect"
-                  className="w-full min-h-[48px] py-3 px-6 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium text-sm text-center flex items-center justify-center transition-colors"
-                >
-                  Back to Hub
-                </Link>
+                  {slideContent.title}
+                </h2>
+
+                {slideContent.subtitle && (
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-3xl">
+                    {slideContent.subtitle}
+                  </p>
+                )}
+              </div>
+
+              {/* Slide Core Content Body */}
+              <div className="my-auto py-4 sm:py-6">
+                {/* Variant A: Prominent Numerical Metrics */}
+                {slideContent.metrics && (
+                  <div
+                    className={`grid gap-3 sm:gap-4 ${
+                      slideContent.metrics.length === 3
+                        ? "grid-cols-1 sm:grid-cols-3"
+                        : "grid-cols-1 sm:grid-cols-2"
+                    }`}
+                  >
+                    {slideContent.metrics.map((metric, i) => (
+                      <div
+                        key={i}
+                        className="p-3.5 sm:p-5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-center"
+                      >
+                        <div
+                          className="text-2xl sm:text-4xl font-extrabold font-mono tracking-tight"
+                          style={{ color: slideMeta.accentColor }}
+                        >
+                          {metric.value}
+                        </div>
+                        <div className="text-xs sm:text-sm font-semibold text-white mt-1">
+                          {metric.label}
+                        </div>
+                        {metric.sub && (
+                          <div className="text-[11px] text-neutral-400 mt-0.5">
+                            {metric.sub}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Variant B: Structured Feature Bullets / Pillars */}
+                {slideContent.bullets && (
+                  <div
+                    className={`grid gap-3 sm:gap-4 mt-3 ${
+                      slideContent.bullets.length === 3
+                        ? "grid-cols-1 sm:grid-cols-3"
+                        : "grid-cols-1 sm:grid-cols-2"
+                    }`}
+                  >
+                    {slideContent.bullets.map((b, i) => (
+                      <div
+                        key={i}
+                        className="p-3.5 sm:p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between"
+                      >
+                        <div>
+                          {b.badge && (
+                            <span className="inline-block text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-white/10 text-[#FECF09] font-bold mb-2">
+                              {b.badge}
+                            </span>
+                          )}
+                          <h3 className="text-xs sm:text-sm font-bold text-white mb-1">
+                            {b.title}
+                          </h3>
+                          <p className="text-[11px] sm:text-xs text-neutral-300 leading-relaxed">
+                            {b.desc}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Variant C: Final Slide 20 Onboarding Call To Action */}
+                {currentSlide === 20 && (
+                  <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-[#e63558]/20 via-[#ff003b]/10 to-transparent border border-[#e63558]/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="space-y-0.5 text-center sm:text-left rtl:sm:text-right">
+                      <div className="text-xs font-bold text-white uppercase tracking-wider">
+                        {ui.contactAlex}
+                      </div>
+                      <div className="text-[11px] text-neutral-300">
+                        {slideContent.tagline}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse w-full sm:w-auto">
+                      <Link
+                        to={`/connect?lang=${lang}#clip-in`}
+                        className="flex-1 sm:flex-initial min-h-[44px] px-4 py-2.5 rounded-xl bg-[#e63558] hover:bg-[#ff003b] text-white text-xs font-bold text-center flex items-center justify-center space-x-1.5 transition-colors shadow-lg shadow-[#e63558]/30"
+                      >
+                        <span>{ui.clipInCta}</span>
+                        <span>→</span>
+                      </Link>
+                      <a
+                        href="/contact.vcf"
+                        download="Alex_Upraiser.vcf"
+                        onClick={() =>
+                          trackAction("vcf_download", getActiveSeconds(), {
+                            source: "deck_slide_20",
+                            lang,
+                          })
+                        }
+                        className="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white text-xs font-semibold flex items-center justify-center transition-colors"
+                        title={ui.saveVcf}
+                      >
+                        📇 {ui.saveVcf}
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Slide Bottom Tagline & Brand Footnote */}
+              <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-neutral-400 font-mono">
+                <div className="truncate max-w-full">
+                  {slideContent.tagline || "UPRAISER Agency · Traffic Infrastructure"}
+                </div>
+                <div className="text-neutral-400 hidden sm:block">
+                  {ui.swipeHint}
+                </div>
               </div>
             </div>
-          </object>
+          )}
+        </div>
+
+        {/* Tactile Navigation Slider Controls */}
+        <div className="mt-3 sm:mt-4 flex items-center justify-between gap-2">
+          {/* Previous Button */}
+          <button
+            onClick={prevSlide}
+            disabled={currentSlide <= 1}
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 rtl:space-x-reverse transition-all ${
+              currentSlide <= 1
+                ? "bg-white/5 text-neutral-600 border border-white/5 cursor-not-allowed"
+                : "bg-white/10 hover:bg-white/15 text-white border border-white/10 active:scale-95"
+            }`}
+          >
+            <span>←</span>
+            <span>{ui.prev}</span>
+          </button>
+
+          {/* Interactive Slide Scrubber Track */}
+          <div className="flex-1 max-w-md mx-2 flex items-center space-x-1 sm:space-x-1.5 rtl:space-x-reverse justify-center">
+            {Array.from({ length: TOTAL_SLIDES }).map((_, idx) => {
+              const slideNum = idx + 1;
+              const isActive = slideNum === currentSlide;
+              return (
+                <button
+                  key={slideNum}
+                  onClick={() => goToSlide(slideNum)}
+                  className={`min-h-[36px] min-w-[12px] sm:min-w-[16px] h-3 rounded-full transition-all duration-200 flex items-center justify-center ${
+                    isActive
+                      ? "w-6 sm:w-8 bg-[#FECF09] shadow-md shadow-[#FECF09]/40"
+                      : "w-2 sm:w-3 bg-white/20 hover:bg-white/40"
+                  }`}
+                  title={`Slide ${slideNum}`}
+                  aria-label={`Go to slide ${slideNum}`}
+                />
+              );
+            })}
+          </div>
+
+          {/* Next Button */}
+          <button
+            onClick={nextSlide}
+            disabled={currentSlide >= TOTAL_SLIDES}
+            className={`min-h-[44px] px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 rtl:space-x-reverse transition-all ${
+              currentSlide >= TOTAL_SLIDES
+                ? "bg-white/5 text-neutral-600 border border-white/5 cursor-not-allowed"
+                : "bg-[#e63558] hover:bg-[#ff003b] text-white shadow-lg shadow-[#e63558]/20 active:scale-95"
+            }`}
+          >
+            <span>{ui.next}</span>
+            <span>→</span>
+          </button>
         </div>
       </main>
+
+      {/* Language Selector Modal Popup */}
+      {langModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#0b0f19] border border-white/15 rounded-2xl max-w-lg w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
+            <div className="p-4 border-b border-white/10 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+                <span>🌐</span>
+                <span>{ui.selectLanguage} (22 Languages)</span>
+              </h3>
+              <button
+                onClick={() => setLangModalOpen(false)}
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-4 grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto flex-1">
+              {HUB_LANGS.map((code) => {
+                const isSelected = code === lang;
+                const name = HUB_LANG_NAMES[code] || code;
+                return (
+                  <button
+                    key={code}
+                    onClick={() => handleSetLang(code)}
+                    className={`min-h-[44px] p-2.5 rounded-xl border text-left rtl:text-right flex items-center justify-between transition-colors ${
+                      isSelected
+                        ? "bg-[#e63558]/20 border-[#e63558] text-white font-bold"
+                        : "bg-white/5 border-white/5 hover:bg-white/10 text-neutral-300"
+                    }`}
+                  >
+                    <span className="text-xs truncate">{name}</span>
+                    <span className="text-[10px] font-mono text-neutral-400 uppercase ml-1">
+                      {code}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="p-3 border-t border-white/10 bg-white/[0.02] text-center">
+              <button
+                onClick={() => setLangModalOpen(false)}
+                className="w-full min-h-[44px] py-2 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold text-white"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

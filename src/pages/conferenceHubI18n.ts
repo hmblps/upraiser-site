@@ -68,6 +68,40 @@ export const HUB_PLAIN_SCRIPT: ReadonlySet<HubLang> = new Set<HubLang>([
   "ar", "he", "hi", "zh", "ja", "ko", "th", "ka",
 ]);
 
+/** Match device language against supported languages. */
+export function detectDeviceLang(): HubLang {
+  if (typeof navigator === "undefined") return "en";
+  const langs = navigator.languages?.length ? navigator.languages : [navigator.language || "en"];
+  for (const raw of langs) {
+    if (!raw) continue;
+    const norm = raw.toLowerCase().trim();
+    const primary = norm.split(/[-_]/)[0];
+    if (primary === "zh") return "zh";
+    if (primary === "hi") return "hi";
+    if (primary === "es") return "es";
+    if (primary === "ar") return "ar";
+    if (primary === "fr") return "fr";
+    if (primary === "pt") return "pt";
+    if (primary === "ru" || primary === "be" || primary === "kk") return "ru";
+    if (primary === "id") return "id";
+    if (primary === "de") return "de";
+    if (primary === "ja") return "ja";
+    if (primary === "fil" || primary === "tl") return "fil";
+    if (primary === "tr") return "tr";
+    if (primary === "vi") return "vi";
+    if (primary === "ko") return "ko";
+    if (primary === "th") return "th";
+    if (primary === "it") return "it";
+    if (primary === "pl") return "pl";
+    if (primary === "uk") return "uk";
+    if (primary === "ro" || primary === "mo") return "ro";
+    if (primary === "he") return "he";
+    if (primary === "ka") return "ka";
+    if (primary === "en") return "en";
+  }
+  return "en";
+}
+
 export interface HubDict {
   kicker: string;
   headline: string;
