@@ -518,7 +518,7 @@ export function ConferenceHubPage() {
       <StarfieldAscent warp={isWarping} />
       <SiteGrain />
 
-      {/* Main Column (max 380px) with Apple Spatial 3D Perspective Tilt & Specular Sheen */}
+      {/* Main Column (max 380px) with Apple Spatial 3D Perspective Tilt & Distinct Floating Slide */}
       <motion.div
         variants={containerVariants}
         initial={reduced ? "visible" : "hidden"}
@@ -527,8 +527,8 @@ export function ConferenceHubPage() {
           perspective: 1000,
           transform: reduced
             ? undefined
-            : `perspective(1000px) rotateX(${parallax.rotateX}deg) rotateY(${parallax.rotateY}deg) translate3d(${parallax.x * 4}px, ${parallax.y * 4}px, 0)`,
-          transition: "transform 0.08s ease-out",
+            : `perspective(1000px) rotateX(${parallax.rotateX}deg) rotateY(${parallax.rotateY}deg) translate3d(${parallax.cardX}px, ${parallax.cardY}px, 0)`,
+          willChange: "transform",
           transformStyle: "preserve-3d",
         }}
         className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7 relative"
@@ -639,6 +639,10 @@ export function ConferenceHubPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   dir="auto"
+                  style={{
+                    transform: reduced ? undefined : `translate3d(${parallax.inputX}px, ${parallax.inputY}px, 0)`,
+                    willChange: "transform",
+                  }}
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
                 <input
@@ -655,6 +659,10 @@ export function ConferenceHubPage() {
                   placeholder={t.fieldContact}
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
+                  style={{
+                    transform: reduced ? undefined : `translate3d(${parallax.inputX * 1.2}px, ${parallax.inputY * 1.2}px, 0)`,
+                    willChange: "transform",
+                  }}
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
 
@@ -668,6 +676,10 @@ export function ConferenceHubPage() {
                   whileHover={{ scale: 1.015 }}
                   whileTap={{ scale: 0.98 }}
                   transition={SPRING_TACTILE}
+                  style={{
+                    transform: reduced ? undefined : `translate3d(${parallax.buttonX}px, ${parallax.buttonY}px, 0)`,
+                    willChange: "transform",
+                  }}
                   className={`w-full min-h-[48px] py-3.5 px-6 rounded-2xl ${
                     androidDownloaded
                       ? "bg-emerald-600 border border-emerald-400/30 text-white shadow-lg shadow-emerald-500/25"
@@ -686,7 +698,6 @@ export function ConferenceHubPage() {
                     </>
                   ) : (
                     <>
-                      <span className="text-base leading-none">🧗</span>
                       <span className="font-semibold tracking-wide">{t.btnSubmit}</span>
                       <span aria-hidden className="inline-block rtl:-scale-x-100 font-bold text-[#FECF09]">→</span>
                     </>
