@@ -591,7 +591,13 @@ export function ConferenceHubPage() {
 
         {/* 1. Direct Lead Capture Form & Reciprocal Contact Exchange */}
         <motion.div variants={itemVariants} className="w-full pt-1 space-y-3">
-          <div className="text-center px-1 flex flex-col items-center">
+          <div
+            style={{
+              transform: reduced ? undefined : `translate3d(${parallax.headingX}px, ${parallax.headingY}px, 0)`,
+              willChange: "transform",
+            }}
+            className="text-center px-1 flex flex-col items-center"
+          >
             <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight text-center leading-snug">
               {t.formHeading}
             </h2>
@@ -660,7 +666,7 @@ export function ConferenceHubPage() {
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
                   style={{
-                    transform: reduced ? undefined : `translate3d(${parallax.inputX * 1.2}px, ${parallax.inputY * 1.2}px, 0)`,
+                    transform: reduced ? undefined : `translate3d(${parallax.inputX * 1.45}px, ${parallax.inputY * 1.45}px, 0)`,
                     willChange: "transform",
                   }}
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
@@ -709,7 +715,14 @@ export function ConferenceHubPage() {
         </motion.div>
 
         {/* 3. Direct Team Roster (Monochrome App Icons, Clean Role) */}
-        <motion.div variants={itemVariants} className="w-full space-y-3 pt-1">
+        <motion.div
+          variants={itemVariants}
+          style={{
+            transform: reduced ? undefined : `translate3d(${parallax.rosterX}px, ${parallax.rosterY}px, 0)`,
+            willChange: "transform",
+          }}
+          className="w-full space-y-3 pt-1"
+        >
           {/* Oleksii */}
           <div className="flex items-center justify-between py-2.5 px-1 border-b border-white/[0.06]">
             <div className="flex items-center space-x-3 min-w-0 flex-1">
