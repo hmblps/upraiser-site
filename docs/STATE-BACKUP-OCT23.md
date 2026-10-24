@@ -186,11 +186,13 @@ To minimize friction when prospects exchange contact information standing in lou
    - Tapping "Next" focuses the contact field, surfacing the phone owner's verified phone number or email suggestion.
    - Tapping the blue "Send" action key on the software keyboard immediately submits the form. The entire handshake completes in ~2 seconds with zero manual typing.
 
-### B. Android Smart Download Guidance
-Because Android browsers download the `.vcf` file to local storage before opening:
-- Upon clicking One-Tap Save or submitting Clip In on Android, the primary button label switches for 4.5 seconds to:
+### B. Cross-Platform Smart Download Guidance (Android & Chrome iOS CriOS)
+Because Android browsers (Chrome, Samsung Internet) and third-party iOS browsers (Google Chrome `CriOS`, Firefox `FxiOS`) lack Apple's private `VCardTabHelper` WebKit integration, they route `.vcf` files through their internal download managers:
+- **Safari on iOS:** Exclusively hooks into UIKit `CNContactViewController`, rendering the native sheet directly over the page with zero download dialogs. (99% of attendees scanning via the native iPhone Camera app land directly in Safari).
+- **Chrome on iOS & Android:** Routes `.vcf` to local storage, prompting a download notification.
+- **Adaptive Guidance:** `needsDownloadGuidance` detects Android, Chrome iOS (`CriOS`), and third-party mobile browsers. Upon clicking One-Tap Save or submitting Clip In, the primary button label switches for 4.5 seconds to:
   `✓ Downloaded — Tap "Open"` (translated across all 20 languages, e.g. `✓ Загружено — нажмите «Открыть»` in Russian).
-- Visual treatment transforms into a reassuring emerald badge (`bg-emerald-600 border-emerald-400/30`), guiding the user's gaze directly to the browser's bottom snackbar / notification to tap "Open".
+- Visual treatment transforms into a reassuring emerald badge (`bg-emerald-600 border-emerald-400/30`), guiding the user's thumb directly to the browser's bottom download notification to tap "Open".
 
 ### C. Pre-filled Direct Messaging for Telegram & WhatsApp
 Direct team communication icons under the Clip In form now include pre-composed introductory greetings via URI parameters:

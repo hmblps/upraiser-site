@@ -277,8 +277,13 @@ export function ConferenceHubPage() {
   const [androidDownloaded, setAndroidDownloaded] = useState(false);
   const warpTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isAndroid = useMemo(() => {
-    return typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+  const needsDownloadGuidance = useMemo(() => {
+    if (typeof navigator === "undefined") return false;
+    const ua = navigator.userAgent;
+    const isAndroid = /Android/i.test(ua);
+    const isCriOS = /CriOS/i.test(ua);
+    const isOtherNonSafariIOS = /iPhone|iPad|iPod/i.test(ua) && (!/Safari/i.test(ua) || /FxiOS|OPiOS|EdgiOS/i.test(ua));
+    return isAndroid || isCriOS || isOtherNonSafariIOS;
   }, []);
 
   const triggerWarp = useCallback((durationMs = 2000) => {
@@ -380,7 +385,7 @@ export function ConferenceHubPage() {
           navigator.vibrate(18);
         } catch {}
       }
-      if (isAndroid) {
+      if (needsDownloadGuidance) {
         setAndroidDownloaded(true);
         setTimeout(() => setAndroidDownloaded(false), 4500);
       }
@@ -581,7 +586,7 @@ export function ConferenceHubPage() {
           <motion.a
             href={VCARD_URL}
             onClick={() => {
-              if (isAndroid) {
+              if (needsDownloadGuidance) {
                 setAndroidDownloaded(true);
                 setTimeout(() => setAndroidDownloaded(false), 4500);
               }
