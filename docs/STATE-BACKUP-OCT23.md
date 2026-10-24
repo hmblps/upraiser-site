@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 24, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v2.2.57-stable`
+**Tag:** `v2.2.59-stable`
 
 ---
 
@@ -210,3 +210,57 @@ To defend against degraded cellular connectivity inside conference venues:
 1. Dynamically inserts `<link rel="preload" href="/Alex_Upraiser.vcf?v=8" as="fetch" crossOrigin="anonymous" />` into `document.head` on page load.
 2. Background fetch executes with `{ cache: "force-cache" }`.
 3. Combined with `vercel.json` CDN headers (`Cache-Control: public, max-age=600, stale-while-revalidate=86400`), the contact file is preserved in the browser's HTTP cache for instant retrieval even if the device momentarily drops offline.
+
+---
+
+## 6. Smart Telemetry Aggregator & High-Intent Digests (v2.2.59)
+
+### A. Supabase Engagement Database Schema (`supabase/migrations/20261024_lead_activity_logs.sql`)
+1. **Activity Log Table (`lead_activity_logs`):**
+   - `id UUID PRIMARY KEY DEFAULT gen_random_uuid()`
+   - `visitor_id TEXT NOT NULL` (persistent token from `localStorage`)
+   - `lead_name TEXT`
+   - `lead_contact TEXT`
+   - `event_type TEXT NOT NULL` (`return_visit`, `deck_view`, `page_scroll`, `vcf_download`, `heartbeat`, `session_end`)
+   - `duration_seconds INT DEFAULT 0` (cumulative active time)
+   - `metadata JSONB DEFAULT '{}'::jsonb` (scroll depth, page URL, IP, user-agent)
+   - `created_at TIMESTAMPTZ DEFAULT now()`
+   - Indexed by `(visitor_id, created_at DESC)` and `event_type`.
+2. **Notification Cooldown Table (`lead_notification_cooldowns`):**
+   - `visitor_id TEXT PRIMARY KEY`
+   - `last_notified_at TIMESTAMPTZ NOT NULL DEFAULT now()`
+   - `last_event_type TEXT`
+   - `total_notifications INT DEFAULT 1`
+   - `metadata JSONB`
+3. **Row-Level Security (RLS):**
+   - Strict `service_role` full access policies for backend serverless functions.
+   - Anonymized `INSERT` policy for fallback client pings.
+
+### B. Client-Side Non-Blocking Tracker (`src/lib/activityTracker.ts` & `src/hooks/useActivityTracker.ts`)
+1. **Active Visibility Accounting:**
+   - Increments active seconds strictly while `document.visibilityState === "visible"`.
+   - Pauses counting when the browser tab is minimized, switched, or the smartphone screen locks.
+2. **10-Second Heartbeat Engine:**
+   - Dispatches background pings via `navigator.sendBeacon` (with fallback to `fetch` with `keepalive: true`) every 10 seconds.
+   - Automatically tracks scroll milestones at 50% and 85% depth.
+   - Flushes final active duration and `session_end` on `visibilitychange` to hidden or `beforeunload`.
+3. **Dedicated Media Deck Web Viewer (`/deck` · `MediaDeckViewerPage.tsx`):**
+   - Responsive web reader embedding `/Upraiser_Traffic_Infrastructure.pdf` with direct fullscreen and download triggers.
+   - Automatically measures exact reading duration via the heartbeat hook, distinguishing casual link clicks from deep deck reviews.
+
+### C. Serverless Aggregator & Smart Alert Dispatcher (`api/activity.ts`)
+1. **High-Intent Threshold Evaluation:**
+   - Triggers digest notifications only when high intent is demonstrated:
+     - Cumulative active session duration $\ge 25$ seconds; OR
+     - Confirmed return visit (`return_visit`); OR
+     - High-value action: `vcf_download` OR `deck_view` $\ge 15$ seconds; OR deep scroll $\ge 80\%$.
+2. **12-Hour Cooldown & Anti-Spam Shield:**
+   - Queries `lead_notification_cooldowns` for the incoming `visitor_id`.
+   - If an alert was dispatched within the previous 12 hours, new events are persisted to `lead_activity_logs` for forensic review but suppressed from re-triggering notifications.
+3. **Multi-Channel Notification Dispatch:**
+   - **Email via Resend:**
+     - Subject: `🔁 [HIGH INTENT] [Lead Name] вернулся на сайт · Провел [X] мин`
+     - Clean branded HTML digest with lead card, visit status, active duration, and chronological action timeline.
+   - **Instant Telegram Bot Alert:**
+     - Formatted with HTML styling and direct link to the Conference Hub for on-the-go conference follow-ups.
+   - Rewritten `/api/telemetry` $\rightarrow$ `/api/activity` in `vercel.json` for unified endpoint compatibility.

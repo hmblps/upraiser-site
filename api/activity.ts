@@ -1,0 +1,414 @@
+/// <reference types="node" />
+import type { IncomingMessage, ServerResponse } from "node:http";
+import { createClient } from "@supabase/supabase-js";
+
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+};
+
+const COOLDOWN_MS = 12 * 60 * 60 * 1000; // 12-hour notification cooldown per visitor
+const ENGAGEMENT_THRESHOLD_SECONDS = 25; // 25 seconds of active presence
+
+function escapeHtml(str: string): string {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+interface ActivityEventPayload {
+  visitorId: string;
+  leadName?: string;
+  leadContact?: string;
+  eventType: "return_visit" | "deck_view" | "page_scroll" | "vcf_download" | "heartbeat" | "session_end";
+  durationSeconds?: number;
+  metadata?: Record<string, any>;
+  sessionState?: string;
+}
+
+export default async function handler(req: IncomingMessage, res: ServerResponse) {
+  // 1. CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    return res.end();
+  }
+
+  if (req.method !== "POST") {
+    res.writeHead(405, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ ok: false, error: "Method not allowed" }));
+  }
+
+  // 2. Parse request payload safely (handles fetch JSON, sendBeacon text/blob)
+  let body: any = {};
+  if ((req as any).body) {
+    try {
+      body = typeof (req as any).body === "string" ? JSON.parse((req as any).body) : (req as any).body;
+    } catch {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: false, error: "Malformed JSON payload" }));
+    }
+  } else {
+    try {
+      const buffers: Buffer[] = [];
+      for await (const chunk of req) {
+        buffers.push(chunk);
+      }
+      const raw = Buffer.concat(buffers).toString("utf-8");
+      body = raw ? JSON.parse(raw) : {};
+    } catch {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: false, error: "Malformed raw JSON body" }));
+    }
+  }
+
+  const {
+    visitorId,
+    leadName = "",
+    leadContact = "",
+    eventType = "heartbeat",
+    durationSeconds = 0,
+    metadata = {},
+    sessionState = "",
+  }: ActivityEventPayload = body;
+
+  if (!visitorId || typeof visitorId !== "string") {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ ok: false, error: "Missing required visitorId" }));
+  }
+
+  // 3. Initialize Supabase Admin Client
+  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  const supabaseAdmin = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+
+  let loggedToDb = false;
+
+  // 4. Log event to Supabase lead_activity_logs
+  if (supabaseAdmin) {
+    try {
+      const { error: insertError } = await supabaseAdmin.from("lead_activity_logs").insert([
+        {
+          visitor_id: visitorId,
+          lead_name: leadName || null,
+          lead_contact: leadContact || null,
+          event_type: eventType,
+          duration_seconds: durationSeconds || 0,
+          metadata: {
+            ...metadata,
+            sessionState,
+            userAgent: req.headers["user-agent"] || "unknown",
+            ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
+          },
+        },
+      ]);
+      if (!insertError) {
+        loggedToDb = true;
+      } else {
+        console.warn("Supabase lead_activity_logs insert warning:", insertError.message);
+      }
+    } catch (dbErr) {
+      console.warn("Database activity logging exception:", dbErr);
+    }
+  }
+
+  // 5. Evaluate High-Intent Trigger Criteria
+  // Criteria:
+  // - High duration session (>= 25 seconds) OR
+  // - Return visit (visitor already tracked before) OR
+  // - Meaningful action: deck_view >= 15s OR vcf_download
+  const isHighEngagement = durationSeconds >= ENGAGEMENT_THRESHOLD_SECONDS;
+  const isReturnVisit = eventType === "return_visit";
+  const isMeaningfulAction =
+    eventType === "vcf_download" ||
+    (eventType === "deck_view" && durationSeconds >= 15) ||
+    Boolean(metadata?.scrollDepth && metadata.scrollDepth >= 80);
+
+  const qualifiesForDigest = isHighEngagement || isReturnVisit || isMeaningfulAction;
+
+  if (!qualifiesForDigest) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false }));
+  }
+
+  // 6. Check 12-Hour Cooldown in Supabase
+  let cooldownActive = false;
+  let previousNotificationCount = 0;
+
+  if (supabaseAdmin) {
+    try {
+      const { data: cooldownData } = await supabaseAdmin
+        .from("lead_notification_cooldowns")
+        .select("last_notified_at, total_notifications")
+        .eq("visitor_id", visitorId)
+        .maybeSingle();
+
+      if (cooldownData?.last_notified_at) {
+        const lastNotifiedTime = new Date(cooldownData.last_notified_at).getTime();
+        const elapsed = Date.now() - lastNotifiedTime;
+        previousNotificationCount = cooldownData.total_notifications || 1;
+        if (elapsed < COOLDOWN_MS) {
+          cooldownActive = true;
+        }
+      }
+    } catch (cooldownErr) {
+      console.warn("Cooldown check error:", cooldownErr);
+    }
+  }
+
+  if (cooldownActive) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(
+      JSON.stringify({
+        ok: true,
+        logged: loggedToDb,
+        digestSent: false,
+        reason: "cooldown_active_12h",
+      })
+    );
+  }
+
+  // 7. Aggregate Recent Activity History for this Visitor
+  let recentActivities: Array<{ event_type: string; duration_seconds: number; created_at: string; metadata: any }> = [];
+  if (supabaseAdmin) {
+    try {
+      const { data: history } = await supabaseAdmin
+        .from("lead_activity_logs")
+        .select("event_type, duration_seconds, created_at, metadata")
+        .eq("visitor_id", visitorId)
+        .order("created_at", { ascending: false })
+        .limit(8);
+
+      if (history) {
+        recentActivities = history;
+      }
+    } catch (histErr) {
+      console.warn("History fetch error:", histErr);
+    }
+  }
+
+  // Format activity summary lines
+  const displayName = leadName.trim() || `Lead #${visitorId.slice(-4).toUpperCase()}`;
+  const displayContact = leadContact.trim() || "Not entered yet";
+  const durationMin = (Math.max(durationSeconds, 1) / 60).toFixed(1);
+
+  const eventDescriptions: Record<string, string> = {
+    return_visit: "🔁 Повторный визит на /connect",
+    deck_view: "📊 Просмотр медиадека (Traffic Infrastructure Deck)",
+    vcf_download: "📇 Скачивание контакта One-Tap Save (.vcf)",
+    page_scroll: "📜 Глубокий скролл страницы хаба",
+    heartbeat: "⏱ Активное чтение / пребывание на странице",
+    session_end: "🚪 Завершение сессии",
+  };
+
+  const activityLines =
+    recentActivities.length > 0
+      ? recentActivities
+          .map((a) => {
+            const timeStr = new Date(a.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+            const label = eventDescriptions[a.event_type] || a.event_type;
+            const dur = a.duration_seconds > 0 ? ` (${a.duration_seconds} сек)` : "";
+            return `• <strong>${timeStr}</strong>: ${label}${dur}`;
+          })
+          .join("<br/>")
+      : `• ${eventDescriptions[eventType] || eventType} (${durationSeconds} сек)`;
+
+  const telegramActivityLines =
+    recentActivities.length > 0
+      ? recentActivities
+          .map((a) => {
+            const timeStr = new Date(a.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+            const label = eventDescriptions[a.event_type] || a.event_type;
+            const dur = a.duration_seconds > 0 ? ` (${a.duration_seconds}s)` : "";
+            return `  • <code>${timeStr}</code>: ${label}${dur}`;
+          })
+          .join("\n")
+      : `  • ${eventDescriptions[eventType] || eventType} (${durationSeconds}s)`;
+
+  // 8. Send Resend Email Digest
+  const resendApiKey = process.env.RESEND_API_KEY;
+  let emailSent = false;
+
+  if (resendApiKey) {
+    try {
+      const notificationEnv = process.env.NOTIFICATION_EMAIL;
+      const toEmails = notificationEnv
+        ? notificationEnv.split(",").map((e) => e.trim()).filter(Boolean)
+        : ["info@upraiser.co.uk"];
+      const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
+
+      const subject = `🔁 [HIGH INTENT] ${displayName} вернулся на сайт · Провел ${durationMin} мин`;
+
+      const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #030712; color: #f3f4f6; margin: 0; padding: 24px; }
+    .card { max-width: 600px; margin: 0 auto; background: #0b0f19; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; overflow: hidden; }
+    .header { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .badge { display: inline-block; padding: 4px 10px; background: rgba(254, 207, 9, 0.15); color: #FECF09; border: 1px solid rgba(254, 207, 9, 0.3); border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .title { font-size: 20px; font-weight: 700; color: #ffffff; margin: 12px 0 4px; }
+    .subtitle { font-size: 13px; color: #9ca3af; margin: 0; }
+    .content { padding: 24px; }
+    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #FECF09; margin-bottom: 10px; }
+    .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+    .info-table td { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .info-table td.label { color: #9ca3af; width: 38%; }
+    .info-table td.value { color: #f9fafb; font-weight: 600; }
+    .activity-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 16px; font-size: 13px; line-height: 1.8; color: #d1d5db; margin-bottom: 20px; }
+    .footer { padding: 16px 24px; font-size: 11px; color: #6b7280; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <span class="badge">🔥 HIGH INTENT TELEMETRY</span>
+      <h1 class="title">${escapeHtml(displayName)} активен на платформе</h1>
+      <p class="subtitle">Повторный визит или длительная сессия на /connect</p>
+    </div>
+    <div class="content">
+      <div class="section-title">Сводка по лиду</div>
+      <table class="info-table">
+        <tr>
+          <td class="label">Имя контакта:</td>
+          <td class="value">${escapeHtml(displayName)}</td>
+        </tr>
+        <tr>
+          <td class="label">Контакт (Email / TG):</td>
+          <td class="value">${escapeHtml(displayContact)}</td>
+        </tr>
+        <tr>
+          <td class="label">Visitor Token:</td>
+          <td class="value"><code>${escapeHtml(visitorId)}</code></td>
+        </tr>
+        <tr>
+          <td class="label">Статус визита:</td>
+          <td class="value">${escapeHtml(sessionState || (isReturnVisit ? "Повторный визит" : "Первый визит (высокая вовлеченность)"))}</td>
+        </tr>
+        <tr>
+          <td class="label">Время на странице:</td>
+          <td class="value"><strong>${durationSeconds} сек</strong> (~${durationMin} мин)</td>
+        </tr>
+      </table>
+
+      <div class="section-title">Хроника действий за сессию</div>
+      <div class="activity-box">
+        ${activityLines}
+      </div>
+
+      <div style="text-align: center; padding-top: 8px;">
+        <a href="https://upraiser.co.uk/connect" style="display: inline-block; background: #e63558; color: #ffffff; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none;">
+          Открыть Conference Hub →
+        </a>
+      </div>
+    </div>
+    <div class="footer">
+      UPRAISER Agency LLP · 128 City Road, London EC1V 2NX · Automated High-Intent Digest (12h Cooldown)
+    </div>
+  </div>
+</body>
+</html>
+      `;
+
+      const resendRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: toEmails,
+          subject,
+          html,
+        }),
+      });
+
+      if (resendRes.ok) {
+        emailSent = true;
+      } else {
+        console.warn("Resend digest failed:", await resendRes.text());
+      }
+    } catch (emailErr) {
+      console.warn("Resend digest exception:", emailErr);
+    }
+  }
+
+  // 9. Send Instant Telegram Alert if Bot Token is configured
+  const tgToken = process.env.VITE_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  const tgChatId = process.env.VITE_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
+  let telegramSent = false;
+
+  if (tgToken && tgChatId) {
+    try {
+      const tgText = `<b>🔁 [HIGH INTENT] Лид вернулся на сайт!</b>\n\n` +
+        `👤 <b>Имя:</b> ${escapeHtml(displayName)}\n` +
+        `📱 <b>Контакт:</b> ${escapeHtml(displayContact)}\n` +
+        `⏱ <b>Активное время:</b> ${durationSeconds}с (~${durationMin} мин)\n` +
+        `🏷 <b>Статус:</b> ${escapeHtml(sessionState || "Повторный визит")}\n` +
+        `🆔 <code>${escapeHtml(visitorId)}</code>\n\n` +
+        `<b>Хроника действий:</b>\n${telegramActivityLines}\n\n` +
+        `🔗 <a href="https://upraiser.co.uk/connect">Открыть Conference Hub</a>`;
+
+      const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: tgChatId,
+          text: tgText,
+          parse_mode: "HTML",
+          disable_web_page_preview: true,
+        }),
+      });
+
+      if (tgRes.ok) {
+        telegramSent = true;
+      }
+    } catch (tgErr) {
+      console.warn("Telegram alert error:", tgErr);
+    }
+  }
+
+  // 10. Update Cooldown Tracker in Supabase
+  if (supabaseAdmin && (emailSent || telegramSent)) {
+    try {
+      await supabaseAdmin.from("lead_notification_cooldowns").upsert(
+        {
+          visitor_id: visitorId,
+          last_notified_at: new Date().toISOString(),
+          last_event_type: eventType,
+          total_notifications: previousNotificationCount + 1,
+          metadata: {
+            displayName,
+            durationSeconds,
+            emailSent,
+            telegramSent,
+          },
+        },
+        { onConflict: "visitor_id" }
+      );
+    } catch (cooldownSaveErr) {
+      console.warn("Cooldown update failed:", cooldownSaveErr);
+    }
+  }
+
+  res.writeHead(200, { "Content-Type": "application/json" });
+  return res.end(
+    JSON.stringify({
+      ok: true,
+      logged: loggedToDb,
+      digestSent: emailSent || telegramSent,
+      emailSent,
+      telegramSent,
+    })
+  );
+}

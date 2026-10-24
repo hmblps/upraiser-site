@@ -12,8 +12,13 @@ import {
   HUB_PLAIN_SCRIPT,
   type HubLang,
 } from "./conferenceHubI18n";
+import {
+  getOrInitHubSession,
+  updateHubContact,
+  type HubSessionState,
+} from "../lib/activityTracker";
+import { useActivityTracker } from "../hooks/useActivityTracker";
 
-const MEDIA_DECK_URL = "/Upraiser_Traffic_Infrastructure.pdf";
 const VCARD_URL = "/Alex_Upraiser.vcf?v=8";
 const SPRING_TACTILE = { type: "spring", stiffness: 400, damping: 25 } as const;
 
@@ -109,60 +114,7 @@ function MailIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-interface HubSessionState {
-  visitorId: string;
-  visitCount: number;
-  firstVisitTime: number;
-  lastVisitTime: number;
-  savedName?: string;
-  savedContact?: string;
-}
-
-const HUB_SESSION_KEY = "upraiser_hub_session_v1";
 const HUB_REVISIT_ALERT_KEY = "upraiser_hub_revisit_alert_v1";
-
-function getOrInitHubSession(): HubSessionState {
-  if (typeof window === "undefined") {
-    return { visitorId: "srv", visitCount: 1, firstVisitTime: Date.now(), lastVisitTime: Date.now() };
-  }
-  try {
-    const raw = localStorage.getItem(HUB_SESSION_KEY);
-    const now = Date.now();
-    if (raw) {
-      const parsed: HubSessionState = JSON.parse(raw);
-      // Count a new distinct visit session if at least 90 seconds elapsed since last recorded activity
-      if (now - (parsed.lastVisitTime || 0) > 90 * 1000) {
-        parsed.visitCount = (parsed.visitCount || 1) + 1;
-        parsed.lastVisitTime = now;
-        localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
-      }
-      return parsed;
-    }
-    const newSession: HubSessionState = {
-      visitorId: "hub_" + Math.random().toString(36).substring(2, 9),
-      visitCount: 1,
-      firstVisitTime: now,
-      lastVisitTime: now,
-    };
-    localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(newSession));
-    return newSession;
-  } catch {
-    return { visitorId: "hub_local", visitCount: 1, firstVisitTime: Date.now(), lastVisitTime: Date.now() };
-  }
-}
-
-function updateHubContact(name: string, contact: string) {
-  try {
-    const raw = localStorage.getItem(HUB_SESSION_KEY);
-    if (raw) {
-      const parsed: HubSessionState = JSON.parse(raw);
-      parsed.savedName = name;
-      parsed.savedContact = contact;
-      parsed.lastVisitTime = Date.now();
-      localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
-    }
-  } catch {}
-}
 
 function collectDeviceTelemetry(session: HubSessionState, selectedLang: HubLang) {
   if (typeof window === "undefined") return null;
@@ -267,6 +219,9 @@ export function ConferenceHubPage() {
       if (tag) tag.content = prevContent;
     };
   }, []);
+
+  // Telemetry & Activity Tracker (Heartbeats, return visits, engagement time)
+  const { trackAction } = useActivityTracker("conference_hub");
 
   // Form state & Hyper-Jump Warp Speed
   const [name, setName] = useState("");
@@ -380,6 +335,7 @@ export function ConferenceHubPage() {
 
   const triggerVCardDownload = () => {
     try {
+      trackAction("vcf_download", 0, { trigger: "clip_in" });
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         try {
           navigator.vibrate(18);
@@ -586,6 +542,7 @@ export function ConferenceHubPage() {
           <motion.a
             href={VCARD_URL}
             onClick={() => {
+              trackAction("vcf_download", 0, { trigger: "one_tap_save_button" });
               if (needsDownloadGuidance) {
                 setAndroidDownloaded(true);
                 setTimeout(() => setAndroidDownloaded(false), 4500);
@@ -838,15 +795,14 @@ export function ConferenceHubPage() {
 
           {/* Expedition Dossier */}
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
-            <a
-              href={MEDIA_DECK_URL}
-              target="_blank"
-              rel="noopener"
+            <Link
+              to="/deck"
+              onClick={() => trackAction("deck_view", 0, { action: "deck_card_clicked" })}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>
-              <span className="text-xs text-white/40 font-mono group-hover:translate-y-0.5 transition-transform">↓</span>
-            </a>
+              <span className="text-xs text-[#FECF09] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
+            </Link>
           </motion.div>
 
           {/* Website */}

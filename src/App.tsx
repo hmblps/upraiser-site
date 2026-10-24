@@ -20,6 +20,7 @@ const HeroCapturePage = lazy(() => import("./pages/HeroCapturePage").then((m) =>
 const HeroLitePreviewPage = lazy(() => import("./pages/HeroLitePreviewPage").then((m) => ({ default: m.HeroLitePreviewPage })));
 const ConferenceHubPage = lazy(() => import("./pages/ConferenceHubPage"));
 const ConnectIntentTestPage = lazy(() => import("./pages/ConnectIntentTestPage"));
+const MediaDeckViewerPage = lazy(() => import("./pages/MediaDeckViewerPage"));
 
 function RouteFallback() {
   return (
@@ -102,6 +103,8 @@ export default function App() {
         <Route path="connect" element={<ConferenceHubPage />} />
         <Route path="connect/test" element={<ConnectIntentTestPage />} />
         <Route path="test-intent" element={<Navigate to="/connect/test" replace />} />
+        <Route path="deck" element={<MediaDeckViewerPage />} />
+        <Route path="connect/deck" element={<Navigate to="/deck" replace />} />
         <Route path="meet" element={<Navigate to="/connect" replace />} />
         <Route path="card" element={<Navigate to="/connect" replace />} />
         <Route path="hub" element={<Navigate to="/connect" replace />} />

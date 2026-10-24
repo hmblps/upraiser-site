@@ -139,6 +139,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/telemetry",
+      "destination": "/api/activity"
+    },
+    {
       "source": "/((?!api/|.*\\.(?:js|css|map|png|jpe?g|gif|svg|webp|avif|woff2?|glb|gltf|wasm|mp4|webm|ico|json|html|txt|xml|webmanifest|pdf|vcf)).*)",
       "destination": "/index.html"
     }
