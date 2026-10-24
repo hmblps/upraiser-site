@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { StarfieldAscent } from "../components/StarfieldAscent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useAppleSpatialParallax } from "../hooks/useAppleSpatialParallax";
 import { SiteGrain } from "../components/SiteGrain";
 import {
   HUB_LANGS,
@@ -247,6 +248,9 @@ export function ConferenceHubPage() {
 
   // Telemetry & Activity Tracker (Heartbeats, return visits, engagement time)
   const { trackAction } = useActivityTracker("conference_hub");
+
+  // Subtle 60 FPS Apple OS Spatial Depth & Gyroscopic Tilt Parallax
+  const parallax = useAppleSpatialParallax();
 
   // Form state & Hyper-Jump Warp Speed
   const [name, setName] = useState("");
@@ -516,19 +520,27 @@ export function ConferenceHubPage() {
       <StarfieldAscent warp={isWarping} />
       <SiteGrain />
 
-      {/* Main Column (max 380px) */}
+      {/* Main Column (max 380px) with Subtle Apple Spatial 3D Perspective Tilt & Specular Sheen */}
       <motion.div
         variants={containerVariants}
         initial={reduced ? "visible" : "hidden"}
         animate="visible"
+        style={{
+          perspective: 1200,
+          transform: reduced
+            ? undefined
+            : `perspective(1200px) rotateX(${parallax.rotateX}deg) rotateY(${parallax.rotateY}deg) translate3d(${parallax.cardX}px, ${parallax.cardY}px, 0)`,
+          willChange: "transform",
+          transformStyle: "preserve-3d",
+        }}
         className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7 relative"
       >
-        {/* Subtle Ambient Glass Sheen */}
+        {/* Subtle Dynamic Apple Specular Liquid Glass Sheen */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-6 rounded-3xl opacity-75"
+          className="pointer-events-none absolute -inset-6 rounded-3xl opacity-75 transition-opacity duration-300"
           style={{
-            background: "radial-gradient(circle at 50% 30%, rgba(230,53,88,0.12) 0%, rgba(254,207,9,0.04) 30%, transparent 65%)",
+            background: `radial-gradient(circle at ${parallax.sheenX}% ${parallax.sheenY}%, rgba(230,53,88,0.12) 0%, rgba(254,207,9,0.03) 30%, transparent 65%)`,
           }}
         />
         {/* Top Minimal Bar: Language Switcher */}
