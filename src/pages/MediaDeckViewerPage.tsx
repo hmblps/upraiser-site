@@ -24,11 +24,19 @@ const PDF_URL = "/Upraiser_Traffic_Infrastructure.pdf";
 export default function MediaDeckViewerPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // 1. Language state synced with URL ?lang=...
+  // 1. Language state synced with URL ?lang=... and persisted in localStorage
   const [lang, setLang] = useState<HubLang>(() => {
     const p = searchParams.get("lang")?.toLowerCase().trim();
     if (p && (HUB_LANGS as readonly string[]).includes(p)) {
       return p as HubLang;
+    }
+    if (typeof localStorage !== "undefined") {
+      try {
+        const stored = localStorage.getItem("upraiser_preferred_lang")?.toLowerCase().trim();
+        if (stored && (HUB_LANGS as readonly string[]).includes(stored)) {
+          return stored as HubLang;
+        }
+      } catch {}
     }
     return detectDeviceLang();
   });
@@ -59,6 +67,11 @@ export default function MediaDeckViewerPage() {
   const handleSetLang = useCallback(
     (next: HubLang) => {
       setLang(next);
+      if (typeof localStorage !== "undefined") {
+        try {
+          localStorage.setItem("upraiser_preferred_lang", next);
+        } catch {}
+      }
       setSearchParams(
         (prev) => {
           const updated = new URLSearchParams(prev);

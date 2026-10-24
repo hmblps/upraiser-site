@@ -184,12 +184,33 @@ export function ConferenceHubPage() {
     if (param && (HUB_LANGS as readonly string[]).includes(param)) {
       return param as HubLang;
     }
+    if (typeof localStorage !== "undefined") {
+      try {
+        const stored = localStorage.getItem("upraiser_preferred_lang")?.toLowerCase().trim();
+        if (stored && (HUB_LANGS as readonly string[]).includes(stored)) {
+          return stored as HubLang;
+        }
+      } catch {}
+    }
     return detectDeviceLang();
   });
+
+  // Synchronize language when URL search param ?lang=... changes
+  useEffect(() => {
+    const p = searchParams.get("lang")?.toLowerCase().trim();
+    if (p && (HUB_LANGS as readonly string[]).includes(p) && p !== lang) {
+      setLang(p as HubLang);
+    }
+  }, [searchParams, lang]);
 
   const handleSetLang = useCallback(
     (next: HubLang) => {
       setLang(next);
+      if (typeof localStorage !== "undefined") {
+        try {
+          localStorage.setItem("upraiser_preferred_lang", next);
+        } catch {}
+      }
       setSearchParams(
         (prev) => {
           const updated = new URLSearchParams(prev);
@@ -787,7 +808,7 @@ export function ConferenceHubPage() {
           {/* Routes */}
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <Link
-              to="/channels?utm_source=qr_wallet"
+              to={`/channels?utm_source=qr_wallet&lang=${lang}`}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.routesTitle}</span>
@@ -798,8 +819,8 @@ export function ConferenceHubPage() {
           {/* Expedition Dossier */}
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <Link
-              to="/deck"
-              onClick={() => trackAction("deck_view", 0, { action: "deck_card_clicked" })}
+              to={`/deck?lang=${lang}`}
+              onClick={() => trackAction("deck_view", 0, { action: "deck_card_clicked", lang })}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>
