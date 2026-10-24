@@ -346,6 +346,18 @@ export function getOrInitHubSession(): HubSessionState {
     };
   }
   try {
+    // Check if operator or tester requested a fresh session via ?reset=1 or ?fresh=1
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get("reset") === "1" || url.searchParams.get("fresh") === "1") {
+        localStorage.removeItem(HUB_SESSION_KEY);
+        url.searchParams.delete("reset");
+        url.searchParams.delete("fresh");
+        const cleanQuery = url.searchParams.toString();
+        window.history.replaceState({}, "", url.pathname + (cleanQuery ? `?${cleanQuery}` : ""));
+      }
+    } catch {}
+
     const raw = localStorage.getItem(HUB_SESSION_KEY);
     const now = Date.now();
     const detected = detectSmartTrafficSource();
