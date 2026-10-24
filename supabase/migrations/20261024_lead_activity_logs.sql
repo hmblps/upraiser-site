@@ -1,5 +1,5 @@
 -- UPRAISER Telemetry & High-Intent Lead Activity Logs
--- Migration: 20261024_lead_activity_logs.sql
+-- Migration: 20261024_lead_activity_logs.sql (100% Additive & Safe)
 
 -- 1. Main Lead Activity Log Table
 CREATE TABLE IF NOT EXISTS lead_activity_logs (
@@ -27,31 +27,48 @@ CREATE TABLE IF NOT EXISTS lead_notification_cooldowns (
   metadata JSONB DEFAULT '{}'::jsonb
 );
 
--- 3. Security (RLS)
+-- 3. Security (Row Level Security)
 ALTER TABLE lead_activity_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE lead_notification_cooldowns ENABLE ROW LEVEL SECURITY;
 
--- Service role policies (used by /api/activity and /api/contact via SUPABASE_SERVICE_ROLE_KEY)
-DROP POLICY IF EXISTS "Service role full access on lead_activity_logs" ON lead_activity_logs;
-CREATE POLICY "Service role full access on lead_activity_logs"
-  ON lead_activity_logs
-  FOR ALL
-  TO service_role
-  USING (true)
-  WITH CHECK (true);
+-- 4. Safe Idempotent Policies (No DROP statements)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'lead_activity_logs' 
+      AND policyname = 'Service role full access on lead_activity_logs'
+  ) THEN
+    CREATE POLICY "Service role full access on lead_activity_logs"
+      ON lead_activity_logs
+      FOR ALL
+      TO service_role
+      USING (true)
+      WITH CHECK (true);
+  END IF;
 
-DROP POLICY IF EXISTS "Service role full access on lead_notification_cooldowns" ON lead_notification_cooldowns;
-CREATE POLICY "Service role full access on lead_notification_cooldowns"
-  ON lead_notification_cooldowns
-  FOR ALL
-  TO service_role
-  USING (true)
-  WITH CHECK (true);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'lead_notification_cooldowns' 
+      AND policyname = 'Service role full access on lead_notification_cooldowns'
+  ) THEN
+    CREATE POLICY "Service role full access on lead_notification_cooldowns"
+      ON lead_notification_cooldowns
+      FOR ALL
+      TO service_role
+      USING (true)
+      WITH CHECK (true);
+  END IF;
 
--- Allow anonymous inserts if client-side Supabase client is used as direct fallback
-DROP POLICY IF EXISTS "Anon insert on lead_activity_logs" ON lead_activity_logs;
-CREATE POLICY "Anon insert on lead_activity_logs"
-  ON lead_activity_logs
-  FOR INSERT
-  TO anon
-  WITH CHECK (true);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'lead_activity_logs' 
+      AND policyname = 'Anon insert on lead_activity_logs'
+  ) THEN
+    CREATE POLICY "Anon insert on lead_activity_logs"
+      ON lead_activity_logs
+      FOR INSERT
+      TO anon
+      WITH CHECK (true);
+  END IF;
+END $$;
