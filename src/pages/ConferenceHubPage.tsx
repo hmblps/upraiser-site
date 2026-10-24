@@ -3,7 +3,6 @@ import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { StarfieldAscent } from "../components/StarfieldAscent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import { useAppleSpatialParallax } from "../hooks/useAppleSpatialParallax";
 import { SiteGrain } from "../components/SiteGrain";
 import {
   HUB_LANGS,
@@ -248,9 +247,6 @@ export function ConferenceHubPage() {
 
   // Telemetry & Activity Tracker (Heartbeats, return visits, engagement time)
   const { trackAction } = useActivityTracker("conference_hub");
-
-  // 60 FPS Apple OS Spatial Depth & Gyroscopic Tilt Parallax
-  const parallax = useAppleSpatialParallax();
 
   // Form state & Hyper-Jump Warp Speed
   const [name, setName] = useState("");
@@ -520,27 +516,19 @@ export function ConferenceHubPage() {
       <StarfieldAscent warp={isWarping} />
       <SiteGrain />
 
-      {/* Main Column (max 380px) with Apple Spatial 3D Perspective Tilt & Distinct Floating Slide */}
+      {/* Main Column (max 380px) */}
       <motion.div
         variants={containerVariants}
         initial={reduced ? "visible" : "hidden"}
         animate="visible"
-        style={{
-          perspective: 1000,
-          transform: reduced
-            ? undefined
-            : `perspective(1000px) rotateX(${parallax.rotateX}deg) rotateY(${parallax.rotateY}deg) translate3d(${parallax.cardX}px, ${parallax.cardY}px, 0)`,
-          willChange: "transform",
-          transformStyle: "preserve-3d",
-        }}
         className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7 relative"
       >
-        {/* Dynamic Apple Specular Liquid Glass Sheen */}
+        {/* Subtle Ambient Glass Sheen */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-6 rounded-3xl opacity-75 transition-opacity duration-300"
+          className="pointer-events-none absolute -inset-6 rounded-3xl opacity-75"
           style={{
-            background: `radial-gradient(circle at ${parallax.sheenX}% ${parallax.sheenY}%, rgba(230,53,88,0.12) 0%, rgba(254,207,9,0.04) 30%, transparent 65%)`,
+            background: "radial-gradient(circle at 50% 30%, rgba(230,53,88,0.12) 0%, rgba(254,207,9,0.04) 30%, transparent 65%)",
           }}
         />
         {/* Top Minimal Bar: Language Switcher */}
@@ -593,13 +581,7 @@ export function ConferenceHubPage() {
 
         {/* 1. Direct Lead Capture Form & Reciprocal Contact Exchange */}
         <motion.div variants={itemVariants} className="w-full pt-1 space-y-3">
-          <div
-            style={{
-              transform: reduced ? undefined : `translate3d(${parallax.headingX}px, ${parallax.headingY}px, 0)`,
-              willChange: "transform",
-            }}
-            className="text-center px-1 flex flex-col items-center"
-          >
+          <div className="text-center px-1 flex flex-col items-center">
             <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight text-center leading-snug">
               {t.formHeading}
             </h2>
@@ -647,10 +629,6 @@ export function ConferenceHubPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   dir="auto"
-                  style={{
-                    transform: reduced ? undefined : `translate3d(${parallax.inputX}px, ${parallax.inputY}px, 0)`,
-                    willChange: "transform",
-                  }}
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
                 <input
@@ -667,10 +645,6 @@ export function ConferenceHubPage() {
                   placeholder={t.fieldContact}
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
-                  style={{
-                    transform: reduced ? undefined : `translate3d(${parallax.inputX * 1.45}px, ${parallax.inputY * 1.45}px, 0)`,
-                    willChange: "transform",
-                  }}
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
 
@@ -684,10 +658,6 @@ export function ConferenceHubPage() {
                   whileHover={{ scale: 1.015 }}
                   whileTap={{ scale: 0.98 }}
                   transition={SPRING_TACTILE}
-                  style={{
-                    transform: reduced ? undefined : `translate3d(${parallax.buttonX}px, ${parallax.buttonY}px, 0)`,
-                    willChange: "transform",
-                  }}
                   className={`w-full min-h-[48px] py-3.5 px-6 rounded-2xl ${
                     androidDownloaded
                       ? "bg-emerald-600 border border-emerald-400/30 text-white shadow-lg shadow-emerald-500/25"
@@ -719,10 +689,6 @@ export function ConferenceHubPage() {
         {/* 3. Direct Team Roster (Monochrome App Icons, Clean Role) */}
         <motion.div
           variants={itemVariants}
-          style={{
-            transform: reduced ? undefined : `translate3d(${parallax.rosterX}px, ${parallax.rosterY}px, 0)`,
-            willChange: "transform",
-          }}
           className="w-full space-y-3 pt-1"
         >
           {/* Oleksii */}

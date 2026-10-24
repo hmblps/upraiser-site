@@ -1,6 +1,5 @@
 import { memo } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import { useAppleSpatialParallax } from "../hooks/useAppleSpatialParallax";
 
 export interface StarfieldAscentProps {
   warp?: boolean;
@@ -75,20 +74,13 @@ const ASCENT_CSS = `
 
 function StarfieldAscentComponent({ warp = false }: StarfieldAscentProps) {
   const reduced = useReducedMotion();
-  const parallax = useAppleSpatialParallax();
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
       <style>{ASCENT_CSS}</style>
 
-      {/* Layer 1: Dense celestial dust with mid-depth Apple spatial parallax */}
-      <div
-        style={{
-          transform: reduced ? undefined : `translate3d(${parallax.midLayerX}px, ${parallax.midLayerY}px, 0)`,
-          willChange: "transform",
-        }}
-        className="absolute inset-0"
-      >
+      {/* Layer 1: Dense celestial dust */}
+      <div className="absolute inset-0">
         <div
           className={`absolute inset-x-0 top-0 h-[200%] origin-center transition-transform duration-500 ${
             reduced
@@ -605,14 +597,8 @@ function StarfieldAscentComponent({ warp = false }: StarfieldAscentProps) {
       </div>
     </div>
 
-      {/* Layer 2: Parallax bright stars with near-depth Apple spatial parallax */}
-      <div
-        style={{
-          transform: reduced ? undefined : `translate3d(${parallax.nearLayerX}px, ${parallax.nearLayerY}px, 0)`,
-          willChange: "transform",
-        }}
-        className="absolute inset-0"
-      >
+      {/* Layer 2: Bright stars */}
+      <div className="absolute inset-0">
         <div
           className={`absolute inset-x-0 top-0 h-[200%] origin-center transition-transform duration-500 ${
             reduced
@@ -799,14 +785,8 @@ function StarfieldAscentComponent({ warp = false }: StarfieldAscentProps) {
       </div>
     </div>
 
-      {/* Layer 3: Hyperspace Warp Rays with speed parallax */}
-      <div
-        style={{
-          transform: reduced ? undefined : `translate3d(${parallax.nearLayerX * 1.3}px, ${parallax.nearLayerY * 1.3}px, 0)`,
-          willChange: "transform",
-        }}
-        className="absolute inset-0"
-      >
+      {/* Layer 3: Hyperspace Warp Rays */}
+      <div className="absolute inset-0">
         <div
           className={`absolute inset-x-0 top-0 h-[200%] pointer-events-none transition-opacity duration-300 origin-center ${
             warp && !reduced ? "opacity-100 animate-warp-rays" : "opacity-0"
@@ -842,13 +822,9 @@ function StarfieldAscentComponent({ warp = false }: StarfieldAscentProps) {
         </div>
       </div>
 
-      {/* Ambient wine glow at top — atmospheric ascent summit with deep-space parallax */}
+      {/* Ambient wine glow at top — atmospheric ascent summit */}
       <div
-        style={{
-          transform: reduced ? undefined : `translate3d(calc(-50% + ${parallax.deepLayerX}px), ${parallax.deepLayerY}px, 0)`,
-          willChange: "transform",
-        }}
-        className={`absolute top-0 left-1/2 w-[420px] h-[320px] rounded-full transition-all duration-700 pointer-events-none ${
+        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[420px] h-[320px] rounded-full transition-all duration-700 pointer-events-none ${
           warp && !reduced
             ? "bg-[#e63558]/35 blur-[100px] animate-warp-glow"
             : "bg-[#e63558]/12 blur-[130px]"
