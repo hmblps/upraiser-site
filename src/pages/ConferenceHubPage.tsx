@@ -362,7 +362,8 @@ export function ConferenceHubPage() {
           navigator.vibrate(18);
         } catch {}
       }
-      // Instant reciprocal dispatch in Safari and Chrome on iOS
+      // Direct navigation to the static inline text/vcard endpoint (no `download` attr, no Blob, no
+      // target="_blank") so Safari and Chrome hand the card straight to the system Contacts sheet
       if (typeof window !== "undefined") {
         window.location.href = VCARD_URL;
       }
@@ -557,7 +558,6 @@ export function ConferenceHubPage() {
         <motion.div variants={itemVariants} className="w-full">
           <motion.a
             href={VCARD_URL}
-            download="Alex_Upraiser.vcf"
             onClick={() => triggerWarp(2200)}
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.98 }}

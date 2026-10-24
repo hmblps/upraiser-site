@@ -100,6 +100,12 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 3. **`Create New Contact` on Screen 1:** Removing the multi-line `NOTE` block saved ~110px of vertical height. The contact card fits strictly on **1 screen without scrolling** across all iOS and Android devices, keeping `Create New Contact` directly visible below the 3 cards (`mobile`, `email`, `work URL`).
 4. **Avatar Photo Parsing:** Embedded 200×200 JPEG with RFC 2426 line folding (`.{1,74}`) and `PHOTO;ENCODING=b;TYPE=JPEG:`.
 
+### A2. Seamless Save: No Download Prompt (v2.2.54)
+- **Cause of the "Download contact.vcf?" popup:** the `download` attribute on the anchor tells Safari and Chrome to save the file to the Downloads folder instead of handing it to the Contacts app.
+- **Fix:** removed `download` from the One-Tap Save anchor. Both the anchor and the Clip In handler (`triggerVCardDownload`) now navigate directly to the static `/Alex_Upraiser.vcf?v=7` (no Blob, no `download`, no `target="_blank"`). The server replies with `Content-Type: text/vcard; charset=utf-8` and `Content-Disposition: inline`, so the browser opens the native contact sheet on top of the current page.
+- **Lead delivery:** the `/api/contact` and Web3Forms fetches use `keepalive: true`, so the lead is still delivered when navigation to the `.vcf` starts in the same tick.
+- **Cleanup:** removed the unused `src/pages/alexVCardData.ts` data-URI module and its generator block (data: URIs are blocked by WebKit).
+
 ### B. Contact Structure Reference
 ```vcard
 BEGIN:VCARD
