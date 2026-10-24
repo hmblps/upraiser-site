@@ -14,7 +14,7 @@ import {
 } from "./conferenceHubI18n";
 
 const MEDIA_DECK_URL = "/Upraiser_Traffic_Infrastructure.pdf";
-const VCARD_URL = "/Alex_Upraiser.vcf?v=7";
+const VCARD_URL = "/Alex_Upraiser.vcf?v=8";
 const SPRING_TACTILE = { type: "spring", stiffness: 400, damping: 25 } as const;
 
 const containerVariants: Variants = {

@@ -25,8 +25,9 @@ const chunks = rawBase64.match(/.{1,74}/g) || [];
 const folded = chunks.join("\r\n ");
 
 // 1. Primary Name strictly Alex Upraiser (N:Upraiser;Alex;;;)
-// 2. ORG contains Oleksii Ostroukhov + UPRAISER Agency LLP + TG @homeboylebz
-// 3. TITLE contains direct operator infrastructure descriptors
+// 2. iOS prints TITLE first, then ORG, under the photo: TITLE=Oleksii Ostroukhov, ORG=Supply & Demand
+//    renders as the short subtitle "OLEKSII OSTROUKHOV • SUPPLY & DEMAND"
+// 3. Keep the subtitle to one short line
 // 4. Strictly 3 cards (mobile, email, work connect url) so Create New Contact fits on 1st screen
 const lines = [
   "BEGIN:VCARD",
@@ -34,8 +35,8 @@ const lines = [
   "PRODID:-//Apple Inc.//macOS 27.0.1//EN",
   "N:Upraiser;Alex;;;",
   "FN:Alex Upraiser",
-  "ORG:Oleksii Ostroukhov · UPRAISER Agency LLP · TG @homeboylebz",
-  "TITLE:Founder & Lead · Direct Mobile UA & OEM Infra",
+  "ORG:Supply & Demand",
+  "TITLE:Oleksii Ostroukhov",
   "TEL;TYPE=CELL,VOICE,PREF:+40724787390",
   "EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk",
   "URL;TYPE=WORK:https://upraiser.co.uk/connect",

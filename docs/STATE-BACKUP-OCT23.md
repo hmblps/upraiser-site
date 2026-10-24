@@ -106,6 +106,12 @@ Every submission and repeat-visit signal to `/api/contact` now includes an exten
 - **Lead delivery:** the `/api/contact` and Web3Forms fetches use `keepalive: true`, so the lead is still delivered when navigation to the `.vcf` starts in the same tick.
 - **Cleanup:** removed the unused `src/pages/alexVCardData.ts` data-URI module and its generator block (data: URIs are blocked by WebKit).
 
+### A3. Short Subtitle & Photo Behaviour on Phones That Already Know the Number (v2.2.55)
+- **Subtitle shortened.** iOS prints `TITLE` first and `ORG` second under the photo, joined by a bullet. The old value (`Founder & Lead · Direct Mobile UA & OEM Infra • Oleksii Ostroukhov · UPRAISER Agency LLP · TG @homeboylebz`) wrapped onto three lines. Now `TITLE:Oleksii Ostroukhov` and `ORG:Supply & Demand` render as `OLEKSII OSTROUKHOV • SUPPLY & DEMAND`. The headline stays `Alex Upraiser`.
+- **Dropped from the card:** Telegram handle and the Mobile UA / OEM keywords. Telegram, WhatsApp, LinkedIn and the media deck stay on `/connect`.
+- **Missing photo on a second iPhone.** The scan test showed a monogram instead of the photo. The monogram letter was Cyrillic, so that iPhone already stores `+40 724 787 390` under a Cyrillic name and iOS matched the existing contact by number. The existing contact's picture takes priority over the `PHOTO` field in the file. The `PHOTO` field itself is unchanged and decodes correctly in macOS QuickLook. To confirm, scan from an iPhone that has never saved the number.
+- **Cache bust:** vCard URL bumped to `/Alex_Upraiser.vcf?v=8` because the endpoint is served with `max-age=600`.
+
 ### B. Contact Structure Reference
 ```vcard
 BEGIN:VCARD
