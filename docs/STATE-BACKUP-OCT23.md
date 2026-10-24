@@ -310,3 +310,25 @@ To defend against degraded cellular connectivity inside conference venues:
   git push origin main --force
   ```
 
+## 8. Smart Referrer & In-App Attribution Engine (`v2.2.63-stable`)
+
+### A. Clean URL Attribution Without UTMs
+- **Problem Solved:** Conference leads receive short, prestigious, clean links (`upraiser.co.uk/connect`) with zero messy tracking tags, while the engineering team preserves full origin attribution.
+- **Client-Side Smart Detector (`src/lib/activityTracker.ts`):**
+  1. **Referrer Analysis (`document.referrer`):**
+     - Matches external domains: `LinkedIn` (`linkedin.com`, `lnkd.in`), `Telegram Web` (`t.me`), `WhatsApp Web`, `X / Twitter` (`t.co`), `Meta` (`facebook.com`, `instagram.com`), `Google Organic`, `Bing`, `MS Teams`, `Slack`, etc.
+  2. **In-App Browser & Messenger Detection (`navigator.userAgent`):**
+     - Operates when messengers (Telegram, WhatsApp, MS Teams, Slack) strip `document.referrer`.
+     - Identifies in-app WebViews: `Telegram (In-App Browser)`, `WhatsApp (In-App Browser)`, `LinkedIn (In-App Browser)`, `MS Teams (In-App Browser)`, `X / Twitter (In-App Browser)`, `iOS In-App WebView`, `Android In-App WebView`.
+     - Identifies direct entries: `Direct / Mobile Safari`, `Direct / Samsung Internet`, `Direct / Mobile Chrome`, `Direct / Clean URL Entry`.
+  3. **First-Touch & Multi-Session Persistence (`localStorage`):**
+     - Captures `firstTrafficSource` on Day 1 and stores it under `upraiser_hub_session_v1`.
+     - Tracks `currentTrafficSource` for repeat sessions, enabling attribution models like:
+       `LinkedIn (Referrer) · Повторный визит напрямую`.
+- **Serverless Alerts Formatting (`api/activity.ts`):**
+  - **Telegram Bot Alert:**
+    `🌐 <b>Источник (Smart Detect):</b> LinkedIn (Referrer)`
+  - **Resend HTML Email Digest:**
+    Dedicated badge row: `🌐 LinkedIn (Referrer) (Возврат: Direct / Mobile Safari)`.
+
+

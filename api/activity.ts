@@ -199,6 +199,16 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const displayContact = leadContact.trim() || "Not entered yet";
   const durationMin = (Math.max(durationSeconds, 1) / 60).toFixed(1);
 
+  // Extract smart detected traffic source (clean URL attribution)
+  const currentSource = metadata?.traffic_source || "";
+  const initialSource = metadata?.first_traffic_source || "";
+  let smartSourceDisplay = currentSource || initialSource || "Direct / Organic";
+  if (initialSource && currentSource && initialSource !== currentSource && !currentSource.startsWith("Direct")) {
+    smartSourceDisplay = `${initialSource} (Возврат: ${currentSource})`;
+  } else if (initialSource && currentSource && initialSource !== currentSource && currentSource.startsWith("Direct")) {
+    smartSourceDisplay = `${initialSource} (Повторный визит напрямую)`;
+  }
+
   const eventDescriptions: Record<string, string> = {
     return_visit: "🔁 Повторный визит на /connect",
     deck_view: "📊 Просмотр медиадека (Traffic Infrastructure Deck)",
@@ -304,6 +314,10 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           <td class="value">${escapeHtml(displayContact)}</td>
         </tr>
         <tr>
+          <td class="label">Определенный источник:</td>
+          <td class="value"><span style="display: inline-block; padding: 2px 8px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 6px; font-weight: 700; font-size: 12px;">🌐 ${escapeHtml(smartSourceDisplay)}</span></td>
+        </tr>
+        <tr>
           <td class="label">Visitor Token:</td>
           <td class="value"><code>${escapeHtml(visitorId)}</code></td>
         </tr>
@@ -370,6 +384,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       const tgText = `<b>🔁 [HIGH INTENT] Лид вернулся на сайт!</b>\n\n` +
         `👤 <b>Имя:</b> ${escapeHtml(displayName)}\n` +
         `📱 <b>Контакт:</b> ${escapeHtml(displayContact)}\n` +
+        `🌐 <b>Источник (Smart Detect):</b> ${escapeHtml(smartSourceDisplay)}\n` +
         `⏱ <b>Активное время:</b> ${durationSeconds}с (~${durationMin} мин)\n` +
         `🏷 <b>Статус:</b> ${escapeHtml(sessionState || "Повторный визит")}\n` +
         `🆔 <code>${escapeHtml(visitorId)}</code>\n\n` +
