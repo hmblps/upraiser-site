@@ -356,9 +356,19 @@ export function ConferenceHubPage() {
     }
   }, [lang]);
 
-  const triggerVCardDownload = () => {
+  const triggerVCardDownload = (leadName?: string, leadContact?: string) => {
     try {
-      trackAction("vcf_download", 0, { trigger: "clip_in" });
+      const session = getOrInitHubSession();
+      const resolvedName = leadName?.trim() || session.savedName || name.trim() || undefined;
+      const resolvedContact = leadContact?.trim() || session.savedContact || contact.trim() || undefined;
+
+      trackAction(
+        "vcf_download",
+        0,
+        { trigger: "clip_in" },
+        resolvedName,
+        resolvedContact
+      );
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         try {
           navigator.vibrate(18);
@@ -381,7 +391,9 @@ export function ConferenceHubPage() {
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
-      if (!name.trim() || !contact.trim()) return;
+      const trimmedName = name.trim();
+      const trimmedContact = contact.trim();
+      if (!trimmedName || !trimmedContact) return;
 
       // 1. Tactile impulse
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
@@ -390,21 +402,22 @@ export function ConferenceHubPage() {
         } catch {}
       }
 
-      // 2. Burst into hyperspace warp speed with an automatic 2.2s cap
+      // 2. Save contact to local session FIRST so all subsequent beacons immediately carry the identity
+      updateHubContact(trimmedName, trimmedContact);
+
+      // 3. Burst into hyperspace warp speed with an automatic 2.2s cap
       if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
       setIsWarping(true);
       warpTimeoutRef.current = setTimeout(() => {
         setIsWarping(false);
       }, 2200);
 
-      // 3. Trigger reciprocal vCard download inside user activation
-      triggerVCardDownload();
+      // 4. Trigger reciprocal vCard download inside user activation with explicit identity
+      triggerVCardDownload(trimmedName, trimmedContact);
 
       setStatus("submitting");
       setErrorMessage("");
 
-      // 4. Save contact to local session so future visits are recognized with their name
-      updateHubContact(name.trim(), contact.trim());
       const session = getOrInitHubSession();
       const telemetry = collectDeviceTelemetry(session, lang);
 
@@ -565,7 +578,9 @@ export function ConferenceHubPage() {
           <motion.a
             href={VCARD_URL}
             onClick={() => {
-              trackAction("vcf_download", 0, { trigger: "one_tap_save_button" });
+              const currentName = name.trim() || undefined;
+              const currentContact = contact.trim() || undefined;
+              trackAction("vcf_download", 0, { trigger: "one_tap_save_button" }, currentName, currentContact);
               if (needsDownloadGuidance) {
                 setAndroidDownloaded(true);
                 setTimeout(() => setAndroidDownloaded(false), 4500);

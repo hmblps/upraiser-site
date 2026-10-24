@@ -21,11 +21,26 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
+/**
+ * Format human-readable fallback display name from timestamped or legacy token
+ * e.g. hub_20261024_1745_9a2f -> "Лид #9A2F (24.10 17:45)"
+ * e.g. hub_07ftruu -> "Лид #07FTRUU"
+ */
+function formatFallbackDisplayName(id: string): string {
+  const match = id.match(/^hub_(\d{4}|\d{2})(\d{2})(\d{2})_(\d{2})(\d{2})_([a-z0-9]+)$/i);
+  if (match) {
+    const [, , mm, dd, hh, min, salt] = match;
+    return `Лид #${salt.toUpperCase()} (${dd}.${mm} ${hh}:${min})`;
+  }
+  const clean = id.replace(/^hub_/, "").toUpperCase();
+  return `Лид #${clean}`;
+}
+
 interface ActivityEventPayload {
   visitorId: string;
   leadName?: string;
   leadContact?: string;
-  eventType: "return_visit" | "deck_view" | "page_scroll" | "vcf_download" | "heartbeat" | "session_end";
+  eventType: "return_visit" | "deck_view" | "page_scroll" | "vcf_download" | "heartbeat" | "session_end" | "form_submit";
   durationSeconds?: number;
   metadata?: Record<string, any>;
   sessionState?: string;
@@ -90,16 +105,60 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   const supabaseAdmin = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
+  // 4. Intelligent Identity Resolution:
+  // If identity was not supplied in this beacon payload, check if this visitor was already
+  // identified in Supabase (e.g. earlier form submit, or previous identified event)
+  let resolvedLeadName = (leadName || "").trim();
+  let resolvedLeadContact = (leadContact || "").trim();
+
+  if (supabaseAdmin && (!resolvedLeadName || !resolvedLeadContact)) {
+    try {
+      // A. Query most recent identified record in lead_activity_logs
+      const { data: identifiedRow } = await supabaseAdmin
+        .from("lead_activity_logs")
+        .select("lead_name, lead_contact")
+        .eq("visitor_id", visitorId)
+        .not("lead_name", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (identifiedRow?.lead_name) {
+        if (!resolvedLeadName) resolvedLeadName = identifiedRow.lead_name;
+        if (!resolvedLeadContact) resolvedLeadContact = identifiedRow.lead_contact || "";
+      } else {
+        // B. Fallback: inspect lead_notification_cooldowns metadata
+        const { data: cooldownRow } = await supabaseAdmin
+          .from("lead_notification_cooldowns")
+          .select("metadata")
+          .eq("visitor_id", visitorId)
+          .maybeSingle();
+
+        const storedName = cooldownRow?.metadata?.displayName;
+        if (
+          storedName &&
+          !storedName.startsWith("Lead #") &&
+          !storedName.startsWith("Лид #")
+        ) {
+          if (!resolvedLeadName) resolvedLeadName = storedName;
+          if (!resolvedLeadContact) resolvedLeadContact = cooldownRow.metadata?.leadContact || "";
+        }
+      }
+    } catch (identityErr) {
+      console.warn("Identity resolution exception:", identityErr);
+    }
+  }
+
   let loggedToDb = false;
 
-  // 4. Log event to Supabase lead_activity_logs
+  // 5. Log event to Supabase lead_activity_logs with stitched identity
   if (supabaseAdmin) {
     try {
       const { error: insertError } = await supabaseAdmin.from("lead_activity_logs").insert([
         {
           visitor_id: visitorId,
-          lead_name: leadName || null,
-          lead_contact: leadContact || null,
+          lead_name: resolvedLeadName || null,
+          lead_contact: resolvedLeadContact || null,
           event_type: eventType,
           duration_seconds: durationSeconds || 0,
           metadata: {
@@ -112,6 +171,18 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       ]);
       if (!insertError) {
         loggedToDb = true;
+
+        // If identity is known, retroactively update previous anonymous entries for this visitor
+        if (resolvedLeadName) {
+          await supabaseAdmin
+            .from("lead_activity_logs")
+            .update({
+              lead_name: resolvedLeadName,
+              lead_contact: resolvedLeadContact || null,
+            })
+            .eq("visitor_id", visitorId)
+            .is("lead_name", null);
+        }
       } else {
         console.warn("Supabase lead_activity_logs insert warning:", insertError.message);
       }
@@ -159,15 +230,16 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false }));
   }
 
-  // 6. Check 4-Hour Cooldown in Supabase (bypass for vcf_download)
+  // 6. Check 4-Hour Cooldown in Supabase (with 45s de-duplication for rapid double clicks)
   let cooldownActive = false;
   let previousNotificationCount = 0;
+  let lastEventWasVcfRecently = false;
 
   if (supabaseAdmin) {
     try {
       const { data: cooldownData } = await supabaseAdmin
         .from("lead_notification_cooldowns")
-        .select("last_notified_at, total_notifications")
+        .select("last_notified_at, last_event_type, total_notifications")
         .eq("visitor_id", visitorId)
         .maybeSingle();
 
@@ -178,13 +250,29 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         if (elapsed < COOLDOWN_MS) {
           cooldownActive = true;
         }
+        // De-duplicate rapid back-to-back vCard saves within 45 seconds
+        if (isVcfDownload && cooldownData.last_event_type === "vcf_download" && elapsed < 45 * 1000) {
+          lastEventWasVcfRecently = true;
+        }
       }
     } catch (cooldownErr) {
       console.warn("Cooldown check error:", cooldownErr);
     }
   }
 
-  // Never suppress vcf_download
+  if (lastEventWasVcfRecently) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(
+      JSON.stringify({
+        ok: true,
+        logged: loggedToDb,
+        digestSent: false,
+        reason: "vcf_dedup_45s",
+      })
+    );
+  }
+
+  // Never suppress initial vcf_download even during general cooldown
   if (cooldownActive && !isVcfDownload) {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(
@@ -216,9 +304,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
   }
 
-  // Format activity summary lines
-  const displayName = leadName.trim() || `Lead #${visitorId.slice(-4).toUpperCase()}`;
-  const displayContact = leadContact.trim() || "Not entered yet";
+  // Format activity summary lines with stitched identity or human-readable fallback
+  const displayName = resolvedLeadName || formatFallbackDisplayName(visitorId);
+  const displayContact = resolvedLeadContact || "Not entered yet";
   const durationMin = (Math.max(durationSeconds, 1) / 60).toFixed(1);
 
   // Extract smart detected traffic source (clean URL attribution)
@@ -232,6 +320,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 
   const eventDescriptions: Record<string, string> = {
+    form_submit: "🧗 Отправка контактов (Clip In)",
     return_visit: "🔁 Повторный визит на /connect",
     deck_view: "📊 Просмотр медиадека (Traffic Infrastructure Deck)",
     vcf_download: "📇 Скачивание контакта One-Tap Save (.vcf)",
@@ -472,6 +561,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           total_notifications: previousNotificationCount + 1,
           metadata: {
             displayName,
+            leadContact: displayContact,
             durationSeconds,
             emailSent,
             telegramSent,

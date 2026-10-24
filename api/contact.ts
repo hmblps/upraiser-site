@@ -114,6 +114,65 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   let attachments: Array<{ filename: string; content: string }> | undefined;
 
+  // Sync identity & persist form_submit activity to Supabase if visitorId is present
+  const visitorId = telemetry?.visitorId || body?.visitorId;
+  const cleanName = name.trim();
+  const cleanContact = (phone || email).trim();
+
+  if (supabaseAdmin && visitorId) {
+    try {
+      // 1. Insert form_submit action into lead_activity_logs
+      await supabaseAdmin.from("lead_activity_logs").insert([
+        {
+          visitor_id: visitorId,
+          lead_name: cleanName,
+          lead_contact: cleanContact,
+          event_type: "form_submit",
+          duration_seconds: 0,
+          metadata: {
+            appId,
+            geos,
+            companyType,
+            companySize,
+            monthlyBudget,
+            isRepeatAlert,
+            notes,
+            telemetry,
+            userAgent: req.headers["user-agent"] || telemetry?.userAgent || "unknown",
+            ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
+          },
+        },
+      ]);
+
+      // 2. Retroactively link all past anonymous activity logs for this visitor
+      await supabaseAdmin
+        .from("lead_activity_logs")
+        .update({
+          lead_name: cleanName,
+          lead_contact: cleanContact,
+        })
+        .eq("visitor_id", visitorId)
+        .is("lead_name", null);
+
+      // 3. Upsert into cooldowns with permanently identified display name
+      await supabaseAdmin.from("lead_notification_cooldowns").upsert(
+        {
+          visitor_id: visitorId,
+          last_notified_at: new Date().toISOString(),
+          last_event_type: "form_submit",
+          metadata: {
+            displayName: cleanName,
+            leadContact: cleanContact,
+            identifiedAt: new Date().toISOString(),
+          },
+        },
+        { onConflict: "visitor_id" }
+      );
+    } catch (syncErr) {
+      console.warn("Supabase identity sync warning in contact handler:", syncErr);
+    }
+  }
+
   try {
     // 1. Validate and download files from Supabase Storage if attached
     if (rawFiles.length > 0 && supabaseAdmin) {
@@ -325,6 +384,44 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       const errorText = await resendResponse.text();
       res.writeHead(resendResponse.status, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ ok: false, error: `Resend error: ${errorText}` }));
+    }
+
+    // 4. Send Telegram instant notification if configured
+    const tgToken = process.env.VITE_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+    const tgChatId = process.env.VITE_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
+    if (tgToken && tgChatId) {
+      try {
+        const tgHeader = isRepeatAlert
+          ? `<b>🔁 [HUB REVISIT ALERT] Лид вернулся на /connect!</b>`
+          : isConference
+          ? `<b>🧗 [НОВЫЙ ЛИД · CLIP IN] Лид оставил контакты!</b>`
+          : `<b>🚀 [НОВАЯ ЗАЯВКА НА ПИЛОТ]</b>`;
+
+        const tgText =
+          `${tgHeader}\n\n` +
+          `👤 <b>Имя:</b> ${escapeHtml(cleanName)}\n` +
+          `📱 <b>Контакт:</b> ${escapeHtml(cleanContact)}\n` +
+          (visitorId ? `🆔 <code>${escapeHtml(visitorId)}</code>\n` : "") +
+          (telemetry?.hubLang ? `🌐 <b>Язык хаба:</b> ${escapeHtml(telemetry.hubLang)}\n` : "") +
+          (telemetry?.sessionState ? `🏷 <b>Статус:</b> ${escapeHtml(telemetry.sessionState)}\n` : "") +
+          (telemetry?.viewport ? `📱 <b>Экран:</b> ${escapeHtml(telemetry.viewport)}\n` : "") +
+          (!isConference && companyType ? `🏢 <b>Тип:</b> ${escapeHtml(companyType)} (${escapeHtml(companySize)})\n` : "") +
+          (!isConference && monthlyBudget ? `💰 <b>Бюджет:</b> ${escapeHtml(monthlyBudget)}\n` : "") +
+          `\n<b>Footprint & Notes:</b>\n<code>${escapeHtml((notes || "No notes").slice(0, 600))}</code>`;
+
+        await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: tgChatId,
+            text: tgText,
+            parse_mode: "HTML",
+            disable_web_page_preview: true,
+          }),
+        });
+      } catch (tgErr) {
+        console.warn("Telegram notification warning in contact handler:", tgErr);
+      }
     }
 
     res.writeHead(200, { "Content-Type": "application/json" });

@@ -317,6 +317,22 @@ export function detectSmartTrafficSource(): SmartTrafficSource {
   };
 }
 
+/**
+ * Generate a human-readable timestamped visitor token:
+ * Format: hub_YYYYMMDD_HHMM_xxxx (e.g. hub_20261024_1745_9a2f)
+ * Embeds year, month, day, hour and minute directly into the ID
+ * so operators instantly know when the lead scanned or first arrived.
+ */
+export function generateTimestampedVisitorId(date: Date = new Date()): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const hh = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  const salt = Math.random().toString(36).substring(2, 6);
+  return `hub_${yyyy}${mm}${dd}_${hh}${min}_${salt}`;
+}
+
 export function getOrInitHubSession(): HubSessionState {
   if (typeof window === "undefined") {
     return {
@@ -347,12 +363,17 @@ export function getOrInitHubSession(): HubSessionState {
         parsed.lastActiveTime = parsed.lastVisitTime || now;
       }
 
+      // If visitorId is missing or corrupt, generate a readable timestamped ID
+      if (!parsed.visitorId || !parsed.visitorId.startsWith("hub_") || parsed.visitorId === "hub_local") {
+        parsed.visitorId = generateTimestampedVisitorId(new Date(parsed.firstVisitTime || now));
+      }
+
       localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
       return parsed;
     }
 
     const newSession: HubSessionState = {
-      visitorId: "hub_" + Math.random().toString(36).substring(2, 9),
+      visitorId: generateTimestampedVisitorId(new Date(now)),
       visitCount: 1,
       firstVisitTime: now,
       lastVisitTime: now,
@@ -366,7 +387,7 @@ export function getOrInitHubSession(): HubSessionState {
   } catch {
     const fallbackDetected = detectSmartTrafficSource();
     return {
-      visitorId: "hub_local",
+      visitorId: generateTimestampedVisitorId(),
       visitCount: 1,
       firstVisitTime: Date.now(),
       lastVisitTime: Date.now(),
@@ -469,13 +490,29 @@ export function sendActivityBeacon(payload: ActivityBeaconPayload) {
 
 /**
  * Manual helper to track high-value actions (vCard download, deck open)
+ * Supports explicit name & contact overrides for immediate identity stitching
  */
-export function trackLeadAction(eventType: ActivityEventType, durationSeconds = 0, metadata: Record<string, any> = {}) {
+export function trackLeadAction(
+  eventType: ActivityEventType,
+  durationSeconds = 0,
+  metadata: Record<string, any> = {},
+  overrideName?: string,
+  overrideContact?: string
+) {
   const session = getOrInitHubSession();
+
+  // If explicit identity is provided, ensure session in localStorage is synchronized immediately
+  if (overrideName && (!session.savedName || session.savedName !== overrideName)) {
+    updateHubContact(overrideName, overrideContact || session.savedContact || "");
+  }
+
+  const resolvedName = overrideName || session.savedName;
+  const resolvedContact = overrideContact || session.savedContact;
+
   sendActivityBeacon({
     visitorId: session.visitorId,
-    leadName: session.savedName,
-    leadContact: session.savedContact,
+    leadName: resolvedName,
+    leadContact: resolvedContact,
     eventType,
     durationSeconds,
     sessionState: session.visitCount > 1 ? `Repeat Visit #${session.visitCount}` : "First Visit",
