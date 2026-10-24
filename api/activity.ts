@@ -8,8 +8,9 @@ export const config = {
   },
 };
 
-const COOLDOWN_MS = 12 * 60 * 60 * 1000; // 12-hour notification cooldown per visitor
-const ENGAGEMENT_THRESHOLD_SECONDS = 25; // 25 seconds of active presence
+const COOLDOWN_MS = 4 * 60 * 60 * 1000; // 4-hour notification cooldown per visitor (allows evening follow-ups)
+const FIRST_VISIT_ENGAGEMENT_SECONDS = 120; // First visit requires >= 2 min active engagement to trigger a digest
+const FIRST_VISIT_DEEP_SLIDE = 8; // Or reaching slide 8+ with at least 45s active time
 
 function escapeHtml(str: string): string {
   return String(str || "")
@@ -120,25 +121,45 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 
   // 5. Evaluate High-Intent Trigger Criteria
-  // Criteria:
-  // - High duration session (>= 25 seconds) OR
-  // - Return visit (visitor already tracked before) OR
-  // - Meaningful action: deck_view >= 15s OR vcf_download
-  const isHighEngagement = durationSeconds >= ENGAGEMENT_THRESHOLD_SECONDS;
-  const isReturnVisit = eventType === "return_visit";
-  const isMeaningfulAction =
-    eventType === "vcf_download" ||
-    (eventType === "deck_view" && durationSeconds >= 15) ||
-    Boolean(metadata?.scrollDepth && metadata.scrollDepth >= 80);
+  const visitCount =
+    Number(metadata?.visitCount) ||
+    (sessionState.match(/Repeat Visit #(\d+)/)?.[1]
+      ? parseInt(sessionState.match(/Repeat Visit #(\d+)/)![1], 10)
+      : 1);
+  const isReturnVisitEvent = eventType === "return_visit";
+  const isRepeatVisitSession = visitCount > 1 || sessionState.toLowerCase().includes("repeat visit");
+  const isActualReturn = isReturnVisitEvent || isRepeatVisitSession;
+  const isVcfDownload = eventType === "vcf_download";
+  const currentSlide = Number(metadata?.current_slide) || 1;
 
-  const qualifiesForDigest = isHighEngagement || isReturnVisit || isMeaningfulAction;
+  // Criteria:
+  // A. Actual Return Visit: return_visit event (fires only after 30+ min idle and verified user interaction)
+  const qualifiesReturnVisit = isReturnVisitEvent;
+
+  // B. vCard Download: high intent conversion
+  const qualifiesVcf = isVcfDownload;
+
+  // C. First Visit Deep Engagement:
+  // Does NOT trigger on quick 15-25s scans! Requires genuine deep engagement:
+  // >= 120s active time OR reaching slide 8+ with at least 45s active time
+  const qualifiesDeepFirstVisit =
+    !isActualReturn &&
+    (durationSeconds >= FIRST_VISIT_ENGAGEMENT_SECONDS ||
+      (currentSlide >= FIRST_VISIT_DEEP_SLIDE && durationSeconds >= 45));
+
+  // D. Repeat Visit Active Reading (heartbeat during a return visit with >= 60s active time)
+  const qualifiesRepeatEngagement =
+    isActualReturn && !isReturnVisitEvent && durationSeconds >= 60;
+
+  const qualifiesForDigest =
+    qualifiesReturnVisit || qualifiesVcf || qualifiesDeepFirstVisit || qualifiesRepeatEngagement;
 
   if (!qualifiesForDigest) {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false }));
   }
 
-  // 6. Check 12-Hour Cooldown in Supabase
+  // 6. Check 4-Hour Cooldown in Supabase (bypass for vcf_download)
   let cooldownActive = false;
   let previousNotificationCount = 0;
 
@@ -163,14 +184,15 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
   }
 
-  if (cooldownActive) {
+  // Never suppress vcf_download
+  if (cooldownActive && !isVcfDownload) {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(
       JSON.stringify({
         ok: true,
         logged: loggedToDb,
         digestSent: false,
-        reason: "cooldown_active_12h",
+        reason: "cooldown_active_4h",
       })
     );
   }
@@ -259,7 +281,36 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           .join("\n")
       : `  • ${formatEventLabel(eventType, metadata)} (${durationSeconds}s)`;
 
-  // 8. Send Resend Email Digest
+  // 8. Dynamic Alert Category, Subject, Titles & Badges
+  let alertBadge = "🔥 HIGH INTENT TELEMETRY";
+  let alertTitle = `${displayName} активен на платформе`;
+  let alertSubtitle = "Сессия на /connect";
+  let emailSubject = `⚡ [АКТИВНОСТЬ] ${displayName} на платформе · ${durationMin} мин`;
+  let tgHeader = `<b>⚡ [АКТИВНОСТЬ] Лид на платформе!</b>`;
+
+  if (isVcfDownload) {
+    alertBadge = "📇 CONTACT DOWNLOADED";
+    alertTitle = `${displayName} сохранил визитку`;
+    alertSubtitle = "Контакт добавлен в адресную книгу мобильного устройства";
+    emailSubject = `📇 [СОХРАНЕНИЕ КОНТАКТА] ${displayName} сохранил визитку (.vcf)`;
+    tgHeader = `<b>📇 [СОХРАНЕНИЕ КОНТАКТА] Лид сохранил визитку!</b>`;
+  } else if (isActualReturn) {
+    const idleMinStr = metadata?.idleMinutes ? `спустя ${metadata.idleMinutes} мин` : "повторно";
+    alertBadge = "🔁 REPEAT VISITOR";
+    alertTitle = `${displayName} вернулся на платформу`;
+    alertSubtitle = `Повторный визит (${idleMinStr}) · Сессия #${visitCount}`;
+    emailSubject = `🔁 [ПОВТОРНЫЙ ВИЗИТ] ${displayName} вернулся на сайт · Сессия #${visitCount}`;
+    tgHeader = `<b>🔁 [ПОВТОРНЫЙ ВИЗИТ] Лид вернулся на платформу!</b>`;
+  } else {
+    // First Visit Deep Engagement
+    alertBadge = "⚡ NEW LEAD · DEEP ENGAGEMENT";
+    alertTitle = `${displayName} изучает презентацию`;
+    alertSubtitle = `Первый визит с QR-кода · Вовлеченность ${durationMin} мин (слайд ${currentSlide}/20)`;
+    emailSubject = `⚡ [НОВЫЙ ЛИД] ${displayName} изучает презентацию (${durationMin} мин)`;
+    tgHeader = `<b>⚡ [НОВЫЙ ЛИД] Высокая вовлеченность с QR-кода!</b>`;
+  }
+
+  // 9. Send Resend Email Digest
   const resendApiKey = process.env.RESEND_API_KEY;
   let emailSent = false;
 
@@ -271,7 +322,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         : ["info@upraiser.co.uk"];
       const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
 
-      const subject = `🔁 [HIGH INTENT] ${displayName} вернулся на сайт · Провел ${durationMin} мин`;
+      const subject = emailSubject;
 
       const html = `
 <!DOCTYPE html>
@@ -298,9 +349,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 <body>
   <div class="card">
     <div class="header">
-      <span class="badge">🔥 HIGH INTENT TELEMETRY</span>
-      <h1 class="title">${escapeHtml(displayName)} активен на платформе</h1>
-      <p class="subtitle">Повторный визит или длительная сессия на /connect</p>
+      <span class="badge">${escapeHtml(alertBadge)}</span>
+      <h1 class="title">${escapeHtml(alertTitle)}</h1>
+      <p class="subtitle">${escapeHtml(alertSubtitle)}</p>
     </div>
     <div class="content">
       <div class="section-title">Сводка по лиду</div>
@@ -323,7 +374,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         </tr>
         <tr>
           <td class="label">Статус визита:</td>
-          <td class="value">${escapeHtml(sessionState || (isReturnVisit ? "Повторный визит" : "Первый визит (высокая вовлеченность)"))}</td>
+          <td class="value">${escapeHtml(sessionState || (isActualReturn ? `Повторный визит #${visitCount}` : "Первый визит"))}</td>
         </tr>
         <tr>
           <td class="label">Время на странице:</td>
@@ -343,7 +394,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       </div>
     </div>
     <div class="footer">
-      UPRAISER Agency LLP · 128 City Road, London EC1V 2NX · Automated High-Intent Digest (12h Cooldown)
+      UPRAISER Agency LLP · 128 City Road, London EC1V 2NX · Automated Telemetry Digest
     </div>
   </div>
 </body>
@@ -374,19 +425,19 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
   }
 
-  // 9. Send Instant Telegram Alert if Bot Token is configured
+  // 10. Send Instant Telegram Alert if Bot Token is configured
   const tgToken = process.env.VITE_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
   const tgChatId = process.env.VITE_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
   let telegramSent = false;
 
   if (tgToken && tgChatId) {
     try {
-      const tgText = `<b>🔁 [HIGH INTENT] Лид вернулся на сайт!</b>\n\n` +
+      const tgText = `${tgHeader}\n\n` +
         `👤 <b>Имя:</b> ${escapeHtml(displayName)}\n` +
         `📱 <b>Контакт:</b> ${escapeHtml(displayContact)}\n` +
         `🌐 <b>Источник (Smart Detect):</b> ${escapeHtml(smartSourceDisplay)}\n` +
         `⏱ <b>Активное время:</b> ${durationSeconds}с (~${durationMin} мин)\n` +
-        `🏷 <b>Статус:</b> ${escapeHtml(sessionState || "Повторный визит")}\n` +
+        `🏷 <b>Статус:</b> ${escapeHtml(sessionState || (isActualReturn ? `Повторный визит #${visitCount}` : "Первый визит"))}\n` +
         `🆔 <code>${escapeHtml(visitorId)}</code>\n\n` +
         `<b>Хроника действий:</b>\n${telegramActivityLines}\n\n` +
         `🔗 <a href="https://upraiser.co.uk/connect">Открыть Conference Hub</a>`;
@@ -410,7 +461,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
   }
 
-  // 10. Update Cooldown Tracker in Supabase
+  // 11. Update Cooldown Tracker in Supabase
   if (supabaseAdmin && (emailSent || telegramSent)) {
     try {
       await supabaseAdmin.from("lead_notification_cooldowns").upsert(
