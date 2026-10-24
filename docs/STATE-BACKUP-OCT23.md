@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 24, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v2.2.56-stable`
+**Tag:** `v2.2.57-stable`
 
 ---
 
@@ -171,3 +171,40 @@ To verify actual real-world behavior on Samsung Internet and Chrome without disr
    - **Method 3: MIME VIEW Intent** — `intent:https://...#Intent;action=VIEW;type=text/vcard;end`.
    - **Method 4: Production Baseline** — Direct HTTP static `/Alex_Upraiser.vcf?v=8`.
 3. Displays a real-time event console capturing `visibilitychange`, `window.blur`, `window.focus`, and user agent string for precise device verification.
+
+---
+
+## 5. Mobile Funnel & Zero-Friction UX Architecture (v2.2.57)
+
+### A. Zero-Typing Lead Capture (Clip In Form)
+To minimize friction when prospects exchange contact information standing in loud expo halls:
+1. **Name Field (`#hub-name`):**
+   - Configured `autoComplete="name"`, `enterKeyHint="next"`, `autoCapitalize="words"`, and `spellCheck={false}`.
+   - iOS QuickType and Android keyboards (Gboard / Samsung Keyboard) immediately render a personal identity badge above the keys. Tapping it populates the name in 0 keystrokes.
+2. **Contact Field (`#hub-contact`):**
+   - Configured `autoComplete="tel email"`, `enterKeyHint="send"`, `autoCapitalize="none"`, and `spellCheck={false}`.
+   - Tapping "Next" focuses the contact field, surfacing the phone owner's verified phone number or email suggestion.
+   - Tapping the blue "Send" action key on the software keyboard immediately submits the form. The entire handshake completes in ~2 seconds with zero manual typing.
+
+### B. Android Smart Download Guidance
+Because Android browsers download the `.vcf` file to local storage before opening:
+- Upon clicking One-Tap Save or submitting Clip In on Android, the primary button label switches for 4.5 seconds to:
+  `✓ Downloaded — Tap "Open"` (translated across all 20 languages, e.g. `✓ Загружено — нажмите «Открыть»` in Russian).
+- Visual treatment transforms into a reassuring emerald badge (`bg-emerald-600 border-emerald-400/30`), guiding the user's gaze directly to the browser's bottom snackbar / notification to tap "Open".
+
+### C. Pre-filled Direct Messaging for Telegram & WhatsApp
+Direct team communication icons under the Clip In form now include pre-composed introductory greetings via URI parameters:
+- **Oleksii Ostroukhov:**
+  - Telegram: `https://t.me/homeboylebz?text=Hey%20Alex%2C%20great%20connecting!`
+  - WhatsApp: `https://wa.me/40724787390?text=Hey%20Alex%2C%20great%20connecting!`
+  - Email: `mailto:alex@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Alex%2C%20great%20connecting!`
+- **Vladyslav Samoilenko:**
+  - Telegram: `https://t.me/Vladussoboi108?text=Hey%20Vlad%2C%20great%20connecting!`
+  - Email: `mailto:ceo@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Vlad%2C%20great%20connecting!`
+- Eliminates the blank chat intimidation factor; interlocutors merely tap the send arrow in their messenger to establish a permanent communication thread.
+
+### D. Expo Pavilion Offline Protection & Head Preloading
+To defend against degraded cellular connectivity inside conference venues:
+1. Dynamically inserts `<link rel="preload" href="/Alex_Upraiser.vcf?v=8" as="fetch" crossOrigin="anonymous" />` into `document.head` on page load.
+2. Background fetch executes with `{ cache: "force-cache" }`.
+3. Combined with `vercel.json` CDN headers (`Cache-Control: public, max-age=600, stale-while-revalidate=86400`), the contact file is preserved in the browser's HTTP cache for instant retrieval even if the device momentarily drops offline.

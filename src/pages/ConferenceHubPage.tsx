@@ -274,7 +274,12 @@ export function ConferenceHubPage() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [isWarping, setIsWarping] = useState(false);
+  const [androidDownloaded, setAndroidDownloaded] = useState(false);
   const warpTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const isAndroid = useMemo(() => {
+    return typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+  }, []);
 
   const triggerWarp = useCallback((durationMs = 2000) => {
     if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
@@ -294,7 +299,20 @@ export function ConferenceHubPage() {
     window.addEventListener("focus", handleReturn);
     document.addEventListener("visibilitychange", handleReturn);
 
-    // Pre-cache static vCard on mount for instant zero-delay opening in Safari & Chrome
+    // 1. Preload <link rel="preload"> in document.head for instant browser-level prefetching
+    try {
+      let link = document.querySelector<HTMLLinkElement>(`link[rel="preload"][href="${VCARD_URL}"]`);
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "preload";
+        link.href = VCARD_URL;
+        link.as = "fetch";
+        link.crossOrigin = "anonymous";
+        document.head.appendChild(link);
+      }
+    } catch {}
+
+    // 2. Pre-cache static vCard on mount for instant zero-delay opening in Safari & Chrome
     try {
       fetch(VCARD_URL, { cache: "force-cache" }).catch(() => {});
     } catch {}
@@ -361,6 +379,10 @@ export function ConferenceHubPage() {
         try {
           navigator.vibrate(18);
         } catch {}
+      }
+      if (isAndroid) {
+        setAndroidDownloaded(true);
+        setTimeout(() => setAndroidDownloaded(false), 4500);
       }
       // Direct navigation to the static inline text/vcard endpoint (no `download` attr, no Blob, no
       // target="_blank") so Safari and Chrome hand the card straight to the system Contacts sheet
@@ -558,17 +580,36 @@ export function ConferenceHubPage() {
         <motion.div variants={itemVariants} className="w-full">
           <motion.a
             href={VCARD_URL}
-            onClick={() => triggerWarp(2200)}
+            onClick={() => {
+              if (isAndroid) {
+                setAndroidDownloaded(true);
+                setTimeout(() => setAndroidDownloaded(false), 4500);
+              }
+              triggerWarp(2200);
+            }}
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.98 }}
             transition={SPRING_TACTILE}
-            className="w-full min-h-[48px] py-3.5 px-6 rounded-2xl bg-[#e63558] hover:bg-[#ff003b] text-white font-medium text-sm text-center shadow-lg shadow-[#e63558]/25 transition-all flex items-center justify-center space-x-2 select-none cursor-pointer"
+            className={`w-full min-h-[48px] py-3.5 px-6 rounded-2xl ${
+              androidDownloaded
+                ? "bg-emerald-600 border border-emerald-400/30 text-white shadow-lg shadow-emerald-500/25"
+                : "bg-[#e63558] hover:bg-[#ff003b] text-white shadow-lg shadow-[#e63558]/25"
+            } font-medium text-sm text-center transition-all flex items-center justify-center space-x-2 select-none cursor-pointer`}
           >
-            <svg className="w-4 h-4 shrink-0 text-[#FECF09]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-            <span>{t.saveContactBtn}</span>
+            {androidDownloaded ? (
+              <>
+                <span className="text-[#FECF09] font-bold text-sm">✓</span>
+                <span className="font-semibold">{t.saveContactAndroidDownloaded}</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4 shrink-0 text-[#FECF09]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span>{t.saveContactBtn}</span>
+              </>
+            )}
           </motion.a>
         </motion.div>
 
@@ -610,6 +651,13 @@ export function ConferenceHubPage() {
               >
                 <input
                   type="text"
+                  name="name"
+                  id="hub-name"
+                  autoComplete="name"
+                  enterKeyHint="next"
+                  autoCapitalize="words"
+                  autoCorrect="off"
+                  spellCheck={false}
                   required
                   placeholder={t.fieldCallsign}
                   value={name}
@@ -619,6 +667,13 @@ export function ConferenceHubPage() {
                 />
                 <input
                   type="text"
+                  name="contact"
+                  id="hub-contact"
+                  autoComplete="tel email"
+                  enterKeyHint="send"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   required
                   dir="ltr"
                   placeholder={t.fieldContact}
@@ -676,7 +731,7 @@ export function ConferenceHubPage() {
             </div>
             <div className="flex items-center space-x-1.5 shrink-0 ms-2">
               <motion.a
-                href="https://t.me/homeboylebz"
+                href="https://t.me/homeboylebz?text=Hey%20Alex%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
                 whileHover={{ scale: 1.08 }}
@@ -689,7 +744,7 @@ export function ConferenceHubPage() {
                 <TelegramIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
               </motion.a>
               <motion.a
-                href="https://wa.me/40724787390"
+                href="https://wa.me/40724787390?text=Hey%20Alex%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
                 whileHover={{ scale: 1.08 }}
@@ -702,7 +757,7 @@ export function ConferenceHubPage() {
                 <WhatsAppIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
               </motion.a>
               <motion.a
-                href="mailto:alex@upraiser.co.uk"
+                href="mailto:alex@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Alex%2C%20great%20connecting!"
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -736,7 +791,7 @@ export function ConferenceHubPage() {
             </div>
             <div className="flex items-center space-x-1.5 shrink-0 ms-2">
               <motion.a
-                href="https://t.me/Vladussoboi108"
+                href="https://t.me/Vladussoboi108?text=Hey%20Vlad%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
                 whileHover={{ scale: 1.08 }}
@@ -749,7 +804,7 @@ export function ConferenceHubPage() {
                 <TelegramIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
               </motion.a>
               <motion.a
-                href="mailto:ceo@upraiser.co.uk"
+                href="mailto:ceo@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Vlad%2C%20great%20connecting!"
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
