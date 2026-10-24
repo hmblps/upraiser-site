@@ -10,12 +10,15 @@ export interface HubSessionState {
   visitCount: number;
   firstVisitTime: number;
   lastVisitTime: number;
+  lastActiveTime?: number;
   savedName?: string;
   savedContact?: string;
   firstTrafficSource?: string;
   currentTrafficSource?: string;
   isInApp?: boolean;
 }
+
+export const IDLE_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes threshold for distinct return visit
 
 export type ActivityEventType =
   | "return_visit"
@@ -340,12 +343,10 @@ export function getOrInitHubSession(): HubSessionState {
       }
       parsed.currentTrafficSource = detected.source;
       parsed.isInApp = detected.isInApp;
-
-      // Count a new distinct visit session if at least 90 seconds elapsed since last activity
-      if (now - (parsed.lastVisitTime || 0) > 90 * 1000) {
-        parsed.visitCount = (parsed.visitCount || 1) + 1;
-        parsed.lastVisitTime = now;
+      if (!parsed.lastActiveTime) {
+        parsed.lastActiveTime = parsed.lastVisitTime || now;
       }
+
       localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
       return parsed;
     }
@@ -355,6 +356,7 @@ export function getOrInitHubSession(): HubSessionState {
       visitCount: 1,
       firstVisitTime: now,
       lastVisitTime: now,
+      lastActiveTime: now,
       firstTrafficSource: detected.source,
       currentTrafficSource: detected.source,
       isInApp: detected.isInApp,
@@ -368,11 +370,46 @@ export function getOrInitHubSession(): HubSessionState {
       visitCount: 1,
       firstVisitTime: Date.now(),
       lastVisitTime: Date.now(),
+      lastActiveTime: Date.now(),
       firstTrafficSource: fallbackDetected.source,
       currentTrafficSource: fallbackDetected.source,
       isInApp: fallbackDetected.isInApp,
     };
   }
+}
+
+/**
+ * Persist timestamp of latest user activity (click, scroll, keystroke)
+ */
+export function recordSessionActivity(timestamp: number = Date.now()): void {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = localStorage.getItem(HUB_SESSION_KEY);
+    if (raw) {
+      const parsed: HubSessionState = JSON.parse(raw);
+      parsed.lastActiveTime = timestamp;
+      localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
+    }
+  } catch {}
+}
+
+/**
+ * Increment visit count on verified interactive return visit (after >= 30 min idle)
+ */
+export function incrementSessionVisit(timestamp: number = Date.now()): number {
+  if (typeof window === "undefined") return 1;
+  try {
+    const raw = localStorage.getItem(HUB_SESSION_KEY);
+    if (raw) {
+      const parsed: HubSessionState = JSON.parse(raw);
+      parsed.visitCount = (parsed.visitCount || 1) + 1;
+      parsed.lastVisitTime = timestamp;
+      parsed.lastActiveTime = timestamp;
+      localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
+      return parsed.visitCount;
+    }
+  } catch {}
+  return 1;
 }
 
 export function updateHubContact(name: string, contact: string) {

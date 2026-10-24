@@ -296,11 +296,11 @@ export default function MediaDeckViewerPage() {
       >
         {/* Aspect Ratio Slide Container */}
         <div
-          className={`relative w-full rounded-2xl border border-white/10 bg-[#080c16] shadow-2xl overflow-hidden flex flex-col transition-all duration-300 sm:aspect-[16/9] min-h-[500px] sm:min-h-0 ${
+          className={`relative w-full rounded-3xl border border-white/[0.08] bg-[#070b16] shadow-2xl overflow-hidden flex flex-col transition-all duration-300 sm:aspect-[16/9] min-h-[520px] sm:min-h-0 ${
             isFullscreen ? "sm:max-h-[85vh]" : ""
           }`}
           style={{
-            backgroundImage: `radial-gradient(circle at 85% 15%, ${slideMeta.accentColor}18 0%, transparent 60%), radial-gradient(circle at 15% 85%, #030712 0%, transparent 70%)`,
+            backgroundImage: `radial-gradient(circle at 85% 15%, ${slideMeta.accentColor}15 0%, transparent 55%), radial-gradient(circle at 10% 85%, #030612 0%, transparent 70%)`,
           }}
         >
           {viewMode === "visual" ? (
@@ -309,30 +309,30 @@ export default function MediaDeckViewerPage() {
               <img
                 src={slideMeta.imageWebp}
                 alt={slideContent.title}
-                className="w-full h-full object-contain rounded-xl select-none"
+                className="w-full h-full object-contain rounded-2xl select-none"
                 loading="eager"
               />
             </div>
           ) : (
-            /* Interactive Mode: 100% Vector Multilingual Layout */
-            <div className="relative w-full h-full p-4 sm:p-8 md:p-10 flex flex-col justify-between overflow-y-auto sm:overflow-hidden">
+            /* Interactive Mode: 100% Vector Multilingual Layout — Airy Minimalist Swiss Typography */
+            <div className="relative w-full h-full p-6 sm:p-10 md:p-12 flex flex-col justify-between overflow-y-auto sm:overflow-hidden">
               {/* Slide Header Zone */}
               <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="inline-flex items-center space-x-2 rtl:space-x-reverse px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono uppercase tracking-wider text-neutral-300">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="inline-flex items-center space-x-2 rtl:space-x-reverse text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold">
                     <span
-                      className="w-2 h-2 rounded-full"
+                      className="w-2 h-2 rounded-full shadow-sm"
                       style={{ backgroundColor: slideMeta.accentColor }}
                     />
                     <span>{slideContent.kicker}</span>
                   </div>
-                  <span className="text-[11px] font-mono text-neutral-400">
+                  <span className="text-xs font-mono text-neutral-400 font-medium">
                     #{String(currentSlide).padStart(2, "0")} / {TOTAL_SLIDES}
                   </span>
                 </div>
 
                 <h2
-                  className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight ${
+                  className={`text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-[1.14] ${
                     isPlainScript ? "tracking-normal" : ""
                   }`}
                 >
@@ -340,39 +340,36 @@ export default function MediaDeckViewerPage() {
                 </h2>
 
                 {slideContent.subtitle && (
-                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-3xl">
+                  <p className="text-sm sm:text-base text-neutral-300/90 leading-relaxed max-w-3xl font-normal mt-1.5 sm:mt-2.5">
                     {slideContent.subtitle}
                   </p>
                 )}
               </div>
 
-              {/* Slide Core Content Body */}
-              <div className="my-auto py-4 sm:py-6">
-                {/* Variant A: Prominent Numerical Metrics */}
+              {/* Slide Core Content Body — Borderless Generous Whitespace */}
+              <div className="my-auto py-4 sm:py-6 md:py-8">
+                {/* Variant A: Prominent Numerical Metrics (No Box Cards, Floating Typography) */}
                 {slideContent.metrics && (
                   <div
-                    className={`grid gap-3 sm:gap-4 ${
+                    className={`grid gap-6 sm:gap-10 md:gap-14 ${
                       slideContent.metrics.length === 3
                         ? "grid-cols-1 sm:grid-cols-3"
                         : "grid-cols-1 sm:grid-cols-2"
                     }`}
                   >
                     {slideContent.metrics.map((metric, i) => (
-                      <div
-                        key={i}
-                        className="p-3.5 sm:p-5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-center"
-                      >
+                      <div key={i} className="flex flex-col justify-start">
                         <div
-                          className="text-2xl sm:text-4xl font-extrabold font-mono tracking-tight"
+                          className="text-4xl sm:text-5xl md:text-6xl font-black font-mono tracking-tight leading-none"
                           style={{ color: slideMeta.accentColor }}
                         >
                           {metric.value}
                         </div>
-                        <div className="text-xs sm:text-sm font-semibold text-white mt-1">
+                        <div className="text-sm sm:text-base font-bold text-white mt-2.5 tracking-tight">
                           {metric.label}
                         </div>
                         {metric.sub && (
-                          <div className="text-[11px] text-neutral-400 mt-0.5">
+                          <div className="text-xs text-neutral-400 mt-1 leading-relaxed font-normal max-w-xs">
                             {metric.sub}
                           </div>
                         )}
@@ -381,11 +378,13 @@ export default function MediaDeckViewerPage() {
                   </div>
                 )}
 
-                {/* Variant B: Structured Feature Bullets / Pillars */}
+                {/* Variant B: Structured Feature Bullets / Pillars (Airy Columns, Zero Box Borders) */}
                 {slideContent.bullets && (
                   <div
-                    className={`grid gap-3 sm:gap-4 mt-3 ${
-                      slideContent.bullets.length === 3
+                    className={`grid gap-6 sm:gap-8 md:gap-12 mt-4 sm:mt-6 ${
+                      slideContent.bullets.length === 4
+                        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                        : slideContent.bullets.length === 3
                         ? "grid-cols-1 sm:grid-cols-3"
                         : "grid-cols-1 sm:grid-cols-2"
                     }`}
@@ -393,21 +392,19 @@ export default function MediaDeckViewerPage() {
                     {slideContent.bullets.map((b, i) => (
                       <div
                         key={i}
-                        className="p-3.5 sm:p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between"
+                        className="flex flex-col justify-start space-y-1.5 sm:space-y-2"
                       >
-                        <div>
-                          {b.badge && (
-                            <span className="inline-block text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-white/10 text-[#FECF09] font-bold mb-2">
-                              {b.badge}
-                            </span>
-                          )}
-                          <h3 className="text-xs sm:text-sm font-bold text-white mb-1">
-                            {b.title}
-                          </h3>
-                          <p className="text-[11px] sm:text-xs text-neutral-300 leading-relaxed">
-                            {b.desc}
-                          </p>
-                        </div>
+                        {b.badge && (
+                          <div className="text-[10px] font-mono uppercase tracking-widest text-[#FECF09] font-bold">
+                            {b.badge}
+                          </div>
+                        )}
+                        <h3 className="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight leading-snug">
+                          {b.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-neutral-300/85 leading-relaxed font-normal">
+                          {b.desc}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -415,19 +412,19 @@ export default function MediaDeckViewerPage() {
 
                 {/* Variant C: Final Slide 20 Onboarding Call To Action */}
                 {currentSlide === 20 && (
-                  <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-[#e63558]/20 via-[#ff003b]/10 to-transparent border border-[#e63558]/40 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div className="space-y-0.5 text-center sm:text-left rtl:sm:text-right">
+                  <div className="mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#e63558]/15 via-[#ff003b]/05 to-transparent border border-[#e63558]/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="space-y-1 text-center sm:text-left rtl:sm:text-right">
                       <div className="text-xs font-bold text-white uppercase tracking-wider">
                         {ui.contactAlex}
                       </div>
-                      <div className="text-[11px] text-neutral-300">
+                      <div className="text-xs text-neutral-300 leading-normal">
                         {slideContent.tagline}
                       </div>
                     </div>
                     <div className="flex items-center space-x-2 rtl:space-x-reverse w-full sm:w-auto">
                       <Link
                         to={`/connect?lang=${lang}#clip-in`}
-                        className="flex-1 sm:flex-initial min-h-[44px] px-4 py-2.5 rounded-xl bg-[#e63558] hover:bg-[#ff003b] text-white text-xs font-bold text-center flex items-center justify-center space-x-1.5 transition-colors shadow-lg shadow-[#e63558]/30"
+                        className="flex-1 sm:flex-initial min-h-[44px] px-5 py-2.5 rounded-xl bg-[#e63558] hover:bg-[#ff003b] text-white text-xs font-bold text-center flex items-center justify-center space-x-1.5 transition-colors shadow-lg shadow-[#e63558]/30"
                       >
                         <span>{ui.clipInCta}</span>
                         <span>→</span>
@@ -441,7 +438,7 @@ export default function MediaDeckViewerPage() {
                             lang,
                           })
                         }
-                        className="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white text-xs font-semibold flex items-center justify-center transition-colors"
+                        className="min-h-[44px] px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-white text-xs font-semibold flex items-center justify-center transition-colors"
                         title={ui.saveVcf}
                       >
                         📇 {ui.saveVcf}
@@ -452,7 +449,7 @@ export default function MediaDeckViewerPage() {
               </div>
 
               {/* Slide Bottom Tagline & Brand Footnote */}
-              <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-neutral-400 font-mono">
+              <div className="pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-neutral-400 font-mono tracking-wide">
                 <div className="truncate max-w-full">
                   {slideContent.tagline || "UPRAISER Agency · Traffic Infrastructure"}
                 </div>
