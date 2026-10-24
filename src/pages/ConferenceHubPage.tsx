@@ -71,7 +71,9 @@ function detectDeviceLang(): HubLang {
     if (primary === "it") return "it";
     if (primary === "pl") return "pl";
     if (primary === "uk") return "uk";
+    if (primary === "ro" || primary === "mo") return "ro";
     if (primary === "he") return "he";
+    if (primary === "ka") return "ka";
     if (primary === "en") return "en";
   }
   return "en";

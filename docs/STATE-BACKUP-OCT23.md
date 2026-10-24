@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 24, 2026
 **Commit:** HEAD / `main`
-**Tag:** `v2.2.59-stable`
+**Tag:** `v2.2.60-stable`
 
 ---
 
@@ -14,7 +14,7 @@
    - Hyperspace warp burst during lead submission ("Clip In" alpine action).
    - Automatic 44×44px minimum tap targets, zero horizontal layout shift (`100dvh`), and safe-area inset protection.
 
-2. **20 Global Languages for AdTech Summits (`conferenceHubI18n.ts`):**
+2. **22 Global Languages for AdTech Summits (`conferenceHubI18n.ts`):**
    - **Demographically Sorted Neutral Picker (Global Speaker Order):**
      1. `en` (English · ~1.5B)
      2. `zh` (Chinese / 中文 · ~1.1B)
@@ -35,7 +35,9 @@
      17. `it` (Italian / Italiano · ~68M)
      18. `pl` (Polish / Polski · ~45M)
      19. `uk` (Ukrainian / Українська · ~40M)
-     20. `he` (Hebrew / עברית · ~10M)
+     20. `ro` (Romanian / Română · ~24M)
+     21. `he` (Hebrew / עברית · ~10M)
+     22. `ka` (Georgian / ქართული · ~4M)
    - **100% Native Localization Across All Elements:**
      - Alpine action button (*Clip In*, *Встегнуться*, *Пристебнутись*, *क्लिप इन करें*, *卡扣锁定*, *I-clip In*, *カラビナを固定*).
      - Roster roles (*Founder & Lead*, *CEO & Co-founder*).

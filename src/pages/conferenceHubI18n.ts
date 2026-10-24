@@ -24,7 +24,9 @@ export const HUB_LANGS = [
   "it",
   "pl",
   "uk",
+  "ro",
   "he",
+  "ka",
 ] as const;
 
 export type HubLang = (typeof HUB_LANGS)[number];
@@ -50,7 +52,9 @@ export const HUB_LANG_NAMES: Record<HubLang, string> = {
   it: "Italiano",
   pl: "Polski",
   uk: "Українська",
+  ro: "Română",
   he: "עברית",
+  ka: "ქართული",
 };
 
 /** Right-to-left scripts. */
@@ -58,10 +62,10 @@ export const HUB_RTL: ReadonlySet<HubLang> = new Set<HubLang>(["ar", "he"]);
 
 /**
  * Scripts where tracking / forced uppercase breaks letter shaping
- * (Arabic joining, Devanagari conjuncts) or looks wrong (CJK, Hebrew, Thai).
+ * (Arabic joining, Devanagari conjuncts) or looks wrong (CJK, Hebrew, Thai, Georgian).
  */
 export const HUB_PLAIN_SCRIPT: ReadonlySet<HubLang> = new Set<HubLang>([
-  "ar", "he", "hi", "zh", "ja", "ko", "th",
+  "ar", "he", "hi", "zh", "ja", "ko", "th", "ka",
 ]);
 
 export interface HubDict {
@@ -842,5 +846,79 @@ export const HUB_DICT: Record<HubLang, HubDict> = {
     errNetwork: "네트워크 오류. 위의 Telegram 또는 WhatsApp으로 Alex에게 직접 문의해 주세요.",
     footerAccess: "컨퍼런스 전용 비공개 네트워킹 허브 · Unlisted",
     langLabel: "언어",
+  },
+  ro: {
+    kicker: "PREZENT LA CONFERINȚĂ · HAI SĂ VORBIM",
+    headline: "Oleksii & The Desk",
+    greeting: "Mă bucur de cunoștință. Hai să construim o infrastructură solidă.",
+    subtext: "Acces direct la operatori. Fără intermediari, infrastructură pură.",
+    saveContactBtn: "Salvează contactul (.vcf)",
+    saveContactAndroidDownloaded: "✓ Descărcat — apasă «Deschide»",
+    saveContactSub: "Importă vCard în contactele iOS și Android cu o singură atingere",
+    directChannels: "Canale directe",
+    founderRole: "Fondator & Lead",
+    opsRole: "CEO & Co-fondator",
+    ecosystemHeader: "Ecosistem & Rezultate",
+    mediaDeckTitle: "Dossier Expediție",
+    mediaDeckSub: "20 slide-uri · 2.6 MB · Infrastructură de trafic",
+    routesTitle: "Rute Dispozitive",
+    routesSub: "Terminal interactiv Programmatic, CTV & OEM",
+    officialPlatform: "Website Oficial",
+    linkedinTitle: "LinkedIn",
+    linkedinSub: "Noutăți oficiale și studii de caz",
+    formHeading: "Să rămânem asigurați în coardă 🧗",
+    formSub: "Evenimentul se termină, dar ascensiunea continuă. Asigură-Ți linia directă cu Noi pentru a nu pierde contactul — iar traficul Tău mobil să nu scadă niciodată.",
+    fieldCallsign: "NUME",
+    callsignPlaceholder: "NUME",
+    fieldCompany: "Companie & Rol",
+    companyPlaceholder: "ex. Head of UA @ Studio",
+    fieldContact: "EMAIL / TELEFON / TG ID etc",
+    contactPlaceholder: "EMAIL / TELEFON / TG ID etc",
+    btnSubmit: "Clip In",
+    btnSubmitting: "Conectare...",
+    successTitle: "COORDONATE PRIMITE",
+    successBody: "",
+    btnAnother: "Trimite alt mesaj",
+    errSubmit: "Nu s-a putut trimite. Scrie-i lui Alex direct pe Telegram sau WhatsApp mai sus.",
+    errNetwork: "Problemă de rețea. Scrie-i lui Alex direct pe Telegram sau WhatsApp mai sus.",
+    footerAccess: "Hub privat de networking · Nelistat",
+    langLabel: "Limbă",
+  },
+  ka: {
+    kicker: "კონფერენციაზე ვართ · ვისაუბროთ",
+    headline: "Oleksii & The Desk",
+    greeting: "სასიამოვნოა გაცნობა. მოდით შევქმნათ მყარი ინფრასტრუქტურა.",
+    subtext: "პირდაპირი წვდომა ოპერატორებთან. შუამავლების გარეშე, სუფთა ინფრასტრუქტურა.",
+    saveContactBtn: "კონტაქტის შენახვა (.vcf)",
+    saveContactAndroidDownloaded: "✓ ჩამოტვირთულია — დააჭირეთ „გახსნას“",
+    saveContactSub: "vCard-ის იმპორტი iOS და Android კონტაქტებში ერთი შეხებით",
+    directChannels: "პირდაპირი კონტაქტები",
+    founderRole: "დამფუძნებელი & Lead",
+    opsRole: "CEO & თანადამფუძნებელი",
+    ecosystemHeader: "ეკოსისტემა & შედეგები",
+    mediaDeckTitle: "საექსპედიციო დოსიე",
+    mediaDeckSub: "20 სლაიდი · 2.6 MB · ტრაფიკის ინფრასტრუქტურა",
+    routesTitle: "მოწყობილობების მარშრუტები",
+    routesSub: "ინტერაქტიული Programmatic, CTV და OEM ტერმინალი",
+    officialPlatform: "ოფიციალური ვებსაიტი",
+    linkedinTitle: "LinkedIn",
+    linkedinSub: "სააგენტოს ოფიციალური სიახლეები და ქეისები",
+    formHeading: "დავრჩეთ ერთ თოკში ჩაბმული 🧗",
+    formSub: "ღონისძიება სრულდება, მაგრამ აღმასვლა გრძელდება. დააფიქსირეთ კავშირი ჩვენთან, რათა არასდროს დავკარგოთ კონტაქტი და თქვენი მობილური მიღწევა არასდროს დაეცეს.",
+    fieldCallsign: "სახელი",
+    callsignPlaceholder: "სახელი",
+    fieldCompany: "კომპანია და როლი",
+    companyPlaceholder: "მაგ. Head of UA @ Studio",
+    fieldContact: "EMAIL / მობილური / TG ID და ა.შ.",
+    contactPlaceholder: "EMAIL / მობილური / TG ID და ა.შ.",
+    btnSubmit: "Clip In",
+    btnSubmitting: "დაკავშირება...",
+    successTitle: "კოორდინატები მიღებულია",
+    successBody: "",
+    btnAnother: "სხვა შეტყობინების გაგზავნა",
+    errSubmit: "გაგზავნა ვერ მოხერხდა. მიწერეთ ალექსს პირდაპირ Telegram-ში ან WhatsApp-ში ზემოთ.",
+    errNetwork: "ქსელის პრობლემა. მიწერეთ ალექსს პირდაპირ Telegram-ში ან WhatsApp-ში ზემოთ.",
+    footerAccess: "კონფერენციის პირადი ქსელური ჰაბი · გაუსაჯაროებელი",
+    langLabel: "ენა",
   },
 };
