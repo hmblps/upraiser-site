@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { StarfieldAscent } from "../components/StarfieldAscent";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useAppleSpatialParallax } from "../hooks/useAppleSpatialParallax";
 import { SiteGrain } from "../components/SiteGrain";
 import {
   HUB_LANGS,
@@ -246,6 +247,9 @@ export function ConferenceHubPage() {
   // Telemetry & Activity Tracker (Heartbeats, return visits, engagement time)
   const { trackAction } = useActivityTracker("conference_hub");
 
+  // 60 FPS Apple OS Spatial Depth & Gyroscopic Tilt Parallax
+  const parallax = useAppleSpatialParallax();
+
   // Form state & Hyper-Jump Warp Speed
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
@@ -406,11 +410,7 @@ export function ConferenceHubPage() {
       updateHubContact(trimmedName, trimmedContact);
 
       // 3. Burst into hyperspace warp speed with an automatic 2.2s cap
-      if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
-      setIsWarping(true);
-      warpTimeoutRef.current = setTimeout(() => {
-        setIsWarping(false);
-      }, 2200);
+      triggerWarp(2200);
 
       // 4. Trigger reciprocal vCard download inside user activation with explicit identity
       triggerVCardDownload(trimmedName, trimmedContact);
@@ -518,13 +518,29 @@ export function ConferenceHubPage() {
       <StarfieldAscent warp={isWarping} />
       <SiteGrain />
 
-      {/* Main Column (max 380px) with Staggered Entry Animation */}
+      {/* Main Column (max 380px) with Apple Spatial 3D Perspective Tilt & Specular Sheen */}
       <motion.div
         variants={containerVariants}
         initial={reduced ? "visible" : "hidden"}
         animate="visible"
-        className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7"
+        style={{
+          perspective: 1000,
+          transform: reduced
+            ? undefined
+            : `perspective(1000px) rotateX(${parallax.rotateX}deg) rotateY(${parallax.rotateY}deg) translate3d(${parallax.x * 4}px, ${parallax.y * 4}px, 0)`,
+          transition: "transform 0.08s ease-out",
+          transformStyle: "preserve-3d",
+        }}
+        className="w-full max-w-[380px] flex flex-col items-center z-10 space-y-6 sm:space-y-7 relative"
       >
+        {/* Dynamic Apple Specular Liquid Glass Sheen */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-6 rounded-3xl opacity-75 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(circle at ${parallax.sheenX}% ${parallax.sheenY}%, rgba(230,53,88,0.12) 0%, rgba(254,207,9,0.04) 30%, transparent 65%)`,
+          }}
+        />
         {/* Top Minimal Bar: Language Switcher */}
         <motion.div variants={itemVariants} className="w-full flex items-center justify-between">
           <Link
@@ -573,47 +589,7 @@ export function ConferenceHubPage() {
           </label>
         </motion.div>
 
-        {/* 1. Primary One-Tap vCard Action (Tactile Spring + Warp Burst) */}
-        <motion.div variants={itemVariants} className="w-full">
-          <motion.a
-            href={VCARD_URL}
-            onClick={() => {
-              const currentName = name.trim() || undefined;
-              const currentContact = contact.trim() || undefined;
-              trackAction("vcf_download", 0, { trigger: "one_tap_save_button" }, currentName, currentContact);
-              if (needsDownloadGuidance) {
-                setAndroidDownloaded(true);
-                setTimeout(() => setAndroidDownloaded(false), 4500);
-              }
-              triggerWarp(2200);
-            }}
-            whileHover={{ scale: 1.015 }}
-            whileTap={{ scale: 0.98 }}
-            transition={SPRING_TACTILE}
-            className={`w-full min-h-[48px] py-3.5 px-6 rounded-2xl ${
-              androidDownloaded
-                ? "bg-emerald-600 border border-emerald-400/30 text-white shadow-lg shadow-emerald-500/25"
-                : "bg-[#e63558] hover:bg-[#ff003b] text-white shadow-lg shadow-[#e63558]/25"
-            } font-medium text-sm text-center transition-all flex items-center justify-center space-x-2 select-none cursor-pointer`}
-          >
-            {androidDownloaded ? (
-              <>
-                <span className="text-[#FECF09] font-bold text-sm">✓</span>
-                <span className="font-semibold">{t.saveContactAndroidDownloaded}</span>
-              </>
-            ) : (
-              <>
-                <svg className="w-4 h-4 shrink-0 text-[#FECF09]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span>{t.saveContactBtn}</span>
-              </>
-            )}
-          </motion.a>
-        </motion.div>
-
-        {/* 2. Direct Lead Capture Form (Centered Header + Micro-Success) */}
+        {/* 1. Direct Lead Capture Form & Reciprocal Contact Exchange */}
         <motion.div variants={itemVariants} className="w-full pt-1 space-y-3">
           <div className="text-center px-1 flex flex-col items-center">
             <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight text-center leading-snug">
@@ -632,7 +608,7 @@ export function ConferenceHubPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98, y: -6 }}
                 transition={SPRING_TACTILE}
-                className="w-full min-h-[46px] py-3.5 px-4 text-center bg-emerald-500/10 rounded-xl border border-emerald-500/25 flex items-center justify-center space-x-2 select-none"
+                className="w-full min-h-[48px] py-3.5 px-4 text-center bg-emerald-500/10 rounded-2xl border border-emerald-500/25 flex items-center justify-center space-x-2 select-none"
               >
                 <span className="text-[#FECF09] font-bold text-sm">✓</span>
                 <span className="font-mono text-xs sm:text-sm font-semibold tracking-wider text-emerald-400 uppercase">
@@ -689,16 +665,29 @@ export function ConferenceHubPage() {
                 <motion.button
                   type="submit"
                   disabled={status === "submitting"}
-                  whileHover={{ scale: 1.01 }}
+                  whileHover={{ scale: 1.015 }}
                   whileTap={{ scale: 0.98 }}
                   transition={SPRING_TACTILE}
-                  className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium transition-colors flex items-center justify-center space-x-2 border border-white/10 cursor-pointer disabled:opacity-50"
+                  className={`w-full min-h-[48px] py-3.5 px-6 rounded-2xl ${
+                    androidDownloaded
+                      ? "bg-emerald-600 border border-emerald-400/30 text-white shadow-lg shadow-emerald-500/25"
+                      : "bg-[#e63558] hover:bg-[#ff003b] text-white shadow-lg shadow-[#e63558]/25 border border-[#ff003b]/30"
+                  } font-medium text-sm text-center transition-all flex items-center justify-center space-x-2 select-none cursor-pointer disabled:opacity-60`}
                 >
                   {status === "submitting" ? (
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>{t.btnSubmitting}</span>
+                    </>
+                  ) : androidDownloaded ? (
+                    <>
+                      <span className="text-[#FECF09] font-bold text-sm">✓</span>
+                      <span className="font-semibold">{t.saveContactAndroidDownloaded}</span>
+                    </>
                   ) : (
                     <>
-                      <span>{t.btnSubmit}</span>
+                      <span className="text-base leading-none">🧗</span>
+                      <span className="font-semibold tracking-wide">{t.btnSubmit}</span>
                       <span aria-hidden className="inline-block rtl:-scale-x-100 font-bold text-[#FECF09]">→</span>
                     </>
                   )}
