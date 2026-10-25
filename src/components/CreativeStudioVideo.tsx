@@ -225,6 +225,53 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     }
   }, [pauseTime, theme]);
 
+  // Allow user to scroll (wheel, touch drag down, arrow keys) to immediately reach summit & cards
+  useEffect(() => {
+    if (phase !== "climbing") return;
+
+    let touchStartY = 0;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Natural downward scroll advances to cards
+      if (e.deltaY > 15) {
+        handleSkipToSummit();
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches?.[0]) {
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!e.touches?.[0]) return;
+      const currentY = e.touches[0].clientY;
+      // User swiping up to scroll down
+      if (touchStartY - currentY > 30) {
+        handleSkipToSummit();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+        handleSkipToSummit();
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [phase, handleSkipToSummit]);
+
   return (
     <div
       onClick={phase === "climbing" ? handleSkipToSummit : undefined}
@@ -529,6 +576,9 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     style={{ width: "0%" }}
                   />
                 </div>
+                <span className="text-accent text-[9px] uppercase tracking-wider pl-1 font-semibold group-hover:underline hidden xs:inline">
+                  Scroll or tap
+                </span>
               </motion.div>
             ) : (
               <motion.div

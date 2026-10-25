@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 25, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.84-stable`  
+**Tag:** `v2.2.86-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,13 +9,16 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Core Hardening
 
 Between October 24 and October 25, 2026, the project underwent significant feature additions and production hardening:
-1. **Creative Studio (`/craft`) Intro Synchronization:**
+1. **Creative Studio (`/craft`) Intro Synchronization & Scroll-to-Advance:**
    - Both Day (`light-loop.mp4`) and Night (`dark-loop.mp4`) ambient intro video ascents now reach the basecamp summit and reveal interactive cards at **exactly 5.0 seconds**.
    - The night ascent was re-timed with a 2.12x speedup curve, eliminating the previous 5.6-second delay gap between themes.
+   - **Scroll-to-Advance Gesture:** Users can scroll down (mouse wheel, touch swipe, or arrow keys) at any point during the intro climb to immediately advance to the capability cards and "Request the Pilot" button.
 2. **Post-Brief Victory Video Flow (`/contact/sent?source=studio`):**
-   - Brief submissions originating from Creative Studio (`/craft` $\to$ `/contact?source=studio`) now trigger an immersive full-screen alpine victory video celebration matching the active theme (Day summit vs. Night celestial aurora).
+   - Brief submissions originating from Creative Studio (`/craft` $\to$ `/contact?source=studio`) trigger an immersive full-screen alpine victory video celebration matching the active theme (Day summit vs. Night celestial aurora).
    - Standard submissions from the main site remain lightning-fast and minimalist without video.
-   - Both victory videos normalized to exactly **6.00 seconds** at CRF 21, with looping disabled (freezing on the summit frame) and confirmation cards emerging at the **4.8s climax** (with tap-to-skip support).
+   - Both victory videos normalized to exactly **6.00 seconds** at 60 FPS, CRF 20, with a custom camera deceleration curve (speed gently dropping from 1.08x at 3.2s down to 0.18x at 6.0s) for a smooth summit landing without abrupt halting.
+   - **Silky Entrance Dissolve & Theme Background Harmony:** The victory video smoothly dissolves in over 900ms (`motion.div` with `ease: [0.22, 1, 0.36, 1]`) against matching theme backgrounds (`#f8fafc` light / `#06070a` dark), completely eliminating harsh cuts or black flashes after submitting.
+   - Confirmation cards emerge progressively starting at **3.4s**, giving viewers 2.6s of comfortable reading time.
    - Reload protection: Refreshing the victory screen returns the user directly to `/craft` in their active theme.
 3. **Studio Ambiance & Lighting Calibration:**
    - Light theme: Brilliant golden sunrise bloom (`screen` & `color-dodge`) without blanket darkening, highlighting the alpine daylight around the climber.

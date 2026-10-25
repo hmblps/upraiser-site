@@ -110,12 +110,21 @@ export function ThankYouPage() {
     <main
       onClick={isStudio && phase === "celebrating" ? handleSkip : undefined}
       className={`site-main relative min-h-[100dvh] flex items-center pt-[var(--site-header-height)] overflow-hidden select-none ${
-        isStudio ? "bg-black text-white" : ""
+        isStudio
+          ? theme === "light"
+            ? "bg-[#f8fafc] text-white"
+            : "bg-[#06070a] text-white"
+          : ""
       } ${isStudio && phase === "celebrating" ? "cursor-pointer" : ""}`}
     >
       {/* Studio Victory Video Ambient Background (Rendered strictly for Studio submitters) */}
       {isStudio && (
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, ease: easeCurve }}
+          className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+        >
           <video
             ref={videoRef}
             key={videoSrc}
@@ -126,7 +135,7 @@ export function ThankYouPage() {
             playsInline
             onTimeUpdate={handleTimeUpdate}
             onEnded={handleVideoEnded}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
+            className="absolute inset-0 w-full h-full object-cover"
             style={{
               filter:
                 theme === "light"
@@ -211,7 +220,7 @@ export function ThankYouPage() {
                   : "linear-gradient(to right, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.22) 32%, rgba(0, 0, 0, 0.04) 55%, transparent 75%)",
             }}
           />
-        </div>
+        </motion.div>
       )}
 
       {/* Confirmation Content Card — reveals smoothly as camera enters graceful deceleration */}
