@@ -73,19 +73,26 @@ Between October 24 and October 25, 2026, the project underwent significant featu
   ```
 - Standard visitors who submit through `/contact` or the main site do not receive the `source=studio` parameter. They are presented with the clean, ultra-fast minimalist confirmation screen without video backgrounds.
 
-### B. Victory Video Architecture & Production Specs
+### B. Victory Video Architecture, Camera Deceleration & Silky Card Revelation
 - **Source Assets:**
   - Day: `/Users/homeboylebz/Downloads/Дневное.mov` $\to$ `public/creative/studio-success-day.mp4`
   - Night: `/Users/homeboylebz/Downloads/Ночное.mov` $\to$ `public/creative/studio-success-night.mp4`
-- **Normalization:**
-  - Cut and re-encoded using high-efficiency H.264 at CRF 21 with `-movflags +faststart` for instantaneous playback start.
-  - Video length synchronized to exactly **6.00 seconds** (1.2 MB Day / 2.3 MB Night).
-  - High-resolution poster frames (`studio-success-day-poster.jpg`, `studio-success-night-poster.jpg`) pre-rendered to prevent blank frames before video starts.
-- **Playback Mechanics (`src/pages/ThankYouPage.tsx`):**
-  - **No Loop:** The `<video>` element omits the `loop` attribute.
-  - **Freeze on Summit:** An `onEnded` callback and an explicit `handleTimeUpdate` pause the video at `5.95s`, holding the final majestic mountain top frame indefinitely.
-  - **Climax Revelation (4.8s):** The confirmation text card remains hidden during the initial 4.8 seconds of climbing triumph, emerging smoothly with an alpine spring animation at the video's emotional peak.
-  - **Click-to-Skip:** Users who wish to skip directly to the confirmation card can tap or click anywhere on the viewport (or on the bottom indicator pill `SUMMIT REACHED · 6.0S`).
+- **Normalization & Camera Deceleration:**
+  - Video length synchronized to exactly **6.00 seconds** (1.6 MB Day / 3.0 MB Night at 60 FPS, CRF 20, H.264 `+faststart`).
+  - **Camera Deceleration Curve (3.2s $\to$ 6.0s):** Re-encoded with a custom PTS deceleration curve:
+    - Initial pace (0.0s $\to$ 3.2s): Brisk 1.08x camera movement.
+    - Deceleration arc (3.2s $\to$ 6.0s): Speed smoothly drops from 1.08x $\to$ 0.18x, allowing the camera to gently glide to a natural rest on the summit rather than halting abruptly.
+  - High-resolution poster frames (`studio-success-day-poster.jpg`, `studio-success-night-poster.jpg`) pre-rendered from the initial frame.
+- **Playback Mechanics & Organic Staggered Reveal (`src/pages/ThankYouPage.tsx`):**
+  - **No Loop & Smooth Freeze:** The `<video>` element omits `loop`. At 5.95s/6.0s, the video softly holds the final majestic mountain top frame without any jarring jerk because the camera has already decelerated.
+  - **Elimination of Abrupt Pop ("Щелчок"):** Card revelation now initiates gently at **3.4s** as the camera enters its deceleration curve, providing 2.6 seconds of comfortable reading time.
+  - **Staggered Progressive Disclosure:**
+    - Badge (`Creative Studio · Pilot Brief Logged`) materializes softly at 3.4s (`duration: 0.75s`, `ease: [0.22, 1, 0.36, 1]`).
+    - Kicker (`Basecamp Reached`) floats in at +120ms.
+    - Headline (`Let us guide You now to the top. Big milestone ahead.`) glides in at +240ms.
+    - Action buttons (`Back to Studio`, `Proven Summits`, `Send another brief`) rise in at +400ms.
+  - **Bottom Indicator Dissolve:** The bottom skip indicator gently fades out (`duration: 0.45s`) rather than abruptly collapsing.
+  - **Click-to-Skip:** Tapping anywhere on the viewport instantly fast-forwards to the final state (`duration: 0.25s`).
 
 ### C. Reload & Re-Visit Auto-Redirect
 - To prevent users from lingering on a static completion URL upon refresh or bookmark reopening:

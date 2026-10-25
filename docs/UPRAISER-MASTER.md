@@ -1,7 +1,7 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 25 October 2026 (v2.2.84-stable)  
+> **Updated:** 25 October 2026 (v2.2.85-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
 > **HEAD:** Creative Studio 5.0s climb equalization + Day/Night victory confirmation engine + Conference Hub & Multilingual Deck  
@@ -1460,6 +1460,10 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - Dark theme: Boosted sky saturation (`1.48 / 1.12`); added two-layer spectral Aurora Borealis (северное сияние) emission in emerald (`#34d399`) and violet (`#a855f7`); bedrock grounded with dark radial base gradient.
   - **Creative Studio Intro Climb Synchronization (v2.2.83-stable):** Accelerated night climb `dark-loop.mp4` by 2.12x (`setpts=0.4717*PTS`), scaling the summit moment from 10.6s down to **5.00s**. Synchronized `pauseTime = 5.0` across both Day and Night modes so interactive showcase cards emerge at the identical 5.0s timestamp. Telemetry altitude counter (`899.0M` $\to$ `900.0M` in 5.0s) and golden wall illumination synchronized.
   - **Master Documentation & State Backup Synchronization (v2.2.84-stable):** Created `docs/STATE-BACKUP-OCT25.md` recording all architectural deliverables, synced `docs/UPRAISER-MASTER.md`, updated site maps, and established rollback tag `v2.2.84-stable` and backup branch `backup-oct25-studio-craft-v2.2.84`.
+  - **Victory Video Camera Deceleration & Silky Staggered Card Disclosure (v2.2.85-stable):**
+    - Re-encoded both 6.0s victory videos with a custom PTS deceleration curve (camera speed gracefully slows from 1.08x at 3.2s down to 0.18x at 6.0s), eliminating abrupt camera halts and providing a gentle, cinematic glide into the summit freeze.
+    - Eliminated the abrupt text pop ("щелчок") by initiating card disclosure at 3.4s with smooth staggered animations across badge, kicker, headline, and CTA buttons (`ease: [0.22, 1, 0.36, 1]`), giving viewers 2.6s of comfortable reading time during the final camera deceleration.
+    - Softened bottom skip indicator pill exit transition to a gentle dissolve. Added `preview` query param support for rapid design inspection.
 
 
 

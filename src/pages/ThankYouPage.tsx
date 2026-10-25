@@ -24,8 +24,12 @@ export function ThankYouPage() {
 
   // For Studio submissions: play cinematic ascent first, then reveal confirmation card at climax
   const [phase, setPhase] = useState<"celebrating" | "reached">(
-    isStudio ? "celebrating" : "reached"
+    isStudio && searchParams.get("preview") !== "reached"
+      ? "celebrating"
+      : "reached"
   );
+  const [skipped, setSkipped] = useState(false);
+  const easeCurve = [0.22, 1, 0.36, 1] as const;
 
   const videoSrc =
     theme === "light"
@@ -40,6 +44,7 @@ export function ThankYouPage() {
   // When refreshing the studio victory confirmation page, return to /craft in active theme
   useEffect(() => {
     if (!isStudio) return;
+    if (searchParams.has("preview")) return;
 
     const navEntry = performance.getEntriesByType?.("navigation")?.[0] as PerformanceNavigationTiming | undefined;
     const isReload =
@@ -73,17 +78,27 @@ export function ThankYouPage() {
       v.currentTime = 5.95;
       v.pause();
     }
+    setSkipped(true);
     setPhase("reached");
   }, [phase]);
 
   const handleTimeUpdate = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
-    // Reveal confirmation card at 4.8s (during the final majestic hold), no loop
-    if (v.currentTime >= 4.8 && phase === "celebrating") {
+    // Reveal confirmation card gently as camera enters deceleration curve (3.4s), no loop
+    if (v.currentTime >= 3.4 && phase === "celebrating") {
       setPhase("reached");
     }
   }, [phase]);
+
+  // Guaranteed fallback timer for smooth reveal at 3.4s even if timeupdate is throttled
+  useEffect(() => {
+    if (!isStudio || phase === "reached") return;
+    const timer = setTimeout(() => {
+      setPhase("reached");
+    }, 3400);
+    return () => clearTimeout(timer);
+  }, [isStudio, phase]);
 
   const handleVideoEnded = useCallback(() => {
     const v = videoRef.current;
@@ -199,41 +214,69 @@ export function ThankYouPage() {
         </div>
       )}
 
-      {/* Confirmation Content Card — reveals smoothly at video climax */}
+      {/* Confirmation Content Card — reveals smoothly as camera enters graceful deceleration */}
       <div className="section-inner py-16 sm:py-20 relative z-20 w-full">
         <AnimatePresence mode="wait">
           {phase === "reached" && (
             <motion.div
               key="confirmation-card"
-              initial={isStudio ? { opacity: 0, y: 24 } : false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              initial={isStudio ? { opacity: 0 } : false}
+              animate={{ opacity: 1 }}
+              transition={{ duration: skipped ? 0.3 : 1.1, ease: easeCurve }}
               className="max-w-2xl"
             >
               {isStudio && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent text-[11px] font-bold tracking-wider uppercase mb-5 backdrop-blur-md">
+                <motion.div
+                  initial={isStudio ? { opacity: 0, y: 12 } : false}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: skipped ? 0.25 : 0.75, ease: easeCurve }}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent text-[11px] font-bold tracking-wider uppercase mb-5 backdrop-blur-md"
+                >
                   <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
                   Creative Studio · Pilot Brief Logged
-                </div>
+                </motion.div>
               )}
 
-              <p
+              <motion.p
+                initial={isStudio ? { opacity: 0, y: 16 } : false}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: skipped ? 0.25 : 0.85,
+                  delay: skipped ? 0 : 0.12,
+                  ease: easeCurve,
+                }}
                 className={`section-label ${
                   isStudio ? "!text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" : ""
                 }`}
               >
                 Basecamp Reached
-              </p>
+              </motion.p>
 
-              <h1
+              <motion.h1
+                initial={isStudio ? { opacity: 0, y: 20 } : false}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: skipped ? 0.25 : 0.95,
+                  delay: skipped ? 0 : 0.24,
+                  ease: easeCurve,
+                }}
                 className={`section-heading--lg max-w-2xl ${
                   isStudio ? "!text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]" : ""
                 }`}
               >
                 Let us guide You now to the top. Big milestone ahead.
-              </h1>
+              </motion.h1>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <motion.div
+                initial={isStudio ? { opacity: 0, y: 16 } : false}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: skipped ? 0.25 : 0.85,
+                  delay: skipped ? 0 : 0.40,
+                  ease: easeCurve,
+                }}
+                className="mt-8 flex flex-wrap items-center gap-3"
+              >
                 {isStudio ? (
                   <>
                     <Magnetic>
@@ -283,7 +326,7 @@ export function ThankYouPage() {
                     </Magnetic>
                   </>
                 )}
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -296,7 +339,7 @@ export function ThankYouPage() {
             key="celebrating-indicator"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10, transition: { duration: 0.25 } }}
+            exit={{ opacity: 0, transition: { duration: 0.45, ease: "easeOut" } }}
             className="fixed bottom-6 sm:bottom-8 inset-x-0 z-30 pointer-events-none flex items-center justify-center px-4"
           >
             <div className="pointer-events-auto min-h-[44px] flex items-center bg-bg-elevated/75 backdrop-blur-xl rounded-full border border-border/40 shadow-lg px-4 py-2 gap-2.5 text-[10px] sm:text-[11px] font-bold tracking-wide uppercase font-sans select-none cursor-pointer text-fg-muted hover:text-fg transition-colors group">
