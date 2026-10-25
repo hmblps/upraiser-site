@@ -37,6 +37,7 @@ export function useActivityTracker(
       const session = getSession();
       sendActivityBeacon({
         visitorId: session.visitorId,
+        clickId: session.clickId || session.visitorId,
         leadName: session.savedName,
         leadContact: session.savedContact,
         eventType,
@@ -102,6 +103,7 @@ export function useActivityTracker(
 
         sendActivityBeacon({
           visitorId: currentSession.visitorId,
+          clickId: currentSession.clickId || currentSession.visitorId,
           leadName: currentSession.savedName,
           leadContact: currentSession.savedContact,
           eventType: "return_visit",
@@ -162,6 +164,7 @@ export function useActivityTracker(
             scrollMilestonesHitRef.current.add(milestone);
             sendActivityBeacon({
               visitorId: session.visitorId,
+              clickId: session.clickId || session.visitorId,
               leadName: session.savedName,
               leadContact: session.savedContact,
               eventType: "page_scroll",

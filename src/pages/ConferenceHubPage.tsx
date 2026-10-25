@@ -171,6 +171,7 @@ function collectDeviceTelemetry(session: HubSessionState, selectedLang: HubLang)
     hubLang: `${selectedLang.toUpperCase()} (${HUB_LANG_NAMES[selectedLang]})`,
     sessionState,
     visitorId: session.visitorId,
+    clickId: session.clickId || session.visitorId,
     visitCount: session.visitCount,
     firstVisitTime: session.firstVisitTime,
     userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
@@ -348,7 +349,7 @@ export function ConferenceHubPage() {
                 `Viewport & Screen: ${telemetry?.viewport} (Screen: ${telemetry?.screenResolution}, ${telemetry?.orientation})`,
                 `Browser Locale: ${telemetry?.locale} (Languages: ${telemetry?.languages})`,
                 `Preferred Hub Language: ${telemetry?.hubLang}`,
-                `Visitor ID: ${telemetry?.visitorId}`,
+                `Click ID (Lead Token): ${telemetry?.clickId || session.clickId || session.visitorId}`,
                 `User-Agent: ${telemetry?.userAgent}`,
               ].join("\n"),
             }),
@@ -434,7 +435,7 @@ export function ConferenceHubPage() {
         `Viewport & Screen: ${telemetry?.viewport || "Mobile"} (Screen: ${telemetry?.screenResolution || ""}, ${telemetry?.orientation || ""})`,
         `Browser Locale: ${telemetry?.locale || "unknown"} (Languages: ${telemetry?.languages || ""})`,
         `Preferred Hub Language: ${telemetry?.hubLang || lang.toUpperCase()}`,
-        `Visitor ID: ${telemetry?.visitorId || "unknown"}`,
+        `Click ID (Lead Token): ${telemetry?.clickId || session.clickId || session.visitorId}`,
         `User-Agent: ${telemetry?.userAgent || (typeof navigator !== "undefined" ? navigator.userAgent : "unknown")}`,
       ].join("\n");
 
@@ -447,6 +448,8 @@ export function ConferenceHubPage() {
         companyType: "Direct Operator Contact",
         companySize: "On-Site Desk",
         monthlyBudget: "Custom Route & Benchmark Split",
+        clickId: session.clickId || session.visitorId,
+        visitorId: session.visitorId,
         telemetry,
         notes: formattedNotes,
       };

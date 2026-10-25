@@ -38,6 +38,7 @@ function formatFallbackDisplayName(id: string): string {
 
 interface ActivityEventPayload {
   visitorId: string;
+  clickId?: string;
   leadName?: string;
   leadContact?: string;
   eventType: "return_visit" | "deck_view" | "page_scroll" | "vcf_download" | "heartbeat" | "session_end" | "form_submit";
@@ -87,6 +88,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   const {
     visitorId,
+    clickId,
     leadName = "",
     leadContact = "",
     eventType = "heartbeat",
@@ -94,6 +96,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     metadata = {},
     sessionState = "",
   }: ActivityEventPayload = body;
+
+  const effectiveClickId = clickId || (body as any)?.click_id || metadata?.click_id || visitorId;
 
   if (!visitorId || typeof visitorId !== "string") {
     res.writeHead(400, { "Content-Type": "application/json" });
@@ -163,6 +167,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           duration_seconds: durationSeconds || 0,
           metadata: {
             ...metadata,
+            click_id: effectiveClickId,
             sessionState,
             userAgent: req.headers["user-agent"] || "unknown",
             ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
@@ -207,8 +212,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   // A. Actual Return Visit: return_visit event (fires only after 30+ min idle and verified user interaction)
   const qualifiesReturnVisit = isReturnVisitEvent;
 
-  // B. vCard Download: high intent conversion
-  const qualifiesVcf = isVcfDownload;
+  // B. vCard Download: disabled per doctrine — downloading .vcf does not guarantee contact was saved.
+  // Activity is still safely logged to Supabase DB for analytics history, but notification alert is suppressed.
+  const qualifiesVcf = false;
 
   // C. First Visit Deep Engagement:
   // Does NOT trigger on quick 15-25s scans! Requires genuine deep engagement:
@@ -458,8 +464,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           <td class="value"><span style="display: inline-block; padding: 2px 8px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 6px; font-weight: 700; font-size: 12px;">🌐 ${escapeHtml(smartSourceDisplay)}</span></td>
         </tr>
         <tr>
-          <td class="label">Visitor Token:</td>
-          <td class="value"><code>${escapeHtml(visitorId)}</code></td>
+          <td class="label">Click ID (Lead Token):</td>
+          <td class="value"><code>${escapeHtml(effectiveClickId)}</code></td>
         </tr>
         <tr>
           <td class="label">Статус визита:</td>
@@ -527,7 +533,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         `🌐 <b>Источник (Smart Detect):</b> ${escapeHtml(smartSourceDisplay)}\n` +
         `⏱ <b>Активное время:</b> ${durationSeconds}с (~${durationMin} мин)\n` +
         `🏷 <b>Статус:</b> ${escapeHtml(sessionState || (isActualReturn ? `Повторный визит #${visitCount}` : "Первый визит"))}\n` +
-        `🆔 <code>${escapeHtml(visitorId)}</code>\n\n` +
+        `🎯 <b>Click ID:</b> <code>${escapeHtml(effectiveClickId)}</code>\n\n` +
         `<b>Хроника действий:</b>\n${telegramActivityLines}\n\n` +
         `🔗 <a href="https://upraiser.co.uk/connect">Открыть Conference Hub</a>`;
 

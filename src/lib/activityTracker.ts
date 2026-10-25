@@ -7,6 +7,7 @@
 
 export interface HubSessionState {
   visitorId: string;
+  clickId: string; // Equated to visitorId token or explicit URL parameter ?click_id / ?cid / ?token
   visitCount: number;
   firstVisitTime: number;
   lastVisitTime: number;
@@ -30,6 +31,7 @@ export type ActivityEventType =
 
 export interface ActivityBeaconPayload {
   visitorId: string;
+  clickId?: string;
   leadName?: string;
   leadContact?: string;
   eventType: ActivityEventType;
@@ -337,6 +339,7 @@ export function getOrInitHubSession(): HubSessionState {
   if (typeof window === "undefined") {
     return {
       visitorId: "srv",
+      clickId: "srv",
       visitCount: 1,
       firstVisitTime: Date.now(),
       lastVisitTime: Date.now(),
@@ -346,6 +349,18 @@ export function getOrInitHubSession(): HubSessionState {
     };
   }
   try {
+    // Inspect URL for external click_id, clickid, cid, or token (ad campaign / conference badge)
+    let urlClickId: string | undefined;
+    try {
+      const url = new URL(window.location.href);
+      urlClickId =
+        url.searchParams.get("click_id") ||
+        url.searchParams.get("clickid") ||
+        url.searchParams.get("cid") ||
+        url.searchParams.get("token") ||
+        undefined;
+    } catch {}
+
     // Check if operator or tester requested a fresh session via ?reset=1 or ?fresh=1
     try {
       const url = new URL(window.location.href);
@@ -380,12 +395,23 @@ export function getOrInitHubSession(): HubSessionState {
         parsed.visitorId = generateTimestampedVisitorId(new Date(parsed.firstVisitTime || now));
       }
 
+      // Equate token to click_id (or capture explicit click_id from campaign URL)
+      if (urlClickId) {
+        parsed.clickId = urlClickId;
+      } else if (!parsed.clickId) {
+        parsed.clickId = parsed.visitorId;
+      }
+
       localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
       return parsed;
     }
 
+    const genToken = generateTimestampedVisitorId(new Date(now));
+    const activeClickId = urlClickId || genToken;
+
     const newSession: HubSessionState = {
-      visitorId: generateTimestampedVisitorId(new Date(now)),
+      visitorId: genToken,
+      clickId: activeClickId,
       visitCount: 1,
       firstVisitTime: now,
       lastVisitTime: now,
@@ -398,8 +424,10 @@ export function getOrInitHubSession(): HubSessionState {
     return newSession;
   } catch {
     const fallbackDetected = detectSmartTrafficSource();
+    const fallbackToken = generateTimestampedVisitorId();
     return {
-      visitorId: generateTimestampedVisitorId(),
+      visitorId: fallbackToken,
+      clickId: fallbackToken,
       visitCount: 1,
       firstVisitTime: Date.now(),
       lastVisitTime: Date.now(),
@@ -465,9 +493,12 @@ export function sendActivityBeacon(payload: ActivityBeaconPayload) {
   if (typeof window === "undefined") return;
 
   const session = getOrInitHubSession();
+  const effectiveClickId = payload.clickId || session.clickId || payload.visitorId;
   const enrichedPayload: ActivityBeaconPayload = {
     ...payload,
+    clickId: effectiveClickId,
     metadata: {
+      click_id: effectiveClickId,
       traffic_source: session.currentTrafficSource || session.firstTrafficSource || "Direct / Clean Entry",
       first_traffic_source: session.firstTrafficSource || "Direct / Clean Entry",
       is_in_app: Boolean(session.isInApp),
@@ -523,6 +554,7 @@ export function trackLeadAction(
 
   sendActivityBeacon({
     visitorId: session.visitorId,
+    clickId: session.clickId || session.visitorId,
     leadName: resolvedName,
     leadContact: resolvedContact,
     eventType,
@@ -531,6 +563,7 @@ export function trackLeadAction(
     metadata: {
       url: typeof window !== "undefined" ? window.location.pathname : "",
       visitCount: session.visitCount,
+      click_id: session.clickId || session.visitorId,
       traffic_source: session.currentTrafficSource || session.firstTrafficSource || "Direct / Clean Entry",
       first_traffic_source: session.firstTrafficSource || "Direct / Clean Entry",
       is_in_app: Boolean(session.isInApp),

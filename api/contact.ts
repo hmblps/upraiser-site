@@ -116,6 +116,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   // Sync identity & persist form_submit activity to Supabase if visitorId is present
   const visitorId = telemetry?.visitorId || body?.visitorId;
+  const effectiveClickId = telemetry?.clickId || body?.clickId || (body as any)?.click_id || visitorId;
   const cleanName = name.trim();
   const cleanContact = (phone || email).trim();
 
@@ -138,6 +139,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             isRepeatAlert,
             notes,
             telemetry,
+            click_id: effectiveClickId,
             userAgent: req.headers["user-agent"] || telemetry?.userAgent || "unknown",
             ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
           },
@@ -302,6 +304,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           <div class="cell-label">Preferred Hub Lang</div>
           <div class="cell-value"><strong>${escapeHtml(telemetry.hubLang)}</strong></div>
         </div>` : ""}
+        ${effectiveClickId ? `
+        <div class="row">
+          <div class="cell-label">Click ID (Lead Token)</div>
+          <div class="cell-value"><code>${escapeHtml(effectiveClickId)}</code></div>
+        </div>` : ""}
         <div class="row">
           <div class="cell-label">Channel Source</div>
           <div class="cell-value">${escapeHtml(appId)} (${escapeHtml(geos || "On-Site")})</div>
@@ -401,7 +408,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           `${tgHeader}\n\n` +
           `👤 <b>Имя:</b> ${escapeHtml(cleanName)}\n` +
           `📱 <b>Контакт:</b> ${escapeHtml(cleanContact)}\n` +
-          (visitorId ? `🆔 <code>${escapeHtml(visitorId)}</code>\n` : "") +
+          (effectiveClickId ? `🎯 <b>Click ID:</b> <code>${escapeHtml(effectiveClickId)}</code>\n` : "") +
           (telemetry?.hubLang ? `🌐 <b>Язык хаба:</b> ${escapeHtml(telemetry.hubLang)}\n` : "") +
           (telemetry?.sessionState ? `🏷 <b>Статус:</b> ${escapeHtml(telemetry.sessionState)}\n` : "") +
           (telemetry?.viewport ? `📱 <b>Экран:</b> ${escapeHtml(telemetry.viewport)}\n` : "") +

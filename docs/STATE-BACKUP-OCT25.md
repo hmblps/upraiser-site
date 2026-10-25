@@ -1,15 +1,21 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 25, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.86-stable`  
+**Tag:** `v2.2.87-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
 
-## 1. Executive Summary: Creative Studio, Victory Flow & Core Hardening
+## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 25, 2026, the project underwent significant feature additions and production hardening:
-1. **Creative Studio (`/craft`) Intro Synchronization & Scroll-to-Advance:**
+1. **Connect Hub Notification De-Noising & Click ID Unification:**
+   - Suppressed email and Telegram notifications on `vcf_download` (One-Tap Save / Clip In) because downloading a `.vcf` file does not guarantee the contact was saved in phone contacts.
+   - Retained instant notifications strictly for submitted forms (`form_submit` via `/api/contact`) and verified return visits.
+   - Equated visitor token to `click_id` across the platform: captures incoming URL parameters (`?click_id=`, `?clickid=`, `?cid=`, `?token=`) or defaults to the timestamped token (`hub_YYYYMMDD_HHMM_xxxx`).
+   - Telegram alerts and email notifications now clearly display `🎯 Click ID: <clickId>`.
+   - Identified root cause of GitHub Actions email: account billing lock on GitHub account `hmblps`. Paused cron schedule in `.github/workflows/supabase-keepalive.yml` to stop automated failure spam. Supabase DB verified 100% online (HTTP 200).
+2. **Creative Studio (`/craft`) Intro Synchronization & Scroll-to-Advance:**
    - Both Day (`light-loop.mp4`) and Night (`dark-loop.mp4`) ambient intro video ascents now reach the basecamp summit and reveal interactive cards at **exactly 5.0 seconds**.
    - The night ascent was re-timed with a 2.12x speedup curve, eliminating the previous 5.6-second delay gap between themes.
    - **Scroll-to-Advance Gesture:** Users can scroll down (mouse wheel, touch swipe, or arrow keys) at any point during the intro climb to immediately advance to the capability cards and "Request the Pilot" button.
@@ -202,6 +208,9 @@ In accordance with David Ogilvy advertising principles and the repository's Glob
 
 | Tag | Date | Focus |
 |---|---|---|
+| `v2.2.87-stable` | 25 Oct 2026 | De-noise Connect notifications (suppress vcf alerts, keep submitted form only), equate token to click_id, pause failing GitHub keep-alive cron |
+| `v2.2.86-stable` | 25 Oct 2026 | Smooth entrance dissolve for victory video & scroll-to-advance in craft intro |
+| `v2.2.85-stable` | 25 Oct 2026 | Victory video camera deceleration & smooth card reveal |
 | `v2.2.84-stable` | 25 Oct 2026 | Full documentation synchronization, state backup & master docs update |
 | `v2.2.83-stable` | 25 Oct 2026 | Accelerate dark climb to 5.0s, synchronizing card emergence across Day & Night |
 | `v2.2.82-stable` | 25 Oct 2026 | Normalize victory videos to 6.0s without loop; card reveal at 4.8s climax |

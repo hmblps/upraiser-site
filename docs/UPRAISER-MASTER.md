@@ -1,7 +1,7 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 25 October 2026 (v2.2.86-stable)  
+> **Updated:** 25 October 2026 (v2.2.87-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
 > **HEAD:** Creative Studio 5.0s climb equalization + Day/Night victory confirmation engine + Conference Hub & Multilingual Deck  
@@ -1467,6 +1467,11 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   - **Victory Video Smooth Entrance Dissolve & Creative Studio Scroll-to-Advance (v2.2.86-stable):**
     - Smooth Entrance Dissolve: Wrapped victory video and ambiance in `motion.div` with a 900ms dissolve (`opacity: 0 -> 1`, `ease: [0.22, 1, 0.36, 1]`) and harmonized underlying page backgrounds (`#f8fafc` light, `#06070a` dark), completely eliminating harsh visual cuts or black flashes after submitting the pilot brief.
     - Scroll-to-Advance Gesture: Enabled natural downward scrolling (mouse wheel, touch swipe down, arrow keys) during the Creative Studio intro climb to immediately advance to capability cards and the "Request the Pilot" button without waiting. Added "Scroll or tap" cue in bottom telemetry pill.
+  - **Connect Hub De-Noising & Click ID Equivalence (v2.2.87-stable):**
+    - Suppressed digest alerts (Telegram and Resend email) on `vcf_download` (One-Tap Save / Clip In) because downloading the card does not prove it was saved on user's device. Retained full activity logging in Supabase `lead_activity_logs` while alerting strictly on submitted forms (`form_submit` via `/api/contact`) and verified return visits.
+    - Equated telemetry token to `Click ID` across the frontend and backend. Captures incoming URL parameters (`?click_id=`, `?clickid=`, `?cid=`, `?token=`) or defaults to the timestamped session token (`hub_YYYYMMDD_HHMM_xxxx`).
+    - Standardized Telegram notifications and Resend emails to display `🎯 Click ID: <clickId>`.
+    - Identified root cause of GitHub Actions email: account billing lock on GitHub account `hmblps`. Paused scheduled cron in `.github/workflows/supabase-keepalive.yml` to prevent failure email spam until billing is unlocked. Verified Supabase database is completely online (HTTP 200).
 
 
 
