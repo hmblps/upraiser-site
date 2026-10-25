@@ -19,7 +19,7 @@ export function ThankYouPage() {
         >
           <p className="section-label">Basecamp Reached</p>
           <h1 className="section-heading--lg max-w-2xl">
-            Let us guide You now to the top. Thrilled to celebrate Your upcoming triumph!
+            Let us guide You now to the top. Big milestone ahead.
           </h1>
           <div className="mt-8 flex flex-wrap gap-3">
             <Magnetic>
