@@ -52,59 +52,90 @@ export function ThankYouPage() {
             loop
             muted
             playsInline
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              theme === "light"
-                ? "opacity-95 contrast-[1.10] saturate-[1.05]"
-                : "opacity-100 contrast-[1.15] saturate-[0.8]"
-            }`}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
             style={{
               filter:
                 theme === "light"
-                  ? "contrast(1.08) saturate(1.04) brightness(1.04)"
-                  : "contrast(1.1) saturate(0.95) brightness(1.0)",
+                  ? "contrast(1.05) saturate(1.18) brightness(1.15)"
+                  : "contrast(1.12) saturate(1.48) brightness(1.20)",
             }}
           />
 
-          {/* Atmosphere / Color Grade Overlay matching Creative Studio */}
-          <div
-            className={`absolute inset-0 pointer-events-none mix-blend-overlay ${
-              theme === "light"
-                ? "bg-gradient-to-b from-[#e0eaf5]/40 to-[#c8d6e5]/40"
-                : "bg-gradient-to-b from-[#111a24]/40 to-[#080d14]/60"
-            }`}
-          />
+          {/* Light Theme: Radiant Golden Sunrise & Day Sun Bloom */}
+          {theme === "light" && (
+            <>
+              {/* Luminous sun burst centered on the horizon / summit */}
+              <div
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{
+                  mixBlendMode: "screen",
+                  background:
+                    "radial-gradient(ellipse 95% 75% at 55% 25%, rgba(255, 240, 205, 0.38) 0%, rgba(255, 215, 140, 0.20) 35%, rgba(251, 191, 36, 0.08) 60%, transparent 80%)",
+                }}
+              />
+              {/* Warm morning atmosphere flood */}
+              <div
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{
+                  mixBlendMode: "color-dodge",
+                  background:
+                    "radial-gradient(circle at 50% 30%, rgba(255, 225, 160, 0.22) 0%, rgba(245, 158, 11, 0.08) 45%, transparent 75%)",
+                }}
+              />
+            </>
+          )}
 
-          {/* Cinematic Golden Ascent Flood Filter */}
-          <div
-            className="absolute inset-0 pointer-events-none z-10"
-            style={{
-              mixBlendMode: "color-dodge",
-              background:
-                theme === "dark"
-                  ? "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(234, 179, 8, 0.12) 0%, rgba(180, 83, 9, 0.04) 50%, transparent 85%)"
-                  : "radial-gradient(ellipse 110% 80% at 50% 100%, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.05) 50%, transparent 85%)",
-            }}
-          />
+          {/* Dark Theme: Aurora Borealis (Сияние) Radiant Celestial Bloom */}
+          {theme === "dark" && (
+            <>
+              {/* Vivid Emerald & Violet Aurora spectral wave in the sky */}
+              <div
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{
+                  mixBlendMode: "screen",
+                  background:
+                    "radial-gradient(ellipse 90% 55% at 70% 25%, rgba(52, 211, 153, 0.32) 0%, rgba(168, 85, 247, 0.35) 38%, rgba(139, 92, 246, 0.15) 60%, transparent 80%)",
+                }}
+              />
+              {/* Concentrated Aurora Core Luminescence */}
+              <div
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{
+                  mixBlendMode: "color-dodge",
+                  background:
+                    "radial-gradient(ellipse 75% 45% at 65% 20%, rgba(110, 231, 183, 0.26) 0%, rgba(192, 132, 252, 0.28) 45%, transparent 75%)",
+                }}
+              />
+            </>
+          )}
 
           {/* Film Grain matching Hero and Creative Studio */}
-          <div className="site-grain absolute inset-0 z-10 opacity-60 pointer-events-none" />
+          <div
+            className={`site-grain absolute inset-0 z-10 pointer-events-none ${
+              theme === "light" ? "opacity-35" : "opacity-50"
+            }`}
+          />
 
-          {/* Centered cinematic contrast vignette for crisp typography */}
+          {/* Dark alpine bedrock grounding (anchors rocks below without dimming sky/sun) */}
           <div
             className="absolute inset-0 pointer-events-none z-10"
             style={{
               background:
                 theme === "dark"
-                  ? "radial-gradient(ellipse 85% 65% at 50% 35%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, transparent 100%)"
-                  : "radial-gradient(ellipse 85% 65% at 50% 35%, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)",
+                  ? "radial-gradient(ellipse 100% 65% at 50% 100%, rgba(4, 7, 12, 0.60) 0%, rgba(4, 7, 12, 0.15) 55%, transparent 90%)"
+                  : "radial-gradient(ellipse 100% 55% at 50% 100%, rgba(20, 10, 5, 0.30) 0%, rgba(20, 10, 5, 0.08) 50%, transparent 85%)",
             }}
           />
 
-          {/* Contrast backdrop */}
+          {/* Precision typography scrim (left side only — leaves climber, sun, and aurora pure & bright) */}
           <div
-            className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
-              theme === "dark" ? "bg-black/55" : "bg-black/35"
-            }`}
+            className="absolute inset-0 pointer-events-none z-10"
+            style={{
+              background:
+                theme === "dark"
+                  ? "linear-gradient(to right, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.38) 32%, rgba(0, 0, 0, 0.08) 55%, transparent 75%)"
+                  : "linear-gradient(to right, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.22) 32%, rgba(0, 0, 0, 0.04) 55%, transparent 75%)",
+            }}
           />
         </div>
       )}
