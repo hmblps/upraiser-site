@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 24 October 2026 (v2.2.60-stable)  
+> **Updated:** 25 October 2026 (v2.2.84-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** this ritual — OEM/CTV glass SOT + single active WebGL device on `/channels` (see §25)  
+> **HEAD:** Creative Studio 5.0s climb equalization + Day/Night victory confirmation engine + Conference Hub & Multilingual Deck  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`
@@ -147,9 +147,11 @@ UPRAISER = **expedition brand**: poetic ascent (Zero-like atmosphere) + operator
 | `/#cases`             | **The Peaks**        | Full carousel + modals                                        |
 | `/#pilot`             | —                    | Request Pilot (после dual-story unlock)                       |
 | `/channels`           | — (не в header)      | 3D `ProgrammaticScrollSection` · Phone/Tablet/TV              |
-| `/craft`              | **Creative Studio**  | Fullscreen atmospheric video loops (light/dark) (`noindex`)   |
-| `/contact`            | **Request Pilot**    | Contact form                                                  |
-| `/contact/sent`       | —                    | Thank-you after Web3Forms                                     |
+| `/craft`              | **Creative Studio**  | Fullscreen atmospheric video loops (5.0s day/night ascent) (`noindex`) |
+| `/contact`            | **Request Pilot**    | Contact form (поддерживает `source=studio`)                   |
+| `/contact/sent`       | —                    | Thank-you screen (минималистичный для сайта; победоносное 6.0s видео для `source=studio`) |
+| `/connect`            | — (offline hub)      | Conference Hub · 22 языка, 1-screen vCard, offline-ready terminal (`noindex`) |
+| `/deck`               | —                    | 20-slide Multilingual Interactive Web Deck with deep telemetry |
 | `/cases/:slug`        | —                    | Deep-link modal на home                                       |
 | `/privacy` · `/terms` | Legal                | Legal                                                         |
 | `/dev/hero-capture`   | DEV only             | Everest frame capture                                         |
@@ -1438,6 +1440,26 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   - **Conference Hub 22-Language Expansion (v2.2.60):** Added native support for Romanian (`ro` · Română) and Georgian (`ka` · ქართული) with full dictionary translations across roles, buttons, slogans, and telemetry badges. Configured `ka` under `HUB_PLAIN_SCRIPT` to preserve authentic Mkhedruli script letter-spacing, and integrated auto-detection for `ro/mo` and `ka` in `detectDeviceLang()`.
   - **Multilingual Interactive Media Deck (`/deck` · v2.2.62-stable):** Replaced static PDF presentation with an interactive 20-slide vector web presentation (`MediaDeckViewerPage.tsx`, `mediaDeckData.ts`). Features fixed aspect-ratio box scaling (`sm:aspect-[16/9]`) on desktop/tablet and full-height adaptive cards on mobile without text truncation. Includes dual-mode viewing (Interactive Vector vs 1:1 Original High-Res WebP Slides at `public/deck/slides/`), 22-language real-time translation with on-the-fly language modal (`mediaDeckI18n.ts`), touch swipe navigation ($\ge 45$px horizontal threshold), keyboard arrow hotkeys, and fullscreen mode. Deeply integrated with `useActivityTracker("media_deck_viewer")` and `api/activity.ts` to transmit live slide numbers and slide titles in heartbeats, Telegram alerts, and Resend email digests. Backed up with rollback tag `backup-pre-deck-v2.2.61` and branch `backup-pre-multilingual-deck-20261024`.
   - **Smart Referrer & In-App Attribution Engine (v2.2.63-stable):** Engineered client-side origin attribution for clean links without UTMs (`src/lib/activityTracker.ts`). Evaluates `document.referrer` for social/search domains (LinkedIn, Telegram, WhatsApp, X/Twitter, Meta, Google, Bing, MS Teams, Slack) and `navigator.userAgent` signatures for stripped-referrer messengers (`Telegram In-App`, `WhatsApp In-App`, `LinkedIn In-App`, `iOS/Android WebViews`, `Mobile Safari`, `Samsung Internet`). Persists first-touch and repeat-session attribution in `localStorage` under `upraiser_hub_session_v1`. Formats smart origin attribution in Telegram alerts (`🌐 Источник: LinkedIn (Referrer)`) and Resend email digests.
+  - **Multilingual Deck Modularization & Interaction-Gated Telemetry (v2.2.64-stable):** Split `mediaDeckI18n.ts` into individual modular language files under `src/pages/deckI18n/` (`ar.ts`, `de.ts`, `en.ts`, `es.ts`, `fil.ts`, `fr.ts`, `he.ts`, `hi.ts`, `id.ts`, `it.ts`, `ja.ts`, `ka.ts`, `ko.ts`, `pl.ts`, `pt.ts`, `ro.ts`, `ru.ts`, `th.ts`, `tr.ts`, `uk.ts`, `vi.ts`, `zh.ts`, `ui.ts`, `types.ts`). Implemented interaction-gated telemetry alerts: repeat visit signals only fire if the user actively interacts with the page (scrolling, clicking, reading for $\ge 25$s), eliminating bot/crawler noise.
+  - **Deck Navigation & Cache Control Hardening (v2.2.65-stable):** Forwarded `?lang` parameter seamlessly between `/connect` and `/deck`, persisting user language preference across tabs. Fixed form submission handling for Romanian (`ro`) and Georgian (`ka`). Added explicit cache headers in `vercel.json` for static deck slide assets.
+  - **High-Precision Telemetry Filtering & Dynamic Digest Titles (v2.2.66-stable):** Filtered out false-positive return visit alerts caused by background browser pre-fetching or rapid tab focus toggles. Dynamic subject lines generated in Resend email digests and Telegram alerts based on user interaction depth (`[DECK READ]`, `[VCARD SAVED]`, `[LEAD SUBMITTED]`).
+  - **Human-Readable Session Tokens & Cross-Route Identity Stitching (v2.2.67-stable):** Formatted visitor session tokens with readable timestamps (`hub_YYYYMMDD_...`) and implemented seamless identity stitching across `/connect`, `/deck`, and `/contact`.
+  - **Session Reset Diagnostics Handler (v2.2.68-stable):** Implemented `?reset=1` query parameter handling to instantly clear local tracking state and cookies, allowing QA and stakeholders to test clean first-visit funnels repeatedly.
+  - **Mobile Tactile Engine (v2.2.75-stable):** Implemented cross-platform tactile feedback engine integrating Web Vibration API for Android and audio/input-synthesized haptics for iOS devices.
+  - **Desktop Clickability & Input Focus Hardening (v2.2.78-stable):** Resolved critical desktop interaction bug where experimental mobile parallax `requestAnimationFrame` loops and synthetic focus-stealing touch listeners froze mouse clicks and keyboard focus on `<input>` and `<a>` elements across desktop viewports. Completely excised the parallax loop, restoring 100% native DOM event dispatching and fluid typing.
+  - **Post-Brief Copy Alignment to Ogilvy Advertising Doctrine (v2.2.76–v2.2.77):** Updated post-submission confirmation cards in `ThankYouPage.tsx`: heading set to **`Basecamp Reached`**, kicker set to **`Let us guide You now to the top. Big milestone ahead.`** Direct address consistently capitalizes **You** and **Your**, with zero marketing fluff.
+  - **Creative Studio Victory Video Flow (`/contact/sent?source=studio` · v2.2.79–v2.2.82):**
+    - Routed "Request the Pilot" CTA from Creative Studio (`/craft`) to `/contact?source=studio`.
+    - Integrated Day and Night summit victory videos on `/contact/sent`, rendered strictly for Studio submitters (standard main-site submitters receive the ultra-fast minimalist layout).
+    - Normalized both victory videos to exactly **6.00 seconds** (CRF 21, H.264 `+faststart`).
+    - Disabled looping: video halts and freezes on the final majestic summit frame.
+    - Climax-timed revelation: Confirmation card reveals at the 4.8s emotional peak, with click-to-skip support anywhere on the viewport.
+    - Reload protection: Refreshing the victory page automatically returns the user to Creative Studio (`/craft?theme=${theme}`) in their matching active theme.
+  - **Ambiance & Spectral Lighting Engine (v2.2.80-stable):**
+    - Light theme: Removed global dark overlay; boosted brightness and saturation (`1.15 / 1.18`); added warm morning atmosphere flood and radiant golden sunrise bloom (`screen` & `color-dodge`); text scrim localized to left third to keep alpine sunlight and climber crisp.
+    - Dark theme: Boosted sky saturation (`1.48 / 1.12`); added two-layer spectral Aurora Borealis (северное сияние) emission in emerald (`#34d399`) and violet (`#a855f7`); bedrock grounded with dark radial base gradient.
+  - **Creative Studio Intro Climb Synchronization (v2.2.83-stable):** Accelerated night climb `dark-loop.mp4` by 2.12x (`setpts=0.4717*PTS`), scaling the summit moment from 10.6s down to **5.00s**. Synchronized `pauseTime = 5.0` across both Day and Night modes so interactive showcase cards emerge at the identical 5.0s timestamp. Telemetry altitude counter (`899.0M` $\to$ `900.0M` in 5.0s) and golden wall illumination synchronized.
+  - **Master Documentation & State Backup Synchronization (v2.2.84-stable):** Created `docs/STATE-BACKUP-OCT25.md` recording all architectural deliverables, synced `docs/UPRAISER-MASTER.md`, updated site maps, and established rollback tag `v2.2.84-stable` and backup branch `backup-oct25-studio-craft-v2.2.84`.
 
 
 
