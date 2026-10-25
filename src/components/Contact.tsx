@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useState, useEffect, useRef, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { contactPage } from "../data/liveContent";
 import { Magnetic } from "./motion-preview/Magnetic";
@@ -174,7 +174,18 @@ async function sendTelegramNotification(
 export function Contact() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const sourceParam = searchParams.get("source") || (location.state as { source?: string } | null)?.source;
+  const isFromStudio = sourceParam === "studio" || Boolean((location.state as { fromStudio?: boolean } | null)?.fromStudio);
+
+  useEffect(() => {
+    if (isFromStudio) {
+      sessionStorage.setItem("upraiser_contact_source", "studio");
+    }
+  }, [isFromStudio]);
 
   const [form, setForm] = useState<FormState>(() => {
     const draft = readDraft();
@@ -401,7 +412,16 @@ export function Contact() {
         setForm(initialForm);
         setPrivacyAccepted(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
-        navigate("/contact/sent", { replace: true });
+
+        const wasStudio =
+          isFromStudio || sessionStorage.getItem("upraiser_contact_source") === "studio";
+        sessionStorage.removeItem("upraiser_contact_source");
+
+        if (wasStudio) {
+          navigate("/contact/sent?source=studio", { replace: true, state: { source: "studio" } });
+        } else {
+          navigate("/contact/sent", { replace: true });
+        }
         return;
       }
 
