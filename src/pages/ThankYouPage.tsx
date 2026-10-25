@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { Link, useSearchParams, useLocation } from "react-router-dom";
+import { Link, useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Magnetic } from "../components/motion-preview/Magnetic";
 import { useTheme } from "../context/ThemeContext";
@@ -7,11 +7,13 @@ import { useTheme } from "../context/ThemeContext";
 /**
  * Post-submit confirmation page.
  * Plays victory summit video ONLY if the user originated from Creative Studio (/craft).
+ * On page reload / direct re-visit, automatically returns to Creative Studio in current theme.
  */
 export function ThankYouPage() {
   const { theme } = useTheme();
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const isStudio =
@@ -27,6 +29,26 @@ export function ThankYouPage() {
     theme === "light"
       ? "/creative/studio-success-day-poster.jpg"
       : "/creative/studio-success-night-poster.jpg";
+
+  // When refreshing the studio victory confirmation page, return to /craft in active theme
+  useEffect(() => {
+    if (!isStudio) return;
+
+    const navEntry = performance.getEntriesByType?.("navigation")?.[0] as PerformanceNavigationTiming | undefined;
+    const isReload =
+      navEntry?.type === "reload" ||
+      (window.performance as { navigation?: { type?: number } } | undefined)?.navigation?.type === 1;
+    const hasFreshSubmit = sessionStorage.getItem("upraiser_studio_submitted") === "1";
+
+    if (isReload || !hasFreshSubmit) {
+      sessionStorage.removeItem("upraiser_studio_submitted");
+      navigate(`/craft?theme=${theme}`, { replace: true });
+      return;
+    }
+
+    // Consume flag so subsequent reload triggers return to /craft
+    sessionStorage.removeItem("upraiser_studio_submitted");
+  }, [isStudio, navigate, theme]);
 
   useEffect(() => {
     if (isStudio && videoRef.current) {

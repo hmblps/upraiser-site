@@ -418,6 +418,7 @@ export function Contact() {
         sessionStorage.removeItem("upraiser_contact_source");
 
         if (wasStudio) {
+          sessionStorage.setItem("upraiser_studio_submitted", "1");
           navigate("/contact/sent?source=studio", { replace: true, state: { source: "studio" } });
         } else {
           navigate("/contact/sent", { replace: true });
