@@ -1,13 +1,15 @@
-import { useRef, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { Link, useSearchParams, useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Magnetic } from "../components/motion-preview/Magnetic";
 import { useTheme } from "../context/ThemeContext";
 
 /**
  * Post-submit confirmation page.
  * Plays victory summit video ONLY if the user originated from Creative Studio (/craft).
- * On page reload / direct re-visit, automatically returns to Creative Studio in current theme.
+ * Videos are normalized to identical 6.0s duration without looping.
+ * Confirmation cards gracefully appear towards the climax of the video, freezing on the summit.
+ * On page reload / direct re-visit, automatically returns to Creative Studio in active theme.
  */
 export function ThankYouPage() {
   const { theme } = useTheme();
@@ -19,6 +21,11 @@ export function ThankYouPage() {
   const isStudio =
     searchParams.get("source") === "studio" ||
     (location.state as { source?: string } | null)?.source === "studio";
+
+  // For Studio submissions: play cinematic ascent first, then reveal confirmation card at climax
+  const [phase, setPhase] = useState<"celebrating" | "reached">(
+    isStudio ? "celebrating" : "reached"
+  );
 
   const videoSrc =
     theme === "light"
@@ -50,17 +57,46 @@ export function ThankYouPage() {
     sessionStorage.removeItem("upraiser_studio_submitted");
   }, [isStudio, navigate, theme]);
 
+  // Video autoplay & ended management
   useEffect(() => {
     if (isStudio && videoRef.current) {
+      videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
   }, [isStudio, videoSrc]);
 
+  // Skip video to climax on click
+  const handleSkip = useCallback(() => {
+    if (phase === "reached") return;
+    const v = videoRef.current;
+    if (v) {
+      v.currentTime = 5.95;
+      v.pause();
+    }
+    setPhase("reached");
+  }, [phase]);
+
+  const handleTimeUpdate = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    // Reveal confirmation card at 4.8s (during the final majestic hold), no loop
+    if (v.currentTime >= 4.8 && phase === "celebrating") {
+      setPhase("reached");
+    }
+  }, [phase]);
+
+  const handleVideoEnded = useCallback(() => {
+    const v = videoRef.current;
+    if (v) v.pause();
+    setPhase("reached");
+  }, []);
+
   return (
     <main
+      onClick={isStudio && phase === "celebrating" ? handleSkip : undefined}
       className={`site-main relative min-h-[100dvh] flex items-center pt-[var(--site-header-height)] overflow-hidden select-none ${
         isStudio ? "bg-black text-white" : ""
-      }`}
+      } ${isStudio && phase === "celebrating" ? "cursor-pointer" : ""}`}
     >
       {/* Studio Victory Video Ambient Background (Rendered strictly for Studio submitters) */}
       {isStudio && (
@@ -71,9 +107,10 @@ export function ThankYouPage() {
             src={videoSrc}
             poster={posterSrc}
             autoPlay
-            loop
             muted
             playsInline
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={handleVideoEnded}
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
             style={{
               filter:
@@ -162,89 +199,118 @@ export function ThankYouPage() {
         </div>
       )}
 
-      {/* Confirmation Content Card */}
+      {/* Confirmation Content Card — reveals smoothly at video climax */}
       <div className="section-inner py-16 sm:py-20 relative z-20 w-full">
-        <motion.div
-          initial={false}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-2xl"
-        >
-          {isStudio && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent text-[11px] font-bold tracking-wider uppercase mb-5 backdrop-blur-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              Creative Studio · Pilot Brief Logged
-            </div>
+        <AnimatePresence mode="wait">
+          {phase === "reached" && (
+            <motion.div
+              key="confirmation-card"
+              initial={isStudio ? { opacity: 0, y: 24 } : false}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-2xl"
+            >
+              {isStudio && (
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent text-[11px] font-bold tracking-wider uppercase mb-5 backdrop-blur-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                  Creative Studio · Pilot Brief Logged
+                </div>
+              )}
+
+              <p
+                className={`section-label ${
+                  isStudio ? "!text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" : ""
+                }`}
+              >
+                Basecamp Reached
+              </p>
+
+              <h1
+                className={`section-heading--lg max-w-2xl ${
+                  isStudio ? "!text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]" : ""
+                }`}
+              >
+                Let us guide You now to the top. Big milestone ahead.
+              </h1>
+
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                {isStudio ? (
+                  <>
+                    <Magnetic>
+                      <Link
+                        to="/craft"
+                        data-cursor="cta"
+                        className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation shadow-lg"
+                      >
+                        Back to Studio
+                      </Link>
+                    </Magnetic>
+                    <Magnetic strength={0.22}>
+                      <Link
+                        to="/#cases"
+                        className="btn-caps inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-colors"
+                      >
+                        Proven Summits
+                      </Link>
+                    </Magnetic>
+                    <Magnetic strength={0.22}>
+                      <Link
+                        to="/contact?source=studio"
+                        className="btn-caps inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-colors"
+                      >
+                        Send another brief
+                      </Link>
+                    </Magnetic>
+                  </>
+                ) : (
+                  <>
+                    <Magnetic>
+                      <Link
+                        to="/#cases"
+                        data-cursor="cta"
+                        className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
+                      >
+                        Proven Summits
+                      </Link>
+                    </Magnetic>
+                    <Magnetic strength={0.22}>
+                      <Link
+                        to="/contact"
+                        className="btn-caps btn-secondary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
+                      >
+                        Send another brief
+                      </Link>
+                    </Magnetic>
+                  </>
+                )}
+              </div>
+            </motion.div>
           )}
-
-          <p
-            className={`section-label ${
-              isStudio ? "!text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" : ""
-            }`}
-          >
-            Basecamp Reached
-          </p>
-
-          <h1
-            className={`section-heading--lg max-w-2xl ${
-              isStudio ? "!text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]" : ""
-            }`}
-          >
-            Let us guide You now to the top. Big milestone ahead.
-          </h1>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            {isStudio ? (
-              <>
-                <Magnetic>
-                  <Link
-                    to="/craft"
-                    data-cursor="cta"
-                    className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation shadow-lg"
-                  >
-                    Back to Studio
-                  </Link>
-                </Magnetic>
-                <Magnetic strength={0.22}>
-                  <Link
-                    to="/#cases"
-                    className="btn-caps inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-colors"
-                  >
-                    Proven Summits
-                  </Link>
-                </Magnetic>
-                <Magnetic strength={0.22}>
-                  <Link
-                    to="/contact?source=studio"
-                    className="btn-caps inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-colors"
-                  >
-                    Send another brief
-                  </Link>
-                </Magnetic>
-              </>
-            ) : (
-              <>
-                <Magnetic>
-                  <Link
-                    to="/#cases"
-                    data-cursor="cta"
-                    className="btn-caps btn-caps--primary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
-                  >
-                    Proven Summits
-                  </Link>
-                </Magnetic>
-                <Magnetic strength={0.22}>
-                  <Link
-                    to="/contact"
-                    className="btn-caps btn-secondary inline-flex min-h-[44px] items-center rounded-full px-7 py-3.5 touch-manipulation"
-                  >
-                    Send another brief
-                  </Link>
-                </Magnetic>
-              </>
-            )}
-          </div>
-        </motion.div>
+        </AnimatePresence>
       </div>
+
+      {/* Floating Skip/Indicator Pill while celebrating */}
+      <AnimatePresence>
+        {isStudio && phase === "celebrating" && (
+          <motion.div
+            key="celebrating-indicator"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10, transition: { duration: 0.25 } }}
+            className="fixed bottom-6 sm:bottom-8 inset-x-0 z-30 pointer-events-none flex items-center justify-center px-4"
+          >
+            <div className="pointer-events-auto min-h-[44px] flex items-center bg-bg-elevated/75 backdrop-blur-xl rounded-full border border-border/40 shadow-lg px-4 py-2 gap-2.5 text-[10px] sm:text-[11px] font-bold tracking-wide uppercase font-sans select-none cursor-pointer text-fg-muted hover:text-fg transition-colors group">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
+              <span className="text-fg/90 whitespace-nowrap">
+                SUMMIT REACHED · 6.0S
+              </span>
+              <span className="text-accent text-[9px] uppercase tracking-wider pl-1 font-semibold group-hover:underline">
+                Skip to brief
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
