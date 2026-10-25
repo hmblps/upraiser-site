@@ -17,8 +17,10 @@ export function ThankYouPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={SPRING}
         >
-          <p className="section-label">Route Telemetry Logged</p>
-          <h1 className="section-heading--lg max-w-xl">Every summit starts with a verified route.</h1>
+          <p className="section-label">Basecamp Reached</p>
+          <h1 className="section-heading--lg max-w-2xl">
+            Let us guide You now to the top. Thrilled to celebrate Your upcoming triumph!
+          </h1>
           <div className="mt-8 flex flex-wrap gap-3">
             <Magnetic>
               <Link
