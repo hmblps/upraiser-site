@@ -433,6 +433,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const geo = parseGeo(req.headers);
   const ua = (req.headers["user-agent"] as string) || "";
   const device = parseDevice(ua);
+  let prevCooldownMeta: Record<string, any> = {};
 
   if (supabaseAdmin && visitorId) {
     try {
@@ -472,8 +473,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         .eq("visitor_id", visitorId)
         .is("lead_name", null);
 
-      // 3. Upsert into cooldowns with permanently identified display name (preserving any existing deck session state)
-      let prevCooldownMeta: Record<string, any> = {};
+      // 3. Upsert into cooldowns with permanently identified display name (preserving any existing deck/session state)
       try {
         const { data: existingCd } = await supabaseAdmin
           .from("lead_notification_cooldowns")
@@ -664,17 +664,127 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
         const tgText = tgLines.filter((line) => line !== null).join("\n");
 
-        await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+        // 4A. Retroactive Deanonymization of Earlier Session Card in Telegram ("Магия деанонимизации задним числом")
+        const priorSessionMsgId = prevCooldownMeta?.session_message_id
+          ? Number(prevCooldownMeta.session_message_id)
+          : null;
+        let updatedTimeline = Array.isArray(prevCooldownMeta?.session_timeline)
+          ? [...prevCooldownMeta.session_timeline]
+          : [];
+
+        if (priorSessionMsgId && updatedTimeline.length > 0) {
+          try {
+            let timeStr = "";
+            try {
+              timeStr = new Intl.DateTimeFormat("ru-RU", {
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "Europe/Bucharest",
+              }).format(new Date());
+            } catch {
+              timeStr = new Date().toISOString().slice(11, 16);
+            }
+
+            updatedTimeline.push({
+              key: `clipin_${Date.now()}`,
+              time: timeStr,
+              line: `• ${timeStr} — 🧗 Оставил контакт: <b>${escapeHtml(cleanName)}</b> (<code>${escapeHtml(cleanContact)}</code>)`,
+            });
+
+            const retroWho = `<b>${escapeHtml(cleanName)}</b> (${escapeHtml(cleanContact)})`;
+            const retroSessionHtml = [
+              `🧭 <b>АКТИВНОСТЬ НА ХАБЕ · <code>[${escapeHtml(shortId)}]</code></b>`,
+              `👤 <b>Лид:</b> ${retroWho}`,
+              `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
+              ``,
+              `📋 <b>Хронология действий в сессии:</b>`,
+              updatedTimeline.map((item: any) => item.line).join("\n"),
+            ].join("\n");
+
+            await fetch(`https://api.telegram.org/bot${tgToken}/editMessageText`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                chat_id: tgChatId,
+                message_id: priorSessionMsgId,
+                text: retroSessionHtml,
+                parse_mode: "HTML",
+                disable_web_page_preview: true,
+              }),
+            });
+          } catch (retroErr) {
+            console.warn("Retroactive session card edit warning:", retroErr);
+          }
+        }
+
+        // 4B. Send the Loud Lead Contact Card (replying to the session card if one existed)
+        const sendPayload: Record<string, any> = {
+          chat_id: tgChatId,
+          text: tgText,
+          parse_mode: "HTML",
+          disable_notification: false, // Loud push with sound & vibration!
+          disable_web_page_preview: true,
+        };
+
+        if (priorSessionMsgId) {
+          sendPayload.reply_parameters = {
+            message_id: priorSessionMsgId,
+            allow_sending_without_reply: true,
+          };
+        }
+
+        const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: tgChatId,
-            text: tgText,
-            parse_mode: "HTML",
-            disable_notification: false, // Loud push with sound & vibration!
-            disable_web_page_preview: true,
-          }),
+          body: JSON.stringify(sendPayload),
         });
+        const tgJson: any = await tgRes.json().catch(() => ({}));
+        const leadCardMessageId: number | null = tgJson?.result?.message_id
+          ? Number(tgJson.result.message_id)
+          : null;
+
+        // 4C. Persist lead_card_message_id in Supabase so future proof clicks & revisits reply to this card!
+        if (supabaseAdmin && leadCardMessageId) {
+          const sharedMeta = {
+            ...prevCooldownMeta,
+            displayName: cleanName,
+            leadContact: cleanContact,
+            leadEmail: leadTargetEmail ? leadTargetEmail.toLowerCase() : null,
+            lead_card_message_id: leadCardMessageId,
+            session_timeline: updatedTimeline,
+            lastGeo: geo,
+            lastDevice: device,
+            identifiedAt: new Date().toISOString(),
+          };
+
+          if (visitorId) {
+            await supabaseAdmin.from("lead_notification_cooldowns").upsert(
+              {
+                visitor_id: visitorId,
+                last_notified_at: new Date().toISOString(),
+                last_event_type: "form_submit",
+                metadata: sharedMeta,
+              },
+              { onConflict: "visitor_id" }
+            );
+          }
+
+          if (leadTargetEmail) {
+            const emailKey = `email_${leadTargetEmail.toLowerCase()}`;
+            await supabaseAdmin.from("lead_notification_cooldowns").upsert(
+              {
+                visitor_id: emailKey,
+                last_notified_at: new Date().toISOString(),
+                last_event_type: "form_submit",
+                metadata: {
+                  ...sharedMeta,
+                  linkedVisitorId: visitorId || null,
+                },
+              },
+              { onConflict: "visitor_id" }
+            );
+          }
+        }
       } catch (tgErr) {
         console.warn("Telegram notification warning in contact handler:", tgErr);
       }

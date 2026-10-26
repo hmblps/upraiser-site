@@ -166,23 +166,29 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-  // Forwarding Detection: compare current (geo, device) against the lead's baseline session in Supabase
+  // Forwarding Detection & Proof Session Cooldown Lookup in Supabase
   let resolvedName = "";
   let prevGeo = "";
   let prevDevice = "";
   let isForwardedSuspect = false;
+  let linkedVisitorId = "";
+  let cooldownKey = lead ? `email_${lead.toLowerCase()}` : "email_anon";
+  let existingCooldownMeta: Record<string, any> = {};
 
   if (supabase && lead) {
     try {
       const { data: priorRows } = await supabase
         .from("lead_activity_logs")
-        .select("lead_name, lead_contact, event_type, metadata, created_at")
+        .select("visitor_id, lead_name, lead_contact, event_type, metadata, created_at")
         .ilike("lead_contact", lead)
         .order("created_at", { ascending: true })
         .limit(10);
 
       if (priorRows && priorRows.length > 0) {
         for (const row of priorRows) {
+          if (!linkedVisitorId && row.visitor_id && row.visitor_id.startsWith("hub_")) {
+            linkedVisitorId = String(row.visitor_id);
+          }
           if (!resolvedName && row.lead_name && row.lead_name !== lead) {
             resolvedName = String(row.lead_name);
           }
@@ -211,12 +217,36 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           isForwardedSuspect = true;
         }
       }
+
+      // Fetch cooldown state (by email key first, fallback to linkedVisitorId)
+      const { data: cdByEmail } = await supabase
+        .from("lead_notification_cooldowns")
+        .select("metadata")
+        .eq("visitor_id", cooldownKey)
+        .maybeSingle();
+
+      if (cdByEmail?.metadata && typeof cdByEmail.metadata === "object") {
+        existingCooldownMeta = cdByEmail.metadata;
+      } else if (linkedVisitorId) {
+        const { data: cdByVisitor } = await supabase
+          .from("lead_notification_cooldowns")
+          .select("metadata")
+          .eq("visitor_id", linkedVisitorId)
+          .maybeSingle();
+        if (cdByVisitor?.metadata && typeof cdByVisitor.metadata === "object") {
+          existingCooldownMeta = cdByVisitor.metadata;
+        }
+      }
+
+      if (!resolvedName && existingCooldownMeta?.displayName) {
+        resolvedName = String(existingCooldownMeta.displayName);
+      }
     } catch (lookupErr) {
       console.warn("Forwarding lookup warning in proof handler:", lookupErr);
     }
   }
 
-  // Send LOUD Telegram push (disable_notification: false)
+  // Send or Edit Telegram Proof Alert (1 consolidated message per 15-min window + Reply to Lead Card)
   const tgToken =
     process.env.VITE_TELEGRAM_BOT_TOKEN ||
     process.env.TELEGRAM_BOT_TOKEN ||
@@ -234,31 +264,141 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           : `<b>${escapeHtml(lead)}</b>`
         : "Аноним (прямая ссылка)";
 
+      const prevProofUpdatedAt = existingCooldownMeta?.proof_updated_at
+        ? new Date(existingCooldownMeta.proof_updated_at).getTime()
+        : 0;
+      const activeProofMessageId: number | null =
+        existingCooldownMeta?.proof_message_id &&
+        Date.now() - prevProofUpdatedAt < 15 * 60 * 1000
+          ? Number(existingCooldownMeta.proof_message_id)
+          : null;
+
+      interface ProofHistoryItem {
+        appId: string;
+        brand: string;
+        report: string;
+        metric: string;
+      }
+
+      let proofHistory: ProofHistoryItem[] =
+        activeProofMessageId && Array.isArray(existingCooldownMeta?.proof_history)
+          ? [...existingCooldownMeta.proof_history]
+          : [];
+
+      if (!proofHistory.some((p) => p.appId === appId)) {
+        proofHistory.push({
+          appId,
+          brand: proof.brand,
+          report: proof.report,
+          metric: proof.metric,
+        });
+      }
+
       const forwardingBanner = isForwardedSuspect
         ? `\n🔥 <b>Возможно, письмо переслали коллеге!</b>\n` +
           `└ <i>Новое устройство/гео: ${escapeHtml(geo)} · ${escapeHtml(device)} (ранее: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(prevDevice || "—")})</i>\n`
         : "";
 
-      const tgText =
-        `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА</b>\n\n` +
-        `👤 <b>Лид:</b> ${leadLabel}\n` +
-        `📊 <b>Кейс:</b> ${escapeHtml(proof.brand)} · ${escapeHtml(proof.report)}\n` +
-        `📈 <b>Метрика:</b> ${escapeHtml(proof.metric)}\n` +
-        `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}` +
-        forwardingBanner +
-        `\n\n🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть оригинал пруфа ↗</a>`;
+      let tgText = "";
+      if (proofHistory.length <= 1) {
+        tgText =
+          `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА</b>\n\n` +
+          `👤 <b>Лид:</b> ${leadLabel}\n` +
+          `📊 <b>Кейс:</b> ${escapeHtml(proof.brand)} · ${escapeHtml(proof.report)}\n` +
+          `📈 <b>Метрика:</b> ${escapeHtml(proof.metric)}\n` +
+          `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}` +
+          forwardingBanner +
+          `\n\n🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть оригинал пруфа ↗</a>`;
+      } else {
+        const historyLines = proofHistory
+          .map(
+            (item, idx) =>
+              `   ${idx + 1}. <b>${escapeHtml(item.brand)}</b> (${escapeHtml(item.report)}) — <i>${escapeHtml(item.metric)}</i>`
+          )
+          .join("\n");
 
-      await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        tgText =
+          `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА (Открыто: ${proofHistory.length} кейса)</b>\n\n` +
+          `👤 <b>Лид:</b> ${leadLabel}\n` +
+          `📊 <b>Только что открыл:</b> ${escapeHtml(proof.brand)} · ${escapeHtml(proof.report)}\n` +
+          `🧭 <b>История открытых пруфов:</b>\n${historyLines}\n` +
+          `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}` +
+          forwardingBanner +
+          `\n\n🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть последний пруф ↗</a>`;
+      }
+
+      let editedInPlace = false;
+      let finalProofMessageId: number | null = activeProofMessageId;
+      const leadCardMessageId: number | null = existingCooldownMeta?.lead_card_message_id
+        ? Number(existingCooldownMeta.lead_card_message_id)
+        : null;
+
+      if (activeProofMessageId) {
+        const editRes = await fetch(`https://api.telegram.org/bot${tgToken}/editMessageText`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: tgChatId,
+            message_id: activeProofMessageId,
+            text: tgText,
+            parse_mode: "HTML",
+            disable_web_page_preview: true,
+          }),
+        });
+        const editJson: any = await editRes.json().catch(() => ({}));
+        if (editRes.ok || String(editJson?.description || "").includes("message is not modified")) {
+          editedInPlace = true;
+        }
+      }
+
+      if (!editedInPlace) {
+        const sendPayload: Record<string, any> = {
           chat_id: tgChatId,
           text: tgText,
           parse_mode: "HTML",
-          disable_notification: false, // Loud push with vibration
+          disable_notification: false, // Loud push with vibration on 1st proof open!
           disable_web_page_preview: true,
-        }),
-      });
+        };
+
+        // Reply directly to the lead's contact card in Telegram!
+        if (leadCardMessageId) {
+          sendPayload.reply_parameters = {
+            message_id: leadCardMessageId,
+            allow_sending_without_reply: true,
+          };
+        }
+
+        const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(sendPayload),
+        });
+        const tgJson: any = await tgRes.json().catch(() => ({}));
+        if (tgJson?.result?.message_id) {
+          finalProofMessageId = Number(tgJson.result.message_id);
+        }
+      }
+
+      if (supabase && finalProofMessageId && lead) {
+        const updatedMeta = {
+          ...existingCooldownMeta,
+          ...(resolvedName ? { displayName: resolvedName } : {}),
+          leadContact: lead,
+          proof_message_id: finalProofMessageId,
+          proof_updated_at: new Date().toISOString(),
+          proof_history: proofHistory,
+        };
+
+        await supabase.from("lead_notification_cooldowns").upsert(
+          {
+            visitor_id: cooldownKey,
+            last_notified_at: new Date().toISOString(),
+            last_event_type: "proof_click",
+            metadata: updatedMeta,
+          },
+          { onConflict: "visitor_id" }
+        );
+      }
     } catch (tgErr) {
       console.warn("Telegram alert error in proof tracking:", tgErr);
     }

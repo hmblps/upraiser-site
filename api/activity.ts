@@ -61,6 +61,54 @@ function formatShortVisitorId(id: string): string {
   return `usr_${clean || "anon"}`;
 }
 
+function formatTimeHHMM(date: Date = new Date()): string {
+  try {
+    return new Intl.DateTimeFormat("ru-RU", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Europe/Bucharest",
+    }).format(date);
+  } catch {
+    return date.toISOString().slice(11, 16);
+  }
+}
+
+export interface SessionTimelineEntry {
+  key: string;
+  time: string;
+  line: string;
+  slideTrail?: number[];
+  uniqueSlides?: number[];
+}
+
+export function renderSessionCardHtml(params: {
+  shortId: string;
+  resolvedLeadName: string;
+  resolvedLeadContact: string;
+  geo: string;
+  device: string;
+  timeline: SessionTimelineEntry[];
+}): string {
+  const { shortId, resolvedLeadName, resolvedLeadContact, geo, device, timeline } = params;
+  const hasNameOrContact = Boolean(resolvedLeadName || resolvedLeadContact);
+  const who = hasNameOrContact
+    ? `<b>${escapeHtml(resolvedLeadName || resolvedLeadContact)}</b>${
+        resolvedLeadName && resolvedLeadContact ? ` (${escapeHtml(resolvedLeadContact)})` : ""
+      }`
+    : `Аноним`;
+
+  const timelineText = timeline.map((item) => item.line).join("\n");
+
+  return [
+    `🧭 <b>АКТИВНОСТЬ НА ХАБЕ · <code>[${escapeHtml(shortId)}]</code></b>`,
+    `👤 <b>Лид:</b> ${who}`,
+    `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
+    ``,
+    `📋 <b>Хронология действий в сессии:</b>`,
+    timelineText,
+  ].join("\n");
+}
+
 // Strict whitelist of explicit human actions that trigger a Telegram message.
 // Background noise (session_end, page_scroll, heartbeat) is logged to DB only and NEVER spams Telegram.
 const TELEGRAM_ALLOWED_EVENTS = new Set([
@@ -82,17 +130,6 @@ const HIGH_PRIORITY_EVENTS = new Set([
   "channel_click",
   "return_visit",
 ]);
-
-const EMOJI_MAP: Record<string, string> = {
-  slide_view: "📊",
-  deck_view: "📊",
-  vcf_download: "📇",
-  vcard_download: "📇",
-  deck_download: "📥",
-  contact_click: "📲",
-  channel_click: "🌐",
-  return_visit: "🔁",
-};
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -305,84 +342,89 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const isSilent = !isHighPriority;
     const isDeckEvent = effectiveEvent === "slide_view" || effectiveEvent === "deck_view";
 
-    // 7. Deck Session Trail Calculation (for 1-message edit-in-place)
-    const currentSlideNum = Number(metadata?.current_slide || metadata?.slide || 1);
-    const prevDeckUpdatedAt = existingCooldownMeta?.deck_updated_at
+    // 7. Unified Session Card Timeline (1 live message per 30-min visitor session)
+    const timeStr = formatTimeHHMM(new Date());
+    const prevSessionUpdatedAt = existingCooldownMeta?.session_updated_at
+      ? new Date(existingCooldownMeta.session_updated_at).getTime()
+      : existingCooldownMeta?.deck_updated_at
       ? new Date(existingCooldownMeta.deck_updated_at).getTime()
       : 0;
-    const activeDeckMessageId: number | null =
-      isDeckEvent &&
-      existingCooldownMeta?.deck_message_id &&
-      Date.now() - prevDeckUpdatedAt < 15 * 60 * 1000
-        ? Number(existingCooldownMeta.deck_message_id)
+
+    const activeSessionMessageId: number | null =
+      (existingCooldownMeta?.session_message_id || existingCooldownMeta?.deck_message_id) &&
+      Date.now() - prevSessionUpdatedAt < 30 * 60 * 1000
+        ? Number(existingCooldownMeta.session_message_id || existingCooldownMeta.deck_message_id)
         : null;
 
-    let slideTrail: number[] =
-      activeDeckMessageId && Array.isArray(existingCooldownMeta?.slide_trail)
-        ? [...existingCooldownMeta.slide_trail]
-        : [];
-    let uniqueSlides: number[] =
-      activeDeckMessageId && Array.isArray(existingCooldownMeta?.unique_slides)
-        ? [...existingCooldownMeta.unique_slides]
+    let timeline: SessionTimelineEntry[] =
+      activeSessionMessageId && Array.isArray(existingCooldownMeta?.session_timeline)
+        ? [...existingCooldownMeta.session_timeline]
         : [];
 
     if (isDeckEvent) {
+      const currentSlideNum = Number(metadata?.current_slide || metadata?.slide || 1);
+      const slideTitle = metadata?.slide_title || `Слайд #${currentSlideNum}`;
+      const langTag = metadata?.lang ? ` (${String(metadata.lang).toUpperCase()})` : "";
+
+      const existingDeckIdx = timeline.findIndex((t) => t.key === "deck");
+      const prevDeckEntry = existingDeckIdx >= 0 ? timeline[existingDeckIdx] : null;
+
+      let slideTrail: number[] = Array.isArray(prevDeckEntry?.slideTrail)
+        ? [...prevDeckEntry!.slideTrail!]
+        : activeSessionMessageId && Array.isArray(existingCooldownMeta?.slide_trail)
+        ? [...existingCooldownMeta.slide_trail]
+        : [];
+
+      let uniqueSlides: number[] = Array.isArray(prevDeckEntry?.uniqueSlides)
+        ? [...prevDeckEntry!.uniqueSlides!]
+        : activeSessionMessageId && Array.isArray(existingCooldownMeta?.unique_slides)
+        ? [...existingCooldownMeta.unique_slides]
+        : [];
+
       if (slideTrail.length === 0 || slideTrail[slideTrail.length - 1] !== currentSlideNum) {
         slideTrail.push(currentSlideNum);
       }
-      if (slideTrail.length > 12) {
-        slideTrail = slideTrail.slice(-12);
+      if (slideTrail.length > 10) {
+        slideTrail = slideTrail.slice(-10);
       }
       if (!uniqueSlides.includes(currentSlideNum)) {
         uniqueSlides.push(currentSlideNum);
       }
-    }
 
-    // 8. Format Unified Russian Telegram Message
-    const icon = EMOJI_MAP[effectiveEvent] || "⚡️";
-    let eventTitle = "АКТИВНОСТЬ НА САЙТЕ";
-
-    if (effectiveEvent === "vcf_download" || effectiveEvent === "vcard_download") {
-      eventTitle = "СОХРАНЕНА ВИЗИТКА (.VCF)";
-    } else if (effectiveEvent === "return_visit") {
-      eventTitle = "ПОВТОРНЫЙ ВИЗИТ НА ХАБ";
-    } else if (isDeckEvent) {
-      eventTitle =
-        slideTrail.length > 1
-          ? `ПРЕЗЕНТАЦИЯ · СЕЙЧАС НА СЛАЙДЕ ${currentSlideNum}/20`
-          : `ПРЕЗЕНТАЦИЯ · СЛАЙД ${currentSlideNum}/20`;
-    } else if (effectiveEvent === "contact_click") {
-      eventTitle = "ПЕРЕХОД В МЕССЕНДЖЕР";
-    } else if (effectiveEvent === "channel_click") {
-      eventTitle = "ПЕРЕХОД ПО ЭКОСИСТЕМЕ";
-    } else if (effectiveEvent === "deck_download") {
-      eventTitle = "СКАЧАНА ПРЕЗЕНТАЦИЯ (PDF)";
-    }
-
-    // Lead identity formatting: anonymous hash vs deanonymized contact
-    const hasNameOrContact = Boolean(resolvedLeadName || resolvedLeadContact);
-    const who = hasNameOrContact
-      ? `<b>${escapeHtml(resolvedLeadName || resolvedLeadContact)}</b>${resolvedLeadName && resolvedLeadContact ? ` (${escapeHtml(resolvedLeadContact)})` : ""} · <code>[${escapeHtml(shortId)}]</code>`
-      : `Аноним · <code>[${escapeHtml(shortId)}]</code>`;
-
-    // Action / Context detail in clean Russian
-    let actionDetail = "";
-    let routeLine: string | null = null;
-
-    if (isDeckEvent) {
-      const slideTitle = metadata?.slide_title || "";
-      const langTag = metadata?.lang ? ` (${String(metadata.lang).toUpperCase()})` : "";
-      actionDetail = slideTitle
-        ? `«<i>${escapeHtml(slideTitle)}</i>»${escapeHtml(langTag)}`
-        : `Слайд #${currentSlideNum}${escapeHtml(langTag)}`;
+      const entryTime = prevDeckEntry?.time || timeStr;
       const trailStr = slideTrail.join(" → ");
-      routeLine = `🧭 <b>Маршрут:</b> Слайд ${trailStr} (изучил ${uniqueSlides.length} из 20)`;
+      const deckLine =
+        slideTrail.length > 1
+          ? `• ${entryTime} — 📊 Презентация${escapeHtml(langTag)}: изучил ${uniqueSlides.length} сл. (${trailStr}) · сейчас на сл. ${currentSlideNum}/20 «<i>${escapeHtml(slideTitle)}</i>»`
+          : `• ${entryTime} — 📊 Открыл презентацию${escapeHtml(langTag)}: сл. ${currentSlideNum}/20 «<i>${escapeHtml(slideTitle)}</i>»`;
+
+      const updatedDeckEntry: SessionTimelineEntry = {
+        key: "deck",
+        time: entryTime,
+        line: deckLine,
+        slideTrail,
+        uniqueSlides,
+      };
+
+      if (existingDeckIdx >= 0) {
+        timeline[existingDeckIdx] = updatedDeckEntry;
+      } else {
+        timeline.push(updatedDeckEntry);
+      }
     } else if (effectiveEvent === "vcf_download" || effectiveEvent === "vcard_download") {
-      actionDetail = "Сохранил контакт Alex в адресную книгу смартфона";
+      timeline.push({
+        key: `vcf_${Date.now()}`,
+        time: timeStr,
+        line: `• ${timeStr} — 📇 Сохранил визитку Alex (.vcf)`,
+      });
     } else if (effectiveEvent === "return_visit") {
       const visitNum = metadata?.visitCount || 2;
       const idleMin = metadata?.idleMinutes ? ` (спустя ${metadata.idleMinutes} мин)` : "";
-      actionDetail = `Вернулся на /connect · Визит #${visitNum}${idleMin}`;
+      timeline.push({
+        key: `revisit_${Date.now()}`,
+        time: timeStr,
+        line: `• ${timeStr} — 🔁 Повторный визит на /connect (Визит #${visitNum}${idleMin})`,
+      });
     } else if (effectiveEvent === "contact_click") {
       const rawChannel = String(metadata?.channel || "");
       const target = metadata?.target || "Direct";
@@ -393,26 +435,42 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         : rawChannel.includes("email")
         ? `Email (${target})`
         : `${rawChannel || "Мессенджер"} (${target})`;
-      actionDetail = `Нажал на кнопку связи: <b>${escapeHtml(channelLabel)}</b>`;
+      timeline.push({
+        key: `contact_${Date.now()}`,
+        time: timeStr,
+        line: `• ${timeStr} — 📲 Нажал на кнопку связи: <b>${escapeHtml(channelLabel)}</b>`,
+      });
     } else if (effectiveEvent === "channel_click") {
       const target = metadata?.target || metadata?.channel || "Раздел сайта";
-      actionDetail = `Открыл раздел с хаба: <b>${escapeHtml(String(target))}</b>`;
+      timeline.push({
+        key: `channel_${Date.now()}`,
+        time: timeStr,
+        line: `• ${timeStr} — 🌐 Открыл раздел: <b>${escapeHtml(String(target))}</b>`,
+      });
     } else if (effectiveEvent === "deck_download") {
       const onSlide = metadata?.current_slide ? ` (со слайда ${metadata.current_slide}/20)` : "";
-      actionDetail = `Скачал оригинал PDF-презентации${onSlide}`;
+      timeline.push({
+        key: `pdf_${Date.now()}`,
+        time: timeStr,
+        line: `• ${timeStr} — 📥 Скачал оригинал PDF-презентации${onSlide}`,
+      });
     }
 
-    const lines: string[] = [
-      `${icon} <b>${eventTitle}</b>`,
-      `👤 <b>Лид:</b> ${who}`,
-      actionDetail ? `📌 <b>${isDeckEvent ? "Текущий слайд" : "Действие"}:</b> ${actionDetail}` : null,
-      routeLine,
-      `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
-    ].filter(Boolean) as string[];
+    // Keep timeline bounded to last 15 actions
+    if (timeline.length > 15) {
+      timeline = timeline.slice(-15);
+    }
 
-    const tgText = lines.join("\n");
+    const tgText = renderSessionCardHtml({
+      shortId,
+      resolvedLeadName,
+      resolvedLeadContact,
+      geo,
+      device,
+      timeline,
+    });
 
-    // 9. Send or Edit Telegram Notification (100% via bot, 0 Resend calls)
+    // 8. Send or Edit Unified Session Card in Telegram
     const tgToken =
       process.env.VITE_TELEGRAM_BOT_TOKEN ||
       process.env.TELEGRAM_BOT_TOKEN ||
@@ -423,20 +481,22 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       "-1003934317948";
 
     let telegramSent = false;
-    let finalDeckMessageId: number | null = activeDeckMessageId;
+    let finalSessionMessageId: number | null = activeSessionMessageId;
+    const leadCardMessageId: number | null = existingCooldownMeta?.lead_card_message_id
+      ? Number(existingCooldownMeta.lead_card_message_id)
+      : null;
 
     if (tgToken && tgChatId) {
       try {
         let editedInPlace = false;
 
-        // If the lead is flipping slides within an active 15-min deck session, edit the existing Telegram message!
-        if (isDeckEvent && activeDeckMessageId) {
+        if (activeSessionMessageId) {
           const editRes = await fetch(`https://api.telegram.org/bot${tgToken}/editMessageText`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               chat_id: tgChatId,
-              message_id: activeDeckMessageId,
+              message_id: activeSessionMessageId,
               text: tgText,
               parse_mode: "HTML",
               disable_web_page_preview: true,
@@ -449,28 +509,36 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           }
         }
 
-        // Otherwise send a new message
         if (!editedInPlace) {
+          const sendPayload: Record<string, any> = {
+            chat_id: tgChatId,
+            text: tgText,
+            parse_mode: "HTML",
+            disable_notification: isSilent,
+            disable_web_page_preview: true,
+          };
+
+          // Link via Reply to the lead's main contact card if they already submitted one earlier!
+          if (leadCardMessageId) {
+            sendPayload.reply_parameters = {
+              message_id: leadCardMessageId,
+              allow_sending_without_reply: true,
+            };
+          }
+
           const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: tgChatId,
-              text: tgText,
-              parse_mode: "HTML",
-              disable_notification: isSilent,
-              disable_web_page_preview: true,
-            }),
+            body: JSON.stringify(sendPayload),
           });
           const tgJson: any = await tgRes.json().catch(() => ({}));
           telegramSent = tgRes.ok;
-          if (isDeckEvent && tgJson?.result?.message_id) {
-            finalDeckMessageId = Number(tgJson.result.message_id);
+          if (tgJson?.result?.message_id) {
+            finalSessionMessageId = Number(tgJson.result.message_id);
           }
         }
 
-        // Persist deck_message_id & slide_trail in Supabase so subsequent slide flips edit this same post
-        if (isDeckEvent && finalDeckMessageId && supabaseAdmin) {
+        if (finalSessionMessageId && supabaseAdmin) {
           await supabaseAdmin.from("lead_notification_cooldowns").upsert(
             {
               visitor_id: effectiveVisitorId,
@@ -480,10 +548,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
                 ...existingCooldownMeta,
                 ...(resolvedLeadName ? { displayName: resolvedLeadName } : {}),
                 ...(resolvedLeadContact ? { leadContact: resolvedLeadContact } : {}),
-                deck_message_id: finalDeckMessageId,
-                deck_updated_at: new Date().toISOString(),
-                slide_trail: slideTrail,
-                unique_slides: uniqueSlides,
+                session_message_id: finalSessionMessageId,
+                session_updated_at: new Date().toISOString(),
+                session_timeline: timeline,
                 lastGeo: geo,
                 lastDevice: device,
               },
