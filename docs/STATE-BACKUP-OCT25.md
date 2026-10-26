@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.102-stable`  
+**Tag:** `v2.2.103-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,7 +9,14 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Telemetry & Alerts Migration to Telegram Supergroup (v2.2.102-stable):**
+1. **Telegram Lead Radar & Zero-Waste Resend Quota (v2.2.103-stable):**
+   - Silent vs Loud Pushes (`disable_notification`): Passive events (page_view, slide_view, heartbeat) land silently in Telegram for clean audit trails; high-intent events (vcard_download, clip_in, deck_download, proof_click, contact_click, return_visit) trigger loud sound & vibration alerts.
+   - Zero-Config Geo & Device: Automatically extracts `x-vercel-ip-city`, `x-vercel-ip-country`, and parses device / in-app browsers (LinkedIn, Telegram, WhatsApp, Instagram, Safari, Chrome).
+   - Session Stitching & Deanonymization: Anonymous visitors are tracked with short token `[usr_xxxx]`; once a lead submits their email, all past and future activities are stitched to their real name and email.
+   - Proof Click-Tracking (`/api/proof.ts`): All snapshot links inside the lead email are tracked via `/api/proof?app=...&lead=...`, giving instant loud Telegram alerts when a lead inspects a specific case study, before redirecting in ~5ms.
+   - 100% Zero-Waste Resend Quota: Internal email notifications via Resend completely disabled. Resend is used strictly for 1 email per lead (the autoresponder snapshot dossier).
+   - Supabase Cache Cleared: Wiped test rows in `lead_activity_logs` and `lead_notification_cooldowns` to 0 rows.
+2. **Telemetry & Alerts Migration to Telegram Supergroup (v2.2.102-stable):**
    - Connected new Telegram Bot (`8955516402:AAF...`) and supergroup `IMS2026` (`chat_id: -1003934317948`).
    - Disabled Resend email digest in `api/activity.ts`: telemetry events (revisits, slide views, vcf downloads, deep scrolls) now route 100% to Telegram with instant push notifications and zero email overhead.
    - Preserved 100% of Resend quota strictly for lead autoresponder dossiers and high-priority pilot submissions in `api/contact.ts`.

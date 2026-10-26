@@ -290,7 +290,7 @@ export default function MediaDeckViewerPage() {
             href={PDF_URL}
             download="Upraiser_Traffic_Infrastructure.pdf"
             onClick={() =>
-              trackAction("deck_view", getActiveSeconds(), {
+              trackAction("deck_download", getActiveSeconds(), {
                 action: "download_original_pdf",
                 current_slide: currentSlide,
                 lang,

@@ -333,9 +333,7 @@ export function Contact() {
         }
       }
 
-      const tgPromise = sendTelegramNotification(form, uploadedFiles);
-
-      // 2. Primary: Send to Vercel Serverless Function /api/contact (Resend Email with Attachment)
+      // 2. Primary: Send to Vercel Serverless Function /api/contact (Dispatches Telegram Alert & Lead Dossier)
       let serverSent = false;
       try {
         const payload = {
@@ -370,6 +368,12 @@ export function Contact() {
         }
       } catch (err) {
         console.warn("Direct /api/contact call failed or running in non-Vercel dev:", err);
+      }
+
+      // Fallback: If /api/contact failed, send direct Telegram alert from client
+      let tgDelivered = serverSent;
+      if (!serverSent) {
+        tgDelivered = await sendTelegramNotification(form, uploadedFiles);
       }
 
       // 3. Fallback: If /api/contact did not handle it, try Web3Forms
@@ -430,8 +434,6 @@ export function Contact() {
           console.warn("Web3Forms fallback error:", web3Err);
         }
       }
-
-      const tgDelivered = await tgPromise;
 
       if (serverSent || web3Sent || tgDelivered) {
         clearDraft();

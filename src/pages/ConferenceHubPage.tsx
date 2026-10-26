@@ -696,7 +696,10 @@ export function ConferenceHubPage() {
                 href="https://t.me/homeboylebz?text=Hey%20Alex%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => triggerHaptic("light")}
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "telegram_alex", target: "@homeboylebz" });
+                }}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -710,7 +713,10 @@ export function ConferenceHubPage() {
                 href="https://wa.me/40724787390?text=Hey%20Alex%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => triggerHaptic("light")}
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "whatsapp_alex", target: "+40724787390" });
+                }}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -722,7 +728,10 @@ export function ConferenceHubPage() {
               </motion.a>
               <motion.a
                 href="mailto:alex@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Alex%2C%20great%20connecting!"
-                onClick={() => triggerHaptic("light")}
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "email_alex", target: "alex@upraiser.co.uk" });
+                }}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -759,7 +768,10 @@ export function ConferenceHubPage() {
                 href="https://t.me/Vladussoboi108?text=Hey%20Vlad%2C%20great%20connecting!"
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => triggerHaptic("light")}
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "telegram_vlad", target: "@Vladussoboi108" });
+                }}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
@@ -771,7 +783,10 @@ export function ConferenceHubPage() {
               </motion.a>
               <motion.a
                 href="mailto:ceo@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Vlad%2C%20great%20connecting!"
-                onClick={() => triggerHaptic("light")}
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "email_vlad", target: "ceo@upraiser.co.uk" });
+                }}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}

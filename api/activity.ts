@@ -8,10 +8,6 @@ export const config = {
   },
 };
 
-const COOLDOWN_MS = 4 * 60 * 60 * 1000; // 4-hour notification cooldown per visitor (allows evening follow-ups)
-const FIRST_VISIT_ENGAGEMENT_SECONDS = 120; // First visit requires >= 2 min active engagement to trigger a digest
-const FIRST_VISIT_DEEP_SLIDE = 8; // Or reaching slide 8+ with at least 45s active time
-
 function escapeHtml(str: string): string {
   return String(str || "")
     .replace(/&/g, "&amp;")
@@ -21,34 +17,82 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-/**
- * Format human-readable fallback display name from timestamped or legacy token
- * e.g. hub_20261024_1745_9a2f -> "Лид #9A2F (24.10 17:45)"
- * e.g. hub_07ftruu -> "Лид #07FTRUU"
- */
-function formatFallbackDisplayName(id: string): string {
-  const match = id.match(/^hub_(\d{4}|\d{2})(\d{2})(\d{2})_(\d{2})(\d{2})_([a-z0-9]+)$/i);
-  if (match) {
-    const [, , mm, dd, hh, min, salt] = match;
-    return `Лид #${salt.toUpperCase()} (${dd}.${mm} ${hh}:${min})`;
-  }
-  const clean = id.replace(/^hub_/, "").toUpperCase();
-  return `Лид #${clean}`;
+function parseGeo(headers: Record<string, any>): string {
+  const rawCity = headers["x-vercel-ip-city"];
+  const city = rawCity ? decodeURIComponent(Array.isArray(rawCity) ? rawCity[0] : String(rawCity)) : "";
+  const country = headers["x-vercel-ip-country"]
+    ? (Array.isArray(headers["x-vercel-ip-country"]) ? headers["x-vercel-ip-country"][0] : String(headers["x-vercel-ip-country"]))
+    : "";
+  if (city && country) return `${city}, ${country}`;
+  if (country) return country;
+  if (city) return city;
+  return "Unknown Location";
 }
 
-interface ActivityEventPayload {
-  visitorId: string;
-  clickId?: string;
-  leadName?: string;
-  leadContact?: string;
-  eventType: "return_visit" | "deck_view" | "page_scroll" | "vcf_download" | "heartbeat" | "session_end" | "form_submit";
-  durationSeconds?: number;
-  metadata?: Record<string, any>;
-  sessionState?: string;
+function parseDevice(ua: string): string {
+  let device = "💻 Desktop";
+  if (/iphone/i.test(ua)) device = "📱 iPhone";
+  else if (/ipad/i.test(ua)) device = "📱 iPad";
+  else if (/android/i.test(ua)) device = "📱 Android";
+  else if (/macintosh|mac os x/i.test(ua)) device = "💻 Mac";
+  else if (/windows/i.test(ua)) device = "💻 Windows";
+
+  let client = "";
+  const uaLower = ua.toLowerCase();
+  if (/linkedinapp|linkedin/i.test(ua)) client = " (LinkedIn In-App)";
+  else if (/telegram/i.test(ua)) client = " (Telegram In-App)";
+  else if (/whatsapp/i.test(ua)) client = " (WhatsApp In-App)";
+  else if (/instagram/i.test(ua)) client = " (Instagram In-App)";
+  else if (/fbav|fban|facebook/i.test(ua)) client = " (Facebook In-App)";
+  else if (/twitter|x\/|x android/i.test(ua)) client = " (X / Twitter In-App)";
+  else if (/teams/i.test(ua)) client = " (Teams In-App)";
+  else if (/slack/i.test(ua)) client = " (Slack In-App)";
+  else if (/safari/i.test(ua) && !/chrome|crios/i.test(uaLower)) client = " (Safari)";
+  else if (/chrome|crios/i.test(uaLower)) client = " (Chrome)";
+
+  return `${device}${client}`;
 }
+
+function formatShortVisitorId(id: string): string {
+  if (!id) return "anon";
+  const match = id.match(/_([a-z0-9]{4,6})$/i);
+  if (match) return `usr_${match[1].toLowerCase()}`;
+  const clean = id.replace(/^hub_/, "").slice(0, 6).toLowerCase();
+  return `usr_${clean || "anon"}`;
+}
+
+const HIGH_PRIORITY_EVENTS = new Set([
+  "vcard_download",
+  "lead_submit",
+  "clip_in",
+  "form_submit",
+  "deck_download",
+  "proof_click",
+  "contact_click",
+  "channel_click",
+  "return_visit",
+  "lead_identified",
+]);
+
+const EMOJI_MAP: Record<string, string> = {
+  page_view: "👀",
+  slide_view: "📊",
+  deck_view: "📊",
+  heartbeat: "⏱",
+  page_scroll: "📜",
+  vcard_download: "📇",
+  lead_submit: "🔥",
+  clip_in: "🧗",
+  form_submit: "🚀",
+  deck_download: "📥",
+  proof_click: "🔎",
+  contact_click: "📲",
+  channel_click: "📲",
+  return_visit: "🔁",
+  lead_identified: "🎯",
+};
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
-  // 1. CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -59,430 +103,253 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 
   if (req.method !== "POST") {
-    res.writeHead(405, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ ok: false, error: "Method not allowed" }));
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ ok: true }));
   }
 
-  // 2. Parse request payload safely (handles fetch JSON, sendBeacon text/blob)
-  let body: any = {};
-  if ((req as any).body) {
-    try {
-      body = typeof (req as any).body === "string" ? JSON.parse((req as any).body) : (req as any).body;
-    } catch {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ ok: false, error: "Malformed JSON payload" }));
-    }
-  } else {
-    try {
-      const buffers: Buffer[] = [];
-      for await (const chunk of req) {
-        buffers.push(chunk);
+  try {
+    let body: any = {};
+    if ((req as any).body) {
+      try {
+        body = typeof (req as any).body === "string" ? JSON.parse((req as any).body) : (req as any).body;
+      } catch {
+        body = {};
       }
-      const raw = Buffer.concat(buffers).toString("utf-8");
-      body = raw ? JSON.parse(raw) : {};
-    } catch {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ ok: false, error: "Malformed raw JSON body" }));
+    } else {
+      try {
+        const buffers: Buffer[] = [];
+        for await (const chunk of req) {
+          buffers.push(chunk);
+        }
+        const raw = Buffer.concat(buffers).toString("utf-8");
+        body = raw ? JSON.parse(raw) : {};
+      } catch {
+        body = {};
+      }
     }
-  }
 
-  const {
-    visitorId,
-    clickId,
-    leadName = "",
-    leadContact = "",
-    eventType = "heartbeat",
-    durationSeconds = 0,
-    metadata = {},
-    sessionState = "",
-  }: ActivityEventPayload = body;
+    const {
+      visitorId = "",
+      clickId,
+      leadName = "",
+      leadContact = "",
+      eventType = "heartbeat",
+      event,
+      durationSeconds = 0,
+      metadata = {},
+      meta,
+      sessionState = "",
+    } = body;
 
-  const effectiveClickId = clickId || (body as any)?.click_id || metadata?.click_id || visitorId;
+    const effectiveEvent = event || eventType || "heartbeat";
+    const effectiveVisitorId = visitorId || body.visitor_id || "anon";
+    const effectiveClickId = clickId || body.click_id || metadata?.click_id || effectiveVisitorId;
+    const shortId = formatShortVisitorId(effectiveVisitorId);
 
-  if (!visitorId || typeof visitorId !== "string") {
-    res.writeHead(400, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ ok: false, error: "Missing required visitorId" }));
-  }
+    // 1. Initialize Supabase Admin Client
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    const supabaseAdmin = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-  // 3. Initialize Supabase Admin Client
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-  const supabaseAdmin = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+    // 2. Intelligent Identity Resolution (Deanonymization)
+    let resolvedLeadName = (leadName || "").trim();
+    let resolvedLeadContact = (leadContact || "").trim();
 
-  // 4. Intelligent Identity Resolution:
-  // If identity was not supplied in this beacon payload, check if this visitor was already
-  // identified in Supabase (e.g. earlier form submit, or previous identified event)
-  let resolvedLeadName = (leadName || "").trim();
-  let resolvedLeadContact = (leadContact || "").trim();
-
-  if (supabaseAdmin && (!resolvedLeadName || !resolvedLeadContact)) {
-    try {
-      // A. Query most recent identified record in lead_activity_logs
-      const { data: identifiedRow } = await supabaseAdmin
-        .from("lead_activity_logs")
-        .select("lead_name, lead_contact")
-        .eq("visitor_id", visitorId)
-        .not("lead_name", "is", null)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (identifiedRow?.lead_name) {
-        if (!resolvedLeadName) resolvedLeadName = identifiedRow.lead_name;
-        if (!resolvedLeadContact) resolvedLeadContact = identifiedRow.lead_contact || "";
-      } else {
-        // B. Fallback: inspect lead_notification_cooldowns metadata
-        const { data: cooldownRow } = await supabaseAdmin
-          .from("lead_notification_cooldowns")
-          .select("metadata")
-          .eq("visitor_id", visitorId)
+    if (supabaseAdmin && (!resolvedLeadName || !resolvedLeadContact)) {
+      try {
+        const { data: identifiedRow } = await supabaseAdmin
+          .from("lead_activity_logs")
+          .select("lead_name, lead_contact")
+          .eq("visitor_id", effectiveVisitorId)
+          .not("lead_name", "is", null)
+          .order("created_at", { ascending: false })
+          .limit(1)
           .maybeSingle();
 
-        const storedName = cooldownRow?.metadata?.displayName;
-        if (
-          storedName &&
-          !storedName.startsWith("Lead #") &&
-          !storedName.startsWith("Лид #")
-        ) {
-          if (!resolvedLeadName) resolvedLeadName = storedName;
-          if (!resolvedLeadContact) resolvedLeadContact = cooldownRow.metadata?.leadContact || "";
+        if (identifiedRow?.lead_name) {
+          if (!resolvedLeadName) resolvedLeadName = identifiedRow.lead_name;
+          if (!resolvedLeadContact) resolvedLeadContact = identifiedRow.lead_contact || "";
         }
+      } catch (idErr) {
+        console.warn("Identity lookup warning:", idErr);
       }
-    } catch (identityErr) {
-      console.warn("Identity resolution exception:", identityErr);
     }
-  }
 
-  let loggedToDb = false;
+    // 3. Extract Geo & Device from Vercel Request Headers
+    const geo = parseGeo(req.headers);
+    const ua = (req.headers["user-agent"] as string) || "";
+    const device = parseDevice(ua);
 
-  // 5. Log event to Supabase lead_activity_logs with stitched identity
-  if (supabaseAdmin) {
-    try {
-      const { error: insertError } = await supabaseAdmin.from("lead_activity_logs").insert([
-        {
-          visitor_id: visitorId,
-          lead_name: resolvedLeadName || null,
-          lead_contact: resolvedLeadContact || null,
-          event_type: eventType,
-          duration_seconds: durationSeconds || 0,
-          metadata: {
-            ...metadata,
-            click_id: effectiveClickId,
-            sessionState,
-            userAgent: req.headers["user-agent"] || "unknown",
-            ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
+    // 4. Log to Supabase lead_activity_logs
+    let loggedToDb = false;
+    if (supabaseAdmin) {
+      try {
+        const { error: insertError } = await supabaseAdmin.from("lead_activity_logs").insert([
+          {
+            visitor_id: effectiveVisitorId,
+            lead_name: resolvedLeadName || null,
+            lead_contact: resolvedLeadContact || null,
+            event_type: effectiveEvent,
+            duration_seconds: durationSeconds || 0,
+            metadata: {
+              ...metadata,
+              meta,
+              click_id: effectiveClickId,
+              sessionState,
+              geo,
+              device,
+              userAgent: ua,
+              ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
+            },
           },
-        },
-      ]);
-      if (!insertError) {
-        loggedToDb = true;
-
-        // If identity is known, retroactively update previous anonymous entries for this visitor
-        if (resolvedLeadName) {
-          await supabaseAdmin
-            .from("lead_activity_logs")
-            .update({
-              lead_name: resolvedLeadName,
-              lead_contact: resolvedLeadContact || null,
-            })
-            .eq("visitor_id", visitorId)
-            .is("lead_name", null);
+        ]);
+        if (!insertError) {
+          loggedToDb = true;
+          // If newly identified, update earlier anonymous entries for this visitor
+          if (resolvedLeadName) {
+            await supabaseAdmin
+              .from("lead_activity_logs")
+              .update({
+                lead_name: resolvedLeadName,
+                lead_contact: resolvedLeadContact || null,
+              })
+              .eq("visitor_id", effectiveVisitorId)
+              .is("lead_name", null);
+          }
         }
-      } else {
-        console.warn("Supabase lead_activity_logs insert warning:", insertError.message);
+      } catch (dbErr) {
+        console.warn("Supabase log exception:", dbErr);
       }
-    } catch (dbErr) {
-      console.warn("Database activity logging exception:", dbErr);
     }
-  }
 
-  // 5. Evaluate High-Intent Trigger Criteria
-  const visitCount =
-    Number(metadata?.visitCount) ||
-    (sessionState.match(/Repeat Visit #(\d+)/)?.[1]
-      ? parseInt(sessionState.match(/Repeat Visit #(\d+)/)![1], 10)
-      : 1);
-  const isReturnVisitEvent = eventType === "return_visit";
-  const isRepeatVisitSession = visitCount > 1 || sessionState.toLowerCase().includes("repeat visit");
-  const isActualReturn = isReturnVisitEvent || isRepeatVisitSession;
-  const isVcfDownload = eventType === "vcf_download";
-  const currentSlide = Number(metadata?.current_slide) || 1;
-
-  // Criteria:
-  // A. Actual Return Visit: return_visit event (fires only after 30+ min idle and verified user interaction)
-  const qualifiesReturnVisit = isReturnVisitEvent;
-
-  // B. vCard Download: disabled per doctrine — downloading .vcf does not guarantee contact was saved.
-  // Activity is still safely logged to Supabase DB for analytics history, but notification alert is suppressed.
-  const qualifiesVcf = false;
-
-  // C. First Visit Deep Engagement:
-  // Does NOT trigger on quick 15-25s scans! Requires genuine deep engagement:
-  // >= 120s active time OR reaching slide 8+ with at least 45s active time
-  const qualifiesDeepFirstVisit =
-    !isActualReturn &&
-    (durationSeconds >= FIRST_VISIT_ENGAGEMENT_SECONDS ||
-      (currentSlide >= FIRST_VISIT_DEEP_SLIDE && durationSeconds >= 45));
-
-  // D. Repeat Visit Active Reading (heartbeat during a return visit with >= 60s active time)
-  const qualifiesRepeatEngagement =
-    isActualReturn && !isReturnVisitEvent && durationSeconds >= 60;
-
-  const qualifiesForDigest =
-    qualifiesReturnVisit || qualifiesVcf || qualifiesDeepFirstVisit || qualifiesRepeatEngagement;
-
-  if (!qualifiesForDigest) {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false }));
-  }
-
-  // 6. Check 4-Hour Cooldown in Supabase (with 45s de-duplication for rapid double clicks)
-  let cooldownActive = false;
-  let previousNotificationCount = 0;
-  let lastEventWasVcfRecently = false;
-
-  if (supabaseAdmin) {
-    try {
-      const { data: cooldownData } = await supabaseAdmin
-        .from("lead_notification_cooldowns")
-        .select("last_notified_at, last_event_type, total_notifications")
-        .eq("visitor_id", visitorId)
-        .maybeSingle();
-
-      if (cooldownData?.last_notified_at) {
-        const lastNotifiedTime = new Date(cooldownData.last_notified_at).getTime();
-        const elapsed = Date.now() - lastNotifiedTime;
-        previousNotificationCount = cooldownData.total_notifications || 1;
-        if (elapsed < COOLDOWN_MS) {
-          cooldownActive = true;
-        }
-        // De-duplicate rapid back-to-back vCard saves within 45 seconds
-        if (isVcfDownload && cooldownData.last_event_type === "vcf_download" && elapsed < 45 * 1000) {
-          lastEventWasVcfRecently = true;
-        }
+    // 5. Anti-Spam Filtering:
+    // - For regular heartbeats: only push on significant engagement milestones (60s, 120s, 300s, 600s)
+    // - Drop rapid heartbeats (e.g. 10s, 20s, 30s) so chat stays clean
+    if (effectiveEvent === "heartbeat") {
+      const allowedMilestones = [60, 120, 300, 600, 1200];
+      const isMilestone = allowedMilestones.includes(durationSeconds);
+      if (!isMilestone) {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false }));
       }
-    } catch (cooldownErr) {
-      console.warn("Cooldown check error:", cooldownErr);
     }
-  }
 
-  if (lastEventWasVcfRecently) {
+    // - For vcard_download: deduplicate rapid duplicate downloads within 30s
+    if (effectiveEvent === "vcard_download" && supabaseAdmin) {
+      try {
+        const { data: recentVcf } = await supabaseAdmin
+          .from("lead_activity_logs")
+          .select("created_at")
+          .eq("visitor_id", effectiveVisitorId)
+          .eq("event_type", "vcard_download")
+          .order("created_at", { ascending: false })
+          .limit(2);
+
+        if (recentVcf && recentVcf.length >= 2) {
+          const t0 = new Date(recentVcf[0].created_at).getTime();
+          const t1 = new Date(recentVcf[1].created_at).getTime();
+          if (Math.abs(t0 - t1) < 30 * 1000) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false, reason: "dedup_30s" }));
+          }
+        }
+      } catch {}
+    }
+
+    // 6. Push Separation: Silent vs Loud
+    const isHighPriority = HIGH_PRIORITY_EVENTS.has(effectiveEvent);
+    const isSilent = !isHighPriority; // disable_notification: true for passive browsing
+
+    // 7. Format Telegram Message
+    const icon = EMOJI_MAP[effectiveEvent] || "⚡️";
+    let eventTitle = effectiveEvent.replace(/_/g, " ").toUpperCase();
+
+    if (effectiveEvent === "vcard_download") eventTitle = "СОХРАНЕНИЕ КОНТАКТА (.VCF)";
+    else if (effectiveEvent === "lead_submit" || effectiveEvent === "clip_in") eventTitle = "НОВЫЙ ЛИД · CLIP IN";
+    else if (effectiveEvent === "return_visit") eventTitle = "ПОВТОРНЫЙ ВИЗИТ";
+    else if (effectiveEvent === "slide_view" || effectiveEvent === "deck_view") {
+      const slideNum = metadata?.current_slide || metadata?.slide || "";
+      eventTitle = slideNum ? `СЛАЙД ${slideNum}/20` : "ПРОСМОТР ПРЕЗЕНТАЦИИ";
+    } else if (effectiveEvent === "proof_click") eventTitle = "ПРУФ ОТКРЫТ ИЗ ПИСЬМА";
+    else if (effectiveEvent === "contact_click") eventTitle = "КЛИК В МЕССЕНДЖЕР";
+    else if (effectiveEvent === "deck_download") eventTitle = "СКАЧИВАНИЕ MEDIA DECK (PDF)";
+
+    // Who formatting: anonymous hash vs deanonymized contact
+    const hasNameOrContact = Boolean(resolvedLeadName || resolvedLeadContact);
+    const who = hasNameOrContact
+      ? `<b>${escapeHtml(resolvedLeadName || resolvedLeadContact)}</b> ${resolvedLeadName && resolvedLeadContact ? `(${escapeHtml(resolvedLeadContact)}) ` : ""}<code>[${escapeHtml(shortId)}]</code>`
+      : `<code>[${escapeHtml(shortId)}]</code>`;
+
+    // Action / Context detail
+    let actionDetail = meta || metadata?.title || metadata?.slide_title || metadata?.channel || "";
+    if (effectiveEvent === "slide_view" || effectiveEvent === "deck_view") {
+      const slideTitle = metadata?.slide_title || "";
+      actionDetail = slideTitle ? `Изучает: <i>${escapeHtml(slideTitle)}</i>` : `Слайд #${metadata?.current_slide || 1}`;
+    } else if (effectiveEvent === "vcard_download") {
+      actionDetail = "Добавил контакт Alex в адресную книгу смартфона";
+    } else if (effectiveEvent === "return_visit") {
+      const idleMin = metadata?.idleMinutes ? `спустя ${metadata.idleMinutes} мин` : "повторно";
+      actionDetail = `Вернулся на платформу (${idleMin}) · ${sessionState || "Сессия #2+"}`;
+    } else if (effectiveEvent === "heartbeat") {
+      const min = Math.round(durationSeconds / 60);
+      actionDetail = `Активное время на странице: ${durationSeconds}с (~${min} мин)`;
+    } else if (effectiveEvent === "contact_click") {
+      const target = metadata?.target || metadata?.channel || "Direct";
+      actionDetail = `Переход по кнопке: ${escapeHtml(target)}`;
+    }
+
+    const lines: string[] = [
+      `${icon} <b>${eventTitle}</b>`,
+      `👤 <b>Who:</b> ${who}`,
+      actionDetail ? `📌 <b>Action:</b> ${actionDetail}` : null,
+      `📍 <b>Geo:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
+      effectiveClickId && effectiveClickId !== effectiveVisitorId ? `🎯 <b>Click ID:</b> <code>${escapeHtml(effectiveClickId)}</code>` : null,
+    ].filter(Boolean) as string[];
+
+    const tgText = lines.join("\n");
+
+    // 8. Send Telegram Notification (100% via bot, 0 Resend calls)
+    const tgToken =
+      process.env.VITE_TELEGRAM_BOT_TOKEN ||
+      process.env.TELEGRAM_BOT_TOKEN ||
+      "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
+    const tgChatId =
+      process.env.VITE_TELEGRAM_CHAT_ID ||
+      process.env.TELEGRAM_CHAT_ID ||
+      "-1003934317948";
+
+    let telegramSent = false;
+    if (tgToken && tgChatId) {
+      try {
+        const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: tgChatId,
+            text: tgText,
+            parse_mode: "HTML",
+            disable_notification: isSilent, // Silent mode for passive browsing, Loud with vibration for high intent!
+            disable_web_page_preview: true,
+          }),
+        });
+        telegramSent = tgRes.ok;
+      } catch (tgErr) {
+        console.warn("Telegram alert error in activity tracker:", tgErr);
+      }
+    }
+
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(
       JSON.stringify({
         ok: true,
         logged: loggedToDb,
-        digestSent: false,
-        reason: "vcf_dedup_45s",
+        digestSent: telegramSent,
+        isSilent,
       })
     );
-  }
-
-  // Never suppress initial vcf_download even during general cooldown
-  if (cooldownActive && !isVcfDownload) {
+  } catch (err) {
+    // Never crash client telemetry requests
     res.writeHead(200, { "Content-Type": "application/json" });
-    return res.end(
-      JSON.stringify({
-        ok: true,
-        logged: loggedToDb,
-        digestSent: false,
-        reason: "cooldown_active_4h",
-      })
-    );
+    return res.end(JSON.stringify({ ok: false }));
   }
-
-  // 7. Aggregate Recent Activity History for this Visitor
-  let recentActivities: Array<{ event_type: string; duration_seconds: number; created_at: string; metadata: any }> = [];
-  if (supabaseAdmin) {
-    try {
-      const { data: history } = await supabaseAdmin
-        .from("lead_activity_logs")
-        .select("event_type, duration_seconds, created_at, metadata")
-        .eq("visitor_id", visitorId)
-        .order("created_at", { ascending: false })
-        .limit(8);
-
-      if (history) {
-        recentActivities = history;
-      }
-    } catch (histErr) {
-      console.warn("History fetch error:", histErr);
-    }
-  }
-
-  // Format activity summary lines with stitched identity or human-readable fallback
-  const displayName = resolvedLeadName || formatFallbackDisplayName(visitorId);
-  const displayContact = resolvedLeadContact || "Not entered yet";
-  const durationMin = (Math.max(durationSeconds, 1) / 60).toFixed(1);
-
-  // Extract smart detected traffic source (clean URL attribution)
-  const currentSource = metadata?.traffic_source || "";
-  const initialSource = metadata?.first_traffic_source || "";
-  let smartSourceDisplay = currentSource || initialSource || "Direct / Organic";
-  if (initialSource && currentSource && initialSource !== currentSource && !currentSource.startsWith("Direct")) {
-    smartSourceDisplay = `${initialSource} (Возврат: ${currentSource})`;
-  } else if (initialSource && currentSource && initialSource !== currentSource && currentSource.startsWith("Direct")) {
-    smartSourceDisplay = `${initialSource} (Повторный визит напрямую)`;
-  }
-
-  const eventDescriptions: Record<string, string> = {
-    form_submit: "🧗 Отправка контактов (Clip In)",
-    return_visit: "🔁 Повторный визит на /connect",
-    deck_view: "📊 Просмотр медиадека (Traffic Infrastructure Deck)",
-    vcf_download: "📇 Скачивание контакта One-Tap Save (.vcf)",
-    page_scroll: "📜 Глубокий скролл страницы хаба",
-    heartbeat: "⏱ Активное чтение / пребывание на странице",
-    session_end: "🚪 Завершение сессии",
-  };
-
-  const formatEventLabel = (type: string, meta: any): string => {
-    if (type === "deck_view") {
-      if (meta?.current_slide) {
-        const slideName = meta?.slide_title ? ` «${meta.slide_title}»` : "";
-        return `📊 Просмотр слайда ${meta.current_slide}/20${slideName}`;
-      }
-      return "📊 Просмотр медиадека (Traffic Infrastructure Deck)";
-    }
-    if (type === "heartbeat" && meta?.current_slide) {
-      return `⏱ Чтение слайда ${meta.current_slide}/20 (${meta.slide_title || "Медиадек"})`;
-    }
-    if (type === "page_scroll" && meta?.scrollDepth) {
-      return `📜 Глубокий скролл страницы (${meta.scrollDepth}%)`;
-    }
-    return eventDescriptions[type] || type;
-  };
-
-  const activityLines =
-    recentActivities.length > 0
-      ? recentActivities
-          .map((a) => {
-            const timeStr = new Date(a.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-            const label = formatEventLabel(a.event_type, a.metadata);
-            const dur = a.duration_seconds > 0 ? ` (${a.duration_seconds} сек)` : "";
-            return `• <strong>${timeStr}</strong>: ${label}${dur}`;
-          })
-          .join("<br/>")
-      : `• ${formatEventLabel(eventType, metadata)} (${durationSeconds} сек)`;
-
-  const telegramActivityLines =
-    recentActivities.length > 0
-      ? recentActivities
-          .map((a) => {
-            const timeStr = new Date(a.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-            const label = formatEventLabel(a.event_type, a.metadata);
-            const dur = a.duration_seconds > 0 ? ` (${a.duration_seconds}s)` : "";
-            return `  • <code>${timeStr}</code>: ${label}${dur}`;
-          })
-          .join("\n")
-      : `  • ${formatEventLabel(eventType, metadata)} (${durationSeconds}s)`;
-
-  // 8. Dynamic Alert Category, Subject, Titles & Badges
-  let alertBadge = "🔥 HIGH INTENT TELEMETRY";
-  let alertTitle = `${displayName} активен на платформе`;
-  let alertSubtitle = "Сессия на /connect";
-  let emailSubject = `⚡ [АКТИВНОСТЬ] ${displayName} на платформе · ${durationMin} мин`;
-  let tgHeader = `<b>⚡ [АКТИВНОСТЬ] Лид на платформе!</b>`;
-
-  if (isVcfDownload) {
-    alertBadge = "📇 CONTACT DOWNLOADED";
-    alertTitle = `${displayName} сохранил визитку`;
-    alertSubtitle = "Контакт добавлен в адресную книгу мобильного устройства";
-    emailSubject = `📇 [СОХРАНЕНИЕ КОНТАКТА] ${displayName} сохранил визитку (.vcf)`;
-    tgHeader = `<b>📇 [СОХРАНЕНИЕ КОНТАКТА] Лид сохранил визитку!</b>`;
-  } else if (isActualReturn) {
-    const idleMinStr = metadata?.idleMinutes ? `спустя ${metadata.idleMinutes} мин` : "повторно";
-    alertBadge = "🔁 REPEAT VISITOR";
-    alertTitle = `${displayName} вернулся на платформу`;
-    alertSubtitle = `Повторный визит (${idleMinStr}) · Сессия #${visitCount}`;
-    emailSubject = `🔁 [ПОВТОРНЫЙ ВИЗИТ] ${displayName} вернулся на сайт · Сессия #${visitCount}`;
-    tgHeader = `<b>🔁 [ПОВТОРНЫЙ ВИЗИТ] Лид вернулся на платформу!</b>`;
-  } else {
-    // First Visit Deep Engagement
-    alertBadge = "⚡ NEW LEAD · DEEP ENGAGEMENT";
-    alertTitle = `${displayName} изучает презентацию`;
-    alertSubtitle = `Первый визит с QR-кода · Вовлеченность ${durationMin} мин (слайд ${currentSlide}/20)`;
-    emailSubject = `⚡ [НОВЫЙ ЛИД] ${displayName} изучает презентацию (${durationMin} мин)`;
-    tgHeader = `<b>⚡ [НОВЫЙ ЛИД] Высокая вовлеченность с QR-кода!</b>`;
-  }
-
-  // 9. Resend email digest disabled to preserve 100% of daily quota for lead autoresponders & form submissions.
-  // All telemetry and visitor alerts are routed directly to Telegram supergroup IMS2026.
-  let emailSent = false;
-
-  // 10. Send Instant Telegram Alert if Bot Token is configured
-  const tgToken =
-    process.env.VITE_TELEGRAM_BOT_TOKEN ||
-    process.env.TELEGRAM_BOT_TOKEN ||
-    "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
-  const tgChatId =
-    process.env.VITE_TELEGRAM_CHAT_ID ||
-    process.env.TELEGRAM_CHAT_ID ||
-    "-1003934317948";
-  let telegramSent = false;
-
-  if (tgToken && tgChatId) {
-    try {
-      const tgText = `${tgHeader}\n\n` +
-        `👤 <b>Имя:</b> ${escapeHtml(displayName)}\n` +
-        `📱 <b>Контакт:</b> ${escapeHtml(displayContact)}\n` +
-        `🌐 <b>Источник (Smart Detect):</b> ${escapeHtml(smartSourceDisplay)}\n` +
-        `⏱ <b>Активное время:</b> ${durationSeconds}с (~${durationMin} мин)\n` +
-        `🏷 <b>Статус:</b> ${escapeHtml(sessionState || (isActualReturn ? `Повторный визит #${visitCount}` : "Первый визит"))}\n` +
-        `🎯 <b>Click ID:</b> <code>${escapeHtml(effectiveClickId)}</code>\n\n` +
-        `<b>Хроника действий:</b>\n${telegramActivityLines}\n\n` +
-        `🔗 <a href="https://upraiser.co.uk/connect">Открыть Conference Hub</a>`;
-
-      const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: tgChatId,
-          text: tgText,
-          parse_mode: "HTML",
-          disable_web_page_preview: true,
-        }),
-      });
-
-      if (tgRes.ok) {
-        telegramSent = true;
-      }
-    } catch (tgErr) {
-      console.warn("Telegram alert error:", tgErr);
-    }
-  }
-
-  // 11. Update Cooldown Tracker in Supabase
-  if (supabaseAdmin && (emailSent || telegramSent)) {
-    try {
-      await supabaseAdmin.from("lead_notification_cooldowns").upsert(
-        {
-          visitor_id: visitorId,
-          last_notified_at: new Date().toISOString(),
-          last_event_type: eventType,
-          total_notifications: previousNotificationCount + 1,
-          metadata: {
-            displayName,
-            leadContact: displayContact,
-            durationSeconds,
-            emailSent,
-            telegramSent,
-          },
-        },
-        { onConflict: "visitor_id" }
-      );
-    } catch (cooldownSaveErr) {
-      console.warn("Cooldown update failed:", cooldownSaveErr);
-    }
-  }
-
-  res.writeHead(200, { "Content-Type": "application/json" });
-  return res.end(
-    JSON.stringify({
-      ok: true,
-      logged: loggedToDb,
-      digestSent: emailSent || telegramSent,
-      emailSent,
-      telegramSent,
-    })
-  );
 }

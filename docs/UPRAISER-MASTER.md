@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 26 October 2026 (v2.2.102-stable)  
+> **Updated:** 26 October 2026 (v2.2.103-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** All Telemetry & Alerts Migrated to Telegram (IMS2026 Supergroup) + 100% Resend Quota Preserved for Lead Dossiers  
+> **HEAD:** Telegram Lead Radar (Silent vs Loud Pushes, Zero-Config Vercel Geo/Device, Email Proof Click-Tracking /api/proof, Clean Supabase Cache)  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`

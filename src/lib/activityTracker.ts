@@ -24,6 +24,12 @@ export const IDLE_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes threshold for dis
 export type ActivityEventType =
   | "return_visit"
   | "deck_view"
+  | "slide_view"
+  | "deck_download"
+  | "proof_click"
+  | "contact_click"
+  | "channel_click"
+  | "lead_submit"
   | "page_scroll"
   | "vcf_download"
   | "heartbeat"
