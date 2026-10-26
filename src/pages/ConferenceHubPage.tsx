@@ -747,7 +747,13 @@ export function ConferenceHubPage() {
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <Link
               to={`/channels?utm_source=qr_wallet&lang=${lang}`}
-              onClick={() => triggerHaptic("light")}
+              onClick={() => {
+                triggerHaptic("light");
+                trackAction("channel_click", 0, {
+                  channel: "ecosystem_routes",
+                  target: "3D Routes & Channels (/channels)",
+                });
+              }}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.routesTitle}</span>
@@ -771,6 +777,13 @@ export function ConferenceHubPage() {
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <a
               href="https://upraiser.co.uk"
+              onClick={() => {
+                triggerHaptic("light");
+                trackAction("channel_click", 0, {
+                  channel: "ecosystem_website",
+                  target: "Official Platform (upraiser.co.uk)",
+                });
+              }}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.officialPlatform}</span>
@@ -784,6 +797,13 @@ export function ConferenceHubPage() {
               href="https://www.linkedin.com/company/upraiser/"
               target="_blank"
               rel="noreferrer"
+              onClick={() => {
+                triggerHaptic("light");
+                trackAction("channel_click", 0, {
+                  channel: "ecosystem_linkedin",
+                  target: "LinkedIn (UPRAISER)",
+                });
+              }}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.linkedinTitle}</span>

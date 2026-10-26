@@ -430,10 +430,13 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const effectiveClickId = telemetry?.clickId || body?.clickId || (body as any)?.click_id || visitorId;
   const cleanName = name.trim();
   const cleanContact = (phone || email).trim();
+  const geo = parseGeo(req.headers);
+  const ua = (req.headers["user-agent"] as string) || "";
+  const device = parseDevice(ua);
 
   if (supabaseAdmin && visitorId) {
     try {
-      // 1. Insert form_submit action into lead_activity_logs
+      // 1. Insert form_submit action into lead_activity_logs (including baseline geo & device for forwarding detection)
       await supabaseAdmin.from("lead_activity_logs").insert([
         {
           visitor_id: visitorId,
@@ -451,7 +454,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             notes,
             telemetry,
             click_id: effectiveClickId,
-            userAgent: req.headers["user-agent"] || telemetry?.userAgent || "unknown",
+            geo,
+            device,
+            userAgent: ua || telemetry?.userAgent || "unknown",
             ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
           },
         },
@@ -467,15 +472,30 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         .eq("visitor_id", visitorId)
         .is("lead_name", null);
 
-      // 3. Upsert into cooldowns with permanently identified display name
+      // 3. Upsert into cooldowns with permanently identified display name (preserving any existing deck session state)
+      let prevCooldownMeta: Record<string, any> = {};
+      try {
+        const { data: existingCd } = await supabaseAdmin
+          .from("lead_notification_cooldowns")
+          .select("metadata")
+          .eq("visitor_id", visitorId)
+          .maybeSingle();
+        if (existingCd?.metadata && typeof existingCd.metadata === "object") {
+          prevCooldownMeta = existingCd.metadata;
+        }
+      } catch {}
+
       await supabaseAdmin.from("lead_notification_cooldowns").upsert(
         {
           visitor_id: visitorId,
           last_notified_at: new Date().toISOString(),
           last_event_type: "form_submit",
           metadata: {
+            ...prevCooldownMeta,
             displayName: cleanName,
             leadContact: cleanContact,
+            lastGeo: geo,
+            lastDevice: device,
             identifiedAt: new Date().toISOString(),
           },
         },
@@ -514,10 +534,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       if (attachments.length === 0) attachments = undefined;
     }
 
-    // 2. Extract Geo & Device from Vercel headers
-    const geo = parseGeo(req.headers);
-    const ua = (req.headers["user-agent"] as string) || "";
-    const device = parseDevice(ua);
+    // 2. Determine conference vs main website form context
     const isConference = appId.includes("Conference") || isRepeatAlert;
     const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
 

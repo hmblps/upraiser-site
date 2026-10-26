@@ -90,7 +90,7 @@ const EMOJI_MAP: Record<string, string> = {
   vcard_download: "📇",
   deck_download: "📥",
   contact_click: "📲",
-  channel_click: "📲",
+  channel_click: "🌐",
   return_visit: "🔁",
 };
 
@@ -153,27 +153,48 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
     const supabaseAdmin = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-    // 2. Intelligent Identity Resolution (Deanonymization)
+    // 2. Intelligent Identity Resolution (Deanonymization) & Cooldown State Fetch
     let resolvedLeadName = (leadName || "").trim();
     let resolvedLeadContact = (leadContact || "").trim();
+    let existingCooldownMeta: Record<string, any> = {};
 
-    if (supabaseAdmin && (!resolvedLeadName || !resolvedLeadContact)) {
+    if (supabaseAdmin) {
       try {
-        const { data: identifiedRow } = await supabaseAdmin
-          .from("lead_activity_logs")
-          .select("lead_name, lead_contact")
+        const { data: cooldownRow } = await supabaseAdmin
+          .from("lead_notification_cooldowns")
+          .select("metadata")
           .eq("visitor_id", effectiveVisitorId)
-          .not("lead_name", "is", null)
-          .order("created_at", { ascending: false })
-          .limit(1)
           .maybeSingle();
 
-        if (identifiedRow?.lead_name) {
-          if (!resolvedLeadName) resolvedLeadName = identifiedRow.lead_name;
-          if (!resolvedLeadContact) resolvedLeadContact = identifiedRow.lead_contact || "";
+        if (cooldownRow?.metadata && typeof cooldownRow.metadata === "object") {
+          existingCooldownMeta = cooldownRow.metadata;
+          if (!resolvedLeadName && existingCooldownMeta.displayName) {
+            resolvedLeadName = String(existingCooldownMeta.displayName);
+          }
+          if (!resolvedLeadContact && existingCooldownMeta.leadContact) {
+            resolvedLeadContact = String(existingCooldownMeta.leadContact);
+          }
         }
-      } catch (idErr) {
-        console.warn("Identity lookup warning:", idErr);
+      } catch {}
+
+      if (!resolvedLeadName || !resolvedLeadContact) {
+        try {
+          const { data: identifiedRow } = await supabaseAdmin
+            .from("lead_activity_logs")
+            .select("lead_name, lead_contact")
+            .eq("visitor_id", effectiveVisitorId)
+            .not("lead_name", "is", null)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+          if (identifiedRow?.lead_name) {
+            if (!resolvedLeadName) resolvedLeadName = identifiedRow.lead_name;
+            if (!resolvedLeadContact) resolvedLeadContact = identifiedRow.lead_contact || "";
+          }
+        } catch (idErr) {
+          console.warn("Identity lookup warning:", idErr);
+        }
       }
     }
 
@@ -279,11 +300,45 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
 
     // 6. Push Separation: Silent vs Loud
-    // Slide browsing is silent (no vibration); vCard, PDF download, messenger click, and return visit are loud!
+    // Slide browsing is silent (no vibration); vCard, PDF download, messenger/ecosystem click, and return visit are loud!
     const isHighPriority = HIGH_PRIORITY_EVENTS.has(effectiveEvent);
     const isSilent = !isHighPriority;
+    const isDeckEvent = effectiveEvent === "slide_view" || effectiveEvent === "deck_view";
 
-    // 7. Format Unified Russian Telegram Message
+    // 7. Deck Session Trail Calculation (for 1-message edit-in-place)
+    const currentSlideNum = Number(metadata?.current_slide || metadata?.slide || 1);
+    const prevDeckUpdatedAt = existingCooldownMeta?.deck_updated_at
+      ? new Date(existingCooldownMeta.deck_updated_at).getTime()
+      : 0;
+    const activeDeckMessageId: number | null =
+      isDeckEvent &&
+      existingCooldownMeta?.deck_message_id &&
+      Date.now() - prevDeckUpdatedAt < 15 * 60 * 1000
+        ? Number(existingCooldownMeta.deck_message_id)
+        : null;
+
+    let slideTrail: number[] =
+      activeDeckMessageId && Array.isArray(existingCooldownMeta?.slide_trail)
+        ? [...existingCooldownMeta.slide_trail]
+        : [];
+    let uniqueSlides: number[] =
+      activeDeckMessageId && Array.isArray(existingCooldownMeta?.unique_slides)
+        ? [...existingCooldownMeta.unique_slides]
+        : [];
+
+    if (isDeckEvent) {
+      if (slideTrail.length === 0 || slideTrail[slideTrail.length - 1] !== currentSlideNum) {
+        slideTrail.push(currentSlideNum);
+      }
+      if (slideTrail.length > 12) {
+        slideTrail = slideTrail.slice(-12);
+      }
+      if (!uniqueSlides.includes(currentSlideNum)) {
+        uniqueSlides.push(currentSlideNum);
+      }
+    }
+
+    // 8. Format Unified Russian Telegram Message
     const icon = EMOJI_MAP[effectiveEvent] || "⚡️";
     let eventTitle = "АКТИВНОСТЬ НА САЙТЕ";
 
@@ -291,11 +346,15 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       eventTitle = "СОХРАНЕНА ВИЗИТКА (.VCF)";
     } else if (effectiveEvent === "return_visit") {
       eventTitle = "ПОВТОРНЫЙ ВИЗИТ НА ХАБ";
-    } else if (effectiveEvent === "slide_view" || effectiveEvent === "deck_view") {
-      const slideNum = metadata?.current_slide || metadata?.slide || "";
-      eventTitle = slideNum ? `ПРЕЗЕНТАЦИЯ · СЛАЙД ${slideNum}/20` : "ОТКРЫТА ПРЕЗЕНТАЦИЯ";
-    } else if (effectiveEvent === "contact_click" || effectiveEvent === "channel_click") {
+    } else if (isDeckEvent) {
+      eventTitle =
+        slideTrail.length > 1
+          ? `ПРЕЗЕНТАЦИЯ · СЕЙЧАС НА СЛАЙДЕ ${currentSlideNum}/20`
+          : `ПРЕЗЕНТАЦИЯ · СЛАЙД ${currentSlideNum}/20`;
+    } else if (effectiveEvent === "contact_click") {
       eventTitle = "ПЕРЕХОД В МЕССЕНДЖЕР";
+    } else if (effectiveEvent === "channel_click") {
+      eventTitle = "ПЕРЕХОД ПО ЭКОСИСТЕМЕ";
     } else if (effectiveEvent === "deck_download") {
       eventTitle = "СКАЧАНА ПРЕЗЕНТАЦИЯ (PDF)";
     }
@@ -308,19 +367,23 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
     // Action / Context detail in clean Russian
     let actionDetail = "";
-    if (effectiveEvent === "slide_view" || effectiveEvent === "deck_view") {
+    let routeLine: string | null = null;
+
+    if (isDeckEvent) {
       const slideTitle = metadata?.slide_title || "";
       const langTag = metadata?.lang ? ` (${String(metadata.lang).toUpperCase()})` : "";
       actionDetail = slideTitle
-        ? `Смотрит слайд: «<i>${escapeHtml(slideTitle)}</i>»${escapeHtml(langTag)}`
-        : `Открыл интерактивный дек${escapeHtml(langTag)}`;
+        ? `«<i>${escapeHtml(slideTitle)}</i>»${escapeHtml(langTag)}`
+        : `Слайд #${currentSlideNum}${escapeHtml(langTag)}`;
+      const trailStr = slideTrail.join(" → ");
+      routeLine = `🧭 <b>Маршрут:</b> Слайд ${trailStr} (изучил ${uniqueSlides.length} из 20)`;
     } else if (effectiveEvent === "vcf_download" || effectiveEvent === "vcard_download") {
       actionDetail = "Сохранил контакт Alex в адресную книгу смартфона";
     } else if (effectiveEvent === "return_visit") {
       const visitNum = metadata?.visitCount || 2;
       const idleMin = metadata?.idleMinutes ? ` (спустя ${metadata.idleMinutes} мин)` : "";
       actionDetail = `Вернулся на /connect · Визит #${visitNum}${idleMin}`;
-    } else if (effectiveEvent === "contact_click" || effectiveEvent === "channel_click") {
+    } else if (effectiveEvent === "contact_click") {
       const rawChannel = String(metadata?.channel || "");
       const target = metadata?.target || "Direct";
       const channelLabel = rawChannel.includes("telegram")
@@ -331,6 +394,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         ? `Email (${target})`
         : `${rawChannel || "Мессенджер"} (${target})`;
       actionDetail = `Нажал на кнопку связи: <b>${escapeHtml(channelLabel)}</b>`;
+    } else if (effectiveEvent === "channel_click") {
+      const target = metadata?.target || metadata?.channel || "Раздел сайта";
+      actionDetail = `Открыл раздел с хаба: <b>${escapeHtml(String(target))}</b>`;
     } else if (effectiveEvent === "deck_download") {
       const onSlide = metadata?.current_slide ? ` (со слайда ${metadata.current_slide}/20)` : "";
       actionDetail = `Скачал оригинал PDF-презентации${onSlide}`;
@@ -339,13 +405,14 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const lines: string[] = [
       `${icon} <b>${eventTitle}</b>`,
       `👤 <b>Лид:</b> ${who}`,
-      actionDetail ? `📌 <b>Действие:</b> ${actionDetail}` : null,
+      actionDetail ? `📌 <b>${isDeckEvent ? "Текущий слайд" : "Действие"}:</b> ${actionDetail}` : null,
+      routeLine,
       `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
     ].filter(Boolean) as string[];
 
     const tgText = lines.join("\n");
 
-    // 8. Send Telegram Notification (100% via bot, 0 Resend calls)
+    // 9. Send or Edit Telegram Notification (100% via bot, 0 Resend calls)
     const tgToken =
       process.env.VITE_TELEGRAM_BOT_TOKEN ||
       process.env.TELEGRAM_BOT_TOKEN ||
@@ -356,20 +423,74 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       "-1003934317948";
 
     let telegramSent = false;
+    let finalDeckMessageId: number | null = activeDeckMessageId;
+
     if (tgToken && tgChatId) {
       try {
-        const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: tgChatId,
-            text: tgText,
-            parse_mode: "HTML",
-            disable_notification: isSilent, // Silent mode for passive browsing, Loud with vibration for high intent!
-            disable_web_page_preview: true,
-          }),
-        });
-        telegramSent = tgRes.ok;
+        let editedInPlace = false;
+
+        // If the lead is flipping slides within an active 15-min deck session, edit the existing Telegram message!
+        if (isDeckEvent && activeDeckMessageId) {
+          const editRes = await fetch(`https://api.telegram.org/bot${tgToken}/editMessageText`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: tgChatId,
+              message_id: activeDeckMessageId,
+              text: tgText,
+              parse_mode: "HTML",
+              disable_web_page_preview: true,
+            }),
+          });
+          const editJson: any = await editRes.json().catch(() => ({}));
+          if (editRes.ok || String(editJson?.description || "").includes("message is not modified")) {
+            editedInPlace = true;
+            telegramSent = true;
+          }
+        }
+
+        // Otherwise send a new message
+        if (!editedInPlace) {
+          const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: tgChatId,
+              text: tgText,
+              parse_mode: "HTML",
+              disable_notification: isSilent,
+              disable_web_page_preview: true,
+            }),
+          });
+          const tgJson: any = await tgRes.json().catch(() => ({}));
+          telegramSent = tgRes.ok;
+          if (isDeckEvent && tgJson?.result?.message_id) {
+            finalDeckMessageId = Number(tgJson.result.message_id);
+          }
+        }
+
+        // Persist deck_message_id & slide_trail in Supabase so subsequent slide flips edit this same post
+        if (isDeckEvent && finalDeckMessageId && supabaseAdmin) {
+          await supabaseAdmin.from("lead_notification_cooldowns").upsert(
+            {
+              visitor_id: effectiveVisitorId,
+              last_notified_at: new Date().toISOString(),
+              last_event_type: effectiveEvent,
+              metadata: {
+                ...existingCooldownMeta,
+                ...(resolvedLeadName ? { displayName: resolvedLeadName } : {}),
+                ...(resolvedLeadContact ? { leadContact: resolvedLeadContact } : {}),
+                deck_message_id: finalDeckMessageId,
+                deck_updated_at: new Date().toISOString(),
+                slide_trail: slideTrail,
+                unique_slides: uniqueSlides,
+                lastGeo: geo,
+                lastDevice: device,
+              },
+            },
+            { onConflict: "visitor_id" }
+          );
+        }
       } catch (tgErr) {
         console.warn("Telegram alert error in activity tracker:", tgErr);
       }

@@ -136,6 +136,15 @@ function parseDevice(ua: string): string {
   return `${device}${client}`;
 }
 
+function getHardwareFamily(deviceLabel: string): string {
+  if (/iphone/i.test(deviceLabel)) return "iPhone";
+  if (/ipad/i.test(deviceLabel)) return "iPad";
+  if (/android/i.test(deviceLabel)) return "Android";
+  if (/mac/i.test(deviceLabel)) return "Mac";
+  if (/windows/i.test(deviceLabel)) return "Windows";
+  return "Desktop";
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const url = new URL(req.url || "/", "https://upraiser.co.uk");
   const appId = (url.searchParams.get("app") || url.searchParams.get("id") || "").toLowerCase().trim();
@@ -153,6 +162,60 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const ua = (req.headers["user-agent"] as string) || "";
   const device = parseDevice(ua);
 
+  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+
+  // Forwarding Detection: compare current (geo, device) against the lead's baseline session in Supabase
+  let resolvedName = "";
+  let prevGeo = "";
+  let prevDevice = "";
+  let isForwardedSuspect = false;
+
+  if (supabase && lead) {
+    try {
+      const { data: priorRows } = await supabase
+        .from("lead_activity_logs")
+        .select("lead_name, lead_contact, event_type, metadata, created_at")
+        .ilike("lead_contact", lead)
+        .order("created_at", { ascending: true })
+        .limit(10);
+
+      if (priorRows && priorRows.length > 0) {
+        for (const row of priorRows) {
+          if (!resolvedName && row.lead_name && row.lead_name !== lead) {
+            resolvedName = String(row.lead_name);
+          }
+          const mGeo = row.metadata?.geo;
+          const mDev = row.metadata?.device;
+          // Prefer the original form_submit baseline or first recorded session with valid geo/device
+          if ((!prevGeo || row.event_type === "form_submit") && mGeo) {
+            prevGeo = String(mGeo);
+          }
+          if ((!prevDevice || row.event_type === "form_submit") && mDev) {
+            prevDevice = String(mDev);
+          }
+        }
+
+        const geoChanged =
+          Boolean(prevGeo && geo) &&
+          prevGeo !== "Unknown Location" &&
+          geo !== "Unknown Location" &&
+          prevGeo.toLowerCase() !== geo.toLowerCase();
+
+        const deviceChanged =
+          Boolean(prevDevice && device) &&
+          getHardwareFamily(prevDevice) !== getHardwareFamily(device);
+
+        if (geoChanged || deviceChanged) {
+          isForwardedSuspect = true;
+        }
+      }
+    } catch (lookupErr) {
+      console.warn("Forwarding lookup warning in proof handler:", lookupErr);
+    }
+  }
+
   // Send LOUD Telegram push (disable_notification: false)
   const tgToken =
     process.env.VITE_TELEGRAM_BOT_TOKEN ||
@@ -165,13 +228,25 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   if (tgToken && tgChatId) {
     try {
+      const leadLabel = lead
+        ? resolvedName
+          ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(lead)})`
+          : `<b>${escapeHtml(lead)}</b>`
+        : "Аноним (прямая ссылка)";
+
+      const forwardingBanner = isForwardedSuspect
+        ? `\n🔥 <b>Возможно, письмо переслали коллеге!</b>\n` +
+          `└ <i>Новое устройство/гео: ${escapeHtml(geo)} · ${escapeHtml(device)} (ранее: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(prevDevice || "—")})</i>\n`
+        : "";
+
       const tgText =
         `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА</b>\n\n` +
-        `👤 <b>Лид:</b> ${lead ? `<b>${escapeHtml(lead)}</b>` : "Аноним (прямая ссылка)"}\n` +
+        `👤 <b>Лид:</b> ${leadLabel}\n` +
         `📊 <b>Кейс:</b> ${escapeHtml(proof.brand)} · ${escapeHtml(proof.report)}\n` +
         `📈 <b>Метрика:</b> ${escapeHtml(proof.metric)}\n` +
-        `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}\n\n` +
-        `🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть оригинал пруфа ↗</a>`;
+        `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}` +
+        forwardingBanner +
+        `\n\n🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть оригинал пруфа ↗</a>`;
 
       await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
         method: "POST",
@@ -190,15 +265,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 
   // Log to Supabase if configured
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-  if (supabaseUrl && supabaseKey) {
+  if (supabase) {
     try {
-      const supabase = createClient(supabaseUrl, supabaseKey);
       await supabase.from("lead_activity_logs").insert([
         {
           visitor_id: lead || "email_click",
-          lead_name: lead || null,
+          lead_name: resolvedName || lead || null,
           lead_contact: lead || null,
           event_type: "proof_click",
           duration_seconds: 0,
@@ -208,6 +280,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             report: proof.report,
             geo,
             device,
+            isForwardedSuspect,
+            prevGeo: prevGeo || null,
+            prevDevice: prevDevice || null,
             userAgent: ua,
             ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
           },
