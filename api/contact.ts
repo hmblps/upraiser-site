@@ -138,34 +138,34 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string): string {
   </style>
   <![endif]-->
 </head>
-<body style="margin: 0; padding: 0; background-color: #090204; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #ffffff; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
-  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #090204; padding: 36px 16px;">
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f1f5f9; padding: 40px 16px;">
     <tr>
       <td align="center">
-        <!-- Main Wrapper -->
-        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #0f0407; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);">
+        <!-- Main Wrapper (Clean White Paper Canvas) -->
+        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);">
           
-          <!-- Top Accent Ribbon (Matches /connect gradient) -->
+          <!-- Top Accent Ribbon (UPRAISER signature gradient) -->
           <tr>
-            <td height="2" style="background: linear-gradient(90deg, #e63558 0%, #fecf09 50%, #e63558 100%);"></td>
+            <td height="3" style="background: linear-gradient(90deg, #e63558 0%, #fecf09 50%, #e63558 100%);"></td>
           </tr>
 
-          <!-- Header: Brand Logo & Title (exact match to /connect top bar) -->
+          <!-- Header: Brand Logo & Title (/connect style) -->
           <tr>
-            <td style="padding: 34px 36px 18px 36px;">
+            <td style="padding: 36px 36px 18px 36px;">
               <table role="presentation" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td valign="middle" style="padding-right: 10px;">
-                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="background-color: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;">
+                  <td valign="middle" style="padding-right: 12px;">
+                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
                       <tr>
-                        <td align="center" valign="middle" style="width: 32px; height: 32px; padding: 6px;">
+                        <td align="center" valign="middle" style="width: 34px; height: 34px; padding: 6px;">
                           <img src="https://upraiser.co.uk/upraiser-logo.png" alt="UPRAISER" width="20" height="20" style="display: block; width: 20px; height: 20px; object-fit: contain;" />
                         </td>
                       </tr>
                     </table>
                   </td>
                   <td valign="middle">
-                    <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.18em; color: rgba(255, 255, 255, 0.85); text-transform: uppercase;">
+                    <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.18em; color: #0f172a; text-transform: uppercase;">
                       UPRAISER
                     </span>
                   </td>
@@ -177,29 +177,29 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string): string {
           <!-- Intro & Master Download Card -->
           <tr>
             <td style="padding: 10px 36px 26px 36px;">
-              <p style="margin: 0 0 10px 0; font-size: 16px; line-height: 1.5; color: #ffffff; font-weight: 600;">
+              <p style="margin: 0 0 10px 0; font-size: 16px; line-height: 1.5; color: #0f172a; font-weight: 700;">
                 ${greeting}
               </p>
-              <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: rgba(255, 255, 255, 0.65); font-weight: 400;">
-                Here are raw snapshots from AppsFlyer, Protect360, and direct advertiser CRM dashboards.
+              <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #475569; font-weight: 400;">
+                Here are raw snapshots from AF, P360, and direct advertiser CRM dashboards.
               </p>
 
-              <!-- Master ZIP Download Box (Glass aesthetic) -->
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 20px;">
+              <!-- Master ZIP Download Box -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px;">
                 <tr>
                   <td>
                     <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td valign="middle" style="padding-right: 16px;">
-                          <div style="font-size: 14px; font-weight: 700; color: #ffffff; letter-spacing: -0.01em;">
+                          <div style="font-size: 14px; font-weight: 700; color: #0f172a; letter-spacing: -0.01em;">
                             Complete Performance Portfolio
                           </div>
-                          <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: 3px;">
+                          <div style="font-size: 12px; color: #64748b; margin-top: 3px;">
                             All 8 raw uncompressed snapshots in one bundle (.zip · 15 MB)
                           </div>
                         </td>
                         <td align="right" valign="middle" style="white-space: nowrap;">
-                          <a href="${ZIP_ARCHIVE_URL}" target="_blank" style="display: inline-block; background-color: #FECF09; color: #090204; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 11px 18px; border-radius: 10px; box-shadow: 0 2px 12px rgba(254, 207, 9, 0.25);">
+                          <a href="${ZIP_ARCHIVE_URL}" target="_blank" style="display: inline-block; background-color: #fecf09; color: #0f172a; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 11px 18px; border-radius: 10px; box-shadow: 0 2px 8px rgba(254, 207, 9, 0.35);">
                             Download All (.zip)
                           </a>
                         </td>
@@ -219,10 +219,10 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string): string {
               <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 14px;">
                 <tr>
                   <td>
-                    <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #FECF09;">
+                    <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #e63558;">
                       ${group.title}
                     </div>
-                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.4); margin-top: 3px;">
+                    <div style="font-size: 12px; color: #64748b; margin-top: 3px; font-weight: 500;">
                       ${group.subtitle}
                     </div>
                   </td>
@@ -234,19 +234,19 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string): string {
                 ${group.items.map((item) => `
                 <tr>
                   <td style="padding-bottom: 12px;">
-                    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 14px; padding: 16px 18px;">
+                    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 18px;">
                       <tr>
                         <!-- Icon -->
                         <td width="44" valign="top" style="padding-right: 14px;">
-                          <img src="${item.iconUrl}" alt="${escapeHtml(item.brand)}" width="44" height="44" style="display: block; width: 44px; height: 44px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); object-fit: cover;" />
+                          <img src="${item.iconUrl}" alt="${escapeHtml(item.brand)}" width="44" height="44" style="display: block; width: 44px; height: 44px; border-radius: 10px; border: 1px solid #e2e8f0; object-fit: cover; background-color: #ffffff;" />
                         </td>
                         <!-- Content -->
                         <td valign="top">
-                          <div style="font-size: 14px; font-weight: 700; color: #ffffff; line-height: 1.3;">
+                          <div style="font-size: 14px; font-weight: 700; color: #0f172a; line-height: 1.3;">
                             ${escapeHtml(item.brand)}
-                            <span style="font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, 0.45); margin-left: 6px;">· ${escapeHtml(item.reportType)}</span>
+                            <span style="font-size: 11px; font-weight: 600; color: #64748b; margin-left: 6px;">· ${escapeHtml(item.reportType)}</span>
                           </div>
-                          <div style="font-size: 12px; line-height: 1.5; color: rgba(255, 255, 255, 0.75); margin-top: 5px; font-weight: 400;">
+                          <div style="font-size: 12.5px; line-height: 1.5; color: #334155; margin-top: 5px; font-weight: 400;">
                             ${escapeHtml(item.metric)}
                           </div>
                           <div style="margin-top: 10px;">
@@ -268,16 +268,16 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string): string {
           <!-- Closing Block (Outro) -->
           <tr>
             <td style="padding: 24px 36px 36px 36px;">
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 26px 20px; text-align: center;">
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 26px 20px; text-align: center;">
                 <tr>
                   <td>
-                    <div style="font-size: 16px; font-weight: 700; color: #ffffff; letter-spacing: -0.01em; line-height: 1.4; margin-bottom: 20px;">
+                    <div style="font-size: 16px; font-weight: 700; color: #0f172a; letter-spacing: -0.01em; line-height: 1.4; margin-bottom: 20px;">
                       Let’s perform a test with similar unit economics for Your app.
                     </div>
                     <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center">
                       <tr>
                         <td>
-                          <a href="mailto:alex@upraiser.co.uk?subject=Re:%20UPRAISER%20Pilot%20Economics" style="display: inline-block; background-color: #e63558; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 13px 28px; border-radius: 12px; box-shadow: 0 4px 16px rgba(230, 53, 88, 0.35); border: 1px solid rgba(255, 0, 59, 0.3);">
+                          <a href="mailto:alex@upraiser.co.uk?subject=Re:%20UPRAISER%20Pilot%20Economics" style="display: inline-block; background-color: #e63558; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 13px 28px; border-radius: 12px; box-shadow: 0 4px 14px rgba(230, 53, 88, 0.25);">
                             Reply to Start Pilot
                           </a>
                         </td>
@@ -291,8 +291,8 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string): string {
 
           <!-- Footer -->
           <tr>
-            <td style="padding: 20px 36px 28px 36px; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center;">
-              <p style="margin: 0; font-size: 11px; font-family: monospace; color: rgba(255, 255, 255, 0.35); line-height: 1.6; letter-spacing: 0.08em; text-transform: uppercase;">
+            <td style="padding: 20px 36px 28px 36px; border-top: 1px solid #f1f5f9; text-align: center;">
+              <p style="margin: 0; font-size: 11px; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; color: #94a3b8; line-height: 1.6; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;">
                 UPRAISER Agency LLP · London · Since 2017
               </p>
             </td>
