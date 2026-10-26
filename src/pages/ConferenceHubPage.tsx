@@ -353,6 +353,32 @@ export function ConferenceHubPage() {
 
 
 
+  const triggerVCardDownload = (leadName?: string, leadContact?: string) => {
+    try {
+      const session = getOrInitHubSession();
+      const resolvedName = leadName?.trim() || session.savedName || name.trim() || undefined;
+      const resolvedContact = leadContact?.trim() || session.savedContact || contact.trim() || undefined;
+
+      trackAction(
+        "vcf_download",
+        0,
+        { trigger: "clip_in" },
+        resolvedName,
+        resolvedContact
+      );
+      // Double-pulse tactile confirmation
+      triggerHaptic("success");
+
+      // Direct navigation to the static inline text/vcard endpoint (no `download` attr, no Blob, no
+      // target="_blank") so Safari and Chrome hand the card straight to the system Contacts sheet
+      if (typeof window !== "undefined") {
+        window.location.href = VCARD_URL;
+      }
+    } catch (err) {
+      console.warn("Reciprocal contact download failed:", err);
+    }
+  };
+
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
@@ -371,6 +397,9 @@ export function ConferenceHubPage() {
 
       // 3. Burst into hyperspace warp speed with an automatic 2.2s cap
       triggerWarp(2200);
+
+      // 4. Reciprocal vCard contact dispatch
+      triggerVCardDownload(trimmedName, trimmedContact);
 
       setStatus("submitting");
       setErrorMessage("");

@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.98-stable`  
+**Tag:** `v2.2.99-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,11 +9,10 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Conference Hub No-Download Clip In + Inter Font Typography for Success Coordinates (v2.2.98-stable):**
-   - Eliminated automatic vCard/file download on tapping "Clip In": the user's phone/browser no longer downloads files unexpectedly when submitting the hub form.
-   - Switched `✓ COORDINATES RECEIVED` to geometric grotesque font (`font-display font-bold tracking-wider`) using Inter (`Inter, system-ui, sans-serif`), exactly matching the site typography (`h2.section-title`).
-   - Inlined lead snapshot template generator inside `api/contact.ts` to ensure 100% self-contained Vercel serverless function execution without runtime module resolution errors (`ERR_MODULE_NOT_FOUND`).
-   - Hardened lead email autoresponder: automatically dispatches snapshot portfolio email via Resend when lead submits their email on `/contact` or `/connect`.
+1. **Reciprocal vCard Flow Restored & Zero-Overhead Asset Confirmation (v2.2.99-stable):**
+   - Restored reciprocal vCard dispatch on "Clip In" for seamless mobile contact exchange (`Alex_Upraiser.vcf`, 47 KB).
+   - Preserved Inter font typography on `✓ COORDINATES RECEIVED` (`font-display font-bold tracking-wider`).
+   - Verified zero client-side attachment overhead: the 8 dashboard snapshots (17.4 MB) and `.zip` archive remain purely cloud-hosted on Edge CDN and linked via email, with zero unwanted downloads on site visit or form submit.
 2. **Automated High-End UX Performance Snapshot Autoresponder (v2.2.97-stable):**
    - Instant Delivery to Lead: When a visitor submits their email via `/contact` or conference hub, an automated high-end dossier email is immediately sent to their inbox via Resend.
    - Airy, Non-Slop Swiss Dark Email Layout: High-contrast, spacious, clean aesthetic with zero AI clichés. Built with inline table-based styles for 100% cross-client rendering (Gmail, Apple Mail, Outlook).

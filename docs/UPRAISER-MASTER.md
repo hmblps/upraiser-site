@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 26 October 2026 (v2.2.98-stable)  
+> **Updated:** 26 October 2026 (v2.2.99-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** Conference Hub No-Download Clip In + Inter Font Typography for Success Coordinates + Inlined Autoresponder Vercel Function  
+> **HEAD:** Reciprocal vCard Flow Restored + Zero-Asset Overhead Confirmation + Inter Typography for Success Badge  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`
@@ -1502,11 +1502,10 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - 1-Click Master Archive: High-contrast `Download All (.zip · 15 MB)` button linking to `public/snapshots/UPRAISER_Performance_Snapshots.zip`.
     - 7 High-Resolution Brand Icons: Bundled in `public/snapshots/icons/` (WSJ, Barron's, MarketWatch, Fetch, Vantage, Underdog, Credcol).
     - Factual Ogilvy Copywriting: Concise punchy intro and closing offer: *"Let’s perform a test with similar unit economics for Your app."*
-  - **Conference Hub No-Download Clip In + Inter Font Typography for Success Coordinates (v2.2.98-stable):**
-    - Eliminated automatic vCard/file download on tapping "Clip In": the user's phone/browser no longer downloads files unexpectedly when submitting the hub form.
-    - Switched `✓ COORDINATES RECEIVED` to geometric grotesque font (`font-display font-bold tracking-wider`) using Inter (`Inter, system-ui, sans-serif`), exactly matching the site typography (`h2.section-title`).
-    - Inlined lead snapshot template generator inside `api/contact.ts` to ensure 100% self-contained Vercel serverless function execution without runtime module resolution errors.
-    - Hardened lead email autoresponder: automatically dispatches snapshot portfolio email via Resend when lead submits their email on `/contact` or `/connect`.
+  - **Reciprocal vCard Flow Restored & Zero-Overhead Asset Confirmation (v2.2.99-stable):**
+    - Restored reciprocal vCard dispatch on "Clip In" for seamless mobile contact exchange (`Alex_Upraiser.vcf`, 47 KB).
+    - Preserved Inter font typography on `✓ COORDINATES RECEIVED` (`font-display font-bold tracking-wider`).
+    - Verified zero client-side attachment overhead: the 8 dashboard snapshots (17.4 MB) and `.zip` archive remain purely cloud-hosted on Edge CDN and linked via email, with zero unwanted downloads on site visit or form submit.
 
 
 
