@@ -1,7 +1,7 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 25 October 2026 (v2.2.87-stable)  
+> **Updated:** 26 October 2026 (v2.2.88-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
 > **HEAD:** Creative Studio 5.0s climb equalization + Day/Night victory confirmation engine + Conference Hub & Multilingual Deck  
@@ -1472,6 +1472,12 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - Equated telemetry token to `Click ID` across the frontend and backend. Captures incoming URL parameters (`?click_id=`, `?clickid=`, `?cid=`, `?token=`) or defaults to the timestamped session token (`hub_YYYYMMDD_HHMM_xxxx`).
     - Standardized Telegram notifications and Resend emails to display `🎯 Click ID: <clickId>`.
     - Identified root cause of GitHub Actions email: account billing lock on GitHub account `hmblps`. Paused scheduled cron in `.github/workflows/supabase-keepalive.yml` to prevent failure email spam until billing is unlocked. Verified Supabase database is completely online (HTTP 200).
+  - **Creative Studio Night Climb Natural 8.0s Pacing (v2.2.88-stable):**
+    - Removed artificial 2.12x speedup filter in dark theme.
+    - Re-encoded `dark-loop.mp4` natively from second 4.0 to second 12.0 of the source climb (8.00s total duration at 29.97 fps, 1.0x native motion speed).
+    - Skips the early static chopping and starts immediately on the ascent, delivering the panorama climax and summit reveal at 8.0s.
+    - Calibrated `pauseTime = theme === "light" ? 5.0 : 8.0;`, `goldenStartTime = 6.0;`, `decelStartTime = 6.8;`.
+    - Scroll-to-advance gesture remains fully active for visitors who want to instantly advance to the summit cards at any point.
 
 
 

@@ -70,17 +70,17 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
 
   // Exact timestamp when camera cuts and climber is viewed from behind on the massive wall:
   // light-loop.mp4: 4.25s (cut & settle on wide wall with climber seen from behind)
-  // dark-loop.mp4: 3.00s (headlamp strikes wall with climber seen from behind)
-  const goldenStartTime = theme === "light" ? 4.25 : 3.0;
+  // dark-loop.mp4: 6.00s (headlamp strikes wall with climber seen from behind on the wide panorama)
+  const goldenStartTime = theme === "light" ? 4.25 : 6.0;
 
   // Subtle imperceptible deceleration on the wide mountain wall:
   // 1.0x full speed everywhere to eliminate judder, then gentle deceleration on approach:
-  const decelStartTime = theme === "light" ? 4.4 : 3.8;
-  const targetSlowRate = theme === "light" ? 0.82 : 0.85;
+  const decelStartTime = theme === "light" ? 4.4 : 6.8;
+  const targetSlowRate = theme === "light" ? 0.82 : 0.88;
 
   // Natural pause on reaching the mountain wall / summit:
-  // Unified: exactly 5.0s in both Day and Night themes!
-  const pauseTime = 5.0;
+  // Day: 5.0s, Night: 8.0s (unaccelerated native panorama reveal from sec 4 to 12)
+  const pauseTime = theme === "light" ? 5.0 : 8.0;
 
   // Reset when video source changes
   useEffect(() => {
