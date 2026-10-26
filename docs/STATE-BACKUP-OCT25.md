@@ -210,6 +210,9 @@ In accordance with David Ogilvy advertising principles and the repository's Glob
 |---|---|---|
 | `v2.2.88-stable` | 26 Oct 2026 | Creative Studio night climb unaccelerated 8.0s cut (sec 4 to 12) with natural panorama reveal |
 | `v2.2.87-stable` | 25 Oct 2026 | De-noise Connect notifications (suppress vcf alerts, keep submitted form only), equate token to click_id, pause failing GitHub keep-alive cron |
+| `v2.2.89-stable` | 26 Oct 2026 | Synchronize night climb to 5.0s ending on downward cliff abyss view matching day timing |
+| `v2.2.88-stable` | 26 Oct 2026 | Creative Studio night climb natural 8.0s cut with panorama reveal |
+| `v2.2.87-stable` | 26 Oct 2026 | Equate token to click_id, silence vcf alerts & pause failing keepalive cron |
 | `v2.2.86-stable` | 25 Oct 2026 | Smooth entrance dissolve for victory video & scroll-to-advance in craft intro |
 | `v2.2.85-stable` | 25 Oct 2026 | Victory video camera deceleration & smooth card reveal |
 | `v2.2.84-stable` | 25 Oct 2026 | Full documentation synchronization, state backup & master docs update |

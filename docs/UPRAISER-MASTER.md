@@ -1478,6 +1478,10 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - Skips the early static chopping and starts immediately on the ascent, delivering the panorama climax and summit reveal at 8.0s.
     - Calibrated `pauseTime = theme === "light" ? 5.0 : 8.0;`, `goldenStartTime = 6.0;`, `decelStartTime = 6.8;`.
     - Scroll-to-advance gesture remains fully active for visitors who want to instantly advance to the summit cards at any point.
+  - **Creative Studio Day & Night Climb Synchronization on Cliff Abyss View (v2.2.89-stable):**
+    - Re-encoded `public/creative/dark-loop.mp4` directly from the iconic POV ice-climbing sequence (source timestamps 125.90s to 131.90s, exactly 6.006s duration at 29.97 fps, CRF 19).
+    - Camera Composition: Starts cleanly on the dynamic ice wall ascent and pauses at 5.0s on the spectacular high-altitude perspective looking straight down past the climber's helmet, chest, and crampons resting on the ice ledge directly into the dark sheer abyss under his feet.
+    - Day & Night Timing Parity: Fully standardized intro ascent timing between Day and Night themes: `pauseTime = 5.0s`, `goldenStartTime = 4.25s`, `decelStartTime = 4.4s`, `targetSlowRate = 0.82`. Both modes pause seamlessly at 5.0s on their respective cliff/wall holds as the capability cards and "Request the Pilot" CTA reveal.
 
 
 

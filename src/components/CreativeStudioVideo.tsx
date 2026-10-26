@@ -68,19 +68,19 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const phaseRef = useRef<"climbing" | "summit">("climbing");
   const goldenVisibleRef = useRef(false);
 
-  // Exact timestamp when camera cuts and climber is viewed from behind on the massive wall:
-  // light-loop.mp4: 4.25s (cut & settle on wide wall with climber seen from behind)
-  // dark-loop.mp4: 6.00s (headlamp strikes wall with climber seen from behind on the wide panorama)
-  const goldenStartTime = theme === "light" ? 4.25 : 6.0;
+  // Exact timestamp when camera settles on the final vantage point:
+  // light-loop.mp4: 4.25s (settle on wide wall with climber seen from behind)
+  // dark-loop.mp4: 4.25s (settle onto ice rim looking down into the sheer abyss)
+  const goldenStartTime = 4.25;
 
-  // Subtle imperceptible deceleration on the wide mountain wall:
+  // Subtle imperceptible deceleration on approach to the summit/cliff:
   // 1.0x full speed everywhere to eliminate judder, then gentle deceleration on approach:
-  const decelStartTime = theme === "light" ? 4.4 : 6.8;
-  const targetSlowRate = theme === "light" ? 0.82 : 0.88;
+  const decelStartTime = 4.4;
+  const targetSlowRate = 0.82;
 
-  // Natural pause on reaching the mountain wall / summit:
-  // Day: 5.0s, Night: 8.0s (unaccelerated native panorama reveal from sec 4 to 12)
-  const pauseTime = theme === "light" ? 5.0 : 8.0;
+  // Natural pause on reaching the cliff / abyss:
+  // Day: 5.0s, Night: 5.0s (both exactly 5.0s ascent ending on cliff edge)
+  const pauseTime = 5.0;
 
   // Reset when video source changes
   useEffect(() => {
