@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.91-stable`  
+**Tag:** `v2.2.92-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,7 +9,13 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Form Submit Button Grounding & Magnetic Clamping (v2.2.91-stable):**
+1. **Dynamic 6.0s Victory Summit Re-timing (v2.2.92-stable):**
+   - Shifted video timing forward into the action, eliminating slow initial climbing while preserving the summit panorama climax:
+     - **Day (`studio-success-day.mp4`):** Cut from 2.0s to 8.0s of `Дневное.mov` (6.0s duration), ending on the radiant sunrise mountain panorama.
+     - **Night (`studio-success-night.mp4`):** Cut from 6.0s to 12.0s of `Ночное.mov` (6.0s duration), ending on the cliff/abyss under climber's feet with aurora borealis.
+   - Confirmation card gently reveals at climax (3.8s) over 900ms fade-in, freezing at 6.0s on the panoramic frame.
+   - Skip pill indicator updated to `SUMMIT REACHED · 6.0S`.
+2. **Form Submit Button Grounding & Magnetic Clamping (v2.2.91-stable):**
    - Removed `<Magnetic>` wrapper from the full-width "REQUEST PILOT" submit button in `Contact.tsx`. Replaced with grounded `motion.button` with subtle spring hover (`scale: 1.01`) and tap (`scale: 0.98`), completely preventing the button from sliding sideways into the adjacent column or being clipped.
    - Hardened `Magnetic.tsx` with max offset clamps (`maxOffsetX`, `maxOffsetY`) defaulting to 8px max on full-width elements.
 2. **Universal Victory Summit Video Across Themes (v2.2.91-stable):**
