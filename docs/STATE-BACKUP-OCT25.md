@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.101-stable`  
+**Tag:** `v2.2.102-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,11 +9,11 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Pristine Light Theme Email Dossier & Tightened Copywriting (v2.2.101-stable):**
-   - Light Theme Canvas: switched email palette to clean white paper aesthetic (`#f1f5f9` outer, `#ffffff` card container with `border: 1px solid #e2e8f0` and soft shadow) for 100% natural integration with Gmail web/desktop interface.
-   - Tightened Punchline: updated intro line to concise form: `"Here are raw snapshots from AF, P360, and direct advertiser CRM dashboards."` without truncation or ellipsis.
-   - Fully Visible Pilot Offer: prominently displayed `"Let’s perform a test with similar unit economics for Your app."` in bold 16px charcoal (`#0f172a`) with high-contrast ruby CTA pill button (`#e63558`).
-   - High-Contrast Metrics: crisp typography in `#0f172a` and `#334155` on `#f8fafc` rows, paired with official brand icons.
+1. **Telemetry & Alerts Migration to Telegram Supergroup (v2.2.102-stable):**
+   - Connected new Telegram Bot (`8955516402:AAF...`) and supergroup `IMS2026` (`chat_id: -1003934317948`).
+   - Disabled Resend email digest in `api/activity.ts`: telemetry events (revisits, slide views, vcf downloads, deep scrolls) now route 100% to Telegram with instant push notifications and zero email overhead.
+   - Preserved 100% of Resend quota strictly for lead autoresponder dossiers and high-priority pilot submissions in `api/contact.ts`.
+   - Synced `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` across Vercel production, preview, and development environments.
 2. **Automated High-End UX Performance Snapshot Autoresponder (v2.2.97-stable):**
    - Instant Delivery to Lead: When a visitor submits their email via `/contact` or conference hub, an automated high-end dossier email is immediately sent to their inbox via Resend.
    - Airy, Non-Slop Swiss Dark Email Layout: High-contrast, spacious, clean aesthetic with zero AI clichés. Built with inline table-based styles for 100% cross-client rendering (Gmail, Apple Mail, Outlook).

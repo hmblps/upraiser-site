@@ -53,6 +53,8 @@ if [[ -f .env ]]; then
   sync_env_var "VITE_WEB3FORMS_ACCESS_KEY"
   sync_env_var "VITE_TELEGRAM_BOT_TOKEN"
   sync_env_var "VITE_TELEGRAM_CHAT_ID"
+  sync_env_var "TELEGRAM_BOT_TOKEN"
+  sync_env_var "TELEGRAM_CHAT_ID"
 fi
 
 echo "Building Vercel functions and framework scaffolding…"

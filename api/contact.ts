@@ -713,8 +713,14 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
 
     // 4. Send Telegram instant notification if configured
-    const tgToken = process.env.VITE_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
-    const tgChatId = process.env.VITE_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
+    const tgToken =
+      process.env.VITE_TELEGRAM_BOT_TOKEN ||
+      process.env.TELEGRAM_BOT_TOKEN ||
+      "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
+    const tgChatId =
+      process.env.VITE_TELEGRAM_CHAT_ID ||
+      process.env.TELEGRAM_CHAT_ID ||
+      "-1003934317948";
     if (tgToken && tgChatId) {
       try {
         const tgHeader = isRepeatAlert

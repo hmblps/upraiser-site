@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 26 October 2026 (v2.2.101-stable)  
+> **Updated:** 26 October 2026 (v2.2.102-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** Pristine Light Theme Email Dossier (Gmail Native Integration) + Shortened AF/P360 Punchline + Fully Rendered Pilot Offer  
+> **HEAD:** All Telemetry & Alerts Migrated to Telegram (IMS2026 Supergroup) + 100% Resend Quota Preserved for Lead Dossiers  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`
@@ -1502,11 +1502,11 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - 1-Click Master Archive: High-contrast `Download All (.zip · 15 MB)` button linking to `public/snapshots/UPRAISER_Performance_Snapshots.zip`.
     - 7 High-Resolution Brand Icons: Bundled in `public/snapshots/icons/` (WSJ, Barron's, MarketWatch, Fetch, Vantage, Underdog, Credcol).
     - Factual Ogilvy Copywriting: Concise punchy intro and closing offer: *"Let’s perform a test with similar unit economics for Your app."*
-  - **Pristine Light Theme Email Dossier & Tightened Copywriting (v2.2.101-stable):**
-    - Light Theme Canvas: switched email palette to clean white paper aesthetic (`#f1f5f9` outer, `#ffffff` card container with `border: 1px solid #e2e8f0` and soft shadow) for 100% natural integration with Gmail web/desktop interface.
-    - Tightened Punchline: updated intro line to concise form: `"Here are raw snapshots from AF, P360, and direct advertiser CRM dashboards."` without truncation or ellipsis.
-    - Fully Visible Pilot Offer: prominently displayed `"Let’s perform a test with similar unit economics for Your app."` in bold 16px charcoal (`#0f172a`) with high-contrast ruby CTA pill button (`#e63558`).
-    - High-Contrast Metrics: crisp typography in `#0f172a` and `#334155` on `#f8fafc` rows, paired with official brand icons.
+  - **Telemetry & Alerts Migration to Telegram Supergroup (v2.2.102-stable):**
+    - Connected new Telegram Bot (`8955516402:AAF...`) and supergroup `IMS2026` (`chat_id: -1003934317948`).
+    - Disabled Resend email digest in `api/activity.ts`: telemetry events (revisits, slide views, vcf downloads, deep scrolls) now route 100% to Telegram with instant push notifications and zero email overhead.
+    - Preserved 100% of Resend quota strictly for lead autoresponder dossiers and high-priority pilot submissions in `api/contact.ts`.
+    - Synced `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` across Vercel production, preview, and development environments.
 
 
 

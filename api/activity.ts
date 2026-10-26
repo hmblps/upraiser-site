@@ -405,124 +405,19 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     tgHeader = `<b>⚡ [НОВЫЙ ЛИД] Высокая вовлеченность с QR-кода!</b>`;
   }
 
-  // 9. Send Resend Email Digest
-  const resendApiKey = process.env.RESEND_API_KEY;
+  // 9. Resend email digest disabled to preserve 100% of daily quota for lead autoresponders & form submissions.
+  // All telemetry and visitor alerts are routed directly to Telegram supergroup IMS2026.
   let emailSent = false;
 
-  if (resendApiKey) {
-    try {
-      const notificationEnv = process.env.NOTIFICATION_EMAIL;
-      const toEmails = notificationEnv
-        ? notificationEnv.split(",").map((e) => e.trim()).filter(Boolean)
-        : ["info@upraiser.co.uk"];
-      const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
-
-      const subject = emailSubject;
-
-      const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #030712; color: #f3f4f6; margin: 0; padding: 24px; }
-    .card { max-width: 600px; margin: 0 auto; background: #0b0f19; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; overflow: hidden; }
-    .header { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .badge { display: inline-block; padding: 4px 10px; background: rgba(254, 207, 9, 0.15); color: #FECF09; border: 1px solid rgba(254, 207, 9, 0.3); border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-    .title { font-size: 20px; font-weight: 700; color: #ffffff; margin: 12px 0 4px; }
-    .subtitle { font-size: 13px; color: #9ca3af; margin: 0; }
-    .content { padding: 24px; }
-    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #FECF09; margin-bottom: 10px; }
-    .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
-    .info-table td { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .info-table td.label { color: #9ca3af; width: 38%; }
-    .info-table td.value { color: #f9fafb; font-weight: 600; }
-    .activity-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 16px; font-size: 13px; line-height: 1.8; color: #d1d5db; margin-bottom: 20px; }
-    .footer { padding: 16px 24px; font-size: 11px; color: #6b7280; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="header">
-      <span class="badge">${escapeHtml(alertBadge)}</span>
-      <h1 class="title">${escapeHtml(alertTitle)}</h1>
-      <p class="subtitle">${escapeHtml(alertSubtitle)}</p>
-    </div>
-    <div class="content">
-      <div class="section-title">Сводка по лиду</div>
-      <table class="info-table">
-        <tr>
-          <td class="label">Имя контакта:</td>
-          <td class="value">${escapeHtml(displayName)}</td>
-        </tr>
-        <tr>
-          <td class="label">Контакт (Email / TG):</td>
-          <td class="value">${escapeHtml(displayContact)}</td>
-        </tr>
-        <tr>
-          <td class="label">Определенный источник:</td>
-          <td class="value"><span style="display: inline-block; padding: 2px 8px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 6px; font-weight: 700; font-size: 12px;">🌐 ${escapeHtml(smartSourceDisplay)}</span></td>
-        </tr>
-        <tr>
-          <td class="label">Click ID (Lead Token):</td>
-          <td class="value"><code>${escapeHtml(effectiveClickId)}</code></td>
-        </tr>
-        <tr>
-          <td class="label">Статус визита:</td>
-          <td class="value">${escapeHtml(sessionState || (isActualReturn ? `Повторный визит #${visitCount}` : "Первый визит"))}</td>
-        </tr>
-        <tr>
-          <td class="label">Время на странице:</td>
-          <td class="value"><strong>${durationSeconds} сек</strong> (~${durationMin} мин)</td>
-        </tr>
-      </table>
-
-      <div class="section-title">Хроника действий за сессию</div>
-      <div class="activity-box">
-        ${activityLines}
-      </div>
-
-      <div style="text-align: center; padding-top: 8px;">
-        <a href="https://upraiser.co.uk/connect" style="display: inline-block; background: #e63558; color: #ffffff; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none;">
-          Открыть Conference Hub →
-        </a>
-      </div>
-    </div>
-    <div class="footer">
-      UPRAISER Agency LLP · 128 City Road, London EC1V 2NX · Automated Telemetry Digest
-    </div>
-  </div>
-</body>
-</html>
-      `;
-
-      const resendRes = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: fromEmail,
-          to: toEmails,
-          subject,
-          html,
-        }),
-      });
-
-      if (resendRes.ok) {
-        emailSent = true;
-      } else {
-        console.warn("Resend digest failed:", await resendRes.text());
-      }
-    } catch (emailErr) {
-      console.warn("Resend digest exception:", emailErr);
-    }
-  }
-
   // 10. Send Instant Telegram Alert if Bot Token is configured
-  const tgToken = process.env.VITE_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
-  const tgChatId = process.env.VITE_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
+  const tgToken =
+    process.env.VITE_TELEGRAM_BOT_TOKEN ||
+    process.env.TELEGRAM_BOT_TOKEN ||
+    "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
+  const tgChatId =
+    process.env.VITE_TELEGRAM_CHAT_ID ||
+    process.env.TELEGRAM_CHAT_ID ||
+    "-1003934317948";
   let telegramSent = false;
 
   if (tgToken && tgChatId) {
