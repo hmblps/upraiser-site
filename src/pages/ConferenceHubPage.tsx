@@ -257,17 +257,7 @@ export function ConferenceHubPage() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [isWarping, setIsWarping] = useState(false);
-  const [androidDownloaded, setAndroidDownloaded] = useState(false);
   const warpTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const needsDownloadGuidance = useMemo(() => {
-    if (typeof navigator === "undefined") return false;
-    const ua = navigator.userAgent;
-    const isAndroid = /Android/i.test(ua);
-    const isCriOS = /CriOS/i.test(ua);
-    const isOtherNonSafariIOS = /iPhone|iPad|iPod/i.test(ua) && (!/Safari/i.test(ua) || /FxiOS|OPiOS|EdgiOS/i.test(ua));
-    return isAndroid || isCriOS || isOtherNonSafariIOS;
-  }, []);
 
   const triggerWarp = useCallback((durationMs = 2000) => {
     if (warpTimeoutRef.current) clearTimeout(warpTimeoutRef.current);
@@ -361,35 +351,7 @@ export function ConferenceHubPage() {
     }
   }, [lang]);
 
-  const triggerVCardDownload = (leadName?: string, leadContact?: string) => {
-    try {
-      const session = getOrInitHubSession();
-      const resolvedName = leadName?.trim() || session.savedName || name.trim() || undefined;
-      const resolvedContact = leadContact?.trim() || session.savedContact || contact.trim() || undefined;
 
-      trackAction(
-        "vcf_download",
-        0,
-        { trigger: "clip_in" },
-        resolvedName,
-        resolvedContact
-      );
-      // Double-pulse tactile confirmation
-      triggerHaptic("success");
-
-      if (needsDownloadGuidance) {
-        setAndroidDownloaded(true);
-        setTimeout(() => setAndroidDownloaded(false), 4500);
-      }
-      // Direct navigation to the static inline text/vcard endpoint (no `download` attr, no Blob, no
-      // target="_blank") so Safari and Chrome hand the card straight to the system Contacts sheet
-      if (typeof window !== "undefined") {
-        window.location.href = VCARD_URL;
-      }
-    } catch (err) {
-      console.warn("Reciprocal contact download failed:", err);
-    }
-  };
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
@@ -409,9 +371,6 @@ export function ConferenceHubPage() {
 
       // 3. Burst into hyperspace warp speed with an automatic 2.2s cap
       triggerWarp(2200);
-
-      // 4. Trigger reciprocal vCard download inside user activation with explicit identity
-      triggerVCardDownload(trimmedName, trimmedContact);
 
       setStatus("submitting");
       setErrorMessage("");
@@ -603,7 +562,7 @@ export function ConferenceHubPage() {
                 className="w-full min-h-[48px] py-3.5 px-4 text-center bg-emerald-500/10 rounded-2xl border border-emerald-500/25 flex items-center justify-center space-x-2 select-none"
               >
                 <span className="text-[#FECF09] font-bold text-sm">✓</span>
-                <span className="font-mono text-xs sm:text-sm font-semibold tracking-wider text-emerald-400 uppercase">
+                <span className="font-display font-bold text-xs sm:text-sm tracking-wider text-emerald-400 uppercase">
                   {t.successTitle}
                 </span>
               </motion.div>
@@ -660,21 +619,12 @@ export function ConferenceHubPage() {
                   whileHover={{ scale: 1.015 }}
                   whileTap={{ scale: 0.98 }}
                   transition={SPRING_TACTILE}
-                  className={`w-full min-h-[48px] py-3.5 px-6 rounded-2xl ${
-                    androidDownloaded
-                      ? "bg-emerald-600 border border-emerald-400/30 text-white shadow-lg shadow-emerald-500/25"
-                      : "bg-[#e63558] hover:bg-[#ff003b] text-white shadow-lg shadow-[#e63558]/25 border border-[#ff003b]/30"
-                  } font-medium text-sm text-center transition-all flex items-center justify-center space-x-2 select-none cursor-pointer disabled:opacity-60`}
+                  className="w-full min-h-[48px] py-3.5 px-6 rounded-2xl bg-[#e63558] hover:bg-[#ff003b] text-white shadow-lg shadow-[#e63558]/25 border border-[#ff003b]/30 font-medium text-sm text-center transition-all flex items-center justify-center space-x-2 select-none cursor-pointer disabled:opacity-60"
                 >
                   {status === "submitting" ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>{t.btnSubmitting}</span>
-                    </>
-                  ) : androidDownloaded ? (
-                    <>
-                      <span className="text-[#FECF09] font-bold text-sm">✓</span>
-                      <span className="font-semibold">{t.saveContactAndroidDownloaded}</span>
                     </>
                   ) : (
                     <>
