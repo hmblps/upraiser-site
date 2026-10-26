@@ -145,6 +145,28 @@ function getHardwareFamily(deviceLabel: string): string {
   return "Desktop";
 }
 
+function getShortDeviceIconLabel(deviceLabel: string): string {
+  const fam = getHardwareFamily(deviceLabel);
+  if (fam === "iPhone") return "📱 iPhone";
+  if (fam === "iPad") return "📱 iPad";
+  if (fam === "Android") return "📱 Android";
+  if (fam === "Mac") return "💻 Mac";
+  if (fam === "Windows") return "💻 Windows";
+  return "💻 Desktop";
+}
+
+function formatTimeHHMM(date: Date = new Date()): string {
+  try {
+    return new Intl.DateTimeFormat("ru-RU", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Europe/Bucharest",
+    }).format(date);
+  } catch {
+    return date.toISOString().slice(11, 16);
+  }
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const url = new URL(req.url || "/", "https://upraiser.co.uk");
   const appId = (url.searchParams.get("app") || url.searchParams.get("id") || "").toLowerCase().trim();
@@ -166,7 +188,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-  // Forwarding Detection & Proof Session Cooldown Lookup in Supabase
+  // Forwarding Detection & Proof Session Cooldown Lookup in Supabase (newest submission first!)
   let resolvedName = "";
   let prevGeo = "";
   let prevDevice = "";
@@ -178,11 +200,32 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   if (supabase && lead) {
     try {
+      // Fetch cooldown state first (holds the latest displayName and lead_card_message_id)
+      const { data: cdByEmail } = await supabase
+        .from("lead_notification_cooldowns")
+        .select("metadata")
+        .eq("visitor_id", cooldownKey)
+        .maybeSingle();
+
+      if (cdByEmail?.metadata && typeof cdByEmail.metadata === "object") {
+        existingCooldownMeta = cdByEmail.metadata;
+        if (existingCooldownMeta.displayName) {
+          resolvedName = String(existingCooldownMeta.displayName);
+        }
+        if (existingCooldownMeta.lastGeo) {
+          prevGeo = String(existingCooldownMeta.lastGeo);
+        }
+        if (existingCooldownMeta.lastDevice) {
+          prevDevice = String(existingCooldownMeta.lastDevice);
+        }
+      }
+
+      // Query lead_activity_logs ordered DESCENDING (most recent submission first)
       const { data: priorRows } = await supabase
         .from("lead_activity_logs")
         .select("visitor_id, lead_name, lead_contact, event_type, metadata, created_at")
         .ilike("lead_contact", lead)
-        .order("created_at", { ascending: true })
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (priorRows && priorRows.length > 0) {
@@ -193,17 +236,28 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           if (!resolvedName && row.lead_name && row.lead_name !== lead) {
             resolvedName = String(row.lead_name);
           }
-          const mGeo = row.metadata?.geo;
-          const mDev = row.metadata?.device;
-          // Prefer the original form_submit baseline or first recorded session with valid geo/device
-          if ((!prevGeo || row.event_type === "form_submit") && mGeo) {
-            prevGeo = String(mGeo);
-          }
-          if ((!prevDevice || row.event_type === "form_submit") && mDev) {
-            prevDevice = String(mDev);
+          if (row.event_type === "form_submit") {
+            if (!prevGeo && row.metadata?.geo) prevGeo = String(row.metadata.geo);
+            if (!prevDevice && row.metadata?.device) prevDevice = String(row.metadata.device);
           }
         }
+      }
 
+      if (!Object.keys(existingCooldownMeta).length && linkedVisitorId) {
+        const { data: cdByVisitor } = await supabase
+          .from("lead_notification_cooldowns")
+          .select("metadata")
+          .eq("visitor_id", linkedVisitorId)
+          .maybeSingle();
+        if (cdByVisitor?.metadata && typeof cdByVisitor.metadata === "object") {
+          existingCooldownMeta = cdByVisitor.metadata;
+          if (!resolvedName && existingCooldownMeta.displayName) {
+            resolvedName = String(existingCooldownMeta.displayName);
+          }
+        }
+      }
+
+      if (prevGeo || prevDevice) {
         const geoChanged =
           Boolean(prevGeo && geo) &&
           prevGeo !== "Unknown Location" &&
@@ -220,40 +274,15 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         if (geoChanged || isDifferentMobileOs) {
           isForwardedSuspect = true;
         } else if (deviceChanged) {
-          // Same city, switched between phone and laptop/tablet (e.g. iPhone -> Mac in Bucharest)
           isSameCityScreenSwitch = true;
         }
-      }
-
-      // Fetch cooldown state (by email key first, fallback to linkedVisitorId)
-      const { data: cdByEmail } = await supabase
-        .from("lead_notification_cooldowns")
-        .select("metadata")
-        .eq("visitor_id", cooldownKey)
-        .maybeSingle();
-
-      if (cdByEmail?.metadata && typeof cdByEmail.metadata === "object") {
-        existingCooldownMeta = cdByEmail.metadata;
-      } else if (linkedVisitorId) {
-        const { data: cdByVisitor } = await supabase
-          .from("lead_notification_cooldowns")
-          .select("metadata")
-          .eq("visitor_id", linkedVisitorId)
-          .maybeSingle();
-        if (cdByVisitor?.metadata && typeof cdByVisitor.metadata === "object") {
-          existingCooldownMeta = cdByVisitor.metadata;
-        }
-      }
-
-      if (!resolvedName && existingCooldownMeta?.displayName) {
-        resolvedName = String(existingCooldownMeta.displayName);
       }
     } catch (lookupErr) {
       console.warn("Forwarding lookup warning in proof handler:", lookupErr);
     }
   }
 
-  // Send or Edit Telegram Proof Alert (1 consolidated message per 15-min window + Reply to Lead Card)
+  // Send or Edit Telegram Proof Alert (1 compact consolidated message per 15-min window + Reply to Lead Card)
   const tgToken =
     process.env.VITE_TELEGRAM_BOT_TOKEN ||
     process.env.TELEGRAM_BOT_TOKEN ||
@@ -284,7 +313,10 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         appId: string;
         brand: string;
         report: string;
-        metric: string;
+        fileUrl: string;
+        category: string;
+        time: string;
+        count: number;
       }
 
       let proofHistory: ProofHistoryItem[] =
@@ -292,49 +324,81 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           ? [...existingCooldownMeta.proof_history]
           : [];
 
-      if (!proofHistory.some((p) => p.appId === appId)) {
+      const nowHHMM = formatTimeHHMM(new Date());
+      const existingIdx = proofHistory.findIndex((p) => p.appId === appId);
+
+      if (existingIdx >= 0) {
+        const existingItem = proofHistory[existingIdx];
+        proofHistory[existingIdx] = {
+          ...existingItem,
+          fileUrl: proof.fileUrl,
+          category: proof.category,
+          time: nowHHMM,
+          count: (existingItem.count || 1) + 1,
+        };
+      } else {
         proofHistory.push({
           appId,
           brand: proof.brand,
           report: proof.report,
-          metric: proof.metric,
+          fileUrl: proof.fileUrl,
+          category: proof.category,
+          time: nowHHMM,
+          count: 1,
         });
       }
 
-      const forwardingBanner = isForwardedSuspect
-        ? `\n🔥 <b>Возможно, письмо переслали коллеге!</b>\n` +
-          `└ <i>Новое гео/девайс: ${escapeHtml(geo)} · ${escapeHtml(device)} (ранее: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(prevDevice || "—")})</i>\n`
-        : isSameCityScreenSwitch
-        ? `\n💻 <b>Открыл письмо с другого экрана в том же городе:</b> ${escapeHtml(device)} <i>(заявка была с ${escapeHtml(prevDevice)})</i>\n`
-        : "";
+      // Single clean device line (no triple repetition)
+      const shortPrevDev = prevDevice ? getShortDeviceIconLabel(prevDevice) : "";
+      const deviceLine = isSameCityScreenSwitch
+        ? `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)} <i>(перешел с ${escapeHtml(shortPrevDev)})</i>`
+        : `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`;
 
-      let tgText = "";
-      if (proofHistory.length <= 1) {
-        tgText =
-          `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА</b>\n\n` +
-          `👤 <b>Лид:</b> ${leadLabel}\n` +
-          `📊 <b>Кейс:</b> ${escapeHtml(proof.brand)} · ${escapeHtml(proof.report)}\n` +
-          `📈 <b>Метрика:</b> ${escapeHtml(proof.metric)}\n` +
-          `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}` +
-          forwardingBanner +
-          `\n\n🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть оригинал пруфа ↗</a>`;
-      } else {
-        const historyLines = proofHistory
-          .map(
-            (item, idx) =>
-              `   ${idx + 1}. <b>${escapeHtml(item.brand)}</b> (${escapeHtml(item.report)}) — <i>${escapeHtml(item.metric)}</i>`
-          )
-          .join("\n");
+      const forwardingLine = isForwardedSuspect
+        ? `🔥 <b>Возможно, переслал коллеге!</b> <i>(заявка была: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(shortPrevDev || prevDevice || "—")})</i>`
+        : null;
 
-        tgText =
-          `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА (Открыто: ${proofHistory.length} кейса)</b>\n\n` +
-          `👤 <b>Лид:</b> ${leadLabel}\n` +
-          `📊 <b>Только что открыл:</b> ${escapeHtml(proof.brand)} · ${escapeHtml(proof.report)}\n` +
-          `🧭 <b>История открытых пруфов:</b>\n${historyLines}\n` +
-          `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}` +
-          forwardingBanner +
-          `\n\n🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть последний пруф ↗</a>`;
+      // Summarize vertical interest when 2+ proofs opened
+      let focusLine: string | null = null;
+      if (proofHistory.length >= 2) {
+        const catCounts: Record<string, number> = {};
+        for (const item of proofHistory) {
+          const cat = item.category || "General";
+          catCounts[cat] = (catCounts[cat] || 0) + 1;
+        }
+        const summaryParts = Object.entries(catCounts).map(([c, n]) => `${c} (${n})`);
+        focusLine = `🎯 <b>Фокус:</b> ${escapeHtml(summaryParts.join(" · "))}`;
       }
+
+      const historyLines = proofHistory
+        .map((item, idx) => {
+          const isCurrent = item.appId === appId;
+          const countTag = item.count > 1 ? ` <b>(×${item.count})</b>` : "";
+          const currentTag = isCurrent && proofHistory.length > 1 ? ` 👈 <i>сейчас тут</i>` : "";
+          const timePrefix = item.time ? `${escapeHtml(item.time)} — ` : "";
+          const urlHref = item.fileUrl || proof.fileUrl;
+          return `${idx + 1}. ${timePrefix}<a href="${escapeHtml(urlHref)}"><b>${escapeHtml(item.brand)}</b></a> · ${escapeHtml(item.report)}${countTag}${currentTag}`;
+        })
+        .join("\n");
+
+      const headerTitle =
+        proofHistory.length <= 1
+          ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 8</b>`
+          : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 8</b>`;
+
+      const tgText = [
+        headerTitle,
+        ``,
+        `👤 <b>Лид:</b> ${leadLabel}`,
+        deviceLine,
+        forwardingLine,
+        focusLine,
+        ``,
+        `📋 <b>Открытые скриншоты:</b>`,
+        historyLines,
+      ]
+        .filter((line) => line !== null)
+        .join("\n");
 
       let editedInPlace = false;
       let finalProofMessageId: number | null = activeProofMessageId;

@@ -632,20 +632,120 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
                 .join(", ")
             : null;
 
+        // Auto-Enrichment: detect corporate domain, phone, or Telegram handle
+        const FREE_EMAIL_DOMAINS = new Set([
+          "gmail.com",
+          "googlemail.com",
+          "icloud.com",
+          "me.com",
+          "mac.com",
+          "yahoo.com",
+          "yahoo.co.uk",
+          "outlook.com",
+          "hotmail.com",
+          "live.com",
+          "msn.com",
+          "aol.com",
+          "mail.ru",
+          "inbox.ru",
+          "bk.ru",
+          "list.ru",
+          "yandex.ru",
+          "ya.ru",
+          "yandex.com",
+          "proton.me",
+          "protonmail.com",
+          "zoho.com",
+          "gmx.com",
+          "gmx.de",
+          "web.de",
+          "qq.com",
+          "163.com",
+          "126.com",
+          "naver.com",
+          "privaterelay.appleid.com",
+        ]);
+
+        let corpDomain = "";
+        if (isValidLeadEmail && leadTargetEmail.includes("@")) {
+          const domainPart = leadTargetEmail.split("@")[1]?.toLowerCase().trim() || "";
+          if (domainPart && !FREE_EMAIL_DOMAINS.has(domainPart) && !domainPart.endsWith(".upraiser.co.uk")) {
+            corpDomain = domainPart;
+          }
+        }
+
+        // Build Quick-Action Inline Keyboard Buttons for Telegram
+        const inlineButtons: Array<{ text: string; url: string }> = [];
+        const rawContactTrimmed = cleanContact.trim();
+        const digitsOnly = rawContactTrimmed.replace(/[^\d]/g, "");
+
+        if (corpDomain) {
+          inlineButtons.push({
+            text: `🌐 ${corpDomain}`,
+            url: `https://${corpDomain}`,
+          });
+        }
+
+        if (rawContactTrimmed.startsWith("@") || /t\.me\/([a-zA-Z0-9_]+)/i.test(rawContactTrimmed)) {
+          const tgHandle = rawContactTrimmed
+            .replace(/^@/, "")
+            .replace(/^https?:\/\/(www\.)?t\.me\//i, "")
+            .split(/[/?\s]/)[0];
+          if (tgHandle) {
+            inlineButtons.push({
+              text: `✈️ Написать @${tgHandle}`,
+              url: `https://t.me/${tgHandle}`,
+            });
+          }
+        } else if (!isValidLeadEmail && digitsOnly.length >= 7 && digitsOnly.length <= 15) {
+          inlineButtons.push({
+            text: `💬 WhatsApp`,
+            url: `https://wa.me/${digitsOnly}`,
+          });
+          inlineButtons.push({
+            text: `✈️ Telegram`,
+            url: `https://t.me/+${digitsOnly}`,
+          });
+        }
+
+        // Always add 1-tap LinkedIn lookup for the lead
+        const linkedinQuery = corpDomain
+          ? `${cleanName} ${corpDomain.split(".")[0]}`
+          : cleanName;
+        inlineButtons.push({
+          text: `🔍 LinkedIn: ${cleanName.slice(0, 18)}`,
+          url: `https://www.google.com/search?q=${encodeURIComponent(`site:linkedin.com/in/ ${linkedinQuery}`)}`,
+        });
+
+        let nowHHMM = "";
+        try {
+          nowHHMM = new Intl.DateTimeFormat("ru-RU", {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Europe/Bucharest",
+          }).format(new Date());
+        } catch {
+          nowHHMM = new Date().toISOString().slice(11, 16);
+        }
+
         let tgLines: Array<string | null> = [];
 
         if (isConference) {
           const visitNum = telemetry?.visitCount || 1;
           const langCode = telemetry?.hubLang ? telemetry.hubLang.split(" ")[0] : "EN";
+          const deviceLocale = telemetry?.locale ? ` (ОС: ${telemetry.locale})` : "";
           tgLines = [
             `🧗 <b>НОВЫЙ КОНТАКТ · /CONNECT</b>`,
             ``,
             `👤 <b>Имя:</b> <b>${escapeHtml(cleanName)}</b>`,
             `📱 <b>Контакт:</b> <code>${escapeHtml(cleanContact)}</code>`,
+            corpDomain
+              ? `🏢 <b>Компания:</b> <a href="https://${escapeHtml(corpDomain)}"><b>${escapeHtml(corpDomain)}</b> ↗</a>`
+              : null,
             cleanUserNote ? `📝 <b>Заметка:</b> <i>${escapeHtml(cleanUserNote)}</i>` : null,
             `📨 <b>Письмо с пруфами:</b> ${emailDossierStatus}`,
-            `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
-            `🏷 <b>Сессия:</b> Визит #${visitNum} · Язык: ${escapeHtml(langCode)} · <code>[${escapeHtml(shortId)}]</code>`,
+            `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
+            `🏷 <b>Сессия:</b> ${escapeHtml(nowHHMM)} · Визит #${visitNum} · Язык: ${escapeHtml(langCode)}${escapeHtml(deviceLocale)} · <code>[${escapeHtml(shortId)}]</code>`,
           ];
         } else {
           tgLines = [
@@ -653,12 +753,15 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             ``,
             `👤 <b>Имя:</b> <b>${escapeHtml(cleanName)}</b>`,
             `📱 <b>Email:</b> <code>${escapeHtml(cleanContact)}</code>`,
+            corpDomain
+              ? `🏢 <b>Домен:</b> <a href="https://${escapeHtml(corpDomain)}"><b>${escapeHtml(corpDomain)}</b> ↗</a>`
+              : null,
             `📲 <b>Приложение:</b> ${escapeHtml(appId)}${geos ? ` (${escapeHtml(geos)})` : ""}`,
-            `🏢 <b>Профиль:</b> ${escapeHtml(companyType)} (${escapeHtml(companySize)}) · Бюджет: ${escapeHtml(monthlyBudget)}`,
+            `💼 <b>Профиль:</b> ${escapeHtml(companyType)} (${escapeHtml(companySize)}) · Бюджет: ${escapeHtml(monthlyBudget)}`,
             cleanUserNote ? `📝 <b>Заметка:</b> <i>${escapeHtml(cleanUserNote)}</i>` : null,
             filesSection,
             `📨 <b>Письмо с пруфами:</b> ${emailDossierStatus}`,
-            `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
+            `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
           ];
         }
 
@@ -717,7 +820,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           }
         }
 
-        // 4B. Send the Loud Lead Contact Card (replying to the session card if one existed)
+        // 4B. Send the Loud Lead Contact Card (replying to the session card if one existed + inline action buttons)
         const sendPayload: Record<string, any> = {
           chat_id: tgChatId,
           text: tgText,
@@ -725,6 +828,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           disable_notification: false, // Loud push with sound & vibration!
           disable_web_page_preview: true,
         };
+
+        if (inlineButtons.length > 0) {
+          sendPayload.reply_markup = {
+            inline_keyboard: [inlineButtons.slice(0, 3)],
+          };
+        }
 
         if (priorSessionMsgId) {
           sendPayload.reply_parameters = {
