@@ -1482,6 +1482,11 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - Re-encoded `public/creative/dark-loop.mp4` directly from the iconic POV ice-climbing sequence (source timestamps 125.90s to 131.90s, exactly 6.006s duration at 29.97 fps, CRF 19).
     - Camera Composition: Starts cleanly on the dynamic ice wall ascent and pauses at 5.0s on the spectacular high-altitude perspective looking straight down past the climber's helmet, chest, and crampons resting on the ice ledge directly into the dark sheer abyss under his feet.
     - Day & Night Timing Parity: Fully standardized intro ascent timing between Day and Night themes: `pauseTime = 5.0s`, `goldenStartTime = 4.25s`, `decelStartTime = 4.4s`, `targetSlowRate = 0.82`. Both modes pause seamlessly at 5.0s on their respective cliff/wall holds as the capability cards and "Request the Pilot" CTA reveal.
+  - **Pilot Brief Redirect Hardening & 8.0s Panorama Victory Videos (v2.2.90-stable):**
+    - Post-Submission Routing Hardening: Resolved the issue where submitting the pilot brief on `/contact` bounced back to `/craft`. Isolated reload detection strictly to document reloads occurring directly on `/contact/sent` (`navEntry.type === 'reload' && navEntry.name.includes('/contact/sent')`) alongside client-side navigation state preservation (`location.state.submitted` and session submit grace window).
+    - Night Victory Video (`public/creative/studio-success-night.mp4`): Re-encoded from second 4.0 to second 12.0 of `Ночное.mov` (8.00s total duration, CRF 21, H.264 `+faststart`). Begins with the climber on the summit under the aurora borealis and culminates in the camera rising to reveal the vast, snowy mountain panorama in the final seconds before freezing.
+    - Day Victory Video (`public/creative/studio-success-day.mp4`): Synchronized to an identical 8.00s duration with the full golden summit sunburst, ensuring identical timing across both themes.
+    - Confirmation Revelation Timing: Adjusted progressive card revelation to 5.2s, giving viewers 5.2 seconds of undisturbed camera ascent before the confirmation message gently floats into view, followed by a 2.8s calm summit freeze. Telemetry indicator pill updated to `SUMMIT REACHED · 8.0S`.
 
 
 

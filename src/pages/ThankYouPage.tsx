@@ -7,7 +7,7 @@ import { useTheme } from "../context/ThemeContext";
 /**
  * Post-submit confirmation page.
  * Plays victory summit video ONLY if the user originated from Creative Studio (/craft).
- * Videos are normalized to identical 6.0s duration without looping.
+ * Videos are normalized to identical 8.0s duration without looping.
  * Confirmation cards gracefully appear towards the climax of the video, freezing on the summit.
  * On page reload / direct re-visit, automatically returns to Creative Studio in active theme.
  */
@@ -41,26 +41,24 @@ export function ThankYouPage() {
       ? "/creative/studio-success-day-poster.jpg"
       : "/creative/studio-success-night-poster.jpg";
 
-  // When refreshing the studio victory confirmation page, return to /craft in active theme
+  // When refreshing the studio victory confirmation page or direct opening, return to /craft in active theme
   useEffect(() => {
     if (!isStudio) return;
     if (searchParams.has("preview")) return;
 
     const navEntry = performance.getEntriesByType?.("navigation")?.[0] as PerformanceNavigationTiming | undefined;
-    const isReload =
-      navEntry?.type === "reload" ||
-      (window.performance as { navigation?: { type?: number } } | undefined)?.navigation?.type === 1;
-    const hasFreshSubmit = sessionStorage.getItem("upraiser_studio_submitted") === "1";
+    const isDocReloadOfSent =
+      navEntry?.type === "reload" && Boolean(navEntry?.name?.includes("/contact/sent"));
 
-    if (isReload || !hasFreshSubmit) {
+    const hasClientSubmit = Boolean((location.state as { submitted?: boolean } | null)?.submitted);
+    const submitTime = Number(sessionStorage.getItem("upraiser_studio_submitted") || "0");
+    const isRecentSubmit = submitTime > 0 && Date.now() - submitTime < 60_000;
+
+    if (isDocReloadOfSent || (!hasClientSubmit && !isRecentSubmit)) {
       sessionStorage.removeItem("upraiser_studio_submitted");
       navigate(`/craft?theme=${theme}`, { replace: true });
-      return;
     }
-
-    // Consume flag so subsequent reload triggers return to /craft
-    sessionStorage.removeItem("upraiser_studio_submitted");
-  }, [isStudio, navigate, theme]);
+  }, [isStudio, location.state, navigate, searchParams, theme]);
 
   // Video autoplay & ended management
   useEffect(() => {
@@ -75,7 +73,7 @@ export function ThankYouPage() {
     if (phase === "reached") return;
     const v = videoRef.current;
     if (v) {
-      v.currentTime = 5.95;
+      v.currentTime = 7.95;
       v.pause();
     }
     setSkipped(true);
@@ -85,18 +83,18 @@ export function ThankYouPage() {
   const handleTimeUpdate = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
-    // Reveal confirmation card gently as camera enters deceleration curve (3.4s), no loop
-    if (v.currentTime >= 3.4 && phase === "celebrating") {
+    // Reveal confirmation card gently as camera reveals the wide panorama (5.2s), no loop
+    if (v.currentTime >= 5.2 && phase === "celebrating") {
       setPhase("reached");
     }
   }, [phase]);
 
-  // Guaranteed fallback timer for smooth reveal at 3.4s even if timeupdate is throttled
+  // Guaranteed fallback timer for smooth reveal at 5.2s even if timeupdate is throttled
   useEffect(() => {
     if (!isStudio || phase === "reached") return;
     const timer = setTimeout(() => {
       setPhase("reached");
-    }, 3400);
+    }, 5200);
     return () => clearTimeout(timer);
   }, [isStudio, phase]);
 
@@ -354,7 +352,7 @@ export function ThankYouPage() {
             <div className="pointer-events-auto min-h-[44px] flex items-center bg-bg-elevated/75 backdrop-blur-xl rounded-full border border-border/40 shadow-lg px-4 py-2 gap-2.5 text-[10px] sm:text-[11px] font-bold tracking-wide uppercase font-sans select-none cursor-pointer text-fg-muted hover:text-fg transition-colors group">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
               <span className="text-fg/90 whitespace-nowrap">
-                SUMMIT REACHED · 6.0S
+                SUMMIT REACHED · 8.0S
               </span>
               <span className="text-accent text-[9px] uppercase tracking-wider pl-1 font-semibold group-hover:underline">
                 Skip to brief

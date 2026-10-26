@@ -210,6 +210,7 @@ In accordance with David Ogilvy advertising principles and the repository's Glob
 |---|---|---|
 | `v2.2.88-stable` | 26 Oct 2026 | Creative Studio night climb unaccelerated 8.0s cut (sec 4 to 12) with natural panorama reveal |
 | `v2.2.87-stable` | 25 Oct 2026 | De-noise Connect notifications (suppress vcf alerts, keep submitted form only), equate token to click_id, pause failing GitHub keep-alive cron |
+| `v2.2.90-stable` | 26 Oct 2026 | Pilot brief redirect hardening & 8.0s night victory panorama (sec 4 to 12) |
 | `v2.2.89-stable` | 26 Oct 2026 | Synchronize night climb to 5.0s ending on downward cliff abyss view matching day timing |
 | `v2.2.88-stable` | 26 Oct 2026 | Creative Studio night climb natural 8.0s cut with panorama reveal |
 | `v2.2.87-stable` | 26 Oct 2026 | Equate token to click_id, silence vcf alerts & pause failing keepalive cron |
