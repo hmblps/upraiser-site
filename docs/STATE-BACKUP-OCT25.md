@@ -246,16 +246,28 @@ In accordance with David Ogilvy advertising principles and the repository's Glob
 ### B. Telemetry & Attribution Engine
 - **Identity Stitching:** Visitor sessions persist across `/connect`, `/deck`, and `/contact` via `upraiser_hub_session_v1`.
 - **Smart Referrer & In-App Attribution:** Identifies traffic origins (LinkedIn, Telegram, WhatsApp, X/Twitter, Meta, Google, Direct) even when UTM parameters are stripped by messenger in-app browsers.
-- **Interaction-Gated Alerts:** Repeat visit signals to Telegram Bot and Resend email digests only fire if a user actively engages ($\ge 25$s active time or card interaction), eliminating bot/crawler noise.
+- **Interaction-Gated Alerts:** Repeat visit signals to Telegram Bot (`IMS2026` supergroup `chat_id: -1003934317948`) only fire if a user actively engages, eliminating bot/crawler noise.
+- **Live Session Card & Retroactive Deanonymization (`v2.2.106-stable`):** All visitor actions on `/connect` and `/deck` within 30 minutes collapse into a single live-edited Telegram card (`🧭 АКТИВНОСТЬ НА ХАБЕ`) via `editMessageText`. Submitting the Clip In form retroactively updates the earlier anonymous card with the lead's real name and contact and links future notifications via Telegram `reply_parameters`.
+- **Compact Proof Click Tracker & Lead Enrichment (`v2.2.109-stable`):** Email snapshot clicks route through `/api/proof`, collapsing multiple clicks into one live card (`🔎 ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · N из 8`) with automatic vertical focus aggregation (`🎯 Фокус`), screen-switch vs. colleague-forwarding detection, corporate domain extraction (`🏢 Компания`), and 1-tap Telegram `inline_keyboard` buttons (`🌐 Website`, `✈️ Telegram`, `💬 WhatsApp`, `🔍 LinkedIn`).
 
 ---
 
-## 8. Git Tags & Release History (v2.2.60 to v2.2.84)
+## 8. Git Tags & Release History (v2.2.60 to v2.2.110)
 
 | Tag | Date | Focus |
 |---|---|---|
-| `v2.2.88-stable` | 26 Oct 2026 | Creative Studio night climb unaccelerated 8.0s cut (sec 4 to 12) with natural panorama reveal |
-| `v2.2.87-stable` | 25 Oct 2026 | De-noise Connect notifications (suppress vcf alerts, keep submitted form only), equate token to click_id, pause failing GitHub keep-alive cron |
+| `v2.2.110-stable` | 26 Oct 2026 | Synchronize UPRAISER-MASTER and STATE-BACKUP documentation through v2.2.110-stable |
+| `v2.2.109-stable` | 26 Oct 2026 | Compact proof click telemetry card with vertical focus summary, corporate domain enrichment & 1-tap inline keyboard buttons |
+| `v2.2.108-stable` | 26 Oct 2026 | Replace `barrons-protect360.png` with new P360 Barrons snapshot & rebuild `.zip` archive (`?v=2`) |
+| `v2.2.107-stable` | 26 Oct 2026 | Distinguish same-city phone-to-laptop screen switch from colleague email forwarding in `/api/proof` |
+| `v2.2.106-stable` | 26 Oct 2026 | Unify hub session card (`editMessageText`), collapse proof clicks, add retroactive deanonymization & reply threading |
+| `v2.2.105-stable` | 26 Oct 2026 | Live `editMessageText` slide trail on `/deck`, email forwarding detector & ecosystem click tracking on `/connect` |
+| `v2.2.104-stable` | 26 Oct 2026 | Add 3rd `NOTES` field across 22 languages on `/connect`, unify Russian Telegram cards & eliminate duplicate events |
+| `v2.2.103-stable` | 26 Oct 2026 | Strict `1 Lead = 1 Resend Email` architecture, ASCII email validation & `/api/proof` click tracking redirect |
+| `v2.2.102-stable` | 26 Oct 2026 | Route all telemetry alerts 100% to Telegram supergroup `IMS2026` (`-1003934317948`); disable Resend telemetry digest |
+| `v2.2.98-v2.2.101` | 26 Oct 2026 | Swiss Light Theme HTML email dossier redesign & Telegram group migration diagnostics |
+| `v2.2.97-stable` | 26 Oct 2026 | Automated High-End UX Performance Snapshot Autoresponder with 8 verified proofs & master `.zip` |
+| `v2.2.96-stable` | 26 Oct 2026 | Restore scroll-to-advance in Creative Studio (`/craft`) & lock footer scroll |
 | `v2.2.90-stable` | 26 Oct 2026 | Pilot brief redirect hardening & 8.0s night victory panorama (sec 4 to 12) |
 | `v2.2.89-stable` | 26 Oct 2026 | Synchronize night climb to 5.0s ending on downward cliff abyss view matching day timing |
 | `v2.2.88-stable` | 26 Oct 2026 | Creative Studio night climb natural 8.0s cut with panorama reveal |
