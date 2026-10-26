@@ -226,53 +226,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     }
   }, [pauseTime, theme]);
 
-  // Allow user to scroll (wheel, touch drag down, arrow keys) to immediately reach summit & cards
-  useEffect(() => {
-    if (phase !== "climbing") return;
-
-    let touchStartY = 0;
-
-    const handleWheel = (e: WheelEvent) => {
-      // Natural downward scroll advances to cards
-      if (e.deltaY > 15) {
-        handleSkipToSummit();
-      }
-    };
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches?.[0]) {
-        touchStartY = e.touches[0].clientY;
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!e.touches?.[0]) return;
-      const currentY = e.touches[0].clientY;
-      // User swiping up to scroll down
-      if (touchStartY - currentY > 30) {
-        handleSkipToSummit();
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
-        handleSkipToSummit();
-      }
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [phase, handleSkipToSummit]);
-
   return (
     <div
       onClick={phase === "climbing" ? handleSkipToSummit : undefined}
@@ -505,8 +458,8 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     )}
                   </p>
                   <Link
-                    to={`/contact?source=studio&theme=${theme}`}
-                    state={{ fromStudio: true, source: "studio", theme }}
+                    to="/contact?source=studio"
+                    state={{ fromStudio: true, source: "studio" }}
                     className={`inline-flex items-center justify-center gap-2.5 rounded-full px-8 py-3.5 min-h-[44px] text-sm sm:text-base font-bold tracking-widest uppercase transition-all duration-200 select-none shadow-[0_6px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-105 active:scale-95 ${
                       theme === "light"
                         ? "bg-[#EE1C25] text-white hover:bg-[#d91921]"
@@ -577,9 +530,6 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     style={{ width: "0%" }}
                   />
                 </div>
-                <span className="text-accent text-[9px] uppercase tracking-wider pl-1 font-semibold group-hover:underline hidden xs:inline">
-                  Scroll or tap
-                </span>
               </motion.div>
             ) : (
               <motion.div
