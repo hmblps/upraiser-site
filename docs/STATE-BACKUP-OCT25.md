@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.93-stable`  
+**Tag:** `v2.2.94-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,7 +9,18 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Restoration of Original Studio Background Videos & Targeted Victory Video Re-timing (v2.2.93-stable):**
+1. **Victory Video Click-Free Seamless Dissolve & 5.0s Timing Equalization (v2.2.94-stable):**
+   - Completely eliminated the abrupt snap/click ("щелчок") on post-submit victory video entrance:
+     - Preloads victory MP4 assets in background on `/contact` via `<link rel="preload" as="video">`.
+     - Removed glitchy HTML5 `poster` attribute on `<video>` to prevent instantaneous JPEG-to-video buffer swap.
+     - Removed artificial `v.currentTime = 0` seek call in `useEffect` that caused decoder pipeline resets and 1-frame flashes.
+     - Fades video in over 750ms (`ease: [0.22, 1, 0.36, 1]`) only after `onPlaying` confirms the video is actively decoding and moving.
+     - Added graceful 120ms exit fade on contact form before route transition.
+   - Equalized both Day and Night victory videos to an identical **5.00 seconds** (eliminating the perception that night was longer):
+     - **Day (`studio-success-day.mp4`):** Cut from 2.6s to 7.6s of `Дневное.mov` (5.00s duration), active climb + sunlit mountain panorama.
+     - **Night (`studio-success-night.mp4`):** Cut from 6.0s to 11.0s of `Ночное.mov` (5.00s duration), active climb + sheer drop/abyss panorama.
+     - Confirmation card appears at **3.2s**, freeze on final summit frame at 5.0s.
+2. **Restoration of Original Studio Background Videos & Targeted Victory Video Re-timing (v2.2.93-stable):**
    - Reverted Creative Studio intro/ambient background videos (`light-loop.mp4` and `dark-loop.mp4`) and `CreativeStudioVideo.tsx` timings back to their exact original baseline.
    - Victory videos after contact form submission on `/contact/sent` remain cleanly re-timed to dynamic 6.0s cuts ending on the panoramas:
      - **Day (`studio-success-day.mp4`):** Cut from 2.0s to 8.0s of `Дневное.mov` (6.0s duration), ending on the radiant sunrise mountain panorama.

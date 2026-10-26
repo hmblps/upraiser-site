@@ -7,8 +7,8 @@ import { useTheme } from "../context/ThemeContext";
 /**
  * Post-submit confirmation page for Pilot Briefings & Creative Studio.
  * Plays the cinematic victory summit video (day in light theme, night in dark theme).
- * Videos are normalized to an identical 6.0s duration without looping.
- * Confirmation cards gracefully appear towards the climax of the video (3.8s), freezing on the summit.
+ * Videos are normalized to an identical 5.0s duration without looping.
+ * Confirmation cards gracefully appear towards the climax of the video (3.2s), freezing on the summit.
  * On page reload / direct re-visit without submission, safely returns to the active flow.
  */
 export function ThankYouPage() {
@@ -33,22 +33,18 @@ export function ThankYouPage() {
     (location.state as { source?: string } | null)?.source;
   const isStudio = sourceParam === "studio";
 
-  // Play cinematic ascent first, then reveal confirmation card at climax (5.2s)
+  // Play cinematic ascent first, then reveal confirmation card at climax (3.2s)
   const [phase, setPhase] = useState<"celebrating" | "reached">(
     searchParams.get("preview") === "reached" ? "reached" : "celebrating"
   );
   const [skipped, setSkipped] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
   const easeCurve = [0.22, 1, 0.36, 1] as const;
 
   const videoSrc =
     activeTheme === "light"
       ? "/creative/studio-success-day.mp4"
       : "/creative/studio-success-night.mp4";
-
-  const posterSrc =
-    activeTheme === "light"
-      ? "/creative/studio-success-day-poster.jpg"
-      : "/creative/studio-success-night-poster.jpg";
 
   // When refreshing the confirmation page or direct opening without submission, return safely
   useEffect(() => {
@@ -79,13 +75,12 @@ export function ThankYouPage() {
     }
   }, [activeTheme, isStudio, location.state, navigate, searchParams]);
 
-  // Video autoplay & WebKit/Safari muted property enforcement
+  // Video autoplay & WebKit/Safari muted property enforcement (no artificial seek)
   useEffect(() => {
     const v = videoRef.current;
     if (v) {
       v.muted = true;
       v.defaultMuted = true;
-      v.currentTime = 0;
       const playPromise = v.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {});
@@ -98,7 +93,7 @@ export function ThankYouPage() {
     if (phase === "reached") return;
     const v = videoRef.current;
     if (v) {
-      v.currentTime = 5.95;
+      v.currentTime = 4.95;
       v.pause();
     }
     setSkipped(true);
@@ -108,18 +103,21 @@ export function ThankYouPage() {
   const handleTimeUpdate = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
-    // Reveal confirmation card gently as camera reveals the wide panorama (3.8s), no loop
-    if (v.currentTime >= 3.8 && phase === "celebrating") {
+    if (!videoPlaying && v.currentTime > 0.04) {
+      setVideoPlaying(true);
+    }
+    // Reveal confirmation card gently as camera reveals the wide panorama (3.2s), no loop
+    if (v.currentTime >= 3.2 && phase === "celebrating") {
       setPhase("reached");
     }
-  }, [phase]);
+  }, [phase, videoPlaying]);
 
-  // Guaranteed fallback timer for smooth reveal at 3.8s even if timeupdate is throttled
+  // Guaranteed fallback timer for smooth reveal at 3.2s even if timeupdate is throttled
   useEffect(() => {
     if (phase === "reached") return;
     const timer = setTimeout(() => {
       setPhase("reached");
-    }, 3800);
+    }, 3200);
     return () => clearTimeout(timer);
   }, [phase]);
 
@@ -138,21 +136,22 @@ export function ThankYouPage() {
           : "bg-[#06070a] text-white"
       } ${phase === "celebrating" ? "cursor-pointer" : ""}`}
     >
-      {/* Victory Video Ambient Background */}
+      {/* Victory Video Ambient Background — dissolves in smoothly once first moving frame is active */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.9, ease: easeCurve }}
+        animate={{ opacity: videoPlaying ? 1 : 0 }}
+        transition={{ duration: 0.75, ease: easeCurve }}
         className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
       >
         <video
           ref={videoRef}
           key={videoSrc}
           src={videoSrc}
-          poster={posterSrc}
           autoPlay
           muted
           playsInline
+          preload="auto"
+          onPlaying={() => setVideoPlaying(true)}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleVideoEnded}
           className="absolute inset-0 w-full h-full object-cover"
@@ -377,7 +376,7 @@ export function ThankYouPage() {
             <div className="pointer-events-auto min-h-[44px] flex items-center bg-bg-elevated/75 backdrop-blur-xl rounded-full border border-border/40 shadow-lg px-4 py-2 gap-2.5 text-[10px] sm:text-[11px] font-bold tracking-wide uppercase font-sans select-none cursor-pointer text-fg-muted hover:text-fg transition-colors group">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
               <span className="text-fg/90 whitespace-nowrap">
-                SUMMIT REACHED · 6.0S
+                SUMMIT REACHED · 5.0S
               </span>
               <span className="text-accent text-[9px] uppercase tracking-wider pl-1 font-semibold group-hover:underline">
                 Skip to brief

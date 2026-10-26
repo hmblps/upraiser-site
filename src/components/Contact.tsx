@@ -212,6 +212,31 @@ export function Contact() {
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isExiting, setIsExiting] = useState(false);
+
+  // Preload victory videos quietly in background so transition on submit is seamless
+  useEffect(() => {
+    const linkDay = document.createElement("link");
+    linkDay.rel = "preload";
+    linkDay.as = "video";
+    linkDay.href = "/creative/studio-success-day.mp4";
+    linkDay.type = "video/mp4";
+    document.head.appendChild(linkDay);
+
+    const linkNight = document.createElement("link");
+    linkNight.rel = "preload";
+    linkNight.as = "video";
+    linkNight.href = "/creative/studio-success-night.mp4";
+    linkNight.type = "video/mp4";
+    document.head.appendChild(linkNight);
+
+    return () => {
+      try {
+        document.head.removeChild(linkDay);
+        document.head.removeChild(linkNight);
+      } catch {}
+    };
+  }, []);
 
   const abortCtrl = useRef<AbortController | null>(null);
   useEffect(() => {
@@ -426,14 +451,17 @@ export function Contact() {
           ? `/contact/sent?source=studio&theme=${theme}`
           : `/contact/sent?source=pilot&theme=${theme}`;
 
-        navigate(targetUrl, {
-          replace: true,
-          state: {
-            source: wasStudio ? "studio" : "pilot",
-            submitted: true,
-            theme,
-          },
-        });
+        setIsExiting(true);
+        setTimeout(() => {
+          navigate(targetUrl, {
+            replace: true,
+            state: {
+              source: wasStudio ? "studio" : "pilot",
+              submitted: true,
+              theme,
+            },
+          });
+        }, 120);
         return;
       }
 
@@ -453,7 +481,7 @@ export function Contact() {
   ];
 
   return (
-    <div className="depth-page depth-page--contact viewport-page">
+    <div className={`depth-page depth-page--contact viewport-page transition-opacity duration-150 ${isExiting ? "opacity-0" : "opacity-100"}`}>
       <div className="section-inner contact-page-shell">
             <div className="strip-beam-wrap contact-briefing-card relative w-full rounded-[0_1.5rem_0_1.5rem] border border-border bg-bg-card shadow-xl">
               <GradientTraceBorder
