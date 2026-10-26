@@ -1,15 +1,24 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.88-stable`  
+**Tag:** `v2.2.91-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
 
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
-Between October 24 and October 25, 2026, the project underwent significant feature additions and production hardening:
-1. **Connect Hub Notification De-Noising & Click ID Unification:**
+Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
+1. **Form Submit Button Grounding & Magnetic Clamping (v2.2.91-stable):**
+   - Removed `<Magnetic>` wrapper from the full-width "REQUEST PILOT" submit button in `Contact.tsx`. Replaced with grounded `motion.button` with subtle spring hover (`scale: 1.01`) and tap (`scale: 0.98`), completely preventing the button from sliding sideways into the adjacent column or being clipped.
+   - Hardened `Magnetic.tsx` with max offset clamps (`maxOffsetX`, `maxOffsetY`) defaulting to 8px max on full-width elements.
+2. **Universal Victory Summit Video Across Themes (v2.2.91-stable):**
+   - Enabled the cinematic victory celebration video across all Pilot Brief submissions on `/contact/sent`.
+   - Light theme plays the radiant golden daylight summit (`studio-success-day.mp4`, 8.0s), while dark theme plays the celestial aurora summit (`studio-success-night.mp4`, 8.0s).
+   - Derives `activeTheme` directly from `?theme=` query parameters, navigation state, and theme context.
+   - Fixed reload protection to prevent accidental bounce-backs to `/craft` on legitimate submissions.
+   - Guaranteed WebKit / Safari video autoplay by enforcing `v.muted = true` and `v.defaultMuted = true` on the DOM node.
+3. **Connect Hub Notification De-Noising & Click ID Unification:**
    - Suppressed email and Telegram notifications on `vcf_download` (One-Tap Save / Clip In) because downloading a `.vcf` file does not guarantee the contact was saved in phone contacts.
    - Retained instant notifications strictly for submitted forms (`form_submit` via `/api/contact`) and verified return visits.
    - Equated visitor token to `click_id` across the platform: captures incoming URL parameters (`?click_id=`, `?clickid=`, `?cid=`, `?token=`) or defaults to the timestamped token (`hub_YYYYMMDD_HHMM_xxxx`).

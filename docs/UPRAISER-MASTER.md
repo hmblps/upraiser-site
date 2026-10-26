@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 26 October 2026 (v2.2.88-stable)  
+> **Updated:** 26 October 2026 (v2.2.91-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** Creative Studio 5.0s climb equalization + Day/Night victory confirmation engine + Conference Hub & Multilingual Deck  
+> **HEAD:** Grounded submit button & Universal Day/Night victory summit celebration for all Pilot Brief submissions  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`

@@ -7,9 +7,17 @@ interface MagneticProps {
   children: ReactNode;
   className?: string;
   strength?: number;
+  maxOffsetX?: number;
+  maxOffsetY?: number;
 }
 
-export function Magnetic({ children, className = "", strength = 0.32 }: MagneticProps) {
+export function Magnetic({
+  children,
+  className = "",
+  strength = 0.32,
+  maxOffsetX,
+  maxOffsetY,
+}: MagneticProps) {
   const reduced = useReducedMotion();
   const block = /\bw-full\b/.test(className);
   const x = useMotionValue(0);
@@ -32,8 +40,14 @@ export function Magnetic({ children, className = "", strength = 0.32 }: Magnetic
       onMouseMove={(event) => {
         const node = event.currentTarget;
         const rect = node.getBoundingClientRect();
-        x.set((event.clientX - (rect.left + rect.width / 2)) * strength);
-        y.set((event.clientY - (rect.top + rect.height / 2)) * strength);
+        let targetX = (event.clientX - (rect.left + rect.width / 2)) * strength;
+        let targetY = (event.clientY - (rect.top + rect.height / 2)) * strength;
+        const limitX = maxOffsetX ?? (block ? 8 : 24);
+        const limitY = maxOffsetY ?? 16;
+        targetX = Math.max(-limitX, Math.min(limitX, targetX));
+        targetY = Math.max(-limitY, Math.min(limitY, targetY));
+        x.set(targetX);
+        y.set(targetY);
       }}
       onMouseLeave={() => {
         x.set(0);

@@ -504,8 +504,8 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     )}
                   </p>
                   <Link
-                    to="/contact?source=studio"
-                    state={{ fromStudio: true, source: "studio" }}
+                    to={`/contact?source=studio&theme=${theme}`}
+                    state={{ fromStudio: true, source: "studio", theme }}
                     className={`inline-flex items-center justify-center gap-2.5 rounded-full px-8 py-3.5 min-h-[44px] text-sm sm:text-base font-bold tracking-widest uppercase transition-all duration-200 select-none shadow-[0_6px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-105 active:scale-95 ${
                       theme === "light"
                         ? "bg-[#EE1C25] text-white hover:bg-[#d91921]"

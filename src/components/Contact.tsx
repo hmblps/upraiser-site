@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, type FormEvent } from "react";
 import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { contactPage } from "../data/liveContent";
-import { Magnetic } from "./motion-preview/Magnetic";
+import { useTheme } from "../context/ThemeContext";
 import { AccentWord } from "./AccentWord";
 import { GradientTraceBorder } from "./GradientTraceBorder";
 import { ContactFormField } from "./ContactFormField";
@@ -173,6 +173,7 @@ async function sendTelegramNotification(
 
 export function Contact() {
   const { t } = useTranslation();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -417,12 +418,22 @@ export function Contact() {
           isFromStudio || sessionStorage.getItem("upraiser_contact_source") === "studio";
         sessionStorage.removeItem("upraiser_contact_source");
 
-        if (wasStudio) {
-          sessionStorage.setItem("upraiser_studio_submitted", String(Date.now()));
-          navigate("/contact/sent?source=studio", { replace: true, state: { source: "studio", submitted: true } });
-        } else {
-          navigate("/contact/sent", { replace: true });
-        }
+        const submitTimestamp = String(Date.now());
+        sessionStorage.setItem("upraiser_pilot_submitted", submitTimestamp);
+        sessionStorage.setItem("upraiser_studio_submitted", submitTimestamp);
+
+        const targetUrl = wasStudio
+          ? `/contact/sent?source=studio&theme=${theme}`
+          : `/contact/sent?source=pilot&theme=${theme}`;
+
+        navigate(targetUrl, {
+          replace: true,
+          state: {
+            source: wasStudio ? "studio" : "pilot",
+            submitted: true,
+            theme,
+          },
+        });
         return;
       }
 
@@ -754,18 +765,17 @@ export function Contact() {
                         </span>
                       </div>
 
-                      <Magnetic className="mt-2 w-full shrink-0">
-                        <motion.button
-                          type="submit"
-                          disabled={status === "loading"}
-                          whileTap={status !== "loading" ? { scale: 0.96 } : undefined}
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                          data-cursor="cta"
-                          className="btn-caps btn-caps--primary w-full rounded-full py-3 disabled:cursor-not-allowed disabled:opacity-60"
-                        >
-                          {status === "loading" ? t("contactPage.form.transmitting", "Transmitting…") : t("contactPage.ctaLabel", contactPage.ctaLabel)}
-                        </motion.button>
-                      </Magnetic>
+                      <motion.button
+                        type="submit"
+                        disabled={status === "loading"}
+                        whileHover={status !== "loading" ? { scale: 1.01 } : undefined}
+                        whileTap={status !== "loading" ? { scale: 0.98 } : undefined}
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.3 }}
+                        data-cursor="cta"
+                        className="btn-caps btn-caps--primary mt-2 w-full min-h-[44px] rounded-full py-3.5 disabled:cursor-not-allowed disabled:opacity-60 transition-shadow shadow-md hover:shadow-lg touch-manipulation"
+                      >
+                        {status === "loading" ? t("contactPage.form.transmitting", "Transmitting…") : t("contactPage.ctaLabel", contactPage.ctaLabel)}
+                      </motion.button>
                     </form>
                 </div>
               </div>
