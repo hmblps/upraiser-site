@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 26 October 2026 (v2.2.96-stable)  
+> **Updated:** 26 October 2026 (v2.2.97-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** Creative Studio scroll-to-advance with footer scroll lock + Equalized 5.0s click-free victory video flow  
+> **HEAD:** Automated High-End UX Performance Snapshot Autoresponder + Creative Studio Scroll-to-Advance Baseline  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`
@@ -1493,6 +1493,15 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - Excluded `/craft` from rendering `<Footer />` in `SiteLayout.tsx` (`!viewportRoute && pathname !== "/craft"`), guaranteeing zero document overflow beyond 100dvh and making it physically impossible for momentum scrolling to reach the footer.
     - Preserved 100% pristine baseline for background video files (`public/creative/light-loop.mp4` and `dark-loop.mp4`).
     - Restored subtle "Scroll or tap" discovery cue in the bottom telemetry Dynamic Island pill.
+  - **Automated High-End UX Performance Snapshot Autoresponder (v2.2.97-stable):**
+    - Instant Delivery to Lead: When a visitor submits their email via `/contact` or conference hub, an automated high-end dossier email is immediately sent to their inbox via Resend.
+    - Airy, Non-Slop Swiss Dark Email Layout: High-contrast, spacious, clean aesthetic with zero AI clichés. Built with inline table-based styles for 100% cross-client rendering (Gmail, Apple Mail, Outlook).
+    - 8 Verified Performance Snapshots hosted on global Edge CDN (`public/snapshots/`):
+      - Tier-1 Media: WSJ Protect360 (~14k clean installs, ≤1% fraud), Barron's Protect360 (4.9k installs, 0.00% fraud), MarketWatch Protect360 (3.1k installs, 0.00% fraud), Fetch Rewards AppsFlyer (6.8k installs, 8.88% CR).
+      - Fintech & Gaming: Vantage Trading (87.5% QFTD, $122.5k commission), Underdog Fantasy (184 FTDs, $137 avg FTD), Credcol AppsFlyer Funnel (13k installs, 1.9k signups), Credcol Protect360 Audit (12.6k attributions, 0.00% fraud).
+    - 1-Click Master Archive: High-contrast `Download All (.zip · 15 MB)` button linking to `public/snapshots/UPRAISER_Performance_Snapshots.zip`.
+    - 7 High-Resolution Brand Icons: Bundled in `public/snapshots/icons/` (WSJ, Barron's, MarketWatch, Fetch, Vantage, Underdog, Credcol).
+    - Factual Ogilvy Copywriting: Concise punchy intro and closing offer: *"Let’s perform a test with similar unit economics for Your app."*
 
 
 

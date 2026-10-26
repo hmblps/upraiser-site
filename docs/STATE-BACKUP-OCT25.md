@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.96-stable`  
+**Tag:** `v2.2.97-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,7 +9,16 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Creative Studio Scroll-to-Advance & Footer Scroll Lock (v2.2.96-stable):**
+1. **Automated High-End UX Performance Snapshot Autoresponder (v2.2.97-stable):**
+   - Instant Delivery to Lead: When a visitor submits their email via `/contact` or conference hub, an automated high-end dossier email is immediately sent to their inbox via Resend.
+   - Airy, Non-Slop Swiss Dark Email Layout: High-contrast, spacious, clean aesthetic with zero AI clichés. Built with inline table-based styles for 100% cross-client rendering (Gmail, Apple Mail, Outlook).
+   - 8 Verified Performance Snapshots hosted on global Edge CDN (`public/snapshots/`):
+     - Tier-1 Media: WSJ Protect360 (~14k clean installs, ≤1% fraud), Barron's Protect360 (4.9k installs, 0.00% fraud), MarketWatch Protect360 (3.1k installs, 0.00% fraud), Fetch Rewards AppsFlyer (6.8k installs, 8.88% CR).
+     - Fintech & Gaming: Vantage Trading (87.5% QFTD, $122.5k commission), Underdog Fantasy (184 FTDs, $137 avg FTD), Credcol AppsFlyer Funnel (13k installs, 1.9k signups), Credcol Protect360 Audit (12.6k attributions, 0.00% fraud).
+   - 1-Click Master Archive: High-contrast `Download All (.zip · 15 MB)` button linking to `public/snapshots/UPRAISER_Performance_Snapshots.zip`.
+   - 7 High-Resolution Brand Icons: Bundled in `public/snapshots/icons/` (WSJ, Barron's, MarketWatch, Fetch, Vantage, Underdog, Credcol).
+   - Factual Ogilvy Copywriting: Concise punchy intro and closing offer: *"Let’s perform a test with similar unit economics for Your app."*
+2. **Creative Studio Scroll-to-Advance & Footer Scroll Lock (v2.2.96-stable):**
    - Restored the gesture to quickly scroll down (mouse wheel, touch swipe down, Down arrow, PageDown, Space) during the intro climbing video (`phase === "climbing"`) to instantly advance the video to the cards and "Request the Pilot" button (`phase === "summit"`).
    - Footer Scroll Lock: Intercepted non-passively with `preventDefault()` and `stopPropagation()`. Attached momentum absorption for 750ms after skipping to absorb trackpad/wheel inertia, keeping `window.scrollTo({ top: 0, behavior: "instant" })` locked at top.
    - Excluded `/craft` from rendering `<Footer />` in `SiteLayout.tsx` (`!viewportRoute && pathname !== "/craft"`), guaranteeing zero document overflow beyond 100dvh and making it physically impossible for momentum scrolling to reach the footer.

@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createClient } from "@supabase/supabase-js";
+import { generateLeadSnapshotsEmailHtml } from "./leadEmailTemplate";
 
 export const config = {
   api: {
@@ -391,6 +392,35 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       const errorText = await resendResponse.text();
       res.writeHead(resendResponse.status, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ ok: false, error: `Resend error: ${errorText}` }));
+    }
+
+    // 3b. Send automated High-End UX Snapshots dossier directly to the lead
+    const isValidLeadEmail =
+      email &&
+      email.includes("@") &&
+      !email.includes("conference-lead") &&
+      !email.includes("revisit-alert");
+
+    if (isValidLeadEmail) {
+      try {
+        const leadHtml = generateLeadSnapshotsEmailHtml(cleanName);
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: fromEmail,
+            to: [email.trim()],
+            reply_to: "alex@upraiser.co.uk",
+            subject: "UPRAISER — Raw Dashboards & Performance Snapshots (Protect360 · AppsFlyer)",
+            html: leadHtml,
+          }),
+        });
+      } catch (leadEmailErr) {
+        console.warn("Autoresponder delivery warning to lead:", leadEmailErr);
+      }
     }
 
     // 4. Send Telegram instant notification if configured
