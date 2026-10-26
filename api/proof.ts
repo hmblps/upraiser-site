@@ -171,6 +171,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   let prevGeo = "";
   let prevDevice = "";
   let isForwardedSuspect = false;
+  let isSameCityScreenSwitch = false;
   let linkedVisitorId = "";
   let cooldownKey = lead ? `email_${lead.toLowerCase()}` : "email_anon";
   let existingCooldownMeta: Record<string, any> = {};
@@ -209,12 +210,18 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           geo !== "Unknown Location" &&
           prevGeo.toLowerCase() !== geo.toLowerCase();
 
-        const deviceChanged =
-          Boolean(prevDevice && device) &&
-          getHardwareFamily(prevDevice) !== getHardwareFamily(device);
+        const prevFam = prevDevice ? getHardwareFamily(prevDevice) : "";
+        const currFam = device ? getHardwareFamily(device) : "";
+        const deviceChanged = Boolean(prevFam && currFam && prevFam !== currFam);
+        const isDifferentMobileOs =
+          (prevFam === "iPhone" && currFam === "Android") ||
+          (prevFam === "Android" && currFam === "iPhone");
 
-        if (geoChanged || deviceChanged) {
+        if (geoChanged || isDifferentMobileOs) {
           isForwardedSuspect = true;
+        } else if (deviceChanged) {
+          // Same city, switched between phone and laptop/tablet (e.g. iPhone -> Mac in Bucharest)
+          isSameCityScreenSwitch = true;
         }
       }
 
@@ -296,7 +303,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
       const forwardingBanner = isForwardedSuspect
         ? `\n🔥 <b>Возможно, письмо переслали коллеге!</b>\n` +
-          `└ <i>Новое устройство/гео: ${escapeHtml(geo)} · ${escapeHtml(device)} (ранее: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(prevDevice || "—")})</i>\n`
+          `└ <i>Новое гео/девайс: ${escapeHtml(geo)} · ${escapeHtml(device)} (ранее: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(prevDevice || "—")})</i>\n`
+        : isSameCityScreenSwitch
+        ? `\n💻 <b>Открыл письмо с другого экрана в том же городе:</b> ${escapeHtml(device)} <i>(заявка была с ${escapeHtml(prevDevice)})</i>\n`
         : "";
 
       let tgText = "";
