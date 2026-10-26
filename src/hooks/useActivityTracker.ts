@@ -21,7 +21,6 @@ export function useActivityTracker(
   const lastTickTimeRef = useRef<number>(Date.now());
   const lastUserActionTimeRef = useRef<number>(Date.now());
   const maxScrollDepthRef = useRef<number>(0);
-  const scrollMilestonesHitRef = useRef<Set<number>>(new Set());
   const pendingReturnVisitRef = useRef<boolean>(false);
   const returnVisitFiredRef = useRef<boolean>(false);
   const initialIdleMsRef = useRef<number>(0);
@@ -146,7 +145,7 @@ export function useActivityTracker(
       }
     }, HEARTBEAT_INTERVAL_MS);
 
-    // 5. Scroll depth tracker
+    // 5. Scroll depth tracker (records depth locally for heartbeats without firing separate spam beacons)
     const handleScroll = (event: Event) => {
       handleUserInteraction(event);
 
@@ -157,30 +156,10 @@ export function useActivityTracker(
         if (depth > maxScrollDepthRef.current) {
           maxScrollDepthRef.current = depth;
         }
-
-        // Milestone alerts for 50% and 85% scroll depth
-        for (const milestone of [50, 85]) {
-          if (depth >= milestone && !scrollMilestonesHitRef.current.has(milestone)) {
-            scrollMilestonesHitRef.current.add(milestone);
-            sendActivityBeacon({
-              visitorId: session.visitorId,
-              clickId: session.clickId || session.visitorId,
-              leadName: session.savedName,
-              leadContact: session.savedContact,
-              eventType: "page_scroll",
-              durationSeconds: activeSecondsRef.current,
-              sessionState: session.visitCount > 1 ? `Repeat Visit #${session.visitCount}` : "First Visit",
-              metadata: {
-                page: pageContext,
-                scrollDepth: milestone,
-              },
-            });
-          }
-        }
       }
     };
 
-    // 6. Visibility change handler (pauses/resumes active time and flushes when hiding)
+    // 6. Visibility change handler (pauses/resumes active time without firing noisy session_end alerts)
     const handleVisibilityChange = () => {
       const visible = document.visibilityState === "visible";
       isVisibleRef.current = visible;
@@ -188,7 +167,6 @@ export function useActivityTracker(
 
       if (!visible) {
         recordSessionActivity(Date.now());
-        flushHeartbeat("session_end");
       } else {
         // Tab restored to foreground: if idle in background for >= 30 min, re-arm Interaction Gate
         const backgroundIdleMs = Date.now() - lastUserActionTimeRef.current;
@@ -202,7 +180,6 @@ export function useActivityTracker(
 
     const handleBeforeUnload = () => {
       recordSessionActivity(Date.now());
-      flushHeartbeat("session_end");
     };
 
     // Attach interaction listeners to window (passive for 60fps scrolling & touches)
@@ -224,7 +201,6 @@ export function useActivityTracker(
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("beforeunload", handleBeforeUnload);
       recordSessionActivity(Date.now());
-      flushHeartbeat("session_end");
     };
   }, [pageContext, flushHeartbeat, getSession]);
 

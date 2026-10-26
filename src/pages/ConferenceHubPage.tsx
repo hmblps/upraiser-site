@@ -117,8 +117,6 @@ function MailIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-const HUB_REVISIT_ALERT_KEY = "upraiser_hub_revisit_alert_v1";
-
 function collectDeviceTelemetry(session: HubSessionState, selectedLang: HubLang) {
   if (typeof window === "undefined") return null;
 
@@ -254,6 +252,7 @@ export function ConferenceHubPage() {
   // Form state & Hyper-Jump Warp Speed
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
+  const [leadNotes, setLeadNotes] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [isWarping, setIsWarping] = useState(false);
@@ -302,70 +301,11 @@ export function ConferenceHubPage() {
     };
   }, []);
 
-  // Silent repeat-visit beacon: notifies desk if a previous visitor / contact returns to the Hub
-  useEffect(() => {
+  // Repeat-visit tracking is handled centrally by useActivityTracker("conference_hub")
+  // with a 30-minute idle + interaction gate to prevent duplicate alerts.
+
+  const triggerVCardDownload = () => {
     try {
-      const session = getOrInitHubSession();
-      if (session.visitCount > 1) {
-        const lastAlert = parseInt(localStorage.getItem(HUB_REVISIT_ALERT_KEY) || "0", 10);
-        const now = Date.now();
-        // Cooldown: send at most 1 alert per 15 minutes per visitor device
-        if (now - lastAlert > 15 * 60 * 1000) {
-          localStorage.setItem(HUB_REVISIT_ALERT_KEY, String(now));
-          const telemetry = collectDeviceTelemetry(session, lang);
-          const knownName = session.savedName || `Visitor #${session.visitorId.slice(-4).toUpperCase()}`;
-          const knownContact = session.savedContact || "";
-
-          fetch("/api/contact", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            keepalive: true,
-            body: JSON.stringify({
-              name: knownName,
-              email: knownContact.includes("@") ? knownContact : "revisit-alert@upraiser.co.uk",
-              phone: knownContact && !knownContact.includes("@") ? knownContact : "",
-              appId: "Conference Lead · Repeat Visit Alert",
-              geos: "On-Site Conference",
-              companyType: "Direct Operator Contact",
-              companySize: "On-Site Desk",
-              monthlyBudget: "Revisit Signal",
-              isRepeatAlert: true,
-              telemetry,
-              notes: [
-                `[REPEAT HUB VISIT DETECTED]`,
-                `Visitor: ${knownName} ${knownContact ? `(${knownContact})` : ""}`,
-                `Session State: ${telemetry?.sessionState}`,
-                `Local Timestamp: ${telemetry?.timestampFormatted} (${telemetry?.timeZone})`,
-                `Viewport & Screen: ${telemetry?.viewport} (Screen: ${telemetry?.screenResolution}, ${telemetry?.orientation})`,
-                `Browser Locale: ${telemetry?.locale} (Languages: ${telemetry?.languages})`,
-                `Preferred Hub Language: ${telemetry?.hubLang}`,
-                `Click ID (Lead Token): ${telemetry?.clickId || session.clickId || session.visitorId}`,
-                `User-Agent: ${telemetry?.userAgent}`,
-              ].join("\n"),
-            }),
-          }).catch(() => {});
-        }
-      }
-    } catch (e) {
-      console.warn("Revisit beacon error:", e);
-    }
-  }, [lang]);
-
-
-
-  const triggerVCardDownload = (leadName?: string, leadContact?: string) => {
-    try {
-      const session = getOrInitHubSession();
-      const resolvedName = leadName?.trim() || session.savedName || name.trim() || undefined;
-      const resolvedContact = leadContact?.trim() || session.savedContact || contact.trim() || undefined;
-
-      trackAction(
-        "vcf_download",
-        0,
-        { trigger: "clip_in" },
-        resolvedName,
-        resolvedContact
-      );
       // Double-pulse tactile confirmation
       triggerHaptic("success");
 
@@ -384,6 +324,7 @@ export function ConferenceHubPage() {
       e.preventDefault();
       const trimmedName = name.trim();
       const trimmedContact = contact.trim();
+      const trimmedNotes = leadNotes.trim();
       if (!trimmedName || !trimmedContact) {
         triggerHaptic("error");
         return;
@@ -399,7 +340,7 @@ export function ConferenceHubPage() {
       triggerWarp(2200);
 
       // 4. Reciprocal vCard contact dispatch
-      triggerVCardDownload(trimmedName, trimmedContact);
+      triggerVCardDownload();
 
       setStatus("submitting");
       setErrorMessage("");
@@ -413,24 +354,12 @@ export function ConferenceHubPage() {
         setStatus((s) => (s === "submitting" ? "success" : s));
       }, 2800);
 
-      const isEmail = contact.includes("@") && contact.includes(".") && !contact.trim().startsWith("@");
-      const formattedNotes = [
-        `[CONFERENCE HUB · CLIP IN RECIPROCAL DISPATCH]`,
-        `Name: ${name.trim()}`,
-        `Contact (Phone / TG / Email): ${contact.trim()}`,
-        `Session State: ${telemetry?.sessionState || "First Visit"}`,
-        `Scan Timestamp: ${telemetry?.timestampFormatted || new Date().toISOString()} (${telemetry?.timeZone || "UTC"})`,
-        `Viewport & Screen: ${telemetry?.viewport || "Mobile"} (Screen: ${telemetry?.screenResolution || ""}, ${telemetry?.orientation || ""})`,
-        `Browser Locale: ${telemetry?.locale || "unknown"} (Languages: ${telemetry?.languages || ""})`,
-        `Preferred Hub Language: ${telemetry?.hubLang || lang.toUpperCase()}`,
-        `Click ID (Lead Token): ${telemetry?.clickId || session.clickId || session.visitorId}`,
-        `User-Agent: ${telemetry?.userAgent || (typeof navigator !== "undefined" ? navigator.userAgent : "unknown")}`,
-      ].join("\n");
+      const isEmail = trimmedContact.includes("@") && trimmedContact.includes(".") && !trimmedContact.startsWith("@");
 
       const payload = {
-        name: name.trim(),
-        email: isEmail ? contact.trim() : "conference-lead@upraiser.co.uk",
-        phone: !isEmail ? contact.trim() : "",
+        name: trimmedName,
+        email: isEmail ? trimmedContact : "conference-lead@upraiser.co.uk",
+        phone: !isEmail ? trimmedContact : "",
         appId: "Conference Lead",
         geos: "Tier-1 / Conference",
         companyType: "Direct Operator Contact",
@@ -439,7 +368,7 @@ export function ConferenceHubPage() {
         clickId: session.clickId || session.visitorId,
         visitorId: session.visitorId,
         telemetry,
-        notes: formattedNotes,
+        notes: trimmedNotes,
       };
 
       try {
@@ -462,11 +391,11 @@ export function ConferenceHubPage() {
         const accessKey = "260b2ece-07ce-4a41-8136-88bb30545e23";
         const fd = new FormData();
         fd.append("access_key", accessKey);
-        fd.append("subject", `Conference Lead (${telemetry?.sessionState?.includes("Repeat") ? "REPEAT" : "CLIP IN"}): ${name.trim()} · ${contact.trim()}`);
-        fd.append("from_name", name.trim());
-        fd.append("email", isEmail ? contact.trim() : "conference-lead@upraiser.co.uk");
-        fd.append("phone_or_telegram", contact.trim());
-        fd.append("notes", formattedNotes);
+        fd.append("subject", `Conference Lead (CLIP IN): ${trimmedName} · ${trimmedContact}`);
+        fd.append("from_name", trimmedName);
+        fd.append("email", isEmail ? trimmedContact : "conference-lead@upraiser.co.uk");
+        fd.append("phone_or_telegram", trimmedContact);
+        fd.append("notes", trimmedNotes || "No notes");
 
         const fbRes = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
@@ -493,7 +422,7 @@ export function ConferenceHubPage() {
         setErrorMessage(t.errNetwork);
       }
     },
-    [name, contact, lang, t]
+    [name, contact, leadNotes, lang, t]
   );
 
   return (
@@ -626,7 +555,7 @@ export function ConferenceHubPage() {
                   name="contact"
                   id="hub-contact"
                   autoComplete="tel email"
-                  enterKeyHint="send"
+                  enterKeyHint="next"
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck={false}
@@ -635,6 +564,18 @@ export function ConferenceHubPage() {
                   placeholder={t.fieldContact}
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
+                  className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
+                />
+                <input
+                  type="text"
+                  name="notes"
+                  id="hub-notes"
+                  enterKeyHint="send"
+                  autoCapitalize="sentences"
+                  placeholder={t.fieldNotes || "NOTES"}
+                  value={leadNotes}
+                  onChange={(e) => setLeadNotes(e.target.value)}
+                  dir="auto"
                   className="w-full min-h-[46px] bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#FECF09]/60 transition-colors"
                 />
 
@@ -818,10 +759,7 @@ export function ConferenceHubPage() {
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <Link
               to={`/deck?lang=${lang}`}
-              onClick={() => {
-                triggerHaptic("light");
-                trackAction("deck_view", 0, { action: "deck_card_clicked", lang });
-              }}
+              onClick={() => triggerHaptic("light")}
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>

@@ -61,35 +61,37 @@ function formatShortVisitorId(id: string): string {
   return `usr_${clean || "anon"}`;
 }
 
-const HIGH_PRIORITY_EVENTS = new Set([
-  "vcard_download",
-  "lead_submit",
-  "clip_in",
-  "form_submit",
+// Strict whitelist of explicit human actions that trigger a Telegram message.
+// Background noise (session_end, page_scroll, heartbeat) is logged to DB only and NEVER spams Telegram.
+const TELEGRAM_ALLOWED_EVENTS = new Set([
+  "slide_view",
+  "deck_view",
   "deck_download",
-  "proof_click",
+  "contact_click",
+  "channel_click",
+  "vcf_download",
+  "vcard_download",
+  "return_visit",
+]);
+
+const HIGH_PRIORITY_EVENTS = new Set([
+  "vcf_download",
+  "vcard_download",
+  "deck_download",
   "contact_click",
   "channel_click",
   "return_visit",
-  "lead_identified",
 ]);
 
 const EMOJI_MAP: Record<string, string> = {
-  page_view: "👀",
   slide_view: "📊",
   deck_view: "📊",
-  heartbeat: "⏱",
-  page_scroll: "📜",
+  vcf_download: "📇",
   vcard_download: "📇",
-  lead_submit: "🔥",
-  clip_in: "🧗",
-  form_submit: "🚀",
   deck_download: "📥",
-  proof_click: "🔎",
   contact_click: "📲",
   channel_click: "📲",
   return_visit: "🔁",
-  lead_identified: "🎯",
 };
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
@@ -222,26 +224,22 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       }
     }
 
-    // 5. Anti-Spam Filtering:
-    // - For regular heartbeats: only push on significant engagement milestones (60s, 120s, 300s, 600s)
-    // - Drop rapid heartbeats (e.g. 10s, 20s, 30s) so chat stays clean
-    if (effectiveEvent === "heartbeat") {
-      const allowedMilestones = [60, 120, 300, 600, 1200];
-      const isMilestone = allowedMilestones.includes(durationSeconds);
-      if (!isMilestone) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false }));
-      }
+    // 5. Strict Event Whitelist & Anti-Spam Filtering:
+    // Only explicit human actions in TELEGRAM_ALLOWED_EVENTS are sent to Telegram.
+    // Background heartbeats, session_end, and scroll pings are logged to DB only.
+    if (!TELEGRAM_ALLOWED_EVENTS.has(effectiveEvent)) {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false }));
     }
 
-    // - For vcard_download: deduplicate rapid duplicate downloads within 30s
-    if (effectiveEvent === "vcard_download" && supabaseAdmin) {
+    // - For vcf_download / vcard_download: deduplicate rapid duplicate downloads within 30s
+    if ((effectiveEvent === "vcf_download" || effectiveEvent === "vcard_download") && supabaseAdmin) {
       try {
         const { data: recentVcf } = await supabaseAdmin
           .from("lead_activity_logs")
           .select("created_at")
           .eq("visitor_id", effectiveVisitorId)
-          .eq("event_type", "vcard_download")
+          .in("event_type", ["vcf_download", "vcard_download"])
           .order("created_at", { ascending: false })
           .limit(2);
 
@@ -256,54 +254,93 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       } catch {}
     }
 
+    // - For deck_view / slide_view: deduplicate identical slide views within 15s
+    if ((effectiveEvent === "deck_view" || effectiveEvent === "slide_view") && supabaseAdmin) {
+      try {
+        const currentSlideNum = metadata?.current_slide || metadata?.slide || 1;
+        const { data: recentSlides } = await supabaseAdmin
+          .from("lead_activity_logs")
+          .select("created_at, metadata")
+          .eq("visitor_id", effectiveVisitorId)
+          .in("event_type", ["deck_view", "slide_view"])
+          .order("created_at", { ascending: false })
+          .limit(2);
+
+        if (recentSlides && recentSlides.length >= 2) {
+          const prevSlideNum = recentSlides[1]?.metadata?.current_slide || recentSlides[1]?.metadata?.slide || 1;
+          const t0 = new Date(recentSlides[0].created_at).getTime();
+          const t1 = new Date(recentSlides[1].created_at).getTime();
+          if (prevSlideNum === currentSlideNum && Math.abs(t0 - t1) < 15 * 1000) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ ok: true, logged: loggedToDb, digestSent: false, reason: "dedup_slide_15s" }));
+          }
+        }
+      } catch {}
+    }
+
     // 6. Push Separation: Silent vs Loud
+    // Slide browsing is silent (no vibration); vCard, PDF download, messenger click, and return visit are loud!
     const isHighPriority = HIGH_PRIORITY_EVENTS.has(effectiveEvent);
-    const isSilent = !isHighPriority; // disable_notification: true for passive browsing
+    const isSilent = !isHighPriority;
 
-    // 7. Format Telegram Message
+    // 7. Format Unified Russian Telegram Message
     const icon = EMOJI_MAP[effectiveEvent] || "⚡️";
-    let eventTitle = effectiveEvent.replace(/_/g, " ").toUpperCase();
+    let eventTitle = "АКТИВНОСТЬ НА САЙТЕ";
 
-    if (effectiveEvent === "vcard_download") eventTitle = "СОХРАНЕНИЕ КОНТАКТА (.VCF)";
-    else if (effectiveEvent === "lead_submit" || effectiveEvent === "clip_in") eventTitle = "НОВЫЙ ЛИД · CLIP IN";
-    else if (effectiveEvent === "return_visit") eventTitle = "ПОВТОРНЫЙ ВИЗИТ";
-    else if (effectiveEvent === "slide_view" || effectiveEvent === "deck_view") {
+    if (effectiveEvent === "vcf_download" || effectiveEvent === "vcard_download") {
+      eventTitle = "СОХРАНЕНА ВИЗИТКА (.VCF)";
+    } else if (effectiveEvent === "return_visit") {
+      eventTitle = "ПОВТОРНЫЙ ВИЗИТ НА ХАБ";
+    } else if (effectiveEvent === "slide_view" || effectiveEvent === "deck_view") {
       const slideNum = metadata?.current_slide || metadata?.slide || "";
-      eventTitle = slideNum ? `СЛАЙД ${slideNum}/20` : "ПРОСМОТР ПРЕЗЕНТАЦИИ";
-    } else if (effectiveEvent === "proof_click") eventTitle = "ПРУФ ОТКРЫТ ИЗ ПИСЬМА";
-    else if (effectiveEvent === "contact_click") eventTitle = "КЛИК В МЕССЕНДЖЕР";
-    else if (effectiveEvent === "deck_download") eventTitle = "СКАЧИВАНИЕ MEDIA DECK (PDF)";
+      eventTitle = slideNum ? `ПРЕЗЕНТАЦИЯ · СЛАЙД ${slideNum}/20` : "ОТКРЫТА ПРЕЗЕНТАЦИЯ";
+    } else if (effectiveEvent === "contact_click" || effectiveEvent === "channel_click") {
+      eventTitle = "ПЕРЕХОД В МЕССЕНДЖЕР";
+    } else if (effectiveEvent === "deck_download") {
+      eventTitle = "СКАЧАНА ПРЕЗЕНТАЦИЯ (PDF)";
+    }
 
-    // Who formatting: anonymous hash vs deanonymized contact
+    // Lead identity formatting: anonymous hash vs deanonymized contact
     const hasNameOrContact = Boolean(resolvedLeadName || resolvedLeadContact);
     const who = hasNameOrContact
-      ? `<b>${escapeHtml(resolvedLeadName || resolvedLeadContact)}</b> ${resolvedLeadName && resolvedLeadContact ? `(${escapeHtml(resolvedLeadContact)}) ` : ""}<code>[${escapeHtml(shortId)}]</code>`
-      : `<code>[${escapeHtml(shortId)}]</code>`;
+      ? `<b>${escapeHtml(resolvedLeadName || resolvedLeadContact)}</b>${resolvedLeadName && resolvedLeadContact ? ` (${escapeHtml(resolvedLeadContact)})` : ""} · <code>[${escapeHtml(shortId)}]</code>`
+      : `Аноним · <code>[${escapeHtml(shortId)}]</code>`;
 
-    // Action / Context detail
-    let actionDetail = meta || metadata?.title || metadata?.slide_title || metadata?.channel || "";
+    // Action / Context detail in clean Russian
+    let actionDetail = "";
     if (effectiveEvent === "slide_view" || effectiveEvent === "deck_view") {
       const slideTitle = metadata?.slide_title || "";
-      actionDetail = slideTitle ? `Изучает: <i>${escapeHtml(slideTitle)}</i>` : `Слайд #${metadata?.current_slide || 1}`;
-    } else if (effectiveEvent === "vcard_download") {
-      actionDetail = "Добавил контакт Alex в адресную книгу смартфона";
+      const langTag = metadata?.lang ? ` (${String(metadata.lang).toUpperCase()})` : "";
+      actionDetail = slideTitle
+        ? `Смотрит слайд: «<i>${escapeHtml(slideTitle)}</i>»${escapeHtml(langTag)}`
+        : `Открыл интерактивный дек${escapeHtml(langTag)}`;
+    } else if (effectiveEvent === "vcf_download" || effectiveEvent === "vcard_download") {
+      actionDetail = "Сохранил контакт Alex в адресную книгу смартфона";
     } else if (effectiveEvent === "return_visit") {
-      const idleMin = metadata?.idleMinutes ? `спустя ${metadata.idleMinutes} мин` : "повторно";
-      actionDetail = `Вернулся на платформу (${idleMin}) · ${sessionState || "Сессия #2+"}`;
-    } else if (effectiveEvent === "heartbeat") {
-      const min = Math.round(durationSeconds / 60);
-      actionDetail = `Активное время на странице: ${durationSeconds}с (~${min} мин)`;
-    } else if (effectiveEvent === "contact_click") {
-      const target = metadata?.target || metadata?.channel || "Direct";
-      actionDetail = `Переход по кнопке: ${escapeHtml(target)}`;
+      const visitNum = metadata?.visitCount || 2;
+      const idleMin = metadata?.idleMinutes ? ` (спустя ${metadata.idleMinutes} мин)` : "";
+      actionDetail = `Вернулся на /connect · Визит #${visitNum}${idleMin}`;
+    } else if (effectiveEvent === "contact_click" || effectiveEvent === "channel_click") {
+      const rawChannel = String(metadata?.channel || "");
+      const target = metadata?.target || "Direct";
+      const channelLabel = rawChannel.includes("telegram")
+        ? `Telegram (${target})`
+        : rawChannel.includes("whatsapp")
+        ? `WhatsApp (${target})`
+        : rawChannel.includes("email")
+        ? `Email (${target})`
+        : `${rawChannel || "Мессенджер"} (${target})`;
+      actionDetail = `Нажал на кнопку связи: <b>${escapeHtml(channelLabel)}</b>`;
+    } else if (effectiveEvent === "deck_download") {
+      const onSlide = metadata?.current_slide ? ` (со слайда ${metadata.current_slide}/20)` : "";
+      actionDetail = `Скачал оригинал PDF-презентации${onSlide}`;
     }
 
     const lines: string[] = [
       `${icon} <b>${eventTitle}</b>`,
-      `👤 <b>Who:</b> ${who}`,
-      actionDetail ? `📌 <b>Action:</b> ${actionDetail}` : null,
-      `📍 <b>Geo:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
-      effectiveClickId && effectiveClickId !== effectiveVisitorId ? `🎯 <b>Click ID:</b> <code>${escapeHtml(effectiveClickId)}</code>` : null,
+      `👤 <b>Лид:</b> ${who}`,
+      actionDetail ? `📌 <b>Действие:</b> ${actionDetail}` : null,
+      `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
     ].filter(Boolean) as string[];
 
     const tgText = lines.join("\n");

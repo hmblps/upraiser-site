@@ -524,7 +524,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     // 3. Send automated High-End UX Snapshots dossier directly to the lead (1 lead = 1 Resend email)
     // Internal team alerts are routed 100% to Telegram IMS2026 supergroup (0 Resend calls).
     let leadTargetEmail = (email || "").trim();
-    if (!leadTargetEmail || leadTargetEmail === "conference-lead@upraiser.co.uk") {
+    if (!leadTargetEmail || leadTargetEmail === "conference-lead@upraiser.co.uk" || leadTargetEmail === "revisit-alert@upraiser.co.uk") {
       if (phone && phone.includes("@") && phone.includes(".")) {
         leadTargetEmail = phone.trim();
       } else if (cleanContact && cleanContact.includes("@") && cleanContact.includes(".")) {
@@ -532,10 +532,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       }
     }
 
+    const EMAIL_ASCII_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const isValidLeadEmail =
+      !isRepeatAlert &&
       Boolean(leadTargetEmail) &&
-      leadTargetEmail.includes("@") &&
-      leadTargetEmail.includes(".") &&
+      EMAIL_ASCII_REGEX.test(leadTargetEmail) &&
       !leadTargetEmail.includes("conference-lead") &&
       !leadTargetEmail.includes("revisit-alert");
 
@@ -585,37 +586,66 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
     if (tgToken && tgChatId) {
       try {
-        const tgHeader = isRepeatAlert
-          ? `<b>🔁 [HUB REVISIT ALERT] Лид вернулся на /connect!</b>`
-          : isConference
-          ? `<b>🧗 [НОВЫЙ ЛИД · CLIP IN] Лид оставил контакты!</b>`
-          : `<b>🚀 [НОВАЯ ЗАЯВКА НА ПИЛОТ]</b>`;
+        const rawNotes = (notes || "").trim();
+        const isLegacyFootprintDump =
+          rawNotes.startsWith("[CONFERENCE HUB") || rawNotes.startsWith("[REPEAT HUB");
+        const cleanUserNote = isLegacyFootprintDump ? "" : rawNotes;
 
-        const filesSection = rawFiles.length > 0
-          ? `\n📎 <b>Файлы (${rawFiles.length}):</b>\n` +
-            rawFiles.map((f: any) => `  • <a href="${escapeHtml(f.url || "")}">${escapeHtml(f.name || "Файл")}</a> ${f.size ? `(${Math.round(f.size / 1024)} KB)` : ""}`).join("\n")
-          : "";
+        const shortIdMatch = String(visitorId || effectiveClickId || "").match(/_([a-z0-9]{4,6})$/i);
+        const shortId = shortIdMatch
+          ? `usr_${shortIdMatch[1].toLowerCase()}`
+          : `usr_${String(visitorId || "anon").replace(/^hub_/, "").slice(0, 6).toLowerCase()}`;
 
         const emailDossierStatus = isValidLeadEmail
-          ? (autoresponderSent
-              ? `✅ Отправлен (Dossier + Deck) на <code>${escapeHtml(leadTargetEmail)}</code>`
-              : `⚠️ Ошибка отправки на <code>${escapeHtml(leadTargetEmail)}</code> (${escapeHtml(autoresponderError || "check logs")})`)
-          : `ℹ️ Email не указан (только мессенджер / телефон)`;
+          ? autoresponderSent
+            ? `✅ Отправлено на <code>${escapeHtml(leadTargetEmail)}</code>`
+            : `⚠️ Ошибка Resend для <code>${escapeHtml(leadTargetEmail)}</code> (${escapeHtml((autoresponderError || "check logs").slice(0, 80))})`
+          : `ℹ️ Не отправлялось (указан телефон / мессенджер)`;
 
-        const tgText =
-          `${tgHeader}\n\n` +
-          `👤 <b>Имя:</b> ${escapeHtml(cleanName)}\n` +
-          `📱 <b>Контакт:</b> ${escapeHtml(cleanContact)}\n` +
-          `📨 <b>Resend Email:</b> ${emailDossierStatus}\n` +
-          `📍 <b>Гео:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}\n` +
-          (effectiveClickId ? `🎯 <b>Click ID:</b> <code>${escapeHtml(effectiveClickId)}</code>\n` : "") +
-          (telemetry?.hubLang ? `🌐 <b>Язык хаба:</b> ${escapeHtml(telemetry.hubLang)}\n` : "") +
-          (telemetry?.sessionState ? `🏷 <b>Статус:</b> ${escapeHtml(telemetry.sessionState)}\n` : "") +
-          (telemetry?.viewport ? `📱 <b>Экран:</b> ${escapeHtml(telemetry.viewport)}\n` : "") +
-          (!isConference && companyType ? `🏢 <b>Тип:</b> ${escapeHtml(companyType)} (${escapeHtml(companySize)})\n` : "") +
-          (!isConference && monthlyBudget ? `💰 <b>Бюджет:</b> ${escapeHtml(monthlyBudget)}\n` : "") +
-          filesSection +
-          `\n\n<b>Footprint & Notes:</b>\n<code>${escapeHtml((notes || "No notes").slice(0, 600))}</code>`;
+        const filesSection =
+          rawFiles.length > 0
+            ? `📎 <b>Файлы (${rawFiles.length}):</b> ` +
+              rawFiles
+                .map(
+                  (f: any) =>
+                    `<a href="${escapeHtml(f.url || "")}">${escapeHtml(f.name || "Файл")}</a>${
+                      f.size ? ` (${Math.round(f.size / 1024)} KB)` : ""
+                    }`
+                )
+                .join(", ")
+            : null;
+
+        let tgLines: Array<string | null> = [];
+
+        if (isConference) {
+          const visitNum = telemetry?.visitCount || 1;
+          const langCode = telemetry?.hubLang ? telemetry.hubLang.split(" ")[0] : "EN";
+          tgLines = [
+            `🧗 <b>НОВЫЙ КОНТАКТ · /CONNECT</b>`,
+            ``,
+            `👤 <b>Имя:</b> <b>${escapeHtml(cleanName)}</b>`,
+            `📱 <b>Контакт:</b> <code>${escapeHtml(cleanContact)}</code>`,
+            cleanUserNote ? `📝 <b>Заметка:</b> <i>${escapeHtml(cleanUserNote)}</i>` : null,
+            `📨 <b>Письмо с пруфами:</b> ${emailDossierStatus}`,
+            `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
+            `🏷 <b>Сессия:</b> Визит #${visitNum} · Язык: ${escapeHtml(langCode)} · <code>[${escapeHtml(shortId)}]</code>`,
+          ];
+        } else {
+          tgLines = [
+            `🚀 <b>ЗАЯВКА НА ПИЛОТ · САЙТ</b>`,
+            ``,
+            `👤 <b>Имя:</b> <b>${escapeHtml(cleanName)}</b>`,
+            `📱 <b>Email:</b> <code>${escapeHtml(cleanContact)}</code>`,
+            `📲 <b>Приложение:</b> ${escapeHtml(appId)}${geos ? ` (${escapeHtml(geos)})` : ""}`,
+            `🏢 <b>Профиль:</b> ${escapeHtml(companyType)} (${escapeHtml(companySize)}) · Бюджет: ${escapeHtml(monthlyBudget)}`,
+            cleanUserNote ? `📝 <b>Заметка:</b> <i>${escapeHtml(cleanUserNote)}</i>` : null,
+            filesSection,
+            `📨 <b>Письмо с пруфами:</b> ${emailDossierStatus}`,
+            `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
+          ];
+        }
+
+        const tgText = tgLines.filter((line) => line !== null).join("\n");
 
         await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
           method: "POST",

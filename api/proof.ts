@@ -166,13 +166,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   if (tgToken && tgChatId) {
     try {
       const tgText =
-        `🔎 <b>[ПРУФ ОТКРЫТ ИЗ ПИСЬМА]</b>\n\n` +
-        `👤 <b>Лид:</b> ${lead ? `<b>${escapeHtml(lead)}</b>` : "<code>anon / direct</code>"}\n` +
+        `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА</b>\n\n` +
+        `👤 <b>Лид:</b> ${lead ? `<b>${escapeHtml(lead)}</b>` : "Аноним (прямая ссылка)"}\n` +
         `📊 <b>Кейс:</b> ${escapeHtml(proof.brand)} · ${escapeHtml(proof.report)}\n` +
         `📈 <b>Метрика:</b> ${escapeHtml(proof.metric)}\n` +
-        `🏷 <b>Категория:</b> ${escapeHtml(proof.category)}\n` +
-        `📍 <b>Гео:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}\n\n` +
-        `🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть оригинал пруфа</a>`;
+        `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}\n\n` +
+        `🔗 <a href="${escapeHtml(proof.fileUrl)}">Открыть оригинал пруфа ↗</a>`;
 
       await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
         method: "POST",
