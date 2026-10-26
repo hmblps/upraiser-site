@@ -60,6 +60,8 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const altitudeRef = useRef<HTMLSpanElement>(null);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
+  const momentumLockUntilRef = useRef<number>(0);
 
   const [phase, setPhase] = useState<"climbing" | "summit">("climbing");
   const [goldenVisible, setGoldenVisible] = useState(false);
@@ -203,11 +205,15 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     if (progressBarRef.current) {
       progressBarRef.current.style.width = "0%";
     }
+    if (contentContainerRef.current) {
+      contentContainerRef.current.scrollTop = 0;
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
     setReplayKey((k) => k + 1);
     v.play().catch(() => {});
   }, [theme]);
 
-  const handleSkipToSummit = useCallback((e?: React.MouseEvent) => {
+  const handleSkipToSummit = useCallback((e?: React.MouseEvent | React.SyntheticEvent) => {
     e?.stopPropagation();
     if (phaseRef.current === "summit") return;
     const v = videoRef.current;
@@ -224,7 +230,87 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
     if (progressBarRef.current) {
       progressBarRef.current.style.width = "100%";
     }
+    if (contentContainerRef.current) {
+      contentContainerRef.current.scrollTop = 0;
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [pauseTime, theme]);
+
+  // Quick scroll-to-advance gesture during climbing phase (wheel, touch swipe down, arrow keys)
+  // Non-passive with preventDefault() and inertia absorption so the page NEVER descends to the footer
+  useEffect(() => {
+    let touchStartY = 0;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Absorb residual momentum wheel events after skipping to summit
+      if (Date.now() < momentumLockUntilRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.scrollTo({ top: 0, behavior: "instant" });
+        return;
+      }
+
+      if (phaseRef.current === "climbing") {
+        if (e.deltaY > 8) {
+          e.preventDefault();
+          e.stopPropagation();
+          momentumLockUntilRef.current = Date.now() + 750;
+          handleSkipToSummit();
+        }
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches?.[0]) {
+        touchStartY = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!e.touches?.[0]) return;
+      const currentY = e.touches[0].clientY;
+      const dy = touchStartY - currentY;
+
+      if (Date.now() < momentumLockUntilRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.scrollTo({ top: 0, behavior: "instant" });
+        return;
+      }
+
+      if (phaseRef.current === "climbing") {
+        // User swiping up to scroll down
+        if (dy > 20) {
+          e.preventDefault();
+          e.stopPropagation();
+          momentumLockUntilRef.current = Date.now() + 750;
+          handleSkipToSummit();
+        }
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (phaseRef.current === "climbing") {
+        if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+          handleSkipToSummit();
+        }
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleSkipToSummit]);
 
   return (
     <div
@@ -319,6 +405,7 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
 
       {/* Main Content Area */}
       <div
+        ref={contentContainerRef}
         className="relative z-20 w-full h-[100dvh] overflow-y-auto overscroll-contain site-scrollbar pt-14 sm:pt-16 lg:pt-20 pb-36 sm:pb-40"
         style={{
           paddingLeft: "var(--hero-rail-left, clamp(1.25rem, 4vw, 3rem))",
@@ -530,6 +617,9 @@ export function CreativeStudioVideo({ videoSrc, theme }: CreativeStudioVideoProp
                     style={{ width: "0%" }}
                   />
                 </div>
+                <span className="text-accent text-[9px] uppercase tracking-wider pl-1 font-semibold group-hover:underline hidden sm:inline">
+                  Scroll or tap
+                </span>
               </motion.div>
             ) : (
               <motion.div

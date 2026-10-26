@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.95-stable`  
+**Tag:** `v2.2.96-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,7 +9,13 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Pristine Creative Studio Baseline & Targeted Post-Brief Victory Equalization (v2.2.95-stable):**
+1. **Creative Studio Scroll-to-Advance & Footer Scroll Lock (v2.2.96-stable):**
+   - Restored the gesture to quickly scroll down (mouse wheel, touch swipe down, Down arrow, PageDown, Space) during the intro climbing video (`phase === "climbing"`) to instantly advance the video to the cards and "Request the Pilot" button (`phase === "summit"`).
+   - Footer Scroll Lock: Intercepted non-passively with `preventDefault()` and `stopPropagation()`. Attached momentum absorption for 750ms after skipping to absorb trackpad/wheel inertia, keeping `window.scrollTo({ top: 0, behavior: "instant" })` locked at top.
+   - Excluded `/craft` from rendering `<Footer />` in `SiteLayout.tsx` (`!viewportRoute && pathname !== "/craft"`), guaranteeing zero document overflow beyond 100dvh and making it physically impossible for momentum scrolling to reach the footer.
+   - Preserved 100% pristine baseline for background video files (`public/creative/light-loop.mp4` and `dark-loop.mp4`).
+   - Restored subtle "Scroll or tap" discovery cue in the bottom telemetry Dynamic Island pill.
+2. **Pristine Creative Studio Baseline & Targeted Post-Brief Victory Equalization (v2.2.95-stable):**
    - **Videos BEFORE the form (Creative Studio / `/craft`):** 100% restored to original untouched state from `c7e52d12`. Zero code modifications, zero scroll interceptors, zero changes to `light-loop.mp4` or `dark-loop.mp4`.
    - **Victory videos AFTER the form (`/contact/sent`):**
      - Completely eliminated the abrupt entrance snap/click ("щелчок") via preloading on `/contact`, removing the glitchy HTML5 `poster` attribute, removing artificial seek resets, and transitioning opacity smoothly (750ms) strictly once `onPlaying` is active.

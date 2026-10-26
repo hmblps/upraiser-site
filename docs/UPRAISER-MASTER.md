@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 26 October 2026 (v2.2.95-stable)  
+> **Updated:** 26 October 2026 (v2.2.96-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** Pristine original Creative Studio pre-form baseline + Equalized 5.0s click-free victory video flow  
+> **HEAD:** Creative Studio scroll-to-advance with footer scroll lock + Equalized 5.0s click-free victory video flow  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`
@@ -1487,6 +1487,12 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - Night Victory Video (`public/creative/studio-success-night.mp4`): Re-encoded from second 4.0 to second 12.0 of `Ночное.mov` (8.00s total duration, CRF 21, H.264 `+faststart`). Begins with the climber on the summit under the aurora borealis and culminates in the camera rising to reveal the vast, snowy mountain panorama in the final seconds before freezing.
     - Day Victory Video (`public/creative/studio-success-day.mp4`): Synchronized to an identical 8.00s duration with the full golden summit sunburst, ensuring identical timing across both themes.
     - Confirmation Revelation Timing: Adjusted progressive card revelation to 5.2s, giving viewers 5.2 seconds of undisturbed camera ascent before the confirmation message gently floats into view, followed by a 2.8s calm summit freeze. Telemetry indicator pill updated to `SUMMIT REACHED · 8.0S`.
+  - **Creative Studio Scroll-to-Advance & Footer Scroll Lock (v2.2.96-stable):**
+    - Restored the gesture to quickly scroll down (mouse wheel, touch swipe down, Down arrow, PageDown, Space) during the intro climbing video (`phase === "climbing"`) to instantly advance the video to the cards and "Request the Pilot" button (`phase === "summit"`).
+    - Footer Scroll Lock: Intercepted non-passively with `preventDefault()` and `stopPropagation()`. Attached momentum absorption for 750ms after skipping to absorb trackpad/wheel inertia, keeping `window.scrollTo({ top: 0, behavior: "instant" })` locked at top.
+    - Excluded `/craft` from rendering `<Footer />` in `SiteLayout.tsx` (`!viewportRoute && pathname !== "/craft"`), guaranteeing zero document overflow beyond 100dvh and making it physically impossible for momentum scrolling to reach the footer.
+    - Preserved 100% pristine baseline for background video files (`public/creative/light-loop.mp4` and `dark-loop.mp4`).
+    - Restored subtle "Scroll or tap" discovery cue in the bottom telemetry Dynamic Island pill.
 
 
 

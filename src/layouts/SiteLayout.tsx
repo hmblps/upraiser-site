@@ -150,7 +150,7 @@ export function SiteLayout() {
           {viewportRoute ? <ViewportChrome /> : null}
         </div>
         {pathname === "/" && <GlobalSnowfall />}
-        {!viewportRoute ? (
+        {!viewportRoute && pathname !== "/craft" ? (
           <LazySection minHeight="20dvh">
             <Footer />
           </LazySection>
