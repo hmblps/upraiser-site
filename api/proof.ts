@@ -38,7 +38,7 @@ const PROOFS: Record<
     brand: "Barron’s (Dow Jones)",
     report: "Protect360 Report",
     metric: "4,909 Clean Installs · 0.00% Fraud Rate (only 4 blocked attributions)",
-    fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png?v=2",
     category: "Tier-1 Media",
   },
   marketwatch: {
@@ -87,7 +87,7 @@ const PROOFS: Record<
     brand: "Full Snapshot Archive (.zip)",
     report: "All 8 Raw Performance Dashboards",
     metric: "15 MB uncompressed ZIP bundle",
-    fileUrl: "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip",
+    fileUrl: "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip?v=2",
     category: "Archive Bundle",
   },
   deck: {

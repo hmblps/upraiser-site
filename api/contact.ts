@@ -96,7 +96,7 @@ export const SNAPSHOT_GROUPS = [
         reportType: "Protect360 Report",
         metric: "4,909 Clean Installs · 0.00% Fraud Rate (only 4 blocked real-time attributions)",
         iconUrl: "https://upraiser.co.uk/snapshots/icons/barrons.png",
-        fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png",
+        fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png?v=2",
       },
       {
         id: "marketwatch",
@@ -156,7 +156,7 @@ export const SNAPSHOT_GROUPS = [
   },
 ];
 
-export const ZIP_ARCHIVE_URL = "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip";
+export const ZIP_ARCHIVE_URL = "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip?v=2";
 
 export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: string): string {
   const cleanName = leadName?.trim() ? escapeHtml(leadName.trim()) : "";
