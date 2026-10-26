@@ -1,10 +1,10 @@
 # UPRAISER — Master Documentation (single file)
 
 > **Единый документ** для человека и ИИ. Других проектных `.md` нет — только этот файл + короткий `README.md` на GitHub.  
-> **Updated:** 26 October 2026 (v2.2.99-stable)  
+> **Updated:** 26 October 2026 (v2.2.100-stable)  
 > **Local path:** `НОВЫЙ САЙТ UPRAISER`  
 > **Production:** [https://upraiser.co.uk](https://upraiser.co.uk) · Vercel `upraiser-site-v2`  
-> **HEAD:** Reciprocal vCard Flow Restored + Zero-Asset Overhead Confirmation + Inter Typography for Success Badge  
+> **HEAD:** Email Dossier Hub Design Parity (/connect) + Official Credcol & Fetch Icons + Pure Air Layout  
 > **Copy SOT (код):** `src/data/liveContent.ts` · `src/data/cases.ts` · `src/data/innerPagesData.ts` · `src/data/clients.ts`  
 > **Brand doctrine:** §4 ниже (файл `docs/BRAND-ASCENT.md` удалён).
 > **Glass SOT:** `src/data/deviceScreens.ts` · painters `src/lib/tabletGlassAnim.ts`
@@ -1502,10 +1502,11 @@ We successfully debugged a major issue where the 3D TV component would cause a m
     - 1-Click Master Archive: High-contrast `Download All (.zip · 15 MB)` button linking to `public/snapshots/UPRAISER_Performance_Snapshots.zip`.
     - 7 High-Resolution Brand Icons: Bundled in `public/snapshots/icons/` (WSJ, Barron's, MarketWatch, Fetch, Vantage, Underdog, Credcol).
     - Factual Ogilvy Copywriting: Concise punchy intro and closing offer: *"Let’s perform a test with similar unit economics for Your app."*
-  - **Reciprocal vCard Flow Restored & Zero-Overhead Asset Confirmation (v2.2.99-stable):**
-    - Restored reciprocal vCard dispatch on "Clip In" for seamless mobile contact exchange (`Alex_Upraiser.vcf`, 47 KB).
-    - Preserved Inter font typography on `✓ COORDINATES RECEIVED` (`font-display font-bold tracking-wider`).
-    - Verified zero client-side attachment overhead: the 8 dashboard snapshots (17.4 MB) and `.zip` archive remain purely cloud-hosted on Edge CDN and linked via email, with zero unwanted downloads on site visit or form submit.
+  - **Email Dossier /connect Design Parity & Official Store Icons (v2.2.100-stable):**
+    - Email Header Parity with `/connect`: Rendered official UPRAISER icon mark (`upraiser-logo.png`, 32x32 rounded container) + clean uppercase `UPRAISER` wordmark.
+    - Stripped redundant subheadings: removed `"London · since 2017 · Verified Traffic Infrastructure"` and removed boilerplate instructions (`"Reply directly to this email with Your target GEOs..."`).
+    - Airy Obsidian Wine Palette: outer canvas `#090204`, inner card `#0f0407` with `border: 1px solid rgba(255, 255, 255, 0.08)`, glass pill rows `rgba(255, 255, 255, 0.025)`, and red accent pill button `#e63558`.
+    - Official Google Play Store Icons: replaced Credcol and Fetch Rewards icons with verified store assets at `public/snapshots/icons/credcol.png` and `public/snapshots/icons/fetch.png`.
 
 
 

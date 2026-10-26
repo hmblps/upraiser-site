@@ -1,7 +1,7 @@
 # UPRAISER PROJECT STATE BACKUP
 **Date:** October 26, 2026  
 **Commit:** HEAD / `main`  
-**Tag:** `v2.2.99-stable`  
+**Tag:** `v2.2.100-stable`  
 **Target Environment:** Production [https://upraiser.co.uk](https://upraiser.co.uk) (Vercel `upraiser-site-v2`)
 
 ---
@@ -9,10 +9,11 @@
 ## 1. Executive Summary: Creative Studio, Victory Flow & Connect Hub Hardening
 
 Between October 24 and October 26, 2026, the project underwent significant feature additions and production hardening:
-1. **Reciprocal vCard Flow Restored & Zero-Overhead Asset Confirmation (v2.2.99-stable):**
-   - Restored reciprocal vCard dispatch on "Clip In" for seamless mobile contact exchange (`Alex_Upraiser.vcf`, 47 KB).
-   - Preserved Inter font typography on `✓ COORDINATES RECEIVED` (`font-display font-bold tracking-wider`).
-   - Verified zero client-side attachment overhead: the 8 dashboard snapshots (17.4 MB) and `.zip` archive remain purely cloud-hosted on Edge CDN and linked via email, with zero unwanted downloads on site visit or form submit.
+1. **Email Dossier /connect Design Parity & Official Store Icons (v2.2.100-stable):**
+   - Email Header Parity with `/connect`: Rendered official UPRAISER icon mark (`upraiser-logo.png`, 32x32 rounded container) + clean uppercase `UPRAISER` wordmark.
+   - Stripped redundant subheadings: removed `"London · since 2017 · Verified Traffic Infrastructure"` and removed boilerplate instructions (`"Reply directly to this email with Your target GEOs..."`).
+   - Airy Obsidian Wine Palette: outer canvas `#090204`, inner card `#0f0407` with `border: 1px solid rgba(255, 255, 255, 0.08)`, glass pill rows `rgba(255, 255, 255, 0.025)`, and red accent pill button `#e63558`.
+   - Official Google Play Store Icons: replaced Credcol and Fetch Rewards icons with verified store assets at `public/snapshots/icons/credcol.png` and `public/snapshots/icons/fetch.png`.
 2. **Automated High-End UX Performance Snapshot Autoresponder (v2.2.97-stable):**
    - Instant Delivery to Lead: When a visitor submits their email via `/contact` or conference hub, an automated high-end dossier email is immediately sent to their inbox via Resend.
    - Airy, Non-Slop Swiss Dark Email Layout: High-contrast, spacious, clean aesthetic with zero AI clichés. Built with inline table-based styles for 100% cross-client rendering (Gmail, Apple Mail, Outlook).
