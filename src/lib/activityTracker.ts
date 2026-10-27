@@ -426,6 +426,7 @@ export function getOrInitHubSession(): HubSessionState {
   try {
     // Inspect URL for external click_id, clickid, cid, or token (ad campaign / conference badge)
     let urlClickId: string | undefined;
+    let urlLeadContact: string | undefined;
     try {
       const url = new URL(window.location.href);
       urlClickId =
@@ -434,6 +435,14 @@ export function getOrInitHubSession(): HubSessionState {
         url.searchParams.get("cid") ||
         url.searchParams.get("token") ||
         undefined;
+      const rawLeadParam = (url.searchParams.get("lead") || url.searchParams.get("email") || "").trim();
+      if (rawLeadParam && !isOwnerEmailOrContact(rawLeadParam)) {
+        urlLeadContact = rawLeadParam;
+        url.searchParams.delete("lead");
+        url.searchParams.delete("email");
+        const cleanQuery = url.searchParams.toString();
+        window.history.replaceState({}, "", url.pathname + (cleanQuery ? `?${cleanQuery}` : ""));
+      }
     } catch {}
 
     // Check if operator or tester requested a fresh session via ?reset=1 or ?fresh=1
@@ -477,13 +486,18 @@ export function getOrInitHubSession(): HubSessionState {
         parsed.clickId = parsed.visitorId;
       }
 
+      const isOwner = checkAndSyncOwnerMode(parsed);
+      if (urlLeadContact && !isOwner && !parsed.savedContact) {
+        parsed.savedContact = urlLeadContact;
+      }
+
       localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
-      checkAndSyncOwnerMode(parsed);
       return parsed;
     }
 
     const genToken = generateTimestampedVisitorId(new Date(now));
     const activeClickId = urlClickId || genToken;
+    const isOwner = checkAndSyncOwnerMode();
 
     const newSession: HubSessionState = {
       visitorId: genToken,
@@ -492,12 +506,12 @@ export function getOrInitHubSession(): HubSessionState {
       firstVisitTime: now,
       lastVisitTime: now,
       lastActiveTime: now,
+      ...(urlLeadContact && !isOwner ? { savedContact: urlLeadContact } : {}),
       firstTrafficSource: detected.source,
       currentTrafficSource: detected.source,
       isInApp: detected.isInApp,
     };
     localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(newSession));
-    checkAndSyncOwnerMode(newSession);
     return newSession;
   } catch {
     const fallbackDetected = detectSmartTrafficSource();

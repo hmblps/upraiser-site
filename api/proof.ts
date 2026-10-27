@@ -17,6 +17,140 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
+interface ProofItem {
+  id: string;
+  brand: string;
+  shortLabel: string;
+  report: string;
+  metric: string;
+  iconUrl: string;
+  fileUrl: string;
+  category: string;
+}
+
+const PROOF_LIST: ProofItem[] = [
+  {
+    id: "wsj-oct-perf",
+    brand: "The Wall Street Journal",
+    shortLabel: "WSJ · Oct AF",
+    report: "October Performance (AF)",
+    metric: "9,167 Installs · 8,369 App Opens · 1,982 Unique Purchases (21.6% CR)",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/wsj.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/wsj-appsflyer-oct.png",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "wsj-oct-p360",
+    brand: "The Wall Street Journal",
+    shortLabel: "WSJ · Oct P360",
+    report: "October Protect360",
+    metric: "6,349+ Clean Installs · <=1% Fraud Rate across top sources",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/wsj.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360-oct.png",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "wsj",
+    brand: "The Wall Street Journal",
+    shortLabel: "WSJ · Sep P360",
+    report: "September Protect360",
+    metric: "~14,000 Clean Installs · <=1% Fraud Rate (0.13% on primary source)",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/wsj.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360.png",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "underdog",
+    brand: "Underdog Fantasy",
+    shortLabel: "Underdog · CRM",
+    report: "Partner Dashboard",
+    metric: "184 FTDs · Up to $137 Avg FTD & $441 Sum Deposit",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/underdog.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/underdog-fantasy.png",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "marketwatch-oct-perf",
+    brand: "MarketWatch",
+    shortLabel: "MarketWatch · Oct AF",
+    report: "October Performance (AF)",
+    metric: "964 Installs · 906 Roadblock Served · 138 Unique Purchases (14.3% CR)",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/marketwatch.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-appsflyer-oct.png",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "marketwatch",
+    brand: "MarketWatch",
+    shortLabel: "MarketWatch · Sep P360",
+    report: "September Protect360",
+    metric: "3,120 Clean Installs · 0.00% Fraud Rate across September 2026",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/marketwatch.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-protect360.png",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "barrons",
+    brand: "Barron’s (Dow Jones)",
+    shortLabel: "Barron’s · P360",
+    report: "Protect360 Report",
+    metric: "4,909 Clean Installs · 0.00% Fraud Rate (only 4 blocked attributions)",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/barrons.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png?v=2",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "fetch",
+    brand: "Fetch Rewards",
+    shortLabel: "Fetch · AF",
+    report: "AppsFlyer Performance",
+    metric: "6,815 Non-Organic Installs · 8.88% Install-to-Sign-Up CR",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/fetch.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/fetch-appsflyer.png",
+    category: "US Geo Campaigns",
+  },
+  {
+    id: "vantage",
+    brand: "Vantage Trading",
+    shortLabel: "Vantage · CRM",
+    report: "Partner Dashboard",
+    metric: "87.5% QFTD Conversion (133 QFTDs) · $122,500 Commission",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/vantage.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/vantage-trading.png",
+    category: "Tier1 & Tier2 Geo Campaigns",
+  },
+  {
+    id: "credcol-funnel",
+    brand: "Credcol (Fintech)",
+    shortLabel: "Credcol · Funnel",
+    report: "AppsFlyer Funnel",
+    metric: "13,015 Installs · 1,953 D1 Sign-ups · 1,777 Funnel Steps",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/credcol.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/credcol-funnel.png",
+    category: "Tier1 & Tier2 Geo Campaigns",
+  },
+  {
+    id: "credcol-audit",
+    brand: "Credcol (Fintech)",
+    shortLabel: "Credcol · P360",
+    report: "Protect360 Audit",
+    metric: "12,609 Verified Attributions · 0.00% Fraud Rate",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/credcol.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/credcol-protect360.png",
+    category: "Tier1 & Tier2 Geo Campaigns",
+  },
+  {
+    id: "autodoc",
+    brand: "Autodoc",
+    shortLabel: "Autodoc · AF",
+    report: "AppsFlyer Performance (Aug '26)",
+    metric: "28.77% D1 Retention · 55,486 Content Views · 2,229 Add-to-Carts · 121 Purchases",
+    iconUrl: "https://upraiser.co.uk/snapshots/icons/autodoc.png",
+    fileUrl: "https://upraiser.co.uk/snapshots/autodoc-appsflyer.png",
+    category: "Tier1 & Tier2 Geo Campaigns",
+  },
+];
+
 const PROOFS: Record<
   string,
   {
@@ -25,98 +159,31 @@ const PROOFS: Record<
     metric: string;
     fileUrl: string;
     category: string;
+    iconUrl?: string;
+    isSnapshot?: boolean;
   }
 > = {
-  "wsj-oct-perf": {
-    brand: "The Wall Street Journal",
-    report: "October Performance (AF)",
-    metric: "9,167 Installs · 8,369 App Opens · 1,982 Unique Purchases (21.6% CR)",
-    fileUrl: "https://upraiser.co.uk/snapshots/wsj-appsflyer-oct.png",
-    category: "US Geo Campaigns",
-  },
-  "wsj-oct-p360": {
-    brand: "The Wall Street Journal",
-    report: "October Protect360",
-    metric: "6,349+ Clean Installs · ≤1% Fraud Rate",
-    fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360-oct.png",
-    category: "US Geo Campaigns",
-  },
-  wsj: {
-    brand: "The Wall Street Journal",
-    report: "September Protect360",
-    metric: "~14,000 Clean Installs · ≤1% Fraud Rate (0.13% on primary source)",
-    fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360.png",
-    category: "US Geo Campaigns",
-  },
-  underdog: {
-    brand: "Underdog Fantasy",
-    report: "Partner Dashboard",
-    metric: "184 FTDs · Up to $137 Avg FTD & $441 Sum Deposit",
-    fileUrl: "https://upraiser.co.uk/snapshots/underdog-fantasy.png",
-    category: "US Geo Campaigns",
-  },
-  "marketwatch-oct-perf": {
-    brand: "MarketWatch",
-    report: "October Performance (AF)",
-    metric: "964 Installs · 906 Roadblock Served · 138 Unique Purchases (14.3% CR)",
-    fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-appsflyer-oct.png",
-    category: "US Geo Campaigns",
-  },
-  marketwatch: {
-    brand: "MarketWatch",
-    report: "September Protect360",
-    metric: "3,120 Clean Installs · 0.00% Fraud Rate across September 2026",
-    fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-protect360.png",
-    category: "US Geo Campaigns",
-  },
-  barrons: {
-    brand: "Barron’s (Dow Jones)",
-    report: "Protect360 Report",
-    metric: "4,909 Clean Installs · 0.00% Fraud Rate (only 4 blocked attributions)",
-    fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png?v=2",
-    category: "US Geo Campaigns",
-  },
-  fetch: {
-    brand: "Fetch Rewards",
-    report: "AppsFlyer Performance",
-    metric: "6,815 Non-Organic Installs · 8.88% Install-to-Sign-Up CR",
-    fileUrl: "https://upraiser.co.uk/snapshots/fetch-appsflyer.png",
-    category: "US Geo Campaigns",
-  },
-  vantage: {
-    brand: "Vantage Trading",
-    report: "Partner Dashboard",
-    metric: "87.5% QFTD Conversion (133 QFTDs) · $122,500 Commission",
-    fileUrl: "https://upraiser.co.uk/snapshots/vantage-trading.png",
-    category: "Tier1 & Tier2 Geo Campaigns",
-  },
-  "credcol-funnel": {
-    brand: "Credcol (Fintech)",
-    report: "AppsFlyer Funnel",
-    metric: "13,015 Installs · 1,953 D1 Sign-ups · 1,777 Funnel Steps",
-    fileUrl: "https://upraiser.co.uk/snapshots/credcol-funnel.png",
-    category: "Tier1 & Tier2 Geo Campaigns",
-  },
-  "credcol-audit": {
-    brand: "Credcol (Fintech)",
-    report: "Protect360 Audit",
-    metric: "12,609 Verified Attributions · 0.00% Fraud Rate",
-    fileUrl: "https://upraiser.co.uk/snapshots/credcol-protect360.png",
-    category: "Tier1 & Tier2 Geo Campaigns",
-  },
-  autodoc: {
-    brand: "Autodoc",
-    report: "AppsFlyer Performance (Aug '26)",
-    metric: "28.77% D1 Retention · 55,486 Content Views · 2,229 Add-to-Carts · 121 Purchases",
-    fileUrl: "https://upraiser.co.uk/snapshots/autodoc-appsflyer.png",
-    category: "Tier1 & Tier2 Geo Campaigns",
-  },
+  ...Object.fromEntries(
+    PROOF_LIST.map((item) => [
+      item.id,
+      {
+        brand: item.brand,
+        report: item.report,
+        metric: item.metric,
+        fileUrl: item.fileUrl,
+        category: item.category,
+        iconUrl: item.iconUrl,
+        isSnapshot: true,
+      },
+    ])
+  ),
   zip: {
     brand: "Full Snapshot Archive (.zip)",
     report: "All 12 Raw Performance Dashboards",
     metric: "22 MB uncompressed ZIP bundle",
     fileUrl: "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip?v=3",
     category: "Archive Bundle",
+    isSnapshot: false,
   },
   deck: {
     brand: "Media Deck (PDF)",
@@ -124,6 +191,7 @@ const PROOFS: Record<
     metric: "20 Slides · Multilingual Blueprint",
     fileUrl: "https://upraiser.co.uk/Upraiser_Traffic_Infrastructure.pdf",
     category: "Media Deck",
+    isSnapshot: false,
   },
 };
 
@@ -223,6 +291,750 @@ function isOwnerProofRequest(headers: Record<string, any>, lead: string): boolea
   return false;
 }
 
+function renderSnapshotViewerHtml(initialId: string, lead: string, isOwner: boolean): string {
+  const initialIndex = Math.max(
+    0,
+    PROOF_LIST.findIndex((item) => item.id === initialId)
+  );
+  const activeItem = PROOF_LIST[initialIndex] || PROOF_LIST[0];
+  const usItems = PROOF_LIST.filter((i) => i.category === "US Geo Campaigns");
+  const tierItems = PROOF_LIST.filter((i) => i.category === "Tier1 & Tier2 Geo Campaigns");
+  const encodedLead = lead && !isOwner ? encodeURIComponent(lead) : "";
+  const deckHref = `https://upraiser.co.uk/deck${encodedLead ? `?lead=${encodedLead}` : ""}`;
+  const connectHref = `https://upraiser.co.uk/connect${encodedLead ? `?lead=${encodedLead}` : ""}`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <title>${escapeHtml(activeItem.brand)} · ${escapeHtml(activeItem.report)} | UPRAISER</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      --accent: #e63558;
+      --accent-soft: #fff1f4;
+      --gold: #fecf09;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      min-height: 100dvh;
+    }
+    /* Sticky Top Header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px 16px;
+    }
+    .topbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      min-height: 44px;
+    }
+    .brand-logo {
+      height: 17px;
+      width: auto;
+      display: block;
+    }
+    .counter-pill {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-top {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 13px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: transform 0.16s ease, opacity 0.16s ease;
+    }
+    .btn-top:active {
+      transform: scale(0.97);
+    }
+    .btn-deck {
+      background: var(--surface-soft);
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+    }
+    .btn-pilot {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(230, 53, 88, 0.22);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 14px calc(32px + env(safe-area-inset-bottom, 0px)) 14px;
+    }
+
+    /* Active Case Info Header Card */
+    .case-header-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .case-meta-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 1 1 260px;
+      min-width: 0;
+    }
+    .case-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #ffffff;
+    }
+    .case-titles {
+      min-width: 0;
+      flex: 1;
+    }
+    .case-kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 3px;
+    }
+    .case-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .case-brand {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 0;
+    }
+    .case-report-badge {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-subtle);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+    }
+    .case-metric {
+      margin: 5px 0 0 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .nav-arrows {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      justify-content: space-between;
+    }
+    @media (min-width: 680px) {
+      .nav-arrows {
+        width: auto;
+        justify-content: flex-end;
+      }
+    }
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 14px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    @media (min-width: 680px) {
+      .btn-nav {
+        flex: initial;
+      }
+    }
+    .btn-nav:active {
+      transform: scale(0.97);
+    }
+
+    /* Stage Card & Zoom Toolbar */
+    .stage-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+      margin-bottom: 16px;
+    }
+    .zoom-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--surface-soft);
+      border-bottom: 1px solid var(--border);
+    }
+    .zoom-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-zoom {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn-zoom.active {
+      background: var(--text);
+      color: #ffffff;
+      border-color: var(--text);
+    }
+    .btn-zoom:active {
+      transform: scale(0.97);
+    }
+    .raw-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-decoration: none;
+    }
+    .stage-viewport {
+      position: relative;
+      width: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      background: #0f172a;
+      max-height: 78dvh;
+      text-align: center;
+    }
+    .stage-img {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      height: auto;
+      cursor: zoom-in;
+      user-select: none;
+      -webkit-user-drag: none;
+      transition: opacity 0.18s ease;
+    }
+    /* Zoom Mode 2x: Crisp readable columns with smooth horizontal pan */
+    .stage-viewport.zoom-2x {
+      text-align: left;
+    }
+    .stage-viewport.zoom-2x .stage-img {
+      width: 920px;
+      max-width: none;
+      cursor: grab;
+    }
+    @media (min-width: 768px) {
+      .stage-viewport.zoom-2x .stage-img {
+        width: 1850px;
+      }
+    }
+    /* Zoom Mode 3x: Deep inspection */
+    .stage-viewport.zoom-3x {
+      text-align: left;
+    }
+    .stage-viewport.zoom-3x .stage-img {
+      width: 1380px;
+      max-width: none;
+      cursor: grab;
+    }
+    @media (min-width: 768px) {
+      .stage-viewport.zoom-3x .stage-img {
+        width: 2560px;
+      }
+    }
+    .stage-hint {
+      padding: 8px 12px;
+      background: var(--surface-soft);
+      border-top: 1px solid var(--border);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-subtle);
+      text-align: center;
+    }
+
+    /* All 12 Snapshots Switcher Grid */
+    .switcher-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+      margin-bottom: 16px;
+    }
+    .group-block + .group-block {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .group-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 10px 0;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 8px;
+    }
+    .snap-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 48px;
+      padding: 8px 10px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .snap-btn:active {
+      transform: scale(0.98);
+    }
+    .snap-btn.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+    .snap-btn-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #ffffff;
+    }
+    .snap-btn-text {
+      min-width: 0;
+      flex: 1;
+    }
+    .snap-btn-brand {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .snap-btn-report {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-subtle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Hover rules strictly wrapped for fine pointers */
+    @media (hover: hover) and (pointer: fine) {
+      .btn-top:hover,
+      .btn-nav:hover,
+      .btn-zoom:hover,
+      .snap-btn:hover {
+        opacity: 0.88;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sticky Topbar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="${connectHref}" class="brand-left">
+        <img src="https://upraiser.co.uk/email-logo-2x.png" alt="UPRAISER" class="brand-logo" />
+        <span class="counter-pill" id="ui-counter">${initialIndex + 1} / ${PROOF_LIST.length}</span>
+      </a>
+      <div class="top-actions">
+        <a href="${deckHref}" class="btn-top btn-deck">Media Deck</a>
+        <a href="${connectHref}" class="btn-top btn-pilot">Start Pilot ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Active Case Header -->
+    <section class="case-header-card">
+      <div class="case-meta-left">
+        <img id="ui-icon" src="${escapeHtml(activeItem.iconUrl)}" alt="${escapeHtml(activeItem.brand)}" class="case-icon" />
+        <div class="case-titles">
+          <div id="ui-kicker" class="case-kicker">${escapeHtml(activeItem.category)}</div>
+          <div class="case-title-row">
+            <h1 id="ui-brand" class="case-brand">${escapeHtml(activeItem.brand)}</h1>
+            <span id="ui-report" class="case-report-badge">${escapeHtml(activeItem.report)}</span>
+          </div>
+          <p id="ui-metric" class="case-metric">${escapeHtml(activeItem.metric)}</p>
+        </div>
+      </div>
+      <div class="nav-arrows">
+        <button type="button" class="btn-nav" id="btn-prev" aria-label="Previous Snapshot">← Prev</button>
+        <button type="button" class="btn-nav" id="btn-next" aria-label="Next Snapshot">Next →</button>
+      </div>
+    </section>
+
+    <!-- Interactive Screenshot Stage -->
+    <section class="stage-card">
+      <div class="zoom-toolbar">
+        <div class="zoom-group">
+          <button type="button" class="btn-zoom active" data-zoom="1x" id="zoom-1x">1x Fit</button>
+          <button type="button" class="btn-zoom" data-zoom="2x" id="zoom-2x">2x Table Zoom ↔</button>
+          <button type="button" class="btn-zoom" data-zoom="3x" id="zoom-3x">3x Detail ↔</button>
+        </div>
+        <a id="ui-raw-link" href="${escapeHtml(activeItem.fileUrl)}" target="_blank" rel="noopener" class="raw-link">Original PNG ↗</a>
+      </div>
+
+      <div class="stage-viewport" id="stage-viewport">
+        <img id="ui-image" src="${escapeHtml(activeItem.fileUrl)}" alt="${escapeHtml(activeItem.brand)} - ${escapeHtml(activeItem.report)}" class="stage-img" />
+      </div>
+
+      <div class="stage-hint" id="stage-hint">
+        Tap screenshot or select <strong>2x Table Zoom ↔</strong> to pan across AppsFlyer &amp; Protect360 columns.
+      </div>
+    </section>
+
+    <!-- All 12 Snapshots Switcher -->
+    <section class="switcher-section">
+      <div class="group-block">
+        <h2 class="group-title">US Geo Campaigns</h2>
+        <div class="cards-grid">
+          ${usItems
+            .map(
+              (item) => `
+          <button type="button" class="snap-btn${item.id === activeItem.id ? " active" : ""}" data-id="${escapeHtml(item.id)}">
+            <img src="${escapeHtml(item.iconUrl)}" alt="${escapeHtml(item.brand)}" class="snap-btn-icon" />
+            <div class="snap-btn-text">
+              <div class="snap-btn-brand">${escapeHtml(item.brand)}</div>
+              <div class="snap-btn-report">${escapeHtml(item.report)}</div>
+            </div>
+          </button>`
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <div class="group-block">
+        <h2 class="group-title">Tier1 &amp; Tier2 Geo Campaigns</h2>
+        <div class="cards-grid">
+          ${tierItems
+            .map(
+              (item) => `
+          <button type="button" class="snap-btn${item.id === activeItem.id ? " active" : ""}" data-id="${escapeHtml(item.id)}">
+            <img src="${escapeHtml(item.iconUrl)}" alt="${escapeHtml(item.brand)}" class="snap-btn-icon" />
+            <div class="snap-btn-text">
+              <div class="snap-btn-brand">${escapeHtml(item.brand)}</div>
+              <div class="snap-btn-report">${escapeHtml(item.report)}</div>
+            </div>
+          </button>`
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function() {
+      var ITEMS = ${JSON.stringify(PROOF_LIST)};
+      var LEAD = ${JSON.stringify(lead)};
+      var IS_OWNER = ${JSON.stringify(isOwner)};
+      var currentIndex = ${initialIndex};
+      var currentZoom = "1x";
+      var trackedIds = {};
+      if (ITEMS[currentIndex]) {
+        trackedIds[ITEMS[currentIndex].id] = true;
+      }
+
+      // Bridge lead identity to localStorage so /deck and /connect recognize the lead automatically
+      if (LEAD && !IS_OWNER) {
+        try {
+          var rawSession = localStorage.getItem("upraiser_hub_session_v1");
+          if (rawSession) {
+            var parsed = JSON.parse(rawSession);
+            if (!parsed.savedContact) {
+              parsed.savedContact = LEAD;
+              localStorage.setItem("upraiser_hub_session_v1", JSON.stringify(parsed));
+            }
+          } else {
+            var now = Date.now();
+            var d = new Date(now);
+            var pad = function(n) { return String(n).padStart(2, "0"); };
+            var genId = "hub_" + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + "_" + pad(d.getHours()) + pad(d.getMinutes()) + "_" + Math.random().toString(36).substring(2, 6);
+            localStorage.setItem("upraiser_hub_session_v1", JSON.stringify({
+              visitorId: genId,
+              clickId: genId,
+              visitCount: 1,
+              firstVisitTime: now,
+              lastVisitTime: now,
+              lastActiveTime: now,
+              savedContact: LEAD,
+              firstTrafficSource: "Email Proof Viewer",
+              currentTrafficSource: "Email Proof Viewer"
+            }));
+          }
+        } catch (e) {}
+      }
+
+      var uiCounter = document.getElementById("ui-counter");
+      var uiIcon = document.getElementById("ui-icon");
+      var uiKicker = document.getElementById("ui-kicker");
+      var uiBrand = document.getElementById("ui-brand");
+      var uiReport = document.getElementById("ui-report");
+      var uiMetric = document.getElementById("ui-metric");
+      var uiImage = document.getElementById("ui-image");
+      var uiRawLink = document.getElementById("ui-raw-link");
+      var viewport = document.getElementById("stage-viewport");
+      var snapBtns = Array.prototype.slice.call(document.querySelectorAll(".snap-btn"));
+      var zoomBtns = Array.prototype.slice.call(document.querySelectorAll(".btn-zoom"));
+
+      function setZoom(mode) {
+        currentZoom = mode;
+        viewport.classList.remove("zoom-2x", "zoom-3x");
+        if (mode === "2x") viewport.classList.add("zoom-2x");
+        if (mode === "3x") viewport.classList.add("zoom-3x");
+        zoomBtns.forEach(function(btn) {
+          btn.classList.toggle("active", btn.getAttribute("data-zoom") === mode);
+        });
+      }
+
+      zoomBtns.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          setZoom(btn.getAttribute("data-zoom") || "1x");
+        });
+      });
+
+      // Desktop drag-to-pan when zoomed + clean click to toggle 1x / 2x
+      var isDragging = false;
+      var didMove = false;
+      var startX = 0;
+      var startY = 0;
+      var scrollLeftStart = 0;
+      var scrollTopStart = 0;
+
+      viewport.addEventListener("mousedown", function(e) {
+        if (currentZoom === "1x") return;
+        isDragging = true;
+        didMove = false;
+        startX = e.pageX - viewport.offsetLeft;
+        startY = e.pageY - viewport.offsetTop;
+        scrollLeftStart = viewport.scrollLeft;
+        scrollTopStart = viewport.scrollTop;
+      });
+
+      window.addEventListener("mouseup", function() {
+        isDragging = false;
+      });
+
+      viewport.addEventListener("mousemove", function(e) {
+        if (!isDragging) return;
+        var x = e.pageX - viewport.offsetLeft;
+        var y = e.pageY - viewport.offsetTop;
+        var dx = x - startX;
+        var dy = y - startY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+          didMove = true;
+        }
+        e.preventDefault();
+        viewport.scrollLeft = scrollLeftStart - dx;
+        viewport.scrollTop = scrollTopStart - dy;
+      });
+
+      uiImage.addEventListener("click", function() {
+        if (didMove) {
+          didMove = false;
+          return;
+        }
+        if (currentZoom === "1x") {
+          setZoom("2x");
+        } else {
+          setZoom("1x");
+        }
+      });
+
+      function preloadNeighbors(idx) {
+        var prev = ITEMS[(idx - 1 + ITEMS.length) % ITEMS.length];
+        var next = ITEMS[(idx + 1) % ITEMS.length];
+        [prev, next].forEach(function(item) {
+          if (item && item.fileUrl) {
+            var img = new Image();
+            img.src = item.fileUrl;
+          }
+        });
+      }
+
+      function selectIndex(idx) {
+        currentIndex = (idx + ITEMS.length) % ITEMS.length;
+        var item = ITEMS[currentIndex];
+        if (!item) return;
+
+        uiCounter.textContent = (currentIndex + 1) + " / " + ITEMS.length;
+        uiIcon.src = item.iconUrl;
+        uiIcon.alt = item.brand;
+        uiKicker.textContent = item.category;
+        uiBrand.textContent = item.brand;
+        uiReport.textContent = item.report;
+        uiMetric.textContent = item.metric;
+        uiImage.style.opacity = "0.4";
+        uiImage.src = item.fileUrl;
+        uiImage.alt = item.brand + " - " + item.report;
+        uiRawLink.href = item.fileUrl;
+        document.title = item.brand + " · " + item.report + " | UPRAISER";
+
+        snapBtns.forEach(function(b) {
+          b.classList.toggle("active", b.getAttribute("data-id") === item.id);
+        });
+
+        viewport.scrollTop = 0;
+        viewport.scrollLeft = 0;
+
+        try {
+          var nextUrl = new URL(window.location.href);
+          nextUrl.searchParams.set("id", item.id);
+          nextUrl.searchParams.delete("app");
+          window.history.replaceState({}, "", nextUrl.pathname + "?" + nextUrl.searchParams.toString());
+        } catch (e) {}
+
+        preloadNeighbors(currentIndex);
+
+        if (!IS_OWNER && !trackedIds[item.id]) {
+          trackedIds[item.id] = true;
+          var trackUrl = "/api/proof?id=" + encodeURIComponent(item.id) + (LEAD ? "&lead=" + encodeURIComponent(LEAD) : "") + "&track=1";
+          fetch(trackUrl, { method: "GET", keepalive: true }).catch(function() {});
+        }
+      }
+
+      uiImage.addEventListener("load", function() {
+        uiImage.style.opacity = "1";
+      });
+
+      document.getElementById("btn-prev").addEventListener("click", function() {
+        selectIndex(currentIndex - 1);
+      });
+      document.getElementById("btn-next").addEventListener("click", function() {
+        selectIndex(currentIndex + 1);
+      });
+
+      snapBtns.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var id = btn.getAttribute("data-id");
+          var foundIdx = ITEMS.findIndex(function(i) { return i.id === id; });
+          if (foundIdx >= 0) {
+            selectIndex(foundIdx);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        });
+      });
+
+      window.addEventListener("keydown", function(e) {
+        if (e.key === "ArrowLeft") selectIndex(currentIndex - 1);
+        if (e.key === "ArrowRight") selectIndex(currentIndex + 1);
+      });
+
+      preloadNeighbors(currentIndex);
+    })();
+  </script>
+</body>
+</html>`;
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const url = new URL(req.url || "/", "https://upraiser.co.uk");
   const ownerParam = url.searchParams.get("owner") || url.searchParams.get("me");
@@ -252,6 +1064,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   const appId = (url.searchParams.get("app") || url.searchParams.get("id") || "").toLowerCase().trim();
   const lead = (url.searchParams.get("lead") || url.searchParams.get("email") || "").trim();
+  const isRawRedirect = url.searchParams.get("raw") === "1";
+  const isTrackOnly = url.searchParams.get("track") === "1";
 
   const proof = PROOFS[appId] || {
     brand: "Performance Portfolio",
@@ -259,6 +1073,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     metric: "12 Dashboards",
     fileUrl: "https://upraiser.co.uk/connect",
     category: "General",
+    isSnapshot: false,
   };
 
   // Skip logging/Telegram if this is a browser background prefetch OR Alex's own device/IP
@@ -269,7 +1084,27 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       "upraiser_owner=1; Path=/; Max-Age=315360000; SameSite=Lax"
     );
   }
-  if (ownerDetected || isPrefetchRequest(req.headers)) {
+
+  // Reject background browser link prefetching so it never triggers false Telegram alerts
+  if (isPrefetchRequest(req.headers)) {
+    res.writeHead(204, {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+    });
+    return res.end();
+  }
+
+  if (ownerDetected) {
+    if (isTrackOnly) {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: true, ignored: "owner" }));
+    }
+    if (proof.isSnapshot && !isRawRedirect) {
+      res.writeHead(200, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+      });
+      return res.end(renderSnapshotViewerHtml(appId, lead, true));
+    }
     res.writeHead(302, {
       Location: proof.fileUrl,
       "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -601,7 +1436,23 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     } catch {}
   }
 
-  // 302 Redirect directly to the asset
+  if (isTrackOnly) {
+    res.writeHead(200, {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+    });
+    return res.end(JSON.stringify({ ok: true }));
+  }
+
+  if (proof.isSnapshot && !isRawRedirect) {
+    res.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+    });
+    return res.end(renderSnapshotViewerHtml(appId, lead, false));
+  }
+
+  // 302 Redirect directly to the asset (.zip, .pdf, or ?raw=1)
   res.writeHead(302, {
     Location: proof.fileUrl,
     "Cache-Control": "no-cache, no-store, must-revalidate",
