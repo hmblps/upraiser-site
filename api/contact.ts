@@ -79,16 +79,56 @@ export interface SnapshotCardData {
 
 export const SNAPSHOT_GROUPS = [
   {
-    title: "01 / TIER-1 MEDIA & CONSUMER APPS",
-    subtitle: "Protect360 & AppsFlyer Attributions",
+    title: "US Geo Campaigns",
+    subtitle: "AppsFlyer Performance, Protect360 & Partner Dashboards",
     items: [
+      {
+        id: "wsj-oct-perf",
+        brand: "The Wall Street Journal",
+        reportType: "October Performance (AF)",
+        metric: "9,167 Installs · 8,369 App Opens · 1,982 Unique Purchases (21.6% Install-to-Purchase CR)",
+        iconUrl: "https://upraiser.co.uk/snapshots/icons/wsj.png",
+        fileUrl: "https://upraiser.co.uk/snapshots/wsj-appsflyer-oct.png",
+      },
+      {
+        id: "wsj-oct-p360",
+        brand: "The Wall Street Journal",
+        reportType: "October Protect360",
+        metric: "6,349+ Clean Installs across top sources · ≤1% Fraud Rate (0% to 1% real-time & post-attribution)",
+        iconUrl: "https://upraiser.co.uk/snapshots/icons/wsj.png",
+        fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360-oct.png",
+      },
       {
         id: "wsj",
         brand: "The Wall Street Journal",
-        reportType: "Protect360 Report",
-        metric: "~14,000 Clean Installs · ≤1% Fraud Rate (0.13% on primary source, -98% fraud trend)",
+        reportType: "September Protect360",
+        metric: "~14,000 Clean Installs · ≤1% Fraud Rate (0.13% on primary source)",
         iconUrl: "https://upraiser.co.uk/snapshots/icons/wsj.png",
         fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360.png",
+      },
+      {
+        id: "underdog",
+        brand: "Underdog Fantasy",
+        reportType: "Partner Dashboard",
+        metric: "184 FTDs across active codes · Up to $137 Avg FTD & $441 Sum Deposit",
+        iconUrl: "https://upraiser.co.uk/snapshots/icons/underdog.png",
+        fileUrl: "https://upraiser.co.uk/snapshots/underdog-fantasy.png",
+      },
+      {
+        id: "marketwatch-oct-perf",
+        brand: "MarketWatch",
+        reportType: "October Performance (AF)",
+        metric: "964 Installs · 906 Roadblock Served · 138 Unique Purchases (14.3% Install-to-Purchase CR)",
+        iconUrl: "https://upraiser.co.uk/snapshots/icons/marketwatch.png",
+        fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-appsflyer-oct.png",
+      },
+      {
+        id: "marketwatch",
+        brand: "MarketWatch",
+        reportType: "September Protect360",
+        metric: "3,120 Clean Installs · 0.00% Fraud Rate across September 2026",
+        iconUrl: "https://upraiser.co.uk/snapshots/icons/marketwatch.png",
+        fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-protect360.png",
       },
       {
         id: "barrons",
@@ -97,14 +137,6 @@ export const SNAPSHOT_GROUPS = [
         metric: "4,909 Clean Installs · 0.00% Fraud Rate (only 4 blocked real-time attributions)",
         iconUrl: "https://upraiser.co.uk/snapshots/icons/barrons.png",
         fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png?v=2",
-      },
-      {
-        id: "marketwatch",
-        brand: "MarketWatch",
-        reportType: "Protect360 Report",
-        metric: "3,120 Clean Installs · 0.00% Fraud Rate across September 2026",
-        iconUrl: "https://upraiser.co.uk/snapshots/icons/marketwatch.png",
-        fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-protect360.png",
       },
       {
         id: "fetch",
@@ -117,8 +149,8 @@ export const SNAPSHOT_GROUPS = [
     ],
   },
   {
-    title: "02 / FINTECH, TRADING & FANTASY SPORTS",
-    subtitle: "LTV & Deep Funnel Conversions",
+    title: "Tier1 & Tier2 Geo Campaigns",
+    subtitle: "Vantage, Credcol & Autodoc Deep-Funnel Performance",
     items: [
       {
         id: "vantage",
@@ -127,14 +159,6 @@ export const SNAPSHOT_GROUPS = [
         metric: "87.5% QFTD Conversion (133 QFTDs in Oct) · $122,500 Lifetime Commission",
         iconUrl: "https://upraiser.co.uk/snapshots/icons/vantage.png",
         fileUrl: "https://upraiser.co.uk/snapshots/vantage-trading.png",
-      },
-      {
-        id: "underdog",
-        brand: "Underdog Fantasy",
-        reportType: "Partner Dashboard",
-        metric: "184 FTDs across active codes · Up to $137 Avg FTD & $441 Sum Deposit",
-        iconUrl: "https://upraiser.co.uk/snapshots/icons/underdog.png",
-        fileUrl: "https://upraiser.co.uk/snapshots/underdog-fantasy.png",
       },
       {
         id: "credcol-funnel",
@@ -152,11 +176,19 @@ export const SNAPSHOT_GROUPS = [
         iconUrl: "https://upraiser.co.uk/snapshots/icons/credcol.png",
         fileUrl: "https://upraiser.co.uk/snapshots/credcol-protect360.png",
       },
+      {
+        id: "autodoc",
+        brand: "Autodoc",
+        reportType: "AppsFlyer Performance (Aug '26)",
+        metric: "28.77% D1 Retention · 55,486 Content Views · 2,229 Add-to-Carts · 121 Unique Purchases",
+        iconUrl: "https://upraiser.co.uk/snapshots/icons/autodoc.png",
+        fileUrl: "https://upraiser.co.uk/snapshots/autodoc-appsflyer.png",
+      },
     ],
   },
 ];
 
-export const ZIP_ARCHIVE_URL = "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip?v=2";
+export const ZIP_ARCHIVE_URL = "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip?v=3";
 
 export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: string): string {
   const cleanName = leadName?.trim() ? escapeHtml(leadName.trim()) : "";
@@ -169,7 +201,7 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UPRAISER — Raw Dashboards &amp; Performance Snapshots</title>
+  <title>UPRAISER - Raw Dashboards &amp; Performance Snapshots</title>
   <!--[if mso]>
   <style type="text/css">
     body, table, td { font-family: Arial, Helvetica, sans-serif !important; }
@@ -177,11 +209,11 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
   <![endif]-->
 </head>
 <body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
-  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f1f5f9; padding: 40px 16px;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f1f5f9; padding: 28px 12px;">
     <tr>
       <td align="center">
         <!-- Main Wrapper (Clean White Paper Canvas) -->
-        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);">
+        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);">
           
           <!-- Top Accent Ribbon (UPRAISER signature gradient) -->
           <tr>
@@ -190,20 +222,20 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
 
           <!-- Header: Brand Logo & Title (/connect style) -->
           <tr>
-            <td style="padding: 36px 36px 18px 36px;">
+            <td style="padding: 24px 28px 10px 28px;">
               <table role="presentation" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td valign="middle" style="padding-right: 12px;">
-                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                  <td valign="middle" style="padding-right: 10px;">
+                    <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 7px;">
                       <tr>
-                        <td align="center" valign="middle" style="width: 34px; height: 34px; padding: 6px;">
-                          <img src="https://upraiser.co.uk/upraiser-logo.png" alt="UPRAISER" width="20" height="20" style="display: block; width: 20px; height: 20px; object-fit: contain;" />
+                        <td align="center" valign="middle" style="width: 28px; height: 28px; padding: 5px;">
+                          <img src="https://upraiser.co.uk/upraiser-logo.png" alt="UPRAISER" width="18" height="18" style="display: block; width: 18px; height: 18px; object-fit: contain;" />
                         </td>
                       </tr>
                     </table>
                   </td>
                   <td valign="middle">
-                    <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.18em; color: #0f172a; text-transform: uppercase;">
+                    <span style="font-size: 12px; font-weight: 800; letter-spacing: 0.18em; color: #0f172a; text-transform: uppercase;">
                       UPRAISER
                     </span>
                   </td>
@@ -214,35 +246,26 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
 
           <!-- Intro & Master Download Card -->
           <tr>
-            <td style="padding: 10px 36px 26px 36px;">
-              <p style="margin: 0 0 10px 0; font-size: 16px; line-height: 1.5; color: #0f172a; font-weight: 700;">
+            <td style="padding: 6px 28px 16px 28px;">
+              <p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.45; color: #0f172a; font-weight: 700;">
                 ${greeting}
               </p>
-              <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #475569; font-weight: 400;">
-                Here are raw snapshots from AF, P360, and direct advertiser CRM dashboards.
+              <p style="margin: 0 0 14px 0; font-size: 13.5px; line-height: 1.55; color: #475569; font-weight: 400;">
+                Here are screenshots from AF (showing both performance and P360), and direct Client's CRM dashboards.
               </p>
 
-              <!-- Master ZIP Download Box -->
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px;">
+              <!-- Compact Master ZIP Download Box -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px;">
                 <tr>
-                  <td>
-                    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td valign="middle" style="padding-right: 16px;">
-                          <div style="font-size: 14px; font-weight: 700; color: #0f172a; letter-spacing: -0.01em;">
-                            Complete Performance Portfolio
-                          </div>
-                          <div style="font-size: 12px; color: #64748b; margin-top: 3px;">
-                            All 8 raw uncompressed snapshots in one bundle (.zip · 15 MB)
-                          </div>
-                        </td>
-                        <td align="right" valign="middle" style="white-space: nowrap;">
-                          <a href="${trackedZipUrl}" target="_blank" style="display: inline-block; background-color: #fecf09; color: #0f172a; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 11px 18px; border-radius: 10px; box-shadow: 0 2px 8px rgba(254, 207, 9, 0.35);">
-                            Download All (.zip)
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
+                  <td valign="middle" style="padding-right: 10px;">
+                    <div style="font-size: 12.5px; font-weight: 700; color: #0f172a;">
+                      Complete Performance Portfolio <span style="font-weight: 500; color: #64748b; font-size: 11.5px;">· 12 raw snapshots (.zip · 22 MB)</span>
+                    </div>
+                  </td>
+                  <td align="right" valign="middle" style="white-space: nowrap;">
+                    <a href="${trackedZipUrl}" target="_blank" style="display: inline-block; background-color: #fecf09; color: #0f172a; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 7px 12px; border-radius: 7px;">
+                      Download .ZIP
+                    </a>
                   </td>
                 </tr>
               </table>
@@ -252,46 +275,38 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
           <!-- Snapshot Sections -->
           ${SNAPSHOT_GROUPS.map((group, groupIdx) => `
           <tr>
-            <td style="padding: ${groupIdx === 0 ? "6px" : "18px"} 36px 8px 36px;">
+            <td style="padding: ${groupIdx === 0 ? "2px" : "10px"} 28px 6px 28px;">
               <!-- Section Kicker -->
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 14px;">
-                <tr>
-                  <td>
-                    <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #e63558;">
-                      ${group.title}
-                    </div>
-                    <div style="font-size: 12px; color: #64748b; margin-top: 3px; font-weight: 500;">
-                      ${group.subtitle}
-                    </div>
-                  </td>
-                </tr>
-              </table>
+              <div style="font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #e63558; margin-bottom: 8px;">
+                ${group.title}
+              </div>
 
-              <!-- Cards List -->
+              <!-- Compact Cards List -->
               <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
                 ${group.items.map((item) => `
                 <tr>
-                  <td style="padding-bottom: 12px;">
-                    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 18px;">
+                  <td style="padding-bottom: 6px;">
+                    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 12px;">
                       <tr>
                         <!-- Icon -->
-                        <td width="44" valign="top" style="padding-right: 14px;">
-                          <img src="${item.iconUrl}" alt="${escapeHtml(item.brand)}" width="44" height="44" style="display: block; width: 44px; height: 44px; border-radius: 10px; border: 1px solid #e2e8f0; object-fit: cover; background-color: #ffffff;" />
+                        <td width="28" valign="middle" style="padding-right: 10px;">
+                          <img src="${item.iconUrl}" alt="${escapeHtml(item.brand)}" width="28" height="28" style="display: block; width: 28px; height: 28px; border-radius: 6px; border: 1px solid #e2e8f0; object-fit: cover; background-color: #ffffff;" />
                         </td>
                         <!-- Content -->
-                        <td valign="top">
-                          <div style="font-size: 14px; font-weight: 700; color: #0f172a; line-height: 1.3;">
+                        <td valign="middle" style="padding-right: 8px;">
+                          <div style="font-size: 12.5px; font-weight: 700; color: #0f172a; line-height: 1.25;">
                             ${escapeHtml(item.brand)}
-                            <span style="font-size: 11px; font-weight: 600; color: #64748b; margin-left: 6px;">· ${escapeHtml(item.reportType)}</span>
+                            <span style="font-size: 11px; font-weight: 500; color: #64748b; margin-left: 4px;">· ${escapeHtml(item.reportType)}</span>
                           </div>
-                          <div style="font-size: 12.5px; line-height: 1.5; color: #334155; margin-top: 5px; font-weight: 400;">
+                          <div style="font-size: 11.5px; line-height: 1.35; color: #475569; margin-top: 2px;">
                             ${escapeHtml(item.metric)}
                           </div>
-                          <div style="margin-top: 10px;">
-                            <a href="https://upraiser.co.uk/api/proof?app=${encodeURIComponent(item.id)}${encodedLead ? `&amp;lead=${encodedLead}` : ""}" target="_blank" style="display: inline-block; font-size: 11px; font-weight: 700; color: #e63558; text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase;">
-                              View Full Screen ↗
-                            </a>
-                          </div>
+                        </td>
+                        <!-- Action -->
+                        <td align="right" valign="middle" style="white-space: nowrap;">
+                          <a href="https://upraiser.co.uk/api/proof?app=${encodeURIComponent(item.id)}${encodedLead ? `&amp;lead=${encodedLead}` : ""}" target="_blank" style="font-size: 11px; font-weight: 700; color: #e63558; text-decoration: none;">
+                            View ↗
+                          </a>
                         </td>
                       </tr>
                     </table>
@@ -305,17 +320,17 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
 
           <!-- Closing Block (Outro) -->
           <tr>
-            <td style="padding: 24px 36px 36px 36px;">
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 26px 20px; text-align: center;">
+            <td style="padding: 12px 28px 24px 28px;">
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 20px; text-align: center;">
                 <tr>
                   <td>
-                    <div style="font-size: 16px; font-weight: 700; color: #0f172a; letter-spacing: -0.01em; line-height: 1.4; margin-bottom: 20px;">
+                    <div style="font-size: 14px; font-weight: 700; color: #0f172a; letter-spacing: -0.01em; line-height: 1.4; margin-bottom: 14px;">
                       Let’s perform a test with similar unit economics for Your app.
                     </div>
                     <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center">
                       <tr>
                         <td>
-                          <a href="mailto:alex@upraiser.co.uk?subject=Re:%20UPRAISER%20Pilot%20Economics" style="display: inline-block; background-color: #e63558; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 13px 28px; border-radius: 12px; box-shadow: 0 4px 14px rgba(230, 53, 88, 0.25);">
+                          <a href="mailto:alex@upraiser.co.uk?subject=Re:%20UPRAISER%20Pilot%20Economics" style="display: inline-block; background-color: #e63558; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; padding: 11px 22px; border-radius: 10px; box-shadow: 0 3px 10px rgba(230, 53, 88, 0.22);">
                             Reply to Start Pilot
                           </a>
                         </td>
@@ -329,8 +344,8 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
 
           <!-- Footer -->
           <tr>
-            <td style="padding: 20px 36px 28px 36px; border-top: 1px solid #f1f5f9; text-align: center;">
-              <p style="margin: 0; font-size: 11px; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; color: #94a3b8; line-height: 1.6; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;">
+            <td style="padding: 14px 28px 20px 28px; border-top: 1px solid #f1f5f9; text-align: center;">
+              <p style="margin: 0; font-size: 10.5px; font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; color: #94a3b8; line-height: 1.6; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;">
                 UPRAISER Agency LLP · London · Since 2017
               </p>
             </td>

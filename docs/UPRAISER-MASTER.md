@@ -1525,6 +1525,15 @@ We successfully debugged a major issue where the 3D TV component would cause a m
   - **Compact Proof Dossier Telemetry, Corporate Domain Enrichment & 1-Tap Inline Actions (v2.2.109–v2.2.110-stable):**
     - **Compact Proof Click Card (`api/proof.ts`):** Collapses all email proof clicks within 30 minutes into one clean message (`🔎 ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · N из 8`), automatically summarizes the lead's vertical interest at the top (`🎯 Фокус: Tier-1 Media (3) · Fintech & Trading (2)`), marks repeat opens `(×2)` and current focus `👈 сейчас тут`, strips repetitive metric walls, and orders lead history `ascending: false` so the latest lead name and baseline device are always authoritative.
     - **Auto-Enrichment & Inline Action Keyboard (`api/contact.ts`):** Extracts corporate domain from business emails (filtering out 25+ public providers like Gmail/iCloud/Yahoo) to render `🏢 Компания: domain.com ↗`, displays device language + exact scan timestamp (`🕒 Скан: 20:38 · Язык устройства: EN-US · Визит #1`), and attaches interactive Telegram `inline_keyboard` buttons (`[🌐 domain.com]`, `[✈️ Написать в TG]`, `[💬 WhatsApp]`, `[🔍 LinkedIn]`) directly below every new lead card.
+  - **12-Snapshot Portfolio Expansion (`US Geo Campaigns` & `Tier1 & Tier2 Geo Campaigns`) & Ultra-Compact Email Rows (v2.2.111-stable · 27 Oct 2026):**
+    - **Added 4 New Verified Screenshots (`public/snapshots/`):**
+      - `wsj-appsflyer-oct.png` (WSJ October AF Performance: 9,167 Installs, 8,369 App Opens, 1,982 Unique Purchases · 21.6% CR).
+      - `wsj-protect360-oct.png` (WSJ October Protect360: 6,349+ Clean Installs across top sources · ≤1% Fraud Rate).
+      - `marketwatch-appsflyer-oct.png` (MarketWatch October AF Performance: 964 Installs, 906 Roadblock Served, 138 Unique Purchases · 14.3% CR).
+      - `autodoc-appsflyer.png` + `icons/autodoc.png` (Autodoc August '26 AF Performance: 28.77% D1 Retention, 55,486 Content Views, 2,229 Add-to-Carts, 121 Purchases).
+    - **Rebuilt Master Archive (`UPRAISER_Performance_Snapshots.zip?v=3` · 22 MB):** Bundles all 12 uncompressed raw PNG dashboards.
+    - **New Section Taxonomy & Compact Email Layout (`api/contact.ts`, `api/proof.ts`):** Replaced legacy section headers with `US Geo Campaigns` (8 snapshots) and `Tier1 & Tier2 Geo Campaigns` (Vantage, Credcol Funnel & Protect360, Autodoc), updated intro copy (`Here are screenshots from AF (showing both performance and P360), and direct Client's CRM dashboards.`), removed `, -98% fraud trend` from WSJ Sept P360, eliminated all em/en-dashes, compacted all email cards into tight single-row horizontal bars (`28×28` icons, right-aligned `View ↗`), and updated Telegram proof counter to `N из 12`.
+
 
 
 

@@ -27,67 +27,95 @@ const PROOFS: Record<
     category: string;
   }
 > = {
+  "wsj-oct-perf": {
+    brand: "The Wall Street Journal",
+    report: "October Performance (AF)",
+    metric: "9,167 Installs · 8,369 App Opens · 1,982 Unique Purchases (21.6% CR)",
+    fileUrl: "https://upraiser.co.uk/snapshots/wsj-appsflyer-oct.png",
+    category: "US Geo Campaigns",
+  },
+  "wsj-oct-p360": {
+    brand: "The Wall Street Journal",
+    report: "October Protect360",
+    metric: "6,349+ Clean Installs · ≤1% Fraud Rate",
+    fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360-oct.png",
+    category: "US Geo Campaigns",
+  },
   wsj: {
     brand: "The Wall Street Journal",
-    report: "Protect360 Report",
-    metric: "~14,000 Clean Installs · ≤1% Fraud Rate (0.13% primary source)",
+    report: "September Protect360",
+    metric: "~14,000 Clean Installs · ≤1% Fraud Rate (0.13% on primary source)",
     fileUrl: "https://upraiser.co.uk/snapshots/wsj-protect360.png",
-    category: "Tier-1 Media",
-  },
-  barrons: {
-    brand: "Barron’s (Dow Jones)",
-    report: "Protect360 Report",
-    metric: "4,909 Clean Installs · 0.00% Fraud Rate (only 4 blocked attributions)",
-    fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png?v=2",
-    category: "Tier-1 Media",
-  },
-  marketwatch: {
-    brand: "MarketWatch",
-    report: "Protect360 Report",
-    metric: "3,120 Clean Installs · 0.00% Fraud Rate across September 2026",
-    fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-protect360.png",
-    category: "Tier-1 Media",
-  },
-  fetch: {
-    brand: "Fetch Rewards",
-    report: "AppsFlyer Performance",
-    metric: "6,815 Non-Organic Installs · 8.88% Install-to-Sign-Up CR",
-    fileUrl: "https://upraiser.co.uk/snapshots/fetch-appsflyer.png",
-    category: "Consumer Apps",
-  },
-  vantage: {
-    brand: "Vantage Trading",
-    report: "Partner Dashboard",
-    metric: "87.5% QFTD Conversion (133 QFTDs) · $122,500 Commission",
-    fileUrl: "https://upraiser.co.uk/snapshots/vantage-trading.png",
-    category: "Fintech & Trading",
+    category: "US Geo Campaigns",
   },
   underdog: {
     brand: "Underdog Fantasy",
     report: "Partner Dashboard",
     metric: "184 FTDs · Up to $137 Avg FTD & $441 Sum Deposit",
     fileUrl: "https://upraiser.co.uk/snapshots/underdog-fantasy.png",
-    category: "Fantasy Sports",
+    category: "US Geo Campaigns",
+  },
+  "marketwatch-oct-perf": {
+    brand: "MarketWatch",
+    report: "October Performance (AF)",
+    metric: "964 Installs · 906 Roadblock Served · 138 Unique Purchases (14.3% CR)",
+    fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-appsflyer-oct.png",
+    category: "US Geo Campaigns",
+  },
+  marketwatch: {
+    brand: "MarketWatch",
+    report: "September Protect360",
+    metric: "3,120 Clean Installs · 0.00% Fraud Rate across September 2026",
+    fileUrl: "https://upraiser.co.uk/snapshots/marketwatch-protect360.png",
+    category: "US Geo Campaigns",
+  },
+  barrons: {
+    brand: "Barron’s (Dow Jones)",
+    report: "Protect360 Report",
+    metric: "4,909 Clean Installs · 0.00% Fraud Rate (only 4 blocked attributions)",
+    fileUrl: "https://upraiser.co.uk/snapshots/barrons-protect360.png?v=2",
+    category: "US Geo Campaigns",
+  },
+  fetch: {
+    brand: "Fetch Rewards",
+    report: "AppsFlyer Performance",
+    metric: "6,815 Non-Organic Installs · 8.88% Install-to-Sign-Up CR",
+    fileUrl: "https://upraiser.co.uk/snapshots/fetch-appsflyer.png",
+    category: "US Geo Campaigns",
+  },
+  vantage: {
+    brand: "Vantage Trading",
+    report: "Partner Dashboard",
+    metric: "87.5% QFTD Conversion (133 QFTDs) · $122,500 Commission",
+    fileUrl: "https://upraiser.co.uk/snapshots/vantage-trading.png",
+    category: "Tier1 & Tier2 Geo Campaigns",
   },
   "credcol-funnel": {
     brand: "Credcol (Fintech)",
     report: "AppsFlyer Funnel",
     metric: "13,015 Installs · 1,953 D1 Sign-ups · 1,777 Funnel Steps",
     fileUrl: "https://upraiser.co.uk/snapshots/credcol-funnel.png",
-    category: "Fintech & Credit",
+    category: "Tier1 & Tier2 Geo Campaigns",
   },
   "credcol-audit": {
     brand: "Credcol (Fintech)",
     report: "Protect360 Audit",
     metric: "12,609 Verified Attributions · 0.00% Fraud Rate",
     fileUrl: "https://upraiser.co.uk/snapshots/credcol-protect360.png",
-    category: "Fintech & Credit",
+    category: "Tier1 & Tier2 Geo Campaigns",
+  },
+  autodoc: {
+    brand: "Autodoc",
+    report: "AppsFlyer Performance (Aug '26)",
+    metric: "28.77% D1 Retention · 55,486 Content Views · 2,229 Add-to-Carts · 121 Purchases",
+    fileUrl: "https://upraiser.co.uk/snapshots/autodoc-appsflyer.png",
+    category: "Tier1 & Tier2 Geo Campaigns",
   },
   zip: {
     brand: "Full Snapshot Archive (.zip)",
-    report: "All 8 Raw Performance Dashboards",
-    metric: "15 MB uncompressed ZIP bundle",
-    fileUrl: "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip?v=2",
+    report: "All 12 Raw Performance Dashboards",
+    metric: "22 MB uncompressed ZIP bundle",
+    fileUrl: "https://upraiser.co.uk/snapshots/UPRAISER_Performance_Snapshots.zip?v=3",
     category: "Archive Bundle",
   },
   deck: {
@@ -383,8 +411,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
       const headerTitle =
         proofHistory.length <= 1
-          ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 8</b>`
-          : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 8</b>`;
+          ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 12</b>`
+          : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 12</b>`;
 
       const tgText = [
         headerTitle,

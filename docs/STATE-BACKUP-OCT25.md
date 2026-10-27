@@ -252,10 +252,11 @@ In accordance with David Ogilvy advertising principles and the repository's Glob
 
 ---
 
-## 8. Git Tags & Release History (v2.2.60 to v2.2.110)
+## 8. Git Tags & Release History (v2.2.60 to v2.2.111)
 
 | Tag | Date | Focus |
 |---|---|---|
+| `v2.2.111-stable` | 27 Oct 2026 | Expand snapshot portfolio to 12 dashboards (`US Geo Campaigns` & `Tier1 & Tier2 Geo Campaigns`), rebuild 22 MB `.zip`, compact email rows & sync docs |
 | `v2.2.110-stable` | 26 Oct 2026 | Synchronize UPRAISER-MASTER and STATE-BACKUP documentation through v2.2.110-stable |
 | `v2.2.109-stable` | 26 Oct 2026 | Compact proof click telemetry card with vertical focus summary, corporate domain enrichment & 1-tap inline keyboard buttons |
 | `v2.2.108-stable` | 26 Oct 2026 | Replace `barrons-protect360.png` with new P360 Barrons snapshot & rebuild `.zip` archive (`?v=2`) |
