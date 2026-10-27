@@ -131,6 +131,44 @@ const HIGH_PRIORITY_EVENTS = new Set([
   "return_visit",
 ]);
 
+const OWNER_IPS = new Set(["82.137.32.198"]);
+const OWNER_VISITOR_IDS = new Set([
+  "hub_20261024_1818_qdzq",
+  "hub_20261026_2200_tep8",
+  "hub_20261026_2049_2zbv",
+]);
+
+function extractClientIp(headers: Record<string, any>): string {
+  const xff = headers["x-forwarded-for"];
+  if (xff) {
+    const raw = Array.isArray(xff) ? xff[0] : String(xff);
+    return raw.split(",")[0].trim();
+  }
+  const realIp = headers["x-real-ip"];
+  return realIp ? String(realIp).trim() : "";
+}
+
+function isOwnerRequest(
+  headers: Record<string, any>,
+  visitorId: string,
+  leadContact: string
+): boolean {
+  const cookieHeader = String(headers["cookie"] || "");
+  if (/(?:^|;\s*)upraiser_owner=1(?:;|$)/.test(cookieHeader)) return true;
+  const ip = extractClientIp(headers);
+  if (ip && OWNER_IPS.has(ip)) return true;
+  if (visitorId && OWNER_VISITOR_IDS.has(visitorId)) return true;
+  const cleanContact = (leadContact || "").trim().toLowerCase();
+  if (
+    cleanContact.endsWith("@upraiser.co.uk") ||
+    cleanContact === "homeboylebz" ||
+    cleanContact === "@homeboylebz"
+  ) {
+    return true;
+  }
+  return false;
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -184,6 +222,16 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const effectiveVisitorId = visitorId || body.visitor_id || "anon";
     const effectiveClickId = clickId || body.click_id || metadata?.click_id || effectiveVisitorId;
     const shortId = formatShortVisitorId(effectiveVisitorId);
+
+    // Silence owner's own visits & stamp a 10-year first-party cookie so Tel Aviv roaming/Wi-Fi is also ignored
+    if (isOwnerRequest(req.headers, effectiveVisitorId, leadContact)) {
+      res.setHeader(
+        "Set-Cookie",
+        "upraiser_owner=1; Path=/; Max-Age=315360000; SameSite=Lax"
+      );
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: true, ignored: "owner_device" }));
+    }
 
     // 1. Initialize Supabase Admin Client
     const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;

@@ -195,18 +195,87 @@ function formatTimeHHMM(date: Date = new Date()): string {
   }
 }
 
+const OWNER_IPS = new Set(["82.137.32.198"]);
+
+function extractClientIp(headers: Record<string, any>): string {
+  const xff = headers["x-forwarded-for"];
+  if (xff) {
+    const raw = Array.isArray(xff) ? xff[0] : String(xff);
+    return raw.split(",")[0].trim();
+  }
+  const realIp = headers["x-real-ip"];
+  return realIp ? String(realIp).trim() : "";
+}
+
+function isPrefetchRequest(headers: Record<string, any>): boolean {
+  const secPurpose = String(headers["sec-purpose"] || headers["purpose"] || headers["x-purpose"] || "").toLowerCase();
+  const moz = String(headers["x-moz"] || "").toLowerCase();
+  return secPurpose.includes("prefetch") || secPurpose.includes("preview") || moz.includes("prefetch");
+}
+
+function isOwnerProofRequest(headers: Record<string, any>, lead: string): boolean {
+  const cookieHeader = String(headers["cookie"] || "");
+  if (/(?:^|;\s*)upraiser_owner=1(?:;|$)/.test(cookieHeader)) return true;
+  const ip = extractClientIp(headers);
+  if (ip && OWNER_IPS.has(ip)) return true;
+  const cleanLead = (lead || "").trim().toLowerCase();
+  if (cleanLead.endsWith("@upraiser.co.uk")) return true;
+  return false;
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const url = new URL(req.url || "/", "https://upraiser.co.uk");
+  const ownerParam = url.searchParams.get("owner") || url.searchParams.get("me");
+
+  // Explicit 1-tap owner activation/deactivation URL: https://upraiser.co.uk/api/proof?owner=1
+  if (ownerParam === "1" || ownerParam === "0") {
+    const enable = ownerParam === "1";
+    res.setHeader(
+      "Set-Cookie",
+      enable
+        ? "upraiser_owner=1; Path=/; Max-Age=315360000; SameSite=Lax"
+        : "upraiser_owner=0; Path=/; Max-Age=0; SameSite=Lax"
+    );
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    return res.end(
+      `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Owner Filter</title></head><body style="font-family:-apple-system,sans-serif;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:100dvh;margin:0;padding:24px;text-align:center;"><div style="max-width:420px;background:#1e293b;border:1px solid #334155;border-radius:16px;padding:28px;"><div style="font-size:36px;margin-bottom:12px;">${
+        enable ? "🛡️" : "🔔"
+      }</div><h2 style="margin:0 0 10px 0;font-size:18px;">${
+        enable ? "Устройство владельца привязано" : "Фильтр владельца отключён"
+      }</h2><p style="margin:0;font-size:14px;line-height:1.5;color:#94a3b8;">${
+        enable
+          ? "Ваши собственные открытия /connect, /deck и клики по ссылкам из писем с этого браузера больше не отправляют пуши в Telegram (в том числе в роуминге и с любого Wi-Fi в Тель-Авиве)."
+          : "Уведомления с этого устройства снова включены для теста."
+      }</p></div></body></html>`
+    );
+  }
+
   const appId = (url.searchParams.get("app") || url.searchParams.get("id") || "").toLowerCase().trim();
   const lead = (url.searchParams.get("lead") || url.searchParams.get("email") || "").trim();
 
   const proof = PROOFS[appId] || {
     brand: "Performance Portfolio",
     report: "Raw Snapshots",
-    metric: "8 Dashboards",
+    metric: "12 Dashboards",
     fileUrl: "https://upraiser.co.uk/connect",
     category: "General",
   };
+
+  // Skip logging/Telegram if this is a browser background prefetch OR Alex's own device/IP
+  const ownerDetected = isOwnerProofRequest(req.headers, lead);
+  if (ownerDetected) {
+    res.setHeader(
+      "Set-Cookie",
+      "upraiser_owner=1; Path=/; Max-Age=315360000; SameSite=Lax"
+    );
+  }
+  if (ownerDetected || isPrefetchRequest(req.headers)) {
+    res.writeHead(302, {
+      Location: proof.fileUrl,
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+    });
+    return res.end();
+  }
 
   const geo = parseGeo(req.headers);
   const ua = (req.headers["user-agent"] as string) || "";

@@ -47,6 +47,75 @@ export interface ActivityBeaconPayload {
 }
 
 export const HUB_SESSION_KEY = "upraiser_hub_session_v1";
+export const OWNER_STORAGE_KEY = "upraiser_owner_ignore";
+export const OWNER_COOKIE_NAME = "upraiser_owner";
+
+const KNOWN_OWNER_VISITOR_IDS = new Set([
+  "hub_20261024_1818_qdzq",
+  "hub_20261026_2200_tep8",
+  "hub_20261026_2049_2zbv",
+]);
+
+export function setOwnerDeviceMode(enabled: boolean): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (enabled) {
+      localStorage.setItem(OWNER_STORAGE_KEY, "1");
+      document.cookie = `${OWNER_COOKIE_NAME}=1; path=/; max-age=315360000; SameSite=Lax`;
+    } else {
+      localStorage.removeItem(OWNER_STORAGE_KEY);
+      document.cookie = `${OWNER_COOKIE_NAME}=0; path=/; max-age=0; SameSite=Lax`;
+    }
+  } catch {}
+}
+
+export function isOwnerEmailOrContact(contact?: string): boolean {
+  if (!contact) return false;
+  const clean = contact.trim().toLowerCase();
+  return (
+    clean.endsWith("@upraiser.co.uk") ||
+    clean === "homeboylebz" ||
+    clean === "@homeboylebz"
+  );
+}
+
+export function checkAndSyncOwnerMode(session?: Partial<HubSessionState>): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const url = new URL(window.location.href);
+    const ownerParam = url.searchParams.get("owner") || url.searchParams.get("me");
+    if (ownerParam === "0") {
+      setOwnerDeviceMode(false);
+      url.searchParams.delete("owner");
+      url.searchParams.delete("me");
+      const cleanQuery = url.searchParams.toString();
+      window.history.replaceState({}, "", url.pathname + (cleanQuery ? `?${cleanQuery}` : ""));
+      return false;
+    }
+    if (ownerParam === "1" || url.searchParams.get("ignore") === "1") {
+      setOwnerDeviceMode(true);
+      url.searchParams.delete("owner");
+      url.searchParams.delete("me");
+      url.searchParams.delete("ignore");
+      const cleanQuery = url.searchParams.toString();
+      window.history.replaceState({}, "", url.pathname + (cleanQuery ? `?${cleanQuery}` : ""));
+      return true;
+    }
+
+    const hasCookie = typeof document !== "undefined" && /(?:^|;\s*)upraiser_owner=1(?:;|$)/.test(document.cookie || "");
+    const hasStorage = localStorage.getItem(OWNER_STORAGE_KEY) === "1";
+    const isKnownOwnerSession =
+      Boolean(session?.visitorId && KNOWN_OWNER_VISITOR_IDS.has(session.visitorId)) ||
+      isOwnerEmailOrContact(session?.savedContact);
+
+    if (hasCookie || hasStorage || isKnownOwnerSession) {
+      // Ensure both cookie and localStorage stay synchronized for 10 years across all routes and /api/proof clicks
+      setOwnerDeviceMode(true);
+      return true;
+    }
+  } catch {}
+  return false;
+}
 
 export interface SmartTrafficSource {
   source: string;
@@ -409,6 +478,7 @@ export function getOrInitHubSession(): HubSessionState {
       }
 
       localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
+      checkAndSyncOwnerMode(parsed);
       return parsed;
     }
 
@@ -427,6 +497,7 @@ export function getOrInitHubSession(): HubSessionState {
       isInApp: detected.isInApp,
     };
     localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(newSession));
+    checkAndSyncOwnerMode(newSession);
     return newSession;
   } catch {
     const fallbackDetected = detectSmartTrafficSource();
@@ -488,6 +559,7 @@ export function updateHubContact(name: string, contact: string) {
       parsed.savedContact = contact;
       parsed.lastVisitTime = Date.now();
       localStorage.setItem(HUB_SESSION_KEY, JSON.stringify(parsed));
+      checkAndSyncOwnerMode(parsed);
     }
   } catch {}
 }
@@ -499,6 +571,14 @@ export function sendActivityBeacon(payload: ActivityBeaconPayload) {
   if (typeof window === "undefined") return;
 
   const session = getOrInitHubSession();
+  // Suppress all telemetry beacons from Alex's own devices (Mac / iPhone, anywhere in the world)
+  if (
+    checkAndSyncOwnerMode(session) ||
+    isOwnerEmailOrContact(payload.leadContact)
+  ) {
+    setOwnerDeviceMode(true);
+    return;
+  }
   const effectiveClickId = payload.clickId || session.clickId || payload.visitorId;
   const enrichedPayload: ActivityBeaconPayload = {
     ...payload,
