@@ -323,10 +323,10 @@ export function ConferenceHubPage() {
         name: trimmedName,
         email: isEmail ? trimmedContact : "conference-lead@upraiser.co.uk",
         phone: !isEmail ? trimmedContact : "",
-        appId: "Conference Lead",
-        geos: "Tier-1 / Conference",
+        appId: "Direct Partner Desk (/connect)",
+        geos: "Tier-1 / Direct Desk",
         companyType: "Direct Operator Contact",
-        companySize: "On-Site Desk",
+        companySize: "Partner Desk",
         monthlyBudget: "Custom Route & Benchmark Split",
         clickId: session.clickId || session.visitorId,
         visitorId: session.visitorId,
@@ -354,7 +354,7 @@ export function ConferenceHubPage() {
         const accessKey = "260b2ece-07ce-4a41-8136-88bb30545e23";
         const fd = new FormData();
         fd.append("access_key", accessKey);
-        fd.append("subject", `Conference Lead (CLIP IN): ${trimmedName} · ${trimmedContact}`);
+        fd.append("subject", `Direct Partner Desk (/connect): ${trimmedName} · ${trimmedContact}`);
         fd.append("from_name", trimmedName);
         fd.append("email", isEmail ? trimmedContact : "conference-lead@upraiser.co.uk");
         fd.append("phone_or_telegram", trimmedContact);
@@ -514,7 +514,7 @@ export function ConferenceHubPage() {
                   type="text"
                   name="contact"
                   id="hub-contact"
-                  autoComplete="tel email"
+                  autoComplete="email"
                   enterKeyHint="next"
                   autoCapitalize="none"
                   autoCorrect="off"
@@ -531,8 +531,8 @@ export function ConferenceHubPage() {
                   name="notes"
                   id="hub-notes"
                   enterKeyHint="send"
-                  autoCapitalize="sentences"
-                  placeholder={t.fieldNotes || "NOTES"}
+                  autoCapitalize="none"
+                  placeholder={t.fieldNotes || "TELEGRAM ID etc"}
                   value={leadNotes}
                   onChange={(e) => setLeadNotes(e.target.value)}
                   dir="auto"
@@ -775,10 +775,22 @@ export function ConferenceHubPage() {
 
         {/* 4. Ecosystem & Links (Centered, stripped of 2.6 MB & domain labels) */}
         <motion.div variants={itemVariants} className="w-full space-y-2 pt-1">
+          {/* Media Deck */}
+          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
+            <Link
+              to={`/deck?lang=${lang}`}
+              onClick={() => triggerHaptic("light")}
+              className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
+            >
+              <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>
+              <span className="text-xs text-[#FECF09] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
+            </Link>
+          </motion.div>
+
           {/* Routes */}
           <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
             <Link
-              to={`/channels?utm_source=qr_wallet&lang=${lang}`}
+              to={`/channels?lang=${lang}`}
               onClick={() => {
                 triggerHaptic("light");
                 trackAction("channel_click", 0, {
@@ -789,18 +801,6 @@ export function ConferenceHubPage() {
               className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
             >
               <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.routesTitle}</span>
-              <span className="text-xs text-[#FECF09] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
-            </Link>
-          </motion.div>
-
-          {/* Expedition Dossier */}
-          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={SPRING_TACTILE}>
-            <Link
-              to={`/deck?lang=${lang}`}
-              onClick={() => triggerHaptic("light")}
-              className="flex items-center justify-center min-h-[48px] py-3 px-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 transition-colors group space-x-2"
-            >
-              <span className="text-sm font-medium text-white/85 group-hover:text-white">{t.mediaDeckTitle}</span>
               <span className="text-xs text-[#FECF09] font-mono group-hover:translate-x-0.5 transition-transform">→</span>
             </Link>
           </motion.div>

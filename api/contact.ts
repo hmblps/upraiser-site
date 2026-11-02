@@ -549,8 +549,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       if (attachments.length === 0) attachments = undefined;
     }
 
-    // 2. Determine conference vs main website form context
-    const isConference = appId.includes("Conference") || isRepeatAlert;
+    // 2. Determine /connect desk vs main website form context
+    const isConference =
+      appId.includes("Conference") ||
+      appId.includes("Direct Partner Desk") ||
+      appId.includes("/connect") ||
+      isRepeatAlert;
     const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
 
     // 3. Send automated High-End UX Snapshots dossier directly to the lead (1 lead = 1 Resend email)
@@ -701,6 +705,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           });
         }
 
+        const noteTgMatch = cleanUserNote.match(/(?:^|\s)@([a-zA-Z0-9_]{3,32})\b/) || cleanUserNote.match(/t\.me\/([a-zA-Z0-9_]{3,32})/i);
+
         if (rawContactTrimmed.startsWith("@") || /t\.me\/([a-zA-Z0-9_]+)/i.test(rawContactTrimmed)) {
           const tgHandle = rawContactTrimmed
             .replace(/^@/, "")
@@ -712,6 +718,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
               url: `https://t.me/${tgHandle}`,
             });
           }
+        } else if (noteTgMatch && noteTgMatch[1]) {
+          inlineButtons.push({
+            text: `✈️ Написать @${noteTgMatch[1]}`,
+            url: `https://t.me/${noteTgMatch[1]}`,
+          });
         } else if (!isValidLeadEmail && digitsOnly.length >= 7 && digitsOnly.length <= 15) {
           inlineButtons.push({
             text: `💬 WhatsApp`,
