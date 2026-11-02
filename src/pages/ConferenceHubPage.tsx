@@ -20,7 +20,6 @@ import {
 } from "../lib/activityTracker";
 import { useActivityTracker } from "../hooks/useActivityTracker";
 
-const VCARD_URL = "/Alex_Upraiser.vcf?v=8";
 const SPRING_TACTILE = { type: "spring", stiffness: 400, damping: 25 } as const;
 
 const containerVariants: Variants = {
@@ -101,10 +100,10 @@ function TelegramIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-function WhatsAppIcon({ className = "w-4 h-4" }: { className?: string }) {
+function TeamsIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.01 4.54-3.68 8.23-8.22 8.23zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.66.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.57.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.12-.23-.19-.48-.31z" />
+      <path d="M19.5 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm-5.5-.75a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm6.25 2.25h-3.13c.24.53.38 1.12.38 1.75v5.5c0 .93-.29 1.79-.78 2.5h2.28A2.25 2.25 0 0 0 21.25 15.5v-5.75c0-.97-.78-1.75-1.75-1.75ZM13.5 7.5h-6A2.5 2.5 0 0 0 5 10v5.25A4.75 4.75 0 0 0 9.75 20h1.5A4.75 4.75 0 0 0 16 15.25V10a2.5 2.5 0 0 0-2.5-2.5Zm-4.25 3.25h4.5v1.4h-1.5v4.35h-1.5v-4.35h-1.5v-1.4Z" />
     </svg>
   );
 }
@@ -266,7 +265,7 @@ export function ConferenceHubPage() {
     }, durationMs);
   }, []);
 
-  // Resilience: Auto-recover if user returns from native Contacts sheet or locks/unlocks phone
+  // Resilience: Auto-recover if user locks/unlocks phone or switches tabs
   useEffect(() => {
     const handleReturn = () => {
       setIsWarping(false);
@@ -275,24 +274,6 @@ export function ConferenceHubPage() {
 
     window.addEventListener("focus", handleReturn);
     document.addEventListener("visibilitychange", handleReturn);
-
-    // 1. Preload <link rel="preload"> in document.head for instant browser-level prefetching
-    try {
-      let link = document.querySelector<HTMLLinkElement>(`link[rel="preload"][href="${VCARD_URL}"]`);
-      if (!link) {
-        link = document.createElement("link");
-        link.rel = "preload";
-        link.href = VCARD_URL;
-        link.as = "fetch";
-        link.crossOrigin = "anonymous";
-        document.head.appendChild(link);
-      }
-    } catch {}
-
-    // 2. Pre-cache static vCard on mount for instant zero-delay opening in Safari & Chrome
-    try {
-      fetch(VCARD_URL, { cache: "force-cache" }).catch(() => {});
-    } catch {}
 
     return () => {
       window.removeEventListener("focus", handleReturn);
@@ -303,21 +284,6 @@ export function ConferenceHubPage() {
 
   // Repeat-visit tracking is handled centrally by useActivityTracker("conference_hub")
   // with a 30-minute idle + interaction gate to prevent duplicate alerts.
-
-  const triggerVCardDownload = () => {
-    try {
-      // Double-pulse tactile confirmation
-      triggerHaptic("success");
-
-      // Direct navigation to the static inline text/vcard endpoint (no `download` attr, no Blob, no
-      // target="_blank") so Safari and Chrome hand the card straight to the system Contacts sheet
-      if (typeof window !== "undefined") {
-        window.location.href = VCARD_URL;
-      }
-    } catch (err) {
-      console.warn("Reciprocal contact download failed:", err);
-    }
-  };
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
@@ -338,9 +304,6 @@ export function ConferenceHubPage() {
 
       // 3. Burst into hyperspace warp speed with an automatic 2.2s cap
       triggerWarp(2200);
-
-      // 4. Reciprocal vCard contact dispatch
-      triggerVCardDownload();
 
       setStatus("submitting");
       setErrorMessage("");
@@ -498,15 +461,12 @@ export function ConferenceHubPage() {
           </label>
         </motion.div>
 
-        {/* 1. Direct Lead Capture Form & Reciprocal Contact Exchange */}
+        {/* 1. Direct Lead Capture Form */}
         <motion.div variants={itemVariants} className="w-full pt-1 space-y-3">
           <div className="text-center px-1 flex flex-col items-center">
             <h2 className="text-lg sm:text-xl font-semibold text-white tracking-tight text-center leading-snug">
               {t.formHeading}
             </h2>
-            <p className="text-[11px] sm:text-xs text-white/90 font-normal text-center leading-relaxed max-w-[365px] mt-1.5">
-              {t.formSub}
-            </p>
           </div>
 
           <AnimatePresence mode="wait">
@@ -651,24 +611,24 @@ export function ConferenceHubPage() {
                 <TelegramIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
               </motion.a>
               <motion.a
-                href="https://wa.me/40724787390?text=Hey%20Alex%2C%20great%20connecting!"
+                href="https://teams.live.com/l/invite/FEArQ5qvXG2J-XWIwE"
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => {
                   triggerHaptic("light");
-                  trackAction("contact_click", 0, { channel: "whatsapp_alex", target: "+40724787390" });
+                  trackAction("contact_click", 0, { channel: "teams_alex", target: "MS Teams (Alex)" });
                 }}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
                 transition={SPRING_TACTILE}
                 className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
-                title="WhatsApp"
-                aria-label="WhatsApp"
+                title="Microsoft Teams"
+                aria-label="Microsoft Teams"
               >
-                <WhatsAppIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+                <TeamsIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
               </motion.a>
               <motion.a
-                href="mailto:alex@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Alex%2C%20great%20connecting!"
+                href="mailto:alex@upraiser.co.uk?subject=UPRAISER%20Partnership&body=Hey%20Alex%2C%20great%20connecting!"
                 onClick={() => {
                   triggerHaptic("light");
                   trackAction("contact_click", 0, { channel: "email_alex", target: "alex@upraiser.co.uk" });
@@ -723,7 +683,7 @@ export function ConferenceHubPage() {
                 <TelegramIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
               </motion.a>
               <motion.a
-                href="mailto:ceo@upraiser.co.uk?subject=Connecting%20from%20Summit&body=Hey%20Vlad%2C%20great%20connecting!"
+                href="mailto:ceo@upraiser.co.uk?subject=UPRAISER%20Partnership&body=Hey%20Vlad%2C%20great%20connecting!"
                 onClick={() => {
                   triggerHaptic("light");
                   trackAction("contact_click", 0, { channel: "email_vlad", target: "ceo@upraiser.co.uk" });
@@ -734,6 +694,78 @@ export function ConferenceHubPage() {
                 className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
                 title="Email ceo@upraiser.co.uk"
                 aria-label="Email ceo@upraiser.co.uk"
+              >
+                <MailIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
+            </div>
+          </div>
+
+          {/* Xander */}
+          <div className="flex items-center justify-between py-2.5 px-1 border-b border-white/[0.06]">
+            <div className="flex items-center space-x-3 min-w-0 flex-1">
+              <div className="relative shrink-0">
+                <img
+                  src="/team/xander.webp"
+                  alt="Xander Alekseyev"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-full object-cover border border-white/10"
+                  loading="eager"
+                />
+                <span className="absolute bottom-0 end-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#090204] rounded-full" aria-hidden />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div dir="ltr" className="text-sm font-medium text-white truncate">Xander Alekseyev</div>
+                <div className="text-[10px] sm:text-xs text-[#f58e38] font-mono whitespace-nowrap overflow-hidden text-ellipsis">{t.distRole}</div>
+              </div>
+            </div>
+            <div className="flex items-center space-x-1.5 shrink-0 ms-2">
+              <motion.a
+                href="https://t.me/+380730723684"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "telegram_xander", target: "Telegram (Xander)" });
+                }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
+                title="Telegram (Xander)"
+                aria-label="Telegram (Xander)"
+              >
+                <TelegramIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
+              <motion.a
+                href="https://teams.live.com/l/invite/FEA_HKTmRsuCtiqJQU?v=g1"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "teams_xander", target: "MS Teams (Xander)" });
+                }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
+                title="Microsoft Teams"
+                aria-label="Microsoft Teams"
+              >
+                <TeamsIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
+              </motion.a>
+              <motion.a
+                href="mailto:xander@upraiser.co.uk?subject=UPRAISER%20Partnership&body=Hey%20Xander%2C%20great%20connecting!"
+                onClick={() => {
+                  triggerHaptic("light");
+                  trackAction("contact_click", 0, { channel: "email_xander", target: "xander@upraiser.co.uk" });
+                }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                transition={SPRING_TACTILE}
+                className="min-h-[44px] min-w-[44px] p-2 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/10 text-white/70 hover:text-white transition-colors group"
+                title="Email xander@upraiser.co.uk"
+                aria-label="Email xander@upraiser.co.uk"
               >
                 <MailIcon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />
               </motion.a>

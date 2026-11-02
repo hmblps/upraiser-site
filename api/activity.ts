@@ -478,6 +478,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       const target = metadata?.target || "Direct";
       const channelLabel = rawChannel.includes("telegram")
         ? `Telegram (${target})`
+        : rawChannel.includes("teams")
+        ? `${target}`
         : rawChannel.includes("whatsapp")
         ? `WhatsApp (${target})`
         : rawChannel.includes("email")

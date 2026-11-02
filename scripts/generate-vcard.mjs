@@ -37,7 +37,6 @@ const lines = [
   "FN:Alex Upraiser",
   "ORG:Supply & Demand",
   "TITLE:Oleksii Ostroukhov",
-  "TEL;TYPE=CELL,VOICE,PREF:+40724787390",
   "EMAIL;TYPE=WORK,INTERNET:alex@upraiser.co.uk",
   "URL;TYPE=WORK:https://upraiser.co.uk/connect",
   `PHOTO;ENCODING=b;TYPE=JPEG:${folded}`,
