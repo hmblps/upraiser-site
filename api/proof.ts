@@ -309,6 +309,15 @@ function renderSnapshotViewerHtml(initialId: string, lead: string, isOwner: bool
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <title>${escapeHtml(activeItem.brand)} · ${escapeHtml(activeItem.report)} | UPRAISER</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="UPRAISER" />
+  <meta property="og:title" content="${escapeHtml(activeItem.brand)} · ${escapeHtml(activeItem.report)}" />
+  <meta property="og:description" content="${escapeHtml(activeItem.metric)}" />
+  <meta property="og:image" content="${escapeHtml(activeItem.fileUrl)}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(activeItem.brand)} · ${escapeHtml(activeItem.report)}" />
+  <meta name="twitter:description" content="${escapeHtml(activeItem.metric)}" />
+  <meta name="twitter:image" content="${escapeHtml(activeItem.fileUrl)}" />
   <style>
     :root {
       --bg: #f1f5f9;
