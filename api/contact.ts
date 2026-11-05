@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { createHmac } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
 export const config = {
@@ -7,6 +8,68 @@ export const config = {
     bodyParser: true,
   },
 };
+
+const MODERATION_RECIPIENTS = ["alex@upraiser.co.uk", "ceo@upraiser.co.uk"];
+
+const FREE_EMAIL_DOMAINS = new Set([
+  "gmail.com",
+  "googlemail.com",
+  "icloud.com",
+  "me.com",
+  "mac.com",
+  "yahoo.com",
+  "yahoo.co.uk",
+  "outlook.com",
+  "hotmail.com",
+  "live.com",
+  "msn.com",
+  "aol.com",
+  "mail.ru",
+  "inbox.ru",
+  "bk.ru",
+  "list.ru",
+  "yandex.ru",
+  "ya.ru",
+  "yandex.com",
+  "proton.me",
+  "protonmail.com",
+  "zoho.com",
+  "gmx.com",
+  "gmx.de",
+  "web.de",
+  "qq.com",
+  "163.com",
+  "126.com",
+  "naver.com",
+  "privaterelay.appleid.com",
+]);
+
+function computeModerationSig(email: string, name: string): string {
+  const secret =
+    process.env.RESEND_API_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    "upraiser_moderation_secret_2026";
+  const payload = `${email.trim().toLowerCase()}|${name.trim()}`;
+  return createHmac("sha256", secret).update(payload).digest("hex").slice(0, 24);
+}
+
+function analyzeLeadEmailDomain(email: string): {
+  emailDomain: string;
+  corpDomain: string;
+  isCorporate: boolean;
+} {
+  const clean = (email || "").trim().toLowerCase();
+  const emailDomain = clean.includes("@") ? clean.split("@")[1]?.trim() || "" : "";
+  const isCorporate =
+    Boolean(emailDomain) &&
+    !FREE_EMAIL_DOMAINS.has(emailDomain) &&
+    !emailDomain.endsWith(".upraiser.co.uk");
+  return {
+    emailDomain,
+    corpDomain: isCorporate ? emailDomain : "",
+    isCorporate,
+  };
+}
 
 const ALLOWED_MIME_TYPES = new Set([
   "application/pdf",
@@ -359,10 +422,453 @@ export function generateLeadSnapshotsEmailHtml(leadName?: string, leadEmail?: st
 </html>`;
 }
 
+export interface ModerationEmailParams {
+  leadName: string;
+  leadEmail: string;
+  emailDomain: string;
+  corpDomain: string;
+  isCorporate: boolean;
+  isConference: boolean;
+  appId: string;
+  geos: string;
+  companyType: string;
+  companySize: string;
+  monthlyBudget: string;
+  notes: string;
+  geo: string;
+  device: string;
+  approveUrl: string;
+  rejectUrl: string;
+  linkedinUrl: string;
+}
+
+export function generateModerationEmailHtml(p: ModerationEmailParams): string {
+  const domainBoxHtml = p.isCorporate
+    ? `<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;">
+        <tr>
+          <td>
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #047857; margin-bottom: 4px;">
+              🏢 Корпоративный домен обнаружен
+            </div>
+            <div style="font-size: 18px; font-weight: 800; color: #064e3b; letter-spacing: -0.01em; margin-bottom: 8px;">
+              ${escapeHtml(p.corpDomain)}
+            </div>
+            <div style="font-size: 12px; font-weight: 700;">
+              <a href="https://${escapeHtml(p.corpDomain)}" target="_blank" style="color: #059669; text-decoration: none; margin-right: 14px;">🌐 Открыть ${escapeHtml(p.corpDomain)} ↗</a>
+              <a href="${escapeHtml(p.linkedinUrl)}" target="_blank" style="color: #0f172a; text-decoration: none;">🔍 Найти в LinkedIn ↗</a>
+            </div>
+          </td>
+        </tr>
+      </table>`
+    : `<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #fffbeb; border: 1px solid #fcd34d; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;">
+        <tr>
+          <td>
+            <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #b45309; margin-bottom: 4px;">
+              ⚠️ Личный почтовый сервис
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: #78350f; margin-bottom: 8px;">
+              ${escapeHtml(p.emailDomain || p.leadEmail)}
+            </div>
+            <div style="font-size: 12px; font-weight: 700;">
+              <a href="${escapeHtml(p.linkedinUrl)}" target="_blank" style="color: #92400e; text-decoration: none;">🔍 Проверить ${escapeHtml(p.leadName)} в LinkedIn ↗</a>
+            </div>
+          </td>
+        </tr>
+      </table>`;
+
+  return `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Модерация отправки скриншотов — ${escapeHtml(p.leadName)}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; -webkit-font-smoothing: antialiased;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f1f5f9; padding: 24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 560px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);">
+          <tr>
+            <td height="4" style="background: linear-gradient(90deg, #e63558 0%, #fecf09 50%, #10b981 100%);"></td>
+          </tr>
+          <tr>
+            <td style="padding: 22px 24px 12px 24px;">
+              <div style="font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; color: #e63558; text-transform: uppercase; margin-bottom: 4px;">
+                UPRAISER · КОНТРОЛЬ ОТПРАВКИ ПРУФОВ
+              </div>
+              <div style="font-size: 18px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; line-height: 1.3;">
+                Выслать 12 скриншотов этому лиду?
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 24px 18px 24px;">
+              ${domainBoxHtml}
+
+              <!-- Action Buttons -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 18px;">
+                <tr>
+                  <td style="padding-bottom: 8px;">
+                    <a href="${escapeHtml(p.approveUrl)}" target="_blank" style="display: block; width: 100%; box-sizing: border-box; background-color: #10b981; color: #ffffff; font-size: 13.5px; font-weight: 800; text-align: center; text-decoration: none; padding: 14px 18px; border-radius: 11px; letter-spacing: 0.02em;">
+                      ✅ Выслать скриншоты на ${escapeHtml(p.leadEmail)}
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="${escapeHtml(p.rejectUrl)}" target="_blank" style="display: block; width: 100%; box-sizing: border-box; background-color: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; font-size: 12.5px; font-weight: 700; text-align: center; text-decoration: none; padding: 11px 18px; border-radius: 11px;">
+                      ❌ Не высылать (Отклонить)
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Lead Dossier Table -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px;">
+                <tr>
+                  <td style="font-size: 12.5px; line-height: 1.65; color: #334155;">
+                    <div><strong>👤 Имя:</strong> ${escapeHtml(p.leadName)}</div>
+                    <div><strong>📧 Email:</strong> <a href="mailto:${escapeHtml(p.leadEmail)}" style="color: #0f172a; font-weight: 700; text-decoration: none;">${escapeHtml(p.leadEmail)}</a></div>
+                    <div><strong>🧭 Источник:</strong> ${p.isConference ? "Конференц-хаб (/connect)" : "Основной сайт (/contact)"}</div>
+                    ${
+                      !p.isConference && p.appId
+                        ? `<div><strong>📲 Приложение:</strong> ${escapeHtml(p.appId)}${p.geos ? ` (${escapeHtml(p.geos)})` : ""}</div>
+                           <div><strong>💼 Профиль:</strong> ${escapeHtml(p.companyType)} (${escapeHtml(p.companySize)}) · Бюджет: ${escapeHtml(p.monthlyBudget)}</div>`
+                        : ""
+                    }
+                    ${p.notes ? `<div><strong>📝 Заметка:</strong> <em>${escapeHtml(p.notes)}</em></div>` : ""}
+                    <div><strong>📍 Гео и девайс:</strong> ${escapeHtml(p.geo)} · ${escapeHtml(p.device)}</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px 18px 24px; border-top: 1px solid #f1f5f9; text-align: center;">
+              <p style="margin: 0; font-size: 11px; color: #64748b; line-height: 1.45;">
+                Статус синхронизируется между <strong>alex@upraiser.co.uk</strong>, <strong>ceo@upraiser.co.uk</strong> и Telegram. Повторная отправка одному лиду заблокирована.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+function renderModerationConsoleHtml(params: {
+  intent: "approve" | "reject";
+  leadName: string;
+  leadEmail: string;
+  vid: string;
+  sig: string;
+  status: "pending" | "approved" | "rejected";
+  decidedAt?: string;
+  geo?: string;
+  device?: string;
+  notes?: string;
+  appId?: string;
+  isConference?: boolean;
+}): string {
+  const { emailDomain, corpDomain, isCorporate } = analyzeLeadEmailDomain(params.leadEmail);
+  const linkedinQuery = corpDomain ? `${params.leadName} ${corpDomain.split(".")[0]}` : params.leadName;
+  const linkedinUrl = `https://www.google.com/search?q=${encodeURIComponent(`site:linkedin.com/in/ ${linkedinQuery}`)}`;
+
+  return `<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Модерация пруфов · ${escapeHtml(params.leadName)} | UPRAISER</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --green: #10b981;
+      --red: #e11d48;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
+    }
+    .ribbon {
+      height: 4px;
+      background: linear-gradient(90deg, #e63558 0%, #fecf09 50%, #10b981 100%);
+    }
+    .pad { padding: 22px; }
+    .kicker {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #e63558;
+      margin-bottom: 4px;
+    }
+    h1 {
+      margin: 0 0 14px 0;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+    .domain-box {
+      border-radius: 12px;
+      padding: 13px 15px;
+      margin-bottom: 16px;
+    }
+    .domain-corp {
+      background: #ecfdf5;
+      border: 1px solid #6ee7b7;
+      color: #064e3b;
+    }
+    .domain-free {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      color: #78350f;
+    }
+    .domain-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 3px;
+    }
+    .domain-val {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      word-break: break-all;
+    }
+    .domain-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .domain-links a {
+      color: inherit;
+      text-decoration: underline;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .meta-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #334155;
+      margin-bottom: 18px;
+    }
+    .meta-box div { word-break: break-word; }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      text-align: center;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn + .btn { margin-top: 10px; }
+    .btn-approve {
+      background: #10b981;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+    .btn-reject {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+    }
+    .btn-secondary {
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .status-banner {
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .status-approved {
+      background: #ecfdf5;
+      border: 1px solid #6ee7b7;
+      color: #065f46;
+    }
+    .status-rejected {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #9f1239;
+    }
+    .status-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .status-sub {
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .btn:hover:not(:disabled) { opacity: 0.9; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="ribbon"></div>
+    <div class="pad">
+      <div class="kicker">UPRAISER · МОДЕРАЦИЯ ПРУФОВ</div>
+      <h1>${escapeHtml(params.leadName)}</h1>
+
+      <div class="domain-box ${isCorporate ? "domain-corp" : "domain-free"}">
+        <div class="domain-label">
+          ${isCorporate ? "🏢 Корпоративный домен" : "⚠️ Личный почтовый сервис"}
+        </div>
+        <div class="domain-val">${escapeHtml(corpDomain || emailDomain || params.leadEmail)}</div>
+        <div class="domain-links">
+          ${
+            corpDomain
+              ? `<a href="https://${escapeHtml(corpDomain)}" target="_blank" rel="noopener">🌐 Открыть сайт ↗</a>`
+              : ""
+          }
+          <a href="${escapeHtml(linkedinUrl)}" target="_blank" rel="noopener">🔍 Найти в LinkedIn ↗</a>
+        </div>
+      </div>
+
+      <div class="meta-box">
+        <div><strong>📧 Email лида:</strong> ${escapeHtml(params.leadEmail)}</div>
+        ${params.appId ? `<div><strong>📲 Источник / Приложение:</strong> ${escapeHtml(params.appId)}</div>` : ""}
+        ${params.notes ? `<div><strong>📝 Заметка:</strong> ${escapeHtml(params.notes)}</div>` : ""}
+        ${params.geo || params.device ? `<div><strong>📍 Девайс:</strong> ${escapeHtml(params.geo || "")} · ${escapeHtml(params.device || "")}</div>` : ""}
+      </div>
+
+      <div id="action-root">
+        ${
+          params.status === "approved"
+            ? `<div class="status-banner status-approved">
+                <div class="status-title">✅ Скриншоты уже отправлены</div>
+                <div class="status-sub">Письмо с 12 скриншотами (AppsFlyer · Protect360 · CRM) было доставлено на <strong>${escapeHtml(params.leadEmail)}</strong>. Повторная отправка заблокирована.</div>
+              </div>`
+            : params.status === "rejected"
+            ? `<div class="status-banner status-rejected">
+                <div class="status-title">🚫 Отправка была отклонена</div>
+                <div class="status-sub">Письмо со скриншотами не отправлялось этому лиду.</div>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="submitDecision('approve')">
+                ✅ Всё-таки выслать скриншоты лиду
+              </button>`
+            : params.intent === "reject"
+            ? `<button type="button" id="btn-main" class="btn btn-reject" onclick="submitDecision('reject')">
+                🚫 Подтвердить отказ (Не высылать)
+              </button>
+              <button type="button" id="btn-alt" class="btn btn-secondary" onclick="submitDecision('approve')">
+                ✅ Всё-таки выслать 12 скриншотов
+              </button>`
+            : `<button type="button" id="btn-main" class="btn btn-approve" onclick="submitDecision('approve')">
+                ✅ Подтвердить и выслать 12 скриншотов
+              </button>
+              <button type="button" id="btn-alt" class="btn btn-secondary" onclick="submitDecision('reject')">
+                ❌ Не высылать (Отклонить)
+              </button>`
+        }
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function submitDecision(decision) {
+      const root = document.getElementById('action-root');
+      const btns = root.querySelectorAll('button');
+      btns.forEach(b => { b.disabled = true; });
+      const mainBtn = document.getElementById('btn-main') || btns[0];
+      if (mainBtn) {
+        mainBtn.textContent = decision === 'approve' ? '⏳ Отправляем скриншоты лиду...' : '⏳ Фиксируем отказ...';
+      }
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'moderate_decision',
+            decision: decision,
+            email: ${JSON.stringify(params.leadEmail)},
+            name: ${JSON.stringify(params.leadName)},
+            vid: ${JSON.stringify(params.vid)},
+            sig: ${JSON.stringify(params.sig)}
+          })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || 'Ошибка сервера');
+        }
+        if (data.status === 'approved') {
+          root.innerHTML = '<div class="status-banner status-approved">' +
+            '<div class="status-title">' + (data.alreadyHandled ? 'ℹ️ Уже было отправлено ранее' : '✅ Скриншоты успешно отправлены!') + '</div>' +
+            '<div class="status-sub">Досье с 12 скриншотами отправлено на <strong>${escapeHtml(params.leadEmail)}</strong>. Статус в Telegram обновлён.</div>' +
+          '</div>';
+        } else {
+          root.innerHTML = '<div class="status-banner status-rejected">' +
+            '<div class="status-title">🚫 Отправка отклонена</div>' +
+            '<div class="status-sub">Скриншоты не будут отправлены на <strong>${escapeHtml(params.leadEmail)}</strong>. Статус в Telegram обновлён.</div>' +
+          '</div>' +
+          '<button type="button" class="btn btn-secondary" onclick="submitDecision(\\'approve\\')">✅ Всё-таки выслать скриншоты лиду</button>';
+        }
+      } catch (err) {
+        alert('Не удалось выполнить действие: ' + (err.message || err));
+        btns.forEach(b => { b.disabled = false; });
+      }
+    }
+  </script>
+</body>
+</html>`;
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   // CORS & Options
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -370,19 +876,98 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return res.end();
   }
 
-  if (req.method !== "POST") {
-    res.writeHead(405, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ ok: false, error: "Method not allowed" }));
-  }
-
   const resendApiKey = process.env.RESEND_API_KEY;
   if (!resendApiKey) {
-    console.warn("Server email is not configured. Missing RESEND_API_KEY - autoresponder will be skipped.");
+    console.warn("Server email is not configured. Missing RESEND_API_KEY.");
   }
 
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   const supabaseAdmin = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+
+  // Handle GET Moderation Console (/api/contact?moderate=approve|reject&email=...&name=...&vid=...&sig=...)
+  if (req.method === "GET") {
+    const reqUrl = new URL(req.url || "/", "https://upraiser.co.uk");
+    const moderate = reqUrl.searchParams.get("moderate");
+    const leadEmail = (reqUrl.searchParams.get("email") || "").trim();
+    const leadName = (reqUrl.searchParams.get("name") || "").trim();
+    const vid = (reqUrl.searchParams.get("vid") || "").trim();
+    const sig = (reqUrl.searchParams.get("sig") || "").trim();
+
+    if ((moderate !== "approve" && moderate !== "reject") || !leadEmail || !leadName) {
+      res.writeHead(400, { "Content-Type": "text/plain; charset=utf-8" });
+      return res.end("Invalid moderation link parameters.");
+    }
+
+    const expectedSig = computeModerationSig(leadEmail, leadName);
+    if (sig !== expectedSig) {
+      res.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
+      return res.end("Forbidden: Invalid moderation signature.");
+    }
+
+    let status: "pending" | "approved" | "rejected" = "pending";
+    let decidedAt: string | undefined;
+    let storedMeta: Record<string, any> = {};
+
+    if (supabaseAdmin) {
+      try {
+        const emailKey = `email_${leadEmail.toLowerCase()}`;
+        const { data: row } = await supabaseAdmin
+          .from("lead_notification_cooldowns")
+          .select("metadata")
+          .eq("visitor_id", emailKey)
+          .maybeSingle();
+
+        if (row?.metadata && typeof row.metadata === "object") {
+          storedMeta = row.metadata;
+        } else if (vid) {
+          const { data: vidRow } = await supabaseAdmin
+            .from("lead_notification_cooldowns")
+            .select("metadata")
+            .eq("visitor_id", vid)
+            .maybeSingle();
+          if (vidRow?.metadata && typeof vidRow.metadata === "object") {
+            storedMeta = vidRow.metadata;
+          }
+        }
+
+        if (storedMeta.proof_status === "approved") status = "approved";
+        else if (storedMeta.proof_status === "rejected") status = "rejected";
+        decidedAt = storedMeta.proof_decided_at;
+      } catch (err) {
+        console.warn("Moderation GET lookup warning:", err);
+      }
+    }
+
+    // Stamp owner cookie so the moderator's device is excluded from self-tracking
+    res.setHeader(
+      "Set-Cookie",
+      "upraiser_owner=1; Path=/; Max-Age=315360000; SameSite=Lax"
+    );
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    return res.end(
+      renderModerationConsoleHtml({
+        intent: moderate,
+        leadName,
+        leadEmail,
+        vid,
+        sig,
+        status,
+        decidedAt,
+        geo: storedMeta.lastGeo,
+        device: storedMeta.lastDevice,
+        notes: storedMeta.notes,
+        appId: storedMeta.appId,
+        isConference: storedMeta.isConference,
+      })
+    );
+  }
+
+  if (req.method !== "POST") {
+    res.writeHead(405, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ ok: false, error: "Method not allowed" }));
+  }
 
   let body: any = {};
   if ((req as any).body) {
@@ -404,6 +989,231 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       res.writeHead(400, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ ok: false, error: "Malformed JSON payload" }));
     }
+  }
+
+  const tgToken =
+    process.env.VITE_TELEGRAM_BOT_TOKEN ||
+    process.env.TELEGRAM_BOT_TOKEN ||
+    "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
+  const tgChatId =
+    process.env.VITE_TELEGRAM_CHAT_ID ||
+    process.env.TELEGRAM_CHAT_ID ||
+    "-1003934317948";
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
+
+  // Handle POST Moderation Decision (Approve / Reject sending screenshots to lead)
+  if (body?.action === "moderate_decision") {
+    const decision = body.decision === "approve" ? "approve" : "reject";
+    const leadEmail = String(body.email || "").trim();
+    const leadName = String(body.name || "").trim();
+    const vid = String(body.vid || "").trim();
+    const sig = String(body.sig || "").trim();
+
+    if (!leadEmail || !leadName) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: false, error: "Missing lead email or name." }));
+    }
+
+    const expectedSig = computeModerationSig(leadEmail, leadName);
+    if (sig !== expectedSig) {
+      res.writeHead(403, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: false, error: "Invalid moderation signature." }));
+    }
+
+    const emailKey = `email_${leadEmail.toLowerCase()}`;
+    let existingMeta: Record<string, any> = {};
+
+    if (supabaseAdmin) {
+      try {
+        const { data: row } = await supabaseAdmin
+          .from("lead_notification_cooldowns")
+          .select("metadata")
+          .eq("visitor_id", emailKey)
+          .maybeSingle();
+        if (row?.metadata && typeof row.metadata === "object") {
+          existingMeta = row.metadata;
+        } else if (vid) {
+          const { data: vidRow } = await supabaseAdmin
+            .from("lead_notification_cooldowns")
+            .select("metadata")
+            .eq("visitor_id", vid)
+            .maybeSingle();
+          if (vidRow?.metadata && typeof vidRow.metadata === "object") {
+            existingMeta = vidRow.metadata;
+          }
+        }
+      } catch (err) {
+        console.warn("Moderation decision lookup warning:", err);
+      }
+    }
+
+    // Prevent duplicate email dispatch if already approved earlier
+    if (existingMeta.proof_status === "approved") {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(
+        JSON.stringify({
+          ok: true,
+          alreadyHandled: true,
+          status: "approved",
+          decidedAt: existingMeta.proof_decided_at || null,
+        })
+      );
+    }
+
+    const nowIso = new Date().toISOString();
+
+    if (decision === "approve") {
+      if (!resendApiKey) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ ok: false, error: "RESEND_API_KEY is not configured on server." }));
+      }
+
+      const leadHtml = generateLeadSnapshotsEmailHtml(leadName, leadEmail);
+      const sendRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [leadEmail],
+          reply_to: "alex@upraiser.co.uk",
+          subject: "UPRAISER — Raw Dashboards & Performance Snapshots (Protect360 · AppsFlyer)",
+          html: leadHtml,
+        }),
+      });
+
+      if (!sendRes.ok) {
+        const errText = await sendRes.text();
+        res.writeHead(500, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ ok: false, error: `Resend error: ${errText.slice(0, 120)}` }));
+      }
+    }
+
+    const nextStatus = decision === "approve" ? "approved" : "rejected";
+    const updatedMeta = {
+      ...existingMeta,
+      displayName: existingMeta.displayName || leadName,
+      leadEmail: leadEmail.toLowerCase(),
+      proof_status: nextStatus,
+      proof_decided_at: nowIso,
+    };
+
+    if (supabaseAdmin) {
+      try {
+        await supabaseAdmin.from("lead_notification_cooldowns").upsert(
+          {
+            visitor_id: emailKey,
+            last_notified_at: nowIso,
+            last_event_type: decision === "approve" ? "proof_approved" : "proof_rejected",
+            metadata: updatedMeta,
+          },
+          { onConflict: "visitor_id" }
+        );
+
+        const targetVid = vid || existingMeta.linkedVisitorId;
+        if (targetVid) {
+          await supabaseAdmin.from("lead_notification_cooldowns").upsert(
+            {
+              visitor_id: targetVid,
+              last_notified_at: nowIso,
+              last_event_type: decision === "approve" ? "proof_approved" : "proof_rejected",
+              metadata: updatedMeta,
+            },
+            { onConflict: "visitor_id" }
+          );
+        }
+
+        await supabaseAdmin.from("lead_activity_logs").insert([
+          {
+            visitor_id: targetVid || emailKey,
+            lead_name: leadName,
+            lead_contact: leadEmail,
+            event_type: decision === "approve" ? "proof_approved" : "proof_rejected",
+            duration_seconds: 0,
+            metadata: {
+              decision,
+              email: leadEmail,
+              decidedAt: nowIso,
+            },
+          },
+        ]);
+      } catch (dbErr) {
+        console.warn("Moderation decision DB sync warning:", dbErr);
+      }
+    }
+
+    // Sync decision to Telegram (remove pending buttons & post status reply)
+    if (tgToken && tgChatId) {
+      try {
+        const leadCardMsgId = existingMeta.lead_card_message_id
+          ? Number(existingMeta.lead_card_message_id)
+          : null;
+
+        if (leadCardMsgId) {
+          const remainingButtons = Array.isArray(existingMeta.enrichment_buttons)
+            ? existingMeta.enrichment_buttons
+            : [];
+          await fetch(`https://api.telegram.org/bot${tgToken}/editMessageReplyMarkup`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: tgChatId,
+              message_id: leadCardMsgId,
+              reply_markup:
+                remainingButtons.length > 0
+                  ? { inline_keyboard: [remainingButtons] }
+                  : { inline_keyboard: [] },
+            }),
+          }).catch(() => {});
+        }
+
+        const tgReplyText =
+          decision === "approve"
+            ? [
+                `✅ <b>Скриншоты отправлены лиду (одобрено)</b>`,
+                `👤 <b>Получатель:</b> <b>${escapeHtml(leadName)}</b> (<code>${escapeHtml(leadEmail)}</code>)`,
+                `📨 Досье с 12 скриншотами успешно доставлено.`,
+              ].join("\n")
+            : [
+                `🚫 <b>Отправка скриншотов отклонена</b>`,
+                `👤 <b>Лид:</b> <b>${escapeHtml(leadName)}</b> (<code>${escapeHtml(leadEmail)}</code>)`,
+              ].join("\n");
+
+        const replyPayload: Record<string, any> = {
+          chat_id: tgChatId,
+          text: tgReplyText,
+          parse_mode: "HTML",
+          disable_notification: decision === "reject",
+          disable_web_page_preview: true,
+        };
+
+        if (leadCardMsgId) {
+          replyPayload.reply_parameters = {
+            message_id: leadCardMsgId,
+            allow_sending_without_reply: true,
+          };
+        }
+
+        await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(replyPayload),
+        });
+      } catch (tgErr) {
+        console.warn("Moderation Telegram sync warning:", tgErr);
+      }
+    }
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(
+      JSON.stringify({
+        ok: true,
+        status: nextStatus,
+        decidedAt: nowIso,
+      })
+    );
   }
 
   const {
@@ -448,6 +1258,10 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const geo = parseGeo(req.headers);
   const ua = (req.headers["user-agent"] as string) || "";
   const device = parseDevice(ua);
+  const rawNotes = (notes || "").trim();
+  const isLegacyFootprintDump =
+    rawNotes.startsWith("[CONFERENCE HUB") || rawNotes.startsWith("[REPEAT HUB");
+  const cleanUserNote = isLegacyFootprintDump ? "" : rawNotes;
   let prevCooldownMeta: Record<string, any> = {};
 
   if (supabaseAdmin && visitorId) {
@@ -555,10 +1369,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       appId.includes("Direct Partner Desk") ||
       appId.includes("/connect") ||
       isRepeatAlert;
-    const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
 
-    // 3. Send automated High-End UX Snapshots dossier directly to the lead (1 lead = 1 Resend email)
-    // Internal team alerts are routed 100% to Telegram IMS2026 supergroup (0 Resend calls).
+    // 3. Resolve lead email & send Moderation Email to alex@upraiser.co.uk and ceo@upraiser.co.uk
+    // Screenshots are NO LONGER sent automatically to the lead — they wait for 1-click moderation!
     let leadTargetEmail = (email || "").trim();
     if (!leadTargetEmail || leadTargetEmail === "conference-lead@upraiser.co.uk" || leadTargetEmail === "revisit-alert@upraiser.co.uk") {
       if (phone && phone.includes("@") && phone.includes(".")) {
@@ -576,67 +1389,101 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       !leadTargetEmail.includes("conference-lead") &&
       !leadTargetEmail.includes("revisit-alert");
 
-    let autoresponderSent = false;
-    let autoresponderError: string | null = null;
+    const { emailDomain, corpDomain, isCorporate } = isValidLeadEmail
+      ? analyzeLeadEmailDomain(leadTargetEmail)
+      : { emailDomain: "", corpDomain: "", isCorporate: false };
 
-    if (isValidLeadEmail && resendApiKey) {
-      try {
-        const leadHtml = generateLeadSnapshotsEmailHtml(cleanName, leadTargetEmail);
-        const autoresponderRes = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${resendApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+    const linkedinQuery = corpDomain
+      ? `${cleanName} ${corpDomain.split(".")[0]}`
+      : cleanName;
+    const linkedinUrl = `https://www.google.com/search?q=${encodeURIComponent(`site:linkedin.com/in/ ${linkedinQuery}`)}`;
+
+    let approveUrl = "";
+    let rejectUrl = "";
+    let moderationEmailSent = false;
+    let moderationEmailError: string | null = null;
+
+    if (isValidLeadEmail) {
+      const sig = computeModerationSig(leadTargetEmail, cleanName);
+      const qParams = `email=${encodeURIComponent(leadTargetEmail)}&name=${encodeURIComponent(cleanName)}&vid=${encodeURIComponent(visitorId || "")}&sig=${sig}`;
+      approveUrl = `https://upraiser.co.uk/api/contact?moderate=approve&${qParams}`;
+      rejectUrl = `https://upraiser.co.uk/api/contact?moderate=reject&${qParams}`;
+
+      if (resendApiKey) {
+        try {
+          const modHtml = generateModerationEmailHtml({
+            leadName: cleanName,
+            leadEmail: leadTargetEmail,
+            emailDomain,
+            corpDomain,
+            isCorporate,
+            isConference,
+            appId,
+            geos,
+            companyType,
+            companySize,
+            monthlyBudget,
+            notes: cleanUserNote,
+            geo,
+            device,
+            approveUrl,
+            rejectUrl,
+            linkedinUrl,
+          });
+
+          const modSubject = isCorporate
+            ? `🔎 Модерация пруфов: ${cleanName} (${corpDomain}) — Выслать скриншоты?`
+            : `🔎 Модерация пруфов: ${cleanName} (${emailDomain} · Личная почта) — Выслать скриншоты?`;
+
+          const modPayload: Record<string, any> = {
             from: fromEmail,
-            to: [leadTargetEmail],
-            reply_to: "alex@upraiser.co.uk",
-            subject: "UPRAISER — Raw Dashboards & Performance Snapshots (Protect360 · AppsFlyer)",
-            html: leadHtml,
-          }),
-        });
-        if (!autoresponderRes.ok) {
-          const autoErr = await autoresponderRes.text();
-          autoresponderError = autoErr;
-          console.error("Autoresponder Resend response error:", autoresponderRes.status, autoErr);
-        } else {
-          autoresponderSent = true;
-          console.info("Autoresponder dossier successfully dispatched to lead:", leadTargetEmail);
+            to: MODERATION_RECIPIENTS,
+            reply_to: leadTargetEmail,
+            subject: modSubject,
+            html: modHtml,
+          };
+          if (attachments && attachments.length > 0) {
+            modPayload.attachments = attachments;
+          }
+
+          const modRes = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${resendApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(modPayload),
+          });
+
+          if (!modRes.ok) {
+            const errTxt = await modRes.text();
+            moderationEmailError = errTxt;
+            console.error("Moderation email Resend error:", modRes.status, errTxt);
+          } else {
+            moderationEmailSent = true;
+            console.info("Moderation email dispatched to:", MODERATION_RECIPIENTS.join(", "));
+          }
+        } catch (modErr) {
+          moderationEmailError = modErr instanceof Error ? modErr.message : String(modErr);
+          console.error("Moderation email exception:", modErr);
         }
-      } catch (leadEmailErr) {
-        autoresponderError = leadEmailErr instanceof Error ? leadEmailErr.message : String(leadEmailErr);
-        console.error("Autoresponder delivery warning to lead:", leadEmailErr);
       }
     }
 
-    // 4. Send LOUD Telegram Instant Alert (disable_notification: false)
-    const tgToken =
-      process.env.VITE_TELEGRAM_BOT_TOKEN ||
-      process.env.TELEGRAM_BOT_TOKEN ||
-      "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
-    const tgChatId =
-      process.env.VITE_TELEGRAM_CHAT_ID ||
-      process.env.TELEGRAM_CHAT_ID ||
-      "-1003934317948";
+    // 4. Send LOUD Telegram Instant Alert (disable_notification: false) with 1-tap Approve / Reject buttons
+    let leadCardMessageId: number | null = null;
+    const inlineButtons: Array<{ text: string; url: string }> = [];
 
     if (tgToken && tgChatId) {
       try {
-        const rawNotes = (notes || "").trim();
-        const isLegacyFootprintDump =
-          rawNotes.startsWith("[CONFERENCE HUB") || rawNotes.startsWith("[REPEAT HUB");
-        const cleanUserNote = isLegacyFootprintDump ? "" : rawNotes;
-
         const shortIdMatch = String(visitorId || effectiveClickId || "").match(/_([a-z0-9]{4,6})$/i);
         const shortId = shortIdMatch
           ? `usr_${shortIdMatch[1].toLowerCase()}`
           : `usr_${String(visitorId || "anon").replace(/^hub_/, "").slice(0, 6).toLowerCase()}`;
 
         const emailDossierStatus = isValidLeadEmail
-          ? autoresponderSent
-            ? `✅ Отправлено на <code>${escapeHtml(leadTargetEmail)}</code>`
-            : `⚠️ Ошибка Resend для <code>${escapeHtml(leadTargetEmail)}</code> (${escapeHtml((autoresponderError || "check logs").slice(0, 80))})`
-          : `ℹ️ Не отправлялось (указан телефон / мессенджер)`;
+          ? `⏳ <b>Ожидает вашего решения</b> (домен: <code>${escapeHtml(emailDomain)}</code>)`
+          : `ℹ️ Не требуется (указан телефон / мессенджер)`;
 
         const filesSection =
           rawFiles.length > 0
@@ -651,50 +1498,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
                 .join(", ")
             : null;
 
-        // Auto-Enrichment: detect corporate domain, phone, or Telegram handle
-        const FREE_EMAIL_DOMAINS = new Set([
-          "gmail.com",
-          "googlemail.com",
-          "icloud.com",
-          "me.com",
-          "mac.com",
-          "yahoo.com",
-          "yahoo.co.uk",
-          "outlook.com",
-          "hotmail.com",
-          "live.com",
-          "msn.com",
-          "aol.com",
-          "mail.ru",
-          "inbox.ru",
-          "bk.ru",
-          "list.ru",
-          "yandex.ru",
-          "ya.ru",
-          "yandex.com",
-          "proton.me",
-          "protonmail.com",
-          "zoho.com",
-          "gmx.com",
-          "gmx.de",
-          "web.de",
-          "qq.com",
-          "163.com",
-          "126.com",
-          "naver.com",
-          "privaterelay.appleid.com",
-        ]);
-
-        let corpDomain = "";
-        if (isValidLeadEmail && leadTargetEmail.includes("@")) {
-          const domainPart = leadTargetEmail.split("@")[1]?.toLowerCase().trim() || "";
-          if (domainPart && !FREE_EMAIL_DOMAINS.has(domainPart) && !domainPart.endsWith(".upraiser.co.uk")) {
-            corpDomain = domainPart;
-          }
-        }
-
         // Build Quick-Action Inline Keyboard Buttons for Telegram
-        const inlineButtons: Array<{ text: string; url: string }> = [];
         const rawContactTrimmed = cleanContact.trim();
         const digitsOnly = rawContactTrimmed.replace(/[^\d]/g, "");
 
@@ -735,12 +1539,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         }
 
         // Always add 1-tap LinkedIn lookup for the lead
-        const linkedinQuery = corpDomain
-          ? `${cleanName} ${corpDomain.split(".")[0]}`
-          : cleanName;
         inlineButtons.push({
           text: `🔍 LinkedIn: ${cleanName.slice(0, 18)}`,
-          url: `https://www.google.com/search?q=${encodeURIComponent(`site:linkedin.com/in/ ${linkedinQuery}`)}`,
+          url: linkedinUrl,
         });
 
         let nowHHMM = "";
@@ -767,6 +1568,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             `📱 <b>Контакт:</b> <code>${escapeHtml(cleanContact)}</code>`,
             corpDomain
               ? `🏢 <b>Компания:</b> <a href="https://${escapeHtml(corpDomain)}"><b>${escapeHtml(corpDomain)}</b> ↗</a>`
+              : isValidLeadEmail
+              ? `⚠️ <b>Домен:</b> Личная почта (<code>${escapeHtml(emailDomain)}</code>)`
               : null,
             cleanUserNote ? `📝 <b>Заметка:</b> <i>${escapeHtml(cleanUserNote)}</i>` : null,
             `📨 <b>Письмо с пруфами:</b> ${emailDossierStatus}`,
@@ -781,6 +1584,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             `📱 <b>Email:</b> <code>${escapeHtml(cleanContact)}</code>`,
             corpDomain
               ? `🏢 <b>Домен:</b> <a href="https://${escapeHtml(corpDomain)}"><b>${escapeHtml(corpDomain)}</b> ↗</a>`
+              : isValidLeadEmail
+              ? `⚠️ <b>Домен:</b> Личная почта (<code>${escapeHtml(emailDomain)}</code>)`
               : null,
             `📲 <b>Приложение:</b> ${escapeHtml(appId)}${geos ? ` (${escapeHtml(geos)})` : ""}`,
             `💼 <b>Профиль:</b> ${escapeHtml(companyType)} (${escapeHtml(companySize)}) · Бюджет: ${escapeHtml(monthlyBudget)}`,
@@ -847,6 +1652,17 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         }
 
         // 4B. Send the Loud Lead Contact Card (replying to the session card if one existed + inline action buttons)
+        const keyboardRows: Array<Array<{ text: string; url: string }>> = [];
+        if (isValidLeadEmail && approveUrl && rejectUrl) {
+          keyboardRows.push([
+            { text: "✅ Выслать скриншоты", url: approveUrl },
+            { text: "❌ Не высылать", url: rejectUrl },
+          ]);
+        }
+        if (inlineButtons.length > 0) {
+          keyboardRows.push(inlineButtons.slice(0, 3));
+        }
+
         const sendPayload: Record<string, any> = {
           chat_id: tgChatId,
           text: tgText,
@@ -855,9 +1671,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           disable_web_page_preview: true,
         };
 
-        if (inlineButtons.length > 0) {
+        if (keyboardRows.length > 0) {
           sendPayload.reply_markup = {
-            inline_keyboard: [inlineButtons.slice(0, 3)],
+            inline_keyboard: keyboardRows,
           };
         }
 
@@ -874,21 +1690,35 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           body: JSON.stringify(sendPayload),
         });
         const tgJson: any = await tgRes.json().catch(() => ({}));
-        const leadCardMessageId: number | null = tgJson?.result?.message_id
+        leadCardMessageId = tgJson?.result?.message_id
           ? Number(tgJson.result.message_id)
           : null;
 
-        // 4C. Persist lead_card_message_id in Supabase so future proof clicks & revisits reply to this card!
-        if (supabaseAdmin && leadCardMessageId) {
+        // 4C. Persist lead_card_message_id & moderation state in Supabase
+        if (supabaseAdmin) {
           const sharedMeta = {
             ...prevCooldownMeta,
             displayName: cleanName,
             leadContact: cleanContact,
             leadEmail: leadTargetEmail ? leadTargetEmail.toLowerCase() : null,
-            lead_card_message_id: leadCardMessageId,
+            lead_card_message_id: leadCardMessageId || prevCooldownMeta?.lead_card_message_id || null,
+            enrichment_buttons: inlineButtons.slice(0, 3),
             session_timeline: updatedTimeline,
             lastGeo: geo,
             lastDevice: device,
+            appId,
+            geos,
+            companyType,
+            companySize,
+            monthlyBudget,
+            notes: cleanUserNote,
+            isConference,
+            proof_status:
+              prevCooldownMeta?.proof_status === "approved"
+                ? "approved"
+                : isValidLeadEmail
+                ? "pending"
+                : "not_applicable",
             identifiedAt: new Date().toISOString(),
           };
 
@@ -926,7 +1756,15 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
 
     res.writeHead(200, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ ok: true, leadTargetEmail, autoresponderSent }));
+    return res.end(
+      JSON.stringify({
+        ok: true,
+        leadTargetEmail,
+        moderationRequired: isValidLeadEmail,
+        moderationEmailSent,
+        moderationEmailError,
+      })
+    );
   } catch (err) {
     res.writeHead(500, { "Content-Type": "application/json" });
     return res.end(
