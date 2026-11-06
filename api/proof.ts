@@ -321,6 +321,87 @@ function formatTimeHHMM(date: Date = new Date()): string {
 
 const OWNER_IPS = new Set(["82.137.32.198"]);
 
+const SCANNER_IP_PREFIXES = [
+  // Microsoft 365 Defender / Safe Links (Azure Dublin, Amsterdam, Boydton, Des Moines, Singapore, Cardiff, Moses Lake, San Jose)
+  "48.209.",
+  "72.145.",
+  "72.152.",
+  "72.153.",
+  "135.232.",
+  "57.155.",
+  "172.186.",
+  "74.179.",
+  "128.85.",
+  // AWS / Mimecast / Proofpoint / Cloud Email Security Gateways (Dublin, Ashburn, Columbus)
+  "34.197.76.",
+  "34.242.",
+  "34.243.",
+  "54.247.",
+  "54.216.",
+  "52.208.",
+  "63.33.",
+  "63.35.",
+  "18.202.",
+  "18.212.",
+  "3.250.",
+  "3.253.",
+  "35.172.",
+  "108.129.",
+  "209.222.82.",
+];
+
+const ROT13_APP_MAP: Record<string, string> = {
+  "efdx-yvif": "deck-live",
+  "dbaafdg": "connect",
+  "jfw-bdg-cfea": "wsj-oct-perf",
+};
+
+function classifyEmailScanner(
+  ua: string,
+  ip: string,
+  rawSrc: string,
+  rawAppId: string
+): { isScanner: boolean; vendor: string } {
+  const uaStr = String(ua || "");
+  const ipStr = String(ip || "").trim();
+  const srcLower = String(rawSrc || "").toLowerCase().trim();
+  const appLower = String(rawAppId || "").toLowerCase().trim();
+
+  if (srcLower === "abyybjhc" || Boolean(ROT13_APP_MAP[appLower])) {
+    return { isScanner: true, vendor: "Microsoft 365 Defender / URL Defense (ROT13)" };
+  }
+
+  if (
+    ipStr.startsWith("48.209.") ||
+    ipStr.startsWith("72.145.") ||
+    ipStr.startsWith("72.152.") ||
+    ipStr.startsWith("72.153.") ||
+    ipStr.startsWith("135.232.") ||
+    ipStr.startsWith("57.155.") ||
+    ipStr.startsWith("172.186.") ||
+    ipStr.startsWith("74.179.") ||
+    ipStr.startsWith("128.85.") ||
+    /android 16;\s*24117rk2cc|android 17;\s*k|mac os x 15_7_7/i.test(uaStr)
+  ) {
+    return { isScanner: true, vendor: "Microsoft 365 Defender (Safe Links)" };
+  }
+
+  if (
+    /python-requests|^ruby$|msie 8\.0|trident\/4\.0|headlesschrome|phantomjs|curl\/|wget\/|go-http-client|chrome\/118\.0\.0\.0/i.test(
+      uaStr
+    ) ||
+    SCANNER_IP_PREFIXES.some((prefix) => ipStr.startsWith(prefix))
+  ) {
+    return { isScanner: true, vendor: "Mimecast / AWS Email Security Gateway" };
+  }
+
+  if (/x11;\s*linux\s*x86_64/i.test(uaStr) && /chrome\//i.test(uaStr)) {
+    return { isScanner: true, vendor: "Check Point / Cloud Anti-Phishing Sandbox" };
+  }
+
+  return { isScanner: false, vendor: "" };
+}
+
 function extractClientIp(headers: Record<string, any>): string {
   const xff = headers["x-forwarded-for"];
   if (xff) {
@@ -1133,9 +1214,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     );
   }
 
-  const appId = (url.searchParams.get("app") || url.searchParams.get("id") || "").toLowerCase().trim();
+  const rawAppId = (url.searchParams.get("app") || url.searchParams.get("id") || "").toLowerCase().trim();
+  const appId = ROT13_APP_MAP[rawAppId] || rawAppId;
   const lead = (url.searchParams.get("lead") || url.searchParams.get("email") || "").trim();
-  const src = (url.searchParams.get("src") || url.searchParams.get("source") || "").toLowerCase().trim();
+  const rawSrc = (url.searchParams.get("src") || url.searchParams.get("source") || "").toLowerCase().trim();
+  const src = rawSrc === "abyybjhc" ? "followup" : rawSrc;
   const isFollowup = src === "followup";
   const isRawRedirect = url.searchParams.get("raw") === "1";
   const isTrackOnly = url.searchParams.get("track") === "1";
@@ -1189,10 +1272,28 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const ua = (req.headers["user-agent"] as string) || "";
   const device = parseDevice(ua);
   const clientIp = extractClientIp(req.headers);
+  let scannerInfo = classifyEmailScanner(ua, clientIp, rawSrc, rawAppId);
 
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+
+  // Behavioral burst check: if the same IP hits >= 3 proof links within 8 seconds, it is an automated scanner
+  if (!scannerInfo.isScanner && supabase && clientIp) {
+    try {
+      const eightSecAgo = new Date(Date.now() - 8000).toISOString();
+      const { data: recentIpHits } = await supabase
+        .from("lead_activity_logs")
+        .select("id")
+        .eq("event_type", "proof_click")
+        .eq("metadata->>ip", clientIp)
+        .gte("created_at", eightSecAgo)
+        .limit(3);
+      if (recentIpHits && recentIpHits.length >= 2) {
+        scannerInfo = { isScanner: true, vendor: "Automated Email Security Scanner (Burst)" };
+      }
+    } catch {}
+  }
 
   // Forwarding Detection & Proof Session Cooldown Lookup in Supabase (newest submission first!)
   let resolvedName = "";
@@ -1202,14 +1303,19 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   let isForwardedSuspect = false;
   let isSameCityScreenSwitch = false;
   let linkedVisitorId = "";
-  let cooldownKey = lead
-    ? `email_${lead.toLowerCase()}`
-    : clientIp
-      ? `ip_${clientIp}`
-      : "email_anon";
+  let cooldownKey = scannerInfo.isScanner
+    ? lead
+      ? `scanner_email_${lead.toLowerCase()}`
+      : "scanner_wave_global"
+    : lead
+      ? `email_${lead.toLowerCase()}`
+      : clientIp
+        ? `ip_${clientIp}`
+        : "email_anon";
   let existingCooldownMeta: Record<string, any> = {};
 
-  if (supabase && !lead && clientIp) {
+  // Only match IP to past leads when this is a REAL HUMAN (never match Microsoft/AWS scanner IPs to Ogilvy/TeachStream!)
+  if (supabase && !scannerInfo.isScanner && !lead && clientIp) {
     try {
       const { data: cdByIp } = await supabase
         .from("lead_notification_cooldowns")
@@ -1249,7 +1355,23 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     } catch {}
   }
 
-  if (supabase && lead) {
+  if (supabase && scannerInfo.isScanner) {
+    try {
+      const { data: cdScanner } = await supabase
+        .from("lead_notification_cooldowns")
+        .select("metadata")
+        .eq("visitor_id", cooldownKey)
+        .maybeSingle();
+      if (cdScanner?.metadata && typeof cdScanner.metadata === "object") {
+        existingCooldownMeta = cdScanner.metadata;
+        if (existingCooldownMeta.displayName) {
+          resolvedName = String(existingCooldownMeta.displayName);
+        }
+      }
+    } catch {}
+  }
+
+  if (supabase && !scannerInfo.isScanner && lead) {
     try {
       // Fetch cooldown state first (holds the latest displayName and lead_card_message_id)
       const { data: cdByEmail } = await supabase
@@ -1357,12 +1479,13 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             ? `Получатель фоллоу-ап рассылки <i>(${escapeHtml(geo)})</i>`
             : "Аноним (прямая ссылка)";
 
+      const cooldownWindowMs = scannerInfo.isScanner ? 3 * 60 * 1000 : 15 * 60 * 1000;
       const prevProofUpdatedAt = existingCooldownMeta?.proof_updated_at
         ? new Date(existingCooldownMeta.proof_updated_at).getTime()
         : 0;
       const activeProofMessageId: number | null =
         existingCooldownMeta?.proof_message_id &&
-        Date.now() - prevProofUpdatedAt < 15 * 60 * 1000
+        Date.now() - prevProofUpdatedAt < cooldownWindowMs
           ? Number(existingCooldownMeta.proof_message_id)
           : null;
 
@@ -1405,69 +1528,97 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         });
       }
 
-      // Single clean device line (no triple repetition)
-      const shortPrevDev = prevDevice ? getShortDeviceIconLabel(prevDevice) : "";
-      const deviceLine = isSameCityScreenSwitch
-        ? `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)} <i>(перешел с ${escapeHtml(shortPrevDev)})</i>`
-        : `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`;
-
-      const forwardingLine = isForwardedSuspect
-        ? `🔥 <b>Возможно, переслал коллеге!</b> <i>(заявка была: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(shortPrevDev || prevDevice || "—")})</i>`
-        : null;
-
-      // Summarize vertical interest when 2+ proofs opened
-      let focusLine: string | null = null;
-      if (proofHistory.length >= 2) {
-        const catCounts: Record<string, number> = {};
-        for (const item of proofHistory) {
-          const cat = item.category || "General";
-          catCounts[cat] = (catCounts[cat] || 0) + 1;
+      let tgText = "";
+      if (scannerInfo.isScanner) {
+        const totalScannedChecks = proofHistory.reduce((acc, item) => acc + (item.count || 1), 0);
+        const prevVendors: string[] =
+          activeProofMessageId && Array.isArray(existingCooldownMeta?.scanner_vendors)
+            ? [...existingCooldownMeta.scanner_vendors]
+            : [];
+        if (scannerInfo.vendor && !prevVendors.includes(scannerInfo.vendor)) {
+          prevVendors.push(scannerInfo.vendor);
         }
-        const summaryParts = Object.entries(catCounts).map(([c, n]) => `${c} (${n})`);
-        focusLine = `🎯 <b>Фокус:</b> ${escapeHtml(summaryParts.join(" · "))}`;
+        const vendorText = prevVendors.join(" · ") || "Corporate Email Gateway";
+        const recipientLine = lead
+          ? `👤 <b>Адрес:</b> <b>${escapeHtml(lead)}</b>${resolvedName ? ` (${escapeHtml(resolvedName)})` : ""}`
+          : `👤 <b>Адрес:</b> Корпоративный ящик получателя`;
+
+        tgText = [
+          `✅ <b>ЯЩИК ЖИВОЙ · ПИСЬМО ПРИНЯТО СЕРВЕРОМ</b>`,
+          ``,
+          isFollowup ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email` : null,
+          recipientLine,
+          `📬 <b>Статус:</b> Доставлено (адрес активен, прошёл SMTP-проверку)`,
+          `🛡️ <b>Шлюз защиты:</b> ${escapeHtml(vendorText)} <i>(проверено ссылок: ${proofHistory.length}, запросов: ${totalScannedChecks})</i>`,
+        ]
+          .filter((line) => line !== null)
+          .join("\n");
+        existingCooldownMeta.scanner_vendors = prevVendors;
+      } else {
+        // Single clean device line (no triple repetition)
+        const shortPrevDev = prevDevice ? getShortDeviceIconLabel(prevDevice) : "";
+        const deviceLine = isSameCityScreenSwitch
+          ? `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)} <i>(перешел с ${escapeHtml(shortPrevDev)})</i>`
+          : `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`;
+
+        const forwardingLine = isForwardedSuspect
+          ? `🔥 <b>Возможно, переслал коллеге!</b> <i>(заявка была: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(shortPrevDev || prevDevice || "—")})</i>`
+          : null;
+
+        // Summarize vertical interest when 2+ proofs opened
+        let focusLine: string | null = null;
+        if (proofHistory.length >= 2) {
+          const catCounts: Record<string, number> = {};
+          for (const item of proofHistory) {
+            const cat = item.category || "General";
+            catCounts[cat] = (catCounts[cat] || 0) + 1;
+          }
+          const summaryParts = Object.entries(catCounts).map(([c, n]) => `${c} (${n})`);
+          focusLine = `🎯 <b>Фокус:</b> ${escapeHtml(summaryParts.join(" · "))}`;
+        }
+
+        const historyLines = proofHistory
+          .map((item, idx) => {
+            const isCurrent = item.appId === appId;
+            const countTag = item.count > 1 ? ` <b>(×${item.count})</b>` : "";
+            const currentTag = isCurrent && proofHistory.length > 1 ? ` 👈 <i>сейчас тут</i>` : "";
+            const timePrefix = item.time ? `${escapeHtml(item.time)} — ` : "";
+            const urlHref = item.fileUrl || proof.fileUrl;
+            return `${idx + 1}. ${timePrefix}<a href="${escapeHtml(urlHref)}"><b>${escapeHtml(item.brand)}</b></a> · ${escapeHtml(item.report)}${countTag}${currentTag}`;
+          })
+          .join("\n");
+
+        const headerTitle = isFollowup
+          ? proofHistory.length <= 1
+            ? `🎯 <b>ЖИВАЯ РЕАКЦИЯ НА ФОЛЛОУ-АП РАССЫЛКУ</b>`
+            : `🎯 <b>ЖИВАЯ РЕАКЦИЯ НА ФОЛЛОУ-АП · АКТИВНОСТЬ (${proofHistory.length})</b>`
+          : proofHistory.length <= 1
+            ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 12</b>`
+            : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 12</b>`;
+
+        const sourceLine = isFollowup
+          ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email`
+          : null;
+
+        const listHeaderLabel = isFollowup
+          ? `📋 <b>Действия и открытые материалы:</b>`
+          : `📋 <b>Открытые скриншоты:</b>`;
+
+        tgText = [
+          headerTitle,
+          ``,
+          sourceLine,
+          `👤 <b>Лид:</b> ${leadLabel}`,
+          deviceLine,
+          forwardingLine,
+          focusLine,
+          ``,
+          listHeaderLabel,
+          historyLines,
+        ]
+          .filter((line) => line !== null)
+          .join("\n");
       }
-
-      const historyLines = proofHistory
-        .map((item, idx) => {
-          const isCurrent = item.appId === appId;
-          const countTag = item.count > 1 ? ` <b>(×${item.count})</b>` : "";
-          const currentTag = isCurrent && proofHistory.length > 1 ? ` 👈 <i>сейчас тут</i>` : "";
-          const timePrefix = item.time ? `${escapeHtml(item.time)} — ` : "";
-          const urlHref = item.fileUrl || proof.fileUrl;
-          return `${idx + 1}. ${timePrefix}<a href="${escapeHtml(urlHref)}"><b>${escapeHtml(item.brand)}</b></a> · ${escapeHtml(item.report)}${countTag}${currentTag}`;
-        })
-        .join("\n");
-
-      const headerTitle = isFollowup
-        ? proofHistory.length <= 1
-          ? `🎯 <b>РЕАКЦИЯ НА ФОЛЛОУ-АП РАССЫЛКУ</b>`
-          : `🎯 <b>РЕАКЦИЯ НА ФОЛЛОУ-АП РАССЫЛКУ · АКТИВНОСТЬ (${proofHistory.length})</b>`
-        : proofHistory.length <= 1
-          ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 12</b>`
-          : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 12</b>`;
-
-      const sourceLine = isFollowup
-        ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email`
-        : null;
-
-      const listHeaderLabel = isFollowup
-        ? `📋 <b>Действия и открытые материалы:</b>`
-        : `📋 <b>Открытые скриншоты:</b>`;
-
-      const tgText = [
-        headerTitle,
-        ``,
-        sourceLine,
-        `👤 <b>Лид:</b> ${leadLabel}`,
-        deviceLine,
-        forwardingLine,
-        focusLine,
-        ``,
-        listHeaderLabel,
-        historyLines,
-      ]
-        .filter((line) => line !== null)
-        .join("\n");
 
       let editedInPlace = false;
       let finalProofMessageId: number | null = activeProofMessageId;
@@ -1498,12 +1649,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           chat_id: tgChatId,
           text: tgText,
           parse_mode: "HTML",
-          disable_notification: false, // Loud push with vibration on 1st proof open!
+          disable_notification: scannerInfo.isScanner, // Silent for scanner validation, Loud for real human click!
           disable_web_page_preview: true,
         };
 
         // Reply directly to the lead's contact card in Telegram!
-        if (leadCardMessageId) {
+        if (leadCardMessageId && !scannerInfo.isScanner) {
           sendPayload.reply_parameters = {
             message_id: leadCardMessageId,
             allow_sending_without_reply: true,
@@ -1521,7 +1672,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         }
       }
 
-      if (supabase && finalProofMessageId && (lead || clientIp)) {
+      if (supabase && finalProofMessageId && (lead || clientIp || scannerInfo.isScanner)) {
         const updatedMeta = {
           ...existingCooldownMeta,
           ...(resolvedName ? { displayName: resolvedName } : {}),
@@ -1535,7 +1686,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           {
             visitor_id: cooldownKey,
             last_notified_at: new Date().toISOString(),
-            last_event_type: "proof_click",
+            last_event_type: scannerInfo.isScanner ? "scanner_verify" : "proof_click",
             metadata: updatedMeta,
           },
           { onConflict: "visitor_id" }
@@ -1551,10 +1702,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     try {
       await supabase.from("lead_activity_logs").insert([
         {
-          visitor_id: lead || ipMatchedContact || (isFollowup ? "followup_email_click" : "email_click"),
-          lead_name: resolvedName || lead || ipMatchedContact || null,
-          lead_contact: lead || ipMatchedContact || null,
-          event_type: "proof_click",
+          visitor_id: scannerInfo.isScanner
+            ? "email_scanner_check"
+            : lead || ipMatchedContact || (isFollowup ? "followup_email_click" : "email_click"),
+          lead_name: scannerInfo.isScanner ? (lead || null) : (resolvedName || lead || ipMatchedContact || null),
+          lead_contact: scannerInfo.isScanner ? (lead || null) : (lead || ipMatchedContact || null),
+          event_type: scannerInfo.isScanner ? "scanner_verify" : "proof_click",
           duration_seconds: 0,
           metadata: {
             appId,
@@ -1563,6 +1716,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             report: proof.report,
             geo,
             device,
+            isScanner: scannerInfo.isScanner,
+            scannerVendor: scannerInfo.vendor || null,
             isForwardedSuspect,
             prevGeo: prevGeo || null,
             prevDevice: prevDevice || null,

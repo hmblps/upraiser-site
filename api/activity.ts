@@ -148,6 +148,52 @@ const OWNER_VISITOR_IDS = new Set([
   "hub_20261026_2049_2zbv",
 ]);
 
+const SCANNER_IP_PREFIXES = [
+  "48.209.",
+  "72.145.",
+  "72.152.",
+  "72.153.",
+  "135.232.",
+  "57.155.",
+  "172.186.",
+  "74.179.",
+  "128.85.",
+  "34.197.76.",
+  "34.242.",
+  "34.243.",
+  "54.247.",
+  "54.216.",
+  "52.208.",
+  "63.33.",
+  "63.35.",
+  "18.202.",
+  "18.212.",
+  "3.250.",
+  "3.253.",
+  "35.172.",
+  "108.129.",
+  "209.222.82.",
+];
+
+function isEmailScannerActivityRequest(ua: string, ip: string): boolean {
+  const uaStr = String(ua || "");
+  const ipStr = String(ip || "").trim();
+  if (SCANNER_IP_PREFIXES.some((prefix) => ipStr.startsWith(prefix))) {
+    return true;
+  }
+  if (
+    /python-requests|^ruby$|msie 8\.0|trident\/4\.0|headlesschrome|phantomjs|curl\/|wget\/|go-http-client|chrome\/118\.0\.0\.0|android 16;\s*24117rk2cc|android 17;\s*k|mac os x 15_7_7/i.test(
+      uaStr
+    )
+  ) {
+    return true;
+  }
+  if (/x11;\s*linux\s*x86_64/i.test(uaStr) && /chrome\//i.test(uaStr)) {
+    return true;
+  }
+  return false;
+}
+
 function extractClientIp(headers: Record<string, any>): string {
   const xff = headers["x-forwarded-for"];
   if (xff) {
@@ -297,6 +343,13 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const geo = parseGeo(req.headers);
     const ua = (req.headers["user-agent"] as string) || "";
     const device = parseDevice(ua);
+    const clientIp = extractClientIp(req.headers);
+    const isScanner = isEmailScannerActivityRequest(ua, clientIp);
+
+    if (isScanner) {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: true, logged: false, digestSent: false, ignored: "email_scanner" }));
+    }
 
     // 4. Log to Supabase lead_activity_logs
     let loggedToDb = false;
