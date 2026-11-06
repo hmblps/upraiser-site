@@ -88,25 +88,35 @@ export function renderSessionCardHtml(params: {
   geo: string;
   device: string;
   timeline: SessionTimelineEntry[];
+  isFollowup?: boolean;
 }): string {
-  const { shortId, resolvedLeadName, resolvedLeadContact, geo, device, timeline } = params;
+  const { shortId, resolvedLeadName, resolvedLeadContact, geo, device, timeline, isFollowup } = params;
   const hasNameOrContact = Boolean(resolvedLeadName || resolvedLeadContact);
   const who = hasNameOrContact
     ? `<b>${escapeHtml(resolvedLeadName || resolvedLeadContact)}</b>${
         resolvedLeadName && resolvedLeadContact ? ` (${escapeHtml(resolvedLeadContact)})` : ""
       }`
-    : `Аноним`;
+    : isFollowup
+      ? `Получатель фоллоу-ап рассылки`
+      : `Аноним`;
 
   const timelineText = timeline.map((item) => item.line).join("\n");
 
+  const headerLine = isFollowup
+    ? `🎯 <b>РЕАКЦИЯ НА ФОЛЛОУ-АП · АКТИВНОСТЬ · <code>[${escapeHtml(shortId)}]</code></b>`
+    : `🧭 <b>АКТИВНОСТЬ НА ХАБЕ · <code>[${escapeHtml(shortId)}]</code></b>`;
+
   return [
-    `🧭 <b>АКТИВНОСТЬ НА ХАБЕ · <code>[${escapeHtml(shortId)}]</code></b>`,
+    headerLine,
+    isFollowup ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email` : null,
     `👤 <b>Лид:</b> ${who}`,
     `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
     ``,
     `📋 <b>Хронология действий в сессии:</b>`,
     timelineText,
-  ].join("\n");
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
 }
 
 // Strict whitelist of explicit human actions that trigger a Telegram message.
@@ -511,6 +521,13 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       timeline = timeline.slice(-15);
     }
 
+    const rawUrlAndRef = `${metadata?.url || ""} ${metadata?.raw_referrer || ""} ${req.headers["referer"] || ""}`.toLowerCase();
+    const isFollowupSession = Boolean(
+      rawUrlAndRef.includes("src=followup") ||
+      rawUrlAndRef.includes("source=followup") ||
+      existingCooldownMeta?.isFollowup
+    );
+
     const tgText = renderSessionCardHtml({
       shortId,
       resolvedLeadName,
@@ -518,6 +535,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       geo,
       device,
       timeline,
+      isFollowup: isFollowupSession,
     });
 
     // 8. Send or Edit Unified Session Card in Telegram
@@ -598,6 +616,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
                 ...existingCooldownMeta,
                 ...(resolvedLeadName ? { displayName: resolvedLeadName } : {}),
                 ...(resolvedLeadContact ? { leadContact: resolvedLeadContact } : {}),
+                ...(isFollowupSession ? { isFollowup: true } : {}),
                 session_message_id: finalSessionMessageId,
                 session_updated_at: new Date().toISOString(),
                 session_timeline: timeline,

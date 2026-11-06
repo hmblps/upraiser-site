@@ -193,6 +193,62 @@ const PROOFS: Record<
     category: "Media Deck",
     isSnapshot: false,
   },
+  "deck-live": {
+    brand: "Interactive Media Deck (/deck)",
+    report: "Открыл интерактивную презентацию (20 слайдов)",
+    metric: "Interactive Deck Viewer",
+    fileUrl: "https://upraiser.co.uk/deck?src=followup",
+    category: "Media Deck",
+    isSnapshot: false,
+  },
+  channels: {
+    brand: "Traffic Channels & Routes (/channels)",
+    report: "Открыл раздел 3D-каналов и роутов",
+    metric: "OEM, Programmatic, CTV, Social",
+    fileUrl: "https://upraiser.co.uk/channels?src=followup",
+    category: "Website",
+    isSnapshot: false,
+  },
+  tg: {
+    brand: "Telegram (@homeboylebz)",
+    report: "Кликнул «Ping on Telegram»",
+    metric: "Direct Messenger",
+    fileUrl: "https://t.me/homeboylebz?text=Hey%20Oleksii%2C%20great%20connecting!%20Let's%20set%20up%20a%20test%20activity%20next%20week.",
+    category: "Messenger",
+    isSnapshot: false,
+  },
+  teams: {
+    brand: "Microsoft Teams",
+    report: "Кликнул «Connect on MS Teams»",
+    metric: "Direct Messenger",
+    fileUrl: "https://teams.live.com/l/invite/FEArQ5qvXG2J-XWIwE",
+    category: "Messenger",
+    isSnapshot: false,
+  },
+  vcard: {
+    brand: "Визитка Oleksii (.vcf)",
+    report: "Скачал контакт (+ Save vCard)",
+    metric: "vCard Download",
+    fileUrl: "https://upraiser.co.uk/Alex_Upraiser.vcf",
+    category: "Contact Card",
+    isSnapshot: false,
+  },
+  connect: {
+    brand: "Partner Hub (/connect)",
+    report: "Перешёл на страницу контактов",
+    metric: "Conference Hub",
+    fileUrl: "https://upraiser.co.uk/connect?src=followup",
+    category: "Website",
+    isSnapshot: false,
+  },
+  website: {
+    brand: "UPRAISER Website (upraiser.co.uk)",
+    report: "Перешёл на главную страницу",
+    metric: "Official Platform",
+    fileUrl: "https://upraiser.co.uk/?src=followup",
+    category: "Website",
+    isSnapshot: false,
+  },
 };
 
 function parseGeo(headers: Record<string, any>): string {
@@ -291,7 +347,7 @@ function isOwnerProofRequest(headers: Record<string, any>, lead: string): boolea
   return false;
 }
 
-function renderSnapshotViewerHtml(initialId: string, lead: string, isOwner: boolean): string {
+function renderSnapshotViewerHtml(initialId: string, lead: string, isOwner: boolean, src = ""): string {
   const initialIndex = Math.max(
     0,
     PROOF_LIST.findIndex((item) => item.id === initialId)
@@ -300,8 +356,13 @@ function renderSnapshotViewerHtml(initialId: string, lead: string, isOwner: bool
   const usItems = PROOF_LIST.filter((i) => i.category === "US Geo Campaigns");
   const tierItems = PROOF_LIST.filter((i) => i.category === "Tier1 & Tier2 Geo Campaigns");
   const encodedLead = lead && !isOwner ? encodeURIComponent(lead) : "";
-  const deckHref = `https://upraiser.co.uk/deck${encodedLead ? `?lead=${encodedLead}` : ""}`;
-  const connectHref = `https://upraiser.co.uk/connect${encodedLead ? `?lead=${encodedLead}` : ""}`;
+  const encodedSrc = src ? encodeURIComponent(src) : "";
+  const qsParts = [
+    encodedLead ? `lead=${encodedLead}` : "",
+    encodedSrc ? `src=${encodedSrc}` : "",
+  ].filter(Boolean).join("&");
+  const deckHref = `https://upraiser.co.uk/deck${qsParts ? `?${qsParts}` : ""}`;
+  const connectHref = `https://upraiser.co.uk/connect${qsParts ? `?${qsParts}` : ""}`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -844,6 +905,7 @@ function renderSnapshotViewerHtml(initialId: string, lead: string, isOwner: bool
     (function() {
       var ITEMS = ${JSON.stringify(PROOF_LIST)};
       var LEAD = ${JSON.stringify(lead)};
+      var SRC = ${JSON.stringify(src)};
       var IS_OWNER = ${JSON.stringify(isOwner)};
       var currentIndex = ${initialIndex};
       var currentZoom = "1x";
@@ -1005,7 +1067,7 @@ function renderSnapshotViewerHtml(initialId: string, lead: string, isOwner: bool
 
         if (!IS_OWNER && !trackedIds[item.id]) {
           trackedIds[item.id] = true;
-          var trackUrl = "/api/proof?id=" + encodeURIComponent(item.id) + (LEAD ? "&lead=" + encodeURIComponent(LEAD) : "") + "&track=1";
+          var trackUrl = "/api/proof?id=" + encodeURIComponent(item.id) + (LEAD ? "&lead=" + encodeURIComponent(LEAD) : "") + (SRC ? "&src=" + encodeURIComponent(SRC) : "") + "&track=1";
           fetch(trackUrl, { method: "GET", keepalive: true }).catch(function() {});
         }
       }
@@ -1073,6 +1135,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   const appId = (url.searchParams.get("app") || url.searchParams.get("id") || "").toLowerCase().trim();
   const lead = (url.searchParams.get("lead") || url.searchParams.get("email") || "").trim();
+  const src = (url.searchParams.get("src") || url.searchParams.get("source") || "").toLowerCase().trim();
+  const isFollowup = src === "followup";
   const isRawRedirect = url.searchParams.get("raw") === "1";
   const isTrackOnly = url.searchParams.get("track") === "1";
 
@@ -1112,7 +1176,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         "Content-Type": "text/html; charset=utf-8",
         "Cache-Control": "no-cache, no-store, must-revalidate",
       });
-      return res.end(renderSnapshotViewerHtml(appId, lead, true));
+      return res.end(renderSnapshotViewerHtml(appId, lead, true, src));
     }
     res.writeHead(302, {
       Location: proof.fileUrl,
@@ -1124,6 +1188,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const geo = parseGeo(req.headers);
   const ua = (req.headers["user-agent"] as string) || "";
   const device = parseDevice(ua);
+  const clientIp = extractClientIp(req.headers);
 
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
@@ -1131,13 +1196,58 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   // Forwarding Detection & Proof Session Cooldown Lookup in Supabase (newest submission first!)
   let resolvedName = "";
+  let ipMatchedContact = "";
   let prevGeo = "";
   let prevDevice = "";
   let isForwardedSuspect = false;
   let isSameCityScreenSwitch = false;
   let linkedVisitorId = "";
-  let cooldownKey = lead ? `email_${lead.toLowerCase()}` : "email_anon";
+  let cooldownKey = lead
+    ? `email_${lead.toLowerCase()}`
+    : clientIp
+      ? `ip_${clientIp}`
+      : "email_anon";
   let existingCooldownMeta: Record<string, any> = {};
+
+  if (supabase && !lead && clientIp) {
+    try {
+      const { data: cdByIp } = await supabase
+        .from("lead_notification_cooldowns")
+        .select("metadata")
+        .eq("visitor_id", cooldownKey)
+        .maybeSingle();
+
+      if (cdByIp?.metadata && typeof cdByIp.metadata === "object") {
+        existingCooldownMeta = cdByIp.metadata;
+        if (existingCooldownMeta.displayName) {
+          resolvedName = String(existingCooldownMeta.displayName);
+        }
+        if (existingCooldownMeta.leadContact) {
+          ipMatchedContact = String(existingCooldownMeta.leadContact);
+        }
+      }
+
+      if (!ipMatchedContact) {
+        const { data: ipRows } = await supabase
+          .from("lead_activity_logs")
+          .select("visitor_id, lead_name, lead_contact, event_type, metadata, created_at")
+          .eq("metadata->>ip", clientIp)
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+        if (ipRows && ipRows.length > 0) {
+          for (const row of ipRows) {
+            if (!ipMatchedContact && row.lead_contact) {
+              ipMatchedContact = String(row.lead_contact);
+            }
+            if (!resolvedName && row.lead_name && row.lead_name !== row.lead_contact) {
+              resolvedName = String(row.lead_name);
+            }
+          }
+        }
+      }
+    } catch {}
+  }
 
   if (supabase && lead) {
     try {
@@ -1239,7 +1349,13 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         ? resolvedName
           ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(lead)})`
           : `<b>${escapeHtml(lead)}</b>`
-        : "Аноним (прямая ссылка)";
+        : ipMatchedContact
+          ? resolvedName
+            ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(ipMatchedContact)}) <i>· совпадение по IP</i>`
+            : `<b>${escapeHtml(ipMatchedContact)}</b> <i>· совпадение по IP</i>`
+          : isFollowup
+            ? `Получатель фоллоу-ап рассылки <i>(${escapeHtml(geo)})</i>`
+            : "Аноним (прямая ссылка)";
 
       const prevProofUpdatedAt = existingCooldownMeta?.proof_updated_at
         ? new Date(existingCooldownMeta.proof_updated_at).getTime()
@@ -1322,20 +1438,32 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         })
         .join("\n");
 
-      const headerTitle =
-        proofHistory.length <= 1
+      const headerTitle = isFollowup
+        ? proofHistory.length <= 1
+          ? `🎯 <b>РЕАКЦИЯ НА ФОЛЛОУ-АП РАССЫЛКУ</b>`
+          : `🎯 <b>РЕАКЦИЯ НА ФОЛЛОУ-АП РАССЫЛКУ · АКТИВНОСТЬ (${proofHistory.length})</b>`
+        : proofHistory.length <= 1
           ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 12</b>`
           : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 12</b>`;
+
+      const sourceLine = isFollowup
+        ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email`
+        : null;
+
+      const listHeaderLabel = isFollowup
+        ? `📋 <b>Действия и открытые материалы:</b>`
+        : `📋 <b>Открытые скриншоты:</b>`;
 
       const tgText = [
         headerTitle,
         ``,
+        sourceLine,
         `👤 <b>Лид:</b> ${leadLabel}`,
         deviceLine,
         forwardingLine,
         focusLine,
         ``,
-        `📋 <b>Открытые скриншоты:</b>`,
+        listHeaderLabel,
         historyLines,
       ]
         .filter((line) => line !== null)
@@ -1393,11 +1521,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         }
       }
 
-      if (supabase && finalProofMessageId && lead) {
+      if (supabase && finalProofMessageId && (lead || clientIp)) {
         const updatedMeta = {
           ...existingCooldownMeta,
           ...(resolvedName ? { displayName: resolvedName } : {}),
-          leadContact: lead,
+          ...(lead || ipMatchedContact ? { leadContact: lead || ipMatchedContact } : {}),
           proof_message_id: finalProofMessageId,
           proof_updated_at: new Date().toISOString(),
           proof_history: proofHistory,
@@ -1423,13 +1551,14 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     try {
       await supabase.from("lead_activity_logs").insert([
         {
-          visitor_id: lead || "email_click",
-          lead_name: resolvedName || lead || null,
-          lead_contact: lead || null,
+          visitor_id: lead || ipMatchedContact || (isFollowup ? "followup_email_click" : "email_click"),
+          lead_name: resolvedName || lead || ipMatchedContact || null,
+          lead_contact: lead || ipMatchedContact || null,
           event_type: "proof_click",
           duration_seconds: 0,
           metadata: {
             appId,
+            src: src || null,
             brand: proof.brand,
             report: proof.report,
             geo,
@@ -1438,7 +1567,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             prevGeo: prevGeo || null,
             prevDevice: prevDevice || null,
             userAgent: ua,
-            ip: req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
+            ip: clientIp || req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
           },
         },
       ]);
@@ -1458,7 +1587,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "no-cache, no-store, must-revalidate",
     });
-    return res.end(renderSnapshotViewerHtml(appId, lead, false));
+    return res.end(renderSnapshotViewerHtml(appId, lead || ipMatchedContact, false, src));
   }
 
   // 302 Redirect directly to the asset (.zip, .pdf, or ?raw=1)
