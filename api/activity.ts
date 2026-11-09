@@ -97,13 +97,15 @@ export function renderSessionCardHtml(params: {
         resolvedLeadName && resolvedLeadContact ? ` (${escapeHtml(resolvedLeadContact)})` : ""
       }`
     : isFollowup
-      ? `Получатель фоллоу-ап рассылки`
+      ? `Анонимный клик <i>(в ссылке письма не было ?lead=email)</i>`
       : `Аноним`;
 
   const timelineText = timeline.map((item) => item.line).join("\n");
 
   const headerLine = isFollowup
-    ? `🎯 <b>РЕАКЦИЯ НА ФОЛЛОУ-АП · АКТИВНОСТЬ · <code>[${escapeHtml(shortId)}]</code></b>`
+    ? hasNameOrContact
+      ? `🎯 <b>ЖИВОЙ ПЕРЕХОД ЛИДА ИЗ ФОЛЛОУ-АПА · <code>[${escapeHtml(shortId)}]</code></b>`
+      : `🧭 <b>ПЕРЕХОД ПО ССЫЛКЕ ИЗ ФОЛЛОУ-АПА (Без метки лида) · <code>[${escapeHtml(shortId)}]</code></b>`
     : `🧭 <b>АКТИВНОСТЬ НА ХАБЕ · <code>[${escapeHtml(shortId)}]</code></b>`;
 
   return [
@@ -149,7 +151,8 @@ const OWNER_VISITOR_IDS = new Set([
 ]);
 
 const SCANNER_IP_PREFIXES = [
-  "48.209.",
+  // Microsoft 365 Defender / Safe Links / Azure data centers
+  "48.",
   "72.145.",
   "72.152.",
   "72.153.",
@@ -158,19 +161,36 @@ const SCANNER_IP_PREFIXES = [
   "172.186.",
   "74.179.",
   "128.85.",
-  "34.197.76.",
+  "20.",
+  "40.",
+  "51.",
+
+  // Amazon AWS Cloud Data Centers (Columbus, Boardman, Ashburn, Dublin, Frankfurt, etc.)
+  "18.",
+  "3.",
+  "52.",
+  "54.",
+  "63.",
+  "99.",
+  "15.",
+  "13.",
+  "34.197.",
   "34.242.",
   "34.243.",
-  "54.247.",
-  "54.216.",
-  "52.208.",
-  "63.33.",
-  "63.35.",
-  "18.202.",
-  "18.212.",
-  "3.250.",
-  "3.253.",
-  "35.172.",
+
+  // Google Cloud Platform & Google Workspace Safe Browsing (Council Bluffs, Columbus, etc.)
+  "34.",
+  "35.",
+  "14.225.",
+  "136.83.",
+
+  // Security Sandboxes, VPNs, VPS & Mail Security Gateways (Check Point, Mimecast, OVH, M247, etc.)
+  "57.129.",
+  "185.212.",
+  "185.191.",
+  "156.244.",
+  "166.88.",
+  "176.100.243.",
   "108.129.",
   "209.222.82.",
 ];
@@ -631,11 +651,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         }
 
         if (!editedInPlace) {
+          const hasNameOrContact = Boolean(resolvedLeadName || resolvedLeadContact);
           const sendPayload: Record<string, any> = {
             chat_id: tgChatId,
             text: tgText,
             parse_mode: "HTML",
-            disable_notification: isSilent,
+            disable_notification: isSilent || (isFollowupSession && !hasNameOrContact),
             disable_web_page_preview: true,
           };
 

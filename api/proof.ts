@@ -322,8 +322,8 @@ function formatTimeHHMM(date: Date = new Date()): string {
 const OWNER_IPS = new Set(["82.137.32.198"]);
 
 const SCANNER_IP_PREFIXES = [
-  // Microsoft 365 Defender / Safe Links (Azure Dublin, Amsterdam, Boydton, Des Moines, Singapore, Cardiff, Moses Lake, San Jose)
-  "48.209.",
+  // Microsoft 365 Defender / Safe Links / Azure data centers
+  "48.",
   "72.145.",
   "72.152.",
   "72.153.",
@@ -332,20 +332,36 @@ const SCANNER_IP_PREFIXES = [
   "172.186.",
   "74.179.",
   "128.85.",
-  // AWS / Mimecast / Proofpoint / Cloud Email Security Gateways (Dublin, Ashburn, Columbus)
-  "34.197.76.",
+  "20.",
+  "40.",
+  "51.",
+
+  // Amazon AWS Cloud Data Centers (Columbus, Boardman, Ashburn, Dublin, Frankfurt, etc.)
+  "18.",
+  "3.",
+  "52.",
+  "54.",
+  "63.",
+  "99.",
+  "15.",
+  "13.",
+  "34.197.",
   "34.242.",
   "34.243.",
-  "54.247.",
-  "54.216.",
-  "52.208.",
-  "63.33.",
-  "63.35.",
-  "18.202.",
-  "18.212.",
-  "3.250.",
-  "3.253.",
-  "35.172.",
+
+  // Google Cloud Platform & Google Workspace Safe Browsing (Council Bluffs, Columbus, etc.)
+  "34.",
+  "35.",
+  "14.225.",
+  "136.83.",
+
+  // Security Sandboxes, VPNs, VPS & Mail Security Gateways (Check Point, Mimecast, OVH, M247, etc.)
+  "57.129.",
+  "185.212.",
+  "185.191.",
+  "156.244.",
+  "166.88.",
+  "176.100.243.",
   "108.129.",
   "209.222.82.",
 ];
@@ -372,7 +388,7 @@ function classifyEmailScanner(
   }
 
   if (
-    ipStr.startsWith("48.209.") ||
+    ipStr.startsWith("48.") ||
     ipStr.startsWith("72.145.") ||
     ipStr.startsWith("72.152.") ||
     ipStr.startsWith("72.153.") ||
@@ -381,22 +397,55 @@ function classifyEmailScanner(
     ipStr.startsWith("172.186.") ||
     ipStr.startsWith("74.179.") ||
     ipStr.startsWith("128.85.") ||
+    ipStr.startsWith("20.") ||
+    ipStr.startsWith("40.") ||
+    ipStr.startsWith("51.") ||
     /android 16;\s*24117rk2cc|android 17;\s*k|mac os x 15_7_7/i.test(uaStr)
   ) {
     return { isScanner: true, vendor: "Microsoft 365 Defender (Safe Links)" };
   }
 
   if (
-    /python-requests|^ruby$|msie 8\.0|trident\/4\.0|headlesschrome|phantomjs|curl\/|wget\/|go-http-client|chrome\/118\.0\.0\.0/i.test(
-      uaStr
-    ) ||
-    SCANNER_IP_PREFIXES.some((prefix) => ipStr.startsWith(prefix))
+    ipStr.startsWith("34.") ||
+    ipStr.startsWith("35.") ||
+    ipStr.startsWith("14.225.") ||
+    ipStr.startsWith("136.83.")
   ) {
-    return { isScanner: true, vendor: "Mimecast / AWS Email Security Gateway" };
+    return { isScanner: true, vendor: "Google Workspace / Safe Browsing Security Scanner" };
   }
 
-  if (/x11;\s*linux\s*x86_64/i.test(uaStr) && /chrome\//i.test(uaStr)) {
-    return { isScanner: true, vendor: "Check Point / Cloud Anti-Phishing Sandbox" };
+  if (
+    ipStr.startsWith("18.") ||
+    ipStr.startsWith("3.") ||
+    ipStr.startsWith("52.") ||
+    ipStr.startsWith("54.") ||
+    ipStr.startsWith("63.") ||
+    ipStr.startsWith("99.") ||
+    ipStr.startsWith("15.") ||
+    ipStr.startsWith("13.") ||
+    ipStr.startsWith("108.129.") ||
+    ipStr.startsWith("209.222.82.") ||
+    /python-requests|^ruby$|msie 8\.0|trident\/4\.0|headlesschrome|phantomjs|curl\/|wget\/|go-http-client|chrome\/118\.0\.0\.0/i.test(
+      uaStr
+    )
+  ) {
+    return { isScanner: true, vendor: "AWS / Mimecast / Cloud Email Security Gateway" };
+  }
+
+  if (
+    ipStr.startsWith("57.129.") ||
+    ipStr.startsWith("185.212.") ||
+    ipStr.startsWith("185.191.") ||
+    ipStr.startsWith("156.244.") ||
+    ipStr.startsWith("166.88.") ||
+    ipStr.startsWith("176.100.243.") ||
+    (/x11;\s*linux\s*x86_64/i.test(uaStr) && /chrome\//i.test(uaStr))
+  ) {
+    return { isScanner: true, vendor: "Cloud Anti-Phishing Sandbox (VPS/Proxy)" };
+  }
+
+  if (SCANNER_IP_PREFIXES.some((prefix) => ipStr.startsWith(prefix))) {
+    return { isScanner: true, vendor: "Corporate Email Security Gateway" };
   }
 
   return { isScanner: false, vendor: "" };
@@ -1274,23 +1323,44 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const clientIp = extractClientIp(req.headers);
   let scannerInfo = classifyEmailScanner(ua, clientIp, rawSrc, rawAppId);
 
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  const supabaseUrl =
+    process.env.VITE_SUPABASE_URL ||
+    process.env.SUPABASE_URL ||
+    "https://zlyxwhrpmyyhsplczedu.supabase.co";
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpseXh3aHJwbXl5aHNwbGN6ZWR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjkwOTQ5NSwiZXhwIjoyMDg4NDg1NDk1fQ.XOIGNtQhruJlauLMs_qPssEZOfzha3boN0dwoEIglas";
   const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-  // Behavioral burst check: if the same IP hits >= 3 proof links within 8 seconds, it is an automated scanner
-  if (!scannerInfo.isScanner && supabase && clientIp) {
+  // Behavioral burst check:
+  // 1. Same IP hitting >= 2 links within 10 seconds
+  // 2. Multi-IP crawler wave: >= 3 hits across followup campaign within 15 seconds
+  if (!scannerInfo.isScanner && supabase) {
     try {
-      const eightSecAgo = new Date(Date.now() - 8000).toISOString();
-      const { data: recentIpHits } = await supabase
-        .from("lead_activity_logs")
-        .select("id")
-        .eq("event_type", "proof_click")
-        .eq("metadata->>ip", clientIp)
-        .gte("created_at", eightSecAgo)
-        .limit(3);
-      if (recentIpHits && recentIpHits.length >= 2) {
-        scannerInfo = { isScanner: true, vendor: "Automated Email Security Scanner (Burst)" };
+      const tenSecAgo = new Date(Date.now() - 10000).toISOString();
+      if (clientIp) {
+        const { data: recentIpHits } = await supabase
+          .from("lead_activity_logs")
+          .select("id")
+          .eq("metadata->>ip", clientIp)
+          .gte("created_at", tenSecAgo)
+          .limit(2);
+        if (recentIpHits && recentIpHits.length >= 1) {
+          scannerInfo = { isScanner: true, vendor: "Automated Email Security Scanner (Rapid Burst)" };
+        }
+      }
+
+      if (!scannerInfo.isScanner && isFollowup) {
+        const fifteenSecAgo = new Date(Date.now() - 15000).toISOString();
+        const { data: recentFollowupHits } = await supabase
+          .from("lead_activity_logs")
+          .select("id")
+          .eq("metadata->>src", "followup")
+          .gte("created_at", fifteenSecAgo)
+          .limit(3);
+        if (recentFollowupHits && recentFollowupHits.length >= 2) {
+          scannerInfo = { isScanner: true, vendor: "Distributed Cloud Email Scanner (Multi-IP Wave)" };
+        }
       }
     } catch {}
   }
@@ -1455,7 +1525,46 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
   }
 
-  // Send or Edit Telegram Proof Alert (1 compact consolidated message per 15-min window + Reply to Lead Card)
+  // Log to Supabase FIRST so atomic deduplication can prevent parallel scanner race conditions
+  let insertedLogId: number | string | null = null;
+  if (supabase) {
+    try {
+      const { data: insRows } = await supabase
+        .from("lead_activity_logs")
+        .insert([
+          {
+            visitor_id: scannerInfo.isScanner
+              ? "email_scanner_check"
+              : lead || ipMatchedContact || (isFollowup ? "followup_email_click" : "email_click"),
+            lead_name: scannerInfo.isScanner ? (lead || null) : (resolvedName || lead || ipMatchedContact || null),
+            lead_contact: scannerInfo.isScanner ? (lead || null) : (lead || ipMatchedContact || null),
+            event_type: scannerInfo.isScanner ? "scanner_verify" : "proof_click",
+            duration_seconds: 0,
+            metadata: {
+              appId,
+              src: src || null,
+              brand: proof.brand,
+              report: proof.report,
+              geo,
+              device,
+              isScanner: scannerInfo.isScanner,
+              scannerVendor: scannerInfo.vendor || null,
+              isForwardedSuspect,
+              prevGeo: prevGeo || null,
+              prevDevice: prevDevice || null,
+              userAgent: ua,
+              ip: clientIp || req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
+            },
+          },
+        ])
+        .select("id");
+      if (insRows && insRows.length > 0) {
+        insertedLogId = insRows[0].id;
+      }
+    } catch {}
+  }
+
+  // Send or Edit Telegram Proof Alert
   const tgToken =
     process.env.VITE_TELEGRAM_BOT_TOKEN ||
     process.env.TELEGRAM_BOT_TOKEN ||
@@ -1465,97 +1574,134 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     process.env.TELEGRAM_CHAT_ID ||
     "-1003934317948";
 
-  if (tgToken && tgChatId) {
+  // If this is an email scanner and NO specific lead email is in the URL, stay 100% silent in Telegram!
+  const shouldNotifyTelegram = !scannerInfo.isScanner || Boolean(lead);
+
+  if (tgToken && tgChatId && shouldNotifyTelegram) {
     try {
-      const leadLabel = lead
-        ? resolvedName
-          ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(lead)})`
-          : `<b>${escapeHtml(lead)}</b>`
-        : ipMatchedContact
-          ? resolvedName
-            ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(ipMatchedContact)}) <i>· совпадение по IP</i>`
-            : `<b>${escapeHtml(ipMatchedContact)}</b> <i>· совпадение по IP</i>`
-          : isFollowup
-            ? `Получатель фоллоу-ап рассылки <i>(${escapeHtml(geo)})</i>`
-            : "Аноним (прямая ссылка)";
-
-      const cooldownWindowMs = scannerInfo.isScanner ? 3 * 60 * 1000 : 15 * 60 * 1000;
-      const prevProofUpdatedAt = existingCooldownMeta?.proof_updated_at
-        ? new Date(existingCooldownMeta.proof_updated_at).getTime()
-        : 0;
-      const activeProofMessageId: number | null =
-        existingCooldownMeta?.proof_message_id &&
-        Date.now() - prevProofUpdatedAt < cooldownWindowMs
-          ? Number(existingCooldownMeta.proof_message_id)
-          : null;
-
-      interface ProofHistoryItem {
-        appId: string;
-        brand: string;
-        report: string;
-        fileUrl: string;
-        category: string;
-        time: string;
-        count: number;
-      }
-
-      let proofHistory: ProofHistoryItem[] =
-        activeProofMessageId && Array.isArray(existingCooldownMeta?.proof_history)
-          ? [...existingCooldownMeta.proof_history]
-          : [];
-
-      const nowHHMM = formatTimeHHMM(new Date());
-      const existingIdx = proofHistory.findIndex((p) => p.appId === appId);
-
-      if (existingIdx >= 0) {
-        const existingItem = proofHistory[existingIdx];
-        proofHistory[existingIdx] = {
-          ...existingItem,
-          fileUrl: proof.fileUrl,
-          category: proof.category,
-          time: nowHHMM,
-          count: (existingItem.count || 1) + 1,
-        };
-      } else {
-        proofHistory.push({
-          appId,
-          brand: proof.brand,
-          report: proof.report,
-          fileUrl: proof.fileUrl,
-          category: proof.category,
-          time: nowHHMM,
-          count: 1,
-        });
-      }
-
-      let tgText = "";
-      if (scannerInfo.isScanner) {
-        const totalScannedChecks = proofHistory.reduce((acc, item) => acc + (item.count || 1), 0);
-        const prevVendors: string[] =
-          activeProofMessageId && Array.isArray(existingCooldownMeta?.scanner_vendors)
-            ? [...existingCooldownMeta.scanner_vendors]
-            : [];
-        if (scannerInfo.vendor && !prevVendors.includes(scannerInfo.vendor)) {
-          prevVendors.push(scannerInfo.vendor);
+      if (scannerInfo.isScanner && lead) {
+        // Atomic check: only send 1 Telegram verification alert per lead per 60 minutes (even if 15 scanner threads hit at once)
+        let isFirstScannerHitForLead = !activeProofMessageId;
+        if (isFirstScannerHitForLead && supabase && insertedLogId) {
+          const sixtyMinAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+          const { data: earliestRows } = await supabase
+            .from("lead_activity_logs")
+            .select("id")
+            .eq("event_type", "scanner_verify")
+            .ilike("lead_contact", lead)
+            .gte("created_at", sixtyMinAgo)
+            .order("created_at", { ascending: true })
+            .order("id", { ascending: true })
+            .limit(1);
+          if (earliestRows && earliestRows.length > 0 && String(earliestRows[0].id) !== String(insertedLogId)) {
+            isFirstScannerHitForLead = false;
+          }
         }
-        const vendorText = prevVendors.join(" · ") || "Corporate Email Gateway";
-        const recipientLine = lead
-          ? `👤 <b>Адрес:</b> <b>${escapeHtml(lead)}</b>${resolvedName ? ` (${escapeHtml(resolvedName)})` : ""}`
-          : `👤 <b>Адрес:</b> Корпоративный ящик получателя`;
 
-        tgText = [
-          `✅ <b>ЯЩИК ЖИВОЙ · ПИСЬМО ПРИНЯТО СЕРВЕРОМ</b>`,
-          ``,
-          isFollowup ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email` : null,
-          recipientLine,
-          `📬 <b>Статус:</b> Доставлено (адрес активен, прошёл SMTP-проверку)`,
-          `🛡️ <b>Шлюз защиты:</b> ${escapeHtml(vendorText)} <i>(проверено ссылок: ${proofHistory.length}, запросов: ${totalScannedChecks})</i>`,
-        ]
-          .filter((line) => line !== null)
-          .join("\n");
-        existingCooldownMeta.scanner_vendors = prevVendors;
-      } else {
-        // Single clean device line (no triple repetition)
+        if (isFirstScannerHitForLead) {
+          const vendorText = scannerInfo.vendor || "Corporate Email Gateway";
+          const tgScannerText = [
+            `✅ <b>ЯЩИК ЖИВОЙ · ПИСЬМО ПРИНЯТО СЕРВЕРОМ</b>`,
+            ``,
+            isFollowup ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email` : null,
+            `👤 <b>Адрес:</b> <b>${escapeHtml(lead)}</b>${resolvedName ? ` (${escapeHtml(resolvedName)})` : ""}`,
+            `📬 <b>Статус:</b> Доставлено (адрес активен, прошёл SMTP-проверку)`,
+            `🛡️ <b>Шлюз защиты:</b> ${escapeHtml(vendorText)}`,
+          ]
+            .filter((line) => line !== null)
+            .join("\n");
+
+          const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: tgChatId,
+              text: tgScannerText,
+              parse_mode: "HTML",
+              disable_notification: true,
+              disable_web_page_preview: true,
+            }),
+          });
+          const tgJson: any = await tgRes.json().catch(() => ({}));
+          if (supabase && tgJson?.result?.message_id) {
+            await supabase.from("lead_notification_cooldowns").upsert(
+              {
+                visitor_id: cooldownKey,
+                last_notified_at: new Date().toISOString(),
+                last_event_type: "scanner_verify",
+                metadata: {
+                  ...existingCooldownMeta,
+                  leadContact: lead,
+                  proof_message_id: Number(tgJson.result.message_id),
+                  proof_updated_at: new Date().toISOString(),
+                },
+              },
+              { onConflict: "visitor_id" }
+            );
+          }
+        }
+      } else if (!scannerInfo.isScanner) {
+        const hasIdentifiedLead = Boolean(lead || ipMatchedContact);
+        const leadLabel = lead
+          ? resolvedName
+            ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(lead)})`
+            : `<b>${escapeHtml(lead)}</b>`
+          : ipMatchedContact
+            ? resolvedName
+              ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(ipMatchedContact)}) <i>· совпадение по IP</i>`
+              : `<b>${escapeHtml(ipMatchedContact)}</b> <i>· совпадение по IP</i>`
+            : isFollowup
+              ? `Анонимный клик <i>(в ссылке письма не было ?lead=email)</i>`
+              : "Аноним (прямая ссылка)";
+
+        const prevProofUpdatedAt = existingCooldownMeta?.proof_updated_at
+          ? new Date(existingCooldownMeta.proof_updated_at).getTime()
+          : 0;
+        const activeProofMessageId: number | null =
+          existingCooldownMeta?.proof_message_id &&
+          Date.now() - prevProofUpdatedAt < 15 * 60 * 1000
+            ? Number(existingCooldownMeta.proof_message_id)
+            : null;
+
+        interface ProofHistoryItem {
+          appId: string;
+          brand: string;
+          report: string;
+          fileUrl: string;
+          category: string;
+          time: string;
+          count: number;
+        }
+
+        let proofHistory: ProofHistoryItem[] =
+          activeProofMessageId && Array.isArray(existingCooldownMeta?.proof_history)
+            ? [...existingCooldownMeta.proof_history]
+            : [];
+
+        const nowHHMM = formatTimeHHMM(new Date());
+        const existingIdx = proofHistory.findIndex((p) => p.appId === appId);
+
+        if (existingIdx >= 0) {
+          const existingItem = proofHistory[existingIdx];
+          proofHistory[existingIdx] = {
+            ...existingItem,
+            fileUrl: proof.fileUrl,
+            category: proof.category,
+            time: nowHHMM,
+            count: (existingItem.count || 1) + 1,
+          };
+        } else {
+          proofHistory.push({
+            appId,
+            brand: proof.brand,
+            report: proof.report,
+            fileUrl: proof.fileUrl,
+            category: proof.category,
+            time: nowHHMM,
+            count: 1,
+          });
+        }
+
         const shortPrevDev = prevDevice ? getShortDeviceIconLabel(prevDevice) : "";
         const deviceLine = isSameCityScreenSwitch
           ? `📍 <b>Девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)} <i>(перешел с ${escapeHtml(shortPrevDev)})</i>`
@@ -1565,7 +1711,6 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           ? `🔥 <b>Возможно, переслал коллеге!</b> <i>(заявка была: ${escapeHtml(prevGeo || "—")} · ${escapeHtml(shortPrevDev || prevDevice || "—")})</i>`
           : null;
 
-        // Summarize vertical interest when 2+ proofs opened
         let focusLine: string | null = null;
         if (proofHistory.length >= 2) {
           const catCounts: Record<string, number> = {};
@@ -1589,9 +1734,13 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           .join("\n");
 
         const headerTitle = isFollowup
-          ? proofHistory.length <= 1
-            ? `🎯 <b>ЖИВАЯ РЕАКЦИЯ НА ФОЛЛОУ-АП РАССЫЛКУ</b>`
-            : `🎯 <b>ЖИВАЯ РЕАКЦИЯ НА ФОЛЛОУ-АП · АКТИВНОСТЬ (${proofHistory.length})</b>`
+          ? hasIdentifiedLead
+            ? proofHistory.length <= 1
+              ? `🎯 <b>ЖИВОЙ ПЕРЕХОД ЛИДА ИЗ ФОЛЛОУ-АПА</b>`
+              : `🎯 <b>АКТИВНОСТЬ ЛИДА В ФОЛЛОУ-АПЕ (${proofHistory.length})</b>`
+            : proofHistory.length <= 1
+              ? `🧭 <b>ПЕРЕХОД ПО ССЫЛКЕ ИЗ ФОЛЛОУ-АПА (Без метки лида)</b>`
+              : `🧭 <b>АКТИВНОСТЬ ПО ССЫЛКЕ ИЗ ФОЛЛОУ-АПА (${proofHistory.length})</b>`
           : proofHistory.length <= 1
             ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 12</b>`
             : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 12</b>`;
@@ -1604,7 +1753,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           ? `📋 <b>Действия и открытые материалы:</b>`
           : `📋 <b>Открытые скриншоты:</b>`;
 
-        tgText = [
+        const tgText = [
           headerTitle,
           ``,
           sourceLine,
@@ -1618,115 +1767,82 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         ]
           .filter((line) => line !== null)
           .join("\n");
-      }
 
-      let editedInPlace = false;
-      let finalProofMessageId: number | null = activeProofMessageId;
-      const leadCardMessageId: number | null = existingCooldownMeta?.lead_card_message_id
-        ? Number(existingCooldownMeta.lead_card_message_id)
-        : null;
+        let editedInPlace = false;
+        let finalProofMessageId: number | null = activeProofMessageId;
+        const leadCardMessageId: number | null = existingCooldownMeta?.lead_card_message_id
+          ? Number(existingCooldownMeta.lead_card_message_id)
+          : null;
 
-      if (activeProofMessageId) {
-        const editRes = await fetch(`https://api.telegram.org/bot${tgToken}/editMessageText`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+        if (activeProofMessageId) {
+          const editRes = await fetch(`https://api.telegram.org/bot${tgToken}/editMessageText`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: tgChatId,
+              message_id: activeProofMessageId,
+              text: tgText,
+              parse_mode: "HTML",
+              disable_web_page_preview: true,
+            }),
+          });
+          const editJson: any = await editRes.json().catch(() => ({}));
+          if (editRes.ok || String(editJson?.description || "").includes("message is not modified")) {
+            editedInPlace = true;
+          }
+        }
+
+        if (!editedInPlace) {
+          const sendPayload: Record<string, any> = {
             chat_id: tgChatId,
-            message_id: activeProofMessageId,
             text: tgText,
             parse_mode: "HTML",
+            disable_notification: !hasIdentifiedLead, // Silent if anonymous, loud if identified lead!
             disable_web_page_preview: true,
-          }),
-        });
-        const editJson: any = await editRes.json().catch(() => ({}));
-        if (editRes.ok || String(editJson?.description || "").includes("message is not modified")) {
-          editedInPlace = true;
-        }
-      }
-
-      if (!editedInPlace) {
-        const sendPayload: Record<string, any> = {
-          chat_id: tgChatId,
-          text: tgText,
-          parse_mode: "HTML",
-          disable_notification: scannerInfo.isScanner, // Silent for scanner validation, Loud for real human click!
-          disable_web_page_preview: true,
-        };
-
-        // Reply directly to the lead's contact card in Telegram!
-        if (leadCardMessageId && !scannerInfo.isScanner) {
-          sendPayload.reply_parameters = {
-            message_id: leadCardMessageId,
-            allow_sending_without_reply: true,
           };
+
+          if (leadCardMessageId) {
+            sendPayload.reply_parameters = {
+              message_id: leadCardMessageId,
+              allow_sending_without_reply: true,
+            };
+          }
+
+          const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(sendPayload),
+          });
+          const tgJson: any = await tgRes.json().catch(() => ({}));
+          if (tgJson?.result?.message_id) {
+            finalProofMessageId = Number(tgJson.result.message_id);
+          }
         }
 
-        const tgRes = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(sendPayload),
-        });
-        const tgJson: any = await tgRes.json().catch(() => ({}));
-        if (tgJson?.result?.message_id) {
-          finalProofMessageId = Number(tgJson.result.message_id);
+        if (supabase && finalProofMessageId && (lead || clientIp)) {
+          const updatedMeta = {
+            ...existingCooldownMeta,
+            ...(resolvedName ? { displayName: resolvedName } : {}),
+            ...(lead || ipMatchedContact ? { leadContact: lead || ipMatchedContact } : {}),
+            proof_message_id: finalProofMessageId,
+            proof_updated_at: new Date().toISOString(),
+            proof_history: proofHistory,
+          };
+
+          await supabase.from("lead_notification_cooldowns").upsert(
+            {
+              visitor_id: cooldownKey,
+              last_notified_at: new Date().toISOString(),
+              last_event_type: "proof_click",
+              metadata: updatedMeta,
+            },
+            { onConflict: "visitor_id" }
+          );
         }
-      }
-
-      if (supabase && finalProofMessageId && (lead || clientIp || scannerInfo.isScanner)) {
-        const updatedMeta = {
-          ...existingCooldownMeta,
-          ...(resolvedName ? { displayName: resolvedName } : {}),
-          ...(lead || ipMatchedContact ? { leadContact: lead || ipMatchedContact } : {}),
-          proof_message_id: finalProofMessageId,
-          proof_updated_at: new Date().toISOString(),
-          proof_history: proofHistory,
-        };
-
-        await supabase.from("lead_notification_cooldowns").upsert(
-          {
-            visitor_id: cooldownKey,
-            last_notified_at: new Date().toISOString(),
-            last_event_type: scannerInfo.isScanner ? "scanner_verify" : "proof_click",
-            metadata: updatedMeta,
-          },
-          { onConflict: "visitor_id" }
-        );
       }
     } catch (tgErr) {
       console.warn("Telegram alert error in proof tracking:", tgErr);
     }
-  }
-
-  // Log to Supabase if configured
-  if (supabase) {
-    try {
-      await supabase.from("lead_activity_logs").insert([
-        {
-          visitor_id: scannerInfo.isScanner
-            ? "email_scanner_check"
-            : lead || ipMatchedContact || (isFollowup ? "followup_email_click" : "email_click"),
-          lead_name: scannerInfo.isScanner ? (lead || null) : (resolvedName || lead || ipMatchedContact || null),
-          lead_contact: scannerInfo.isScanner ? (lead || null) : (lead || ipMatchedContact || null),
-          event_type: scannerInfo.isScanner ? "scanner_verify" : "proof_click",
-          duration_seconds: 0,
-          metadata: {
-            appId,
-            src: src || null,
-            brand: proof.brand,
-            report: proof.report,
-            geo,
-            device,
-            isScanner: scannerInfo.isScanner,
-            scannerVendor: scannerInfo.vendor || null,
-            isForwardedSuspect,
-            prevGeo: prevGeo || null,
-            prevDevice: prevDevice || null,
-            userAgent: ua,
-            ip: clientIp || req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || null,
-          },
-        },
-      ]);
-    } catch {}
   }
 
   if (isTrackOnly) {
