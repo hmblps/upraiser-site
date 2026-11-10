@@ -991,14 +991,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
   }
 
-  const tgToken =
-    process.env.VITE_TELEGRAM_BOT_TOKEN ||
-    process.env.TELEGRAM_BOT_TOKEN ||
-    "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
-  const tgChatId =
-    process.env.VITE_TELEGRAM_CHAT_ID ||
-    process.env.TELEGRAM_CHAT_ID ||
-    "-1003934317948";
+  const tgToken = process.env.VITE_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  const tgChatId = process.env.VITE_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
   const fromEmail = process.env.RESEND_FROM_EMAIL || "UPRAISER Desk <pilot@upraiser.co.uk>";
 
   // Handle POST Moderation Decision (Approve / Reject sending screenshots to lead)

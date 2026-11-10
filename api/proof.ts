@@ -1323,13 +1323,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const clientIp = extractClientIp(req.headers);
   let scannerInfo = classifyEmailScanner(ua, clientIp, rawSrc, rawAppId);
 
-  const supabaseUrl =
-    process.env.VITE_SUPABASE_URL ||
-    process.env.SUPABASE_URL ||
-    "https://zlyxwhrpmyyhsplczedu.supabase.co";
-  const supabaseKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpseXh3aHJwbXl5aHNwbGN6ZWR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjkwOTQ5NSwiZXhwIjoyMDg4NDg1NDk1fQ.XOIGNtQhruJlauLMs_qPssEZOfzha3boN0dwoEIglas";
+  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
   // Behavioral burst check:
@@ -1565,14 +1560,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 
   // Send or Edit Telegram Proof Alert
-  const tgToken =
-    process.env.VITE_TELEGRAM_BOT_TOKEN ||
-    process.env.TELEGRAM_BOT_TOKEN ||
-    "8955516402:AAFMgYQ5dJoS13RhOLrNkoPs3lplpaa4bxI";
-  const tgChatId =
-    process.env.VITE_TELEGRAM_CHAT_ID ||
-    process.env.TELEGRAM_CHAT_ID ||
-    "-1003934317948";
+  const tgToken = process.env.VITE_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  const tgChatId = process.env.VITE_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
 
   // If this is an email scanner and NO specific lead email is in the URL, stay 100% silent in Telegram!
   const shouldNotifyTelegram = !scannerInfo.isScanner || Boolean(lead);
