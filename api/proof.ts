@@ -1269,6 +1269,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   const rawSrc = (url.searchParams.get("src") || url.searchParams.get("source") || "").toLowerCase().trim();
   const src = rawSrc === "abyybjhc" ? "followup" : rawSrc;
   const isFollowup = src === "followup";
+  const isPitch = src === "pitch";
   const isRawRedirect = url.searchParams.get("raw") === "1";
   const isTrackOnly = url.searchParams.get("track") === "1";
 
@@ -1345,15 +1346,15 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         }
       }
 
-      if (!scannerInfo.isScanner && isFollowup) {
+      if (!scannerInfo.isScanner && (isFollowup || isPitch)) {
         const fifteenSecAgo = new Date(Date.now() - 15000).toISOString();
-        const { data: recentFollowupHits } = await supabase
+        const { data: recentHits } = await supabase
           .from("lead_activity_logs")
           .select("id")
-          .eq("metadata->>src", "followup")
+          .in("metadata->>src", ["followup", "pitch"])
           .gte("created_at", fifteenSecAgo)
           .limit(3);
-        if (recentFollowupHits && recentFollowupHits.length >= 2) {
+        if (recentHits && recentHits.length >= 2) {
           scannerInfo = { isScanner: true, vendor: "Distributed Cloud Email Scanner (Multi-IP Wave)" };
         }
       }
@@ -1592,7 +1593,11 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
           const tgScannerText = [
             `✅ <b>ЯЩИК ЖИВОЙ · ПИСЬМО ПРИНЯТО СЕРВЕРОМ</b>`,
             ``,
-            isFollowup ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email` : null,
+            isFollowup
+              ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email`
+              : isPitch
+                ? `📨 <b>Кампания:</b> Cold Pitch Email (Outreach)`
+                : null,
             `👤 <b>Адрес:</b> <b>${escapeHtml(lead)}</b>${resolvedName ? ` (${escapeHtml(resolvedName)})` : ""}`,
             `📬 <b>Статус:</b> Доставлено (адрес активен, прошёл SMTP-проверку)`,
             `🛡️ <b>Шлюз защиты:</b> ${escapeHtml(vendorText)}`,
@@ -1639,7 +1644,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             ? resolvedName
               ? `<b>${escapeHtml(resolvedName)}</b> (${escapeHtml(ipMatchedContact)}) <i>· совпадение по IP</i>`
               : `<b>${escapeHtml(ipMatchedContact)}</b> <i>· совпадение по IP</i>`
-            : isFollowup
+            : isFollowup || isPitch
               ? `Анонимный клик <i>(в ссылке письма не было ?lead=email)</i>`
               : "Аноним (прямая ссылка)";
 
@@ -1730,15 +1735,25 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
             : proofHistory.length <= 1
               ? `🧭 <b>ПЕРЕХОД ПО ССЫЛКЕ ИЗ ФОЛЛОУ-АПА (Без метки лида)</b>`
               : `🧭 <b>АКТИВНОСТЬ ПО ССЫЛКЕ ИЗ ФОЛЛОУ-АПА (${proofHistory.length})</b>`
+          : isPitch
+            ? hasIdentifiedLead
+              ? proofHistory.length <= 1
+                ? `🎯 <b>ЖИВОЙ ПЕРЕХОД ПО ХОЛОДНОМУ ПИТЧУ</b>`
+                : `🎯 <b>АКТИВНОСТЬ ЛИДА ПО ХОЛОДНОМУ ПИТЧУ (${proofHistory.length})</b>`
+              : proofHistory.length <= 1
+                ? `🧭 <b>ПЕРЕХОД ПО ПИТЧУ (Без метки лида)</b>`
+                : `🧭 <b>АКТИВНОСТЬ ПО ПИТЧУ (${proofHistory.length})</b>`
           : proofHistory.length <= 1
             ? `🔎 <b>ОТКРЫТ ПРУФ ИЗ ПИСЬМА · 1 из 12</b>`
             : `🔎 <b>ИЗУЧАЕТ ПРУФЫ ИЗ ПИСЬМА · ${proofHistory.length} из 12</b>`;
 
         const sourceLine = isFollowup
           ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email`
-          : null;
+          : isPitch
+            ? `📨 <b>Кампания:</b> Cold Pitch Email (Outreach)`
+            : null;
 
-        const listHeaderLabel = isFollowup
+        const listHeaderLabel = isFollowup || isPitch
           ? `📋 <b>Действия и открытые материалы:</b>`
           : `📋 <b>Открытые скриншоты:</b>`;
 

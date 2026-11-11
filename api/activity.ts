@@ -89,14 +89,15 @@ export function renderSessionCardHtml(params: {
   device: string;
   timeline: SessionTimelineEntry[];
   isFollowup?: boolean;
+  isPitch?: boolean;
 }): string {
-  const { shortId, resolvedLeadName, resolvedLeadContact, geo, device, timeline, isFollowup } = params;
+  const { shortId, resolvedLeadName, resolvedLeadContact, geo, device, timeline, isFollowup, isPitch } = params;
   const hasNameOrContact = Boolean(resolvedLeadName || resolvedLeadContact);
   const who = hasNameOrContact
     ? `<b>${escapeHtml(resolvedLeadName || resolvedLeadContact)}</b>${
         resolvedLeadName && resolvedLeadContact ? ` (${escapeHtml(resolvedLeadContact)})` : ""
       }`
-    : isFollowup
+    : isFollowup || isPitch
       ? `Анонимный клик <i>(в ссылке письма не было ?lead=email)</i>`
       : `Аноним`;
 
@@ -106,11 +107,21 @@ export function renderSessionCardHtml(params: {
     ? hasNameOrContact
       ? `🎯 <b>ЖИВОЙ ПЕРЕХОД ЛИДА ИЗ ФОЛЛОУ-АПА · <code>[${escapeHtml(shortId)}]</code></b>`
       : `🧭 <b>ПЕРЕХОД ПО ССЫЛКЕ ИЗ ФОЛЛОУ-АПА (Без метки лида) · <code>[${escapeHtml(shortId)}]</code></b>`
-    : `🧭 <b>АКТИВНОСТЬ НА ХАБЕ · <code>[${escapeHtml(shortId)}]</code></b>`;
+    : isPitch
+      ? hasNameOrContact
+        ? `🎯 <b>ЖИВОЙ ПЕРЕХОД ПО ХОЛОДНОМУ ПИТЧУ · <code>[${escapeHtml(shortId)}]</code></b>`
+        : `🧭 <b>ПЕРЕХОД ПО ПИТЧУ (Без метки лида) · <code>[${escapeHtml(shortId)}]</code></b>`
+      : `🧭 <b>АКТИВНОСТЬ НА ХАБЕ · <code>[${escapeHtml(shortId)}]</code></b>`;
+
+  const campaignLine = isFollowup
+    ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email`
+    : isPitch
+      ? `📨 <b>Кампания:</b> Cold Pitch Email (Outreach)`
+      : null;
 
   return [
     headerLine,
-    isFollowup ? `📨 <b>Кампания:</b> Post-Summit Follow-Up Email` : null,
+    campaignLine,
     `👤 <b>Лид:</b> ${who}`,
     `📍 <b>Локация и девайс:</b> ${escapeHtml(geo)} · ${escapeHtml(device)}`,
     ``,
@@ -595,7 +606,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     }
 
     const rawUrlAndRef = `${metadata?.url || ""} ${metadata?.raw_referrer || ""} ${req.headers["referer"] || ""}`.toLowerCase();
-    const isFollowupSession = Boolean(
+    const isPitchSession = Boolean(
+      rawUrlAndRef.includes("src=pitch") ||
+      rawUrlAndRef.includes("source=pitch") ||
+      existingCooldownMeta?.isPitch
+    );
+    const isFollowupSession = !isPitchSession && Boolean(
       rawUrlAndRef.includes("src=followup") ||
       rawUrlAndRef.includes("source=followup") ||
       existingCooldownMeta?.isFollowup
@@ -609,6 +625,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       device,
       timeline,
       isFollowup: isFollowupSession,
+      isPitch: isPitchSession,
     });
 
     // 8. Send or Edit Unified Session Card in Telegram
